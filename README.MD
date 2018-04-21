@@ -1,6 +1,6 @@
 # Jikan REST API Source
 
-This REST API is built on Lumen and is in development, therefore neither will I product or help for any in-depth installation/set up guides at the moment for an instance.
+This REST API is built on Lumen and is in development, therefore neither will I produce or help in any form for any kind of in-depth installation/set up or guides for the time being
 
 
 ## What this requires
