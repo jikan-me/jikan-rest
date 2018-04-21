@@ -30,7 +30,7 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('meta/{request:[A-Za-z]+}[/{type:[A-Za-z]+}[/{period:[A-Za-z]+}[/{page:[0-9]+}]]]', [
-	'uses' => 'MetaController@request'
+	'uses' => 'MetaLiteController@request'
 ]);
 
 $router->group(['middleware' => ['meta', 'throttle']], function() use ($router) {

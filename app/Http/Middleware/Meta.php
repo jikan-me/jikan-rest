@@ -24,21 +24,22 @@ class Meta
         $time = round(microtime(true) * 1000);
         $key = "requests:".$date.":".$time;
 
-        if (!app('redis')->exists($key)) {
-            app('redis')->hMSet($key, [
-                'key' => $key,
-                'time' => $time,
-                'ip' => $_SERVER['REMOTE_ADDR'],
-                'request' => $req,
-                'request_type' => $req_type
-                // 'count' => 0
-            ]);
 
-            app('redis')->sAdd('requests', $key);
-        }
+        $this->updateMeta("requests:today", $req, 86400);
+        $this->updateMeta("requests:weekly", $req, 604800);
+        $this->updateMeta("requests:monthly", $req, 2629746);
 
-        // app('redis')->hIncrBy($key, 'count', 1);
 
         return $response;
     }
+
+    private function updateMeta($key, $req, $expire) {
+        $hashKey = $key . ":" . $req;
+        if (!app('redis')->exists($hashKey)) {
+            app('redis')->set($hashKey, 0);
+            app('redis')->expire($hashKey, $expire);
+        }
+        app('redis')->incrBy($hashKey, 1);
+    }
+
 }

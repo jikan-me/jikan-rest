@@ -8,7 +8,7 @@ class MetaController extends Controller
     private const VALID_REQUESTS = ['status', 'requests'];
     private const VALID_TYPE = ['anime', 'manga', 'character', 'people', 'person', 'search', 'top', 'season'];
     private const VALID_PERIOD = ['today', 'weekly', 'monthly'];
-    private const LIMIT = 50;
+    private const LIMIT = 10000;
 
     private $request;
     private $type;
@@ -17,7 +17,17 @@ class MetaController extends Controller
 
     public function request($request, $type = null, $period = null, $page = 0) {
 
-        $this->request = $request;
+
+        if (!is_null($request)) {
+            if (!in_array($request, self::VALID_REQUESTS)) {
+                return response()->json([
+                    'error' => 'Invalid or incomplete endpoint'
+                ], 400);
+            }
+
+            $this->request = $request;
+        }
+
         if (!is_null($type)) {
             if (!in_array($type, self::VALID_TYPE)) {
                 return response()->json([
@@ -112,11 +122,14 @@ class MetaController extends Controller
             $requests = [];
             $requestsHashKey = app('redis')->sort('requests', [
                 'by' => 'requests:*->time',
-                'limit' => [$this->page*self::LIMIT, self::LIMIT],
+                //'limit' => [$this->page*self::LIMIT, self::LIMIT],
+                'limit' => [0,self::LIMIT],
                 'sort' => 'desc'
             ]);
 
+            $i = 0;
             foreach ($requestsHashKey as $value) {
+                if ($i > self::LIMIT){break;}
                 $data = app('redis')->hMGet($value, ['time', 'request', 'request_type']);
 
                 if (!isset($request[$data[1]])){
@@ -125,6 +138,9 @@ class MetaController extends Controller
 
                 $request[$data[1]][] = (int) $data[0];
             }
+
+            array_multisort(array_map('count', $request), SORT_DESC, $request);
+
 
             return $request;
 
