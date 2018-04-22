@@ -1,3 +1,3 @@
-# Jikan REST 2.0 Source
+# Jikan REST 2.X Source
 
-Woops, you're here too early! ;)
+The source is in the Development branch.
