@@ -52,17 +52,12 @@ class MetaLiteController extends Controller
     private function requests() {
 
         if (is_null($this->type)) {
-            return response()->json([
-                'error' => 'Missing type'
-            ], 400);
+           return  ['error' => 'Missing type'];
         }
 
         if (is_null($this->period)) {
-            return response()->json([
-                'error' => 'Missing period'
-            ], 400);
+            return ['error' => 'Missing period'];
         }
-
 
         $requests = [];
         $data = app('redis')->keys('requests:'.$this->period.':*'.$this->type.'*');
