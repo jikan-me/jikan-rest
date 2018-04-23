@@ -14,10 +14,10 @@ try {
 */
 define('SESSION_STORAGE_PATH', '/var/www/api.jikan/storage/app/sessions.json');
 define('RATE_LIMIT', 5000); // per day
-//define('CACHE_EXPIRE', 3600 * 24 * 3); // 3 days
-// define('CACHE_EXPIRE_SEARCH', 3600 * 6); // 6 hours
-define('CACHE_EXPIRE', 4); // 60 seconds | dev
-define('CACHE_EXPIRE_SEARCH', 4); // 60 seconds | dev
+define('CACHE_EXPIRE', 3600 * 24 * 3); // 3 days
+define('CACHE_EXPIRE_SEARCH', 3600 * 6); // 6 hours
+//define('CACHE_EXPIRE', 4); // 60 seconds | dev
+//define('CACHE_EXPIRE_SEARCH', 4); // 60 seconds | dev
 
 define('REST_VERSION', '2.2');
 define('SOURCE_VERSION', '1.15.5');
