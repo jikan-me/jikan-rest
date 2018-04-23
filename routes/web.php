@@ -25,7 +25,6 @@ $router->get('/', function () use ($router) {
     	'GitHub' => 'https://github.com/jikan-me/jikan',
     	'PRODUCTION_API_URL' => 'https://api.jikan.moe/',
     	'RATE_LIMIT' => RATE_LIMIT,
-    	'CACHED_REQUESTS' => app('redis')->dbSize(),
     ]);
 });
 
