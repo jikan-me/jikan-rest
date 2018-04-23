@@ -47,7 +47,21 @@ class MetaLiteController extends Controller
 
     }
 
-    private function status() {}
+    private function status() {
+        $info = app('redis')->info();
+
+        return [
+            'cached_requests' => app('redis')->dbsize(),
+            'requests_today' => count(app('redis')->keys('requests:today:*')),
+            'requests_this_week' => count(app('redis')->keys('requests:weekly:*')),
+            'requests_this_month' => count(app('redis')->keys('requests:monthly:*')),
+            'connected_clients' => $info['Clients']['connected_clients'],
+            'total_connections_received' => $info['Stats']['total_connections_received'],
+            //'db_keys' => $info['Keyspace']['db0']['keys'],
+            //'db_expires' => $info['Keyspace']['db0']['expires'],
+            //'db_avg_ttl' => $info['Keyspace']['db0']['avg_ttl'],
+        ];
+    }
 
     private function requests() {
 
@@ -65,6 +79,8 @@ class MetaLiteController extends Controller
         foreach ($data as $hashKey) {
             $requests[explode(":", $hashKey)[2]] = (int) app('redis')->get($hashKey);
         }
+
+        arsort($requests);
 
         return $requests;
     }
