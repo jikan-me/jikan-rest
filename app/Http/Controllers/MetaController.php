@@ -8,7 +8,7 @@ class MetaController extends Controller
     private const VALID_REQUESTS = ['status', 'requests'];
     private const VALID_TYPE = ['anime', 'manga', 'character', 'people', 'person', 'search', 'top', 'season'];
     private const VALID_PERIOD = ['today', 'weekly', 'monthly'];
-    private const LIMIT = 10000;
+    private const LIMIT = 5;
 
     private $request;
     private $type;
@@ -85,9 +85,7 @@ class MetaController extends Controller
         $last_week = strtotime("-1 week");
         $now = time();
 
-        $counter = 1;
         foreach ($requests as $time => $data) {
-            if ($counter > self::LIMIT) {break;}
 
             $data = json_decode($data, true);
             $count = count($data);
@@ -102,7 +100,6 @@ class MetaController extends Controller
                 $requests_today += $count;
             }
 
-            $counter++;
         }
 
         $info = app('redis')->info();
@@ -122,39 +119,10 @@ class MetaController extends Controller
     }
 
     public function requests() {
-        if (is_null($this->type)) {
-
-            $requests = [];
-            $requestsHashKey = app('redis')->sort('requests', [
-                'by' => 'requests:*->time',
-                //'limit' => [$this->page*self::LIMIT, self::LIMIT],
-                'limit' => [0,self::LIMIT],
-                'sort' => 'desc'
-            ]);
-
-            $i = 0;
-            foreach ($requestsHashKey as $value) {
-                if ($i > self::LIMIT){break;}
-                $data = app('redis')->hMGet($value, ['time', 'request', 'request_type']);
-
-                if (!isset($request[$data[1]])){
-                    $request[$data[1]] = [];
-                }
-
-                $request[$data[1]][] = (int) $data[0];
-            }
-
-            array_multisort(array_map('count', $request), SORT_DESC, $request);
-
-
-            return $request;
-
-        }
 
         $requests = [];
         $requestsHashKey = app('redis')->sort('requests', [
             'by' => 'requests:*->time',
-            // 'limit' => [$this->page*self::LIMIT, self::LIMIT],
             'sort' => 'desc'
         ]);
 
@@ -169,10 +137,10 @@ class MetaController extends Controller
                 $request[$data[1]] = [];
             }
 
-              $request[$data[1]][] = (int) $data[0];
+            $request[$data[1]][] = (int) $data[0];
         }
 
-        return $request;
+        return array_slice($request, 0, self::LIMIT);
 
     }
 }
