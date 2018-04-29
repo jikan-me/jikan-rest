@@ -17,7 +17,6 @@ class MetaController extends Controller
 
     public function request($request, $type = null, $period = null, $page = 0) {
 
-
         if (!is_null($request)) {
             if (!in_array($request, self::VALID_REQUESTS)) {
                 return response()->json([
@@ -85,7 +84,11 @@ class MetaController extends Controller
         $today = strtotime('today UTC');
         $last_week = strtotime("-1 week");
         $now = time();
+
+        $counter = 1;
         foreach ($requests as $time => $data) {
+            if ($counter > self::LIMIT) {break;}
+
             $data = json_decode($data, true);
             $count = count($data);
 
@@ -98,6 +101,8 @@ class MetaController extends Controller
             if ($time >= $today && $time <= $now) {
                 $requests_today += $count;
             }
+
+            $counter++;
         }
 
         $info = app('redis')->info();
