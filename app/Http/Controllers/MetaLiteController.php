@@ -8,7 +8,7 @@ class MetaLiteController extends Controller
     private const VALID_REQUESTS = ['status', 'requests'];
     private const VALID_TYPE = ['anime', 'manga', 'character', 'people', 'person', 'search', 'top', 'season'];
     private const VALID_PERIOD = ['today', 'weekly', 'monthly'];
-    private const LIMIT = 10;
+    private const LIMIT = 1000;
 
     private $request;
     private $type;
