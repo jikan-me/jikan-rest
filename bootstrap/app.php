@@ -12,7 +12,7 @@ try {
 /*
     Defines
 */
-define('SESSION_STORAGE_PATH', '/var/www/api.jikan/storage/app/sessions.json');
+define('SESSION_STORAGE_PATH', '/var/www/api.jikan/storage/app/sessions.json'); // depreciated. Using Redis now
 define('RATE_LIMIT', 5000); // per day
 define('CACHE_EXPIRE', 3600 * 24 * 3); // 3 days
 define('CACHE_EXPIRE_SEARCH', 3600 * 6); // 6 hours
