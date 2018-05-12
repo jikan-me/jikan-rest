@@ -11,8 +11,8 @@ This REST API is built on Lumen and is in development, therefore neither will I 
 - Redis
 
 ## Quick set up
-1. Install Lumen
-2. Overwrite with this
+1. Git Clone the repo
+2. Rename `.env.example` to `.env`
 3. `composer update`
-4. Make a BugSnag Account & set the details in `.env`
-5. Set up Redis & enter the connection credentials in `.env`
+4. Make a BugSnag Account & set the API Key in `.env`
+5. Install Redis
