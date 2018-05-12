@@ -8,7 +8,6 @@ try {
     //
 }
 
-
 /*
     Defines
 */
