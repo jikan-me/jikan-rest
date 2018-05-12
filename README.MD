@@ -6,7 +6,7 @@ This REST API is built on Lumen and is in development, therefore neither will I 
 ## What this requires
 - Composer
 - Lumen
-- BugSnag
+- BugSnag (API Key)
 - JikanPHP Library (just composer update)
 - Redis
 
