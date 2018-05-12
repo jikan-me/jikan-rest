@@ -20,7 +20,7 @@ define('CACHE_EXPIRE_SEARCH', 3600 * 6); // 6 hours
 //define('CACHE_EXPIRE_SEARCH', 4); // 60 seconds | dev
 
 define('REST_VERSION', '2.2');
-define('SOURCE_VERSION', '1.15.5');
+define('SOURCE_VERSION', '1.15.8');
 
 /*
 |--------------------------------------------------------------------------
