@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
 
     return response()->json([
     	'Author' => '@irfanDahir',
-    	'Contact' => 'contact@jikan.moe',
+    	'Contact' => 'irfan@jikan.moe',
     	'JikanREST' => REST_VERSION,
     	'JikanPHP' => SOURCE_VERSION,
     	'Home' => 'https://jikan.moe/',
