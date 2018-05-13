@@ -249,7 +249,7 @@ class SearchController extends Controller
         }
 
         if (isset($_GET['genre_exclude'])) {
-            $this->config['gx'] = ((int) $_GET['genre_exclude'] == 1) ? false : true;
+            $this->config['GenreInclude'] = ((int) $_GET['genre_exclude'] == 1) ? false : true;
         }
     }
 
@@ -262,7 +262,7 @@ class SearchController extends Controller
                         $url .= $key . "[]=" . $genre . "&";
                     }
                     break;
-                
+
                 default:
                     $url .= $key . "=" . $value . "&";
                     break;
