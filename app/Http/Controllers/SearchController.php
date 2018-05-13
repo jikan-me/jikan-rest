@@ -52,7 +52,7 @@ class SearchController extends Controller
         'r' => 5,
         'rx' => 6
     ];
-    private $validGenre = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43];
+    private $validGenre = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44];
 
     public function request($type = null, $query = null, $page = 1) {
 
@@ -221,18 +221,29 @@ class SearchController extends Controller
         }
 
         if (isset($_GET['genre'])) {
-            if (!is_array($_GET['genre'])) {
+/*            if (!is_array($_GET['genre'])) {
                 return response()->json(
                     ['error' => 'Bad genre parse: "' . $this->type . '"'], 400
                 );
             }
+            // Doesn't work. `genre=` gets past without any exception.
+            // Thus now we ignore this and add support for it instead
+*/
 
-            $this->config['genre'] = [];
-            foreach ($_GET['genre'] as $genre) {
-                $genre = (int) $genre;
+            $this->config['Genre'] = [];
 
+            if (is_array($_GET['genre'])) {
+                foreach ($_GET['genre'] as $genre) {
+                    $genre = (int) $genre;
+
+                    if (in_array($genre, $this->validGenre)) {
+                        $this->config['Genre'][] = $genre;
+                    }
+                }
+            } else {
+                $genre = (int) $_GET['genre'];
                 if (in_array($genre, $this->validGenre)) {
-                    $this->config['genre'][] = $genre;
+                    $this->config['Genre'][] = $genre;
                 }
             }
         }
@@ -242,6 +253,7 @@ class SearchController extends Controller
         }
     }
 
+    // this method is just for hashing and differs from the request URL
     private function configToString() {
         $url = "?";
         foreach ($this->config as $key => $value) {
