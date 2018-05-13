@@ -221,16 +221,27 @@ class SearchController extends Controller
         }
 
         if (isset($_GET['genre'])) {
-            if (!is_array($_GET['genre'])) {
+/*            if (!is_array($_GET['genre'])) {
                 return response()->json(
                     ['error' => 'Bad genre parse: "' . $this->type . '"'], 400
                 );
             }
+            // Doesn't work. `genre=` gets past without any exception.
+            // Thus now we ignore this and add support for it instead
+*/
 
             $this->config['genre'] = [];
-            foreach ($_GET['genre'] as $genre) {
-                $genre = (int) $genre;
 
+            if (is_array($_GET['genre'])) {
+                foreach ($_GET['genre'] as $genre) {
+                    $genre = (int) $genre;
+
+                    if (in_array($genre, $this->validGenre)) {
+                        $this->config['genre'][] = $genre;
+                    }
+                }
+            } else {
+                $genre = (int) $_GET['genre'];
                 if (in_array($genre, $this->validGenre)) {
                     $this->config['genre'][] = $genre;
                 }
@@ -245,11 +256,17 @@ class SearchController extends Controller
     private function configToString() {
         $url = "?";
         foreach ($this->config as $key => $value) {
-            if (is_array($value)) {
-                $value = implode(",", $value);
+            switch ($key) {
+                case 'genre':
+                    foreach ($value as $key2 => $genre) {
+                        $url .= $key . "[]=" . $genre . "&";
+                    }
+                    break;
+                
+                default:
+                    $url .= $key . "=" . $value . "&";
+                    break;
             }
-
-            $url .= $key . "=" . $value . "&";
         }
 
         return $url;
