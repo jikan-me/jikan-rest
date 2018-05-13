@@ -1654,12 +1654,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "4a6227047a40222bf56ddf6a9e72f4e9485dae46"
+                "reference": "76955c91434297ab401ca6d0398384e04628ad4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/4a6227047a40222bf56ddf6a9e72f4e9485dae46",
-                "reference": "4a6227047a40222bf56ddf6a9e72f4e9485dae46",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/76955c91434297ab401ca6d0398384e04628ad4a",
+                "reference": "76955c91434297ab401ca6d0398384e04628ad4a",
                 "shasum": ""
             },
             "type": "library",
@@ -1681,7 +1681,7 @@
                 }
             ],
             "description": "Jikan is an unofficial MyAnimeList API",
-            "time": "2018-05-12T05:41:26+00:00"
+            "time": "2018-05-13T21:31:40+00:00"
         },
         {
             "name": "laravel/lumen-framework",
