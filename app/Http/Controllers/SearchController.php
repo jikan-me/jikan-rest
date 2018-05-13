@@ -230,20 +230,20 @@ class SearchController extends Controller
             // Thus now we ignore this and add support for it instead
 */
 
-            $this->config['genre'] = [];
+            $this->config['Genre'] = [];
 
             if (is_array($_GET['genre'])) {
                 foreach ($_GET['genre'] as $genre) {
                     $genre = (int) $genre;
 
                     if (in_array($genre, $this->validGenre)) {
-                        $this->config['genre'][] = $genre;
+                        $this->config['Genre'][] = $genre;
                     }
                 }
             } else {
                 $genre = (int) $_GET['genre'];
                 if (in_array($genre, $this->validGenre)) {
-                    $this->config['genre'][] = $genre;
+                    $this->config['Genre'][] = $genre;
                 }
             }
         }
@@ -253,20 +253,15 @@ class SearchController extends Controller
         }
     }
 
+    // this method is just for hashing and differs from the request URL
     private function configToString() {
         $url = "?";
         foreach ($this->config as $key => $value) {
-            switch ($key) {
-                case 'genre':
-                    foreach ($value as $key2 => $genre) {
-                        $url .= $key . "[]=" . $genre . "&";
-                    }
-                    break;
-
-                default:
-                    $url .= $key . "=" . $value . "&";
-                    break;
+            if (is_array($value)) {
+                $value = implode(",", $value);
             }
+
+            $url .= $key . "=" . $value . "&";
         }
 
         return $url;
