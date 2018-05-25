@@ -34,7 +34,7 @@ $router->get('meta/{request:[A-Za-z]+}[/{type:[A-Za-z]+}[/{period:[A-Za-z]+}[/{p
 	'uses' => 'MetaLiteController@request'
 ]);
 
-$router->group(['middleware' => ['meta', 'throttle']], function() use ($router) {
+$router->group(['middleware' => ['blacklist', 'meta', 'throttle']], function() use ($router) {
 
 	$router->get('anime[/{id:[0-9]+}[/{extend:[A-Za-z_]+}[/{extendArgs}]]]', [
 		'uses' => 'AnimeController@request'
