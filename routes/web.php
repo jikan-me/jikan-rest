@@ -52,7 +52,7 @@ $router->group(['middleware' => ['blacklist', 'meta', 'throttle']], function() u
 		'uses' => 'CharacterController@request'
 	]);
 
-	$router->get('search[/{type}/{query}[/{page:[0-9]+}]]', [
+	$router->get('search[/{type}[/{query}[/{page:[0-9]+}]]]', [
 		'uses' => 'SearchController@request'
 	]);
 

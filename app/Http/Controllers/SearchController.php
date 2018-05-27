@@ -58,9 +58,23 @@ class SearchController extends Controller
 
         $antiXss = new \voku\helper\AntiXSS();
 
+
         $this->type = $type;
-        $this->query = urlencode($antiXss->xss_clean($query));
+        
+        if (!is_null($query)) {
+            $this->query = $antiXss->xss_clean($query);
+        } else {
+            if (isset($_GET['q']) && !empty($_GET['q'])) {
+                $this->query = $antiXss->xss_clean($_GET['q']);
+            }
+        }
+
         $this->page = $page;
+
+        if (isset($_GET['page'])) {
+            $this->page = (int) $_GET['page'];
+            if ($this->page < 1) { $this->page = 1; }
+        }
 
         $jikan = new \Jikan\Jikan;
         
