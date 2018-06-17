@@ -101,7 +101,7 @@ class SearchController extends Controller
         if (app('redis')->exists($this->hash)) {
             $this->response['request_cached'] = true;
             return response()->json(
-                $this->response + json_decode(app('redis')->get($this->hash), true)
+                $this->response + json_decode(app('redis')->get($this->hash), true), 200, [], JSON_UNESCAPED_UNICODE
             );
         }
 
@@ -186,7 +186,7 @@ class SearchController extends Controller
         }
 
         return response()->json(
-            $this->response + $jikan->response
+            $this->response + $jikan->response, 200, [], JSON_UNESCAPED_UNICODE // fix utf8 issues 
         );
     }
 
