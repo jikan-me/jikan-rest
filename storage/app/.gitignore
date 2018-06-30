@@ -1,2 +1,4 @@
 *
 !.gitignore
+sessions.json
+blacklist.json

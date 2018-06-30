@@ -48,7 +48,6 @@ class Throttle
         $this->ip = $_SERVER['REMOTE_ADDR'];
         $date = date("d-m-Y");
 
-
         if (!isset($this->sessions[$this->ip])) { // register the session
             $this->sessions[$this->ip] = [
                 $date => 0
