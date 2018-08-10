@@ -38,7 +38,7 @@ class AnimeController extends Controller
         }
 
         $serializer = (\JMS\Serializer\SerializerBuilder::create())
-            ->setMetadataDirs([__DIR__.'/../../../resources/serializer'])
+            ->addMetadataDir(__DIR__.'/../../../resources/serializer')
             ->build();
         $json = $serializer->serialize($response, 'json');
 
