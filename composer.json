@@ -9,11 +9,12 @@
         "laravel/lumen-framework": "5.5.*",
         "vlucas/phpdotenv": "~2.2",
         "jikan-me/jikan": "dev-master",
-        "bugsnag/bugsnag-laravel": "^2.0",
         "danielmewes/php-rql": "dev-master",
         "illuminate/redis": "^5.5",
         "predis/predis": "^1.1",
-        "voku/anti-xss": "^4.0"
+        "voku/anti-xss": "^4.0",
+        "divineomega/cachetphp": "^0.2.0",
+        "jms/serializer": "^1.13"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

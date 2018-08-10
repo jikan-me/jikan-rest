@@ -18,15 +18,14 @@ $router->get('/', function () use ($router) {
     return response()->json([
     	'Author' => '@irfanDahir',
     	'Contact' => 'irfan@jikan.moe',
-    	'JikanREST' => REST_VERSION,
-    	'JikanPHP' => SOURCE_VERSION,
-    	'Home' => 'https://jikan.moe/',
+    	'JikanREST' => '3.0',
+    	'JikanPHP' => '2.0.0-rc.1',
+    	'Home' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',
-    	'PRODUCTION_API_URL' => 'https://api.jikan.moe/',
-    	'STATUS_URL' => 'https://api.jikan.moe/meta/status',
-    	'RATE_LIMIT' => RATE_LIMIT,
-    	'CACHED_REQUESTS' => app('redis')->dbSize(),
+    	'PRODUCTION_API_URL' => 'https://api.jikan.moe',
+    	'STATUS_URL' => 'https://status.jikan.moe',
+//    	'CACHED_REQUESTS' => app('redis')->dbSize(),
     ]);
 });
 
@@ -34,7 +33,7 @@ $router->get('meta/{request:[A-Za-z]+}[/{type:[A-Za-z]+}[/{period:[A-Za-z]+}[/{p
 	'uses' => 'MetaLiteController@request'
 ]);
 
-$router->group(['middleware' => ['blacklist', 'meta', 'throttle']], function() use ($router) {
+$router->group(['middleware' => ['blacklist', 'meta']], function() use ($router) {
 
 	$router->get('anime[/{id:[0-9]+}[/{extend:[A-Za-z_]+}[/{extendArgs}]]]', [
 		'uses' => 'AnimeController@request'

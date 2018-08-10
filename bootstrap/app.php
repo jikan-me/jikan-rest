@@ -11,7 +11,6 @@ try {
 /*
     Defines
 */
-define('SESSION_STORAGE_PATH', '/var/www/api.jikan/storage/app/sessions.json'); // depreciated. Using Redis now
 define('BLACKLIST_PATH', '/var/www/api.jikan/storage/app/blacklist.json');
 define('RATE_LIMIT', 5000); // per day
 define('CACHE_EXPIRE', 3600 * 24 * 3); // 3 days
@@ -19,8 +18,8 @@ define('CACHE_EXPIRE_SEARCH', 3600 * 6); // 6 hours
 //define('CACHE_EXPIRE', 4); // 60 seconds | dev
 //define('CACHE_EXPIRE_SEARCH', 4); // 60 seconds | dev
 
-define('REST_VERSION', '2.2');
-define('SOURCE_VERSION', '1.15.12');
+define('REST_VERSION', '3.0');
+define('SOURCE_VERSION', '2.0.0-rc.1');
 
 /*
 |--------------------------------------------------------------------------
@@ -83,7 +82,6 @@ $app->middleware([App\Http\Middleware\Throttle::class]);*/
 $app->routeMiddleware([
     'blacklist' => App\Http\Middleware\Blacklist::class,
     'meta' => App\Http\Middleware\Meta::class,
-    'throttle' => App\Http\Middleware\Throttle::class
 ]);
 
 /*
@@ -97,7 +95,6 @@ $app->routeMiddleware([
 |
 */
 
-$app->register(Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 // $app->register(App\Providers\AppServiceProvider::class);

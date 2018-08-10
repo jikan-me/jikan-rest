@@ -53,14 +53,14 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
 
-        Bugsnag::notifyException($e);
-        if ($e instanceof HttpResponseException) {
-        } elseif ($e instanceof ModelNotFoundException) {
-            $e = new NotFoundHttpException($e->getMessage(), $e);
-        } elseif ($e instanceof AuthorizationException) {
-            $e = new HttpException(403, $e->getMessage());
-        } elseif ($e instanceof ValidationException && $e->getResponse()) {
-        }
+//        Bugsnag::notifyException($e);
+//        if ($e instanceof HttpResponseException) {
+//        } elseif ($e instanceof ModelNotFoundException) {
+//            $e = new NotFoundHttpException($e->getMessage(), $e);
+//        } elseif ($e instanceof AuthorizationException) {
+//            $e = new HttpException(403, $e->getMessage());
+//        } elseif ($e instanceof ValidationException && $e->getResponse()) {
+//        }
 
         $fe = FlattenException::create($e);
 
