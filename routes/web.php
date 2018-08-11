@@ -157,6 +157,21 @@ $router->group(
             }
         );
 
+        $router->group(
+            [
+                'prefix' => 'character/{id:[0-9]+}'
+            ],
+            function() use ($router) {
+                $router->get('/', [
+                    'uses' => 'CharacterController@main'
+                ]);
+
+                $router->get('/pictures', [
+                    'uses' => 'CharacterController@pictures'
+                ]);
+            }
+        );
+
     }
 );
 
