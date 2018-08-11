@@ -108,7 +108,7 @@ $router->group(
                     'uses' => 'AnimeController@videos'
                 ]);
 
-                $router->get('{pictures', [
+                $router->get('/pictures', [
                     'uses' => 'AnimeController@pictures'
                 ]);
 
@@ -122,6 +122,40 @@ $router->group(
             }
         );
 
+        $router->group(
+            [
+                'prefix' => 'manga/{id:[0-9]+}'
+            ],
+            function() use ($router) {
+                $router->get('/', [
+                    'uses' => 'MangaController@main'
+                ]);
+
+                $router->get('/characters', [
+                    'uses' => 'MangaController@characters'
+                ]);
+
+                $router->get('/news', [
+                    'uses' => 'MangaController@news'
+                ]);
+
+                $router->get('/forum', [
+                    'uses' => 'MangaController@forum'
+                ]);
+
+                $router->get('/pictures', [
+                    'uses' => 'MangaController@pictures'
+                ]);
+
+                $router->get('/stats', [
+                    'uses' => 'MangaController@stats'
+                ]);
+
+                $router->get('/moreinfo', [
+                    'uses' => 'MangaController@moreInfo'
+                ]);
+            }
+        );
 
     }
 );
