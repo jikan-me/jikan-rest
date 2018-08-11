@@ -1,0 +1,6 @@
+Jikan\Model\Person\PublishedManga:
+  exclusion_policy: NONE
+  properties:
+    mangaMeta:
+      expose: true
+      serialized_name: manga
