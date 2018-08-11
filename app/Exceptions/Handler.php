@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
@@ -51,6 +52,9 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof ParserException) {
             return response()->json(['error' => $e->getMessage()], 500);
+        }
+        if ($e instanceof ClientException) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
 
 //        Bugsnag::notifyException($e);

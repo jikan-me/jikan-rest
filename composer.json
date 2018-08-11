@@ -1,4 +1,10 @@
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/janvernieuwe/Goutte.git"
+        }
+    ],
     "name": "laravel/lumen",
     "description": "The Laravel Lumen Framework.",
     "keywords": ["framework", "laravel", "lumen"],
@@ -15,7 +21,8 @@
         "voku/anti-xss": "^4.0",
         "divineomega/cachetphp": "^0.2.0",
         "jms/serializer": "^1.13",
-        "symfony/yaml": "^4.1"
+        "symfony/yaml": "^4.1",
+        "fabpot/goutte": "dev-http-exceptions as 3.2.x-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

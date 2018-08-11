@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56f0fe0d0f3ab5fe1d180c60ecefacec",
+    "content-hash": "57524c76bf60237d66c7975cf57a416c",
     "packages": [
         {
             "name": "danielmewes/php-rql",
@@ -345,16 +345,16 @@
         },
         {
             "name": "fabpot/goutte",
-            "version": "v3.2.3",
+            "version": "dev-http-exceptions",
             "source": {
                 "type": "git",
-                "url": "https://github.com/FriendsOfPHP/Goutte.git",
-                "reference": "3f0eaf0a40181359470651f1565b3e07e3dd31b8"
+                "url": "https://github.com/janvernieuwe/Goutte.git",
+                "reference": "85d245ec79d8e3d8b9d18562d116c791ff66d2b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/Goutte/zipball/3f0eaf0a40181359470651f1565b3e07e3dd31b8",
-                "reference": "3f0eaf0a40181359470651f1565b3e07e3dd31b8",
+                "url": "https://api.github.com/repos/janvernieuwe/Goutte/zipball/85d245ec79d8e3d8b9d18562d116c791ff66d2b8",
+                "reference": "85d245ec79d8e3d8b9d18562d116c791ff66d2b8",
                 "shasum": ""
             },
             "require": {
@@ -381,7 +381,6 @@
                     "Goutte/Tests"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -396,7 +395,10 @@
             "keywords": [
                 "scraper"
             ],
-            "time": "2018-06-29T15:13:57+00:00"
+            "support": {
+                "source": "https://github.com/janvernieuwe/Goutte/tree/http-exceptions"
+            },
+            "time": "2018-08-11T20:55:32+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -5485,11 +5487,19 @@
             "time": "2018-01-29T19:49:41+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "3.2.x-dev",
+            "alias_normalized": "3.2.9999999.9999999-dev",
+            "version": "dev-http-exceptions",
+            "package": "fabpot/goutte"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "jikan-me/jikan": 20,
-        "danielmewes/php-rql": 20
+        "danielmewes/php-rql": 20,
+        "fabpot/goutte": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
