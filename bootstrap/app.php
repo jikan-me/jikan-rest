@@ -1,5 +1,10 @@
 <?php
 
+use Jikan\Model\Common\DateRange;
+use Jikan\Model\Common\MalUrl;
+use JMS\Serializer\Handler\HandlerRegistry;
+use JMS\Serializer\SerializerBuilder;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -11,7 +16,7 @@ try {
 /*
     Defines
 */
-define('BLACKLIST_PATH', __DIR__ . '/../storage/app/blacklist.json');
+define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
 define('RATE_LIMIT', 5000); // per day
 define('CACHE_EXPIRE', 3600 * 24 * 3); // 3 days
 define('CACHE_EXPIRE_SEARCH', 3600 * 6); // 6 hours
@@ -112,10 +117,59 @@ $app->middleware([App\Http\Middleware\Throttle::class]);*/
 |
 */
 
-$app->router->group([
-    'namespace' => 'App\Http\Controllers',
-], function ($router) {
-    require __DIR__.'/../routes/web.php';
-});
+$app->router->group(
+    [
+        'namespace' => 'App\Http\Controllers',
+    ],
+    function ($router) {
+        require __DIR__.'/../routes/web.php';
+    }
+);
+
+$app->singleton(
+    \JMS\Serializer\Serializer::class,
+    function () {
+        return (new SerializerBuilder())
+            ->addMetadataDir(__DIR__.'/../storage/app/metadata')
+            ->configureHandlers(
+                function (HandlerRegistry $registry) {
+                    $registry->registerHandler(
+                        'serialization',
+                        MalUrl::class,
+                        'json',
+                        function ($visitor, MalUrl $obj, array $type) {
+                            return [
+                                'mal_id' => $obj->getMalId(),
+                                'type'   => $obj->getType(),
+                                'name'   => $obj->getTitle(),
+                                'url'    => $obj->getUrl(),
+                            ];
+                        }
+                    );
+
+                    $registry->registerHandler(
+                        'serialization',
+                        DateRange::class,
+                        'json',
+                        function ($visitor, DateRange $obj, array $type) {
+                            return [
+                                'from'   => date_format($obj->getFrom(), 'c'),
+                                'to'     => date_format($obj->getUntil(), 'c'),
+                                'string' => (string)$obj,
+                            ];
+                        }
+                    );
+                }
+            )
+            ->build();
+    }
+);
+
+$app->singleton(
+    'Jikan/Jikan',
+    function () {
+        return new \Jikan\Jikan();
+    }
+);
 
 return $app;

@@ -2,72 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Jikan\Exception\ParserException;
 use Jikan\MyAnimeList\MalClient as Jikan;
-use GuzzleHttp\Client as GuzzleClient;
-use JMS\Serializer\Handler\HandlerRegistry;
-use JMS\Serializer\SerializerBuilder;
-
-
-use Jikan\Model\Common\MalUrl;
-use Jikan\Model\Common\DateRange;
+use Jikan\Request\Anime\AnimeRequest;
+use JMS\Serializer\Serializer;
 
 class AnimeController extends Controller
 {
+    /**
+     * @var Serializer
+     */
+    private $serializer;
 
-    public $id;
-    public $extend;
-    public $extendArgs;
+    /**
+     * @var Jikan
+     */
+    private $jikan;
 
-    private const VALID_REQUESTS = ['episodes', 'characters_staff', 'news', 'forum', 'pictures', 'videos', 'stats', 'moreinfo'];
-
-    public function request(int $id, $request = null, $requestArg = null) {
-
-
-        try {
-            $jikan = new Jikan();
-            $this->response = $jikan->getAnime(
-                new \Jikan\Request\Anime\AnimeRequest($id)
-            );
-        } catch (\Jikan\Exception\ParserException $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
-        }
-
-
-        $serializer = (new SerializerBuilder())
-            ->addMetadataDir(__DIR__.'/../../../storage/app/metadata')
-            ->configureHandlers(function (HandlerRegistry $registry) {
-                $registry->registerHandler('serialization', MalUrl::class, 'json',
-                    function ($visitor, MalUrl $obj, array $type) {
-                        return [
-                            'mal_id' => $obj->getMalId(),
-                            'type' => $obj->getType(),
-                            'name' => $obj->getTitle(),
-                            'url' => $obj->getUrl()
-                        ];
-                    }
-                );
-
-                $registry->registerHandler('serialization', DateRange::class, 'json',
-                    function ($visitor, DateRange $obj, array $type) {
-                        return [
-                            'from' => date_format($obj->getFrom(), 'c'),
-                            'to' => date_format($obj->getUntil(), 'c'),
-                            'string' => (string) $obj
-                        ];
-                    }
-                );
-            })
-            ->build();
-
-        $json = $serializer->serialize($this->response, 'json');
-
-        return response(
-          $json
-        );
-
+    /**
+     * AnimeController constructor.
+     *
+     * @param Serializer $serializer
+     * @param Jikan      $jikan
+     */
+    public function __construct(Serializer $serializer, Jikan $jikan)
+    {
+        $this->serializer = $serializer;
+        $this->jikan = $jikan;
     }
 
+    public function request(int $id, $request = null, $requestArg = null)
+    {
+        try {
+            $anime = $this->jikan->getAnime(
+                new AnimeRequest($id)
+            );
+
+            return response(
+                $this->serializer->serialize($anime, 'json')
+            );
+
+        } catch (ParserException $e) {
+            return response()->json(
+                [
+                    'error' => $e->getMessage(),
+                ]
+            );
+        }
+    }
 }
