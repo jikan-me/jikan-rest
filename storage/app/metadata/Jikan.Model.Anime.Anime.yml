@@ -1,0 +1,20 @@
+Jikan\Model\Anime\Anime:
+  exclusion_policy: NONE
+  properties:
+    malId:
+      expose: true
+      type: int
+      serialized_name: mal_id
+    url:
+      expose: true
+      type: string
+    title:
+      expose: true
+      type: string
+    titleEnglish:
+      expose: true
+      type: string
+      serialized_name: title_english
+    producers:
+      expose: true
+      type: array
