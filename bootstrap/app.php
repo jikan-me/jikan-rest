@@ -11,7 +11,7 @@ try {
 /*
     Defines
 */
-define('BLACKLIST_PATH', '/var/www/api.jikan/storage/app/blacklist.json');
+define('BLACKLIST_PATH', __DIR__ . '/../storage/app/blacklist.json');
 define('RATE_LIMIT', 5000); // per day
 define('CACHE_EXPIRE', 3600 * 24 * 3); // 3 days
 define('CACHE_EXPIRE_SEARCH', 3600 * 6); // 6 hours
