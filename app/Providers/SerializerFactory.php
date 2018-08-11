@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use Jikan\Model\Common\AnimeMeta;
+use Jikan\Model\Common\CharacterMeta;
+use Jikan\Model\Common\MangaMeta;
+use Jikan\Model\Common\PersonMeta;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Handler\HandlerRegistry;
 use Jikan\Model\Common\MalUrl;

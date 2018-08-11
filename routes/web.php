@@ -172,6 +172,21 @@ $router->group(
             }
         );
 
+        $router->group(
+            [
+                'prefix' => 'person/{id:[0-9]+}'
+            ],
+            function() use ($router) {
+                $router->get('/', [
+                    'uses' => 'PersonController@main'
+                ]);
+
+                $router->get('/pictures', [
+                    'uses' => 'PersonController@pictures'
+                ]);
+            }
+        );
+
     }
 );
 

@@ -9,13 +9,13 @@ class CharacterController extends Controller
 {
     public function main(int $id)
     {
-        $manga = $this->jikan->getCharacter(new CharacterRequest($id));
-        return response($this->serializer->serialize($manga, 'json'));
+        $character = $this->jikan->getCharacter(new CharacterRequest($id));
+        return response($this->serializer->serialize($character, 'json'));
     }
 
     public function pictures(int $id)
     {
-        $manga = $this->jikan->getCharacterPictures(new CharacterPicturesRequest($id));
-        return response($this->serializer->serialize($manga, 'json'));
+        $character = $this->jikan->getCharacterPictures(new CharacterPicturesRequest($id));
+        return response($this->serializer->serialize($character, 'json'));
     }
 }

@@ -1,0 +1,6 @@
+Jikan\Model\Common\VoiceActingRole:
+  exclusion_policy: ALL
+  properties:
+    animeMeta:
+      expose: true
+      serialized_name: anime
