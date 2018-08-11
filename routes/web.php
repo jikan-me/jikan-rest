@@ -81,42 +81,42 @@ $router->group(
 
         $router->group(
             [
-                'prefix' => 'anime'
+                'prefix' => 'anime/{id:[0-9]+}'
             ],
             function() use ($router) {
-                $router->get('{id:[0-9]+}', [
+                $router->get('/', [
                     'uses' => 'AnimeController@main'
                 ]);
 
-                $router->get('{id:[0-9]+}/characters_staff', [
+                $router->get('/characters_staff', [
                     'uses' => 'AnimeController@characters_staff'
                 ]);
 
-                $router->get('{id:[0-9]+}/episodes/{page:[0-9]+}', [
+                $router->get('/episodes/{page:[0-9]+}', [
                     'uses' => 'AnimeController@episodes'
                 ]);
 
-                $router->get('{id:[0-9]+}/news', [
+                $router->get('/news', [
                     'uses' => 'AnimeController@news'
                 ]);
 
-                $router->get('{id:[0-9]+}/forum', [
+                $router->get('/forum', [
                     'uses' => 'AnimeController@forum'
                 ]);
 
-                $router->get('{id:[0-9]+}/videos', [
+                $router->get('/videos', [
                     'uses' => 'AnimeController@videos'
                 ]);
 
-                $router->get('{id:[0-9]+}/pictures', [
+                $router->get('{pictures', [
                     'uses' => 'AnimeController@pictures'
                 ]);
 
-                $router->get('{id:[0-9]+}/stats', [
+                $router->get('/stats', [
                     'uses' => 'AnimeController@stats'
                 ]);
 
-                $router->get('{id:[0-9]+}/moreinfo', [
+                $router->get('/moreinfo', [
                     'uses' => 'AnimeController@moreInfo'
                 ]);
             }
