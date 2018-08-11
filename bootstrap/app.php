@@ -37,8 +37,8 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-$app->withFacades();
-$app->withEloquent();
+//$app->withFacades();
+//$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -79,10 +79,10 @@ $app->middleware([App\Http\Middleware\Throttle::class]);*/
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
-$app->routeMiddleware([
-    'blacklist' => App\Http\Middleware\Blacklist::class,
-    'meta' => App\Http\Middleware\Meta::class,
-]);
+//$app->routeMiddleware([
+//    'blacklist' => App\Http\Middleware\Blacklist::class,
+//    'meta' => App\Http\Middleware\Meta::class,
+//]);
 
 /*
 |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ $app->routeMiddleware([
 |
 */
 
-$app->register(Illuminate\Redis\RedisServiceProvider::class);
+//$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
