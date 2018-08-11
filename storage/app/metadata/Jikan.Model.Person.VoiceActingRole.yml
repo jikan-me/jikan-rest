@@ -1,4 +1,4 @@
-Jikan\Model\Common\VoiceActingRole:
+Jikan\Model\Person\VoiceActingRole:
   exclusion_policy: ALL
   properties:
     animeMeta:
