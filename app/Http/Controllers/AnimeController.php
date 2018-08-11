@@ -26,10 +26,9 @@ class AnimeController extends Controller
     public function request(int $id, $request = null, $requestArg = null)
     {
 
-        $this->guzzle = new GuzzleClient;
 
         try {
-            $jikan = new Jikan($this->guzzle);
+            $jikan = new Jikan();
             $response = $jikan->Anime($id);
         } catch (\Jikan\Exception\ParserException $e) {
             return response()->json([
