@@ -195,6 +195,10 @@ $router->group(
             'uses' => 'ScheduleController@main'
         ]);
 
+        $router->get('producer/{id:[0-9]+}[/{page:[0-9]+}]', [
+            'uses' => 'ProducerController@main'
+        ]);
+
     }
 );
 
