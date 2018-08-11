@@ -22,13 +22,14 @@ class ScheduleController extends Controller
 
     public function main(?string $day = null)
     {
-        $schedule = $this->jikan->getSchedule(new ScheduleRequest());
 
         if (!is_null($day) && !\in_array(strtolower($day), self::VALID_DAYS)) {
             return response()->json([
                 'error' => 'Bad Request'
             ])->setStatusCode(400);
         }
+
+        $schedule = $this->jikan->getSchedule(new ScheduleRequest());
 
         if (!is_null($day)) {
             $schedule = $schedule->{'get' . ucfirst(strtolower($day))}();
