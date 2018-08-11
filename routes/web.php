@@ -191,6 +191,10 @@ $router->group(
             'uses' => 'SeasonController@main'
         ]);
 
+        $router->get('schedule[/{day:[A-Za-z]+}]', [
+            'uses' => 'ScheduleController@main'
+        ]);
+
     }
 );
 
