@@ -2,19 +2,15 @@
 
 namespace App\Exceptions;
 
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Jikan\Exception\ParserException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
-use Illuminate\Http\Response;
 use Symfony\Component\Debug\Exception\FlattenException;
-use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -52,6 +48,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+
+        if ($e instanceof ParserException) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
 
 //        Bugsnag::notifyException($e);
 //        if ($e instanceof HttpResponseException) {

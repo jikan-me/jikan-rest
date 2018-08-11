@@ -166,9 +166,9 @@ $app->singleton(
 );
 
 $app->singleton(
-    'Jikan/Jikan',
+    \Jikan\MyAnimeList\MalClient::class,
     function () {
-        return new \Jikan\Jikan();
+        return new \Jikan\MyAnimeList\MalClient();
     }
 );
 
