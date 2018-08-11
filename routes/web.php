@@ -35,39 +35,95 @@ $router->get('meta/{request:[A-Za-z]+}[/{type:[A-Za-z]+}[/{period:[A-Za-z]+}[/{p
 
 $router->group(['middleware' => []], function() use ($router) {
 
-	$router->get('anime[/{id:[0-9]+}[/{extend:[A-Za-z_]+}[/{extendArgs}]]]', [
-		'uses' => 'AnimeController@request'
-	]);
+    $router->get('anime[/{id:[0-9]+}[/{extend:[A-Za-z_]+}[/{extendArgs}]]]', [
+        'uses' => 'AnimeController@a'
+    ]);
 
-	$router->get('manga[/{id:[0-9]+}[/{extend:[A-Za-z]+}]]', [
-		'uses' => 'MangaController@request'
-	]);
+    $router->get('manga[/{id:[0-9]+}[/{extend:[A-Za-z]+}]]', [
+        'uses' => 'MangaController@request'
+    ]);
 
-	$router->get('person[/{id:[0-9]+}[/{extend:[A-Za-z]+}]]', [
-		'uses' => 'PersonController@request'
-	]);
+    $router->get('person[/{id:[0-9]+}[/{extend:[A-Za-z]+}]]', [
+        'uses' => 'PersonController@request'
+    ]);
 
-	$router->get('character[/{id:[0-9]+}[/{extend:[A-Za-z]+}]]', [
-		'uses' => 'CharacterController@request'
-	]);
+    $router->get('character[/{id:[0-9]+}[/{extend:[A-Za-z]+}]]', [
+        'uses' => 'CharacterController@request'
+    ]);
 
-	$router->get('search[/{type}[/{query}[/{page:[0-9]+}]]]', [
-		'uses' => 'SearchController@request'
-	]);
+    $router->get('search[/{type}[/{query}[/{page:[0-9]+}]]]', [
+        'uses' => 'SearchController@request'
+    ]);
 
-	$router->get('season[/{year:[0-9]{4}}/{season:[A-Za-z]+}]', [
-		'uses' => 'SeasonController@request'
-	]);
+    $router->get('season[/{year:[0-9]{4}}/{season:[A-Za-z]+}]', [
+        'uses' => 'SeasonController@request'
+    ]);
 
-	$router->get('schedule[/{day:[A-Za-z]+}]', [
-		'uses' => 'ScheduleController@request'
-	]);
+    $router->get('schedule[/{day:[A-Za-z]+}]', [
+        'uses' => 'ScheduleController@request'
+    ]);
 
-	$router->get('top/{type:[A-Za-z]+}[/{page:[0-9]+}[/{subtype:[A-Za-z]+}]]', [
-		'uses' => 'TopController@request'
-	]);
-
-
+    $router->get('top/{type:[A-Za-z]+}[/{page:[0-9]+}[/{subtype:[A-Za-z]+}]]', [
+        'uses' => 'TopController@request'
+    ]);
 });
+
+
+/*
+ * REST v3
+ */
+$router->group(
+    [
+        'middleware' => [],
+        'prefix' => 'v3'
+    ],
+    function() use ($router) {
+
+        $router->group(
+            [
+                'prefix' => 'anime'
+            ],
+            function() use ($router) {
+                $router->get('{id:[0-9]+}', [
+                    'uses' => 'AnimeController@main'
+                ]);
+
+                $router->get('{id:[0-9]+}/characters_staff', [
+                    'uses' => 'AnimeController@characters_staff'
+                ]);
+
+                $router->get('{id:[0-9]+}/episodes/{page:[0-9]+}', [
+                    'uses' => 'AnimeController@episodes'
+                ]);
+
+                $router->get('{id:[0-9]+}/news', [
+                    'uses' => 'AnimeController@news'
+                ]);
+
+                $router->get('{id:[0-9]+}/forum', [
+                    'uses' => 'AnimeController@forum'
+                ]);
+
+                $router->get('{id:[0-9]+}/videos', [
+                    'uses' => 'AnimeController@videos'
+                ]);
+
+                $router->get('{id:[0-9]+}/pictures', [
+                    'uses' => 'AnimeController@pictures'
+                ]);
+
+                $router->get('{id:[0-9]+}/stats', [
+                    'uses' => 'AnimeController@stats'
+                ]);
+
+                $router->get('{id:[0-9]+}/moreinfo', [
+                    'uses' => 'AnimeController@moreInfo'
+                ]);
+            }
+        );
+
+
+    }
+);
 
 

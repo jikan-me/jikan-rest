@@ -1,10 +1,5 @@
 <?php
 
-use Jikan\Model\Common\DateRange;
-use Jikan\Model\Common\MalUrl;
-use JMS\Serializer\Handler\HandlerRegistry;
-use JMS\Serializer\SerializerBuilder;
-
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -66,6 +61,21 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->singleton(
+    \JMS\Serializer\Serializer::class,
+    function () {
+        return App\Providers\SerializerFactory::create();
+    }
+);
+
+$app->singleton(
+    \Jikan\MyAnimeList\MalClient::class,
+    function () {
+        return new \Jikan\MyAnimeList\MalClient();
+    }
+);
+
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -126,50 +136,5 @@ $app->router->group(
     }
 );
 
-$app->singleton(
-    \JMS\Serializer\Serializer::class,
-    function () {
-        return (new SerializerBuilder())
-            ->addMetadataDir(__DIR__.'/../storage/app/metadata')
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerHandler(
-                        'serialization',
-                        MalUrl::class,
-                        'json',
-                        function ($visitor, MalUrl $obj, array $type) {
-                            return [
-                                'mal_id' => $obj->getMalId(),
-                                'type'   => $obj->getType(),
-                                'name'   => $obj->getTitle(),
-                                'url'    => $obj->getUrl(),
-                            ];
-                        }
-                    );
-
-                    $registry->registerHandler(
-                        'serialization',
-                        DateRange::class,
-                        'json',
-                        function ($visitor, DateRange $obj, array $type) {
-                            return [
-                                'from'   => date_format($obj->getFrom(), 'c'),
-                                'to'     => date_format($obj->getUntil(), 'c'),
-                                'string' => (string)$obj,
-                            ];
-                        }
-                    );
-                }
-            )
-            ->build();
-    }
-);
-
-$app->singleton(
-    \Jikan\MyAnimeList\MalClient::class,
-    function () {
-        return new \Jikan\MyAnimeList\MalClient();
-    }
-);
 
 return $app;

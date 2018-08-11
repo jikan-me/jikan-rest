@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Factory;
+namespace App\Providers;
 
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\Handler\HandlerRegistry;

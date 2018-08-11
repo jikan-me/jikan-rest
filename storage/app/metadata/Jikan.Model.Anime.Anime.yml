@@ -49,7 +49,6 @@ Jikan\Model\Anime\Anime:
       serialized_name: airing
     aired:
       expose: true
-      type: array
       serialized_name: aired
     duration:
       expose: true
