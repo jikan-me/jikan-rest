@@ -222,6 +222,21 @@ $router->group(
             }
         );
 
+        $router->group(
+            [
+                'prefix' => 'genre'
+            ],
+            function() use ($router) {
+                $router->get('/anime/{id:[0-9]+}[/{page:[0-9]+}]', [
+                    'uses' => 'GenreController@anime'
+                ]);
+
+                $router->get('/manga/{id:[0-9]+}[/{page:[0-9]+}]', [
+                    'uses' => 'GenreController@manga'
+                ]);
+            }
+        );
+
 
 
     }
