@@ -199,6 +199,12 @@ $router->group(
             'uses' => 'ProducerController@main'
         ]);
 
+        $router->get('magazine/{id:[0-9]+}[/{page:[0-9]+}]', [
+            'uses' => 'MagazineController@main'
+        ]);
+
+
+
     }
 );
 
