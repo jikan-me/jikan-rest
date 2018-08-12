@@ -203,6 +203,25 @@ $router->group(
             'uses' => 'MagazineController@main'
         ]);
 
+        $router->group(
+            [
+                'prefix' => 'user/{username:[\w\-]+}'
+            ],
+            function() use ($router) {
+                $router->get('/', [
+                    'uses' => 'UserController@profile'
+                ]);
+
+                $router->get('/history[/{type:[A-Za-z]+}]', [
+                    'uses' => 'UserController@history'
+                ]);
+
+                $router->get('/friends[/{page:[0-9]+}]', [
+                    'uses' => 'UserController@friends'
+                ]);
+            }
+        );
+
 
 
     }
