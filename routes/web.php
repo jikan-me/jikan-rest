@@ -237,6 +237,30 @@ $router->group(
             }
         );
 
+        $router->group(
+            [
+                'prefix' => 'top'
+            ],
+            function() use ($router) {
+
+                $router->get('/anime[/{page:[0-9]+}[/{type:[A-Za-z]+}]]', [
+                    'uses' => 'TopController@anime'
+                ]);
+
+                $router->get('/manga[/{page:[0-9]+}[/{type:[A-Za-z]+}]]', [
+                    'uses' => 'TopController@manga'
+                ]);
+
+                $router->get('/characters[/{page:[0-9]+}]', [
+                    'uses' => 'TopController@characters'
+                ]);
+
+                $router->get('/people[/{page:[0-9]+}]', [
+                    'uses' => 'TopController@people'
+                ]);
+            }
+        );
+
 
 
     }

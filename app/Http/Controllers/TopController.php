@@ -2,87 +2,80 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Exceptions\Handler as Handler;
-use Jikan\Jikan;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
-use Lazer\Classes\Database as Lazer;
+use Jikan\Request\Top\TopAnimeRequest;
+use Jikan\Request\Top\TopMangaRequest;
+use Jikan\Request\Top\TopCharactersRequest;
+use Jikan\Request\Top\TopPeopleRequest;
+use Jikan\Helper\Constants as JikanConstants;
 
 class TopController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
 
-    public $type;
-    public $subtype;
-    public $page;
-
-    private $validTypes = ['anime', 'manga'];
-    private $validSubTypes = ['airing', 'upcoming', 'tv', 'movie', 'ova', 'special', 'manga', 'novels', 'oneshots', 'doujin', 'manhwa', 'manhua', 'bypopularity', 'favorite'];
-
-    public function request($type = null, $page = 1, $subtype = null) {
-
-        $antiXss = new \voku\helper\AntiXSS();
-
-        $this->type = $antiXss->xss_clean($type);
-        $this->page = (int) $page;
-
-        if (!in_array($this->type, $this->validTypes)) {
-            return response()->json(
-                ['error' => 'Invalid type request: "' . $this->type . '/' . $this->page . '/' . $this->subtype . '"'], 400
-            );
-        }
-
-        if (!is_null($subtype)) {
-            $this->subtype = $antiXss->xss_clean($subtype);
-            if (!in_array($this->subtype, $this->validSubTypes)) {
-                return response()->json(
-                    ['error' => 'Invalid sub type request: "' . $this->type . '/' . $this->page . '/' . $this->subtype . '"'], 400
-                );
-            }
-        }
-
-        $this->hash = sha1('top' . $this->type . $this->page . $this->subtype);
-        $this->response['request_hash'] = $this->hash;
-        $this->response['request_cached'] = false;
-
-        if (app('redis')->exists($this->hash)) {
-            $this->response['request_cached'] = true;
-            return response()->json(
-                $this->response + json_decode(app('redis')->get($this->hash), true)
-            );
-        }
-
-        $jikan = new Jikan;
-
-        try {
-            
-            $jikan->Top($this->type, $this->page, $this->subtype);
-            
-        } catch (\Exception $e) {
-            Bugsnag::notifyException($e);
-            return response()->json(
-                ['error' => $e->getMessage()], 404
-            );
-        }
-
-        if (empty($jikan->response) || $jikan->response === false) {
-            return response()->json(['error' => 'MyAnimeList Rate Limiting reached. Slow down!'], 429);
-        }
-
-        $this->cache = json_encode($jikan->response);
-        if ($this->cache !== false) {
-            if (app('redis')->set($this->hash, $this->cache)) {
-                app('redis')->expire($this->hash, CACHE_EXPIRE_SEARCH);
-            }
-        }
-
-        return response()->json(
-            $this->response + $jikan->response
-        );
+    public function main() {
+        return response()->json([
+            'test' => 'test'
+        ]);
     }
 
+    public function anime(int $page = 1, string $type = null)
+    {
+
+        if (!is_null($type) && !\in_array(strtolower($type), [
+                JikanConstants::TOP_AIRING,
+                JikanConstants::TOP_UPCOMING,
+                JikanConstants::TOP_TV,
+                JikanConstants::TOP_MOVIE,
+                JikanConstants::TOP_OVA,
+                JikanConstants::TOP_SPECIAL,
+                JikanConstants::TOP_BY_POPULARITY,
+                JikanConstants::TOP_BY_FAVORITES,
+            ])) {
+            return response()->json([
+                'error' => 'Bad Request'
+            ])->setStatusCode(400);
+        }
+
+        $top = $this->jikan->getTopAnime(new TopAnimeRequest($page, $type));
+
+        return response($this->serializer->serialize($top, 'json'));
+    }
+
+    public function manga(int $page = 1, string $type = null)
+    {
+
+        if (!is_null($type) && !\in_array(strtolower($type),
+                [
+                JikanConstants::TOP_MANGA,
+                JikanConstants::TOP_NOVEL,
+                JikanConstants::TOP_ONE_SHOT,
+                JikanConstants::TOP_DOUJINSHI,
+                JikanConstants::TOP_MANHWA,
+                JikanConstants::TOP_MANHUA,
+                JikanConstants::TOP_BY_POPULARITY,
+                JikanConstants::TOP_BY_FAVORITES,
+                ]
+            )) {
+            return response()->json([
+                'error' => 'Bad Request'
+            ])->setStatusCode(400);
+        }
+
+        $top = $this->jikan->getTopManga(new TopMangaRequest($page, $type));
+
+        return response($this->serializer->serialize($top, 'json'));
+    }
+
+    public function people(int $page = 1)
+    {
+        $top = $this->jikan->getTopPeople(new TopPeopleRequest($page));
+
+        return response($this->serializer->serialize($top, 'json'));
+    }
+
+    public function characters(int $page = 1)
+    {
+        $top = $this->jikan->getTopCharacters(new TopCharactersRequest($page));
+
+        return response($this->serializer->serialize($top, 'json'));
+    }
 }
