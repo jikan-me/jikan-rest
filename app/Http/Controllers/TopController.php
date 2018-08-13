@@ -11,12 +11,6 @@ use Jikan\Helper\Constants as JikanConstants;
 class TopController extends Controller
 {
 
-    public function main() {
-        return response()->json([
-            'test' => 'test'
-        ]);
-    }
-
     public function anime(int $page = 1, string $type = null)
     {
 

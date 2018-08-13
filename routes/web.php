@@ -261,7 +261,34 @@ $router->group(
             }
         );
 
+        $router->group(
+            [
+                'prefix' => 'search'
+            ],
+            function() use ($router) {
 
+                $router->get('/anime[/{page:[0-9]+}]', [
+                    'uses' => 'SearchController@anime'
+                ]);
+
+                $router->get('/manga[/{page:[0-9]+}]', [
+                    'uses' => 'SearchController@manga'
+                ]);
+
+                $router->get('/character[/{page:[0-9]+}]', [
+                    'uses' => 'SearchController@character'
+                ]);
+
+                $router->get('/person[/{page:[0-9]+}]', [
+                    'uses' => 'SearchController@person'
+                ]);
+
+                $router->get('/people[/{page:[0-9]+}]', [
+                    'uses' => 'SearchController@person'
+                ]);
+
+            }
+        );
 
     }
 );

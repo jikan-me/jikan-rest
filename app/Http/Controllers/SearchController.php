@@ -2,194 +2,71 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Exceptions\Handler as Handler;
-use Jikan;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
-use Lazer\Classes\Database as Lazer;
+use Jikan\Jikan;
+use Jikan\Request\Search\AnimeSearchRequest;
+use Jikan\Request\Search\MangaSearchRequest;
+use Jikan\Request\Search\CharacterSearchRequest;
+use Jikan\Request\Search\PersonSearchRequest;
+use Jikan\Helper\Constants as JikanConstants;
 
-class SearchController extends Controller
+class TopController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *build
-     * @return void
-     */
 
-    public $type;
-    public $query;
-    public $page;
-    public $config = [];
-    public $configObj;
-
-    private $validTypes = ['anime', 'manga', 'character', 'person', 'people'];
-    private $validSubTypes = [
-        'tv' => 1,
-        'ova' => 2,
-        'movie' => 3,
-        'special' => 4,
-        'ona' => 5,
-        'music' => 6,
-        'manga' => 1,
-        'novel' => 2,
-        'oneshot' => 3,
-        'doujin' => 4,
-        'manhwa' => 5,
-        'manhua' => 6
+    private const VALID_SUB_TYPES = [
+        'tv' => JikanConstants::SEARCH_ANIME_TV,
+        'ova' => JikanConstants::SEARCH_ANIME_OVA,
+        'movie' => JikanConstants::SEARCH_ANIME_MOVIE,
+        'special' => JikanConstants::SEARCH_ANIME_SPECIAL,
+        'ona' => JikanConstants::SEARCH_ANIME_ONA,
+        'music' => JikanConstants::SEARCH_ANIME_MUSIC,
+        'manga' => JikanConstants::SEARCH_MANGA_MANGA,
+        'novel' => JikanConstants::SEARCH_MANGA_NOVEL,
+        'oneshot' => JikanConstants::SEARCH_MANGA_ONESHOT,
+        'doujin' => JikanConstants::SEARCH_MANGA_DOUJIN,
+        'manhwa' => JikanConstants::SEARCH_MANGA_MANHWA,
+        'manhua' => JikanConstants::SEARCH_MANGA_MANHUA
     ];
-    private $validStatus = [
-        'airing' => 1,
-        'completed' => 2,
-        'complete' => 2,
-        'tba' => 3,
-        'upcoming' => 3
+
+    private const VALID_STATUS = [
+        'airing' => JikanConstants::SEARCH_ANIME_STATUS_AIRING,
+        'completed' => JikanConstants::SEARCH_ANIME_STATUS_COMPLETED,
+        'complete' => JikanConstants::SEARCH_ANIME_STATUS_COMPLETED,
+        'tba' => JikanConstants::SEARCH_ANIME_STATUS_TBA,
+        'upcoming' => JikanConstants::SEARCH_ANIME_STATUS_TBA
     ];
     private $validRating = [
-        'g' => 1,
-        'pg' => 2,
-        'pg13' => 3,
-        'r17' => 4,
-        'r' => 5,
-        'rx' => 6
+        'g' => JikanConstants::SEARCH_ANIME_RATING_G,
+        'pg' => JikanConstants::SEARCH_ANIME_PG,
+        'pg13' => JikanConstants::SEARCH_ANIME_PG13,
+        'r17' => JikanConstants::SEARCH_ANIME_R17,
+        'r' => JikanConstants::SEARCH_ANIME_R,
+        'rx' => JikanConstants::SEARCH_ANIME_RX
     ];
-    private $validGenre = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44];
 
-    public function request($type = null, $query = null, $page = 1) {
-
-        $antiXss = new \voku\helper\AntiXSS();
+    private const VALID_GENRE_ANIME = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43];
+    private const VALID_GENRE_MANGA = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45];
 
 
-        $this->type = $type;
-        
-        if (!is_null($query)) {
-            $this->query = $antiXss->xss_clean($query);
-        } else {
-            if (isset($_GET['q']) && !empty($_GET['q'])) {
-                $this->query = $antiXss->xss_clean($_GET['q']);
-            }
-        }
+    public function anime(int $page = 1) {
 
-        $this->page = $page;
-
-        if (isset($_GET['page'])) {
-            $this->page = (int) $_GET['page'];
-            if ($this->page < 1) { $this->page = 1; }
-        }
-
-        $jikan = new \Jikan\Jikan;
-        
-        if ($type == 'anime' || $type == 'manga') {
-            $this->buildConfig();
-
-            if (!empty($this->config)) {
-                $this->configObj = new \Jikan\Helper\SearchConfig($type);
-
-                foreach ($this->config as $key => $value) {
-                    if (is_array($value)) {
-                        $this->configObj->{"set".$key}(...$value);
-                    } else {
-                        $this->configObj->{"set".$key}($value);
-                    }
-                }
-            }
-        }
-
-        $this->hash = sha1('search' . $this->type . $this->query . $this->page . $this->configToString());
-        $this->response['request_hash'] = $this->hash;
-        $this->response['request_cached'] = false;
-
-        if (app('redis')->exists($this->hash)) {
-            $this->response['request_cached'] = true;
-            return response()->json(
-                $this->response + json_decode(app('redis')->get($this->hash), true), 200, [], JSON_UNESCAPED_UNICODE
-            );
-        }
-
-
-        if (!in_array($this->type, $this->validTypes)) {
-            return response()->json(
-                ['error' => 'Invalid type request: "' . $this->type . '"'], 400
-            );
-        }
-
-
-        switch ($this->type) {
-            case 'anime':
-                try {
-
-                    if (!empty($this->config)) {
-                        $jikan->Search($this->query, ANIME, $this->page, $this->configObj);
-                    } else {
-                        $jikan->Search($this->query, ANIME, $this->page);
-                    }
-
-                } catch (\Exception $e) {
-                    Bugsnag::notifyException($e);
-                    return response()->json(
-                        ['error' => $e->getMessage()], 404
-                    );
-                }
-                break;
-            case 'manga':
-                try {
-
-                    if (!empty($this->config)) {
-                        $jikan->Search($this->query, MANGA, $this->page, $this->configObj);
-                    } else {
-                        $jikan->Search($this->query, MANGA, $this->page);
-                    }
-
-                } catch (\Exception $e) {
-                    Bugsnag::notifyException($e);
-                    return response()->json(
-                        ['error' => $e->getMessage()], 404
-                    );
-                }
-                break;
-            case 'person':
-            case 'people':
-                try {
-
-                    $jikan->Search($this->query, PERSON, $this->page);
-
-                } catch (\Exception $e) {
-                    Bugsnag::notifyException($e);
-                    return response()->json(
-                        ['error' => $e->getMessage()], 404
-                    );
-                }
-                break;
-            case 'character':
-                try {
-
-                    $jikan->Search($this->query, CHARACTER, $this->page);
-
-
-                } catch (\Exception $e) {
-                    Bugsnag::notifyException($e);
-                    return response()->json(
-                        ['error' => $e->getMessage()], 404
-                    );
-                }
-                break;
-        }
-
-        if (empty($jikan->response) || $jikan->response === false) {
-            return response()->json(['error' => 'MyAnimeList Rate Limiting reached. Slow down!'], 429);
-        }
-
-        $this->cache = json_encode($jikan->response);
-        if ($this->cache !== false) {
-            if (app('redis')->set($this->hash, $this->cache)) {
-                app('redis')->expire($this->hash, CACHE_EXPIRE_SEARCH);
-            }
-        }
-
-        return response()->json(
-            $this->response + $jikan->response, 200, [], JSON_UNESCAPED_UNICODE // fix utf8 issues 
-        );
     }
 
+    public function manga(int $page = 1) {
+
+    }
+
+    public function people(int $page = 1) {
+
+    }
+
+    public function character(int $page = 1) {
+
+    }
+
+}
+
+/*
+ * make factory?
     private function buildConfig() {
         $antiXss = new \voku\helper\AntiXSS();
         
@@ -235,14 +112,6 @@ class SearchController extends Controller
         }
 
         if (isset($_GET['genre'])) {
-/*            if (!is_array($_GET['genre'])) {
-                return response()->json(
-                    ['error' => 'Bad genre parse: "' . $this->type . '"'], 400
-                );
-            }
-            // Doesn't work. `genre=` gets past without any exception.
-            // Thus now we ignore this and add support for it instead
-*/
 
             $this->config['Genre'] = [];
 
@@ -281,4 +150,4 @@ class SearchController extends Controller
         return $url;
     }
 
-}
+*/
