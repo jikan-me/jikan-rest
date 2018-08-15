@@ -37,8 +37,8 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-//$app->withFacades();
-//$app->withEloquent();
+$app->withFacades();
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -87,10 +87,11 @@ $app->middleware([App\Http\Middleware\Throttle::class]);*/
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
-//$app->routeMiddleware([
-//    'blacklist' => App\Http\Middleware\Blacklist::class,
-//    'meta' => App\Http\Middleware\Meta::class,
-//]);
+$app->routeMiddleware([
+    'blacklist' => App\Http\Middleware\Blacklist::class,
+    'meta' => App\Http\Middleware\Meta::class,
+    'throttle' => App\Http\Middleware\Throttle::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -103,11 +104,12 @@ $app->middleware([App\Http\Middleware\Throttle::class]);*/
 |
 */
 
-//$app->register(Illuminate\Redis\RedisServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -124,6 +126,7 @@ $app->router->group(
     [
         'prefix' => 'v3',
         'namespace' => 'App\Http\Controllers\V3',
+        'middleware' => ['throttle']
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v3.php';
@@ -134,6 +137,7 @@ $app->router->group(
     [
         'prefix' => 'v2',
         'namespace' => 'App\Http\Controllers\V2',
+        'middleware' => ['throttle']
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v2.php';
