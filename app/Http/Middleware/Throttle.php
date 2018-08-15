@@ -15,13 +15,10 @@ class Throttle
 
     public function handle(Request $request, Closure $next)
     {
-
         $signature = $this->resolveRequestSignature($request);
         $key = "user:{$signature}:" . time();
 
         $this->hit($key);
-
-
 
         $data = app('redis')->keys("user:{$signature}:*");
         foreach ($data as $user) {
