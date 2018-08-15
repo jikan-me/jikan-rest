@@ -29,6 +29,7 @@ $router->get('/', function () use ($router) {
     ]);
 });
 
+
 $router->get('meta/{request:[A-Za-z]+}[/{type:[A-Za-z]+}[/{period:[A-Za-z]+}[/{page:[0-9]+}]]]', [
 	'uses' => 'MetaLiteController@request'
 ]);

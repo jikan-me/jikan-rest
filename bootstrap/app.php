@@ -62,13 +62,6 @@ $app->singleton(
 );
 
 $app->singleton(
-    \JMS\Serializer\Serializer::class,
-    function () {
-        return App\Providers\SerializerFactory::create();
-    }
-);
-
-$app->singleton(
     \Jikan\MyAnimeList\MalClient::class,
     function () {
         return new \Jikan\MyAnimeList\MalClient();
@@ -129,10 +122,21 @@ $app->middleware([App\Http\Middleware\Throttle::class]);*/
 
 $app->router->group(
     [
-        'namespace' => 'App\Http\Controllers',
+        'prefix' => 'v3',
+        'namespace' => 'App\Http\Controllers\V3',
     ],
     function ($router) {
-        require __DIR__.'/../routes/web.php';
+        require __DIR__.'/../routes/web.v3.php';
+    }
+);
+
+$app->router->group(
+    [
+        'prefix' => 'v2',
+        'namespace' => 'App\Http\Controllers\V2',
+    ],
+    function ($router) {
+        require __DIR__.'/../routes/web.v2.php';
     }
 );
 
