@@ -4,18 +4,16 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class RedisCache
 {
-//    protected const CACHE_EXPIRY = 43200; // 6 hours
-    protected const CACHE_EXPIRY = 5; // 6 hours
+    protected const CACHE_EXPIRY = 43200; // 6 hours
 
     public function handle(Request $request, Closure $next)
     {
         $key = $request->getRequestUri();
         $requestType = $request->segments()[1];
-        $hashKey = "request:{$request}:{$key}";
+        $hashKey = "request:{$requestType}:{$key}";
         $cached = true;
 
 
@@ -40,7 +38,7 @@ class RedisCache
             array_merge(
                 [
                     'request_cached' => $cached,
-                    'request_expiration' => app('redis')->ttl($hashKey),
+                    'cache_expiration' => app('redis')->ttl($hashKey),
                 ],
                 json_decode(
                     app('redis')->get($hashKey),
