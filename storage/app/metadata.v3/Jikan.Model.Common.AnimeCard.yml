@@ -1,2 +1,5 @@
 Jikan\Model\Common\AnimeCard:
   exclusion_policy: NONE
+  properties:
+    score:
+      expose: true

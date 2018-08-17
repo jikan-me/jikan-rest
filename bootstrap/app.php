@@ -138,7 +138,7 @@ $app->router->group(
     [
         'prefix' => 'v2',
         'namespace' => 'App\Http\Controllers\V2',
-        'middleware' => ['redis-cache', 'throttle']
+        'middleware' => ['throttle']
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v2.php';
@@ -149,7 +149,7 @@ $app->router->group(
     [
         'prefix' => '/',
         'namespace' => 'App\Http\Controllers\V2',
-        'middleware' => ['redis-cache', 'throttle']
+        'middleware' => ['throttle']
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v2.php';
