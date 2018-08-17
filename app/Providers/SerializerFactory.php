@@ -21,35 +21,21 @@ class SerializerFactory
                         'serialization',
                         MalUrl::class,
                         'json',
-                        function ($visitor, MalUrl $obj, array $type) {
-                            return [
-                                'mal_id' => $obj->getMalId(),
-                                'type'   => $obj->getType(),
-                                'name'   => $obj->getTitle(),
-                                'url'    => $obj->getUrl(),
-                            ];
-                        }
+                        \Closure::fromCallable('self::convertMalUrl')
                     );
 
                     $registry->registerHandler(
                         'serialization',
                         DateRange::class,
                         'json',
-                        function ($visitor, DateRange $obj, array $type) {
-                            return [
-                                'from' => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
-                                'to'   => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
-                            ];
-                        }
+                        \Closure::fromCallable('self::convertDateRange')
                     );
 
                     $registry->registerHandler(
                         'serialization',
                         \DateTimeImmutable::class,
                         'json',
-                        function ($visitor, \DateTimeImmutable $obj, array $type) {
-                            return $obj ? $obj->format(DATE_ATOM) : null;
-                        }
+                        \Closure::fromCallable('self::convertDateTimeImmutable')
                     );
                 }
             )
@@ -66,36 +52,21 @@ class SerializerFactory
                         'serialization',
                         MalUrl::class,
                         'json',
-                        function ($visitor, MalUrl $obj, array $type) {
-                            return [
-                                'mal_id' => $obj->getMalId(),
-                                'type'   => $obj->getType(),
-                                'name'   => $obj->getTitle(),
-                                'url'    => $obj->getUrl(),
-                            ];
-                        }
+                        \Closure::fromCallable('self::convertMalUrl')
                     );
 
                     $registry->registerHandler(
                         'serialization',
                         DateRange::class,
                         'json',
-                        function ($visitor, DateRange $obj, array $type) {
-                            return [
-                                'from'   => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
-                                'to'     => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
-                                'string' => (string)$obj,
-                            ];
-                        }
+                        \Closure::fromCallable('self::convertDateRange')
                     );
 
                     $registry->registerHandler(
                         'serialization',
                         \DateTimeImmutable::class,
                         'json',
-                        function ($visitor, \DateTimeImmutable $obj, array $type) {
-                            return $obj ? $obj->format(DATE_ATOM) : null;
-                        }
+                        \Closure::fromCallable('self::convertDateTimeImmutable')
                     );
                 }
             )
@@ -103,5 +74,29 @@ class SerializerFactory
         $serializer->setSerializationContextFactory(new SerializationContextFactory());
 
         return $serializer;
+    }
+
+    private static function convertMalUrl($visitor, MalUrl $obj, array $type): array
+    {
+        return [
+            'mal_id' => $obj->getMalId(),
+            'type'   => $obj->getType(),
+            'name'   => $obj->getTitle(),
+            'url'    => $obj->getUrl(),
+        ];
+    }
+
+    private static function convertDateRange($visitor, DateRange $obj, array $type): array
+    {
+        return [
+            'from'   => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
+            'to'     => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
+            'string' => (string)$obj,
+        ];
+    }
+
+    private static function convertDateTimeImmutable($visitor, \DateTimeImmutable $obj, array $type): ?string
+    {
+        return $obj ? $obj->format(DATE_ATOM) : null;
     }
 }
