@@ -22,8 +22,6 @@ class RedisCache
         $hashKey = "request:{$requestType}:{$key}";
         $cached = true;
 
-
-
         if (!app('redis')->exists($hashKey)) {
 
             $response = $next($request);

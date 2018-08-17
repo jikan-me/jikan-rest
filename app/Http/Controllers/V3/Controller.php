@@ -7,6 +7,7 @@ use App\Providers\SerializerServiceProdivder;
 use App\Providers\SerializerServiceProviderV3;
 use Jikan\Jikan;
 use Jikan\MyAnimeList\MalClient;
+use JMS\Serializer\Context;
 use JMS\Serializer\Serializer;
 use Laravel\Lumen\Routing\Controller as BaseController;
 

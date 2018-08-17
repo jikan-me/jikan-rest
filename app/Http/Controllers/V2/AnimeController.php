@@ -26,7 +26,7 @@ class AnimeController extends Controller
         return response($this->serializer->serialize($anime, 'json'));
     }
 
-    public function episodes(int $id, int $page)
+    public function episodes(int $id, int $page = 1)
     {
         $anime = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
         return response($this->serializer->serialize($anime, 'json'));

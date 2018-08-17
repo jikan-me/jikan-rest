@@ -26,7 +26,7 @@ class AnimeController extends Controller
         return response($this->serializer->serialize($anime, 'json'));
     }
 
-    public function episodes(int $id, int $page)
+    public function episodes(int $id, int $page = 1)
     {
         $anime = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
         return response($this->serializer->serialize($anime, 'json'));
@@ -34,13 +34,13 @@ class AnimeController extends Controller
 
     public function news(int $id)
     {
-        $anime = $this->jikan->getNewsList(new AnimeNewsRequest($id));
+        $anime = ['articles' => $this->jikan->getNewsList(new AnimeNewsRequest($id))];
         return response($this->serializer->serialize($anime, 'json'));
     }
 
     public function forum(int $id)
     {
-        $anime = $this->jikan->getAnimeForum(new AnimeForumRequest($id));
+        $anime = ['topics' => $this->jikan->getAnimeForum(new AnimeForumRequest($id))];
         return response($this->serializer->serialize($anime, 'json'));
     }
 
@@ -52,7 +52,7 @@ class AnimeController extends Controller
 
     public function pictures(int $id)
     {
-        $anime = $this->jikan->getAnimePictures(new AnimePicturesRequest($id));
+        $anime = ['pictures' => $this->jikan->getAnimePictures(new AnimePicturesRequest($id))];
         return response($this->serializer->serialize($anime, 'json'));
     }
 
@@ -64,7 +64,7 @@ class AnimeController extends Controller
 
     public function moreInfo(int $id)
     {
-        $anime = $this->jikan->getAnimeMoreInfo(new AnimeMoreInfoRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = ['moreinfo' => $this->jikan->getAnimeMoreInfo(new AnimeMoreInfoRequest($id))];
+        return response(json_encode($anime));
     }
 }
