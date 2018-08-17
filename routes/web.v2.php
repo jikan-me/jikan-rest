@@ -14,6 +14,7 @@ $router->get('/', function () use ($router) {
     	'GitHub' => 'https://github.com/jikan-me/jikan',
     	'PRODUCTION_API_URL' => 'https://api.jikan.moe/v2/',
     	'STATUS_URL' => 'https://status.jikan.moe',
+        'NOTICE' => 'Switch over to V3 before the End Of Life for V2! (January 1st, 2019)'
 //    	'CACHED_REQUESTS' => app('redis')->dbSize(),
     ]);
 });
