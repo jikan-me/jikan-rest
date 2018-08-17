@@ -145,5 +145,29 @@ $app->router->group(
     }
 );
 
+$app->router->group(
+    [
+        'prefix' => '/',
+        'namespace' => 'App\Http\Controllers\V2',
+        'middleware' => ['redis-cache', 'throttle']
+    ],
+    function ($router) {
+        require __DIR__.'/../routes/web.v2.php';
+    }
+);
+
+$app->router->group(
+    [
+        'prefix' => 'v1',
+    ],
+    function ($router) {
+        $router->get('/', function () {
+            return response()->json([
+                'error' => 'This version is depreciated'
+            ]);
+        });
+    }
+);
+
 
 return $app;
