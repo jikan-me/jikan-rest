@@ -1,112 +1,30 @@
 Jikan\Model\Anime\Anime:
-  exclusion_policy: ALL
+  exclusion_policy: NONE
   properties:
-    malId:
-      expose: true
-      type: int
-      serialized_name: mal_id
-    url:
-      expose: true
-      type: string
-    imageUrl:
-      expose: true
-      type: string
-      serialized_name: image_url
-    title:
-      expose: true
-      type: string
-    titleEnglish:
-      expose: true
-      type: string
-      serialized_name: title_english
-    titleJapanese:
-      expose: true
-      type: string
-      serialized_name: title_japanese
     titleSynonyms:
       expose: true
       type: array
       serialized_name: title_synonyms
-    type:
-      expose: true
-      type: string
-      serialized_name: type
-    source:
-      expose: true
-      type: string
-      serialized_name: source
-    episodes:
-      expose: true
-      type: int
-      serialized_name: episodes
-    status:
-      expose: true
-      type: string
-      serialized_name: status
-    airing:
-      expose: true
-      type: bool
-      serialized_name: airing
     aired:
       expose: true
       serialized_name: aired
-    duration:
-      expose: true
-      type: string
-    rating:
-      expose: true
-      type: string
-    score:
-      expose: true
-      type: float
-    scoredBy:
-      expose: true
-      type: integer
-      serialized_name: scored_by
-    rank:
-      expose: true
-      type: integer
-    popularity:
-      expose: true
-      type: integer
-    members:
-      expose: true
-      type: integer
-    favorites:
-      expose: true
-      type: integer
-    synopsis:
-      expose: true
-      type: string
-    background:
-      expose: true
-      type: string
     premiered:
-      expose: true
       type: string
     broadcast:
-      expose: true
       type: string
     related:
-      expose: true
       type: array
     producers:
-      expose: true
       type: array
     licensors:
-      expose: true
       type: array
     studios:
-      expose: true
       type: array
     genres:
-      expose: true
       type: array
     openingThemes:
-      expose: true
       type: array
       serialized_name: opening_themes
     endingThemes:
-      expose: true
       type: array
       serialized_name: ending_themes
