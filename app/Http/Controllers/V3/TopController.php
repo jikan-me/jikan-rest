@@ -29,7 +29,7 @@ class TopController extends Controller
             ])->setStatusCode(400);
         }
 
-        $top = $this->jikan->getTopAnime(new TopAnimeRequest($page, $type));
+        $top = ['top' => $this->jikan->getTopAnime(new TopAnimeRequest($page, $type))];
 
         return response($this->serializer->serialize($top, 'json'));
     }
@@ -54,21 +54,21 @@ class TopController extends Controller
             ])->setStatusCode(400);
         }
 
-        $top = $this->jikan->getTopManga(new TopMangaRequest($page, $type));
+        $top = ['top' => $this->jikan->getTopManga(new TopMangaRequest($page, $type))];
 
         return response($this->serializer->serialize($top, 'json'));
     }
 
     public function people(int $page = 1)
     {
-        $top = $this->jikan->getTopPeople(new TopPeopleRequest($page));
+        $top = ['top' => $this->jikan->getTopPeople(new TopPeopleRequest($page))];
 
         return response($this->serializer->serialize($top, 'json'));
     }
 
     public function characters(int $page = 1)
     {
-        $top = $this->jikan->getTopCharacters(new TopCharactersRequest($page));
+        $top = ['top' => $this->jikan->getTopCharacters(new TopCharactersRequest($page))];
 
         return response($this->serializer->serialize($top, 'json'));
     }
