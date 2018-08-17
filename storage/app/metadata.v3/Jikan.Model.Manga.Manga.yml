@@ -1,0 +1,16 @@
+Jikan\Model\Manga\Manga:
+  exclusion_policy: NONE
+  properties:
+    titleSynonyms:
+      type: array
+      serialized_name: title_synonyms
+    published:
+      serialized_name: published
+    related:
+      type: array
+    genres:
+      type: array
+    authors:
+      type: array
+    serializations:
+      type: array

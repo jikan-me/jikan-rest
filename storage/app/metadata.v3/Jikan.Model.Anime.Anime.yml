@@ -2,11 +2,9 @@ Jikan\Model\Anime\Anime:
   exclusion_policy: NONE
   properties:
     titleSynonyms:
-      expose: true
       type: array
       serialized_name: title_synonyms
     aired:
-      expose: true
       serialized_name: aired
     premiered:
       type: string
