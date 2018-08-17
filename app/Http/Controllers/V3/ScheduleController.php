@@ -32,7 +32,9 @@ class ScheduleController extends Controller
         $schedule = $this->jikan->getSchedule(new ScheduleRequest());
 
         if (!is_null($day)) {
-            $schedule = $schedule->{'get' . ucfirst(strtolower($day))}();
+            $schedule = [
+                strtolower($day) => $schedule->{'get' . ucfirst(strtolower($day))}()
+            ];
         }
 
 
