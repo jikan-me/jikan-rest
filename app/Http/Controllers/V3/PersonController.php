@@ -15,7 +15,7 @@ class PersonController extends Controller
 
     public function pictures(int $id)
     {
-        $person = $this->jikan->getPersonPictures(new PersonPicturesRequest($id));
+        $person = ['pictures' => $this->jikan->getPersonPictures(new PersonPicturesRequest($id))];
         return response($this->serializer->serialize($person, 'json'));
     }
 }

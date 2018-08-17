@@ -15,7 +15,7 @@ class CharacterController extends Controller
 
     public function pictures(int $id)
     {
-        $character = $this->jikan->getCharacterPictures(new CharacterPicturesRequest($id));
+        $character = ['pictures' => $this->jikan->getCharacterPictures(new CharacterPicturesRequest($id))];
         return response($this->serializer->serialize($character, 'json'));
     }
 }
