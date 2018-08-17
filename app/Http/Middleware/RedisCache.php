@@ -12,7 +12,13 @@ class RedisCache
     public function handle(Request $request, Closure $next)
     {
         $key = $request->getRequestUri();
+        if (empty($request->segments())) {return $next($request);}
+        if (!isset($request->segments()[1])){return $next($request);}
+
         $requestType = $request->segments()[1];
+        if (!\in_array($request->segments()[0], ['v1', 'v2', 'v3'])) {
+            $requestType = $request->segments()[0];
+        }
         $hashKey = "request:{$requestType}:{$key}";
         $cached = true;
 
