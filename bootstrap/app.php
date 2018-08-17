@@ -90,7 +90,7 @@ $app->middleware([App\Http\Middleware\Throttle::class]);*/
 $app->routeMiddleware([
     'blacklist' => App\Http\Middleware\Blacklist::class,
     'meta' => App\Http\Middleware\Meta::class,
-    'redis-cache' => App\Http\Middleware\RedisCache::class,
+    //'redis-cache' => App\Http\Middleware\RedisCache::class,
     'throttle' => App\Http\Middleware\Throttle::class,
 ]);
 
@@ -105,7 +105,7 @@ $app->routeMiddleware([
 |
 */
 
-$app->register(Illuminate\Redis\RedisServiceProvider::class);
+//$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
@@ -127,7 +127,7 @@ $app->router->group(
     [
         'prefix' => 'v3',
         'namespace' => 'App\Http\Controllers\V3',
-        'middleware' => ['redis-cache', 'throttle']
+        //'middleware' => ['redis-cache', 'throttle']
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v3.php';
@@ -138,7 +138,7 @@ $app->router->group(
     [
         'prefix' => 'v2',
         'namespace' => 'App\Http\Controllers\V2',
-        'middleware' => ['redis-cache', 'throttle']
+        //'middleware' => ['redis-cache', 'throttle']
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v2.php';
@@ -149,7 +149,7 @@ $app->router->group(
     [
         'prefix' => '/',
         'namespace' => 'App\Http\Controllers\V2',
-        'middleware' => ['redis-cache', 'throttle']
+        //'middleware' => ['redis-cache', 'throttle']
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v2.php';

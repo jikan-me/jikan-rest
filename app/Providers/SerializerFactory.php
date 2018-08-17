@@ -2,19 +2,19 @@
 
 namespace App\Providers;
 
+use Jikan\Model\Common\DateRange;
+use Jikan\Model\Common\MalUrl;
+use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
-use JMS\Serializer\Handler\HandlerRegistry;
-use Jikan\Model\Common\MalUrl;
-use Jikan\Model\Common\DateRange;
 
 class SerializerFactory
 {
 
-    public static function createV2() : Serializer
+    public static function createV2(): Serializer
     {
         return (new SerializerBuilder())
-            ->addMetadataDir(__DIR__ . '/../../storage/app/metadata.v2')
+            ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v2')
             ->configureHandlers(
                 function (HandlerRegistry $registry) {
                     $registry->registerHandler(
@@ -37,8 +37,8 @@ class SerializerFactory
                         'json',
                         function ($visitor, DateRange $obj, array $type) {
                             return [
-                                'from'   => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
-                                'to'     => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
+                                'from' => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
+                                'to'   => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
                             ];
                         }
                     );
@@ -56,10 +56,10 @@ class SerializerFactory
             ->build();
     }
 
-    public static function createV3() : Serializer
+    public static function createV3(): Serializer
     {
-        return (new SerializerBuilder())
-            ->addMetadataDir(__DIR__ . '/../../storage/app/metadata.v3')
+        $serializer = (new SerializerBuilder())
+            ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v3')
             ->configureHandlers(
                 function (HandlerRegistry $registry) {
                     $registry->registerHandler(
@@ -84,7 +84,7 @@ class SerializerFactory
                             return [
                                 'from'   => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
                                 'to'     => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
-                                'string' => (string) $obj,
+                                'string' => (string)$obj,
                             ];
                         }
                     );
@@ -100,5 +100,8 @@ class SerializerFactory
                 }
             )
             ->build();
+        $serializer->setSerializationContextFactory(new SerializationContextFactory());
+
+        return $serializer;
     }
 }

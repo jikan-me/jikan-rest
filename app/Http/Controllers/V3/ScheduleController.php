@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\V3;
 
 use Jikan\Request\Schedule\ScheduleRequest;
-use Jikan\Request\Seasonal\SeasonalRequest;
 
 class ScheduleController extends Controller
 {
@@ -17,22 +16,22 @@ class ScheduleController extends Controller
         'saturday',
         'sunday',
         'other',
-        'unknown'
+        'unknown',
     ];
 
     public function main(?string $day = null)
     {
-        if (!is_null($day) && !\in_array(strtolower($day), self::VALID_DAYS)) {
+        if (null !== $day && !\in_array(strtolower($day), self::VALID_DAYS, true)) {
             return response()->json([
-                'error' => 'Bad Request'
+                'error' => 'Bad Request',
             ])->setStatusCode(400);
         }
 
         $schedule = $this->jikan->getSchedule(new ScheduleRequest());
 
-        if (!is_null($day)) {
+        if (null !== $day) {
             $schedule = [
-                strtolower($day) => $schedule->{'get' . ucfirst(strtolower($day))}()
+                strtolower($day) => $schedule->{'get'.ucfirst(strtolower($day))}(),
             ];
         }
 
