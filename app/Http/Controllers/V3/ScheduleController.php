@@ -22,7 +22,6 @@ class ScheduleController extends Controller
 
     public function main(?string $day = null)
     {
-
         if (!is_null($day) && !\in_array(strtolower($day), self::VALID_DAYS)) {
             return response()->json([
                 'error' => 'Bad Request'
@@ -36,7 +35,6 @@ class ScheduleController extends Controller
                 strtolower($day) => $schedule->{'get' . ucfirst(strtolower($day))}()
             ];
         }
-
 
         return response($this->serializer->serialize($schedule, 'json'));
     }
