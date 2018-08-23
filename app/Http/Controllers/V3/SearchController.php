@@ -37,13 +37,23 @@ class SearchController extends Controller
     }
 
     public function people(int $page = 1) {
-        $request = (new PersonSearchRequest())->setPage($page);
+        $search = $this->jikan->getPersonSearch(
+            SearchQueryBuilder::create(
+                (new PersonSearchRequest())->setPage($page)
+            )
+        );
 
+        return response($this->serializer->serialize($search, 'json'));
     }
 
     public function character(int $page = 1) {
-        $request = (new CharacterSearchRequest())->setPage($page);
+        $search = $this->jikan->getCharacterSearch(
+            SearchQueryBuilder::create(
+                (new CharacterSearchRequest())->setPage($page)
+            )
+        );
 
+        return response($this->serializer->serialize($search, 'json'));
     }
 
 }

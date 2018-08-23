@@ -220,11 +220,11 @@ $router->group(
         ]);
 
         $router->get('/person[/{page:[0-9]+}]', [
-            'uses' => 'SearchController@person'
+            'uses' => 'SearchController@people'
         ]);
 
         $router->get('/people[/{page:[0-9]+}]', [
-            'uses' => 'SearchController@person'
+            'uses' => 'SearchController@people'
         ]);
 
     }
