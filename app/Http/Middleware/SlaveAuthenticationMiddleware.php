@@ -28,25 +28,28 @@ class SlaveAuthenticationMiddleware
             ]);
         }
 
+        $slaveKeyHeader = env('SLAVE_KEY_HEADER');
+        $slaveClientIpHeader = env('SLAVE_CLIENT_IP_HEADER');
 
-        $slaveKey = $request->header('x-slave-key') ?? null;
-        $clientIp = $request->header('x-client-ip') ?? null;
+
+        $slaveKey = $request->header($slaveKeyHeader) ?? null;
+        $clientIp = $request->header($slaveClientIpHeader) ?? null;
 
         if (is_null($slaveKey)) {
             return response()->json([
-                'error' => 'Header x-slave-key is not set'
+                'error' => "Header \"{$slaveKeyHeader}\" is not set"
             ]);
         }
 
         if (is_null($clientIp)) {
             return response()->json([
-                'error' => 'Forwarded Header x-client-ip is not set'
+                'error' => "Forwarded Header \"{$slaveClientIpHeader}\" is not set"
             ]);
         }
 
         if ($slaveKey !== env('SLAVE_KEY')) {
             return response()->json([
-                'error' => 'Failed to verify slave key'
+                'error' => "Slave verification failed; \"{$slaveKeyHeader}\" mismatch"
             ]);
         }
 
