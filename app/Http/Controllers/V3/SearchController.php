@@ -27,8 +27,13 @@ class SearchController extends Controller
     }
 
     public function manga(int $page = 1) {
-        $request = (new MangaSearchRequest())->setPage($page);
+        $search = $this->jikan->getMangaSearch(
+            SearchQueryBuilder::create(
+                (new MangaSearchRequest())->setPage($page)
+            )
+        );
 
+        return response($this->serializer->serialize($search, 'json'));
     }
 
     public function people(int $page = 1) {
