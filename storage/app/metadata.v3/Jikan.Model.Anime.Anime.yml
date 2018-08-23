@@ -6,20 +6,6 @@ Jikan\Model\Anime\Anime:
       serialized_name: title_synonyms
     aired:
       serialized_name: aired
-    premiered:
-      type: string
-    broadcast:
-      type: string
-    related:
-      type: array
-    producers:
-      type: array
-    licensors:
-      type: array
-    studios:
-      type: array
-    genres:
-      type: array
     openingThemes:
       type: array
       serialized_name: opening_themes

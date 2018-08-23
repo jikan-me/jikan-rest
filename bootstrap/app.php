@@ -12,11 +12,6 @@ try {
     Defines
 */
 define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
-define('RATE_LIMIT', 5000); // per day
-define('CACHE_EXPIRE', 3600 * 24 * 3); // 3 days
-define('CACHE_EXPIRE_SEARCH', 3600 * 6); // 6 hours
-//define('CACHE_EXPIRE', 4); // 60 seconds | dev
-//define('CACHE_EXPIRE_SEARCH', 4); // 60 seconds | dev
 
 define('REST_VERSION', '3.0');
 define('SOURCE_VERSION', '2.0.0-rc.1');
@@ -92,6 +87,7 @@ $app->routeMiddleware([
     'meta' => App\Http\Middleware\Meta::class,
     'redis-cache' => App\Http\Middleware\RedisCache::class,
     'throttle' => App\Http\Middleware\Throttle::class,
+    'slave-auth' => App\Http\Middleware\SlaveAuthenticationMiddleware::class
 ]);
 
 /*
@@ -123,11 +119,13 @@ $app->register(Illuminate\Redis\RedisServiceProvider::class);
 |
 */
 
+$commonMiddleware = ['slave-auth', 'redis-cache', 'throttle'];
+
 $app->router->group(
     [
         'prefix' => 'v3',
         'namespace' => 'App\Http\Controllers\V3',
-        'middleware' => ['redis-cache', 'throttle']
+        'middleware' => $commonMiddleware
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v3.php';
@@ -138,7 +136,7 @@ $app->router->group(
     [
         'prefix' => 'v2',
         'namespace' => 'App\Http\Controllers\V2',
-        'middleware' => ['redis-cache', 'throttle']
+        'middleware' => $commonMiddleware
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v2.php';
@@ -149,7 +147,7 @@ $app->router->group(
     [
         'prefix' => '/',
         'namespace' => 'App\Http\Controllers\V2',
-        'middleware' => ['redis-cache', 'throttle']
+        'middleware' => $commonMiddleware
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v2.php';
