@@ -19,7 +19,7 @@ class RedisCache
         if (!\in_array($request->segments()[0], ['v1', 'v2', 'v3'])) {
             $requestType = $request->segments()[0];
         }
-        $hashKey = "request:{$requestType}:{$key}";
+        $hashKey = "request:{$requestType}:" . sha1($key);
         $cached = true;
 
         if (!app('redis')->exists($hashKey)) {
