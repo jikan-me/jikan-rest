@@ -87,7 +87,8 @@ $app->routeMiddleware([
     'meta' => App\Http\Middleware\Meta::class,
     'redis-cache' => App\Http\Middleware\RedisCache::class,
     'throttle' => App\Http\Middleware\Throttle::class,
-    'slave-auth' => App\Http\Middleware\SlaveAuthenticationMiddleware::class
+    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
+    'cachet' => App\Http\Middleware\Cachet::class
 ]);
 
 /*
@@ -119,7 +120,7 @@ $app->register(Illuminate\Redis\RedisServiceProvider::class);
 |
 */
 
-$commonMiddleware = ['slave-auth', 'redis-cache', 'throttle'];
+$commonMiddleware = ['slave-auth', 'redis-cache', 'throttle', 'cachet'];
 
 $app->router->group(
     [
