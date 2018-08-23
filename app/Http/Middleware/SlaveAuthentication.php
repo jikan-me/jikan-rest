@@ -3,9 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 
-class SlaveAuthenticationMiddleware
+class SlaveAuthentication
 {
     /**
      * Handle an incoming request.
@@ -18,8 +17,6 @@ class SlaveAuthenticationMiddleware
     {
         if (
             is_null(env('SLAVE_INSTANCE'))
-            ||
-            empty(env('SLAVE_INSTANCE'))
             ||
             env('SLAVE_INSTANCE') === false
         ) {
