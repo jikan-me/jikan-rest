@@ -103,8 +103,20 @@ class AnimeController extends Controller
 
     public function forum(int $id)
     {
-        $anime = $this->jikan->getAnimeForum(new AnimeForumRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+        $forum = ['topic' => $this->jikan->getAnimeForum(new AnimeForumRequest($id))];
+        $forum = json_decode(
+            $this->serializer->serialize($forum, 'json'),
+            true
+        );
+
+
+        return response(
+            array_merge(
+                $anime,
+                $forum
+            )
+        );
     }
 
     public function videos(int $id)

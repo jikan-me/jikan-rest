@@ -1,0 +1,5 @@
+Jikan\Model\Forum\ForumPost:
+  exclusion_policy: NONE
+  properties:
+    relativeDate:
+      serialized_name: date_relative
