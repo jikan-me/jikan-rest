@@ -20,9 +20,7 @@ class SlaveAuthentication
             ||
             env('SLAVE_INSTANCE') === false
         ) {
-            return response()->json([
-                'error' => 'Slave not configured properly'
-            ]);
+            return $next($request);
         }
 
         $slaveKeyHeader = env('SLAVE_KEY_HEADER');
