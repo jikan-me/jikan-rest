@@ -16,7 +16,7 @@ class Blacklist
 
         if ($this->inList()) {
             return response()->json([
-                'error' => 'This IP has been blacklisted'
+                'error' => 'You have been blocked from the service'
             ]);
         }
 
