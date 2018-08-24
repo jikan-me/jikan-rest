@@ -21,7 +21,7 @@ class SerializerFactory
                         'serialization',
                         MalUrl::class,
                         'json',
-                        \Closure::fromCallable('self::convertMalUrl')
+                        \Closure::fromCallable('self::convertMalUrlv2')
                     );
 
                     $registry->registerHandler(
@@ -81,6 +81,17 @@ class SerializerFactory
         return [
             'mal_id' => $obj->getMalId(),
             'type'   => $obj->getType(),
+            'name'   => $obj->getTitle(),
+            'url'    => $obj->getUrl(),
+        ];
+    }
+
+    private static function convertMalUrlv2($visitor, MalUrl $obj, array $type): array
+    {
+        return [
+            'mal_id' => $obj->getMalId(),
+            'type'   => $obj->getType(),
+            'title'   => $obj->getTitle(),
             'name'   => $obj->getTitle(),
             'url'    => $obj->getUrl(),
         ];

@@ -1,0 +1,5 @@
+Jikan\Model\Anime\AnimeCharactersAndStaff:
+  exclusion_policy: NONE
+  properties:
+    characters:
+      serialized_name: character

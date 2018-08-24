@@ -14,16 +14,51 @@ use Jikan\Request\Anime\AnimeVideosRequest;
 
 class AnimeController extends Controller
 {
+    public function _main($id) {
+        $anime = $this->jikan->getAnime(new AnimeRequest($id));
+
+        // backwards compatibility
+        $anime = json_decode(
+            $this->serializer->serialize($anime, 'json'),
+            true
+        );
+
+        $anime['aired_string'] = $anime['aired']['string'];
+        unset($anime['aired']['string']);
+        $anime['title_synonyms'] = empty($anime['title_synonyms']) ? null : implode(",", $anime['title_synonyms']);;
+
+        return $anime;
+    }
+
     public function main(int $id)
     {
-        $anime = $this->jikan->getAnime(new AnimeRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+
+        return response($anime);
     }
 
     public function characters_staff(int $id)
     {
-        $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+        $charactersStaff = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
+        $charactersStaff = json_decode(
+            $this->serializer->serialize($charactersStaff, 'json'),
+            true
+        );
+
+        foreach ($charactersStaff['staff'] as &$staff) {
+            $staff['positions'] = empty($staff['positions']) ?  null : implode(",", $staff['positions']);
+            $staff['role'] = $staff['positions'];
+            unset($staff['positions']);
+        }
+
+
+        return response(
+            array_merge(
+                $anime,
+                $charactersStaff
+            )
+        );
     }
 
     public function episodes(int $id, int $page = 1)

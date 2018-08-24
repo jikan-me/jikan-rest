@@ -1,0 +1,5 @@
+Jikan\Model\Character\CharacterListItem:
+  exclusion_policy: NONE
+  properties:
+    voiceActors:
+      serialized_name: voice_actor
