@@ -45,8 +45,7 @@ class Throttle
 
     protected function resolveRequestSignature(Request $request) {
         if (env('SLAVE_INSTANCE') === true) {
-            $ip = $request->header('x-client-ip') ?? null;
-
+            $ip = $request->header('x-client-ip');
             return sha1(
                 'localhost' . '|' . $ip
             );
