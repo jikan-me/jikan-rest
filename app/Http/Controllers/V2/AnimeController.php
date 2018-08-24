@@ -139,14 +139,41 @@ class AnimeController extends Controller
 
     public function pictures(int $id)
     {
-        $anime = $this->jikan->getAnimePictures(new AnimePicturesRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+        $pictures = ['image' =>$this->jikan->getAnimePictures(new AnimePicturesRequest($id))];
+        $pictures = json_decode(
+            $this->serializer->serialize($pictures, 'json'),
+            true
+        );
+
+        foreach($pictures['image'] as $key => $value) {
+            $pictures['image'][$key] = $value['small'];
+        }
+
+
+        return response(
+            array_merge(
+                $anime,
+                $pictures
+            )
+        );
     }
 
     public function stats(int $id)
     {
-        $anime = $this->jikan->getAnimeStats(new AnimeStatsRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+        $stats = $this->jikan->getAnimeStats(new AnimeStatsRequest($id));
+        $stats = json_decode(
+            $this->serializer->serialize($stats, 'json'),
+            true
+        );
+
+        return response(
+            array_merge(
+                $anime,
+                $stats
+            )
+        );
     }
 
     public function moreInfo(int $id)
