@@ -1,0 +1,5 @@
+Jikan\Model\Anime\AnimeVideos:
+  exclusion_policy: NONE
+  properties:
+    episodes:
+      serialized_name: episode

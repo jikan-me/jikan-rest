@@ -121,8 +121,20 @@ class AnimeController extends Controller
 
     public function videos(int $id)
     {
-        $anime = $this->jikan->getAnimeVideos(new AnimeVideosRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+        $videos = $this->jikan->getAnimeVideos(new AnimeVideosRequest($id));
+        $videos = json_decode(
+            $this->serializer->serialize($videos, 'json'),
+            true
+        );
+
+
+        return response(
+            array_merge(
+                $anime,
+                $videos
+            )
+        );
     }
 
     public function pictures(int $id)
