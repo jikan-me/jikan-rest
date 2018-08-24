@@ -85,8 +85,20 @@ class AnimeController extends Controller
 
     public function news(int $id)
     {
-        $anime = $this->jikan->getNewsList(new AnimeNewsRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+        $news = ['news' => $this->jikan->getNewsList(new AnimeNewsRequest($id))];
+        $news = json_decode(
+            $this->serializer->serialize($news, 'json'),
+            true
+        );
+
+
+        return response(
+            array_merge(
+                $anime,
+                $news
+            )
+        );
     }
 
     public function forum(int $id)
