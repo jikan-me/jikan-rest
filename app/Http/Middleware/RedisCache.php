@@ -42,7 +42,7 @@ class RedisCache
             array_merge(
                 [
                     'request_cached' => $cached,
-                    'cache_expiry' => app('redis')->ttl($hashKey),
+                    'request_cache_expiry' => app('redis')->ttl($hashKey),
                 ],
                 json_decode(
                     app('redis')->get($hashKey),
