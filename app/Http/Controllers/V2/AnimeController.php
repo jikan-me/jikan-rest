@@ -178,7 +178,18 @@ class AnimeController extends Controller
 
     public function moreInfo(int $id)
     {
-        $anime = $this->jikan->getAnimeMoreInfo(new AnimeMoreInfoRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+        $moreinfo = ['moreinfo' => $this->jikan->getAnimeMoreInfo(new AnimeMoreInfoRequest($id))];
+        $moreinfo = json_decode(
+            $this->serializer->serialize($moreinfo, 'json'),
+            true
+        );
+
+        return response(
+            array_merge(
+                $anime,
+                $moreinfo
+            )
+        );
     }
 }
