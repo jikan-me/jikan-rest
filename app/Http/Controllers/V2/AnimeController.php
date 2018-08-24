@@ -63,8 +63,24 @@ class AnimeController extends Controller
 
     public function episodes(int $id, int $page = 1)
     {
-        $anime = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
-        return response($this->serializer->serialize($anime, 'json'));
+        $anime = $this->_main($id);
+        $episodes = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
+        $episodes = json_decode(
+            $this->serializer->serialize($episodes, 'json'),
+            true
+        );
+
+        foreach ($episodes['episode'] as &$episode) {
+            $episode['aired'] = $episode['aired']['string'];
+        }
+
+
+        return response(
+            array_merge(
+                $anime,
+                $episodes
+            )
+        );
     }
 
     public function news(int $id)

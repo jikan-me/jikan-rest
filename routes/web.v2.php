@@ -33,7 +33,7 @@ $router->group(
             'uses' => 'AnimeController@characters_staff'
         ]);
 
-        $router->get('/episodes/{page:[0-9]+}', [
+        $router->get('/episodes[/{page:[0-9]+}]', [
             'uses' => 'AnimeController@episodes'
         ]);
 
