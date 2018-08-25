@@ -13,7 +13,7 @@ class SerializerFactory
 
     public static function createV2(): Serializer
     {
-        return (new SerializerBuilder())
+        $serializer = (new SerializerBuilder())
             ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v2')
             ->configureHandlers(
                 function (HandlerRegistry $registry) {
@@ -40,6 +40,9 @@ class SerializerFactory
                 }
             )
             ->build();
+        $serializer->setSerializationContextFactory(new SerializationContextFactory());
+        return $serializer;
+
     }
 
     public static function createV3(): Serializer

@@ -19,7 +19,6 @@ $router->get('/', function () use ($router) {
     ]);
 });
 
-
 $router->group(
     [
         'prefix' => 'anime/{id:[0-9]+}'
@@ -136,48 +135,6 @@ $router->get('schedule[/{day:[A-Za-z]+}]', [
     'uses' => 'ScheduleController@main'
 ]);
 
-$router->get('producer/{id:[0-9]+}[/{page:[0-9]+}]', [
-    'uses' => 'ProducerController@main'
-]);
-
-$router->get('magazine/{id:[0-9]+}[/{page:[0-9]+}]', [
-    'uses' => 'MagazineController@main'
-]);
-
-$router->group(
-    [
-        'prefix' => 'user/{username:[\w\-]+}'
-    ],
-    function() use ($router) {
-        $router->get('/', [
-            'uses' => 'UserController@profile'
-        ]);
-
-        $router->get('/history[/{type:[A-Za-z]+}]', [
-            'uses' => 'UserController@history'
-        ]);
-
-        $router->get('/friends[/{page:[0-9]+}]', [
-            'uses' => 'UserController@friends'
-        ]);
-    }
-);
-
-$router->group(
-    [
-        'prefix' => 'genre'
-    ],
-    function() use ($router) {
-        $router->get('/anime/{id:[0-9]+}[/{page:[0-9]+}]', [
-            'uses' => 'GenreController@anime'
-        ]);
-
-        $router->get('/manga/{id:[0-9]+}[/{page:[0-9]+}]', [
-            'uses' => 'GenreController@manga'
-        ]);
-    }
-);
-
 $router->group(
     [
         'prefix' => 'top'
@@ -190,14 +147,6 @@ $router->group(
 
         $router->get('/manga[/{page:[0-9]+}[/{type:[A-Za-z]+}]]', [
             'uses' => 'TopController@manga'
-        ]);
-
-        $router->get('/characters[/{page:[0-9]+}]', [
-            'uses' => 'TopController@characters'
-        ]);
-
-        $router->get('/people[/{page:[0-9]+}]', [
-            'uses' => 'TopController@people'
         ]);
     }
 );
@@ -221,11 +170,11 @@ $router->group(
         ]);
 
         $router->get('/person[/{page:[0-9]+}]', [
-            'uses' => 'SearchController@person'
+            'uses' => 'SearchController@people'
         ]);
 
         $router->get('/people[/{page:[0-9]+}]', [
-            'uses' => 'SearchController@person'
+            'uses' => 'SearchController@people'
         ]);
 
     }
