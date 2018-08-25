@@ -1,0 +1,7 @@
+Jikan\Model\Character\Character:
+  exclusion_policy: NONE
+  properties:
+    url:
+      serialized_name: link_canonical
+    voiceActors:
+      serialized_name: voice_actor
