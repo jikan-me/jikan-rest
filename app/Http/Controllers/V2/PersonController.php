@@ -8,15 +8,44 @@ use Jikan\Request\Person\PersonPicturesRequest;
 
 class PersonController extends Controller
 {
+    public function _main($id) {
+        $person = $this->jikan->getPerson(new PersonRequest($id));
+
+        // backwards compatibility
+        $person = json_decode(
+            $this->serializer->serialize($person, 'json'),
+            true
+        );
+
+        return $person;
+    }
+
     public function main(int $id)
     {
-        $person = $this->jikan->getPerson(new PersonRequest($id));
-        return response($this->serializer->serialize($person, 'json'));
+        $person = $this->_main($id);
+
+        return response($person);
     }
 
     public function pictures(int $id)
     {
-        $person = $this->jikan->getPersonPictures(new PersonPicturesRequest($id));
-        return response($this->serializer->serialize($person, 'json'));
+        $person = $this->_main($id);
+        $pictures = ['image' =>$this->jikan->getPersonPictures(new PersonPicturesRequest($id))];
+        $pictures = json_decode(
+            $this->serializer->serialize($pictures, 'json'),
+            true
+        );
+
+        foreach($pictures['image'] as $key => $value) {
+            $pictures['image'][$key] = $value['small'];
+        }
+
+
+        return response(
+            array_merge(
+                $person,
+                $pictures
+            )
+        );
     }
 }
