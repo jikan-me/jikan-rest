@@ -1,0 +1,13 @@
+Jikan\Model\Manga\Manga:
+  exclusion_policy: NONE
+  properties:
+    url:
+      serialized_name: link_canonical
+    titleSynonyms:
+      serialized_name: title_synonyms
+    serializations:
+      serialized_name: serialization
+    authors:
+      serialized_name: author
+    genres:
+      serialized_name: genre
