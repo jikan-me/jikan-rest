@@ -1,0 +1,17 @@
+Jikan\Model\Search\MangaSearchListItem:
+  exclusion_policy: NONE
+  properties:
+    startDate:
+      exclude: true
+    endDate:
+      exclude: true
+    malUrl:
+      serialized_name: meta
+    synopsis:
+      serialized_name: description
+    rated:
+      exclude: true
+    airing:
+      exclude: true
+    chapters:
+      exclude: true

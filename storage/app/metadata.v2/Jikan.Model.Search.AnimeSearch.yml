@@ -1,0 +1,7 @@
+Jikan\Model\Search\AnimeSearch:
+  exclusion_policy: NONE
+  properties:
+    results:
+      serialized_name: result
+    lastPage :
+      serialized_name: result_last_page

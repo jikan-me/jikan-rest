@@ -24,22 +24,56 @@ class SearchController extends Controller
         );
 
         return response($this->serializer->serialize($search, 'json'));
-
     }
 
     public function manga(int $page = 1) {
-        $request = (new MangaSearchRequest())->setPage($page);
+        $search = $this->jikan->getMangaSearch(
+            SearchQueryBuilder::create(
+                (new MangaSearchRequest())->setPage($page)
+            )
+        );
 
+        return response($this->serializer->serialize($search, 'json'));
     }
 
     public function people(int $page = 1) {
-        $request = (new PersonSearchRequest())->setPage($page);
+        $search = $this->jikan->getPersonSearch(
+            SearchQueryBuilder::create(
+                (new PersonSearchRequest())->setPage($page)
+            )
+        );
 
+        // backwards compatibility
+        $search = json_decode(
+            $this->serializer->serialize($search, 'json'),
+            true
+        );
+
+        foreach ($search['result'] as &$item) {
+            $item['nicknames'] = empty($item['nicknames']) ? null : implode(",", $item['nicknames']);
+        }
+
+        return $search;
     }
 
     public function character(int $page = 1) {
-        $request = (new CharacterSearchRequest())->setPage($page);
+        $search = $this->jikan->getCharacterSearch(
+            SearchQueryBuilder::create(
+                (new CharacterSearchRequest())->setPage($page)
+            )
+        );
 
+        // backwards compatibility
+        $search = json_decode(
+            $this->serializer->serialize($search, 'json'),
+            true
+        );
+
+        foreach ($search['result'] as &$item) {
+            $item['nicknames'] = empty($item['nicknames']) ? null : implode(",", $item['nicknames']);
+        }
+
+        return $search;
     }
 
 }
