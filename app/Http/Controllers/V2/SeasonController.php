@@ -24,8 +24,18 @@ class SeasonController extends Controller
             ])->setStatusCode(400);
         }
 
+        // backwards compatibility
         $season = $this->jikan->getSeasonal(new SeasonalRequest($year, $season));
+        $season = json_decode(
+            $this->serializer->serialize($season, 'json'),
+            true
+        );
 
-        return response($this->serializer->serialize($season, 'json'));
+        foreach ($season['season'] as &$item) {
+            $item['continued'] = $item['continuing'];
+            unset($item['continuing']);
+        }
+
+        return $season;
     }
 }

@@ -1,2 +1,13 @@
 Jikan\Model\Common\AnimeCard:
   exclusion_policy: NONE
+  properties:
+    producers:
+      serialized_name: producer
+    genres:
+      serialized_name: genre
+    licensors:
+      serialized_name: licensor
+    continuing:
+      serialized_name: continued
+    r18:
+      serialized_name: r18_plus

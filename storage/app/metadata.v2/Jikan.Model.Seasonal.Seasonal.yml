@@ -1,0 +1,5 @@
+Jikan\Model\Seasonal\Seasonal:
+  exclusion_policy: NONE
+  properties:
+    anime:
+      serialized_name: season
