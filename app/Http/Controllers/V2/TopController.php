@@ -30,9 +30,20 @@ class TopController extends Controller
             ])->setStatusCode(400);
         }
 
-        $top = $this->jikan->getTopAnime(new TopAnimeRequest($page, $type));
+        $top = ['top' => $this->jikan->getTopAnime(new TopAnimeRequest($page, $type))];
+        $top = json_decode(
+            $this->serializer->serialize($top, 'json'),
+            true
+        );
 
-        return response($this->serializer->serialize($top, 'json'));
+        foreach ($top['top'] as &$item) {
+            $item['mal_id'] = $item['meta']['mal_id'];
+            $item['url'] = $item['meta']['url'];
+            $item['title'] = $item['meta']['title'];
+            unset($item['meta']);
+        }
+
+        return $top;
     }
 
     public function manga(int $page = 1, string $type = null)
@@ -55,8 +66,19 @@ class TopController extends Controller
             ])->setStatusCode(400);
         }
 
-        $top = $this->jikan->getTopManga(new TopMangaRequest($page, $type));
+        $top = ['top' => $this->jikan->getTopManga(new TopMangaRequest($page, $type))];
+        $top = json_decode(
+            $this->serializer->serialize($top, 'json'),
+            true
+        );
 
-        return response($this->serializer->serialize($top, 'json'));
+        foreach ($top['top'] as &$item) {
+            $item['mal_id'] = $item['meta']['mal_id'];
+            $item['url'] = $item['meta']['url'];
+            $item['title'] = $item['meta']['title'];
+            unset($item['meta']);
+        }
+
+        return $top;
     }
 }
