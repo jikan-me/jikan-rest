@@ -6,31 +6,29 @@ use Closure;
 
 class Meta
 {
-
     private $request;
 
     public function handle($request, Closure $next)
     {
-        $req = $_SERVER['REQUEST_URI'];
-        $req_type = explode('/', $req)[1];
+        // pass on meta requests
+        if (\in_array('meta', $request->segments())) {
+            return $next($request);
+        }
+
+        $requestUri = $request->getRequestUri();
+        $requestUri = str_replace(['/v1', '/v2', '/v3'], '', $requestUri);
 
         $response = $next($request);
-
         if (isset($response->original['error'])) {
             return $response;
         }
 
-        $date = date("m-o");
-        $time = round(microtime(true) * 1000);
-        $key = "requests:".$date.":".$time;
+        $this->updateMeta("requests:today", $requestUri, 86400);
+        $this->updateMeta("requests:weekly", $requestUri, 604800);
+        $this->updateMeta("requests:monthly", $requestUri, 2629746);
 
 
-        $this->updateMeta("requests:today", $req, 86400);
-        $this->updateMeta("requests:weekly", $req, 604800);
-        $this->updateMeta("requests:monthly", $req, 2629746);
-
-
-        return $response;
+        return $next($request);
     }
 
     private function updateMeta($key, $req, $expire) {
@@ -39,7 +37,8 @@ class Meta
             app('redis')->set($hashKey, 0);
             app('redis')->expire($hashKey, $expire);
         }
-        app('redis')->incrBy($hashKey, 1);
+
+        app('redis')->incr($hashKey);
     }
 
 }

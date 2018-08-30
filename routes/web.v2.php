@@ -1,6 +1,5 @@
 <?php
 
-
 $router->get('/', function () use ($router) {
 
 
@@ -14,10 +13,32 @@ $router->get('/', function () use ($router) {
     	'GitHub' => 'https://github.com/jikan-me/jikan',
     	'PRODUCTION_API_URL' => 'https://api.jikan.moe/v2/',
     	'STATUS_URL' => 'https://status.jikan.moe',
-        'NOTICE' => 'Switch over to V3 before the End Of Life for V2! (January 1st, 2019)'
+        'NOTICE' => 'Switch over to v3 before the End Of Life for V2! (January 1st, 2019)'
 //    	'CACHED_REQUESTS' => app('redis')->dbSize(),
     ]);
 });
+
+$router->group(
+    [
+        'prefix' => 'meta'
+    ],
+    function() use ($router) {
+        $router->get('/status', [
+            'uses' => 'MetaController@status'
+        ]);
+
+        $router->group(
+            [
+                'prefix' => 'requests'
+            ],
+            function() use ($router) {
+                $router->get('/{type:[a-z]+}/{period:[a-z]+}', [
+                    'uses' => 'MetaController@requests'
+                ]);
+            }
+        );
+    }
+);
 
 $router->group(
     [

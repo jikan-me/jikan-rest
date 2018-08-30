@@ -11,6 +11,11 @@ class RedisCache
 
     public function handle(Request $request, Closure $next)
     {
+        // pass on meta requests
+        if (\in_array('meta', $request->segments())) {
+            return $next($request);
+        }
+
         $key = $request->getRequestUri();
         if (empty($request->segments())) {return $next($request);}
         if (!isset($request->segments()[1])){return $next($request);}
@@ -19,6 +24,7 @@ class RedisCache
         if (!\in_array($request->segments()[0], ['v1', 'v2', 'v3'])) {
             $requestType = $request->segments()[0];
         }
+
         $hashKey = "request:{$requestType}:" . sha1($key);
         $cached = true;
 

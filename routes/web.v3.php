@@ -18,6 +18,27 @@ $router->get('/', function () use ($router) {
     ]);
 });
 
+$router->group(
+    [
+        'prefix' => 'meta'
+    ],
+    function() use ($router) {
+        $router->get('/status', [
+           'uses' => 'MetaController@status'
+        ]);
+
+        $router->group(
+            [
+                'prefix' => 'requests'
+            ],
+            function() use ($router) {
+                $router->get('/{type:[a-z]+}/{period:[a-z]+}', [
+                   'uses' => 'MetaController@requests'
+                ]);
+            }
+        );
+    }
+);
 
 $router->group(
     [
@@ -33,7 +54,8 @@ $router->group(
         ]);
 
         $router->get('/episodes[/{page:[0-9]+}]', [
-            'uses' => 'AnimeController@episodes'
+            'uses'
+=> 'AnimeController@episodes'
         ]);
 
         $router->get('/news', [

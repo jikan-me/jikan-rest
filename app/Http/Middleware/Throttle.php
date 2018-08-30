@@ -15,6 +15,11 @@ class Throttle
 
     public function handle(Request $request, Closure $next)
     {
+        // don't throttle meta requests
+        if (\in_array('meta', $request->segments())) {
+            return $next($request);
+        }
+
         $signature = $this->resolveRequestSignature($request);
         $key = "user:{$signature}:" . time();
 
