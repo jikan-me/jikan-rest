@@ -32,7 +32,7 @@ $router->group(
                 'prefix' => 'requests'
             ],
             function() use ($router) {
-                $router->get('/{type:[a-z]+}/{period:[a-z]+}', [
+                $router->get('/{type:[a-z]+}/{period:[a-z]+}[/{offset:[0-9]+}]', [
                    'uses' => 'MetaController@requests'
                 ]);
             }
