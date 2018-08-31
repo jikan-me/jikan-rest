@@ -7,14 +7,12 @@ $router->get('/', function () use ($router) {
     	'Author' => '@irfanDahir',
     	'Contact' => 'irfan@jikan.moe',
     	'JikanREST' => '2.0',
-    	'JikanPHP' => '2.0.0-rc.1',
+    	'JikanPHP' => '2.0.0-rc.2',
     	'Website' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',
     	'PRODUCTION_API_URL' => 'https://api.jikan.moe/v2/',
-    	'STATUS_URL' => 'https://status.jikan.moe',
-        'NOTICE' => 'Switch over to v3 before the End Of Life for V2! (January 1st, 2019)'
-//    	'CACHED_REQUESTS' => app('redis')->dbSize(),
+    	'STATUS_URL' => 'https://status.jikan.moe'
     ]);
 });
 
