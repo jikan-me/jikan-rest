@@ -29,6 +29,8 @@ class TopController extends Controller
             ])->setStatusCode(400);
         }
 
+        $anime = $this->jikan->getTopAnime(new TopAnimeRequest($page, $type));
+
         $top = ['top' => $this->jikan->getTopAnime(new TopAnimeRequest($page, $type))];
 
         return response($this->serializer->serialize($top, 'json'));

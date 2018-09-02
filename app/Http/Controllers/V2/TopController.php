@@ -36,13 +36,6 @@ class TopController extends Controller
             true
         );
 
-        foreach ($top['top'] as &$item) {
-            $item['mal_id'] = $item['meta']['mal_id'];
-            $item['url'] = $item['meta']['url'];
-            $item['title'] = $item['meta']['title'];
-            unset($item['meta']);
-        }
-
         return $top;
     }
 
@@ -71,13 +64,6 @@ class TopController extends Controller
             $this->serializer->serialize($top, 'json'),
             true
         );
-
-        foreach ($top['top'] as &$item) {
-            $item['mal_id'] = $item['meta']['mal_id'];
-            $item['url'] = $item['meta']['url'];
-            $item['title'] = $item['meta']['title'];
-            unset($item['meta']);
-        }
 
         return $top;
     }

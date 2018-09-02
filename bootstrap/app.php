@@ -120,7 +120,7 @@ $app->register(Illuminate\Redis\RedisServiceProvider::class);
 |
 */
 
-$commonMiddleware = ['slave-auth', 'meta', /*'cachet',*/ 'redis-cache', 'throttle'];
+$commonMiddleware = ['slave-auth', 'meta', /*'cachet', 'redis-cache', */'throttle'];
 
 $app->router->group(
     [
