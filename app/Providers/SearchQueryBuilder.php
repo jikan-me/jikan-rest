@@ -53,7 +53,7 @@ class SearchQueryBuilder
         }
 
         if (isset($_GET['page'])) {
-            $page = (int) $page;
+            $page = (int) $_GET['page'];
             $request->setPage($page);
         }
 
