@@ -36,6 +36,8 @@ class SeasonController extends Controller
             unset($item['continuing']);
         }
 
-        return $season;
+        return response(
+            json_encode($season)
+        );
     }
 }

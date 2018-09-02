@@ -31,12 +31,8 @@ class TopController extends Controller
         }
 
         $top = ['top' => $this->jikan->getTopAnime(new TopAnimeRequest($page, $type))];
-        $top = json_decode(
-            $this->serializer->serialize($top, 'json'),
-            true
-        );
 
-        return $top;
+        return response($this->serializer->serialize($top, 'json'));
     }
 
     public function manga(int $page = 1, string $type = null)
@@ -60,11 +56,7 @@ class TopController extends Controller
         }
 
         $top = ['top' => $this->jikan->getTopManga(new TopMangaRequest($page, $type))];
-        $top = json_decode(
-            $this->serializer->serialize($top, 'json'),
-            true
-        );
 
-        return $top;
+        return response($this->serializer->serialize($top, 'json'));
     }
 }

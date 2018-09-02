@@ -53,7 +53,9 @@ class SearchController extends Controller
             $item['nicknames'] = empty($item['nicknames']) ? null : implode(",", $item['nicknames']);
         }
 
-        return $search;
+        return response(
+            json_encode($search)
+        );
     }
 
     public function character(int $page = 1) {
@@ -73,7 +75,9 @@ class SearchController extends Controller
             $item['nicknames'] = empty($item['nicknames']) ? null : implode(",", $item['nicknames']);
         }
 
-        return $search;
+        return response(
+            json_encode($search)
+        );
     }
 
 }

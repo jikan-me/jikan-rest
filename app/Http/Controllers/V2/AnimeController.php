@@ -34,7 +34,9 @@ class AnimeController extends Controller
     {
         $anime = $this->_main($id);
 
-        return response($anime);
+        return response(
+            json_encode($anime)
+        );
     }
 
     public function characters_staff(int $id)
@@ -54,9 +56,11 @@ class AnimeController extends Controller
 
 
         return response(
-            array_merge(
-                $anime,
-                $charactersStaff
+            json_encode(
+                array_merge(
+                    $anime,
+                    $charactersStaff
+                )
             )
         );
     }
@@ -76,9 +80,11 @@ class AnimeController extends Controller
 
 
         return response(
-            array_merge(
-                $anime,
-                $episodes
+            json_encode(
+                array_merge(
+                    $anime,
+                    $episodes
+                )
             )
         );
     }
@@ -94,9 +100,11 @@ class AnimeController extends Controller
 
 
         return response(
-            array_merge(
-                $anime,
-                $news
+            json_encode(
+                array_merge(
+                    $anime,
+                    $news
+                )
             )
         );
     }
@@ -112,9 +120,11 @@ class AnimeController extends Controller
 
 
         return response(
-            array_merge(
-                $anime,
-                $forum
+            json_encode(
+                array_merge(
+                    $anime,
+                    $forum
+                )
             )
         );
     }
@@ -130,9 +140,11 @@ class AnimeController extends Controller
 
 
         return response(
-            array_merge(
-                $anime,
-                $videos
+            json_encode(
+                array_merge(
+                    $anime,
+                    $videos
+                )
             )
         );
     }
@@ -152,9 +164,11 @@ class AnimeController extends Controller
 
 
         return response(
-            array_merge(
-                $anime,
-                $pictures
+            json_encode(
+                array_merge(
+                    $anime,
+                    $pictures
+                )
             )
         );
     }
@@ -169,9 +183,11 @@ class AnimeController extends Controller
         );
 
         return response(
-            array_merge(
-                $anime,
-                $stats
+            json_encode(
+                array_merge(
+                    $anime,
+                    $stats
+                )
             )
         );
     }
@@ -186,9 +202,11 @@ class AnimeController extends Controller
         );
 
         return response(
-            array_merge(
-                $anime,
-                $moreinfo
+            json_encode(
+                array_merge(
+                    $anime,
+                    $moreinfo
+                )
             )
         );
     }

@@ -25,7 +25,9 @@ class CharacterController extends Controller
     {
         $character = $this->_main($id);
 
-        return response($character);
+        return response(
+            json_encode($character)
+        );
     }
 
     public function pictures(int $id)
@@ -43,9 +45,11 @@ class CharacterController extends Controller
 
 
         return response(
-            array_merge(
-                $character,
-                $pictures
+            json_encode(
+                array_merge(
+                    $character,
+                    $pictures
+                )
             )
         );
     }

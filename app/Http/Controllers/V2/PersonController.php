@@ -24,7 +24,9 @@ class PersonController extends Controller
     {
         $person = $this->_main($id);
 
-        return response($person);
+        return response(
+            json_encode($person)
+        );
     }
 
     public function pictures(int $id)
@@ -42,9 +44,11 @@ class PersonController extends Controller
 
 
         return response(
-            array_merge(
-                $person,
-                $pictures
+            json_encode(
+                array_merge(
+                    $person,
+                    $pictures
+                )
             )
         );
     }

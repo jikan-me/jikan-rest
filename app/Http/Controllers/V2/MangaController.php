@@ -33,7 +33,9 @@ class MangaController extends Controller
     {
         $manga = $this->_main($id);
 
-        return response($manga);
+        return response(
+            json_encode($manga)
+        );
     }
 
     public function characters(int $id)
@@ -46,9 +48,11 @@ class MangaController extends Controller
         );
 
         return response(
-            array_merge(
-                $manga,
-                $characters
+            json_encode(
+                array_merge(
+                    $manga,
+                    $characters
+                )
             )
         );
     }
@@ -64,9 +68,11 @@ class MangaController extends Controller
 
 
         return response(
-            array_merge(
-                $manga,
-                $news
+            json_encode(
+                array_merge(
+                    $manga,
+                    $news
+                )
             )
         );
     }
@@ -82,9 +88,11 @@ class MangaController extends Controller
 
 
         return response(
-            array_merge(
-                $manga,
-                $forum
+            json_encode(
+                array_merge(
+                    $manga,
+                    $forum
+                )
             )
         );
     }
@@ -104,9 +112,11 @@ class MangaController extends Controller
 
 
         return response(
-            array_merge(
-                $manga,
-                $pictures
+            json_encode(
+                array_merge(
+                    $manga,
+                    $pictures
+                )
             )
         );
     }
@@ -121,9 +131,11 @@ class MangaController extends Controller
         );
 
         return response(
-            array_merge(
-                $manga,
-                $stats
+            json_encode(
+                array_merge(
+                    $manga,
+                    $stats
+                )
             )
         );
     }
@@ -138,9 +150,11 @@ class MangaController extends Controller
         );
 
         return response(
-            array_merge(
-                $manga,
-                $moreinfo
+            json_encode(
+                array_merge(
+                    $manga,
+                    $moreinfo
+                )
             )
         );
     }
