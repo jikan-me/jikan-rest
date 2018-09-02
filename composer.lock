@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "57524c76bf60237d66c7975cf57a416c",
+    "content-hash": "47ca3934d47bbbb11786e1c820e794ea",
     "packages": [
         {
             "name": "danielmewes/php-rql",
@@ -1694,12 +1694,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "a56beaef367bf7cf1d0b54fc5611ebb713f1d728"
+                "reference": "a9fc5ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/a56beaef367bf7cf1d0b54fc5611ebb713f1d728",
-                "reference": "a56beaef367bf7cf1d0b54fc5611ebb713f1d728",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/a9fc5ec",
+                "reference": "a9fc5ec",
                 "shasum": ""
             },
             "require": {
@@ -1735,7 +1735,7 @@
                 }
             ],
             "description": "Jikan is an unofficial MyAnimeList API",
-            "time": "2018-08-31T20:06:03+00:00"
+            "time": "2018-09-02T03:30:54+00:00"
         },
         {
             "name": "jms/metadata",
@@ -5497,9 +5497,9 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "jikan-me/jikan": 20,
         "danielmewes/php-rql": 20,
-        "fabpot/goutte": 20
+        "fabpot/goutte": 20,
+        "jikan-me/jikan": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

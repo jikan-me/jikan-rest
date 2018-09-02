@@ -14,7 +14,6 @@
         "php": ">=7.0",
         "laravel/lumen-framework": "5.5.*",
         "vlucas/phpdotenv": "~2.2",
-        "jikan-me/jikan": "dev-master",
         "danielmewes/php-rql": "dev-master",
         "illuminate/redis": "^5.5",
         "predis/predis": "^1.1",
@@ -22,7 +21,8 @@
         "divineomega/cachetphp": "^0.2.0",
         "jms/serializer": "^1.13",
         "symfony/yaml": "^4.1",
-        "fabpot/goutte": "dev-http-exceptions as 3.2.x-dev"
+        "fabpot/goutte": "dev-http-exceptions as 3.2.x-dev",
+        "jikan-me/jikan": "dev-master#a9fc5ec"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
