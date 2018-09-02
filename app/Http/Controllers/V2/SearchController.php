@@ -16,30 +16,36 @@ use JMS\Serializer\Serializer;
 class SearchController extends Controller
 {
 
-    public function anime(int $page = 1) {
+    public function anime(string $query = null, int $page = 1) {
         $search = $this->jikan->getAnimeSearch(
             SearchQueryBuilder::create(
-                (new AnimeSearchRequest())->setPage($page)
+                (new AnimeSearchRequest())
+                    ->setPage($page)
+                    ->setQuery($query)
             )
         );
 
         return response($this->serializer->serialize($search, 'json'));
     }
 
-    public function manga(int $page = 1) {
+    public function manga(string $query = null, int $page = 1) {
         $search = $this->jikan->getMangaSearch(
             SearchQueryBuilder::create(
-                (new MangaSearchRequest())->setPage($page)
+                (new MangaSearchRequest())
+                    ->setPage($page)
+                    ->setQuery($query)
             )
         );
 
         return response($this->serializer->serialize($search, 'json'));
     }
 
-    public function people(int $page = 1) {
+    public function people(string $query = null, int $page = 1) {
         $search = $this->jikan->getPersonSearch(
             SearchQueryBuilder::create(
-                (new PersonSearchRequest())->setPage($page)
+                (new PersonSearchRequest())
+                    ->setPage($page)
+                    ->setQuery($query)
             )
         );
 
@@ -58,10 +64,12 @@ class SearchController extends Controller
         );
     }
 
-    public function character(int $page = 1) {
+    public function character(string $query = null, int $page = 1) {
         $search = $this->jikan->getCharacterSearch(
             SearchQueryBuilder::create(
-                (new CharacterSearchRequest())->setPage($page)
+                (new CharacterSearchRequest())
+                    ->setPage($page)
+                    ->setQuery($query)
             )
         );
 

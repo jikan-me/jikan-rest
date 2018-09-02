@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Jikan\Request\Search\AnimeSearchRequest;
 use \voku\helper\AntiXSS;
 use Jikan\Helper\Constants as JikanConstants;
 

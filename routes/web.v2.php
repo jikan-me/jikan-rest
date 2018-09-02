@@ -175,24 +175,23 @@ $router->group(
         'prefix' => 'search'
     ],
     function() use ($router) {
-
-        $router->get('/anime[/{page:[0-9]+}]', [
+        $router->get('/anime[/{query}[/{page:[0-9]+}]]', [
             'uses' => 'SearchController@anime'
         ]);
 
-        $router->get('/manga[/{page:[0-9]+}]', [
+        $router->get('/manga[/{query}[/{page:[0-9]+}]]', [
             'uses' => 'SearchController@manga'
         ]);
 
-        $router->get('/character[/{page:[0-9]+}]', [
+        $router->get('/character[/{query}[/{page:[0-9]+}]]', [
             'uses' => 'SearchController@character'
         ]);
 
-        $router->get('/person[/{page:[0-9]+}]', [
+        $router->get('/person[/{query}[/{page:[0-9]+}]]', [
             'uses' => 'SearchController@people'
         ]);
 
-        $router->get('/people[/{page:[0-9]+}]', [
+        $router->get('/people[/{query}[/{page:[0-9]+}]]', [
             'uses' => 'SearchController@people'
         ]);
 
