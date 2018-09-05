@@ -11,6 +11,7 @@ use Jikan\Request\Search\PersonSearchRequest;
 use Jikan\Helper\Constants as JikanConstants;
 use App\Providers\SearchQueryBuilder;
 use JMS\Serializer\Serializer;
+use phpDocumentor\Reflection\Types\Object_;
 
 class SearchController extends Controller
 {
@@ -22,8 +23,7 @@ class SearchController extends Controller
             )
         );
 
-        return response($this->serializer->serialize($search, 'json'));
-
+        return response($this->filter($search));
     }
 
     public function manga(int $page = 1) {
@@ -32,8 +32,7 @@ class SearchController extends Controller
                 (new MangaSearchRequest())->setPage($page)
             )
         );
-
-        return response($this->serializer->serialize($search, 'json'));
+        return response($this->filter($search));
     }
 
     public function people(int $page = 1) {
@@ -43,7 +42,7 @@ class SearchController extends Controller
             )
         );
 
-        return response($this->serializer->serialize($search, 'json'));
+        return response($this->filter($search));
     }
 
     public function character(int $page = 1) {
@@ -53,7 +52,22 @@ class SearchController extends Controller
             )
         );
 
-        return response($this->serializer->serialize($search, 'json'));
+        return response($this->filter($search));
+    }
+
+
+    private function filter($object) {
+        $limit = $_GET['limit'] ?? 0;
+
+        $data = json_decode(
+            $this->serializer->serialize($object, 'json'),
+            true
+        );
+        $data['results'] = array_slice($data['results'], 0, $limit);
+
+        return json_encode(
+            $data
+        );
     }
 
 }
