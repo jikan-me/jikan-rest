@@ -173,6 +173,10 @@ $router->group(
             'uses' => 'UserController@profile'
         ]);
 
+        $router->get('/profile', [
+            'uses' => 'UserController@profile'
+        ]);
+
         $router->get('/history[/{type:[A-Za-z]+}]', [
             'uses' => 'UserController@history'
         ]);
