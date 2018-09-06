@@ -7,17 +7,34 @@ use Illuminate\Http\Request;
 
 class Throttle
 {
-    public const MAX_ATTEMPTS_PER_DECAY_MINUTES = 30;
-    public const MAX_ATTEMPTS_PER_CONCURRENCY = 2;
-    public const DECAY_MINUTES = 1;
+    public $maxAttemptsPerDecayMinutes = 30;
+    public $maxAttemptsPerConcurrency = 2;
+    public $decayMinutes = 1;
 
     private $userRequests = [];
 
     public function handle(Request $request, Closure $next)
     {
         // don't throttle meta requests
-        if (\in_array('meta', $request->segments())) {
+//        if (\in_array('meta', $request->segments())) {
+//            return $next($request);
+//        }
+
+        if (env('THROTTLE') === false) {
             return $next($request);
+        }
+
+
+        if (!is_null(env('THROTTLE_DECAY_MINUTES'))) {
+            $this->decayMinutes = (int) env('THROTTLE_DECAY_MINUTES');
+        }
+
+        if (!is_null(env('THROTTLE_MAX_PER_DECAY_MINUTES'))) {
+            $this->maxAttemptsPerDecayMinutes = (int) env('THROTTLE_MAX_PER_DECAY_MINUTES');
+        }
+
+        if (!is_null(env('THROTTLE_MAX_PER_CONCURRENCY'))) {
+            $this->maxAttemptsPerConcurrency = (int) env('THROTTLE_MAX_PER_CONCURRENCY');
         }
 
         $signature = $this->resolveRequestSignature($request);
@@ -31,17 +48,17 @@ class Throttle
         }
 
         // throttle concurrent requests
-        if (array_sum($this->userRequests) > self::MAX_ATTEMPTS_PER_DECAY_MINUTES) {
+        if (array_sum($this->userRequests) > $this->maxAttemptsPerDecayMinutes) {
             return response()->json([
-                'error' => 'You are being rate limited [MAX: '.self::MAX_ATTEMPTS_PER_DECAY_MINUTES.' requests/'.self::DECAY_MINUTES.' minute(s)]'
+                'error' => 'You are being rate limited [MAX: '.$this->maxAttemptsPerDecayMinutes.' requests/'.$this->decayMinutes.' minute(s)]'
             ], 429);
         }
 
         // requests per DECAY_MINUTES
         $requestsThisSecond = (int) app('redis')->get($key);
-        if ($requestsThisSecond > self::MAX_ATTEMPTS_PER_CONCURRENCY) {
+        if ($requestsThisSecond > $this->maxAttemptsPerConcurrency) {
             return response()->json([
-                'error' => 'You are being rate limited [MAX: '.self::MAX_ATTEMPTS_PER_CONCURRENCY.' requests/second]'
+                'error' => 'You are being rate limited [MAX: '.$this->maxAttemptsPerConcurrency.' requests/second]'
             ], 429);
         }
 
@@ -50,7 +67,7 @@ class Throttle
 
     protected function resolveRequestSignature(Request $request) {
         if (env('SLAVE_INSTANCE') === true) {
-            $ip = $request->header('x-client-ip');
+            $ip = $request->header(env('SLAVE_CLIENT_IP_HEADER'));
             return sha1(
                 'localhost' . '|' . $ip
             );
@@ -64,7 +81,7 @@ class Throttle
     protected function hit(string $key) {
         if (!app('redis')->exists($key)) {
             app('redis')->set($key, 0);
-            app('redis')->expire($key, self::DECAY_MINUTES*60);
+            app('redis')->expire($key, $this->decayMinutes*60);
         }
         app('redis')->incr($key);
     }
