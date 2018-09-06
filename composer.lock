@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47ca3934d47bbbb11786e1c820e794ea",
+    "content-hash": "806b67f1c6bf6900ab7e2c0c78efdd28",
     "packages": [
         {
             "name": "danielmewes/php-rql",
@@ -1694,12 +1694,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "a9fc5ec"
+                "reference": "9bf71ff7e5a40631e9c6ed70df2af13d4e99450a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/a9fc5ec",
-                "reference": "a9fc5ec",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/9bf71ff7e5a40631e9c6ed70df2af13d4e99450a",
+                "reference": "9bf71ff7e5a40631e9c6ed70df2af13d4e99450a",
                 "shasum": ""
             },
             "require": {
@@ -1735,7 +1735,7 @@
                 }
             ],
             "description": "Jikan is an unofficial MyAnimeList API",
-            "time": "2018-09-02T03:30:54+00:00"
+            "time": "2018-09-03T05:07:09+00:00"
         },
         {
             "name": "jms/metadata",
