@@ -12,7 +12,8 @@ $router->get('/', function () use ($router) {
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',
     	'PRODUCTION_API_URL' => 'https://api.jikan.moe/v2/',
-    	'STATUS_URL' => 'https://status.jikan.moe'
+    	'STATUS_URL' => 'https://status.jikan.moe',
+        'NOTICE' => 'THIS ENDPOINT POINTS TO v2. TO USE THE LATEST VERSION, APPEND v3 TO THE URL.'
     ]);
 });
 
