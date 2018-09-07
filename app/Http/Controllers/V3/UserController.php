@@ -24,14 +24,14 @@ class UserController extends Controller
             ])->setStatusCode(400);
         }
 
-        $person = $this->jikan->getUserHistory(new UserHistoryRequest($username, $type));
+        $person = ['history' => $this->jikan->getUserHistory(new UserHistoryRequest($username, $type))];
 
         return response($this->serializer->serialize($person, 'json'));
     }
 
     public function friends(string $username, int $page = 1)
     {
-        $person = $this->jikan->getUserFriends(new UserFriendsRequest($username, $page));
+        $person = ['friends' => $this->jikan->getUserFriends(new UserFriendsRequest($username, $page))];
         return response($this->serializer->serialize($person, 'json'));
     }
 }
