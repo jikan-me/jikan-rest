@@ -209,7 +209,7 @@ A single character object with all its details
         
         
 ## Search [/search/{type}/?q=Fate/Zero&page=1]
-Search result object related to the query
+Search results for the query
 
 **NOTE: MyAnimeList only processes queries with a minimum of 3 letters**
 ### Parameters
@@ -288,13 +288,13 @@ Anime of the specified season
         ]
         
 ## Schedule [/schedule/{day}]
-Anime of the specified season
+Anime schedule of the week or specified day
 
 **Note:** If you don't pass the `day` parameter, it'll return the schedule for **all** days of the week
 ### Parameters
 | Parameter  | Argument | Description |
 | ------------- | ------------- | ------------- |
-| day (optional) | `monday` `tuesday` `wednesday` `thursday` `friday` `saturday` `sunday` | Anime scheduled for that specific day |
+| day (optional) | `monday` `tuesday` `wednesday` `thursday` `friday` `saturday` `sunday`, `other` **(v3)**, `unknown` **(v3)** | Anime scheduled for that specific day |
 
 ### Schedule Request Example+Schema [GET]
 
@@ -335,7 +335,7 @@ Top items on MyAnimeList
         ]
         
 ## Genre [/genre/{type}/{genre_id}/{page}]
-Anime/Manga items (e.g anime, manga) of the genre
+Anime/Manga items of the genre
 
 **Note:** Genres with their respective IDs are listed [here]()
 ### Parameters
