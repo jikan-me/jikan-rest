@@ -105,6 +105,18 @@ class SerializerFactory
         return [
             'from'   => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
             'to'     => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
+            'prop'   => [
+                'from' => [
+                    'day' => $obj->getFromProp()->getDay(),
+                    'month' => $obj->getFromProp()->getMonth(),
+                    'year' => $obj->getFromProp()->getYear()
+                ],
+                'to' => [
+                    'day' => $obj->getUntilProp()->getDay(),
+                    'month' => $obj->getUntilProp()->getMonth(),
+                    'year' => $obj->getUntilProp()->getYear()
+                ],
+            ],
             'string' => (string)$obj,
         ];
     }
