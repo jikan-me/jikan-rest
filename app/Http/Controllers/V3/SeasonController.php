@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V3;
 
 use Jikan\Request\Seasonal\SeasonalRequest;
+use Jikan\Request\SeasonList\SeasonListRequest;
 
 class SeasonController extends Controller
 {
@@ -26,5 +27,15 @@ class SeasonController extends Controller
         $season = $this->jikan->getSeasonal(new SeasonalRequest($year, $season));
 
         return response($this->serializer->serialize($season, 'json'));
+    }
+
+    public function archive()
+    {
+        return response(
+            $this->serializer->serialize(
+                ['archive' => $this->jikan->getSeasonList(new SeasonListRequest())],
+                'json'
+            )
+        );
     }
 }

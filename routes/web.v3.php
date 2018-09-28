@@ -148,6 +148,10 @@ $router->group(
     }
 );
 
+$router->get('season/archive', [
+   'uses' => 'SeasonController@archive'
+]);
+
 $router->get('season[/{year:[0-9]{4}}/{season:[A-Za-z]+}]', [
     'uses' => 'SeasonController@main'
 ]);
