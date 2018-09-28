@@ -13,8 +13,8 @@ try {
 */
 define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
 
-define('REST_VERSION', '3.0');
-define('SOURCE_VERSION', '2.0.0-rc.1');
+define('REST_VERSION', '3.1');
+define('SOURCE_VERSION', '2.0.0');
 
 /*
 |--------------------------------------------------------------------------
