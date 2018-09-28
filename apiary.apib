@@ -287,6 +287,17 @@ Anime of the specified season
  
         ]
         
+## Season Archive [/season/archive]
+All the years & their respective seasons that can be parsed from MyAnimeList
+
+### Season Archive Request Example+Schema [GET]
+
++ Response 200 (application/json)
+
+        [
+ 
+        ]
+        
 ## Schedule [/schedule/{day}]
 Anime schedule of the week or specified day
 
@@ -405,18 +416,22 @@ User related data
 
 **Note:** About is returned in HTML as MyAnimeList allows custom "about" sections for users that can consist of images, formatting, etc.
 
+**Note 2:** Anime & Manga Lists are paginated. Only 300 items are returned per page.
+
 ### Parameters
 | Parameter  | Argument | Description |
 | ------------- | ------------- | ------------- |
 | username | string | Username on MyAnimeList |
-| request | `profile`, `history`, `friends` | |
-| data (optional) | Additional data for `history` and `friends` |
+| request | `profile`, `history`, `friends`, `animelist`, `mangalist` |
+| data (optional) | Additional data for the requests |
 
 #### Data
 | Data  | Argument | Description |
 | ------------- | ------------- | ------------- |
 | history | `anime`, `manga` | Returns both combined if neither are passed |
 | friends | INTEGER | Pagination support; Status 404 if there's no friends on the page |
+| animelist | `all`, `watching`, `completed`, `onhold`, `dropped`, `plantowatch`, `ptw` (alias) |
+| mangalist | `all`, `reading`, `completed`, `onhold`, `dropped`, `plantoread`, `ptr` (alias) |
 
 #### Examples
 `/user/nekomata1037` - Parses Profile
@@ -430,7 +445,18 @@ User related data
 `/user/nekomata1037/friends` - Parses user friends
 
 The request below will return 404 because I don't have that many friends on MAL to generate a second page.
-`/user/nekomata1037/friends/2` - Parses user friends (from page 2) 
+`/user/nekomata1037/friends/2` - Parses user friends (from page 2)
+
+
+**Anime & Manga Lists**
+
+Lists are paginated (300 items per page).
+
+`/user/nekomata1037/animelist/all` - All anime in user list
+
+`/user/nekomata1037/animelist/all/2` - Page 2
+
+`/user/nekomata1037/mangalist/reading` - Manga that I'm currently reading
 
 ### User Request Example+Schema [GET]
 + Parameters
