@@ -188,6 +188,14 @@ $router->group(
         $router->get('/friends[/{page:[0-9]+}]', [
             'uses' => 'UserController@friends'
         ]);
+
+        $router->get('/animelist[/{status:[A-Za-z]+}[/{page:[0-9]+}]]', [
+            'uses' => 'UserController@animelist'
+        ]);
+
+        $router->get('/mangalist[/{status:[A-Za-z]+}[/{page:[0-9]+}]]', [
+            'uses' => 'UserController@mangalist'
+        ]);
     }
 );
 
