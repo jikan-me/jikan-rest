@@ -22,7 +22,7 @@
         "jms/serializer": "^1.13",
         "symfony/yaml": "^4.1",
         "fabpot/goutte": "dev-http-exceptions as 3.2.x-dev",
-        "jikan-me/jikan": "dev-master"
+        "jikan-me/jikan": "dev-master#7c88915"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
