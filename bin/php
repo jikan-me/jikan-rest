@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT="$(cd "${DIR}"/../ && pwd)"
+
+. "${ROOT}"/.env
+. "${ROOT}"/docker/lib/docker_host_user_id.sh
+. "${ROOT}"/docker/lib/images.sh
+. "${DIR}"/lib/env.sh
+
+
+docker run \
+    -e LOCAL_USER_ID=$DOCKER_HOST_USER_ID \
+    -it \
+    --env-file "$ROOT"/docker/.env \
+    -v $(pwd):/var/www \
+    -v ~/.composer:/home/user/.composer \
+    -w /var/www \
+    --rm \
+    --net ${PROJECT_NAME}_default \
+    --link web:jikan-rest.local \
+    --link web:www.jikan-rest.local \
+    ${PHP_IMAGE} php "$@"

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+
+. "${ROOT}"/bin/lib/exitCheck.sh
+
+echo ""
+echo "Installing environments..."
+# Initialize Docker .env
+"${ROOT}"/bin/init/init_env.sh docker
+exitCheck $?
+
+# Initialize .env
+"${ROOT}"/bin/init/init_env.sh
+exitCheck $?
+
+# Load .env
+. "${ROOT}"/.env
+exitCheck $?
+
+# Check that we have a valid app key (or encryption, and therefore authentication, doesn't work)
+if [ -z "${APP_KEY}" ]; then
+    # Generate a random 32 character string to use as the app key
+    export APP_KEY="base64:$(php -r 'echo base64_encode(random_bytes(32));')"
+    exitCheck $?
+    "${ROOT}/bin/linux-sed" -i "s|^APP_KEY|APP_KEY=$APP_KEY|g" "${ROOT}/.env"
+    exitCheck $?
+fi
+
+echo ""
+echo "Installing Composer..."
+"${ROOT}"/bin/init/install_composer.sh
+exitCheck $?
+
+echo ""
+echo "Installing Composer dependencies..."
+composer install
+exitCheck $?
+
+echo ""
+echo "Running database migrations..."
+"${ROOT}"/bin/php artisan migrate --force
+exitCheck $?

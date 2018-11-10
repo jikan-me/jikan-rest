@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
+
+. "${ROOT}"/bin/lib/env.sh
+. "${ROOT}"/docker/lib/images.sh
+
+docker run \
+   --env-file "$ROOT"/docker/.env \
+   -it \
+   --rm \
+   --net ${PROJECT_NAME}_default \
+   ${REDIS_REPO}:${REDIS_TAG} \
+   redis-cli -h redis -p 6379 -a password "$@"
