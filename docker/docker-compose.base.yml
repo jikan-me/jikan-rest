@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  api:
+    image: ${WEB_IMAGE}
+    env_file: .env
+    environment:
+      LOCAL_USER_ID: 0
+      PHP_FPM_USER_ID: ${DOCKER_HOST_USER_ID}
+    volumes:
+      - ..:/var/www
+    depends_on:
+      - db
+      - redis
+    ports:
+      - 80:80
+    extra_hosts:
+      - "phpstorm:${PHPSTORM_HOST_IP}"
+    networks:
+      default:
+        aliases:
+        - jikan-rest.local
+        - www.jikan-rest.local
+
+  db:
+    image: ${MYSQL_IMAGE}
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jikanlocal
+    ports:
+      - 3306:3306
+
+  redis:
+    image: ${REDIS_IMAGE}
+    command:
+      --requirepass password
+      --loglevel notice
+
+networks:
+  default:
+    driver: bridge

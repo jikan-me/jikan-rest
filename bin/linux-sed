@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT="$(cd "${DIR}"/../ && pwd)"
+
+. "${ROOT}"/docker/lib/images.sh
+
+docker run \
+  --env-file "$ROOT"/docker/.env \
+  -i \
+  --rm ${SED_REPO}:${SED_TAG} \
+  sed "$@"
