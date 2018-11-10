@@ -1,5 +1,6 @@
 /vendor
 /.idea
+/bin/composer
 Homestead.json
 Homestead.yaml
 .env
