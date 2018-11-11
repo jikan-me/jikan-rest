@@ -14,8 +14,6 @@ services:
       - redis
     ports:
       - 80:80
-    extra_hosts:
-      - "phpstorm:${PHPSTORM_HOST_IP}"
     networks:
       default:
         aliases:
