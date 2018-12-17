@@ -6,8 +6,8 @@ $router->get('/', function () use ($router) {
     return response()->json([
     	'Author' => '@irfanDahir',
     	'Contact' => 'irfan@jikan.moe',
-    	'JikanREST' => '2.0',
-    	'JikanPHP' => '2.0.0-rc.2',
+    	'JikanREST' => '2.2',
+    	'JikanPHP' => '2.0.0',
     	'Website' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',

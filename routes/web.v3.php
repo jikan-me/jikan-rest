@@ -6,9 +6,9 @@ $router->get('/', function () use ($router) {
 
     return response()->json([
     	'Author' => '@irfanDahir',
-    	'Contact' => 'irfan@jikan.moe',
-    	'JikanREST' => '3.0',
-    	'JikanPHP' => '2.0.0-rc.2',
+    	'Contact' => 'irfan@dahir.co',
+    	'JikanREST' => '3.2',
+    	'JikanPHP' => '2.6.0',
     	'Website' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',
@@ -80,6 +80,18 @@ $router->group(
         $router->get('/moreinfo', [
             'uses' => 'AnimeController@moreInfo'
         ]);
+
+        $router->get('/recommendations', [
+            'uses' => 'AnimeController@recommendations'
+        ]);
+
+        $router->get('/userupdates[/{page:[0-9]+}]', [
+            'uses' => 'AnimeController@userupdates'
+        ]);
+
+        $router->get('/reviews[/{page:[0-9]+}]', [
+            'uses' => 'AnimeController@reviews'
+        ]);
     }
 );
 
@@ -115,6 +127,18 @@ $router->group(
         $router->get('/moreinfo', [
             'uses' => 'MangaController@moreInfo'
         ]);
+
+        $router->get('/recommendations', [
+            'uses' => 'MangaController@recommendations'
+        ]);
+
+        $router->get('/userupdates[/{page:[0-9]+}]', [
+            'uses' => 'MangaController@userupdates'
+        ]);
+
+        $router->get('/reviews[/{page:[0-9]+}]', [
+            'uses' => 'MangaController@reviews'
+        ]);
     }
 );
 
@@ -149,7 +173,11 @@ $router->group(
 );
 
 $router->get('season/archive', [
-   'uses' => 'SeasonController@archive'
+    'uses' => 'SeasonController@archive'
+]);
+
+$router->get('season/later', [
+    'uses' => 'SeasonController@later'
 ]);
 
 $router->get('season[/{year:[0-9]{4}}/{season:[A-Za-z]+}]', [
@@ -264,5 +292,20 @@ $router->group(
             'uses' => 'SearchController@people'
         ]);
 
+    }
+);
+
+$router->group(
+    [
+        'prefix' => 'club/{id:[0-9]+}'
+    ],
+    function() use ($router) {
+        $router->get('/', [
+            'uses' => 'ClubController@main'
+        ]);
+
+        $router->get('/members[/{page:[0-9]+}]', [
+            'uses' => 'ClubController@members'
+        ]);
     }
 );

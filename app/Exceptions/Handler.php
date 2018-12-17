@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Jikan\Exception\BadResponseException;
 use Jikan\Exception\ParserException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -51,20 +52,14 @@ class Handler extends ExceptionHandler
     {
 
         if ($e instanceof ParserException) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
         if ($e instanceof ClientException) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
-
-//        Bugsnag::notifyException($e);
-//        if ($e instanceof HttpResponseException) {
-//        } elseif ($e instanceof ModelNotFoundException) {
-//            $e = new NotFoundHttpException($e->getMessage(), $e);
-//        } elseif ($e instanceof AuthorizationException) {
-//            $e = new HttpException(403, $e->getMessage());
-//        } elseif ($e instanceof ValidationException && $e->getResponse()) {
-//        }
+        if ($e instanceof BadResponseException) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        }
 
         $fe = FlattenException::create($e);
 

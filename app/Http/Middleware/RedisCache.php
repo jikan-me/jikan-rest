@@ -9,6 +9,10 @@ class RedisCache
 {
     protected const CACHE_EXPIRY = 43200; // 6 hours
 
+    private $fingerprint;
+    private $cached = false;
+    private $response;
+
     public function handle(Request $request, Closure $next)
     {
         //debug
@@ -29,41 +33,50 @@ class RedisCache
             $requestType = $request->segments()[0];
         }
 
-        $hashKey = "request:{$requestType}:" . sha1($key);
-        $cached = true;
+        $this->fingerprint = "request:{$requestType}:" . sha1($key);
+        $this->cached = (bool) app('redis')->exists($this->fingerprint);
 
-        if (!app('redis')->exists($hashKey)) {
+        // ETag
+        if (
+            $request->hasHeader('If-None-Match')
+            && app('redis')->exists($this->fingerprint)
+            && md5(app('redis')->get($this->fingerprint)) === $request->header('If-None-Match')
+        ) {
+            return response('', 304);
+        }
+
+
+        if (!app('redis')->exists($this->fingerprint)) {
 
             $response = $next($request);
-            $cached = false;
 
             if ($this->isError($response)) {
                 return $response;
             }
 
             app('redis')->set(
-                $hashKey,
+                $this->fingerprint,
                 $response->original
             );
-            app('redis')->expire($hashKey, self::CACHE_EXPIRY);
+            app('redis')->expire($this->fingerprint, self::CACHE_EXPIRY);
         }
 
+        $data = app('redis')->get($this->fingerprint);
+        $ttl = app('redis')->ttl($this->fingerprint);
+
         return response()->json(
-            array_merge(
-                [
-                    'request_hash' => $hashKey,
-                    'request_cached' => $cached,
-                    'request_cache_expiry' => app('redis')->ttl($hashKey),
-                ],
-                json_decode(
-                    app('redis')->get($hashKey),
-                    true
-                )
-            )
-        );
+            [
+                'request_hash' => $this->fingerprint,
+                'request_cached' => $this->cached,
+                'request_cache_expiry' => $ttl,
+            ]
+            +
+            json_decode($data, true)
+        )
+            ->setEtag(md5($data));
     }
 
-    private function isError($response) {
+    private function isError($response) : bool {
         return isset($response->original['error']);
     }
 }

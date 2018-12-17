@@ -38,4 +38,10 @@ class SeasonController extends Controller
             )
         );
     }
+
+    public function later()
+    {
+        $season = $this->jikan->getSeasonal(new SeasonalRequest(null, null, true));
+        return response($this->serializer->serialize($season, 'json'));
+    }
 }

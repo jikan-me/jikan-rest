@@ -5,7 +5,6 @@ namespace App\Http\Controllers\V3;
 use Jikan\Request\Genre\AnimeGenreRequest;
 use Jikan\Request\Genre\MangaGenreRequest;
 
-
 class GenreController extends Controller
 {
     public function anime(int $id, int $page = 1)

@@ -28,7 +28,7 @@ class Meta
         $this->updateMeta("requests:monthly", $requestUri, 2629746);
 
 
-        return $next($request);
+        return $response;
     }
 
     private function updateMeta($key, $req, $expire) {

@@ -13,8 +13,8 @@ try {
 */
 define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
 
-define('REST_VERSION', '3.1');
-define('SOURCE_VERSION', '2.0.0');
+define('REST_VERSION', '3.2');
+define('SOURCE_VERSION', '2.4.0');
 
 /*
 |--------------------------------------------------------------------------
@@ -88,7 +88,7 @@ $app->routeMiddleware([
     'redis-cache' => App\Http\Middleware\RedisCache::class,
     'throttle' => App\Http\Middleware\Throttle::class,
     'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
-    'cachet' => App\Http\Middleware\Cachet::class
+//    'cachet' => App\Http\Middleware\Cachet::class
 ]);
 
 /*
