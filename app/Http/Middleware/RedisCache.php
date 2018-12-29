@@ -72,8 +72,10 @@ class RedisCache
         $return = $meta + json_decode($data, true);
 
         if ($requestType === 'anime' || $requestType === 'manga') {
-            if (count($return['related']) === 0) {
-                $return['related'] = new \stdClass();
+            if (isset($return['related'])) {
+                if (\count($return['related']) === 0) {
+                    $return['related'] = new \stdClass();
+                }
             }
         }
 
