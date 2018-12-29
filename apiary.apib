@@ -9,17 +9,21 @@ Base URL: `https://api.jikan.moe/v3`
 
 [Status](https://status.jikan.moe) | [Bug Report](https://github.com/jikan-me/jikan/issues/new) | **[Discord](https://discord.gg/dDMxFmz)**
 
-## Announcement - 2nd Sept, 2019
-**2nd September, 2018**
-REST v3 has been released. There's a lot of changes and additions!
-- [News Post](https://myanimelist.net/forum/?topicid=1616529&show=50#msg55620086)
-- "Extended Requests" are **NO LONGER** supported in v3
-- [MIGRATION NOTES](https://github.com/jikan-me/jikan-rest/blob/master/MIGRATION.MD)
+## Announcement - 29 December, 18
+REST v3.2 has been released!
 
-From **1st January, 2019**
-- `api.jikan.moe` will point towards the latest v3 endpoint
-- "Extended Request" will be depreciated in V2.
+#### New Features
+- Anime/Manga **Reviews**
+- Anime/Manga **Recommendations**
+- Anime/Manga **User Updates**
+- [Club **Information**](https://jikan.docs.apiary.io/#reference/0/club)
+- [Club **Members**](https://jikan.docs.apiary.io/#reference/0/club)
+- [Season **later**](https://jikan.docs.apiary.io/#reference/0/season-later)
+- [Entity Tags - Cache validation](https://jikan.docs.apiary.io/#introduction/cache-validation)
 
+**Important Changes**
+- All data from user related endpoints `/v3/user/*` are now cached for 5 minutes only
+- **(Anime/Manga)** Bug fixed for `related` property. It's an object but returns an array when it was empty. **This is fixed now.**
 
 
 
@@ -30,11 +34,12 @@ From **1st January, 2019**
 - [REST API Status](https://status.jikan.moe)
 
 
-- [JikanPHP - Source](https://github.com/jikan-me/jikan/)
-- [JikanPy - Wrapper](https://github.com/AWConant/jikanpy) by Andrew Conant
+- [JikanPHP - Parser](https://github.com/jikan-me/jikan/) by [Contributors](https://github.com/jikan-me/jikan/graphs/contributors)
+- [JikanPy - Wrapper](https://github.com/AWConant/jikanpy) by Andrew Conant & abhinavk99 (Abhinav Kasamsetty)
 - [Jikan.rb - Wrapper](https://github.com/Zerocchi/jikan.rb) by Zerocchi
-- [Jikan.Net - Wrapper](https://github.com/Ervie/jikan.net) by Ervie
+- [Jikan.Net - Wrapper](https://github.com/Ervie/jikan.net) by Ervie (Bartłomiej Buchała)
 - [JikanJs - Wrapper](https://github.com/zuritor/jikanjs) by zuritor (Sven)
+- [Jikan4java - Wrapper](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs
 
 
 # Information
@@ -70,6 +75,7 @@ GET: All requests are done via GET
 
 # Response Headers
 - 200 `OK` - the request was successful.
+- 304 `Not Modified` - You have the latest data
 - 400 `Bad Request` - You've made an invalid request or to an invalid endpoint.
 - 404 `Not Found` - MyAnimeList responded with a 404
 - 405 `Method Not Allowed` - requested method is not supported for resource.
@@ -102,6 +108,23 @@ If there's any 404s or the parser is unable to complete the request, you'll get 
 - **Any abuse of the REST API instance will lead to temporary IP blocks!**
 
 
+# Cache Validation
+- All requests return a `ETag` header which is an md5 hash of the content.
+
+- You can use this hash to verify if there's new or updated content by supplying it as the value for the `If-None-Match` header.
+
+- You will get a `304` HTTP response if your value and the data on Jikan matches.
+
+- If there's new/updated content, you'll get a normal `200` HTTP response with the updated content.
+
+### How To Use
+1. Use the `ETag` value as a header value for `If-None-Match` for future requests
+2. If the content has changed, you will get a `304 - Not Modified` header response, otherwise `200 - OK`
+
+
+![Cache Validation](https://i.imgur.com/925ozVn.png "Cache Validation")
+
+
 ## Anime [/anime/{id}/{request}/{parameter}]
 A single anime object with all its details
 ### Requests
@@ -115,10 +138,18 @@ A single anime object with all its details
 | stats | N/A | Statistical information related to the item |
 | forum | N/A | Forum topics related to the item |
 | moreinfo | N/A | More info related to the item |
+| reviews | Page number (integer) | Reviews written by users |
+| recommendations | N/A | Recommendations and their weightage made by users |
+| userupdates | Page number (integer) | Latest list updates made by users |
 
-**Remarks:** The field `episodes_last_page` will tell you the last page of the paginated episodes list.
 
-The episodes page on MyAnimeList get paginated after 100 episodes. If there's an anime with more than 100 episodes, you'll have to use the parameter.
+
+#### Remarks 
+- The field `episodes_last_page` will tell you the last page of the paginated episodes list.
+
+- The episodes page on MyAnimeList get paginated after 100 episodes. If there's an anime with more than 100 episodes, you'll have to use the parameter.
+
+- Only 20 items are shown per page for reviews
 
 ### Example Calls
 - `/anime/1/characters_staff` // Returns the list of characters and staff
@@ -152,9 +183,17 @@ A single manga object with all its details
 | stats | N/A | Statistical information related to the item |
 | forum | N/A | Forum topics related to the item |
 | moreinfo | N/A | More info related to the item |
+| reviews | Page number (integer) | Reviews written by users |
+| recommendations | N/A | Recommendations and their weightage made by users |
+| userupdates | Page number (integer) | Latest list updates made by users |
 
 ### Example Calls
 - `/manga/1/characters` // Returns the list of characters and staff
+
+
+#### Remarks 
+
+- Only 20 items are shown per page for reviews
 
 ### Manga Request Example+Schema [GET]
 
@@ -291,6 +330,18 @@ Anime of the specified season
 All the years & their respective seasons that can be parsed from MyAnimeList
 
 ### Season Archive Request Example+Schema [GET]
+
++ Response 200 (application/json)
+
+        [
+ 
+        ]
+        
+
+## Season Later [/season/later]
+Anime that have been announced for the upcoming seasons
+
+### Season Later Request Example+Schema [GET]
 
 + Response 200 (application/json)
 
@@ -469,6 +520,37 @@ Lists are paginated (300 items per page).
         [
  
         ]
+
+
+## Club [/club/{id}/{request}]
+A single club object with all its details
+### Requests
+| Request  | Parameter | Description |
+| ------------- | ------------- | ------------- |
+| members  | Page (INTEGER)  | Fetches list of club members |
+
+
+### Example Calls
+- `/club/1` // Returns club information
+- `/club/1/members/1` // Returns list of club members
+
+
+#### Remarks 
+
+- Only 35 items are shown per page for members
+
+### Club Request Example+Schema [GET]
+
++ Parameters
+    + id (required, Number, `1`) ... Returns the Club details from that the ID
+    + request (optional, String, `members`) ... Return club members
+    
++ Response 200 (application/json)
+
+        [
+ 
+        ]
+
 
 ## Meta [/meta/{request}/{type}/{period}]
 Requests related to meta information regarding the Jikan REST Instance.
