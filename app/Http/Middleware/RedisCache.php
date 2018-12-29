@@ -7,11 +7,9 @@ use Illuminate\Http\Request;
 
 class RedisCache
 {
-    protected const CACHE_EXPIRY = 43200; // 6 hours
-
     private $fingerprint;
     private $cached = false;
-    private $response;
+    private $cacheExpiry = 43200; // 6 hours
 
     public function handle(Request $request, Closure $next)
     {
@@ -45,6 +43,9 @@ class RedisCache
             return response('', 304);
         }
 
+        if ($requestType === "user") {
+            $this->cacheExpiry = 300;
+        }
 
         if (!app('redis')->exists($this->fingerprint)) {
 
@@ -58,20 +59,26 @@ class RedisCache
                 $this->fingerprint,
                 $response->original
             );
-            app('redis')->expire($this->fingerprint, self::CACHE_EXPIRY);
+            app('redis')->expire($this->fingerprint, $this->cacheExpiry);
         }
 
         $data = app('redis')->get($this->fingerprint);
-        $ttl = app('redis')->ttl($this->fingerprint);
+        $meta = [
+            'request_hash' => $this->fingerprint,
+            'request_cached' => $this->cached,
+            'request_cache_expiry' => app('redis')->ttl($this->fingerprint)
+        ];
+
+        $return = $meta + json_decode($data, true);
+
+        if ($requestType === 'anime' || $requestType === 'manga') {
+            if (count($return['related']) === 0) {
+                $return['related'] = new \stdClass();
+            }
+        }
 
         return response()->json(
-            [
-                'request_hash' => $this->fingerprint,
-                'request_cached' => $this->cached,
-                'request_cache_expiry' => $ttl,
-            ]
-            +
-            json_decode($data, true)
+            $return
         )
             ->setEtag(md5($data));
     }

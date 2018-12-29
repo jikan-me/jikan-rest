@@ -7,7 +7,7 @@ $router->get('/', function () use ($router) {
     	'Author' => '@irfanDahir',
     	'Contact' => 'irfan@jikan.moe',
     	'JikanREST' => '2.2',
-    	'JikanPHP' => '2.0.0',
+    	'JikanPHP' => '2.6.1',
     	'Website' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',

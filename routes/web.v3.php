@@ -8,7 +8,7 @@ $router->get('/', function () use ($router) {
     	'Author' => '@irfanDahir',
     	'Contact' => 'irfan@dahir.co',
     	'JikanREST' => '3.2',
-    	'JikanPHP' => '2.6.0',
+    	'JikanPHP' => '2.6.1',
     	'Website' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',
@@ -53,8 +53,7 @@ $router->group(
         ]);
 
         $router->get('/episodes[/{page:[0-9]+}]', [
-            'uses'
-=> 'AnimeController@episodes'
+            'uses' => 'AnimeController@episodes'
         ]);
 
         $router->get('/news', [
