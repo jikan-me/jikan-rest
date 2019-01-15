@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Http\HttpHelper;
 use Closure;
 use Illuminate\Http\Request;
-use r\Queries\Control\Http;
 
 class JikanResponse
 {
@@ -19,6 +18,7 @@ class JikanResponse
     {
         if (empty($request->segments())) {return $next($request);}
         if (!isset($request->segments()[1])){return $next($request);}
+        if (\in_array('meta', $request->segments())) {return $next($request);}
 
         $this->requestUri = $request->getRequestUri();
         $this->requestType = HttpHelper::requestType($request);
