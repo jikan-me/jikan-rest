@@ -85,7 +85,6 @@ $app->routeMiddleware([
     'jikan-response' => App\Http\Middleware\JikanResponse::class,
     'throttle' => App\Http\Middleware\Throttle::class,
     'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
-//    'cachet' => App\Http\Middleware\Cachet::class
 ]);
 
 /*
@@ -120,7 +119,6 @@ $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $commonMiddleware = [
     'slave-auth',
     'meta',
-    //'cachet',
     'jikan-response',
     'throttle'
 ];
