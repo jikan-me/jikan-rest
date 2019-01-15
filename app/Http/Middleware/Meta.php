@@ -11,9 +11,9 @@ class Meta
     public function handle($request, Closure $next)
     {
         // pass on meta requests
-        if (\in_array('meta', $request->segments())) {
-            return $next($request);
-        }
+//        if (\in_array('meta', $request->segments())) {
+//            return $next($request);
+//        }
 
         $requestUri = $request->getRequestUri();
         $requestUri = str_replace(['/v1', '/v2', '/v3'], '', $requestUri);

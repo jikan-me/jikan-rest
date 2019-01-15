@@ -58,6 +58,13 @@ class Handler extends ExceptionHandler
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
         if ($e instanceof BadResponseException) {
+            if ($e->getCode() === 404) {
+                $fingerprint = "request:404:" . sha1($request->getRequestUri());
+
+                app('redis')->setNx($fingerprint, 1);
+                app('redis')->expire($fingerprint, env('CACHE_404_EXPIRE') ?? 604800);
+            }
+
             return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
 
@@ -82,6 +89,7 @@ class Handler extends ExceptionHandler
         //var_dump(parent::render($request, $e));
         //return parent::render($request, $e);
     }
+
 
     public function getContent($statusCode) {
         switch ($statusCode) {

@@ -13,10 +13,7 @@ class RedisCache
 
     public function handle(Request $request, Closure $next)
     {
-        //debug
-//        error_log(
-//            $request->header('SLAVE_KEY_HEADER') . " | " . $request->header(env('SLAVE_CLIENT_IP_HEADER'))
-//        );
+
         // pass on meta requests
         if (\in_array('meta', $request->segments())) {
             return $next($request);
@@ -48,7 +45,6 @@ class RedisCache
         }
 
         if (!app('redis')->exists($this->fingerprint)) {
-
             $response = $next($request);
 
             if ($this->isError($response)) {

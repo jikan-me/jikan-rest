@@ -13,9 +13,6 @@ try {
 */
 define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
 
-define('REST_VERSION', '3.2');
-define('SOURCE_VERSION', '2.4.0');
-
 /*
 |--------------------------------------------------------------------------
 | Create The Application
@@ -85,7 +82,7 @@ $app->middleware([App\Http\Middleware\Throttle::class]);*/
 $app->routeMiddleware([
     'blacklist' => App\Http\Middleware\Blacklist::class,
     'meta' => App\Http\Middleware\Meta::class,
-    'redis-cache' => App\Http\Middleware\RedisCache::class,
+    'jikan-response' => App\Http\Middleware\JikanResponse::class,
     'throttle' => App\Http\Middleware\Throttle::class,
     'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
 //    'cachet' => App\Http\Middleware\Cachet::class
@@ -124,7 +121,7 @@ $commonMiddleware = [
     'slave-auth',
     'meta',
     //'cachet',
-    'redis-cache',
+    'jikan-response',
     'throttle'
 ];
 
