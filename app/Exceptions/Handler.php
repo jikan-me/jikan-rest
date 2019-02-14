@@ -51,56 +51,57 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
 
+        // ParserException from Jikan PHP API
         if ($e instanceof ParserException) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+            return response()
+                ->json(
+                    [
+                        'status' => 500,
+                        'type' => 'ParserException',
+                        'message' => 'Unable to parse this request. Please create an issue on GitHub with the exception error',
+                        'error' => $e->getMessage(),
+                    ],
+                    500
+                );
         }
-        if ($e instanceof ClientException) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
-        }
+
+        // BadResponseException from Guzzle dep via Jikan PHP API
         if ($e instanceof BadResponseException) {
-            if ($e->getCode() === 404) {
-                $fingerprint = "request:404:" . sha1($request->getRequestUri());
-
-                app('redis')->setNx($fingerprint, $e->getMessage());
-                app('redis')->expire($fingerprint, env('CACHE_404_EXPIRE') ?? 604800);
+            switch ($e->getCode()) {
+                case 400:
+                    return response()
+                        ->json([
+                            'status' => $e->getCode(),
+                            'type' => 'BadResponseException',
+                            'message' => 'Bad request. Please double check with the documentation',
+                            'error' => $e->getMessage()
+                        ], $e->getCode());
+                case 404:
+                    return response()
+                        ->json([
+                            'status' => $e->getCode(),
+                            'type' => 'BadResponseException',
+                            'message' => 'Resource not found',
+                            'error' => $e->getMessage()
+                        ], $e->getCode());
+                default:
+                    return response()
+                        ->json([
+                            'status' => $e->getCode(),
+                            'type' => 'BadResponseException',
+                            'message' => 'Something went wrong, please try again later',
+                            'error' => $e->getMessage()
+                        ], $e->getCode());
             }
-
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
 
-        $fe = FlattenException::create($e);
-
-        //$decorated = $this->decorate($handler->getContent($fe), $handler->getStylesheet($fe));
-        return response()->json(['error' => $this->getContent($fe->getStatusCode())], $fe->getStatusCode());
-
-        //return response()->json($this->getContent($fe), $fe->getStatusCode());
-
-        //$response->exception = $e;
-
-
-        //return $response;
-
-        //if ($e instanceof CustomException) {
-        //    return response('Custom Message');
-        //}
-
-
-        //return response(['error' => $e->getMessage()], 400);
-        //var_dump(parent::render($request, $e));
-        //return parent::render($request, $e);
-    }
-
-
-    public function getContent($statusCode) {
-        switch ($statusCode) {
-            case 404:
-                return 'Invalid or incomplete endpoint';
-            case 400:
-                return 'Bad Request';
-            case 500:
-                return 'Server Error';
-            default:
-                return 'Unknown error';
-        }
+        // Bad REST API requests
+        return response()
+            ->json([
+                'status' => 400,
+                'type' => 'HttpException',
+                'message' => 'Invalid or incomplete request. Please double check the request documentation',
+                'error' => null
+            ], 400);
     }
 }
