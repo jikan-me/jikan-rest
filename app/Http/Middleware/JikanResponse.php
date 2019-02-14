@@ -25,14 +25,7 @@ class JikanResponse
         $this->requestCacheExpiry = HttpHelper::requestCacheExpiry($this->requestType);
         $this->fingerprint = "request:{$this->requestType}:" . sha1($this->requestUri);
         $this->requestCached = (bool) app('redis')->exists($this->fingerprint);
-
-        // Check if request is in the 404 cache pool
-        if (app('redis')->exists("request:404:" . sha1($this->requestUri))) {
-            return response()->json([
-                'error' => app('redis')->get("request:404:" . sha1($this->requestUri))
-            ], 404);
-        }
-
+        
         // Cache data from parser
         if (!$this->requestCached) {
             $response = $next($request);
