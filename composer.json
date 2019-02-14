@@ -22,7 +22,8 @@
         "jms/serializer": "^1.13",
         "symfony/yaml": "^4.1",
         "fabpot/goutte": "3.2.3",
-        "jikan-me/jikan": "^2.3.0"
+        "jikan-me/jikan": "^2.3.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

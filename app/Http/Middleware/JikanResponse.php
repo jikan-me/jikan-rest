@@ -25,7 +25,7 @@ class JikanResponse
         $this->requestCacheExpiry = HttpHelper::requestCacheExpiry($this->requestType);
         $this->fingerprint = "request:{$this->requestType}:" . sha1($this->requestUri);
         $this->requestCached = (bool) app('redis')->exists($this->fingerprint);
-        
+
         // Cache data from parser
         if (!$this->requestCached) {
             $response = $next($request);
