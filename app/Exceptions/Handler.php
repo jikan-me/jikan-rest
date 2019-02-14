@@ -50,38 +50,35 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-
         // ParserException from Jikan PHP API
         if ($e instanceof ParserException) {
             return response()
-                ->json(
-                    [
+                ->json([
                         'status' => 500,
                         'type' => 'ParserException',
                         'message' => 'Unable to parse this request. Please create an issue on GitHub with the exception error',
                         'error' => $e->getMessage(),
-                    ],
-                    500
-                );
+                    ], 500);
         }
 
         // BadResponseException from Guzzle dep via Jikan PHP API
+        // This is basically the response MyAnimeList returns to Jikan
         if ($e instanceof BadResponseException) {
             switch ($e->getCode()) {
-                case 400:
-                    return response()
-                        ->json([
-                            'status' => $e->getCode(),
-                            'type' => 'BadResponseException',
-                            'message' => 'Bad request. Please double check with the documentation',
-                            'error' => $e->getMessage()
-                        ], $e->getCode());
                 case 404:
                     return response()
                         ->json([
                             'status' => $e->getCode(),
                             'type' => 'BadResponseException',
-                            'message' => 'Resource not found',
+                            'message' => 'Resource does not exist',
+                            'error' => $e->getMessage()
+                        ], $e->getCode());
+                case 429:
+                    return response()
+                        ->json([
+                            'status' => $e->getCode(),
+                            'type' => 'BadResponseException',
+                            'message' => 'Jikan is being rate limited by MyAnimeList',
                             'error' => $e->getMessage()
                         ], $e->getCode());
                 default:
