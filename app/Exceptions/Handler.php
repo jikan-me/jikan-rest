@@ -61,7 +61,7 @@ class Handler extends ExceptionHandler
             if ($e->getCode() === 404) {
                 $fingerprint = "request:404:" . sha1($request->getRequestUri());
 
-                app('redis')->setNx($fingerprint, 1);
+                app('redis')->setNx($fingerprint, $e->getMessage());
                 app('redis')->expire($fingerprint, env('CACHE_404_EXPIRE') ?? 604800);
             }
 

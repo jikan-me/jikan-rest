@@ -29,7 +29,7 @@ class JikanResponse
         // Check if request is in the 404 cache pool
         if (app('redis')->exists("request:404:" . sha1($this->requestUri))) {
             return response()->json([
-                'error' => '404: Resource not found'
+                'error' => app('redis')->get("request:404:" . sha1($this->requestUri))
             ], 404);
         }
 
