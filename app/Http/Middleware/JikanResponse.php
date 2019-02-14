@@ -65,11 +65,23 @@ class JikanResponse
     private function serializeEmptyObjects($requestType, array $data)
     {
         if (!($requestType === 'anime' || $requestType === 'manga')) {
-                return $data;
+            return $data;
         }
 
         if (isset($data['related']) && \count($data['related']) === 0) {
             $data['related'] = new \stdClass();
+        }
+
+        if (isset($data['related'])) {
+            $related = $data['related'];
+            $data['related'] = [];
+
+            foreach ($related as $relation => $items) {
+                $data['related'][] = [
+                    'relation' => $relation,
+                    'items' => $items
+                ];
+            }
         }
 
         return $data;
