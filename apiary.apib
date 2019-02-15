@@ -3,11 +3,11 @@ HOST: https://api.jikan.moe/v3
 
 # Jikan
 [Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList REST-ful API. 
-It's built on the Lumen microframework, uses Redis for caching and is powered by the [Jikan Parser](https://github.com/jikan-me/jikan)
+It's built on the Lumen microframework, uses Redis for caching and is powered by the [Jikan PHP API](https://github.com/jikan-me/jikan)
 
 Base URL: `https://api.jikan.moe/v3`
 
-[Status](https://status.jikan.moe) | [Bug Report](https://github.com/jikan-me/jikan/issues/new) | **[Discord](https://discord.gg/dDMxFmz)**
+[Bug Report](https://github.com/jikan-me/jikan/issues/new) | **[Discord](https://discordapp.com/invite/4tvCr36)**
 
 ## Announcement - 29 December, 18
 REST v3.2 has been released!
@@ -40,7 +40,7 @@ REST v3.2 has been released!
 - [Jikan.Net - Wrapper](https://github.com/Ervie/jikan.net) by Ervie (Bartłomiej Buchała)
 - [JikanJs - Wrapper](https://github.com/zuritor/jikanjs) by zuritor (Sven)
 - [Jikan4java - Wrapper](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs
-
+- [Jikan-php - Wrapper](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe
 
 # Information
 
@@ -62,7 +62,9 @@ This API serves as a purpose for apps/bots/etc that make consistent amount of re
 - All dates and timestamps are in **ISO8601** format and in **UTC**
 
 ## Caching
-All requests are cached for **6 hours**
+User related requests are cached for **5 minutes**
+
+All other requests are cached for **6 hours**
 
 - `request_cached` (bool) will tell you whether the request is cached
 
@@ -79,7 +81,7 @@ GET: All requests are done via GET
 - 400 `Bad Request` - You've made an invalid request or to an invalid endpoint.
 - 404 `Not Found` - MyAnimeList responded with a 404
 - 405 `Method Not Allowed` - requested method is not supported for resource.
-- 429 `Too Many Requests` - You are being rate limited
+- 429 `Too Many Requests` - You are being rate limited or Jikan is being rate-limited by MyAnimeList
 
 # Errors
 If you get an error response, it'll be within the `error` field. Here's an example:
