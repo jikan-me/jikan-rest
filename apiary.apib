@@ -111,7 +111,6 @@ If there's any 404s or the parser is unable to complete the request, you'll get 
 
 
 # Cache Validation
-### ⚠️ This feature is temporarily disabled due to a bug ⚠️
 - All requests return a `ETag` header which is an md5 hash of the content.
 
 - You can use this hash to verify if there's new or updated content by supplying it as the value for the `If-None-Match` header.
