@@ -14,7 +14,7 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 ## Getting Started
 
 ### Requirements
-- [Composer](getcomposer.org/download/)
+- [Composer](https://getcomposer.org/download/)
 - [Redis](https://redis.io)
 - PHP 7.1+
 
