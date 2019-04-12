@@ -33,8 +33,8 @@ This is specifically for Ubuntu, but other distributions should work similarly.
   - Install the corresponding `php-xml` and `php-mbstring` packages for your version, e.g:
     - PHP 7.1: `sudo apt install php7.1-xml php7.1-mbstring`
     - PHP 7.3: `sudo apt install php7.3-xml php7.3-mbstring`
-2. Install composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
-3. Start the redis server: `sudo service redis start`
+  - Install composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
+2. Start the redis server: `sudo service redis start`
 
 #### Mac
 
