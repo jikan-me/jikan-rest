@@ -14,16 +14,47 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 ## Getting Started
 
 ### Requirements
-- [Composer](getcomposer.org/download/)
-- [Redis](https://redis.io)
+
 - PHP 7.1+
+- [Composer](https://getcomposer.org/download/)
+- [Redis](https://redis.io)
 
 ### Installation
 
+#### Linux
+
+This is specifically for Ubuntu, but other distributions should work similarly.
+
+1. Install requirements:
+  - Add PHP related packages: `sudo add-apt-repository -y ppa:ondrej/php`
+  - `sudo apt update && sudo apt upgrade`
+  - Install requirements: `sudo apt install curl git python-software-properties php redis-server`
+  - Verify that PHP 7.1+ is installed: `php -v`
+  - Install the corresponding `php-xml` and `php-mbstring` packages for your version, e.g:
+    - PHP 7.1: `sudo apt install php7.1-xml php7.1-mbstring`
+    - PHP 7.3: `sudo apt install php7.3-xml php7.3-mbstring`
+  - Install composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
+2. Start the redis server: `sudo service redis start`
+
+#### Mac
+
+1. Install [brew](https://brew.sh/)
+2. Install requirements: `brew install php composer redis`
+3. Start the redis server: `brew services start redis`
+
+### Run
+
 1. `git clone https://github.com/jikan-me/jikan-rest.git`
-2. Rename `.env.dist` to `.env`
-3. `composer install`
-4. **Optional** Create a virtual host and point it to `/public`
+2. `cd jikan-rest`
+3.  Rename `.env.dist` to `.env`: `mv .env.dist .env`
+4. `composer update`
+5. `composer install`
+
+To start the server, create a virtual host and point it to `/public`:
+
+`php -S localhost:8000 -t public`
+
+Jikan is now hosted on `http://localhost:8000/v3/`
 
 ## Information
 If you don't want to host your instance, there's a public API available.
@@ -37,6 +68,8 @@ If you don't want to host your instance, there's a public API available.
 - **[Ruby]** [Jikan.rb](https://github.com/Zerocchi/jikan.rb) by Zerocchi
 - **[JavaScript]** [JikanJS](https://github.com/zuritor/jikanjs) by Zuritor
 - **[Java]** [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs
+- **[PHP]** [jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe
+- **[Node.js]** [jikan-node](https://github.com/xy137/jikan-node) by xy137
 
 [Add your own wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
 
