@@ -14,10 +14,14 @@ class Blacklist
     {
         $this->loadList();
 
-        if ($this->inList()) {
-            return response()->json([
-                'error' => 'You have been blocked from the service'
-            ]);
+        if (\in_array($_SERVER['REMOTE_ADDR'], $this->blacklist)) {
+            return response()
+                ->json([
+                    'status' => 403,
+                    'type' => null,
+                    'message' => 'You have been blocked from the service for breaching Terms of Use',
+                    'error' => null
+                ], 403);
         }
 
         return $next($request);
@@ -30,10 +34,4 @@ class Blacklist
 
         $this->blacklist = json_decode(file_get_contents(BLACKLIST_PATH), true);
     }
-
-    private function inList() {
-        $ip = $_SERVER['REMOTE_ADDR'];
-        return in_array($ip, $this->blacklist) ? true : false;
-    }
-
 }
