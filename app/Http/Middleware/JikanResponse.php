@@ -16,9 +16,11 @@ class JikanResponse
 
     public function handle(Request $request, Closure $next)
     {
+
         if (empty($request->segments())) {return $next($request);}
         if (!isset($request->segments()[1])){return $next($request);}
         if (\in_array('meta', $request->segments())) {return $next($request);}
+
 
         $this->requestUri = $request->getRequestUri();
         $this->requestType = HttpHelper::requestType($request);
@@ -48,44 +50,53 @@ class JikanResponse
         }
 
         // Return cache
+        $meta = $this->generateMeta($request);
+
+        $cache = app('redis')->get($this->fingerprint);
+        $cacheMutable = json_decode(app('redis')->get($this->fingerprint), true);
+
+
+        return response()
+            ->json(
+                array_merge($meta, $cacheMutable)
+            )
+            ->setEtag(
+                md5($cache)
+            )
+            ->withHeaders([
+                'X-Request-Hash' => $this->fingerprint,
+                'X-Request-Cached' => $this->requestCached,
+                'X-Request-Cache-Expiry' => app('redis')->ttl($this->fingerprint)
+            ]);
+
+    }
+
+    private function generateMeta(Request $request) : array
+    {
+        $version = HttpHelper::requestAPIVersion($request);
+
         $meta = [
-            'TESTING_NOTICE' => 'THIS VERSION IS IN THE TESTING STAGE; EXPECT SCHEMA CHANGES. DO NOT USE FOR PRODUCTION.',
             'request_hash' => $this->fingerprint,
             'request_cached' => $this->requestCached,
             'request_cache_expiry' => app('redis')->ttl($this->fingerprint)
         ];
-        $cache = app('redis')->get($this->fingerprint);
-        $cacheMutable = json_decode(app('redis')->get($this->fingerprint), true);
-        $cacheMutable = $this->serializeEmptyObjects($this->requestType, $cacheMutable);
 
-        return response()->json(
-            array_merge($meta, $cacheMutable)
-        )->setEtag(md5($cache));
+        switch ($version) {
+            case 2:
+                $meta = array_merge([
+                    'DEPRECIATION_NOTICE' => 'THIS VERSION WILL BE DEPRECIATED ON JUNE 20th, 2019.',
+                ], $meta);
+                break;
+            case 4:
+                unset($meta['request_cached'], $meta['request_cache_expiry']);
+                $meta = array_merge([
+                    'DEVELOPMENT_NOTICE' => 'THIS VERSION IS IN TESTING. DO NOT USE FOR PRODUCTION.',
+                    'MIGRATION' => 'https://github.com/jikan-me/jikan-rest/blob/master/MIGRATION.MD',
+                ], $meta);
+                break;
+        }
+
+
+        return $meta;
     }
-
-    private function serializeEmptyObjects($requestType, array $data)
-    {
-        if (!($requestType === 'anime' || $requestType === 'manga')) {
-            return $data;
-        }
-
-        if (isset($data['related']) && \count($data['related']) === 0) {
-            $data['related'] = new \stdClass();
-        }
-
-        if (isset($data['related'])) {
-            $related = $data['related'];
-            $data['related'] = [];
-
-            foreach ($related as $relation => $items) {
-                $data['related'][] = [
-                    'relation' => $relation,
-                    'items' => $items
-                ];
-            }
-        }
-
-        return $data;
-    }
-
 }
