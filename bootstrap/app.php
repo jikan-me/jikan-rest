@@ -98,6 +98,7 @@ $app->routeMiddleware([
 |
 */
 
+$app->configure('database');
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 // $app->register(App\Providers\AppServiceProvider::class);
