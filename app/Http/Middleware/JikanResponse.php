@@ -49,6 +49,7 @@ class JikanResponse
 
         // Return cache
         $meta = [
+            'TESTING_NOTICE' => 'THIS VERSION IS IN THE TESTING STAGE; EXPECT SCHEMA CHANGES. DO NOT USE FOR PRODUCTION.',
             'request_hash' => $this->fingerprint,
             'request_cached' => $this->requestCached,
             'request_cache_expiry' => app('redis')->ttl($this->fingerprint)
