@@ -33,9 +33,14 @@ class MangaController extends Controller
         return response($this->serializer->serialize($manga, 'json'));
     }
 
-    public function forum(int $id)
+    public function forum(int $id, ?string $topic = null)
     {
-        $manga = ['topics' => $this->jikan->getMangaForum(new MangaForumRequest($id))];
+        // safely bypass MAL's naming schemes
+        if ($topic === 'chapters') {
+            $topic = 'episode';
+        }
+
+        $manga = ['topics' => $this->jikan->getMangaForum(new MangaForumRequest($id, $topic))];
         return response($this->serializer->serialize($manga, 'json'));
     }
 
