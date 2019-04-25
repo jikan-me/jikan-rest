@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Jikan\Exception\BadResponseException;
 use Jikan\Exception\ParserException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Predis\Connection\ConnectionException;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -50,13 +51,25 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+
+        // ConnectionException from Redis server
+        if ($e instanceof ConnectionException) {
+            return response()
+                ->json([
+                    'status' => 500,
+                    'type' => 'ConnectionException',
+                    'message' => 'Failed to communicate with Redis',
+                    'error' => env('APP_DEBUG') ?  $e->getMessage() : null,
+                ], 500);
+        }
+
         // ParserException from Jikan PHP API
         if ($e instanceof ParserException) {
             return response()
                 ->json([
                         'status' => 500,
                         'type' => 'ParserException',
-                        'message' => 'Unable to parse this request. Please create an issue on GitHub with the exception error',
+                        'message' => 'Unable to parse this request. Please create an issue on GitHub with the request URL and exception error',
                         'error' => $e->getMessage(),
                     ], 500);
         }
@@ -93,12 +106,27 @@ class Handler extends ExceptionHandler
         }
 
         // Bad REST API requests
-        return response()
-            ->json([
-                'status' => 400,
-                'type' => 'HttpException',
-                'message' => 'Invalid or incomplete request. Please double check the request documentation',
-                'error' => null
-            ], 400);
+        if ($e instanceof HttpException) {
+            return response()
+                ->json([
+                    'status' => 400,
+                    'type' => 'HttpException',
+                    'message' => 'Invalid or incomplete request. Please double check the request documentation',
+                    'error' => null
+                ], 400);
+        }
+
+        if ($e instanceof Exception) {
+            return response()
+                ->json([
+                    'status' => 500,
+                    'type' => "Exception",
+                    'message' => 'Unhandled Exception. Please create an issue on GitHub with the request URL and exception error',
+                    'trace' => "{$e->getFile()} at line {$e->getLine()}",
+                    'error' => $e->getMessage()
+                ], 400);
+        }
+
+
     }
 }
