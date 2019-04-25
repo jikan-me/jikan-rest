@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V3;
+namespace App\Http\Controllers\V4;
 
 use Jikan\Request\Manga\MangaCharactersRequest;
 use Jikan\Request\Manga\MangaForumRequest;
@@ -18,6 +18,13 @@ class MangaController extends Controller
     public function main(int $id)
     {
         $manga = $this->jikan->getManga(new MangaRequest($id));
+
+        $mangaSerialized = $this->serializer->serialize($manga, 'json');
+        $mangaSerialized = HttpHelper::serializeEmptyObjectsControllerLevel(
+            json_decode($mangaSerialized, true)
+        );
+        $mangaSerialized = json_encode($mangaSerialized);
+
         return response($this->serializer->serialize($manga, 'json'));
     }
 
@@ -59,19 +66,19 @@ class MangaController extends Controller
 
     public function recommendations(int $id)
     {
-        $anime = ['recommendations' => $this->jikan->getMangaRecommendations(new MangaRecommendationsRequest($id))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $manga = ['recommendations' => $this->jikan->getMangaRecommendations(new MangaRecommendationsRequest($id))];
+        return response($this->serializer->serialize($manga, 'json'));
     }
 
     public function userupdates(int $id, int $page = 1)
     {
-        $anime = ['users' => $this->jikan->getMangaRecentlyUpdatedByUsers(new MangaRecentlyUpdatedByUsersRequest($id, $page))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $manga = ['users' => $this->jikan->getMangaRecentlyUpdatedByUsers(new MangaRecentlyUpdatedByUsersRequest($id, $page))];
+        return response($this->serializer->serialize($manga, 'json'));
     }
 
     public function reviews(int $id, int $page = 1)
     {
-        $anime = ['reviews' => $this->jikan->getMangaReviews(new MangaReviewsRequest($id, $page))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $manga = ['reviews' => $this->jikan->getMangaReviews(new MangaReviewsRequest($id, $page))];
+        return response($this->serializer->serialize($manga, 'json'));
     }
 }

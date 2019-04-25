@@ -6,13 +6,13 @@ $router->get('/', function () use ($router) {
 
     return response()->json([
     	'Author' => '@irfanDahir',
-    	'Contact' => 'irfan@dahir.co',
-    	'JikanREST' => '3.2',
-    	'JikanPHP' => '2.6.1',
+    	'Discord' => 'https://discord.gg/4tvCr36',
+    	'Version' => '4.0',
+    	'JikanPHP' => '2.7.0',
     	'Website' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',
-    	'PRODUCTION_API_URL' => 'https://api.jikan.moe/v3/',
+    	'PRODUCTION_API_URL' => 'https://api.jikan.moe/v4/',
     	'STATUS_URL' => 'https://status.jikan.moe'
     ]);
 });

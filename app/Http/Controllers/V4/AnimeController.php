@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V3;
+namespace App\Http\Controllers\V4;
 
 use App\Http\HttpHelper;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
@@ -21,14 +21,14 @@ class AnimeController extends Controller
     public function main(int $id)
     {
         $anime = $this->jikan->getAnime(new AnimeRequest($id));
-//        Todo: Use for /v4
-//        $animeSerialized = $this->serializer->serialize($anime, 'json');
-//        $animeSerialized = HttpHelper::serializeEmptyObjectsControllerLevel(
-//            json_decode($animeSerialized, true)
-//        );
-//        $animeSerialized = json_encode($animeSerialized);
-//        return response($animeSerialized);
-        return response($this->serializer->serialize($anime, 'json'));
+
+        $animeSerialized = $this->serializer->serialize($anime, 'json');
+        $animeSerialized = HttpHelper::serializeEmptyObjectsControllerLevel(
+            json_decode($animeSerialized, true)
+        );
+        $animeSerialized = json_encode($animeSerialized);
+
+        return response($animeSerialized);
     }
 
     public function characters_staff(int $id)

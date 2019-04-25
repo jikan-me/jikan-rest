@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V3;
 
+use App\Http\HttpHelper;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\Anime\AnimeEpisodesRequest;
 use Jikan\Request\Anime\AnimeForumRequest;

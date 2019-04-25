@@ -4,16 +4,16 @@ $router->get('/', function () use ($router) {
 
 
     return response()->json([
+        'DEPRECIATION_NOTICE' => 'THIS ENDPOINT WILL BE DEPRECIATED ON JUNE 20th, 2019.',
     	'Author' => '@irfanDahir',
-    	'Contact' => 'irfan@jikan.moe',
-    	'JikanREST' => '2.2',
-    	'JikanPHP' => '2.6.1',
-    	'Website' => 'https://jikan.moe',
+        'Discord' => 'https://discord.gg/4tvCr36',
+        'Version' => '2.0',
+        'JikanPHP' => '2.7.0',
+        'Website' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',
     	'PRODUCTION_API_URL' => 'https://api.jikan.moe/v2/',
-    	'STATUS_URL' => 'https://status.jikan.moe',
-        'NOTICE' => 'THIS ENDPOINT POINTS TO v2. TO USE THE LATEST VERSION, APPEND v3 TO THE URL.'
+    	'STATUS_URL' => 'https://status.jikan.moe'
     ]);
 });
 

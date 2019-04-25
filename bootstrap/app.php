@@ -126,6 +126,17 @@ $commonMiddleware = [
 
 $app->router->group(
     [
+        'prefix' => 'v4',
+        'namespace' => 'App\Http\Controllers\V4',
+        'middleware' => $commonMiddleware
+    ],
+    function ($router) {
+        require __DIR__.'/../routes/web.v4.php';
+    }
+);
+
+$app->router->group(
+    [
         'prefix' => 'v3',
         'namespace' => 'App\Http\Controllers\V3',
         'middleware' => $commonMiddleware
@@ -163,9 +174,13 @@ $app->router->group(
     ],
     function ($router) {
         $router->get('/', function () {
-            return response()->json([
-                'error' => 'This version is depreciated'
-            ]);
+            return response()
+                ->json([
+                    'status' => 400,
+                    'type' => 'HttpException',
+                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported version.',
+                    'error' => null
+                ], 400);
         });
     }
 );

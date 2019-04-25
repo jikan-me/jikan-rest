@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V3;
+namespace App\Http\Controllers\V4;
 
 class MetaController extends Controller
 {
