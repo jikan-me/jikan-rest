@@ -39,8 +39,8 @@ class SearchQueryBuilder
         'rx' => JikanConstants::SEARCH_ANIME_RATING_RX
     ];
 
-    private const VALID_GENRE = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45];
-
+    private const VALID_MIN_GENRE = 1;
+    private const VALID_MAX_GENRE = 45;
 
     public static function create($request)
     {
@@ -55,6 +55,23 @@ class SearchQueryBuilder
         if (isset($_GET['page'])) {
             $page = (int) $_GET['page'];
             $request->setPage($page);
+        }
+
+        if (isset($_GET['letter'])) {
+            $letter = $xss->xss_clean($_GET['letter']);
+
+            $request->setStartsWithChar('');
+
+            if (!empty($_GET['letter'])) {
+                $letter = strtolower(
+                    // https://stackoverflow.com/questions/1972100/getting-the-first-character-of-a-string-with-str0#comment27161857_1972111
+                    mb_substr($letter, 0, 1, 'utf-8')
+                );
+
+                if (preg_match('~[A-Z0-9\.]~', $letter)) {
+                    $request->setStartsWithChar($letter);
+                }
+            }
         }
 
         if (isset($_GET['type'])) {
@@ -111,18 +128,17 @@ class SearchQueryBuilder
         }
 
         if (isset($_GET['genre'])) {
-
             if (is_array($_GET['genre'])) {
                 foreach ($_GET['genre'] as $genre) {
                     $genre = (int) $genre;
 
-                    if (\in_array($genre, self::VALID_GENRE)) {
+                    if ($genre >= self::VALID_MIN_GENRE && $genre <= self::VALID_MAX_GENRE) {
                         $request->setGenre($genre);
                     }
                 }
             } else {
                 $genre = (int) $_GET['genre'];
-                if (\in_array($genre, self::VALID_GENRE)) {
+                if ($genre >= self::VALID_MIN_GENRE && $genre <= self::VALID_MAX_GENRE) {
                     $request->setGenre($genre);
                 }
             }
