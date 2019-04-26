@@ -4,7 +4,7 @@ $router->get('/', function () use ($router) {
 
 
     return response()->json([
-        'DEPRECIATION_NOTICE' => 'THIS ENDPOINT WILL BE DEPRECIATED ON JUNE 20th, 2019.',
+        'DEPRECIATION_NOTICE' => 'THIS VERSION WILL BE DEPRECIATED ON July 01, 2019.',
     	'Author' => '@irfanDahir',
         'Discord' => 'https://discord.gg/4tvCr36',
         'Version' => '2.0',
