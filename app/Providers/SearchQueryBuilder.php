@@ -128,7 +128,7 @@ class SearchQueryBuilder
         }
 
         if (isset($_GET['genre'])) {
-            if (is_array($_GET['genre'])) {
+            if (\is_array($_GET['genre'])) {
                 foreach ($_GET['genre'] as $genre) {
                     $genre = (int) $genre;
 
@@ -136,8 +136,11 @@ class SearchQueryBuilder
                         $request->setGenre($genre);
                     }
                 }
-            } else {
+            }
+
+            if (!\is_array($_GET['genre'])) {
                 $genre = (int) $_GET['genre'];
+
                 if ($genre >= self::VALID_MIN_GENRE && $genre <= self::VALID_MAX_GENRE) {
                     $request->setGenre($genre);
                 }
