@@ -15,6 +15,10 @@ use Predis\Connection\ConnectionException;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * Class Handler
+ * @package App\Exceptions
+ */
 class Handler extends ExceptionHandler
 {
     /**
@@ -30,12 +34,8 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception  $e
-     * @return void
+     * @param Exception $e
+     * @throws Exception
      */
     public function report(Exception $e)
     {
@@ -51,26 +51,38 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        $githubReport = GithubReport::make($e, $request);
 
         // ConnectionException from Redis server
         if ($e instanceof ConnectionException) {
+            /*
+             * Redis
+             * Remove sensitive information
+             */
+            if (env('APP_DEBUG')) {
+                $githubReport->setError(' ');
+            }
+
             return response()
                 ->json([
                     'status' => 500,
                     'type' => 'ConnectionException',
                     'message' => 'Failed to communicate with Redis',
                     'error' => env('APP_DEBUG') ?  $e->getMessage() : null,
+                    'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
                 ], 500);
         }
 
         // ParserException from Jikan PHP API
         if ($e instanceof ParserException) {
+            $githubReport->setRepo(env('GITHUB_API', 'jikan-me/jikan'));
             return response()
                 ->json([
                         'status' => 500,
                         'type' => 'ParserException',
-                        'message' => 'Unable to parse this request. Please create an issue on GitHub with the request URL and exception error',
+                        'message' => 'Unable to parse this request. Please follow report_url to generate an issue on GitHub',
                         'error' => $e->getMessage(),
+                        'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
                     ], 500);
         }
 
@@ -94,6 +106,17 @@ class Handler extends ExceptionHandler
                             'message' => 'Jikan is being rate limited by MyAnimeList',
                             'error' => $e->getMessage()
                         ], $e->getCode());
+                case 500:
+                case 502:
+                case 503:
+                case 504:
+                    return response()
+                        ->json([
+                            'status' => $e->getCode(),
+                            'type' => 'BadResponseException',
+                            'message' => 'Jikan could not connect to MyAnimeList',
+                            'error' => $e->getMessage()
+                        ], 503);
                 default:
                     return response()
                         ->json([
@@ -121,12 +144,11 @@ class Handler extends ExceptionHandler
                 ->json([
                     'status' => 500,
                     'type' => "Exception",
-                    'message' => 'Unhandled Exception. Please create an issue on GitHub with the request URL and exception error',
+                    'message' => 'Unhandled Exception. Please follow report_url to generate an issue on GitHub',
                     'trace' => "{$e->getFile()} at line {$e->getLine()}",
-                    'error' => $e->getMessage()
-                ], 400);
+                    'error' => $e->getMessage(),
+                    'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
+                ], 500);
         }
-
-
     }
 }
