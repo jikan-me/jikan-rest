@@ -57,9 +57,9 @@ class Handler extends ExceptionHandler
         if ($e instanceof ConnectionException) {
             /*
              * Redis
-             * Remove sensitive information
+             * Remove sensitive information from production
              */
-            if (env('APP_DEBUG')) {
+            if (!env('APP_DEBUG')) {
                 $githubReport->setError(' ');
             }
 
