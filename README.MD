@@ -23,8 +23,7 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 
 
 #### 🐳 Docker
-- [JikanREST Docker](https://github.com/fethica/jikan-rest-docker) by [Fethi El Hassasna
-](https://github.com/fethica)
+- [JikanREST Docker](https://github.com/fethica/jikan-rest-docker) by Fethi El Hassasna
 
 #### Linux
 
@@ -67,7 +66,7 @@ If you don't want to host your instance, there's a public API available.
 - **[REST DOCUMENTATION](https://jikan.docs.apiary.io)**
 - **[Apps/Projects using JikanREST](https://jikan.moe/showcase)**
 
-### Available Wrappers
+### Wrappers
 - **[.NET]** [Jikan.net](https://github.com/Ervie/jikan.net) by Ervie
 - **[Python]** [JikanPy](https://github.com/AWConant/jikanpy) by Andrew Conant & Abhinav Kasamsetty
 - **[Ruby]** [Jikan.rb](https://github.com/Zerocchi/jikan.rb) by Zerocchi
@@ -75,8 +74,10 @@ If you don't want to host your instance, there's a public API available.
 - **[Java]** [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs
 - **[PHP]** [jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe
 - **[Node.js]** [jikan-node](https://github.com/xy137/jikan-node) by xy137
+- **[Dart]** [jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol
+- **[TypeScript]** [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard
 
-[Add your own wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
+[Add your wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
 
 ## DISCLAIMER
 - Jikan is not affiliated with MyAnimeList.net 
