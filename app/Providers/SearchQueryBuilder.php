@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Jikan\Request\Search\AnimeSearchRequest;
+use Jikan\Request\Search\MangaSearchRequest;
 use \voku\helper\AntiXSS;
 use Jikan\Helper\Constants as JikanConstants;
 
@@ -30,6 +32,7 @@ class SearchQueryBuilder
         'tba' => JikanConstants::SEARCH_ANIME_STATUS_TBA,
         'upcoming' => JikanConstants::SEARCH_ANIME_STATUS_TBA
     ];
+
     private const VALID_RATING = [
         'g' => JikanConstants::SEARCH_ANIME_RATING_G,
         'pg' => JikanConstants::SEARCH_ANIME_RATING_PG,
@@ -42,21 +45,67 @@ class SearchQueryBuilder
     private const VALID_MIN_GENRE = 1;
     private const VALID_MAX_GENRE = 45;
 
+    private const VALID_ANIME_ORDER_BY = [
+        'title' => JikanConstants::SEARCH_ANIME_ORDER_BY_TITLE,
+        'start_date' => JikanConstants::SEARCH_ANIME_ORDER_BY_START_DATE,
+        'start-date' => JikanConstants::SEARCH_ANIME_ORDER_BY_START_DATE,
+        'startdate' => JikanConstants::SEARCH_ANIME_ORDER_BY_START_DATE,
+        'score' => JikanConstants::SEARCH_ANIME_ORDER_BY_SCORE,
+        'episodes' => JikanConstants::SEARCH_ANIME_ORDER_BY_EPISODES,
+        'eps' => JikanConstants::SEARCH_ANIME_ORDER_BY_EPISODES,
+        'end_date' => JikanConstants::SEARCH_ANIME_ORDER_BY_END_DATE,
+        'end-date' => JikanConstants::SEARCH_ANIME_ORDER_BY_END_DATE,
+        'enddate' => JikanConstants::SEARCH_ANIME_ORDER_BY_END_DATE,
+        'type' => JikanConstants::SEARCH_ANIME_ORDER_BY_TYPE,
+        'members' => JikanConstants::SEARCH_ANIME_ORDER_BY_MEMBERS,
+        'rating' => JikanConstants::SEARCH_ANIME_ORDER_BY_RATED,
+        'rated' => JikanConstants::SEARCH_ANIME_ORDER_BY_RATED,
+        'id' => JikanConstants::SEARCH_ANIME_ORDER_BY_ID
+    ];
+
+    private const VALID_MANGA_ORDER_BY = [
+        'title' => JikanConstants::SEARCH_MANGA_ORDER_BY_TITLE,
+        'start_date' => JikanConstants::SEARCH_MANGA_ORDER_BY_START_DATE,
+        'start-date' => JikanConstants::SEARCH_MANGA_ORDER_BY_START_DATE,
+        'startdate' => JikanConstants::SEARCH_MANGA_ORDER_BY_START_DATE,
+        'score' => JikanConstants::SEARCH_MANGA_ORDER_BY_SCORE,
+        'volumes' => JikanConstants::SEARCH_MANGA_ORDER_BY_VOLUMES,
+        'vols' => JikanConstants::SEARCH_MANGA_ORDER_BY_VOLUMES,
+        'end_date' => JikanConstants::SEARCH_MANGA_ORDER_BY_END_DATE,
+        'end-date' => JikanConstants::SEARCH_MANGA_ORDER_BY_END_DATE,
+        'enddate' => JikanConstants::SEARCH_MANGA_ORDER_BY_END_DATE,
+        'chapters' => JikanConstants::SEARCH_MANGA_ORDER_BY_CHAPTERS,
+        'chaps' => JikanConstants::SEARCH_MANGA_ORDER_BY_CHAPTERS,
+        'members' => JikanConstants::SEARCH_MANGA_ORDER_BY_MEMBERS,
+        'type' => JikanConstants::SEARCH_MANGA_ORDER_BY_TYPE,
+        'id' => JikanConstants::SEARCH_MANGA_ORDER_BY_ID,
+    ];
+
+    private const VALID_SORT = [
+        'ascending' => JikanConstants::SEARCH_SORT_ASCENDING,
+        'asc' => JikanConstants::SEARCH_SORT_ASCENDING,
+        'descending' => JikanConstants::SEARCH_SORT_DESCENDING,
+        'desc' => JikanConstants::SEARCH_SORT_DESCENDING,
+    ];
+
     public static function create($request)
     {
         $xss = new AntiXSS();
 
+        // Query
         if (isset($_GET['q'])) {
             $request->setQuery(
                 $xss->xss_clean($_GET['q'])
             );
         }
 
+        // Page
         if (isset($_GET['page'])) {
             $page = (int) $_GET['page'];
             $request->setPage($page);
         }
 
+        // Starts with glyph
         if (isset($_GET['letter'])) {
             $letter = $xss->xss_clean($_GET['letter']);
 
@@ -74,6 +123,7 @@ class SearchQueryBuilder
             }
         }
 
+        // Type
         if (isset($_GET['type'])) {
             $subtype = strtolower($xss->xss_clean($_GET['type']));
             if (array_key_exists($subtype, self::VALID_SUB_TYPES)) {
@@ -81,6 +131,7 @@ class SearchQueryBuilder
             }
         }
 
+        // Score
         if (isset($_GET['score'])) {
             $score = (float) $xss->xss_clean($_GET['score']);
 
@@ -89,6 +140,7 @@ class SearchQueryBuilder
             }
         }
 
+        // Status
         if (isset($_GET['status'])) {
             $status = strtolower($xss->xss_clean($_GET['status']));
             if (array_key_exists($status, self::VALID_STATUS)) {
@@ -96,6 +148,7 @@ class SearchQueryBuilder
             }
         }
 
+        // Rating/Rated
         if (isset($_GET['rated'])) {
             $rated = strtolower($xss->xss_clean($_GET['rated']));
             if (array_key_exists($rated, self::VALID_RATING)) {
@@ -103,6 +156,7 @@ class SearchQueryBuilder
             }
         }
 
+        // Start Date
         if (isset($_GET['start_date'])) {
             $startDate = $xss->xss_clean($_GET['start_date']);
             if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $startDate)) {
@@ -115,6 +169,7 @@ class SearchQueryBuilder
             }
         }
 
+        // End Date
         if (isset($_GET['end_date'])) {
             $endDate = $xss->xss_clean($_GET['end_date']);
             if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $endDate)) {
@@ -127,6 +182,7 @@ class SearchQueryBuilder
             }
         }
 
+        // Genre
         if (isset($_GET['genre']) && \is_string($_GET['genre']) && strpos($_GET['genre'], ',')) {
             $_GET['genre'] = explode(',', $_GET['genre']);
         }
@@ -151,11 +207,40 @@ class SearchQueryBuilder
             }
         }
 
+        // Exclude genre passed for $_GET['genre']. Defaulted to false
         if (isset($_GET['genre_exclude'])) {
             $request->setGenreExclude(
                 ((int) $_GET['genre_exclude'] == 1) ? false : true
             );
         }
+
+        // Anime: Order By
+        if ($request instanceof AnimeSearchRequest && isset($_GET['order_by'])) {
+            $order = $xss->xss_clean($_GET['order_by']);
+
+            if (array_key_exists($order, self::VALID_ANIME_ORDER_BY)) {
+                $request->setOrderBy(self::VALID_ANIME_ORDER_BY[$order]);
+            }
+        }
+
+        // Manga: Order By
+        if ($request instanceof MangaSearchRequest && isset($_GET['order_by'])) {
+            $order = $xss->xss_clean($_GET['order_by']);
+
+            if (array_key_exists($order, self::VALID_MANGA_ORDER_BY)) {
+                $request->setOrderBy(self::VALID_MANGA_ORDER_BY[$order]);
+            }
+        }
+
+        // Anime|Manga : Sort
+        if (isset($_GET['sort'])) {
+            $order = $xss->xss_clean($_GET['sort']);
+
+            if (array_key_exists($order, self::VALID_SORT)) {
+                $request->setOrderBy(self::VALID_SORT[$order]);
+            }
+        }
+
 
         return $request;
     }
