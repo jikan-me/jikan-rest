@@ -21,6 +21,11 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 
 ### Installation
 
+
+#### 🐳 Docker
+- [JikanREST Docker](https://github.com/fethica/jikan-rest-docker) by [Fethi El Hassasna
+](https://github.com/fethica)
+
 #### Linux
 
 This is specifically for Ubuntu, but other distributions should work similarly.
