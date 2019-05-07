@@ -127,6 +127,10 @@ class SearchQueryBuilder
             }
         }
 
+        if (isset($_GET['genre']) && \is_string($_GET['genre']) && strpos($_GET['genre'], ',')) {
+            $_GET['genre'] = explode(',', $_GET['genre']);
+        }
+
         if (isset($_GET['genre'])) {
             if (\is_array($_GET['genre'])) {
                 foreach ($_GET['genre'] as $genre) {
@@ -138,7 +142,7 @@ class SearchQueryBuilder
                 }
             }
 
-            if (!\is_array($_GET['genre'])) {
+            if (!\is_array($_GET['genre']) ) {
                 $genre = (int) $_GET['genre'];
 
                 if ($genre >= self::VALID_MIN_GENRE && $genre <= self::VALID_MAX_GENRE) {
