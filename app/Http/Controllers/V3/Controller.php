@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V3;
 use App\Providers\SerializerFactory;
 use App\Providers\SerializerServiceProdivder;
 use App\Providers\SerializerServiceProviderV3;
+use GuzzleHttp\Client;
 use Jikan\Jikan;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\Context;
@@ -30,9 +31,9 @@ class Controller extends BaseController
      * @param Serializer      $serializer
      * @param MalClient $jikan
      */
-    public function __construct(MalClient $jikan)
+    public function __construct()
     {
         $this->serializer = SerializerFactory::createV3();
-        $this->jikan = $jikan;
+        $this->jikan = app('JikanParser');
     }
 }

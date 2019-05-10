@@ -53,13 +53,6 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-$app->singleton(
-    \Jikan\MyAnimeList\MalClient::class,
-    function () {
-        return new \Jikan\MyAnimeList\MalClient();
-    }
-);
-
 
 /*
 |--------------------------------------------------------------------------
@@ -71,13 +64,6 @@ $app->singleton(
 | route or middleware that'll be assigned to some specific routes.
 |
 */
-
-/*$app->middleware([App\Http\Middleware\Meta::class]);
-$app->middleware([App\Http\Middleware\Throttle::class]);*/
-
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
 
 $app->routeMiddleware([
     'blacklist' => App\Http\Middleware\Blacklist::class,
@@ -101,9 +87,12 @@ $app->routeMiddleware([
 $app->configure('database');
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 
-// $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$guzzleClient = new \GuzzleHttp\Client();
+$app->instance('GuzzleClient', $guzzleClient);
+
+$jikan = new \Jikan\MyAnimeList\MalClient($app->make('GuzzleClient'));
+$app->instance('JikanParser', $jikan);
+
 
 
 /*
@@ -178,7 +167,7 @@ $app->router->group(
                 ->json([
                     'status' => 400,
                     'type' => 'HttpException',
-                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported version.',
+                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported versions.',
                     'error' => null
                 ], 400);
         });
