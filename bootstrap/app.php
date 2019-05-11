@@ -66,11 +66,11 @@ $app->singleton(
 */
 
 $app->routeMiddleware([
+    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
     'blacklist' => App\Http\Middleware\Blacklist::class,
     'meta' => App\Http\Middleware\Meta::class,
-    'jikan-response' => App\Http\Middleware\JikanResponse::class,
+    'jikan-response' => App\Http\Middleware\JikanResponseHandler::class,
     'throttle' => App\Http\Middleware\Throttle::class,
-    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
 ]);
 
 /*
@@ -85,12 +85,14 @@ $app->routeMiddleware([
 */
 
 $app->configure('database');
+$app->configure('queue');
+
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 $guzzleClient = new \GuzzleHttp\Client();
 $app->instance('GuzzleClient', $guzzleClient);
 
-$jikan = new \Jikan\MyAnimeList\MalClient($app->make('GuzzleClient'));
+$jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
 $app->instance('JikanParser', $jikan);
 
 
