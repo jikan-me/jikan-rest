@@ -17,7 +17,8 @@
         "symfony/yaml": "^4.1",
         "fabpot/goutte": "3.2.3",
         "jikan-me/jikan": "^2.7",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ocramius/package-versions": "^1.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
