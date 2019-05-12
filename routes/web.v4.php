@@ -8,7 +8,7 @@ $router->get('/', function () use ($router) {
     	'Author' => '@irfanDahir',
     	'Discord' => 'https://discord.gg/4tvCr36',
     	'Version' => '4.0',
-    	'JikanPHP' => '2.7.0',
+    	'JikanPHP' => JIKAN_PARSER_VERSION,
     	'Website' => 'https://jikan.moe',
     	'Docs' => 'https://jikan.docs.apiary.io',
     	'GitHub' => 'https://github.com/jikan-me/jikan',

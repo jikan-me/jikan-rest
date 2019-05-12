@@ -1,5 +1,7 @@
 <?php
 
+use PackageVersions\Versions;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -12,6 +14,7 @@ try {
     Defines
 */
 define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
+define('JIKAN_PARSER_VERSION', Versions::getVersion('jikan-me/jikan'));
 
 /*
 |--------------------------------------------------------------------------
