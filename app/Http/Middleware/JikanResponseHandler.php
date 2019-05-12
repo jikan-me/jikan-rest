@@ -81,7 +81,12 @@ class JikanResponseHandler
             // Don't duplicate the queue for same request
             if (!app('redis')->exists($queueFingerprint)) {
                 app('redis')->set($queueFingerprint, 1);
-                dispatch(new UpdateCacheJob($request));
+                dispatch(
+                    (new UpdateCacheJob($request))->delay(
+                        env('QUEUE_DELAY_PER_JOB', 5)
+                    )
+                );
+
             } else {
                 Log::info("Duplicate ({$queueFingerprint})");
             }
