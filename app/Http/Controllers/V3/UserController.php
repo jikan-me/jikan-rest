@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V3;
 
+use App\Providers\UserListQueryBuilder;
 use Jikan\Request\User\UserAnimeListRequest;
 use Jikan\Request\User\UserMangaListRequest;
 use Jikan\Request\User\UserProfileRequest;
@@ -55,7 +56,11 @@ class UserController extends Controller
             $this->serializer->serialize(
                 [
                     'anime' => $this->jikan->getUserAnimeList(
-                        new UserAnimeListRequest($username, $page, $status)
+                        UserListQueryBuilder::create(
+                            (new UserAnimeListRequest($username))
+                                ->setPage($page)
+                                ->setStatus($status)
+                        )
                     )
                 ],
                 'json'
@@ -81,7 +86,11 @@ class UserController extends Controller
             $this->serializer->serialize(
                 [
                     'manga' => $this->jikan->getUserMangaList(
-                        new UserMangaListRequest($username, $page, $status)
+                        UserListQueryBuilder::create(
+                            (new UserMangaListRequest($username))
+                                ->setPage($page)
+                                ->setStatus($status)
+                        )
                     )
                 ],
                 'json'
