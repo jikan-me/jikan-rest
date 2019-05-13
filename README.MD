@@ -32,7 +32,7 @@ This is specifically for Ubuntu, but other distributions should work similarly.
 1. Install requirements:
   - Add PHP related packages: `sudo add-apt-repository -y ppa:ondrej/php`
   - `sudo apt update && sudo apt upgrade`
-  - Install requirements: `sudo apt install curl git python-software-properties php redis-server`
+  - Install requirements: `sudo apt install curl git python-software-properties php redis-server unzip`
   - Verify that PHP 7.1+ is installed: `php -v`
   - Install the corresponding `php-xml` and `php-mbstring` packages for your version, e.g:
     - PHP 7.1: `sudo apt install php7.1-xml php7.1-mbstring`
