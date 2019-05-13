@@ -16,11 +16,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\V3\ScheduleController;
 use App\Http\HttpHelper;
 use App\Jobs\UpdateCacheJob;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use phpDocumentor\Reflection\Types\Self_;
 
 class JikanResponseHandler
 {
@@ -34,11 +35,27 @@ class JikanResponseHandler
     private $fingerprint;
     private $cacheExpiryFingerprint;
 
-    private $controllerName;
-    private $controllerMethod;
+    private $route;
+
+    private $queueable = true;
+
+    private const NON_QUEUEABLE = [
+        'UserController@profile',
+        'UserController@history',
+        'UserController@friends',
+        'UserController@animelist',
+        'UserController@mangalist',
+    ];
+
+    private const HIGH_PRIORITY_QUEUE = [
+        'ScheduleController@main'
+    ];
 
     public function handle(Request $request, Closure $next)
     {
+        if ($request->header('auth') === env('APP_KEY')) {
+            return $next($request);
+        }
         if (empty($request->segments())) {
             return $next($request);
         }
@@ -46,9 +63,6 @@ class JikanResponseHandler
             return $next($request);
         }
         if (\in_array('meta', $request->segments())) {
-            return $next($request);
-        }
-        if ($request->header('auth') === env('APP_KEY')) {
             return $next($request);
         }
 
@@ -65,6 +79,14 @@ class JikanResponseHandler
 
         $this->requestCached = (bool) app('redis')->exists($this->fingerprint);
 
+        $this->route = explode('\\', $request->route()[1]['uses']);
+        $this->route = end($this->route);
+
+        // Queueable?
+        if (\in_array($this->route, self::NON_QUEUEABLE)) {
+            $this->queueable = false;
+        }
+
         // Cache if it doesn't exist
         if (!$this->requestCached) {
             $response = $next($request);
@@ -73,24 +95,30 @@ class JikanResponseHandler
                 return $response;
             }
 
+
             app('redis')->set($this->fingerprint, $response->original);
             app('redis')->set($this->cacheExpiryFingerprint, $this->requestCacheExpiry);
+
+            if (!$this->queueable) {
+                app('redis')->del($this->cacheExpiryFingerprint);
+                app('redis')->expire($this->fingerprint, $this->requestCacheTtl);
+            }
         }
 
         // If cache is expired, queue for an update
         $this->requestCacheExpiry = (int) app('redis')->get($this->cacheExpiryFingerprint);
 
-
-        if ($this->requestCacheExpiry <= time()) {
+        if ($this->requestCacheExpiry <= time() && $this->queueable) {
             $queueFingerprint = "queue_update:{$this->fingerprint}";
+            $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);
 
             // Don't duplicate the queue for same request
             if (!app('redis')->exists($queueFingerprint)) {
                 app('redis')->set($queueFingerprint, 1);
                 dispatch(
-                    (new UpdateCacheJob($request))->delay(
-                        env('QUEUE_DELAY_PER_JOB', 5)
-                    )
+                    (new UpdateCacheJob($request))
+                        ->delay(env('QUEUE_DELAY_PER_JOB', 5))
+                        ->onQueue($queueHighPriority ? 'high' : 'low')
                 );
             }
         }
@@ -133,7 +161,7 @@ class JikanResponseHandler
         $meta = [
             'request_hash' => $this->fingerprint,
             'request_cached' => $this->requestCached,
-            'request_cache_expiry' => app('redis')->get($this->cacheExpiryFingerprint) - time()
+            'request_cache_expiry' => !$this->queueable ? app('redis')->ttl($this->fingerprint) : app('redis')->get($this->cacheExpiryFingerprint) - time()
         ];
 
         switch ($version) {
