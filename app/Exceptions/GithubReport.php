@@ -81,8 +81,12 @@ class GithubReport
         $report->requestMethod = $request->getMethod();
         $report->jikanVersion = Versions::getVersion('jikan-me/jikan');
         $report->redisRunning = trim(app('redis')->ping()) === 'PONG' ? "Connected" : "Disconnected";
-        $report->instanceType = $_SERVER['SERVER_NAME'] === 'api.jikan.moe' ? 'OFFICIAL' : 'HOSTED';
         $report->phpVersion = PHP_VERSION;
+
+        $report->instanceType = 'UNKNOWN';
+        if (env('APP_ENV') !== 'testing') {
+            $report->instanceType = $_SERVER['SERVER_NAME'] === 'api.jikan.moe' ? 'OFFICIAL' : 'HOSTED';
+        }
 
         return $report;
     }

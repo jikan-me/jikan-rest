@@ -13,8 +13,8 @@ try {
 /*
     Defines
 */
-define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
-define('JIKAN_PARSER_VERSION', Versions::getVersion('jikan-me/jikan'));
+defined('BLACKLIST_PATH') or define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
+defined('JIKAN_PARSER_VERSION') or define('JIKAN_PARSER_VERSION', Versions::getVersion('jikan-me/jikan'));
 
 /*
 |--------------------------------------------------------------------------

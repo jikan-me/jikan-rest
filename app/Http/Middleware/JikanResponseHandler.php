@@ -16,12 +16,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\V3\ScheduleController;
 use App\Http\HttpHelper;
 use App\Jobs\UpdateCacheJob;
 use Closure;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Self_;
 
 class JikanResponseHandler
 {
