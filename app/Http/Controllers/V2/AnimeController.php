@@ -14,7 +14,8 @@ use Jikan\Request\Anime\AnimeVideosRequest;
 
 class AnimeController extends Controller
 {
-    public function _main($id) {
+    public function _main($id)
+    {
         $anime = $this->jikan->getAnime(new AnimeRequest($id));
 
         // backwards compatibility
@@ -25,7 +26,8 @@ class AnimeController extends Controller
 
         $anime['aired_string'] = $anime['aired']['string'];
         unset($anime['aired']['string']);
-        $anime['title_synonyms'] = empty($anime['title_synonyms']) ? null : implode(",", $anime['title_synonyms']);;
+        $anime['title_synonyms'] = empty($anime['title_synonyms']) ? null : implode(",", $anime['title_synonyms']);
+        ;
 
         return $anime;
     }
@@ -158,7 +160,7 @@ class AnimeController extends Controller
             true
         );
 
-        foreach($pictures['image'] as $key => $value) {
+        foreach ($pictures['image'] as $key => $value) {
             $pictures['image'][$key] = $value['small'];
         }
 

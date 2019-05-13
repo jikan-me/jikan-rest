@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Log;
 class UpdateCacheJob extends Job
 {
 
-    public $tries = 1;
-
     /**
      * @var string
      */
@@ -78,7 +76,6 @@ class UpdateCacheJob extends Job
         app('redis')->set($this->fingerprint, $cache);
         app('redis')->set($this->cacheExpiryFingerprint, $this->requestCacheExpiry);
         app('redis')->del($queueFingerprint);
-
     }
 
     public function failed(\Exception $e)

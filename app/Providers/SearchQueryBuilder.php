@@ -10,7 +10,6 @@ use Jikan\Helper\Constants as JikanConstants;
 
 class SearchQueryBuilder
 {
-
     private const VALID_SUB_TYPES = [
         'tv' => JikanConstants::SEARCH_ANIME_TV,
         'ova' => JikanConstants::SEARCH_ANIME_OVA,
@@ -194,7 +193,7 @@ class SearchQueryBuilder
                     }
                 }
 
-                if (!\is_array($_GET['genre']) ) {
+                if (!\is_array($_GET['genre'])) {
                     $genre = (int) $_GET['genre'];
 
                     if ($genre >= self::VALID_MIN_GENRE && $genre <= self::VALID_MAX_GENRE) {
@@ -271,5 +270,4 @@ class SearchQueryBuilder
 
         return $request;
     }
-
 }

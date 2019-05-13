@@ -25,11 +25,18 @@ class JikanResponseLegacy
 
     public function handle(Request $request, Closure $next)
     {
-
-        if (empty($request->segments())) {return $next($request);}
-        if (!isset($request->segments()[1])){return $next($request);}
-        if (\in_array('meta', $request->segments())) {return $next($request);}
-        if ($request->hasHeader('auth') === env('APP_ADMIN_KEY')) {return $next($request);}
+        if (empty($request->segments())) {
+            return $next($request);
+        }
+        if (!isset($request->segments()[1])) {
+            return $next($request);
+        }
+        if (\in_array('meta', $request->segments())) {
+            return $next($request);
+        }
+        if ($request->hasHeader('auth') === env('APP_ADMIN_KEY')) {
+            return $next($request);
+        }
 
         $this->requestUri = $request->getRequestUri();
         $this->requestType = HttpHelper::requestType($request);
@@ -77,7 +84,6 @@ class JikanResponseLegacy
                 'X-Request-Cached' => $this->requestCached,
                 'X-Request-Cache-Expiry' => app('redis')->ttl($this->fingerprint)
             ]);
-
     }
 
     private function generateMeta(Request $request) : array

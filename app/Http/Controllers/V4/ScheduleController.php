@@ -6,7 +6,6 @@ use Jikan\Request\Schedule\ScheduleRequest;
 
 class ScheduleController extends Controller
 {
-
     private const VALID_DAYS = [
         'monday',
         'tuesday',

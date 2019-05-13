@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\V2;
 
-
 use Jikan\Request\Person\PersonRequest;
 use Jikan\Request\Person\PersonPicturesRequest;
 
 class PersonController extends Controller
 {
-    public function _main($id) {
+    public function _main($id)
+    {
         $person = $this->jikan->getPerson(new PersonRequest($id));
 
         // backwards compatibility
@@ -38,7 +38,7 @@ class PersonController extends Controller
             true
         );
 
-        foreach($pictures['image'] as $key => $value) {
+        foreach ($pictures['image'] as $key => $value) {
             $pictures['image'][$key] = $value['small'];
         }
 

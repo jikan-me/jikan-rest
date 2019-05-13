@@ -65,7 +65,8 @@ class Throttle
         return $next($request);
     }
 
-    protected function resolveRequestSignature(Request $request) {
+    protected function resolveRequestSignature(Request $request)
+    {
         if (env('SLAVE_INSTANCE') === true) {
             $ip = $request->header(env('SLAVE_CLIENT_IP_HEADER'));
             return sha1(
@@ -78,7 +79,8 @@ class Throttle
         );
     }
 
-    protected function hit(string $key) {
+    protected function hit(string $key)
+    {
         if (!app('redis')->exists($key)) {
             app('redis')->set($key, 0);
             app('redis')->expire($key, $this->decayMinutes*60);

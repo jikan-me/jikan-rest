@@ -15,8 +15,8 @@ use phpDocumentor\Reflection\Types\Object_;
 
 class SearchController extends Controller
 {
-
-    public function anime(int $page = 1) {
+    public function anime(int $page = 1)
+    {
         $search = $this->jikan->getAnimeSearch(
             SearchQueryBuilder::create(
                 (new AnimeSearchRequest())->setPage($page)
@@ -26,7 +26,8 @@ class SearchController extends Controller
         return response($this->filter($search));
     }
 
-    public function manga(int $page = 1) {
+    public function manga(int $page = 1)
+    {
         $search = $this->jikan->getMangaSearch(
             SearchQueryBuilder::create(
                 (new MangaSearchRequest())->setPage($page)
@@ -35,7 +36,8 @@ class SearchController extends Controller
         return response($this->filter($search));
     }
 
-    public function people(int $page = 1) {
+    public function people(int $page = 1)
+    {
         $search = $this->jikan->getPersonSearch(
             SearchQueryBuilder::create(
                 (new PersonSearchRequest())->setPage($page)
@@ -45,7 +47,8 @@ class SearchController extends Controller
         return response($this->filter($search));
     }
 
-    public function character(int $page = 1) {
+    public function character(int $page = 1)
+    {
         $search = $this->jikan->getCharacterSearch(
             SearchQueryBuilder::create(
                 (new CharacterSearchRequest())->setPage($page)
@@ -56,7 +59,8 @@ class SearchController extends Controller
     }
 
 
-    private function filter($object) {
+    private function filter($object)
+    {
         $limit = $_GET['limit'] ?? null;
 
         $data = json_decode(
@@ -72,5 +76,4 @@ class SearchController extends Controller
             $data
         );
     }
-
 }

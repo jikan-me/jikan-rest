@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\V2;
 
-
 use Jikan\Jikan;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Search\AnimeSearchRequest;
@@ -15,8 +14,8 @@ use JMS\Serializer\Serializer;
 
 class SearchController extends Controller
 {
-
-    public function anime(string $query = null, int $page = 1) {
+    public function anime(string $query = null, int $page = 1)
+    {
         $search = $this->jikan->getAnimeSearch(
             SearchQueryBuilder::create(
                 (new AnimeSearchRequest())
@@ -28,7 +27,8 @@ class SearchController extends Controller
         return response($this->serializer->serialize($search, 'json'));
     }
 
-    public function manga(string $query = null, int $page = 1) {
+    public function manga(string $query = null, int $page = 1)
+    {
         $search = $this->jikan->getMangaSearch(
             SearchQueryBuilder::create(
                 (new MangaSearchRequest())
@@ -40,7 +40,8 @@ class SearchController extends Controller
         return response($this->serializer->serialize($search, 'json'));
     }
 
-    public function people(string $query = null, int $page = 1) {
+    public function people(string $query = null, int $page = 1)
+    {
         $search = $this->jikan->getPersonSearch(
             SearchQueryBuilder::create(
                 (new PersonSearchRequest())
@@ -64,7 +65,8 @@ class SearchController extends Controller
         );
     }
 
-    public function character(string $query = null, int $page = 1) {
+    public function character(string $query = null, int $page = 1)
+    {
         $search = $this->jikan->getCharacterSearch(
             SearchQueryBuilder::create(
                 (new CharacterSearchRequest())
@@ -87,5 +89,4 @@ class SearchController extends Controller
             json_encode($search)
         );
     }
-
 }

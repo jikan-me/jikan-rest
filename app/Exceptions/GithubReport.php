@@ -188,5 +188,4 @@ class GithubReport
         $this->instanceType = $instanceType;
         return $this;
     }
-
 }

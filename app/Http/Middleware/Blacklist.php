@@ -6,7 +6,6 @@ use Closure;
 
 class Blacklist
 {
-
     private $request;
     private $blacklist = [];
 
@@ -27,7 +26,8 @@ class Blacklist
         return $next($request);
     }
 
-    private function loadList() {
+    private function loadList()
+    {
         if (!file_exists(BLACKLIST_PATH)) {
             file_put_contents(BLACKLIST_PATH, json_encode([]));
         }

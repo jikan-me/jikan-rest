@@ -2,18 +2,16 @@
 
 
 $router->get('/', function () use ($router) {
-
-
     return response()->json([
-    	'Author' => '@irfanDahir',
-    	'Discord' => 'https://discord.gg/4tvCr36',
-    	'Version' => '4.0',
-    	'JikanPHP' => JIKAN_PARSER_VERSION,
-    	'Website' => 'https://jikan.moe',
-    	'Docs' => 'https://jikan.docs.apiary.io',
-    	'GitHub' => 'https://github.com/jikan-me/jikan',
-    	'PRODUCTION_API_URL' => 'https://api.jikan.moe/v4/',
-    	'STATUS_URL' => 'https://status.jikan.moe'
+        'Author' => '@irfanDahir',
+        'Discord' => 'https://discord.gg/4tvCr36',
+        'Version' => '4.0',
+        'JikanPHP' => JIKAN_PARSER_VERSION,
+        'Website' => 'https://jikan.moe',
+        'Docs' => 'https://jikan.docs.apiary.io',
+        'GitHub' => 'https://github.com/jikan-me/jikan',
+        'PRODUCTION_API_URL' => 'https://api.jikan.moe/v4/',
+        'STATUS_URL' => 'https://status.jikan.moe'
     ]);
 });
 
@@ -21,7 +19,7 @@ $router->group(
     [
         'prefix' => 'meta'
     ],
-    function() use ($router) {
+    function () use ($router) {
         $router->get('/status', [
            'uses' => 'MetaController@status'
         ]);
@@ -30,7 +28,7 @@ $router->group(
             [
                 'prefix' => 'requests'
             ],
-            function() use ($router) {
+            function () use ($router) {
                 $router->get('/{type:[a-z]+}/{period:[a-z]+}[/{offset:[0-9]+}]', [
                    'uses' => 'MetaController@requests'
                 ]);
@@ -43,7 +41,7 @@ $router->group(
     [
         'prefix' => 'anime/{id:[0-9]+}'
     ],
-    function() use ($router) {
+    function () use ($router) {
         $router->get('/', [
             'uses' => 'AnimeController@main'
         ]);
@@ -98,7 +96,7 @@ $router->group(
     [
         'prefix' => 'manga/{id:[0-9]+}'
     ],
-    function() use ($router) {
+    function () use ($router) {
         $router->get('/', [
             'uses' => 'MangaController@main'
         ]);
@@ -145,7 +143,7 @@ $router->group(
     [
         'prefix' => 'character/{id:[0-9]+}'
     ],
-    function() use ($router) {
+    function () use ($router) {
         $router->get('/', [
             'uses' => 'CharacterController@main'
         ]);
@@ -160,7 +158,7 @@ $router->group(
     [
         'prefix' => 'person/{id:[0-9]+}'
     ],
-    function() use ($router) {
+    function () use ($router) {
         $router->get('/', [
             'uses' => 'PersonController@main'
         ]);
@@ -199,7 +197,7 @@ $router->group(
     [
         'prefix' => 'user/{username:[\w\-]+}'
     ],
-    function() use ($router) {
+    function () use ($router) {
         $router->get('/', [
             'uses' => 'UserController@profile'
         ]);
@@ -230,7 +228,7 @@ $router->group(
     [
         'prefix' => 'genre'
     ],
-    function() use ($router) {
+    function () use ($router) {
         $router->get('/anime/{id:[0-9]+}[/{page:[0-9]+}]', [
             'uses' => 'GenreController@anime'
         ]);
@@ -245,8 +243,7 @@ $router->group(
     [
         'prefix' => 'top'
     ],
-    function() use ($router) {
-
+    function () use ($router) {
         $router->get('/anime[/{page:[0-9]+}[/{type:[A-Za-z]+}]]', [
             'uses' => 'TopController@anime'
         ]);
@@ -269,8 +266,7 @@ $router->group(
     [
         'prefix' => 'search'
     ],
-    function() use ($router) {
-
+    function () use ($router) {
         $router->get('/anime[/{page:[0-9]+}]', [
             'uses' => 'SearchController@anime'
         ]);
@@ -290,7 +286,6 @@ $router->group(
         $router->get('/people[/{page:[0-9]+}]', [
             'uses' => 'SearchController@people'
         ]);
-
     }
 );
 
@@ -298,7 +293,7 @@ $router->group(
     [
         'prefix' => 'club/{id:[0-9]+}'
     ],
-    function() use ($router) {
+    function () use ($router) {
         $router->get('/', [
             'uses' => 'ClubController@main'
         ]);

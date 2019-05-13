@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\V3;
 
-
 use Jikan\Request\Club\ClubRequest;
 use Jikan\Request\Club\UserListRequest;
 

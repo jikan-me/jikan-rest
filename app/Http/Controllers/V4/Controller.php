@@ -11,7 +11,6 @@ use JMS\Serializer\Context;
 use JMS\Serializer\Serializer;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
-
 class Controller extends BaseController
 {
     /**

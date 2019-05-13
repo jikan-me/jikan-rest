@@ -39,11 +39,18 @@ class JikanResponseHandler
 
     public function handle(Request $request, Closure $next)
     {
-
-        if (empty($request->segments())) {return $next($request);}
-        if (!isset($request->segments()[1])){return $next($request);}
-        if (\in_array('meta', $request->segments())) {return $next($request);}
-        if ($request->header('auth') === env('APP_KEY')) {return $next($request);}
+        if (empty($request->segments())) {
+            return $next($request);
+        }
+        if (!isset($request->segments()[1])) {
+            return $next($request);
+        }
+        if (\in_array('meta', $request->segments())) {
+            return $next($request);
+        }
+        if ($request->header('auth') === env('APP_KEY')) {
+            return $next($request);
+        }
 
 
         $this->requestUri = $request->getRequestUri();
@@ -74,8 +81,7 @@ class JikanResponseHandler
         $this->requestCacheExpiry = (int) app('redis')->get($this->cacheExpiryFingerprint);
 
 
-        if ($this->requestCacheExpiry < time()) {
-
+        if ($this->requestCacheExpiry <= time()) {
             $queueFingerprint = "queue_update:{$this->fingerprint}";
 
             // Don't duplicate the queue for same request
@@ -86,9 +92,6 @@ class JikanResponseHandler
                         env('QUEUE_DELAY_PER_JOB', 5)
                     )
                 );
-
-            } else {
-                Log::info("Duplicate ({$queueFingerprint})");
             }
         }
 
@@ -121,7 +124,6 @@ class JikanResponseHandler
                 'X-Request-Cached' => $this->requestCached,
                 'X-Request-Cache-Expiry' => app('redis')->get($this->cacheExpiryFingerprint) - time()
             ]);
-
     }
 
     private function generateMeta(Request $request) : array

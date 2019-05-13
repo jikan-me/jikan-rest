@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\V2;
 
-
 use Jikan\Request\Seasonal\SeasonalRequest;
 
 class SeasonController extends Controller
 {
-
     private const VALID_SEASONS = [
         'summer',
         'spring',
@@ -17,7 +15,6 @@ class SeasonController extends Controller
 
     public function main(?int $year = null, ?string $season = null)
     {
-
         if (!is_null($season) && !\in_array(strtolower($season), self::VALID_SEASONS)) {
             return response()->json([
                 'error' => 'Bad Request'

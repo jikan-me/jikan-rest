@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\V2;
 
-
 use Jikan\Request\Top\TopAnimeRequest;
 use Jikan\Request\Top\TopMangaRequest;
 use Jikan\Request\Top\TopCharactersRequest;
@@ -11,10 +10,8 @@ use Jikan\Helper\Constants as JikanConstants;
 
 class TopController extends Controller
 {
-
     public function anime(int $page = 1, string $type = null)
     {
-
         if (!is_null($type) && !\in_array(strtolower($type), [
                 JikanConstants::TOP_AIRING,
                 JikanConstants::TOP_UPCOMING,
@@ -37,9 +34,9 @@ class TopController extends Controller
 
     public function manga(int $page = 1, string $type = null)
     {
-
-        if (!is_null($type) && !\in_array(strtolower($type),
-                [
+        if (!is_null($type) && !\in_array(
+            strtolower($type),
+            [
                 JikanConstants::TOP_MANGA,
                 JikanConstants::TOP_NOVEL,
                 JikanConstants::TOP_ONE_SHOT,

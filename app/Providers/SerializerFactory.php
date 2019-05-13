@@ -10,7 +10,6 @@ use JMS\Serializer\SerializerBuilder;
 
 class SerializerFactory
 {
-
     public static function createV2(): Serializer
     {
         $serializer = (new SerializerBuilder())
@@ -42,7 +41,6 @@ class SerializerFactory
             ->build();
         $serializer->setSerializationContextFactory(new SerializationContextFactory());
         return $serializer;
-
     }
 
     public static function createV3(): Serializer

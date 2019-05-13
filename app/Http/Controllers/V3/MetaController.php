@@ -4,7 +4,8 @@ namespace App\Http\Controllers\V3;
 
 class MetaController extends Controller
 {
-    public function status() {
+    public function status()
+    {
         $info = app('redis')->info();
 
         return response()->json([
@@ -17,8 +18,8 @@ class MetaController extends Controller
         ]);
     }
 
-    public function requests($type, $period, $offset = 0) {
-
+    public function requests($type, $period, $offset = 0)
+    {
         if (!\in_array($type, [
             'anime', 'manga', 'character', 'person', 'people', 'search', 'top', 'season', 'schedule', 'user', 'producer', 'magazine', 'genre'
         ])) {
@@ -43,7 +44,7 @@ class MetaController extends Controller
         arsort($requests);
 
         return response()->json(
-           \array_slice($requests, $offset, 1000)
+            \array_slice($requests, $offset, 1000)
         );
     }
 }

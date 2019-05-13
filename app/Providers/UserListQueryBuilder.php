@@ -9,7 +9,6 @@ use Jikan\Helper\Constants as JikanConstants;
 
 class UserListQueryBuilder
 {
-
     private const VALID_ANIME_ORDER_BY = [
         'title' => JikanConstants::USER_ANIME_LIST_ORDER_BY_TITLE,
         'finish_date' => JikanConstants::USER_ANIME_LIST_ORDER_BY_FINISHED_DATE,
@@ -265,5 +264,4 @@ class UserListQueryBuilder
 
         return $request;
     }
-
 }

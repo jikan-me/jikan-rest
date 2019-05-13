@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\V2;
 
-
 use Jikan\Request\Schedule\ScheduleRequest;
 use Jikan\Request\Seasonal\SeasonalRequest;
 
 class ScheduleController extends Controller
 {
-
     private const VALID_DAYS = [
         'monday',
         'tuesday',
@@ -23,7 +21,6 @@ class ScheduleController extends Controller
 
     public function main(?string $day = null)
     {
-
         if (!is_null($day) && !\in_array(strtolower($day), self::VALID_DAYS)) {
             return response()->json([
                 'error' => 'Bad Request'

@@ -7,7 +7,8 @@ use Jikan\Request\Character\CharacterPicturesRequest;
 
 class CharacterController extends Controller
 {
-    public function _main($id) {
+    public function _main($id)
+    {
         $character = $this->jikan->getCharacter(new CharacterRequest($id));
 
         // backwards compatibility
@@ -16,7 +17,8 @@ class CharacterController extends Controller
             true
         );
 
-        $character['nicknames'] = empty($character['nicknames']) ? null : implode(",", $character['nicknames']);;
+        $character['nicknames'] = empty($character['nicknames']) ? null : implode(",", $character['nicknames']);
+        ;
 
         return $character;
     }
@@ -39,7 +41,7 @@ class CharacterController extends Controller
             true
         );
 
-        foreach($pictures['image'] as $key => $value) {
+        foreach ($pictures['image'] as $key => $value) {
             $pictures['image'][$key] = $value['small'];
         }
 

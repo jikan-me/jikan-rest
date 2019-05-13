@@ -31,7 +31,8 @@ class Meta
         return $response;
     }
 
-    private function updateMeta($key, $req, $expire) {
+    private function updateMeta($key, $req, $expire)
+    {
         $hashKey = $key . ":" . $req;
         if (!app('redis')->exists($hashKey)) {
             app('redis')->set($hashKey, 0);
@@ -40,5 +41,4 @@ class Meta
 
         app('redis')->incr($hashKey);
     }
-
 }

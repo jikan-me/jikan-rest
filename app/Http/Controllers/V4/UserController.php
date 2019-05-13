@@ -8,7 +8,6 @@ use Jikan\Request\User\UserProfileRequest;
 use Jikan\Request\User\UserFriendsRequest;
 use Jikan\Request\User\UserHistoryRequest;
 
-
 class UserController extends Controller
 {
     public function profile(string $username)
@@ -19,7 +18,6 @@ class UserController extends Controller
 
     public function history(string $username, ?string $type = null)
     {
-
         if (!is_null($type) && !\in_array(strtolower($type), ['anime', 'manga'])) {
             return response()->json([
                 'error' => 'Bad Request'
@@ -47,7 +45,6 @@ class UserController extends Controller
                     'error' => 'Bad Request'
                 ])->setStatusCode(400);
             }
-
         }
         $status = $this->listStatusToId($status);
 
@@ -73,7 +70,6 @@ class UserController extends Controller
                     'error' => 'Bad Request'
                 ])->setStatusCode(400);
             }
-
         }
         $status = $this->listStatusToId($status);
 

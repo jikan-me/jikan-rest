@@ -12,8 +12,8 @@ use Jikan\Request\Manga\MangaStatsRequest;
 
 class MangaController extends Controller
 {
-
-    public function _main($id) {
+    public function _main($id)
+    {
         $manga = $this->jikan->getManga(new MangaRequest($id));
 
         // backwards compatibility
@@ -24,7 +24,8 @@ class MangaController extends Controller
 
         $manga['published_string'] = $manga['published']['string'];
         unset($manga['published']['string']);
-        $manga['title_synonyms'] = empty($manga['title_synonyms']) ? null : implode(",", $manga['title_synonyms']);;
+        $manga['title_synonyms'] = empty($manga['title_synonyms']) ? null : implode(",", $manga['title_synonyms']);
+        ;
 
         return $manga;
     }
@@ -106,7 +107,7 @@ class MangaController extends Controller
             true
         );
 
-        foreach($pictures['image'] as $key => $value) {
+        foreach ($pictures['image'] as $key => $value) {
             $pictures['image'][$key] = $value['small'];
         }
 

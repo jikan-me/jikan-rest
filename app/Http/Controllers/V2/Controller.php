@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\V2;
+
 ;
 
 use App\Providers\SerializerFactory;
@@ -10,7 +11,6 @@ use Jikan\Jikan;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\Serializer;
 use Laravel\Lumen\Routing\Controller as BaseController;
-
 
 class Controller extends BaseController
 {
