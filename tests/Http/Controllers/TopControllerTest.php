@@ -69,7 +69,7 @@ class TopControllerTest extends TestCase
 
     public function testTopCharacters()
     {
-        $this->get('/v3/top/people')
+        $this->get('/v3/top/characters')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'top' => [
@@ -79,8 +79,7 @@ class TopControllerTest extends TestCase
                         'title', // todo should be `name`
                         'url',
                         'name_kanji',
-                        'favorites',
-                        'image_url',
+
                         'animeography' => [
                             [
                                 'mal_id',
@@ -97,6 +96,8 @@ class TopControllerTest extends TestCase
                                 'url'
                             ]
                         ],
+                        'favorites',
+                        'image_url',
                     ]
                 ]
             ]);
