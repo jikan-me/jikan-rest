@@ -42,6 +42,7 @@ This is specifically for Ubuntu, but other distributions should work similarly.
 2. Start the redis server: `sudo service redis start`
 3. Configure Supervisor
     1. `sudo cp conf/supervisor/jikan-worker.conf /etc/supervisor/conf.d`
+    - Be sure to update to the correct directory in `jikan-worker.conf` for `command` and `stdout_logfile` to where you cloned!
     2. `sudo supervisorctl reread`
     3. `sudo supervisorctl update`
     4. `sudo supervisorctl start jikan-worker:*`
