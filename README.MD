@@ -66,7 +66,7 @@ You're able to configure Jikan through the `.env` file.
 Before running, you need to set the correct values to the following keys in `.env`
 
 1. `APP_KEY` : a random 32 alphanumeric character string
-2. `APP_URL` : If you're using a virtual host, set the correct domain here. Do not leave a trailing slash.
+2. `APP_URL` : If you're using a virtual host, set the correct domain here. **Do not leave a trailing slash.**
 
 ##### Do's
 
@@ -79,11 +79,15 @@ Before running, you need to set the correct values to the following keys in `.en
 - `http://api.jikan.moe/` :x:
 
 
+#### Ignition
+
 To start the server, create a virtual host and point it to `/public`:
 
 `php -S localhost:8000 -t public`
 
 Jikan is now hosted on `http://localhost:8000/v3/`
+
+:information_source: You can also configure Jikan for Apache. If you wish to configure it for Nginx or anything else, you'll have to port the rewrite rules located at `public/.htaccess`
 
 ### Information
 If you don't want to host your instance, there's a public API available.
