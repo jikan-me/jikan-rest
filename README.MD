@@ -59,6 +59,26 @@ This is specifically for Ubuntu, but other distributions should work similarly.
 3. `cp .env.dist .env`
 5. `composer install`
 
+#### Configuring Jikan
+
+You're able to configure Jikan through the `.env` file.
+
+Before running, you need to set the correct values to the following keys in `.env`
+
+1. `APP_KEY` : a random 32 alphanumeric character string
+2. `APP_URL` : If you're using a virtual host, set the correct domain here. Do not leave a trailing slash.
+
+##### Do's
+
+- `http://api.jikan.moe` :heavy_check_mark:
+- `https://api.jikan.local` :heavy_check_mark:
+- `http://localhost` :heavy_check_mark:
+
+##### Dont's
+- `http://localhost/` :x:
+- `http://api.jikan.moe/` :x:
+
+
 To start the server, create a virtual host and point it to `/public`:
 
 `php -S localhost:8000 -t public`
