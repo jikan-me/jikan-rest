@@ -74,7 +74,7 @@ class SearchControllerTest extends TestCase
 
     public function testCharacterSearch()
     {
-        $this->get('/v3/search/character?q=Okabe, Rintarou')
+        $this->get('/v3/search/character?q=Okabe,%20Rintarou')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'results' => [
@@ -92,7 +92,7 @@ class SearchControllerTest extends TestCase
                                 'url'
                             ]
                         ],
-                        'manga',
+                        'manga' => [],
                     ]
                 ],
                 'last_page'
