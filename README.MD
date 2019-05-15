@@ -40,20 +40,14 @@ This is specifically for Ubuntu, but other distributions should work similarly.
     - PHP 7.3: `sudo apt install php7.3-xml php7.3-mbstring`
   - Install composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
 2. Start the redis server: `sudo service redis start`
-3. Configure Supervisor
-    1. `sudo cp conf/supervisor/jikan-worker.conf /etc/supervisor/conf.d`
-    - Be sure to update to the correct directory in `jikan-worker.conf` for `command` and `stdout_logfile` to the directory of jikan!
-    2. `sudo supervisorctl reread`
-    3. `sudo supervisorctl update`
-    4. `sudo supervisorctl start jikan-worker:*`
 
 #### Mac
 
 1. Install [brew](https://brew.sh/)
-2. Install requirements: `brew install php composer redis`
+2. Install requirements: `brew install php composer redis supervisor`
 3. Start the redis server: `brew services start redis`
 
-### Run
+### Setting Up
 
 1. `git clone https://github.com/jikan-me/jikan-rest.git`
 2. `cd jikan-rest`
@@ -79,6 +73,22 @@ Before running, you need to set the correct values to the following keys in `.en
 - `http://localhost/` :x:
 - `http://api.jikan.moe/` :x:
 
+
+#### Configuring Supervisor
+
+##### Linux
+1. `sudo cp conf/supervisor/jikan-worker.conf /etc/supervisor/conf.d`
+    - Be sure to update to the correct directory in `jikan-worker.conf` for `command` and `stdout_logfile` to the directory of jikan!
+2. `sudo supervisorctl reread`
+3. `sudo supervisorctl update`
+4. `sudo supervisorctl start jikan-worker:*`
+
+##### Mac
+1. `supervisord -c /usr/local/etc/supervisord.ini`
+2. Copy `conf/supervisor/jikan-worker.conf` to `/usr/local/etc/supervisor.d/`
+3. `brew services start supervisor`
+4. `sudo supervisorctl update`
+5. `sudo supervisorctl start jikan-worker:*`
 
 #### Ignition
 
