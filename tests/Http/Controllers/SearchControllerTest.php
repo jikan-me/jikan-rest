@@ -4,7 +4,7 @@ class SearchControllerTest extends TestCase
 {
     public function testSearch()
     {
-        $this->get('/v3/search/anime?order_by=9&sort=asc')
+        $this->get('/v3/search/anime?order_by=id&sort=asc')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                'results' => [
@@ -24,9 +24,6 @@ class SearchControllerTest extends TestCase
                        'rated'
                    ]
                ]
-            ])
-            ->seeJson([
-                'request_cached' => true
             ])
         ;
     }
