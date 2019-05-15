@@ -33,13 +33,18 @@ This is specifically for Ubuntu, but other distributions should work similarly.
   - Add PHP related packages: `sudo add-apt-repository -y ppa:ondrej/php`
     - If `add-apt-repository` is not installed, you can install it by doing `sudo apt install python-software-properties` or `sudo apt install software-properties-common`
   - `sudo apt update && sudo apt upgrade`
-  - Install requirements: `sudo apt install curl git php redis-server unzip`
+  - Install requirements: `sudo apt install curl git php redis-server unzip supervisor`
   - Verify that PHP 7.1+ is installed: `php -v`
   - Install the corresponding `php-xml` and `php-mbstring` packages for your version, e.g:
     - PHP 7.1: `sudo apt install php7.1-xml php7.1-mbstring`
     - PHP 7.3: `sudo apt install php7.3-xml php7.3-mbstring`
   - Install composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
 2. Start the redis server: `sudo service redis start`
+3. Configure Supervisor
+    1. `sudo cp conf/supervisor/jikan-worker.conf /etc/supervisor/conf.d`
+    2. `sudo supervisorctl reread`
+    3. `sudo supervisorctl update`
+    4. `sudo supervisorctl start jikan-worker:*`
 
 #### Mac
 
@@ -61,7 +66,7 @@ To start the server, create a virtual host and point it to `/public`:
 
 Jikan is now hosted on `http://localhost:8000/v3/`
 
-## Information
+### Information
 If you don't want to host your instance, there's a public API available.
 
 - **[REST DOCUMENTATION](https://jikan.docs.apiary.io)**
@@ -79,6 +84,13 @@ If you don't want to host your instance, there's a public API available.
 - **[TypeScript]** [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard
 
 [Add your wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
+
+### Running Tests
+
+`php vendor/bin/phpunit tests`
+
+Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
+
 
 ## DISCLAIMER
 - Jikan is not affiliated with MyAnimeList.net 
