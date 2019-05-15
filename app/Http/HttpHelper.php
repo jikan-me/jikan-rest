@@ -77,4 +77,12 @@ class HttpHelper
 
         return $data;
     }
+
+    public static function requestControllerName(Request $request) : string
+    {
+        $route = explode('\\', $request->route()[1]['uses']);
+        $route = end($route);
+
+        return explode('@', $route)[0];
+    }
 }

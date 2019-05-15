@@ -80,6 +80,17 @@ class JikanResponseHandler
         $this->route = explode('\\', $request->route()[1]['uses']);
         $this->route = end($this->route);
 
+        // Check if request is in the 404 cache pool
+        if (app('redis')->exists("request:404:" . $this->requestUriHash)) {
+            return response()
+                ->json([
+                    'status' => 404,
+                    'type' => 'BadResponseException',
+                    'message' => 'Resource does not exist',
+                    'error' => app('redis')->get("request:404:" . $this->requestUriHash)
+                ], 404);
+        }
+
         // Queueable?
         if (\in_array($this->route, self::NON_QUEUEABLE)) {
             $this->queueable = false;

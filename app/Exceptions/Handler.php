@@ -2,11 +2,13 @@
 
 namespace App\Exceptions;
 
+use App\Http\HttpHelper;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Jikan\Exception\BadResponseException;
 use Jikan\Exception\ParserException;
@@ -91,6 +93,8 @@ class Handler extends ExceptionHandler
         if ($e instanceof BadResponseException) {
             switch ($e->getCode()) {
                 case 404:
+                    $this->set404Cache($request, $e);
+
                     return response()
                         ->json([
                             'status' => $e->getCode(),
@@ -150,5 +154,30 @@ class Handler extends ExceptionHandler
                     'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
                 ], 500);
         }
+    }
+
+    private function set404Cache(Request $request, BadResponseException $e)
+    {
+        $fingerprint = "request:404:".sha1(env('APP_URL') . $request->getRequestUri());
+
+        if (app('redis')->exists($fingerprint)) {
+            return;
+        }
+
+        $routeController = HttpHelper::requestControllerName($request);
+        $cacheTtl = env('CACHE_DEFAULT_EXPIRE', 86400);
+
+        if (\in_array($routeController, [
+            'AnimeController',
+            'MangaController',
+            'CharacterController',
+            'PersonController'
+        ])) {
+            $cacheTtl = env('CACHE_404_EXPIRE', 604800);
+        }
+
+
+        app('redis')->set($fingerprint, $e->getMessage());
+        app('redis')->expire($fingerprint, $cacheTtl);
     }
 }
