@@ -56,8 +56,7 @@ This is specifically for Ubuntu, but other distributions should work similarly.
 
 1. `git clone https://github.com/jikan-me/jikan-rest.git`
 2. `cd jikan-rest`
-3.  Rename `.env.dist` to `.env`: `mv .env.dist .env`
-4. `composer update`
+3. `cp .env.dist .env`
 5. `composer install`
 
 To start the server, create a virtual host and point it to `/public`:
