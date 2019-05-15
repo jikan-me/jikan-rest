@@ -159,8 +159,10 @@ class JikanResponseHandler
             ->withHeaders([
                 'X-Request-Hash' => $this->fingerprint,
                 'X-Request-Cached' => $this->requestCached,
-                'X-Request-Cache-Expiry' => app('redis')->get($this->cacheExpiryFingerprint) - time()
-            ]);
+                'X-Request-Cache-Ttl' => app('redis')->get($this->cacheExpiryFingerprint) - time()
+            ])
+            ->setExpires((new \DateTime())->setTimestamp($this->requestCacheExpiry))
+            ;
     }
 
     private function generateMeta(Request $request) : array
