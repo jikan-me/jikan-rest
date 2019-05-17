@@ -61,13 +61,14 @@ You're able to configure Jikan through the `.env` file.
 Before running, you need to set the correct values to the following keys in `.env`
 
 1. `APP_KEY` : a random 32 alphanumeric character string
-2. `APP_URL` : If you're using a virtual host, set the correct domain here. **Do not leave a trailing slash.**
+2. `APP_URL` : If you're using a virtual host, set the correct domain here. Additionally, include the port number if you've changed it from the standard. **Do not leave a trailing slash.**
 
 ##### Do's
 
 - `http://api.jikan.moe` :heavy_check_mark:
 - `https://api.jikan.local` :heavy_check_mark:
 - `http://localhost` :heavy_check_mark:
+- `http://localhost:8000` :heavy_check_mark:
 
 ##### Dont's
 - `http://localhost/` :x:
