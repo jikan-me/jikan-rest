@@ -126,6 +126,18 @@ If you don't want to host your instance, there's a public API available.
 
 Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
 
+---
+
+# Backers
+Thank you to all our backers! 🙏 [[Become a backer](https://patreon.com/jikan)]
+- [PurplePinapples](https://github.com/purplepinapples/)
+- [Barkdoll (Jesse)](https://github.com/barkdoll/)
+
+# Sponsors
+Thank you to all our sponsors! You will recieve advertisement/promotive perks. [[Become a sponsor](https://patreon.com/jikan)]
+- [Hibiki Matsujo](https://github.com/assintates)
+
+---
 
 ## DISCLAIMER
 - Jikan is not affiliated with MyAnimeList.net 
