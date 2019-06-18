@@ -16,6 +16,7 @@ use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Predis\Connection\ConnectionException;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class Handler
@@ -33,6 +34,7 @@ class Handler extends ExceptionHandler
         HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
+        BadResponseException::class
     ];
 
     /**
@@ -69,7 +71,7 @@ class Handler extends ExceptionHandler
                 ->json([
                     'status' => 500,
                     'type' => 'ConnectionException',
-                    'message' => 'Failed to communicate with Redis',
+                    'message' => 'Failed to communicate with Redis.',
                     'error' => env('APP_DEBUG') ?  $e->getMessage() : null,
                     'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
                 ], 500);
@@ -160,7 +162,7 @@ class Handler extends ExceptionHandler
     {
         $fingerprint = "request:404:".sha1(env('APP_URL') . $request->getRequestUri());
 
-        if (app('redis')->exists($fingerprint)) {
+        if (Cache::has($fingerprint)) {
             return;
         }
 
@@ -177,7 +179,6 @@ class Handler extends ExceptionHandler
         }
 
 
-        app('redis')->set($fingerprint, $e->getMessage());
-        app('redis')->expire($fingerprint, $cacheTtl);
+        Cache::put($fingerprint, $e->getMessage(), $cacheTtl);
     }
 }

@@ -34,9 +34,6 @@ class JikanResponseLegacy
         if (\in_array('meta', $request->segments())) {
             return $next($request);
         }
-        if ($request->hasHeader('auth') === env('APP_ADMIN_KEY')) {
-            return $next($request);
-        }
 
         $this->requestUri = $request->getRequestUri();
         $this->requestType = HttpHelper::requestType($request);
@@ -71,6 +68,7 @@ class JikanResponseLegacy
         $cache = app('redis')->get($this->fingerprint);
         $cacheMutable = json_decode(app('redis')->get($this->fingerprint), true);
 
+        $cacheMutable = $this->cacheMutation($cacheMutable);
 
         return response()
             ->json(
@@ -114,5 +112,17 @@ class JikanResponseLegacy
 
 
         return $meta;
+    }
+
+    private function cacheMutation(array $data) : string
+    {
+        if (!($this->requestType === 'anime' || $this->requestType === 'manga')) {
+            return $data;
+        }
+
+        // Fix JSON response for empty related object
+        if (isset($data['related']) && \count($data['related']) === 0) {
+            $data['related'] = new \stdClass();
+        }
     }
 }

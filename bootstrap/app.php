@@ -89,8 +89,10 @@ $app->routeMiddleware([
 
 $app->configure('database');
 $app->configure('queue');
+$app->configure('cache');
 
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
 $guzzleClient = new \GuzzleHttp\Client();
 $app->instance('GuzzleClient', $guzzleClient);

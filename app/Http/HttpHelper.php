@@ -85,4 +85,10 @@ class HttpHelper
 
         return explode('@', $route)[0];
     }
+
+    public static function getRequestUriHash(Request $request) : string
+    {
+        return sha1(env('APP_URL') . $request->getRequestUri());
+    }
+
 }

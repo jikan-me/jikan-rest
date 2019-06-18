@@ -20,13 +20,14 @@ use App\Http\HttpHelper;
 use App\Jobs\UpdateCacheJob;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class JikanResponseHandler
 {
     private $requestUri;
     private $requestUriHash;
     private $requestType;
-    private $requestCacheExpiry;
+    private $requestCacheExpiry = 0;
     private $requestCached = false;
     private $requestCacheTtl;
 
@@ -64,35 +65,32 @@ class JikanResponseHandler
             return $next($request);
         }
 
-
-        $this->requestUri = $request->getRequestUri();
-        $this->requestUriHash = sha1(env('APP_URL') . $this->requestUri);
+        $this->requestUriHash = HttpHelper::getRequestUriHash($request);
         $this->requestType = HttpHelper::requestType($request);
 
         $this->requestCacheTtl = HttpHelper::requestCacheExpiry($this->requestType);
-        $this->requestCacheExpiry = time() + $this->requestCacheTtl;
 
         $this->fingerprint = "request:{$this->requestType}:{$this->requestUriHash}";
         $this->cacheExpiryFingerprint = "ttl:{$this->fingerprint}";
 
-        $this->requestCached = (bool) app('redis')->exists($this->fingerprint);
+        $this->requestCached = Cache::has($this->fingerprint);
 
         $this->route = explode('\\', $request->route()[1]['uses']);
         $this->route = end($this->route);
 
-        // Check if request is in the 404 cache pool
-        if (app('redis')->exists("request:404:" . $this->requestUriHash)) {
+        // Check if request is in the 404 cache pool @todo: separate as middleware
+        if (Cache::has("request:404:{$this->requestUriHash}")) {
             return response()
                 ->json([
                     'status' => 404,
                     'type' => 'BadResponseException',
                     'message' => 'Resource does not exist',
-                    'error' => app('redis')->get("request:404:" . $this->requestUriHash)
+                    'error' => Cache::get("request:404:{$this->requestUriHash}")
                 ], 404);
         }
 
         // Queueable?
-        if (\in_array($this->route, self::NON_QUEUEABLE)) {
+        if (\in_array($this->route, self::NON_QUEUEABLE) || env('CACHE_METHOD', 'legacy') === 'legacy') {
             $this->queueable = false;
         }
 
@@ -104,26 +102,33 @@ class JikanResponseHandler
                 return $response;
             }
 
-
-            app('redis')->set($this->fingerprint, $response->original);
-            app('redis')->set($this->cacheExpiryFingerprint, $this->requestCacheExpiry);
-
-            if (!$this->queueable) {
-                app('redis')->del($this->cacheExpiryFingerprint);
-                app('redis')->expire($this->fingerprint, $this->requestCacheTtl);
-            }
+            Cache::forever($this->fingerprint, $response->original);
+            Cache::forever($this->cacheExpiryFingerprint, time() + $this->requestCacheTtl);
         }
 
-        // If cache is expired, queue for an update
-        $this->requestCacheExpiry = (int) app('redis')->get($this->cacheExpiryFingerprint);
+        // If cache is expired, handle it depending on whether it's queueable
+        $this->requestCacheExpiry = (int) Cache::get($this->cacheExpiryFingerprint);
 
-        if ($this->requestCacheExpiry <= time() && $this->queueable) {
+        if ($this->requestCached && $this->requestCacheExpiry <= time() && !$this->queueable) {
+            $response = $next($request);
+
+            if (HttpHelper::hasError($response)) {
+                return $response;
+            }
+
+            Cache::forever($this->fingerprint, $response->original);
+            Cache::forever($this->cacheExpiryFingerprint, time() + $this->requestCacheTtl);
+            $this->requestCacheExpiry = (int) Cache::get($this->cacheExpiryFingerprint);
+        }
+
+        if ($this->queueable && $this->requestCacheExpiry <= time()) {
             $queueFingerprint = "queue_update:{$this->fingerprint}";
             $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);
 
             // Don't duplicate the queue for same request
             if (!app('redis')->exists($queueFingerprint)) {
                 app('redis')->set($queueFingerprint, 1);
+
                 dispatch(
                     (new UpdateCacheJob($request))
                         ->delay(env('QUEUE_DELAY_PER_JOB', 5))
@@ -133,21 +138,22 @@ class JikanResponseHandler
         }
 
 
-        // ETag
-        if (
-            $request->hasHeader('If-None-Match')
-            && app('redis')->exists($this->fingerprint)
-            && md5(app('redis')->get($this->fingerprint)) === $request->header('If-None-Match')
-        ) {
-            return response('', 304);
-        }
+//        // ETag @todo: separate as middleware
+//        if (
+//            $request->hasHeader('If-None-Match')
+//            && $this->cache->exists($this->fingerprint)
+//            && md5($this->cache->get($this->fingerprint)) === $request->header('If-None-Match')
+//        ) {
+//            return response('', 304);
+//        }
 
-        // Return cache
+
+        // Return response
         $meta = $this->generateMeta($request);
 
-        $cache = app('redis')->get($this->fingerprint);
-        $cacheMutable = json_decode(app('redis')->get($this->fingerprint), true);
-
+        $cache = Cache::get($this->fingerprint);
+        $cacheMutable = json_decode($cache, true);
+        $cacheMutable = $this->cacheMutation($cacheMutable);
 
         return response()
             ->json(
@@ -159,10 +165,9 @@ class JikanResponseHandler
             ->withHeaders([
                 'X-Request-Hash' => $this->fingerprint,
                 'X-Request-Cached' => $this->requestCached,
-                'X-Request-Cache-Ttl' => app('redis')->get($this->cacheExpiryFingerprint) - time()
+                'X-Request-Cache-Ttl' => (int) $this->requestCacheExpiry - time()
             ])
-            ->setExpires((new \DateTime())->setTimestamp($this->requestCacheExpiry))
-            ;
+            ->setExpires((new \DateTime())->setTimestamp($this->requestCacheExpiry));
     }
 
     private function generateMeta(Request $request) : array
@@ -172,7 +177,7 @@ class JikanResponseHandler
         $meta = [
             'request_hash' => $this->fingerprint,
             'request_cached' => $this->requestCached,
-            'request_cache_expiry' => !$this->queueable ? app('redis')->ttl($this->fingerprint) : app('redis')->get($this->cacheExpiryFingerprint) - time()
+            'request_cache_expiry' => (int) $this->requestCacheExpiry - time()
         ];
 
         switch ($version) {
@@ -191,7 +196,20 @@ class JikanResponseHandler
                 break;
         }
 
-
         return $meta;
+    }
+
+    private function cacheMutation(array $data) : array
+    {
+        if (!($this->requestType === 'anime' || $this->requestType === 'manga')) {
+            return $data;
+        }
+
+        // Fix JSON response for empty related object
+        if (isset($data['related']) && \count($data['related']) === 0) {
+            $data['related'] = new \stdClass();
+        }
+
+        return $data;
     }
 }

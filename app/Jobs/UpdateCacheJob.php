@@ -6,6 +6,8 @@ use App\Http\HttpHelper;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+
 
 /**
  * Class UpdateCacheJob
@@ -44,7 +46,7 @@ class UpdateCacheJob extends Job
         $this->fingerprint = "request:{$this->requestType}:{$this->requestUriHash}";
         $this->cacheExpiryFingerprint = "ttl:{$this->fingerprint}";
 
-        $this->requestCached = (bool) app('redis')->exists($this->fingerprint);
+        $this->requestCached = (bool) Cache::has($this->fingerprint);
     }
 
 
@@ -53,6 +55,7 @@ class UpdateCacheJob extends Job
      */
     public function handle() : void
     {
+
         $queueFingerprint = "queue_update:{$this->fingerprint}";
 
         $client = new Client();
@@ -73,8 +76,8 @@ class UpdateCacheJob extends Job
         $cache = json_encode($cache);
 
 
-        app('redis')->set($this->fingerprint, $cache);
-        app('redis')->set($this->cacheExpiryFingerprint, $this->requestCacheExpiry);
+        Cache::forever($this->fingerprint, $cache);
+        Cache::forever($this->cacheExpiryFingerprint, time() + $this->requestCacheTtl);
         app('redis')->del($queueFingerprint);
     }
 

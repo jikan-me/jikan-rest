@@ -80,8 +80,13 @@ class GithubReport
         $report->requestUri = $request->getRequestUri();
         $report->requestMethod = $request->getMethod();
         $report->jikanVersion = Versions::getVersion('jikan-me/jikan');
-        $report->redisRunning = trim(app('redis')->ping()) === 'PONG' ? "Connected" : "Disconnected";
         $report->phpVersion = PHP_VERSION;
+
+        try {
+            $report->redisRunning = trim(app('redis')->ping()) === 'PONG' ? "Connected" : "Disconnected";
+        } catch (ConnectionException $e) {
+            $report->redisRunning = false;
+        }
 
         $report->instanceType = 'UNKNOWN';
         if (env('APP_ENV') !== 'testing') {
