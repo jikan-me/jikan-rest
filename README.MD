@@ -61,13 +61,14 @@ You're able to configure Jikan through the `.env` file.
 Before running, you need to set the correct values to the following keys in `.env`
 
 1. `APP_KEY` : a random 32 alphanumeric character string
-2. `APP_URL` : If you're using a virtual host, set the correct domain here. **Do not leave a trailing slash.**
+2. `APP_URL` : If you're using a virtual host, set the correct domain here. Additionally, include the port number if you've changed it from the standard. **Do not leave a trailing slash.**
 
 ##### Do's
 
 - `http://api.jikan.moe` :heavy_check_mark:
 - `https://api.jikan.local` :heavy_check_mark:
 - `http://localhost` :heavy_check_mark:
+- `http://localhost:8000` :heavy_check_mark:
 
 ##### Dont's
 - `http://localhost/` :x:
@@ -125,6 +126,18 @@ If you don't want to host your instance, there's a public API available.
 
 Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
 
+---
+
+# Backers
+Thank you to all our backers! 🙏 [[Become a backer](https://patreon.com/jikan)]
+- [PurplePinapples](https://github.com/purplepinapples/)
+- [Barkdoll (Jesse)](https://github.com/barkdoll/)
+
+# Sponsors
+Thank you to all our sponsors! You will recieve advertisement/promotive perks. [[Become a sponsor](https://patreon.com/jikan)]
+- [Hibiki Matsujo](https://github.com/assintates)
+
+---
 
 ## DISCLAIMER
 - Jikan is not affiliated with MyAnimeList.net 
