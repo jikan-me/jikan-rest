@@ -88,7 +88,7 @@ class HttpHelper
 
     public static function getRequestUriHash(Request $request) : string
     {
-        return sha1(env('APP_URL') . $request->getRequestUri());
+        return sha1($request->getRequestUri());
     }
 
 }

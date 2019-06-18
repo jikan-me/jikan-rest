@@ -37,7 +37,7 @@ class UpdateCacheJob extends Job
     {
         $this->requestUri = $request->getRequestUri();
 
-        $this->requestUriHash = sha1(env('APP_URL') . $this->requestUri);
+        $this->requestUriHash = sha1($this->requestUri);
         $this->requestType = HttpHelper::requestType($request);
 
         $this->requestCacheTtl = HttpHelper::requestCacheExpiry($this->requestType);
