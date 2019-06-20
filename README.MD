@@ -132,6 +132,7 @@ Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
 Thank you to all our backers! 🙏 [[Become a backer](https://patreon.com/jikan)]
 - [PurplePinapples](https://github.com/purplepinapples/)
 - [Barkdoll (Jesse)](https://github.com/barkdoll/)
+- [Piotr Szymczak (Drutol)](https://github.com/Drutol)
 
 # Sponsors
 Thank you to all our sponsors! You will recieve advertisement/promotive perks. [[Become a sponsor](https://patreon.com/jikan)]
