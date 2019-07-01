@@ -80,14 +80,14 @@ However, you can configure Jikan to cache on Redis instead: `php artisan cache:d
 
 Note: If you're currently running Jikan, you're required to stop it before running the above command.
 
-### Configuring how Jikan handles expired cache (optional)
+### 06. Configuring how Jikan handles expired cache (optional)
 Jikan handles cache in the `legacy` manner out of the box. This method was used previously to update cache.
 
 
-#### 05A. Cache Method: Legacy
+#### 06A. Cache Method: Legacy
 When a cache expires, it gets deleted. So if you make a request that has an expired cache, your request will take longer as Jikan has to fetch and parse the new data from MyAnimeList again.
 
-#### 05B. Cache Method: Queue
+#### 06B. Cache Method: Queue
 This is a newly introduced caching method to the API, it's what the public API runs on as well. It requires some further setup.
 
 When a cache expires, it does not get deleted. Instead, if you make a request that has an expired cache, a job will be dispatched to the queue which handles updating the cache in the background. Therefore, the request will keep on providing stale cache until the job is complete and the cache is replaced with fresh data.
@@ -110,9 +110,9 @@ This reason for this is quite simple. User related requests such as anime/manga 
 
 :information_source: Note 3: Note 1 & Note 2 are default behavior. You can obviously change them as per your needs.
 
-##### 06. Configuring Supervisor
+##### Configuring Supervisor
 
-###### 06A. Linux
+###### Linux
 1. Install supervisor: `sudo apt install supervisor`
 2. `sudo cp conf/supervisor/jikan-worker.conf /etc/supervisor/conf.d`
     - A default supervisor configureation file is available in this repo `conf/supervisor/jikan-worker.conf`
@@ -131,7 +131,7 @@ stderr_logfile=/var/www/jikan-is-installed-here/storage/logs/worker.error.log
 4. `sudo supervisorctl update`
 5. `sudo supervisorctl start jikan-worker:*`
 
-###### 06B. Mac
+###### Mac
 1. Install Supervisor: `brew install supervisor`
 2. `supervisord -c /usr/local/etc/supervisord.ini`
 3. Copy `conf/supervisor/jikan-worker.conf` to `/usr/local/etc/supervisor.d/`
