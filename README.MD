@@ -65,20 +65,15 @@ The first thing you need to do is generate an `APP_KEY`.
 
 ### 04. Ignition
 
-`php artisan serve`
+`php artisan serve --port=8080` or `php -S localhost:8000 -t public`
 
 Jikan is now hosted on `http://localhost:8000/v3/`
 
-or alternatively;
-`php -S localhost:8000 -t public`
+**Alternatively,** host it on Apache (or Nginx)
 
-Jikan is now hosted on `http://localhost:8000/v3/`
+Create a virtual host and point it to `/public`. Jikan supports Apache out of the box, you just need to create a virtual host and point it to `/public`, and enable the rewrite module for .htaccess (`sudo a2enmod rewrite`), and configure `/etc/apache/apache2.conf` by setting `AllowOverride None` to `AllowOverride All` for the `/var/www` directory.
 
-or;
-
-Create a virtual host and point it to `/public`:
-
-:information_source: You can also configure Jikan for Apache. If you wish to configure it for Nginx or anything else, you'll have to port the rewrite rules located at `public/.htaccess`
+:information_source: If you wish to configure it for Nginx or anything else, you'll have to port the rewrite rules located at `public/.htaccess`
 
 ### 05. Configuring how Jikan Caches (optional)
 Jikan caches on file by default in `/storage/framework/cache`. So even if you don't change the caching method, Jikan will work out of the box.
