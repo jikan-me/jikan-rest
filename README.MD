@@ -22,9 +22,9 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 #### 🐳 Docker
 - [JikanREST Docker](https://github.com/fethica/jikan-rest-docker) by Fethi El Hassasna
 
-### Prerequisites
+### 01. Prerequisites
 
-#### Linux
+#### 01A. Linux
 
 This is specifically for Ubuntu, but other distributions should work similarly.
 1. Install requirements:
@@ -39,20 +39,20 @@ This is specifically for Ubuntu, but other distributions should work similarly.
   - Install composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
 2. Start the redis server: `sudo service redis start`
 
-#### Mac
+#### 01B. Mac
 
 1. Install [brew](https://brew.sh/)
 2. Install requirements: `brew install php composer redis`
 3. Start the redis server: `brew services start redis`
 
-### Installation
+### 02. Installation
 
 1. `git clone https://github.com/jikan-me/jikan-rest.git`
 2. `cd jikan-rest`
 3. `cp .env.dist .env`
 5. `composer install` (Make sure Jikan's directory has write permissions)
 
-### Configuration
+### 03. Configuration
 
 You're able to configure Jikan through the `.env` file.
 A few kernel commands are available from the project directory by running the `artisan` file.
@@ -63,7 +63,7 @@ The first thing you need to do is generate an `APP_KEY`.
 2. [Configure how Jikan caches](https://github.com/jikan-me/jikan-rest#configuring-how-jikan-caches)
 3. [Configure how Jikan handles expired cache](https://github.com/jikan-me/jikan-rest#configuring-how-jikan-handles-expired-cache)
 
-### Ignition
+### 04. Ignition
 
 To start the server, create a virtual host and point it to `/public`:
 
@@ -73,7 +73,7 @@ Jikan is now hosted on `http://localhost:8000/v3/`
 
 :information_source: You can also configure Jikan for Apache. If you wish to configure it for Nginx or anything else, you'll have to port the rewrite rules located at `public/.htaccess`
 
-### Configuring how Jikan Caches (optional)
+### 05. Configuring how Jikan Caches (optional)
 Jikan caches on file by default in `/storage/framework/cache`. So even if you don't change the caching method, Jikan will work out of the box.
 
 However, you can configure Jikan to cache on Redis instead: `php artisan cache:driver redis`
@@ -84,10 +84,10 @@ Note: If you're currently running Jikan, you're required to stop it before runni
 Jikan handles cache in the `legacy` manner out of the box. This method was used previously to update cache.
 
 
-#### Cache Method: Legacy
+#### 05A. Cache Method: Legacy
 When a cache expires, it gets deleted. So if you make a request that has an expired cache, your request will take longer as Jikan has to fetch and parse the new data from MyAnimeList again.
 
-#### Cache Method: Queue
+#### 05B. Cache Method: Queue
 This is a newly introduced caching method to the API, it's what the public API runs on as well. It requires some further setup.
 
 When a cache expires, it does not get deleted. Instead, if you make a request that has an expired cache, a job will be dispatched to the queue which handles updating the cache in the background. Therefore, the request will keep on providing stale cache until the job is complete and the cache is replaced with fresh data.
@@ -110,9 +110,9 @@ This reason for this is quite simple. User related requests such as anime/manga 
 
 :information_source: Note 3: Note 1 & Note 2 are default behavior. You can obviously change them as per your needs.
 
-##### Configuring Supervisor
+##### 06. Configuring Supervisor
 
-###### Linux
+###### 06A. Linux
 1. Install supervisor: `sudo apt install supervisor`
 2. `sudo cp conf/supervisor/jikan-worker.conf /etc/supervisor/conf.d`
     - A default supervisor configureation file is available in this repo `conf/supervisor/jikan-worker.conf`
@@ -131,7 +131,7 @@ stderr_logfile=/var/www/jikan-is-installed-here/storage/logs/worker.error.log
 4. `sudo supervisorctl update`
 5. `sudo supervisorctl start jikan-worker:*`
 
-###### Mac
+###### 06B. Mac
 1. Install Supervisor: `brew install supervisor`
 2. `supervisord -c /usr/local/etc/supervisord.ini`
 3. Copy `conf/supervisor/jikan-worker.conf` to `/usr/local/etc/supervisor.d/`
