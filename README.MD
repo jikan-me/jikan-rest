@@ -19,15 +19,12 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 - [Composer](https://getcomposer.org/download/)
 - [Redis](https://redis.io)
 
-### Installation
-
-
 #### 🐳 Docker
 - [JikanREST Docker](https://github.com/fethica/jikan-rest-docker) by Fethi El Hassasna
 
-#### Prerequisites
+### Prerequisites
 
-##### Linux
+#### Linux
 
 This is specifically for Ubuntu, but other distributions should work similarly.
 1. Install requirements:
@@ -42,20 +39,20 @@ This is specifically for Ubuntu, but other distributions should work similarly.
   - Install composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
 2. Start the redis server: `sudo service redis start`
 
-##### Mac
+#### Mac
 
 1. Install [brew](https://brew.sh/)
 2. Install requirements: `brew install php composer redis`
 3. Start the redis server: `brew services start redis`
 
-### Setting Up
+### Installation
 
 1. `git clone https://github.com/jikan-me/jikan-rest.git`
 2. `cd jikan-rest`
 3. `cp .env.dist .env`
 5. `composer install` (Make sure Jikan's directory has write permissions)
 
-### Configuring Jikan
+### Configuration
 
 You're able to configure Jikan through the `.env` file.
 A few kernel commands are available from the project directory by running the `artisan` file.
