@@ -55,7 +55,7 @@ This is specifically for Ubuntu, but other distributions should work similarly.
 3. `cp .env.dist .env`
 5. `composer install` (Make sure Jikan's directory has write permissions)
 
-#### Configuring Jikan
+### Configuring Jikan
 
 You're able to configure Jikan through the `.env` file.
 A few kernel commands are available from the project directory by running the `artisan` file.
@@ -63,10 +63,10 @@ A few kernel commands are available from the project directory by running the `a
 The first thing you need to do is generate an `APP_KEY`. 
 
 1. `php artisan key:generate`
-2. Configure how Jikan caches (scroll down)
-3. Configure how Jikan handles expired cache
+2. [Configure how Jikan caches](https://github.com/jikan-me/jikan-rest#configuring-how-jikan-caches)
+3. [Configure how Jikan handles expired cache](https://github.com/jikan-me/jikan-rest#configuring-how-jikan-handles-expired-cache)
 
-#### Ignition
+### Ignition
 
 To start the server, create a virtual host and point it to `/public`:
 
@@ -76,14 +76,14 @@ Jikan is now hosted on `http://localhost:8000/v3/`
 
 :information_source: You can also configure Jikan for Apache. If you wish to configure it for Nginx or anything else, you'll have to port the rewrite rules located at `public/.htaccess`
 
-### Configuring how Jikan Caches
+### Configuring how Jikan Caches (optional)
 Jikan caches on file by default in `/storage/framework/cache`. So even if you don't change the caching method, Jikan will work out of the box.
 
 However, you can configure Jikan to cache on Redis instead: `php artisan cache:driver redis`
 
 Note: If you're currently running Jikan, you're required to stop it before running the above command.
 
-### Configuring how Jikan handles expired cache
+### Configuring how Jikan handles expired cache (optional)
 Jikan handles cache in the `legacy` manner out of the box. This method was used previously to update cache.
 
 
@@ -97,7 +97,7 @@ When a cache expires, it does not get deleted. Instead, if you make a request th
 
 This method provides zero delay, and is highly recommended if you have immense traffic coming your way.
 
-Note: If you're currently running Jikan, you're required to stop it before running the above command. You're also required to clear any cache you've stored as well as anything on the Redis server.
+:information_source: Note: If you're currently running Jikan, you're required to stop it before running the above command. You're also required to clear any cache you've stored as well as anything on the Redis server.
 
 1. `php artisan cache:method queue`
 
@@ -105,13 +105,13 @@ Next, you need to make sure that there's a service looking after the queue. This
 
 But a recommended way is to install Supervisor and have it handle the queue automatically.
 
-Note: `--queue=high,low`; Jikan stores two types of queues; high priority and low priority. This depends on the type of request. You can check which request is considered to be high priority in the [JikanResponseHandler.php](https://github.com/jikan-me/jikan-rest/blob/master/app/Http/Middleware/JikanResponseHandler.php) middleware in the `HIGH_PRIORITY_QUEUE` array.
+:information_source: Note: `--queue=high,low`; Jikan stores two types of queues; high priority and low priority. This depends on the type of request. You can check which request is considered to be high priority in the [JikanResponseHandler.php](https://github.com/jikan-me/jikan-rest/blob/master/app/Http/Middleware/JikanResponseHandler.php) middleware in the `HIGH_PRIORITY_QUEUE` array.
 
-Note 2: Not all requests are queuable. Some are handled the `legacy` way. You can find out which ones in the [JikanResponseHandler.php](https://github.com/jikan-me/jikan-rest/blob/master/app/Http/Middleware/JikanResponseHandler.php) middleware in the `NON_QUEUEABLE` array.
+:information_source: Note 2: Not all requests are queuable. Some are handled the `legacy` way. You can find out which ones in the [JikanResponseHandler.php](https://github.com/jikan-me/jikan-rest/blob/master/app/Http/Middleware/JikanResponseHandler.php) middleware in the `NON_QUEUEABLE` array.
 
 This reason for this is quite simple. User related requests such as anime/manga list can be frequently updated. They're cached by default for 5 minutes (you can change this in `.env`). But if they were to get queued for a cache update, it would take longer than 5 minutes because the update job would have to wait in line. So it skips the queue and is automatically updated on the request. This does mean a slight delay in fetching and parsing the fresh data from MyAnimeList.
 
-Note 3: Note 1 & Note 2 are default behavior. You can obviously change them as per your needs.
+:information_source: Note 3: Note 1 & Note 2 are default behavior. You can obviously change them as per your needs.
 
 ##### Configuring Supervisor
 
