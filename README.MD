@@ -65,11 +65,18 @@ The first thing you need to do is generate an `APP_KEY`.
 
 ### 04. Ignition
 
-To start the server, create a virtual host and point it to `/public`:
+`php artisan serve`
 
+Jikan is now hosted on `http://localhost:8000/v3/`
+
+or alternatively;
 `php -S localhost:8000 -t public`
 
 Jikan is now hosted on `http://localhost:8000/v3/`
+
+or;
+
+Create a virtual host and point it to `/public`:
 
 :information_source: You can also configure Jikan for Apache. If you wish to configure it for Nginx or anything else, you'll have to port the rewrite rules located at `public/.htaccess`
 
@@ -113,7 +120,9 @@ This reason for this is quite simple. User related requests such as anime/manga 
 ##### Configuring Supervisor
 
 ###### Linux
-1. Install supervisor: `sudo apt install supervisor`
+1. Install supervisor
+    - Linux: `sudo apt install supervisor`
+    - Mac: `brew install supervisor`
 2. `sudo cp conf/supervisor/jikan-worker.conf /etc/supervisor/conf.d`
     - A default supervisor configureation file is available in this repo `conf/supervisor/jikan-worker.conf`
     - Be sure to update to the correct directory in `jikan-worker.conf` for `command` and `stdout_logfile` to the directory of jikan!
