@@ -60,8 +60,8 @@ A few kernel commands are available from the project directory by running the `a
 The first thing you need to do is generate an `APP_KEY`. 
 
 1. `php artisan key:generate`
-2. [Configure how Jikan caches](https://github.com/jikan-me/jikan-rest#configuring-how-jikan-caches)
-3. [Configure how Jikan handles expired cache](https://github.com/jikan-me/jikan-rest#configuring-how-jikan-handles-expired-cache)
+2. [Configure how Jikan caches](https://github.com/jikan-me/jikan-rest#05-configuring-how-jikan-caches-optional)
+3. [Configure how Jikan handles expired cache](https://github.com/jikan-me/jikan-rest#06-configuring-how-jikan-handles-expired-cache-optional)
 
 ### 04. Ignition
 
