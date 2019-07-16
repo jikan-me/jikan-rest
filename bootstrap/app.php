@@ -98,13 +98,17 @@ $app->instance('GuzzleClient', $guzzleClient);
 $jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
 $app->instance('JikanParser', $jikan);
 
-$app->configureMonologUsing(function(Monolog\Logger $monolog) use ($app) {
-    return $monolog->pushHandler(
-        new Monolog\Handler\RotatingFileHandler($app->storagePath().'/logs/lumen.log', 5)
-    );
-});
 
-
+/*$app->router->group(
+    [
+        'prefix' => 'v4',
+        'namespace' => 'App\Http\Controllers\V4',
+        'middleware' => $commonMiddleware
+    ],
+    function ($router) {
+        require __DIR__.'/../routes/web.v4.php';
+    }
+);*/
 
 
 /*
@@ -150,22 +154,17 @@ $app->router->group(
 $app->router->group(
     [
         'prefix' => 'v2',
-        'namespace' => 'App\Http\Controllers\V2',
-        'middleware' => $commonMiddleware
     ],
     function ($router) {
-        require __DIR__.'/../routes/web.v2.php';
-    }
-);
-
-$app->router->group(
-    [
-        'prefix' => '/',
-        'namespace' => 'App\Http\Controllers\V2',
-        'middleware' => $commonMiddleware
-    ],
-    function ($router) {
-        require __DIR__.'/../routes/web.v2.php';
+        $router->get('/', function () {
+            return response()
+                ->json([
+                    'status' => 400,
+                    'type' => 'HttpException',
+                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported versions.',
+                    'error' => null
+                ], 400);
+        });
     }
 );
 

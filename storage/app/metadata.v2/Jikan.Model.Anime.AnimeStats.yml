@@ -1,5 +1,0 @@
-Jikan\Model\Anime\AnimeStats:
-  exclusion_policy: NONE
-  properties:
-    scores:
-      serialized_name: score_stats

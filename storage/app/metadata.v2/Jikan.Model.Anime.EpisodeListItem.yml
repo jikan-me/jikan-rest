@@ -1,5 +1,0 @@
-Jikan\Model\Anime\EpisodeListItem:
-  exclusion_policy: NONE
-  properties:
-    episodeId:
-      serialized_name: id

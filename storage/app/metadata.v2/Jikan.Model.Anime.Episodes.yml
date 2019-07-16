@@ -1,7 +1,0 @@
-Jikan\Model\Anime\Episodes:
-  exclusion_policy: NONE
-  properties:
-    episodes:
-      serialized_name: episode
-    episodesLastPage:
-      serialized_name: episode_last_page

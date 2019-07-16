@@ -1,9 +1,0 @@
-Jikan\Model\Top\TopManga:
-  exclusion_policy: NONE
-  properties:
-    malUrl:
-      serialized_name: meta
-    startDate:
-      serialized_name: publishing_start
-    endDate:
-      serialized_name: publishing_end
