@@ -6,8 +6,8 @@
     "type": "project",
     "require": {
         "php": ">=7.1",
-        "laravel/lumen-framework": "5.5.*",
-        "vlucas/phpdotenv": "~2.2",
+        "laravel/lumen-framework": "5.8.*",
+        "vlucas/phpdotenv": "^3.3",
         "danielmewes/php-rql": "dev-master",
         "illuminate/redis": "^5.5",
         "predis/predis": "^1.1",
@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
-        "phpunit/phpunit": "~6.0",
+        "phpunit/phpunit": "~7.0",
         "mockery/mockery": "~0.9"
     },
     "autoload": {
@@ -43,9 +43,6 @@
         ],
         "server:run": [
             "php -S localhost:8000 -t public"
-        ],
-        "cache:flush": [
-            ""
         ]
     },
     "minimum-stability": "dev",

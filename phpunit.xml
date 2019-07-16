@@ -22,6 +22,6 @@
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="redis"/>
-        <env name="QUEUE_DRIVER" value="redis"/>
+        <env name="QUEUE_CONNECTION" value="redis"/>
     </php>
 </phpunit>
