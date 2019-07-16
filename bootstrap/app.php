@@ -100,6 +100,13 @@ $app->instance('GuzzleClient', $guzzleClient);
 $jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
 $app->instance('JikanParser', $jikan);
 
+$app->configureMonologUsing(function(Monolog\Logger $monolog) use ($app) {
+    return $monolog->pushHandler(
+        new Monolog\Handler\RotatingFileHandler($app->storagePath().'/logs/lumen.log', 5)
+    );
+});
+
+
 
 
 /*

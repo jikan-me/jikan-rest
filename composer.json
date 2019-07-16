@@ -43,6 +43,9 @@
         ],
         "server:run": [
             "php -S localhost:8000 -t public"
+        ],
+        "cache:flush": [
+            ""
         ]
     },
     "minimum-stability": "dev",
