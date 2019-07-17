@@ -92,7 +92,7 @@ class Handler extends ExceptionHandler
 
         // BadResponseException from Guzzle dep via Jikan PHP API
         // This is basically the response MyAnimeList returns to Jikan
-        if ($e instanceof BadResponseException) {
+        if ($e instanceof BadResponseException || $e instanceof ClientException) {
             switch ($e->getCode()) {
                 case 404:
                     $this->set404Cache($request, $e);
