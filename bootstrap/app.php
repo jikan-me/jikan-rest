@@ -99,18 +99,6 @@ $jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
 $app->instance('JikanParser', $jikan);
 
 
-/*$app->router->group(
-    [
-        'prefix' => 'v4',
-        'namespace' => 'App\Http\Controllers\V4',
-        'middleware' => $commonMiddleware
-    ],
-    function ($router) {
-        require __DIR__.'/../routes/web.v4.php';
-    }
-);*/
-
-
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
@@ -153,7 +141,18 @@ $app->router->group(
 
 $app->router->group(
     [
-        'prefix' => 'v2',
+        'prefix' => '/',
+        'namespace' => 'App\Http\Controllers\V3',
+        'middleware' => $commonMiddleware
+    ],
+    function ($router) {
+        require __DIR__.'/../routes/web.v3.php';
+    }
+);
+
+$app->router->group(
+    [
+        'prefix' => 'v1',
     ],
     function ($router) {
         $router->get('/', function () {
@@ -170,7 +169,7 @@ $app->router->group(
 
 $app->router->group(
     [
-        'prefix' => 'v1',
+        'prefix' => 'v2',
     ],
     function ($router) {
         $router->get('/', function () {
