@@ -7,8 +7,10 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
+         stopOnError="false"
          stopOnFailure="false"
-         syntaxCheck="false">
+         verbose="true"
+>
     <testsuites>
         <testsuite name="Application Test Suite">
             <directory suffix="Test.php">./tests</directory>
@@ -21,7 +23,7 @@
     </filter>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <env name="CACHE_DRIVER" value="redis"/>
+        <env name="CACHE_DRIVER" value="file"/>
         <env name="QUEUE_CONNECTION" value="redis"/>
     </php>
 </phpunit>
