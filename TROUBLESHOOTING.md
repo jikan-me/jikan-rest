@@ -49,7 +49,7 @@ If Redis is taking too long to restart, follow this: https://stackoverflow.com/a
 
 ## I want to clear the Cache Updater Queue
 
-1. `redis-cli --scan --pattern queue_update:* | xargs redis-cli del` or alternatively replace `del` with `unlink` to have it done in the background.
+1. `redis-cli --scan --pattern queue_update:* | xargs redis-cli del` or alternatively replace `del` with `unlink` to have it done in the background ([Redis 4.0.0 required](https://redis.io/commands/unlink))
 
 2. `php artisan queue:restart`
 
