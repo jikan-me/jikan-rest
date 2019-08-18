@@ -147,7 +147,7 @@ stderr_logfile=/var/www/jikan-is-installed-here/storage/logs/worker.error.log
 
 ### Troubleshooting
 Please read the [troubleshooting guide](https://github.com/jikan-me/jikan-rest/blob/master/TROUBLESHOOTING.md).
-For any additional help, join our Discord server.
+For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
 
 ### Information
 If you don't want to host your instance, there's a public API available.
