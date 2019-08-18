@@ -131,7 +131,6 @@ class JikanResponseHandler
 
                 dispatch(
                     (new UpdateCacheJob($request))
-                        ->delay(env('QUEUE_DELAY_PER_JOB', 5))
                         ->onQueue($queueHighPriority ? 'high' : 'low')
                 );
             }

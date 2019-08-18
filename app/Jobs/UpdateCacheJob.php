@@ -77,6 +77,8 @@ class UpdateCacheJob extends Job
         Cache::forever($this->fingerprint, $cache);
         Cache::forever($this->cacheExpiryFingerprint, time() + $this->requestCacheTtl);
         app('redis')->del($queueFingerprint);
+
+        sleep((int) env('QUEUE_DELAY_PER_JOB', 5));
     }
 
     public function failed(\Exception $e)
