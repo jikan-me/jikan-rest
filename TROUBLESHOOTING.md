@@ -44,6 +44,14 @@ And then reload the supervisor configuration:
 If Redis is taking too long to restart, follow this: https://stackoverflow.com/a/45069100/2326811 and then start it `sudo service redis start`
 
 
+## I want to clear the cache in Jikan
+`php artisan cache:clear`
 
+## I want to clear the Cache Updater Queue
+1a. `redis-cli --scan --pattern queue_update:* | xargs redis-cli del`
+1b. `redis-cli --scan --pattern queue_update:* | xargs redis-cli unlink` (does it in the background)
+
+2. `php artisan queue:restart`
+3. `sudo service supervisor restart`
 
 More troubleshooting Q/A on the way, please let me know if there's anything else I should add onto here.
