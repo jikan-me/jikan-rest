@@ -64,7 +64,7 @@ class UpdateCacheJob extends Job
                 env('APP_URL') . $this->requestUri,
                 [
                     'headers' => [
-                        'auth' => env('APP_ADMIN_KEY') // skip middleware
+                        'auth' => env('APP_KEY') // skip middleware
                     ]
                 ]
             );
