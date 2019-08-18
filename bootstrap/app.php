@@ -146,7 +146,20 @@ $app->router->group(
         'middleware' => $commonMiddleware
     ],
     function ($router) {
-        require __DIR__.'/../routes/web.v3.php';
+        $router->get('/', function () {
+            return response()->json([
+                'NOTICE' => 'Append an API version for API requests. Please check the documentation for the latest and supported versions.',
+                'Author' => '@irfanDahir',
+                'Discord' => 'https://discord.gg/4tvCr36',
+                'Version' => '3.4-RC2',
+                'JikanPHP' => JIKAN_PARSER_VERSION,
+                'Website' => 'https://jikan.moe',
+                'Docs' => 'https://jikan.docs.apiary.io',
+                'GitHub' => 'https://github.com/jikan-me/jikan',
+                'PRODUCTION_API_URL' => 'https://api.jikan.moe/v3/',
+                'STATUS_URL' => 'https://status.jikan.moe'
+            ]);
+        });
     }
 );
 

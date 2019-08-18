@@ -5,7 +5,7 @@ $router->get('/', function () use ($router) {
     return response()->json([
         'Author' => '@irfanDahir',
         'Discord' => 'https://discord.gg/4tvCr36',
-        'Version' => '3.3',
+        'Version' => '3.4-RC2',
         'JikanPHP' => JIKAN_PARSER_VERSION,
         'Website' => 'https://jikan.moe',
         'Docs' => 'https://jikan.docs.apiary.io',
