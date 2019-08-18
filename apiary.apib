@@ -12,29 +12,20 @@ It's built on the Lumen microframework, uses Redis for caching and is powered by
 
 [Report an Issue](https://github.com/jikan-me/jikan/issues/new) | **[Discord](https://discordapp.com/invite/4tvCr36)**
 
-## Announcement - 17th May, 2019
-REST v3.3 has been released!
+## Announcement - 20th July, 2019
 
-### New Features
-- Improved Search
-    - Order by data: `order_by`
-    - Sort by ascending/descending: `sort`
-    - Search by letter: `letter`
-    - Improved multiple genre query: `genre=1,2,3,4,...`
-    - Anime/Manga: Search by `producer`/`magazine`
-- User Lists (Anime/Manga)
-    - Order by data: `order_by`, `order_by2`
-    - Sort by ascending/descending: `sort`
-    - Search user list: `search` or `q`
-    - New **Anime** filters: `aired_from`, `aired_to`, `producer`, `season`, `year`, `airing_status`
-    - New **Manga** filters: `published_from`, `published_to`, `magazine`, `publishing_status`
-- Caching improvements - no longer wait for an uncached request to finish parsing!
-- Updated Caching TTL
-- Added `Expires`, `X-Request-Cached`, `X-Request-Cache-Ttl`, `X-Request-Hash` header responses
-- Improved/helpful error responses
-- Bug fixes & improvements
+Final reminder to anyone using the following endpoints for requests
+`api.jikan.moe/v2` _[e.g `api.jikan.moe/v2/anime/1`]_
+`api.jikan.moe` (alias of above) _[e.g `api.jikan.moe/anime/1`]_
 
+Make sure you are using `/v3` in your requests.
 
+We'll be discontinuing support for v2 as planned _as soon as next week_ .
+
+Make sure you're making requests to `api.jikan.moe/v3`. This is the correct production version.
+_[e.g `api.jikan.moe/v3/anime/1`]_
+
+Migration Guide: https://github.com/jikan-me/jikan-rest/blob/master/MIGRATION.MD
 
 # Information
 
@@ -341,6 +332,9 @@ Search results for the query
 | limit | INTEGER | Limits item results to the number specified |
 | order_by | **See Enums Below** | Order results with respect to a property |
 | sort | **See Enums Below** | Sort `order_by` (Default is `descending`) |
+| producer | INTEGER | MAL ID of the producer |
+| magazine | INTEGER | MAL ID of the magazine |
+| letter | UTF8 Character | Search anime or manga by the letter/character it starts with |
 
 
 #### Enums
