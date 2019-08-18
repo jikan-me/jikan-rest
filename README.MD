@@ -21,6 +21,7 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 
 #### 🐳 Docker
 - [JikanREST Docker](https://github.com/fethica/jikan-rest-docker) by Fethi El Hassasna
+- [JikanDocerized](https://github.com/zunjae/JikanDockerized) by Zunjae
 
 ### 01. Prerequisites
 
@@ -162,6 +163,7 @@ If you don't want to host your instance, there's a public API available.
 - **[Node.js]** [jikan-node](https://github.com/xy137/jikan-node) by xy137
 - **[Dart]** [jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol
 - **[TypeScript]** [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard
+- **[TypeScript]** [jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco
 
 [Add your wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
 
