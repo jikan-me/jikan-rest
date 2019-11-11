@@ -3,10 +3,12 @@
 namespace App\Console;
 
 use App\Console\Commands\ClearQueuedJobs;
+use App\Console\Commands\DeleteCache;
 use App\Console\Commands\ModifyCacheDriver;
 use App\Console\Commands\ModifyCacheMethod;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
+use r\Queries\Writing\Delete;
 
 class Kernel extends ConsoleKernel
 {
@@ -18,7 +20,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ModifyCacheMethod::class,
         ModifyCacheDriver::class,
-        ClearQueuedJobs::class
+        ClearQueuedJobs::class,
+        DeleteCache::class
     ];
 
     /**
