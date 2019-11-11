@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ModifyCacheDriver;
 use App\Console\Commands\ModifyCacheMethod;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ModifyCacheMethod::class
+        ModifyCacheMethod::class,
+        ModifyCacheDriver::class
     ];
 
     /**
