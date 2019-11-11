@@ -112,14 +112,11 @@ class SearchQueryBuilder
             $request->setStartsWithChar('');
 
             if (!empty($_GET['letter'])) {
-                $letter = strtolower(
+                $letter =
                     // https://stackoverflow.com/questions/1972100/getting-the-first-character-of-a-string-with-str0#comment27161857_1972111
-                    mb_substr($letter, 0, 1, 'utf-8')
-                );
+                    mb_substr($letter, 0, 1, 'utf-8');
 
-                if (preg_match('~[A-Z0-9\.]~', $letter)) {
-                    $request->setStartsWithChar($letter);
-                }
+                $request->setStartsWithChar($letter);
             }
         }
 
