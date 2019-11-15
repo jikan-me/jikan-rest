@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 
-class DeleteCache extends Command
+class CacheRemove extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'cache:delete {key}';
+    protected $signature = 'cache:remove {key}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Delete cache by hash key';
+    protected $description = 'Remove cache by their hash key';
 
     /**
      * Create a new command instance.
@@ -46,7 +46,7 @@ class DeleteCache extends Command
 
         if (Cache::forget($fingerprint)) {
             Cache::forget("ttl:".$fingerprint);
-            $this->info('Cache deleted');
+            $this->info('Cache removed');
         }
     }
 }
