@@ -172,7 +172,7 @@ Please read the [troubleshooting guide](https://github.com/jikan-me/jikan-rest/b
 For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
 
 ## Artisan Commands
-Please read the [commands guide](https://github.com/jikan-me/jikan-rest/blob/master/COMMANDS.md).
+Please read the [commands guide](https://github.com/jikan-me/jikan-rest/blob/master/COMMANDS.MD).
 For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
 
 ## Information
