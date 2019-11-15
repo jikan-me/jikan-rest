@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\BlacklistAdd;
+use App\Console\Commands\BlacklistFlush;
+use App\Console\Commands\BlacklistRemove;
 use App\Console\Commands\ClearQueuedJobs;
 use App\Console\Commands\DeleteCache;
 use App\Console\Commands\ModifyCacheDriver;
@@ -21,7 +24,10 @@ class Kernel extends ConsoleKernel
         ModifyCacheMethod::class,
         ModifyCacheDriver::class,
         ClearQueuedJobs::class,
-        DeleteCache::class
+        DeleteCache::class,
+        BlacklistAdd::class,
+        BlacklistRemove::class,
+        BlacklistFlush::class
     ];
 
     /**

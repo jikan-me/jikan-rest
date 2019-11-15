@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class Blacklist
 {
@@ -36,14 +38,29 @@ class Blacklist
             file_put_contents(BLACKLIST_PATH, json_encode([]));
         }
 
-        $blacklist = json_decode(file_get_contents(BLACKLIST_PATH), true);
+        self::reloadList();
+    }
 
+    public static function reloadList()
+    {
+        self::flushList();
+
+        $blacklist = json_decode(file_get_contents(BLACKLIST_PATH), true);
         if (empty($blacklist)) {
             return;
         }
 
         foreach ($blacklist as $ip) {
             Redis::set("blacklist:{$ip}", 0);
+        }
+    }
+
+    public static function flushList()
+    {
+        $process = Process::fromShellCommandline('redis-cli --scan --pattern blacklist:* | xargs redis-cli del');
+        $process->run();
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
         }
     }
 }

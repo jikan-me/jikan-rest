@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use App\Http\Middleware\Blacklist;
 use Illuminate\Console\Command;
 
-class BlacklistAdd extends Command
+class BlacklistFlush extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'blacklist:add {ip} {--reload}';
+    protected $signature = 'blacklist:flush {--reload}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Add an IP to the blacklist';
+    protected $description = 'Remove all IPs from blacklist';
 
     /**
      * Create a new command instance.
@@ -38,22 +38,13 @@ class BlacklistAdd extends Command
      */
     public function handle()
     {
-        $ip = $this->argument('ip');
         $reload = $this->option('reload');
 
-        $blacklist = json_decode(file_get_contents(BLACKLIST_PATH), true);
-
-        if (\in_array($ip, $blacklist)) {
-            $this->error("IP is already blacklisted");
-            return;
-        }
-
-        $blacklist[] = $ip;
-        file_put_contents(BLACKLIST_PATH, json_encode($blacklist));
-        $this->info("Blacklisted IP: {$ip}");
+        file_put_contents(BLACKLIST_PATH, json_encode([]));
+        $this->info("Blacklist flushed");
 
         if ($reload) {
-            Blacklist::reloadList();
+            Blacklist::flushList();
             $this->info("Blacklist reloaded into Redis");
         }
     }
