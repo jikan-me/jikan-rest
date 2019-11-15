@@ -15,27 +15,18 @@ class Throttle
 
     public function handle(Request $request, Closure $next)
     {
-        // don't throttle meta requests
-        if (\in_array('meta', $request->segments())) {
+        if (!env('THROTTLE', false)) {
             return $next($request);
         }
 
-        if (env('THROTTLE') === false) {
+        // don't throttle base requests
+        if ($request->is('/')) {
             return $next($request);
         }
 
-
-        if (!is_null(env('THROTTLE_DECAY_MINUTES'))) {
-            $this->decayMinutes = (int) env('THROTTLE_DECAY_MINUTES');
-        }
-
-        if (!is_null(env('THROTTLE_MAX_PER_DECAY_MINUTES'))) {
-            $this->maxAttemptsPerDecayMinutes = (int) env('THROTTLE_MAX_PER_DECAY_MINUTES');
-        }
-
-        if (!is_null(env('THROTTLE_MAX_PER_CONCURRENCY'))) {
-            $this->maxAttemptsPerConcurrency = (int) env('THROTTLE_MAX_PER_CONCURRENCY');
-        }
+        $this->decayMinutes = (int) env('THROTTLE_DECAY_MINUTES', 1);
+        $this->maxAttemptsPerDecayMinutes = (int) env('THROTTLE_MAX_REQUESTS_PER_DECAY_MINUTES', 60);
+        $this->maxAttemptsPerConcurrency = (int) env('THROTTLE_MAX_REQUESTS_PER_SECOND', 2);
 
         $signature = $this->resolveRequestSignature($request);
         $key = "user:{$signature}:" . time();
