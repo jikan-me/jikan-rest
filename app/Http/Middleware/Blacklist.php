@@ -3,17 +3,16 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class Blacklist
 {
-    private $request;
     private $blacklist = [];
 
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        $this->loadList();
-
-        if (\in_array($_SERVER['REMOTE_ADDR'], $this->blacklist)) {
+        if (app('redis')->exists("blacklist:{$request->getClientIp()}")) {
             return response()
                 ->json([
                     'status' => 403,
@@ -26,12 +25,25 @@ class Blacklist
         return $next($request);
     }
 
-    private function loadList()
+    public static function loadList()
     {
+        $blacklist = Redis::keys("blacklist:*");
+        if (!empty($blacklist)) {
+            return;
+        }
+
         if (!file_exists(BLACKLIST_PATH)) {
             file_put_contents(BLACKLIST_PATH, json_encode([]));
         }
 
-        $this->blacklist = json_decode(file_get_contents(BLACKLIST_PATH), true);
+        $blacklist = json_decode(file_get_contents(BLACKLIST_PATH), true);
+
+        if (empty($blacklist)) {
+            return;
+        }
+
+        foreach ($blacklist as $ip) {
+            Redis::set("blacklist:{$ip}", 0);
+        }
     }
 }
