@@ -11,6 +11,25 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 
 **Notice**: Jikan does not support authenticated requests. You can not update your lists.
 
+## Index
+- [Getting Started](#getting-started)
+    - [Requirements](#requirements)
+    - [🐳 Docker](#-docker)
+    - [Installation Prerequisites](#01-installation-prerequisites)
+    - [Installation](#02-installation)
+    - [Configuration](#03-configuration)
+    - [Ignition](#04-ignition)
+    - [Configuring Cache Driver](#05-configuring-how-jikan-caches-optional) (optional)
+    - [Configuring Cache Method](#06-configuring-how-jikan-handles-expired-cache-optional) (optional)
+    - [Configuring Supervisord](#configuring-supervisord) (optional)
+- [Troubleshooting](#troubleshooting)
+- [Artisan Commands](#artisan-commands)
+- [Information](#information)
+- [Wrappers](#wrappers)
+- [Running Tests](#running-tests)
+- [Backers](#backers)
+- [Disclaimer](#disclaimer)
+
 ## Getting Started
 
 ### Requirements
@@ -18,12 +37,15 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 - PHP 7.1+
 - [Composer](https://getcomposer.org/download/)
 - [Redis](https://redis.io)
+- [Supervisord](http://supervisord.org/) (optional)
 
 #### 🐳 Docker
+If you don't want to install it yourself, there are dockerized options available:
+
 - [JikanREST Docker](https://github.com/fethica/jikan-rest-docker) by Fethi El Hassasna
 - [JikanDocerized](https://github.com/zunjae/JikanDockerized) by Zunjae
 
-### 01. Prerequisites
+### 01. Installation Prerequisites
 
 #### 01A. Linux
 
@@ -113,7 +135,7 @@ This reason for this is quite simple. User related requests such as anime/manga 
 
 :information_source: Note 3: Note 1 & Note 2 are default behavior. You can obviously change them as per your needs.
 
-##### Configuring Supervisor
+##### Configuring Supervisord
 
 ###### Linux
 1. Install supervisor
@@ -145,17 +167,21 @@ stderr_logfile=/var/www/jikan-is-installed-here/storage/logs/worker.error.log
 6. `sudo supervisorctl start jikan-worker:*`
 
 
-### Troubleshooting
+## Troubleshooting
 Please read the [troubleshooting guide](https://github.com/jikan-me/jikan-rest/blob/master/TROUBLESHOOTING.md).
 For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
 
-### Information
+## Artisan Commands
+Please read the [commands guide](https://github.com/jikan-me/jikan-rest/blob/master/COMMANDS.md).
+For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
+
+## Information
 If you don't want to host your instance, there's a public API available.
 
 - **[REST DOCUMENTATION](https://jikan.docs.apiary.io)**
 - **[Apps/Projects using JikanREST](https://jikan.moe/showcase)**
 
-### Wrappers
+## Wrappers
 - **[.NET]** [Jikan.net](https://github.com/Ervie/jikan.net) by Ervie
 - **[Python]** [JikanPy](https://github.com/AWConant/jikanpy) by Andrew Conant & Abhinav Kasamsetty
 - **[Ruby]** [Jikan.rb](https://github.com/Zerocchi/jikan.rb) by Zerocchi
@@ -169,19 +195,20 @@ If you don't want to host your instance, there's a public API available.
 
 [Add your wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
 
-### Running Tests
+## Running Tests
 
 `php vendor/bin/phpunit tests`
 
 Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
 
 ---
+## Backers
 
-# Sugoi Backers
+## Sugoi Backers
 Thank you to all our **sugoi** backers! 🙏 [[Become a sugoi backer](https://patreon.com/jikan)]
 - [Jared Allard (jaredallard)](https://github.com/jaredallard)
 
-# Backers
+## Backers
 Thank you to all our backers! 🙏 [[Become a backer](https://patreon.com/jikan)]
 - [PurplePinapples](https://github.com/purplepinapples/)
 - [Barkdoll (Jesse)](https://github.com/barkdoll/)
@@ -189,9 +216,8 @@ Thank you to all our backers! 🙏 [[Become a backer](https://patreon.com/jikan)
 - [Jason Weatherly (jamesthebard)](https://twitter.com/jamesthebard)
 - [Cesar Irad Mendoza (aberuwu)](https://github.com/aberuwu)
 
-
-# Sponsors
-Thank you to all our sponsors! You will recieve advertisement/promotive perks. [[Become a sponsor](https://patreon.com/jikan)]
+## Sponsors
+Thank you to all our sponsors! [[Become a sponsor](https://patreon.com/jikan)]
 - [Hibiki Matsujo](https://github.com/assintates)
 
 ---
