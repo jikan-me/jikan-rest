@@ -13,6 +13,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 */
 defined('BLACKLIST_PATH') or define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
 defined('JIKAN_PARSER_VERSION') or define('JIKAN_PARSER_VERSION', Versions::getVersion('jikan-me/jikan'));
+defined('JIKAN_REST_API_VERSION') or define('JIKAN_REST_API_VERSION', '3.4');
 
 
 /*
