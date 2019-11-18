@@ -34,6 +34,7 @@ class EtagMiddleware
         }
 
         $fingerprint = HttpHelper::resolveRequestFingerprint($request);
+
         if (
             $request->hasHeader('If-None-Match')
             && Cache::has($fingerprint)

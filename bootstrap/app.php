@@ -73,7 +73,8 @@ $app->routeMiddleware([
     'meta' => App\Http\Middleware\Meta::class,
     'jikan-response' => App\Http\Middleware\JikanResponseHandler::class,
     'throttle' => App\Http\Middleware\Throttle::class,
-    'etag' => \App\Http\Middleware\EtagMiddleware::class
+    'etag' => \App\Http\Middleware\EtagMiddleware::class,
+    'microcaching' => \App\Http\Middleware\MicroCaching::class
 ]);
 
 /*
@@ -122,6 +123,7 @@ $commonMiddleware = [
     'slave-auth',
     'meta',
     'etag',
+    'microcaching',
     'jikan-response',
     'throttle'
 ];

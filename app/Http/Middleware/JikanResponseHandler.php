@@ -143,9 +143,16 @@ class JikanResponseHandler
         $cacheMutable = json_decode($cache, true);
         $cacheMutable = $this->cacheMutation($cacheMutable);
 
+        $response = array_merge($meta, $cacheMutable);
+
+        // Allow microcaching if it's enabled and the cache driver is set to file
+        if (env('MICROCACHING', true) && env('CACHE_DRIVER', 'file') === 'file') {
+            MicroCaching::setMicroCache($this->fingerprint, $response);
+        }
+
         return response()
             ->json(
-                array_merge($meta, $cacheMutable)
+                $response
             )
             ->setEtag(
                 md5($cache)

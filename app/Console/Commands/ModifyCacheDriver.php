@@ -18,7 +18,7 @@ class ModifyCacheDriver extends Command
      *
      * @var string
      */
-    protected $description = 'Change caching driver. (redis, file)';
+    protected $description = 'Change the cache driver. [redis, file]';
 
     /**
      * Create a new command instance.
@@ -48,8 +48,8 @@ class ModifyCacheDriver extends Command
             file_put_contents($path, str_replace(
                 'CACHE_DRIVER='.env('CACHE_DRIVER'), 'CACHE_DRIVER='.$this->argument('driver'), file_get_contents($path)
             ));
+
+            $this->info("CACHE_DRIVER is now set to '{$this->argument('driver')}'");
         }
-
-
     }
 }

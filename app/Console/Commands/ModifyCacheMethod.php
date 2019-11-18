@@ -42,8 +42,6 @@ class ModifyCacheMethod extends Command
             return;
         }
 
-
-
         $path = base_path('.env');
 
         if (file_exists($path)) {
@@ -52,6 +50,6 @@ class ModifyCacheMethod extends Command
             ));
         }
 
-        $this->info("CACHE_METHOD is now set to {$this->argument('method')}");
+        $this->info("CACHE_METHOD is now set to '{$this->argument('method')}'");
     }
 }
