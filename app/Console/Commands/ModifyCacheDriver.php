@@ -42,8 +42,6 @@ class ModifyCacheDriver extends Command
             return;
         }
 
-
-
         $path = base_path('.env');
 
         if (file_exists($path)) {
@@ -52,6 +50,6 @@ class ModifyCacheDriver extends Command
             ));
         }
 
-        $this->info("CACHE_DRIVER is now set to {$this->argument('driver')}");
+
     }
 }

@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class HttpHelper
 {
+    public static function resolveRequestFingerprint(Request $request): string
+    {
+        return sprintf("request:%s:%s", self::requestType($request), self::getRequestUriHash($request));
+    }
+
     public static function hasError($response): bool
     {
         return isset($response->original['error']);

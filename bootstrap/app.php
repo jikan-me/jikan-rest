@@ -73,6 +73,7 @@ $app->routeMiddleware([
     'meta' => App\Http\Middleware\Meta::class,
     'jikan-response' => App\Http\Middleware\JikanResponseHandler::class,
     'throttle' => App\Http\Middleware\Throttle::class,
+    'etag' => \App\Http\Middleware\EtagMiddleware::class
 ]);
 
 /*
@@ -120,6 +121,7 @@ $commonMiddleware = [
     'blacklist',
     'slave-auth',
     'meta',
+    'etag',
     'jikan-response',
     'throttle'
 ];

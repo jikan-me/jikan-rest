@@ -55,24 +55,24 @@ class JikanResponseHandler
         if ($request->header('auth') === env('APP_KEY')) {
             return $next($request);
         }
+
         if (empty($request->segments())) {
             return $next($request);
         }
+
         if (!isset($request->segments()[1])) {
             return $next($request);
         }
+
         if (\in_array('meta', $request->segments())) {
             return $next($request);
         }
 
         $this->requestUriHash = HttpHelper::getRequestUriHash($request);
         $this->requestType = HttpHelper::requestType($request);
-
         $this->requestCacheTtl = HttpHelper::requestCacheExpiry($this->requestType);
-
-        $this->fingerprint = "request:{$this->requestType}:{$this->requestUriHash}";
+        $this->fingerprint = HttpHelper::resolveRequestFingerprint($request);
         $this->cacheExpiryFingerprint = "ttl:{$this->fingerprint}";
-
         $this->requestCached = Cache::has($this->fingerprint);
 
         $this->route = explode('\\', $request->route()[1]['uses']);
@@ -135,17 +135,6 @@ class JikanResponseHandler
                 );
             }
         }
-
-
-//        // ETag @todo: separate as middleware
-//        if (
-//            $request->hasHeader('If-None-Match')
-//            && $this->cache->exists($this->fingerprint)
-//            && md5($this->cache->get($this->fingerprint)) === $request->header('If-None-Match')
-//        ) {
-//            return response('', 304);
-//        }
-
 
         // Return response
         $meta = $this->generateMeta($request);
