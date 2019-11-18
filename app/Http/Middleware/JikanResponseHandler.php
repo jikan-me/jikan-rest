@@ -89,7 +89,7 @@ class JikanResponseHandler
                 ], 404);
         }
 
-        // Queueable?
+        // Is the request queueable?
         if (\in_array($this->route, self::NON_QUEUEABLE) || env('CACHE_METHOD', 'legacy') === 'legacy') {
             $this->queueable = false;
         }
@@ -175,7 +175,7 @@ class JikanResponseHandler
                 ], $meta);
                 break;
             case 4:
-                // remove cache data from JSON response and send as headers
+                // remove cache data from JSON response as it's sent as headers
                 unset($meta['request_cached'], $meta['request_cache_expiry']);
                 $meta = array_merge([
                     'DEVELOPMENT_NOTICE' => 'THIS VERSION IS IN TESTING. DO NOT USE FOR PRODUCTION.',
