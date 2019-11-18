@@ -192,6 +192,7 @@ If you don't want to host your instance, there's a public API available.
 - **[Dart]** [jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol
 - **[TypeScript]** [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard
 - **[TypeScript]** [jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco
+- **[Go]** [jikan-go](https://github.com/darenliang/jikan-go) by Daren Liang
 
 [Add your wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
 
