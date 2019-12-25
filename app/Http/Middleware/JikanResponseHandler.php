@@ -125,7 +125,7 @@ class JikanResponseHandler
             $queueFingerprint = "queue_update:{$this->fingerprint}";
             $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);
 
-            // Don't duplicate the queue for same request
+            // Don't duplicate the job in the queue for same request
             if (!app('redis')->exists($queueFingerprint)) {
                 app('redis')->set($queueFingerprint, 1);
 
@@ -150,6 +150,7 @@ class JikanResponseHandler
             MicroCaching::setMicroCache($this->fingerprint, $response);
         }
 
+        // Build and return response
         return response()
             ->json(
                 $response
