@@ -19,7 +19,8 @@
         "jikan-me/jikan": "^2.8",
         "ext-json": "*",
         "ocramius/package-versions": "^1.4",
-        "flipbox/lumen-generator": "^5.6"
+        "flipbox/lumen-generator": "^5.6",
+        "jenssegers/mongodb": "^3.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
