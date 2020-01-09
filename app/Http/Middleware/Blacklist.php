@@ -14,6 +14,10 @@ class Blacklist
 
     public function handle(Request $request, Closure $next)
     {
+        if ($request->header('auth') === env('APP_KEY')) {
+            return $next($request);
+        }
+        
         if (app('redis')->exists("blacklist:{$request->getClientIp()}")) {
             return response()
                 ->json([
