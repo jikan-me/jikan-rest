@@ -120,7 +120,7 @@ $app->instance('JikanParser', $jikan);
 */
 
 $commonMiddleware = [
-//    'blacklist',
+    'blacklist',
     'slave-auth',
     'meta',
     'etag',
