@@ -106,7 +106,7 @@ $app->instance('JikanParser', $jikan);
 /**
  * Load Blacklist into Redis
  */
-\App\Http\Middleware\Blacklist::loadList();
+//\App\Http\Middleware\Blacklist::loadList(); causing issues on high load todo: add it as a one time init
 
 /*
 |--------------------------------------------------------------------------
