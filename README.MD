@@ -205,9 +205,10 @@ Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
 ---
 ## Backers
 
-## Sugoi Backers
-Thank you to all our **sugoi** backers! 🙏 [[Become a sugoi backer](https://patreon.com/jikan)]
+## Sugoi (すごい) Backers
+Thank you to all our **Sugoi (すごい)** backers! 🙏 [[Become a sugoi backer](https://patreon.com/jikan)]
 - [Jared Allard (jaredallard)](https://github.com/jaredallard)
+- [hugonun (hug_onun)](https://twitter.com/hug_onun)
 
 ## Backers
 Thank you to all our backers! 🙏 [[Become a backer](https://patreon.com/jikan)]

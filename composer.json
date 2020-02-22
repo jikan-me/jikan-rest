@@ -16,7 +16,7 @@
         "jms/serializer": "^1.13",
         "symfony/yaml": "^4.1",
         "fabpot/goutte": "3.2.3",
-        "jikan-me/jikan": "^2.8",
+        "jikan-me/jikan": "^2.0",
         "ext-json": "*",
         "ocramius/package-versions": "^1.4",
         "flipbox/lumen-generator": "^5.6"
