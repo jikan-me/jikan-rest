@@ -65,7 +65,7 @@ If you're not comfortable being that restrictive, consider setting up your own J
 
 
 ## JSON Notes
-- Any property (except arrays) whose value does not exist or is undertermined, will be `null`
+- Any property (except arrays) whose value does not exist or is undetermined, will be `null`
 - Any array property whose value does not exist or is undetermined, will be **empty**
 - Any `score` property whose value does not exist or is undetermined, will be `0`
 - All dates and timestamps are returned in **ISO8601** format and in **UTC**
@@ -176,7 +176,7 @@ A single anime object with all its details
 | `/episodes`  | Page number (integer)  | List of episodes |
 | `/news` | N/A | List of Related news |
 | `/pictures` | N/A | List of Related pictures |
-| `/videos` | N/A | List o fPromotional Videos & episodes (if any) |
+| `/videos` | N/A | List of Promotional Videos & episodes (if any) |
 | `/stats` | N/A | Related statistical information |
 | `/forum` | N/A | List of Related forum topics |
 | `/moreinfo` | N/A | A string of more information (if any) |
@@ -316,7 +316,7 @@ Search results for the query
 | score | FLOAT : 0.0-10.0 | Filter score of results |
 | start_date | `yyyy-mm-dd` | Filter start date of results |
 | end_date | `yyyy-mm-dd` | Filter end date of results |
-| genre_exclude | boolean : 0/1 | To exlude/include the `genre` you added in your request |
+| genre_exclude | boolean : 0/1 | To exclude/include the `genre` you added in your request |
 | limit | INTEGER | Limits item results to the number specified |
 | order_by | **See Enums Below** | Order results with respect to a property |
 | sort | **See Enums Below** | Sort `order_by` (Default is `descending`) |
@@ -650,7 +650,7 @@ User related data
 | ------------- | ------------- | ------------- |
 | `search` | STRING | Return items in your list matching the string |
 | `q` (alias) | STRING | Return items in your list matching the string |
-| `page` (alias) | INEGER | Pass page number as a `key=value` |
+| `page` (alias) | INTEGER | Pass page number as a `key=value` |
 | `sort` | **See Enums Below** | Sort `order_by` (Default is `descending`) |
 
 ### Advanced User List Parameters (ANIME)
