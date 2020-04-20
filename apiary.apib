@@ -456,7 +456,8 @@ Read more about them [here](https://myanimelist.net/info.php?go=mpaa)
 ## Season [/season/{year}/{season}]
 Anime of the specified season
 
-**Note:** Both parameters are required.
+**Note:** Not using parameters will return the current season's anime listing
+
 ### Parameters
 | Parameter  | Argument | Description |
 | ------------- | ------------- | ------------- |
@@ -466,8 +467,8 @@ Anime of the specified season
 ### Season Request Example+Schema [GET]
 
 + Parameters
-    + year (required, Integer, `2018`) ... Returns anime of the year
-    + season (required, String, `winter`) ... Returns anime of the season
+    + year (optional, Integer, `2018`) ... Returns anime of the year
+    + season (optional, String, `winter`) ... Returns anime of the season
 
 + Response 200 (application/json)
 
