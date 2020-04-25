@@ -1,0 +1,5 @@
+Jikan\Model\Person\AnimeStaffPosition:
+  exclusion_policy: NONE
+  properties:
+    animeMeta:
+      serialized_name: anime

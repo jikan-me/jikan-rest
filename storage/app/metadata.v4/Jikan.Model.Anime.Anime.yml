@@ -1,0 +1,14 @@
+Jikan\Model\Anime\Anime:
+  exclusion_policy: NONE
+  properties:
+    titleSynonyms:
+      type: array
+      serialized_name: title_synonyms
+    aired:
+      serialized_name: aired
+    openingThemes:
+      type: array
+      serialized_name: opening_themes
+    endingThemes:
+      type: array
+      serialized_name: ending_themes
