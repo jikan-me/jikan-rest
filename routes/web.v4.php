@@ -349,6 +349,10 @@ $router->group(
         $router->get('/users', [
             'uses' => 'SearchController@users'
         ]);
+
+        $router->get('/userid/{id:[0-9]+}', [
+            'uses' => 'SearchController@userById'
+        ]);
     }
 );
 

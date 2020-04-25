@@ -11,6 +11,7 @@ use Jikan\Request\Search\PersonSearchRequest;
 use Jikan\Helper\Constants as JikanConstants;
 use App\Providers\SearchQueryBuilder;
 use Jikan\Request\Search\UserSearchRequest;
+use Jikan\Request\User\UsernameByIdRequest;
 use JMS\Serializer\Serializer;
 use phpDocumentor\Reflection\Types\Object_;
 
@@ -65,6 +66,15 @@ class SearchController extends Controller
             SearchQueryBuilder::create(
                 new UserSearchRequest()
             )
+        );
+
+        return response($this->filter($search));
+    }
+
+    public function userById(int $id)
+    {
+        $search = $this->jikan->getUsernameById(
+            new UsernameByIdRequest($id)
         );
 
         return response($this->filter($search));
