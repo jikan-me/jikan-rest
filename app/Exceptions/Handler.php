@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use App\Http\HttpHelper;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -38,22 +37,20 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * @param Exception $e
+     * @param \Throwable $e
      * @throws Exception
      */
-    public function report(Exception $e)
+    public function report(\Throwable $e)
     {
         parent::report($e);
     }
 
     /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param \Throwable $e
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, \Throwable $e)
     {
         $githubReport = GithubReport::make($e, $request);
 
@@ -158,6 +155,10 @@ class Handler extends ExceptionHandler
         }
     }
 
+    /**
+     * @param Request $request
+     * @param BadResponseException $e
+     */
     private function set404Cache(Request $request, BadResponseException $e)
     {
         $fingerprint = "request:404:".sha1(env('APP_URL') . $request->getRequestUri());
