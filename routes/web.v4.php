@@ -219,14 +219,10 @@ $router->group(
 
 $router->group(
     [
-        'prefix' => 'user/{username:[\w\-]+}'
+        'prefix' => 'users/{username:[\w\-]+}'
     ],
     function () use ($router) {
         $router->get('/', [
-            'uses' => 'UserController@profile'
-        ]);
-
-        $router->get('/profile', [
             'uses' => 'UserController@profile'
         ]);
 
@@ -245,12 +241,20 @@ $router->group(
         $router->get('/mangalist[/{status:[A-Za-z]+}[/{page:[0-9]+}]]', [
             'uses' => 'UserController@mangalist'
         ]);
+
+        $router->get('/recommendations[/{page:[0-9]+}]', [
+            'uses' => 'UserController@recommendations'
+        ]);
+
+        $router->get('/reviews[/{page:[0-9]+}]', [
+            'uses' => 'UserController@reviews'
+        ]);
     }
 );
 
 $router->group(
     [
-        'prefix' => 'genre'
+        'prefix' => 'genres'
     ],
     function () use ($router) {
         $router->get('/anime', [

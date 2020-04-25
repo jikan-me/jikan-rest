@@ -7,6 +7,8 @@ use Jikan\Request\User\UserMangaListRequest;
 use Jikan\Request\User\UserProfileRequest;
 use Jikan\Request\User\UserFriendsRequest;
 use Jikan\Request\User\UserHistoryRequest;
+use Jikan\Request\User\UserRecommendationsRequest;
+use Jikan\Request\User\UserReviewsRequest;
 
 class UserController extends Controller
 {
@@ -83,6 +85,24 @@ class UserController extends Controller
                 'json'
             )
         );
+    }
+
+    public function reviews(string $username, int $page = 1)
+    {
+        $results = $this->jikan->getUserReviews(
+            new UserReviewsRequest($username, $page)
+        );
+
+        return response($this->serializer->serialize($results, 'json'));
+    }
+
+    public function recommendations(string $username, int $page = 1)
+    {
+        $results = $this->jikan->getUserRecommendations(
+            new UserRecommendationsRequest($username, $page)
+        );
+
+        return response($this->serializer->serialize($results, 'json'));
     }
 
 

@@ -69,7 +69,7 @@ class GithubReport
      * @param Request $request
      * @return string
      */
-    public static function make(\Exception $exception, Request $request, ?string $repo = null) : self
+    public static function make(\Throwable $exception, Request $request, ?string $repo = null) : self
     {
         $report = new self;
         $report->name = \get_class($exception);
