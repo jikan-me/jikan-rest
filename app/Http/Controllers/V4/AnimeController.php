@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V4;
 
 use App\Http\HttpHelper;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
+use Jikan\Request\Anime\AnimeEpisodeRequest;
 use Jikan\Request\Anime\AnimeEpisodesRequest;
 use Jikan\Request\Anime\AnimeForumRequest;
 use Jikan\Request\Anime\AnimeMoreInfoRequest;
@@ -37,8 +38,15 @@ class AnimeController extends Controller
         return response($this->serializer->serialize($anime, 'json'));
     }
 
-    public function episodes(int $id, int $page = 1)
+    public function episode(int $id, int $episodeId)
     {
+        $anime = $this->jikan->getAnimeEpisode(new AnimeEpisodeRequest($id, $episodeId));
+        return response($this->serializer->serialize($anime, 'json'));
+    }
+
+    public function episodes(int $id)
+    {
+        $page = $_GET['page'] ?? 1;
         $anime = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
         return response($this->serializer->serialize($anime, 'json'));
     }

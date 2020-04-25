@@ -51,8 +51,12 @@ $router->group(
             'uses' => 'AnimeController@characters_staff'
         ]);
 
-        $router->get('/episodes[/{page:[0-9]+}]', [
+        $router->get('/episodes', [
             'uses' => 'AnimeController@episodes'
+        ]);
+
+        $router->get('/episodes/{episodeId:[0-9]+}', [
+            'uses' => 'AnimeController@episode'
         ]);
 
         $router->get('/news', [
