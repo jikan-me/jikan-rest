@@ -378,3 +378,26 @@ $router->group(
         ]);
     }
 );
+
+$router->group(
+    [
+        'prefix' => 'watch'
+    ],
+    function () use ($router) {
+        $router->get('/episodes', [
+            'uses' => 'WatchController@recentEpisodes'
+        ]);
+
+        $router->get('/episodes/popular', [
+            'uses' => 'WatchController@popularEpisodes'
+        ]);
+
+        $router->get('/promos', [
+            'uses' => 'WatchController@recentPromos'
+        ]);
+
+        $router->get('/promos/popular', [
+            'uses' => 'WatchController@popularPromos'
+        ]);
+    }
+);
