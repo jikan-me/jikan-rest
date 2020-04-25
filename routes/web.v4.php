@@ -242,12 +242,16 @@ $router->group(
             'uses' => 'UserController@mangalist'
         ]);
 
-        $router->get('/recommendations[/{page:[0-9]+}]', [
+        $router->get('/recommendations', [
             'uses' => 'UserController@recommendations'
         ]);
 
-        $router->get('/reviews[/{page:[0-9]+}]', [
+        $router->get('/reviews', [
             'uses' => 'UserController@reviews'
+        ]);
+
+        $router->get('/clubs', [
+            'uses' => 'UserController@clubs'
         ]);
     }
 );
@@ -295,7 +299,7 @@ $router->group(
         $router->get('/people[/{page:[0-9]+}]', [
             'uses' => 'TopController@people'
         ]);
-        
+
         $router->get('/reviews', [
             'uses' => 'ReviewsController@bestVoted'
         ]);

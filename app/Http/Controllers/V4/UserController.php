@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V4;
 
 use Jikan\Request\User\UserAnimeListRequest;
+use Jikan\Request\User\UserClubsRequest;
 use Jikan\Request\User\UserMangaListRequest;
 use Jikan\Request\User\UserProfileRequest;
 use Jikan\Request\User\UserFriendsRequest;
@@ -87,8 +88,9 @@ class UserController extends Controller
         );
     }
 
-    public function reviews(string $username, int $page = 1)
+    public function reviews(string $username)
     {
+        $page = $_GET['page'] ?? 1;
         $results = $this->jikan->getUserReviews(
             new UserReviewsRequest($username, $page)
         );
@@ -96,11 +98,23 @@ class UserController extends Controller
         return response($this->serializer->serialize($results, 'json'));
     }
 
-    public function recommendations(string $username, int $page = 1)
+    public function recommendations(string $username)
     {
+        $page = $_GET['page'] ?? 1;
         $results = $this->jikan->getUserRecommendations(
             new UserRecommendationsRequest($username, $page)
         );
+
+        return response($this->serializer->serialize($results, 'json'));
+    }
+
+    public function clubs(string $username)
+    {
+        $results = [
+            'clubs' => $this->jikan->getUserClubs(
+                new UserClubsRequest($username)
+            )
+        ];
 
         return response($this->serializer->serialize($results, 'json'));
     }
