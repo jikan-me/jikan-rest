@@ -186,13 +186,36 @@ $router->get('schedule[/{day:[A-Za-z]+}]', [
     'uses' => 'ScheduleController@main'
 ]);
 
-$router->get('producer/{id:[0-9]+}[/{page:[0-9]+}]', [
-    'uses' => 'ProducerController@main'
-]);
+$router->group(
+    [
+        'prefix' => 'producers'
+    ],
+    function() use ($router) {
+        $router->get('/', [
+            'uses' => 'ProducerController@main',
+        ]);
 
-$router->get('magazine/{id:[0-9]+}[/{page:[0-9]+}]', [
-    'uses' => 'MagazineController@main'
-]);
+        $router->get('/{id:[0-9]+}[/{page:[0-9]+}]', [
+            'uses' => 'ProducerController@resource'
+        ]);
+    }
+);
+
+$router->group(
+    [
+        'prefix' => 'magazines'
+    ],
+    function() use ($router) {
+        $router->get('/', [
+            'uses' => 'MagazineController@main',
+        ]);
+
+        $router->get('/{id:[0-9]+}[/{page:[0-9]+}]', [
+            'uses' => 'MagazineController@resource'
+        ]);
+    }
+);
+
 
 $router->group(
     [
