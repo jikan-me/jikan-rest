@@ -8,7 +8,7 @@ use Jikan\Request\Reviews\RecentReviewsRequest;
 class ReviewsController extends Controller
 {
 
-    public function main()
+    public function bestVoted()
     {
         $page = $_GET['page'] ?? 1;
         $results = $this->jikan->getRecentReviews(
@@ -24,7 +24,7 @@ class ReviewsController extends Controller
         $results = $this->jikan->getRecentReviews(
             new RecentReviewsRequest(Constants::RECENT_REVIEW_ANIME, $page)
         );
-        
+
         return response($this->serializer->serialize($results, 'json'));
     }
 
