@@ -339,3 +339,22 @@ $router->group(
         ]);
     }
 );
+
+$router->group(
+    [
+        'prefix' => 'reviews'
+    ],
+    function () use ($router) {
+        $router->get('/', [
+            'uses' => 'ReviewsController@main'
+        ]);
+
+        $router->get('/anime', [
+            'uses' => 'ReviewsController@anime'
+        ]);
+
+        $router->get('/manga', [
+            'uses' => 'ReviewsController@manga'
+        ]);
+    }
+);
