@@ -15,6 +15,10 @@ class Throttle
 
     public function handle(Request $request, Closure $next)
     {
+        if ($request->header('auth') === env('APP_KEY')) {
+            return $next($request);
+        }
+
         if (!env('THROTTLE', false)) {
             return $next($request);
         }
