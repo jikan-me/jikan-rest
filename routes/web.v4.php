@@ -345,9 +345,6 @@ $router->group(
         'prefix' => 'reviews'
     ],
     function () use ($router) {
-        $router->get('/', [
-            'uses' => 'ReviewsController@main'
-        ]);
 
         $router->get('/anime', [
             'uses' => 'ReviewsController@anime'
@@ -355,6 +352,21 @@ $router->group(
 
         $router->get('/manga', [
             'uses' => 'ReviewsController@manga'
+        ]);
+    }
+);
+
+$router->group(
+    [
+        'prefix' => 'recommendations'
+    ],
+    function () use ($router) {
+        $router->get('/anime', [
+            'uses' => 'RecommendationsController@anime'
+        ]);
+
+        $router->get('/manga', [
+            'uses' => 'RecommendationsController@manga'
         ]);
     }
 );
