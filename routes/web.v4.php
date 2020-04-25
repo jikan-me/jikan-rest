@@ -295,6 +295,10 @@ $router->group(
         $router->get('/people[/{page:[0-9]+}]', [
             'uses' => 'TopController@people'
         ]);
+        
+        $router->get('/reviews', [
+            'uses' => 'ReviewsController@bestVoted'
+        ]);
     }
 );
 
