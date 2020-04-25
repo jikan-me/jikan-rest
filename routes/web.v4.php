@@ -230,6 +230,14 @@ $router->group(
         'prefix' => 'genre'
     ],
     function () use ($router) {
+        $router->get('/anime', [
+            'uses' => 'GenreController@animeListing'
+        ]);
+
+        $router->get('/manga', [
+            'uses' => 'GenreController@mangaListing'
+        ]);
+
         $router->get('/anime/{id:[0-9]+}[/{page:[0-9]+}]', [
             'uses' => 'GenreController@anime'
         ]);
