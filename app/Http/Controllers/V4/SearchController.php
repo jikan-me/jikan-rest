@@ -10,6 +10,7 @@ use Jikan\Request\Search\CharacterSearchRequest;
 use Jikan\Request\Search\PersonSearchRequest;
 use Jikan\Helper\Constants as JikanConstants;
 use App\Providers\SearchQueryBuilder;
+use Jikan\Request\Search\UserSearchRequest;
 use JMS\Serializer\Serializer;
 use phpDocumentor\Reflection\Types\Object_;
 
@@ -52,6 +53,17 @@ class SearchController extends Controller
         $search = $this->jikan->getCharacterSearch(
             SearchQueryBuilder::create(
                 (new CharacterSearchRequest())->setPage($page)
+            )
+        );
+
+        return response($this->filter($search));
+    }
+
+    public function users()
+    {
+        $search = $this->jikan->getUserSearch(
+            SearchQueryBuilder::create(
+                new UserSearchRequest()
             )
         );
 

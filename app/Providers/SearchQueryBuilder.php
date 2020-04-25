@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use Jikan\Helper\Constants;
 use Jikan\Model\Anime\Anime;
 use Jikan\Request\Search\AnimeSearchRequest;
+use Jikan\Request\Search\CharacterSearchRequest;
 use Jikan\Request\Search\MangaSearchRequest;
+use Jikan\Request\Search\PersonSearchRequest;
+use Jikan\Request\Search\UserSearchRequest;
 use \voku\helper\AntiXSS;
 use Jikan\Helper\Constants as JikanConstants;
 
@@ -88,6 +92,13 @@ class SearchQueryBuilder
         'desc' => JikanConstants::SEARCH_SORT_DESCENDING,
     ];
 
+    private const VALID_GENDER = [
+        'any' => JikanConstants::SEARCH_USER_GENDER_ANY,
+        'male' => JikanConstants::SEARCH_USER_GENDER_MALE,
+        'female' => JikanConstants::SEARCH_USER_GENDER_FEMALE,
+        'nonbinary' => JikanConstants::SEARCH_USER_GENDER_NONBINARY
+    ];
+
     public static function create($request)
     {
         $xss = new AntiXSS();
@@ -105,18 +116,26 @@ class SearchQueryBuilder
             $request->setPage($page);
         }
 
-        // Starts with glyph
-        if (isset($_GET['letter'])) {
-            $letter = $xss->xss_clean($_GET['letter']);
+        if (
+            $request instanceof AnimeSearchRequest
+            || $request instanceof MangaSearchRequest
+            || $request instanceof PersonSearchRequest
+            || $request instanceof CharacterSearchRequest
+        ) {
 
-            $request->setStartsWithChar('');
+            // Starts with glyph
+            if (isset($_GET['letter'])) {
+                $letter = $xss->xss_clean($_GET['letter']);
 
-            if (!empty($_GET['letter'])) {
-                $letter =
-                    // https://stackoverflow.com/questions/1972100/getting-the-first-character-of-a-string-with-str0#comment27161857_1972111
-                    mb_substr($letter, 0, 1, 'utf-8');
+                $request->setStartsWithChar('');
 
-                $request->setStartsWithChar($letter);
+                if (!empty($_GET['letter'])) {
+                    $letter =
+                        // https://stackoverflow.com/questions/1972100/getting-the-first-character-of-a-string-with-str0#comment27161857_1972111
+                        mb_substr($letter, 0, 1, 'utf-8');
+
+                    $request->setStartsWithChar($letter);
+                }
             }
         }
 
@@ -262,6 +281,37 @@ class SearchQueryBuilder
                 if (array_key_exists($order, self::VALID_MANGA_ORDER_BY)) {
                     $request->setOrderBy(self::VALID_MANGA_ORDER_BY[$order]);
                 }
+            }
+        }
+
+        // Users
+        if ($request instanceof UserSearchRequest) {
+            // Gender
+            if (isset($_GET['gender'])) {
+                $gender = $xss->xss_clean($_GET['gender']);
+
+                if (array_key_exists($gender, self::VALID_GENDER)) {
+                    $request->setGender(self::VALID_GENDER[$gender]);
+                }
+            }
+
+            // Location
+            if (isset($_GET['location'])) {
+                $location = $xss->xss_clean($_GET['location']);
+
+                $request->setLocation($location);
+            }
+
+            // Max Age
+            if (isset($_GET['max-age'])) {
+                $maxAge = (int) $_GET['max-age'];
+                $request->setMaxAge($maxAge);
+            }
+
+            // Min Age
+            if (isset($_GET['min-age'])) {
+                $maxAge = (int) $_GET['min-age'];
+                $request->setMaxAge($maxAge);
             }
         }
 

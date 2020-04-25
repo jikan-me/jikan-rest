@@ -223,40 +223,51 @@ $router->group(
 
 $router->group(
     [
-        'prefix' => 'users/{username:[\w\-]+}'
+        'prefix' => 'users'
     ],
     function () use ($router) {
         $router->get('/', [
-            'uses' => 'UserController@profile'
+            'uses' => 'UserController@recentlyOnline'
         ]);
 
-        $router->get('/history[/{type:[A-Za-z]+}]', [
-            'uses' => 'UserController@history'
-        ]);
+        $router->group(
+            [
+                'prefix' => '/{username:[\w\-]+}'
+            ],
+            function () use ($router) {
+                $router->get('/', [
+                    'uses' => 'UserController@profile'
+                ]);
 
-        $router->get('/friends[/{page:[0-9]+}]', [
-            'uses' => 'UserController@friends'
-        ]);
+                $router->get('/history[/{type:[A-Za-z]+}]', [
+                    'uses' => 'UserController@history'
+                ]);
 
-        $router->get('/animelist[/{status:[A-Za-z]+}[/{page:[0-9]+}]]', [
-            'uses' => 'UserController@animelist'
-        ]);
+                $router->get('/friends[/{page:[0-9]+}]', [
+                    'uses' => 'UserController@friends'
+                ]);
 
-        $router->get('/mangalist[/{status:[A-Za-z]+}[/{page:[0-9]+}]]', [
-            'uses' => 'UserController@mangalist'
-        ]);
+                $router->get('/animelist[/{status:[A-Za-z]+}[/{page:[0-9]+}]]', [
+                    'uses' => 'UserController@animelist'
+                ]);
 
-        $router->get('/recommendations', [
-            'uses' => 'UserController@recommendations'
-        ]);
+                $router->get('/mangalist[/{status:[A-Za-z]+}[/{page:[0-9]+}]]', [
+                    'uses' => 'UserController@mangalist'
+                ]);
 
-        $router->get('/reviews', [
-            'uses' => 'UserController@reviews'
-        ]);
+                $router->get('/recommendations', [
+                    'uses' => 'UserController@recommendations'
+                ]);
 
-        $router->get('/clubs', [
-            'uses' => 'UserController@clubs'
-        ]);
+                $router->get('/reviews', [
+                    'uses' => 'UserController@reviews'
+                ]);
+
+                $router->get('/clubs', [
+                    'uses' => 'UserController@clubs'
+                ]);
+            }
+        );
     }
 );
 
@@ -333,6 +344,10 @@ $router->group(
 
         $router->get('/people[/{page:[0-9]+}]', [
             'uses' => 'SearchController@people'
+        ]);
+
+        $router->get('/users', [
+            'uses' => 'SearchController@users'
         ]);
     }
 );

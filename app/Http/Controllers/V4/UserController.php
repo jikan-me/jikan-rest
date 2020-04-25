@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V4;
 
+use Jikan\Request\User\RecentlyOnlineUsersRequest;
 use Jikan\Request\User\UserAnimeListRequest;
 use Jikan\Request\User\UserClubsRequest;
 use Jikan\Request\User\UserMangaListRequest;
@@ -119,6 +120,16 @@ class UserController extends Controller
         return response($this->serializer->serialize($results, 'json'));
     }
 
+    public function recentlyOnline()
+    {
+        $results = [
+            'users' => $this->jikan->getRecentOnlineUsers(
+                new RecentlyOnlineUsersRequest()
+            )
+        ];
+
+        return response($this->serializer->serialize($results, 'json'));
+    }
 
     private function listStatusToId(?string $status) : int
     {
