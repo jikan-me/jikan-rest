@@ -43,6 +43,9 @@ And then reload the supervisor configuration:
 
 If Redis is taking too long to restart, follow this: https://stackoverflow.com/a/45069100/2326811 and then start it `sudo service redis start`
 
+## My local instance is returning HTTP 503
+
+ This is an error forwarded from MAL, it typically happens when MAL is down. The Jikan response body includes the HTTP status from MAL, like: `[HTTP code] on [request url]` 
 
 ## I want to clear the cache in Jikan
 `php artisan cache:clear`
