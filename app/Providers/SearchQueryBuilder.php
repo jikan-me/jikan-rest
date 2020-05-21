@@ -221,7 +221,7 @@ class SearchQueryBuilder
             // Exclude genre passed for $_GET['genre']. Defaulted to false
             if (isset($_GET['genre_exclude'])) {
                 $request->setGenreExclude(
-                    ((int) $_GET['genre_exclude'] == 1) ? false : true
+                    (int) $_GET['genre_exclude'] === 1
                 );
             }
 
