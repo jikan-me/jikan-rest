@@ -16,8 +16,8 @@ class UserController extends Controller
 {
     public function profile(string $username)
     {
-        $person = $this->jikan->getUserProfile(new UserProfileRequest($username));
-        return response($this->serializer->serialize($person, 'json'));
+        $user = $this->jikan->getUserProfile(new UserProfileRequest($username));
+        return response($this->serializer->serialize($user, 'json'));
     }
 
     public function history(string $username, ?string $type = null)

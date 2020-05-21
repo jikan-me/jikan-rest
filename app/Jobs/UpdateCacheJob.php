@@ -71,7 +71,7 @@ class UpdateCacheJob extends Job
             );
 
         $cache = json_decode($response->getBody()->getContents(), true);
-        unset($cache['request_hash'], $cache['request_cached'], $cache['request_cache_expiry']);
+        unset($cache['fingerprint'], $cache['request_cached'], $cache['request_cache_expiry']);
         $cache = json_encode($cache);
 
 

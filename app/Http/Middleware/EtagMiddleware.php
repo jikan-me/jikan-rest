@@ -17,6 +17,10 @@ class EtagMiddleware
      */
     public function handle($request, Closure $next)
     {
+        if (!env('CACHING')) {
+            return $next($request);
+        }
+
         if ($request->header('auth') === env('APP_KEY')) {
             return $next($request);
         }

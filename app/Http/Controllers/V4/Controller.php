@@ -31,7 +31,7 @@ class Controller extends BaseController
      */
     public function __construct(MalClient $jikan)
     {
-        $this->serializer = SerializerFactory::createV3();
+        $this->serializer = SerializerFactory::createV4();
         $this->jikan = $jikan;
     }
 }

@@ -146,7 +146,7 @@ $router->group(
 
 $router->group(
     [
-        'prefix' => 'character/{id:[0-9]+}'
+        'prefix' => 'characters/{id:[0-9]+}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -161,7 +161,7 @@ $router->group(
 
 $router->group(
     [
-        'prefix' => 'person/{id:[0-9]+}'
+        'prefix' => 'people/{id:[0-9]+}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -334,7 +334,7 @@ $router->group(
             'uses' => 'SearchController@manga'
         ]);
 
-        $router->get('/character[/{page:[0-9]+}]', [
+        $router->get('/characters[/{page:[0-9]+}]', [
             'uses' => 'SearchController@character'
         ]);
 

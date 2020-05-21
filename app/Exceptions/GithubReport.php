@@ -82,10 +82,12 @@ class GithubReport
         $report->jikanVersion = Versions::getVersion('jikan-me/jikan');
         $report->phpVersion = PHP_VERSION;
 
-        try {
-            $report->redisRunning = trim(app('redis')->ping()) === 'PONG' ? "Connected" : "Disconnected";
-        } catch (ConnectionException $e) {
-            $report->redisRunning = false;
+        if (env('CACHING') && env('CACHE_DRIVER') === 'redis') {
+            try {
+                $report->redisRunning = trim(app('redis')->ping()) === 'PONG' ? "Connected" : "Disconnected";
+            } catch (ConnectionException $e) {
+                $report->redisRunning = false;
+            }
         }
 
         $report->instanceType = 'UNKNOWN';

@@ -161,6 +161,10 @@ class Handler extends ExceptionHandler
      */
     private function set404Cache(Request $request, BadResponseException $e)
     {
+        if (!env('CACHING')) {
+            return;
+        }
+
         $fingerprint = "request:404:".sha1(env('APP_URL') . $request->getRequestUri());
 
         if (Cache::has($fingerprint)) {

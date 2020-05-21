@@ -1,14 +1,5 @@
 <?php
 
-/**
- * This middleware was used up to REST v3.2; it was previously named `JikanResponse`
- *
- * It works by storing cache with TTL
- * Redis automatically removes any cache that's past it's TTL
- *
- * This middleware has been succeeded by JikanResponseHandler
- */
-
 namespace App\Http\Middleware;
 
 use App\Http\HttpHelper;

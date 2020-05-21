@@ -31,6 +31,8 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
+$app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
+
 $app->withFacades();
 $app->withEloquent();
 
@@ -71,10 +73,11 @@ $app->routeMiddleware([
     'blacklist' => App\Http\Middleware\Blacklist::class,
     'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
     'meta' => App\Http\Middleware\Meta::class,
-    'jikan-response' => App\Http\Middleware\JikanResponseHandler::class,
+    'cache-resolver' => App\Http\Middleware\CacheResolver::class,
     'throttle' => App\Http\Middleware\Throttle::class,
     'etag' => \App\Http\Middleware\EtagMiddleware::class,
-    'microcaching' => \App\Http\Middleware\MicroCaching::class
+    'microcaching' => \App\Http\Middleware\MicroCaching::class,
+    'database-resolver' => \App\Http\Middleware\DatabaseResolver::class
 ]);
 
 /*
@@ -90,9 +93,13 @@ $app->routeMiddleware([
 
 $app->configure('database');
 $app->configure('queue');
-$app->configure('cache');
+$app->configure('controller-to-table-mapping');
 
-$app->register(Illuminate\Redis\RedisServiceProvider::class);
+if (env('CACHING')) {
+    $app->configure('cache');
+    $app->register(Illuminate\Redis\RedisServiceProvider::class);
+}
+
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
 $guzzleClient = new \GuzzleHttp\Client();
@@ -119,13 +126,14 @@ $app->instance('JikanParser', $jikan);
 */
 
 $commonMiddleware = [
-    'blacklist',
-    'slave-auth',
-    'meta',
-    'etag',
-    'microcaching',
-    'jikan-response',
-    'throttle'
+//    'blacklist',
+//    'slave-auth',
+//    'meta',
+//    'etag',
+    'database-resolver',
+//    'microcaching',
+//    'cache-resolver',
+//    'throttle'
 ];
 
 $app->router->group(

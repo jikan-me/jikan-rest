@@ -1,28 +1,23 @@
 <?php
 
-/**
- * This middleware is the successor of JikanResponseLegacy; used for REST v3.3+
- *
- * It works by storing cache with no automated TTL handling by Redis
- *
- * If a request is past it's TTL, it queues an update instead of removing the cache followed by fetching a new one
- * Update queues are automated.
- *
- * Therefore,
- * - if MyAnimeList is down or rate-limits the response, stale cache is served
- * - if cache expires, the client doesn't have to wait longer for the server to fetch+parse the new response
- */
-
-
 namespace App\Http\Middleware;
 
+use App\DatabaseHandler;
 use App\Http\HttpHelper;
 use App\Jobs\UpdateCacheJob;
 use Closure;
+use Flipbox\LumenGenerator\LumenGeneratorServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Jenssegers\Mongodb\MongodbServiceProvider;
+use MongoDB\BSON\UTCDateTime;
+use MongoDB\Client;
+use MongoDB\Collection;
 
-class JikanResponseHandler
+class DatabaseResolver
 {
     private $requestUri;
     private $requestUriHash;
@@ -73,26 +68,14 @@ class JikanResponseHandler
         $this->requestCacheTtl = HttpHelper::requestCacheExpiry($this->requestType);
         $this->fingerprint = HttpHelper::resolveRequestFingerprint($request);
         $this->cacheExpiryFingerprint = "ttl:{$this->fingerprint}";
-        $this->requestCached = Cache::has($this->fingerprint);
 
         $this->route = explode('\\', $request->route()[1]['uses']);
         $this->route = end($this->route);
 
-        // Check if request is in the 404 cache pool @todo: separate as middleware
-        if (Cache::has("request:404:{$this->requestUriHash}")) {
-            return response()
-                ->json([
-                    'status' => 404,
-                    'type' => 'BadResponseException',
-                    'message' => 'Resource does not exist',
-                    'error' => Cache::get("request:404:{$this->requestUriHash}")
-                ], 404);
-        }
+        $db = new DatabaseHandler();
+        $table = $db::getMappedTableName($this->route);
 
-        // Is the request queueable?
-        if (\in_array($this->route, self::NON_QUEUEABLE) || env('CACHE_METHOD', 'legacy') === 'legacy') {
-            $this->queueable = false;
-        }
+        $this->requestCached = DB::table($table)->where('request_hash', $this->fingerprint)->exists();
 
         // Cache if it doesn't exist
         if (!$this->requestCached) {
@@ -102,53 +85,25 @@ class JikanResponseHandler
                 return $response;
             }
 
-            Cache::forever($this->fingerprint, $response->original);
-            Cache::forever($this->cacheExpiryFingerprint, time() + $this->requestCacheTtl);
+            DB::table($table)->insert(array_merge(
+                [
+                    'expireAfterSeconds' => $this->requestCacheTtl,
+                    'request_hash' => $this->fingerprint
+                ],
+                json_decode($response->original, true)
+            ));
         }
 
-        // If cache is expired, handle it depending on whether it's queueable
-        $this->requestCacheExpiry = (int) Cache::get($this->cacheExpiryFingerprint);
-
-        if ($this->requestCached && $this->requestCacheExpiry <= time() && !$this->queueable) {
-            $response = $next($request);
-
-            if (HttpHelper::hasError($response)) {
-                return $response;
-            }
-
-            Cache::forever($this->fingerprint, $response->original);
-            Cache::forever($this->cacheExpiryFingerprint, time() + $this->requestCacheTtl);
-            $this->requestCacheExpiry = (int) Cache::get($this->cacheExpiryFingerprint);
-        }
-
-        if ($this->queueable && $this->requestCacheExpiry <= time()) {
-            $queueFingerprint = "queue_update:{$this->fingerprint}";
-            $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);
-
-            // Don't duplicate the job in the queue for same request
-            if (!app('redis')->exists($queueFingerprint)) {
-                app('redis')->set($queueFingerprint, 1);
-
-                dispatch(
-                    (new UpdateCacheJob($request))
-                        ->onQueue($queueHighPriority ? 'high' : 'low')
-                );
-            }
-        }
 
         // Return response
         $meta = $this->generateMeta($request);
 
-        $cache = Cache::get($this->fingerprint);
-        $cacheMutable = json_decode($cache, true);
+        $cache = DB::table($table)->where('request_hash', $this->fingerprint)->get();
+        $cacheMutable = json_decode($cache, true)[0];
         $cacheMutable = $this->cacheMutation($cacheMutable);
 
         $response = array_merge($meta, $cacheMutable);
-
-        // Allow microcaching if it's enabled and the cache driver is set to file
-        if (env('MICROCACHING', true) && env('CACHE_DRIVER', 'file') === 'file') {
-            MicroCaching::setMicroCache($this->fingerprint, $response);
-        }
+        unset($response['createdAt'], $response['expireAfterSeconds'], $response['_id']);
 
         // Build and return response
         return response()

@@ -17,7 +17,12 @@ class MicroCaching
      */
     public function handle($request, Closure $next)
     {
+
         if ($request->header('auth') === env('APP_KEY')) {
+            return $next($request);
+        }
+
+        if (!env('CACHING')) {
             return $next($request);
         }
 

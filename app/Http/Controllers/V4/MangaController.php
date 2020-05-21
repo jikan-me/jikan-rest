@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V4;
 
+use App\Http\HttpHelper;
 use Jikan\Request\Manga\MangaCharactersRequest;
 use Jikan\Request\Manga\MangaForumRequest;
 use Jikan\Request\Manga\MangaMoreInfoRequest;
@@ -23,9 +24,8 @@ class MangaController extends Controller
         $mangaSerialized = HttpHelper::serializeEmptyObjectsControllerLevel(
             json_decode($mangaSerialized, true)
         );
-        $mangaSerialized = json_encode($mangaSerialized);
 
-        return response($this->serializer->serialize($manga, 'json'));
+        return response($this->serializer->serialize($mangaSerialized, 'json'));
     }
 
     public function characters(int $id)
@@ -61,7 +61,7 @@ class MangaController extends Controller
     public function moreInfo(int $id)
     {
         $manga = ['moreinfo' => $this->jikan->getMangaMoreInfo(new MangaMoreInfoRequest($id))];
-        return response(json_encode($manga));
+        return response($this->serializer->serialize($manga, 'json'));
     }
 
     public function recommendations(int $id)

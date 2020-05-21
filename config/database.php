@@ -1,6 +1,26 @@
 <?php
 
 return [
+    'default' => env('DB_CONNECTION', 'mongodb'),
+
+    'connections' => [
+        'mongodb' => [
+            /*
+            'driver' => 'mongodb',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', 27017),
+            'username' => env('DB_USERNAME', ''),
+            'password' => env('DB_PASSWORD', ''),
+            'options' => [
+                'db' => env('MONGODB_AUTHDATABASE', '')
+            ]
+            */
+            'driver' => 'mongodb',
+            'dsn'=> "mongodb+srv://".env('DB_USERNAME', 'jikan').":".env('DB_PASSWORD', '')."@".env('MONGODB_DSN', ''),
+            'database' => env('DB_DATABASE', ''),
+        ]
+    ],
+
     'redis' => [
         'client' => 'predis',
         'default' => [
@@ -9,5 +29,7 @@ return [
             'port' => env('REDIS_PORT', 6379),
             'database' => 0
         ]
-    ]
+    ],
+
+    'migrations' => 'migrations'
 ];

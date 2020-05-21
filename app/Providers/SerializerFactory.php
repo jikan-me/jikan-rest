@@ -77,6 +77,40 @@ class SerializerFactory
         return $serializer;
     }
 
+    public static function createV4(): Serializer
+    {
+        $serializer = (new SerializerBuilder())
+            ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v4')
+            ->configureHandlers(
+                function (HandlerRegistry $registry) {
+                    $registry->registerHandler(
+                        'serialization',
+                        MalUrl::class,
+                        'json',
+                        \Closure::fromCallable('self::convertMalUrl')
+                    );
+
+                    $registry->registerHandler(
+                        'serialization',
+                        DateRange::class,
+                        'json',
+                        \Closure::fromCallable('self::convertDateRange')
+                    );
+
+                    $registry->registerHandler(
+                        'serialization',
+                        \DateTimeImmutable::class,
+                        'json',
+                        \Closure::fromCallable('self::convertDateTimeImmutable')
+                    );
+                }
+            )
+            ->build();
+        $serializer->setSerializationContextFactory(new SerializationContextFactory());
+
+        return $serializer;
+    }
+
     private static function convertMalUrl($visitor, MalUrl $obj, array $type): array
     {
         return [
