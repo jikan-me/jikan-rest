@@ -63,7 +63,7 @@ $router->group(
             'uses' => 'AnimeController@news'
         ]);
 
-        $router->get('/forum', [
+        $router->get('/topics', [
             'uses' => 'AnimeController@forum'
         ]);
 
@@ -75,7 +75,7 @@ $router->group(
             'uses' => 'AnimeController@pictures'
         ]);
 
-        $router->get('/stats', [
+        $router->get('/statistics', [
             'uses' => 'AnimeController@stats'
         ]);
 
@@ -114,7 +114,7 @@ $router->group(
             'uses' => 'MangaController@news'
         ]);
 
-        $router->get('/forum', [
+        $router->get('/topics', [
             'uses' => 'MangaController@forum'
         ]);
 
@@ -122,7 +122,7 @@ $router->group(
             'uses' => 'MangaController@pictures'
         ]);
 
-        $router->get('/stats', [
+        $router->get('/statistics', [
             'uses' => 'MangaController@stats'
         ]);
 
@@ -174,19 +174,33 @@ $router->group(
     }
 );
 
-$router->get('season/archive', [
-    'uses' => 'SeasonController@archive'
-]);
 
-$router->get('season/later', [
-    'uses' => 'SeasonController@later'
-]);
+$router->group(
+    [
+        'prefix' => 'seasons'
+    ],
+    function () use ($router) {
+        $router->get('/', [
+            'uses' => 'SeasonController@archive'
+        ]);
 
-$router->get('season[/{year:[0-9]{4}}/{season:[A-Za-z]+}]', [
-    'uses' => 'SeasonController@main'
-]);
+        $router->get('/now', [
+            'uses' => 'SeasonController@main'
+        ]);
 
-$router->get('schedule[/{day:[A-Za-z]+}]', [
+        $router->get('/later', [
+            'uses' => 'SeasonController@later'
+        ]);
+
+        $router->get('/{year:[0-9]{4}}/{season:[A-Za-z]+}', [
+            'uses' => 'SeasonController@main'
+        ]);
+
+
+    }
+);
+
+$router->get('schedules[/{day:[A-Za-z]+}]', [
     'uses' => 'ScheduleController@main'
 ]);
 
@@ -338,10 +352,6 @@ $router->group(
             'uses' => 'SearchController@character'
         ]);
 
-        $router->get('/person[/{page:[0-9]+}]', [
-            'uses' => 'SearchController@people'
-        ]);
-
         $router->get('/people[/{page:[0-9]+}]', [
             'uses' => 'SearchController@people'
         ]);
@@ -358,7 +368,7 @@ $router->group(
 
 $router->group(
     [
-        'prefix' => 'club/{id:[0-9]+}'
+        'prefix' => 'clubs/{id:[0-9]+}'
     ],
     function () use ($router) {
         $router->get('/', [
