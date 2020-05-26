@@ -2,15 +2,21 @@ FORMAT: 1A
 HOST: https://api.jikan.moe/v3
 
 # Jikan
-[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. 
-It's built on the Lumen microframework, uses Redis for caching and is powered by the [Jikan PHP API](https://github.com/jikan-me/jikan).
+[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. It scrapes the website to satisfy the need for an API - which MyAnimeList lacks.
+
+The word Jikan literally translates to Time in Japanese (時間). And that's what this API saves you of. ;)
+
+Notice: Jikan does not support authenticated requests. You can not update your lists.
+
+Jikan is open-source and is powered by the [Jikan PHP API/Parser](https://github.com/jikan-me/jikan).
 
 
+## 
 **API Path:** `https://api.jikan.moe/v3`
 
-**API Version**: `v3.4 RC`
+**API Version**: `v3.4`
 
-[Status](https://status.jikan.moe) | [Report an Issue](https://github.com/jikan-me/jikan-rest/issues/new) | **[Discord](https://discordapp.com/invite/4tvCr36)**
+[Status](https://status.jikan.moe) | [Report an Issue](https://github.com/jikan-me/jikan-rest/issues/new) | **[Discord](http://discord.jikan.moe)**
 
 
 # Information
@@ -18,7 +24,7 @@ It's built on the Lumen microframework, uses Redis for caching and is powered by
 ## Links
 - [Jikan.moe](https://jikan.moe)
 - [About](https://jikan.moe/about)
-- [Projects/Apps using Jikan](https://jikan.moe/showcase)
+- [Stuff using Jikan](https://jikan.moe/showcase)
 
 
 ## Wrappers
@@ -75,7 +81,7 @@ If you're not comfortable being that restrictive, consider setting up your own J
 
 ## Caching
 
-By "caching", we refer to the data parsed from MyAnimeList that is cached temporarily on our servers for performance/faster responses.
+By "caching", we refer to the data parsed from MyAnimeList that is cached temporarily on our servers for better performance.
 
 All requests by default are cached for **24 hours** except for a few API endpoints which have their own unique cache expiry time.
 
@@ -98,7 +104,7 @@ Header | Remarks
 
 **FAQ: Why is `X-Request-Cache-Ttl` negative?**
 
-Jikan REST API v3.3+ uses a different caching logic. If the cache expires, it queues a job in the background to update the cache.
+If the cache expires, it queues a job in the background to update the cache.
 So you're getting stale cache until the cache update completes.
 
 
@@ -122,11 +128,13 @@ Furthermore, [JikanAuth](https://github.com/jikan-me/jikan-auth) is a PHP API wh
 # HTTP Response
 - 200 `OK` - the request was successful.
 - 304 `Not Modified` - You have the latest data
-- 400 `Bad Request` - You've made an invalid request or to an invalid endpoint.
-- 404 `Not Found` - MyAnimeList responded with a 404
-- 405 `Method Not Allowed` - requested method is not supported for resource.
-- 429 `Too Many Requests` - You are being rate limited or Jikan is being rate-limited by MyAnimeList
-- 500 `Internal Server Error` - Something broke on our end :(
+- 400 `Bad Request` - You’ve made an invalid request
+- 404 `Not Found` - Resource not found, i.e MyAnimeList responded with a 404
+- 405 `Method Not Allowed` - requested method is not supported for resource
+- 429 `Too Many Requests` - You are being rate limited or Jikan is being rate limited by MyAnimeList (either is specified in the error message)
+- 500 `Internal Server Error` - Something is not working on our end, please open a Github issue by clicking on the generated `report_url`
+- 503 `Service Unavailable` - Something is not working on MyAnimeList’s end. MyAnimeList is either down/unavailable or is refusing to connect
+
 
 # JSON Error Response
 This is a typical error response
