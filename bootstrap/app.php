@@ -77,7 +77,8 @@ $app->routeMiddleware([
     'throttle' => App\Http\Middleware\Throttle::class,
     'etag' => \App\Http\Middleware\EtagMiddleware::class,
     'microcaching' => \App\Http\Middleware\MicroCaching::class,
-    'database-resolver' => \App\Http\Middleware\DatabaseResolver::class
+    'database-resolver' => \App\Http\Middleware\DatabaseResolver::class,
+    'source-health-monitor' => \App\Http\Middleware\SourceHealthMonitor::class
 ]);
 
 /*
@@ -108,6 +109,10 @@ $app->instance('GuzzleClient', $guzzleClient);
 $jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
 $app->instance('JikanParser', $jikan);
 
+if (env('SOURCE_BAD_HEALTH_FAILOVER') && env('DB_CACHING')) {
+    $app->register(\App\Providers\SourceHealthServiceProvider::class);
+}
+
 
 /**
  * Load Blacklist into Redis
@@ -134,6 +139,7 @@ $commonMiddleware = [
 //    'microcaching',
 //    'cache-resolver',
 //    'throttle'
+    'source-health-monitor'
 ];
 
 $app->router->group(

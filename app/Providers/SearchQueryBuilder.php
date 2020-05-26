@@ -235,9 +235,6 @@ class SearchQueryBuilder
             }
         }
 
-
-
-
         // Anime
         if ($request instanceof AnimeSearchRequest) {
             // Rating/Rated

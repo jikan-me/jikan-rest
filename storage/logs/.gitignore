@@ -1,2 +1,5 @@
 *
 !.gitignore
+source-health-monitor.log
+worker.error.log
+worker.log

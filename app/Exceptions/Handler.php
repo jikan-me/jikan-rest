@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Events\SourceHealthEvent;
 use App\Http\HttpHelper;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
@@ -109,10 +110,17 @@ class Handler extends ExceptionHandler
                             'message' => 'Jikan is being rate limited by MyAnimeList',
                             'error' => $e->getMessage()
                         ], $e->getCode());
+                case 403:
                 case 500:
+                case 501:
                 case 502:
                 case 503:
                 case 504:
+                    // Dispatch Bad source health event to prompt database fallback if enabled
+                    if (env('SOURCE_BAD_HEALTH_FALLBACK') && env('DB_CACHING')) {
+                        event(new SourceHealthEvent(SourceHealthEvent::BAD_HEALTH, $e->getCode()));
+                    }
+
                     return response()
                         ->json([
                             'status' => $e->getCode(),

@@ -3,8 +3,11 @@
 namespace App\Http\Middleware;
 
 use App\DatabaseHandler;
+use App\Events\SourceHealthEvent;
 use App\Http\HttpHelper;
 use App\Jobs\UpdateCacheJob;
+use App\Jobs\UpdateDatabaseJob;
+use App\Providers\SourceHealthServiceProvider;
 use Closure;
 use Flipbox\LumenGenerator\LumenGeneratorServiceProvider;
 use Illuminate\Http\Request;
@@ -12,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Jenssegers\Mongodb\MongodbServiceProvider;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Client;
@@ -33,6 +37,8 @@ class DatabaseResolver
 
     private $queueable = true;
 
+    private $table;
+
     private const NON_QUEUEABLE = [
         'UserController@profile',
         'UserController@history',
@@ -47,6 +53,7 @@ class DatabaseResolver
 
     public function handle(Request $request, Closure $next)
     {
+
         if ($request->header('auth') === env('APP_KEY')) {
             return $next($request);
         }
@@ -73,34 +80,48 @@ class DatabaseResolver
         $this->route = end($this->route);
 
         $db = new DatabaseHandler();
-        $table = $db::getMappedTableName($this->route);
+        $this->table = $db::getMappedTableName($this->route);
+        $this->requestCached = DB::table($this->table)->where('request_hash', $this->fingerprint)->exists();
 
-        $this->requestCached = DB::table($table)->where('request_hash', $this->fingerprint)->exists();
-
-        // Cache if it doesn't exist
-        if (!$this->requestCached) {
-            $response = $next($request);
-
-            if (HttpHelper::hasError($response)) {
-                return $response;
-            }
-
-            DB::table($table)->insert(array_merge(
-                [
-                    'expireAfterSeconds' => $this->requestCacheTtl,
-                    'request_hash' => $this->fingerprint
-                ],
-                json_decode($response->original, true)
-            ));
+        // Is the request queueable?
+        if (\in_array($this->route, self::NON_QUEUEABLE) || env('CACHE_METHOD', 'legacy') === 'legacy') {
+            $this->queueable = false;
         }
 
+        // If cache does not exist
+        if (!$this->requestCached) {
+            return $this->fetchFresh($request, $next);
+        }
 
-        // Return response
+        // Fetch Cache & Generate Meta
         $meta = $this->generateMeta($request);
 
-        $cache = DB::table($table)->where('request_hash', $this->fingerprint)->get();
+        $cache = DB::table($this->table)->where('request_hash', $this->fingerprint)->get();
         $cacheMutable = json_decode($cache, true)[0];
         $cacheMutable = $this->cacheMutation($cacheMutable);
+
+        // If cache is expired, handle it depending on whether it's queueable
+        $expiresAt = $cacheMutable['expiresAt']['$date']['$numberLong']/1000;
+
+        if ($this->requestCached && $expiresAt > time() && !$this->queueable) {
+            return $this->fetchFresh($request, $next);
+        }
+
+        if ( $this->queueable && $expiresAt > time()) {
+            $queueFingerprint = "queue_update:{$this->fingerprint}";
+            $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);
+
+            // Don't duplicate the job in the queue for same request
+            $job = DB::table(env('QUEUE_TABLE', 'jobs'))->where('request_hash', $this->fingerprint);
+
+            if (!$job->exists()) {
+                dispatch(
+                    (new UpdateDatabaseJob($request))
+                        ->onQueue($queueHighPriority ? 'high' : 'low')
+                );
+            }
+        }
+
 
         $response = array_merge($meta, $cacheMutable);
         unset($response['createdAt'], $response['expireAfterSeconds'], $response['_id']);
@@ -162,5 +183,22 @@ class DatabaseResolver
         }
 
         return $data;
+    }
+
+    public function fetchFresh($request, $next)
+    {
+        $response = $next($request);
+
+        if (HttpHelper::hasError($response)) {
+            return $response;
+        }
+
+        DB::table($this->table)->insert(array_merge(
+            [
+                'expiresAt' => new UTCDateTime((time()+$this->requestCacheTtl)*1000),
+                'request_hash' => $this->fingerprint
+            ],
+            json_decode($response->original, true)
+        ));
     }
 }

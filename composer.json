@@ -17,6 +17,7 @@
         "jikan-me/jikan": "^3.0",
         "jms/serializer": "^1.13",
         "laravel/lumen-framework": "^7.0",
+        "league/flysystem": "^1.0",
         "ocramius/package-versions": "^1.4",
         "predis/predis": "^1.1",
         "symfony/yaml": "^4.1",
