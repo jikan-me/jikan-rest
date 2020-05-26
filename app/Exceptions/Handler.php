@@ -125,7 +125,7 @@ class Handler extends ExceptionHandler
                         ->json([
                             'status' => $e->getCode(),
                             'type' => 'BadResponseException',
-                            'message' => 'Jikan could not connect to MyAnimeList',
+                            'message' => 'Jikan failed to connect to MyAnimeList. MyAnimeList may be down/unavailable or refuses to connect',
                             'error' => $e->getMessage()
                         ], 503);
                 default:
