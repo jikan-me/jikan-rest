@@ -22,9 +22,7 @@ class CreateIndex extends Migration
             }
 
             Schema::create($table, function (Blueprint $table) {
-                $table->index('request_hash', 'request_hash');
-                $table->timestamps();
-                $table->integer('expireAfterSeconds');
+                $table->index(['request_hash' => 1], 'request_hash');
             });
 
             $mapped[] = $table;
