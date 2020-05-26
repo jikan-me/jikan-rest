@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use MongoDB\BSON\UTCDateTime;
 
 
 /**
@@ -22,50 +23,55 @@ class UpdateDatabaseJob extends Job
 
     public $retryAfter = 60;
 
-    /**
-     * @var string
-     */
+    protected $request;
     protected $requestUri;
     protected $requestType;
     protected $requestCacheTtl;
     protected $fingerprint;
-    protected $cacheExpiryFingerprint;
-    protected $requestCached;
+    protected $table;
 
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param Request $request
+     * @param $table
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, $table)
     {
+        $this->table = $table;
         $this->fingerprint = HttpHelper::resolveRequestFingerprint($request);
 
-        $this->requestCached = DB::table(env('QUEUE_TABLE', 'jobs'))->where('request_hash', $this->fingerprint);
+        $this->requestType = HttpHelper::requestType($request);
+        $this->requestCacheTtl = HttpHelper::requestCacheExpiry($this->requestType);
     }
 
-
-    /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
     public function handle() : void
     {
-        $client = new Client();
 
-        $response = $client
+        $response = app('GuzzleClient')
             ->request(
                 'GET',
                 env('APP_URL') . $this->requestUri,
                 [
                     'headers' => [
-                        'auth' => env('APP_KEY') // skip middleware
+                        'auth' => env('APP_KEY') // skips middleware
                     ]
                 ]
             );
 
         $cache = json_decode($response->getBody()->getContents(), true);
-        unset($cache['request_hash'], $cache['request_cached'], $cache['request_cache_expiry']);
+        unset($cache['request_hash'], $cache['request_cached'], $cache['request_cache_expiry'], $cache['DEVELOPMENT_NOTICE'], $cache['MIGRATION']);
         $cache = json_encode($cache);
+
+        DB::table($this->table)
+            ->where('request_hash', $this->fingerprint)
+            ->update(array_merge(
+            [
+                'expiresAt' => new UTCDateTime((time()+$this->requestCacheTtl)*1000),
+                'request_hash' => $this->fingerprint
+            ],
+            json_decode($cache, true)
+        ));
 
         sleep((int) env('QUEUE_DELAY_PER_JOB', 5));
     }

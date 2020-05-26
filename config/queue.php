@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'redis'),
+    'default' => env('QUEUE_CONNECTION', 'mongodb'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,6 +37,7 @@ return [
         'database' => [
             'driver' => 'mongodb',
             'connection' => 'mongodb',
+            'dsn'=> "mongodb+srv://".env('DB_USERNAME', 'jikan').":".env('DB_PASSWORD', '')."@".env('MONGODB_DSN', ''),
             'table' => env('QUEUE_TABLE', 'jobs'),
             'queue' => 'low',
 //            'retry_after' => 60,

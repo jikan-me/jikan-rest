@@ -13,8 +13,18 @@ class CreateQueueIndex extends Migration
      */
     public function up()
     {
-        Schema::create(env('QUEUE_TABLE', 'jobs_failed'), function (Blueprint $table) {
-            $table->index(['request_hash' => 1], 'request_hash');
+        Schema::create(env('QUEUE_TABLE', 'jobs'), function (Blueprint $table) {
+            $table->index(['queue', 'reserved_at']);
+            $table->bigIncrements('id');
+            $table->string('queue');
+            $table->longText('payload');
+            $table->tinyInteger('attempts')->unsigned();
+            $table->unsignedInteger('reserved_at')->nullable();
+            $table->unsignedInteger('available_at');
+            $table->unsignedInteger('created_at');
+        });
+
+        Schema::create(env('QUEUE_TABLE', 'jobs'), function (Blueprint $table) {
             $table->index(['queue', 'reserved_at']);
             $table->bigIncrements('id');
             $table->string('queue');
@@ -33,6 +43,6 @@ class CreateQueueIndex extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(env('QUEUE_TABLE', 'jobs_failed'));
+        Schema::dropIfExists(env('QUEUE_TABLE', 'jobs'));
     }
 }

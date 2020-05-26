@@ -25,7 +25,7 @@ class SourceHealthListener
     public function __construct()
     {
         $this->logger = new Logger('source-health-monitor');
-        $this->logger->pushHandler(new StreamHandler(storage_path().'/logs/source-health-monitor.log'), Logger::DEBUG);
+        $this->logger->pushHandler(new StreamHandler(storage_path().'/logs/source-health-monitor.log'), env('APP_DEBUG') ? Logger::DEBUG : Logger::WARNING);
 
         if (SourceHealthServiceProvider::isFailoverEnabled()) {
             $lastFailoverLockTimestamp = $this->getLastFailoverLockTimestamp();

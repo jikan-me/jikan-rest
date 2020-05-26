@@ -74,7 +74,6 @@ class UpdateCacheJob extends Job
         unset($cache['fingerprint'], $cache['request_cached'], $cache['request_cache_expiry']);
         $cache = json_encode($cache);
 
-
         Cache::forever($this->fingerprint, $cache);
         Cache::forever($this->cacheExpiryFingerprint, time() + $this->requestCacheTtl);
         app('redis')->del($queueFingerprint);

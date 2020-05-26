@@ -14,7 +14,6 @@ class CreateQueueFailedIndex extends Migration
     public function up()
     {
         Schema::create(env('QUEUE_FAILED_TABLE', 'jobs_failed'), function (Blueprint $table) {
-            $table->index(['request_hash' => 1], 'request_hash');
             $table->increments('id');
             $table->text('connection');
             $table->text('queue');

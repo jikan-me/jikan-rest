@@ -53,7 +53,6 @@ class DatabaseResolver
 
     public function handle(Request $request, Closure $next)
     {
-
         if ($request->header('auth') === env('APP_KEY')) {
             return $next($request);
         }
@@ -84,13 +83,19 @@ class DatabaseResolver
         $this->requestCached = DB::table($this->table)->where('request_hash', $this->fingerprint)->exists();
 
         // Is the request queueable?
-        if (\in_array($this->route, self::NON_QUEUEABLE) || env('CACHE_METHOD', 'legacy') === 'legacy') {
+        if (\in_array($this->route, self::NON_QUEUEABLE) || env('DB_METHOD', 'legacy') === 'legacy') {
             $this->queueable = false;
         }
 
         // If cache does not exist
         if (!$this->requestCached) {
-            return $this->fetchFresh($request, $next);
+            $response = $next($request);
+
+            if (HttpHelper::hasError($response)) {
+                return $response;
+            }
+
+            $this->insertCache($response);
         }
 
         // Fetch Cache & Generate Meta
@@ -103,12 +108,17 @@ class DatabaseResolver
         // If cache is expired, handle it depending on whether it's queueable
         $expiresAt = $cacheMutable['expiresAt']['$date']['$numberLong']/1000;
 
-        if ($this->requestCached && $expiresAt > time() && !$this->queueable) {
-            return $this->fetchFresh($request, $next);
+        if ($this->requestCached && $expiresAt < time() && !$this->queueable) {
+            $response = $next($request);
+
+            if (HttpHelper::hasError($response)) {
+                return $response;
+            }
+
+            $this->insertCache($response);
         }
 
-        if ( $this->queueable && $expiresAt > time()) {
-            $queueFingerprint = "queue_update:{$this->fingerprint}";
+        if ( $this->queueable && $expiresAt < time()) {
             $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);
 
             // Don't duplicate the job in the queue for same request
@@ -116,15 +126,14 @@ class DatabaseResolver
 
             if (!$job->exists()) {
                 dispatch(
-                    (new UpdateDatabaseJob($request))
+                    (new UpdateDatabaseJob($request, $this->table))
                         ->onQueue($queueHighPriority ? 'high' : 'low')
                 );
             }
         }
 
-
         $response = array_merge($meta, $cacheMutable);
-        unset($response['createdAt'], $response['expireAfterSeconds'], $response['_id']);
+        unset($response['createdAt'], $response['expireAfterSeconds'], $response['_id'], $response['expiresAt']);
 
         // Build and return response
         return response()
@@ -185,14 +194,8 @@ class DatabaseResolver
         return $data;
     }
 
-    public function fetchFresh($request, $next)
+    public function insertCache($response)
     {
-        $response = $next($request);
-
-        if (HttpHelper::hasError($response)) {
-            return $response;
-        }
-
         DB::table($this->table)->insert(array_merge(
             [
                 'expiresAt' => new UTCDateTime((time()+$this->requestCacheTtl)*1000),

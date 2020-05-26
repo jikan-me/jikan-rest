@@ -2210,16 +2210,16 @@
         },
         {
             "name": "jikan-me/jikan",
-            "version": "v3.0.0-alpha.4",
+            "version": "v3.0.0-alpha.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "c5f4052c40454bf3a7c5a092fed6ed24650426cb"
+                "reference": "e1d11d663669a6e6e5d7ac536138834846764596"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/c5f4052c40454bf3a7c5a092fed6ed24650426cb",
-                "reference": "c5f4052c40454bf3a7c5a092fed6ed24650426cb",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/e1d11d663669a6e6e5d7ac536138834846764596",
+                "reference": "e1d11d663669a6e6e5d7ac536138834846764596",
                 "shasum": ""
             },
             "require": {
@@ -2256,7 +2256,7 @@
                 }
             ],
             "description": "Jikan is an unofficial MyAnimeList API",
-            "time": "2020-05-20T07:44:20+00:00"
+            "time": "2020-05-26T18:52:10+00:00"
         },
         {
             "name": "jms/metadata",
