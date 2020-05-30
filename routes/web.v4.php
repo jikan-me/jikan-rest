@@ -63,7 +63,7 @@ $router->group(
             'uses' => 'AnimeController@news'
         ]);
 
-        $router->get('/topics', [
+        $router->get('/forum', [
             'uses' => 'AnimeController@forum'
         ]);
 
@@ -114,7 +114,7 @@ $router->group(
             'uses' => 'MangaController@news'
         ]);
 
-        $router->get('/topics', [
+        $router->get('/forum', [
             'uses' => 'MangaController@forum'
         ]);
 

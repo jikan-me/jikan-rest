@@ -20,6 +20,7 @@ use Jenssegers\Mongodb\MongodbServiceProvider;
 use MongoDB\BSON\UTCDateTime;
 use MongoDB\Client;
 use MongoDB\Collection;
+use r\Queries\Control\Http;
 
 class DatabaseResolver
 {
@@ -117,6 +118,8 @@ class DatabaseResolver
 
             $this->insertCache($response);
         }
+
+
 
         if ( $this->queueable && $expiresAt < time()) {
             $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);

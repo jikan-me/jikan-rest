@@ -117,7 +117,7 @@ if (env('SOURCE_BAD_HEALTH_FAILOVER') && env('DB_CACHING')) {
 /**
  * Load Blacklist into Redis
  */
-//\App\Http\Middleware\Blacklist::loadList(); causing issues on high load todo: add it as a one time init
+//\App\HttpV3\Middleware\Blacklist::loadList(); causing issues on high load todo: add it as a one time init
 
 /*
 |--------------------------------------------------------------------------
