@@ -40,6 +40,10 @@ class DatabaseResolver
 
     private $table;
 
+    public const SKIP = [
+        'SearchController@anime'
+    ];
+
     private const NON_QUEUEABLE = [
         'UserController@profile',
         'UserController@history',
@@ -78,6 +82,10 @@ class DatabaseResolver
 
         $this->route = explode('\\', $request->route()[1]['uses']);
         $this->route = end($this->route);
+
+        if (\in_array($this->route, self::SKIP)) {
+            return $next($request);
+        }
 
         $db = new DatabaseHandler();
         $this->table = $db::getMappedTableName($this->route);
