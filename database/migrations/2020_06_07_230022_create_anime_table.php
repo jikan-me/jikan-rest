@@ -11,18 +11,36 @@ class CreateAnimeTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('anime', function (Blueprint $table) {
             $table->unique(['request_hash' => 1], 'request_hash');
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->string('url');
+            $table->string('image_url');
+            $table->string('trailer_url');
             $table->index('title');
             $table->index('title_english');
             $table->index('title_japanese');
-            $table->index('type');
+            $table->enum('type', ['Tv', 'Movie', 'OVA', 'Special', 'ONA', 'Music']);
             $table->index('source');
-            $table->index(['score' => 1], 'score');
-            $table->index(['rank' => 1], 'rank');
+            $table->integer('episodes')->index('episodes');
+            $table->string('status')->index();
+            $table->boolean('airing');
+            $table->string('duration');
+            $table->string('rating')->index('rating');
+            $table->float('score')->index('score');
+            $table->integer('rank')->index('rank')->nullable();
+            $table->integer('popularity')->index('popularity');
+            $table->integer('members')->index('members');
+            $table->integer('favorites')->index('favorites');
+            $table->string('synopsis')->nullable();
+            $table->string('background')->nullable();
+            $table->string('background')->nullable();
+            $table->index('genres');
+            $table->index(['aired.from' => 1], 'start_date');
+            $table->index(['aired.to' => 1], 'end_date');
         });
     }
 

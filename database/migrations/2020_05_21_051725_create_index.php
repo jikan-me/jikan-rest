@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateIndex extends Migration
 {
+
+    const IGNORE = [
+        'anime'
+    ];
+
     /**
      * Run the migrations.
      *
@@ -17,7 +22,7 @@ class CreateIndex extends Migration
         $mapped = [];
 
         foreach ($mappings as $table) {
-            if (in_array($table, $mapped)) {
+            if (in_array($table, $mapped) || in_array($table, self::IGNORE)) {
                 continue;
             }
 
