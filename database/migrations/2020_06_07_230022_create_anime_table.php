@@ -23,7 +23,7 @@ class CreateAnimeTable extends Migration
             $table->index('title');
             $table->index('title_english');
             $table->index('title_japanese');
-            $table->enum('type', ['Tv', 'Movie', 'OVA', 'Special', 'ONA', 'Music']);
+            $table->enum('type', ['TV', 'Movie', 'OVA', 'Special', 'ONA', 'Music']);
             $table->index('source');
             $table->integer('episodes')->index('episodes');
             $table->string('status')->index();
@@ -36,7 +36,6 @@ class CreateAnimeTable extends Migration
             $table->integer('members')->index('members');
             $table->integer('favorites')->index('favorites');
             $table->string('synopsis')->nullable();
-            $table->string('background')->nullable();
             $table->string('background')->nullable();
             $table->index('genres');
             $table->index(['aired.from' => 1], 'start_date');
