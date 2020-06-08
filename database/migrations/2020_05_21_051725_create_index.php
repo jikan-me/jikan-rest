@@ -8,7 +8,7 @@ class CreateIndex extends Migration
 {
 
     const IGNORE = [
-        'anime', 'manga'
+        'anime', 'manga', 'people', 'characters'
     ];
 
     /**
