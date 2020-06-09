@@ -278,7 +278,7 @@ class SearchController extends Controller
                 $item['rated'] = $item['rating'];
             }
 
-            unset($item['_id'], $item['oid'], $item['expiresAt'], $item['aired'], $item['published']);
+            unset($item['_id'], $item['oid'], $item['expiresAt'], $item['aired'], $item['published'], $item['rating']);
         }
         $items = ['results' => $items];
 
