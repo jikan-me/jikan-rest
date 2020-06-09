@@ -49,6 +49,7 @@ class DatabaseResolver
         'GenreController@manga',
         'ProducerController@main',
         'MagazineController@main',
+        'ScheduleController@main'
     ];
 
     private const NON_QUEUEABLE = [
