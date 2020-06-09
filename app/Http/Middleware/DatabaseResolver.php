@@ -41,7 +41,10 @@ class DatabaseResolver
     private $table;
 
     public const SKIP = [
-        'SearchController@anime'
+        'SearchController@anime',
+        'SearchController@manga',
+        'TopController@anime',
+        'TopController@manga'
     ];
 
     private const NON_QUEUEABLE = [

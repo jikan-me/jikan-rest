@@ -39,21 +39,6 @@ class SearchController extends Controller
         $orderBy = $this->getOrderBy($request->get('order_by'));
         $sort = $this->getSort($request->get('sort'));
 
-//        $results = DB::table('anime')
-//            ->where('title', 'like', "%$query%")
-//            ->orWhere('title_english', 'like', "%$query%")
-//            ->orWhere('title_japanese', 'like', "%$query%")
-////            ->where('score', '>=', $score)
-//            ->where('type', $type)
-//            ->limit($limit)
-//            ->paginate(
-//                self::MAX_RESULTS_PER_PAGE,
-//                ['mal_id', 'url', 'image_url', 'title', 'airing', 'synopsis', 'type', 'episodes', 'score', 'start_date', 'end_date', 'members', 'rated'],
-//                null,
-//                $page
-//            );
-
-
         $results = DB::table('anime')
             ->select('mal_id', 'url', 'image_url', 'title', 'airing', 'synopsis', 'type', 'episodes', 'score', 'aired.from', 'aired.to', 'members', 'rating');
 
@@ -133,8 +118,85 @@ class SearchController extends Controller
 //        return response($this->filter($search));
     }
 
-    public function manga(int $page = 1)
+    public function manga(Request $request, int $page = 1)
     {
+        $this->request = $request;
+
+        $query = $request->get('q');
+        $page = $request->get('page');
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+        $score = $request->get('score') ?? 0;
+        $type = $this->getAnimeType($request->get('type'));
+        $status = $this->getStatusType($request->get('status'));
+        $genres = $request->get('genre');
+        $orderBy = $this->getOrderBy($request->get('order_by'));
+        $sort = $this->getSort($request->get('sort'));
+
+        $results = DB::table('manga')
+            ->select('mal_id', 'url', 'image_url', 'title', 'publishing', 'synopsis', 'type', 'chapters', 'volumes', 'score', 'published.from', 'published.to', 'members');
+
+        if (!empty($query)) {
+            $results
+                ->where('title', 'like', "%$query%")
+                ->orWhere('title_english', 'like', "%$query%")
+                ->orWhere('title_japanese', 'like', "%$query%");
+        } else {
+            $results
+                ->orderBy('mal_id');
+        }
+
+        if (!empty($type)) {
+            $results = $results
+                ->where('type', $type);
+        }
+
+        if (!empty($score)) {
+            $score = (float) $score;
+            $results = $results
+                ->where('score', '>=', $score);
+        }
+
+        if (!is_null($status)) {
+            $results = $results
+                ->where('status', $status);
+        }
+
+
+        if (!is_null($genres)) {
+            $genres = explode(',', $genres);
+
+            // @todo WIP. Need genre indexing
+        }
+
+        if (!is_null($orderBy)) {
+            $results = $results
+                ->orderBy($orderBy, $sort ?? 'asc');
+        }
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = $results
+            ->paginate(
+                $limit,
+                null,
+                null,
+                $page
+            );
+
+        $items = $this->applyBackwardsCompatibility($results);
+
+        return response()->json($items);
+
         $search = $this->jikan->getMangaSearch(
             SearchQueryBuilder::create(
                 (new MangaSearchRequest())->setPage($page)
@@ -197,11 +259,26 @@ class SearchController extends Controller
 
         $items = $data->items() ?? [];
         foreach ($items as &$item) {
-            $item['start_date'] = $item['aired']['from'];
-            $item['end_date'] = $item['aired']['to'];
-            $item['rated'] = $item['rating'];
+            if (isset($item['aired']['from'])) {
+                $item['start_date'] = $item['aired']['from'];
+            }
 
-            unset($item['_id'], $item['oid'], $item['expiresAt'], $item['aired']);
+            if (isset($item['aired']['to'])) {
+                $item['end_date'] = $item['aired']['to'];
+            }
+            if (isset($item['published']['from'])) {
+                $item['start_date'] = $item['published']['from'];
+            }
+
+            if (isset($item['published']['to'])) {
+                $item['end_date'] = $item['published']['to'];
+            }
+
+            if (isset($item['rating'])) {
+                $item['rated'] = $item['rating'];
+            }
+
+            unset($item['_id'], $item['oid'], $item['expiresAt'], $item['aired'], $item['published']);
         }
         $items = ['results' => $items];
 
@@ -224,7 +301,26 @@ class SearchController extends Controller
 
         $type = strtolower($type);
 
-        return $this->animeTypes[$type];
+        return $this->animeTypes[$type] ?? null;
+    }
+
+    private $mangaTypes = [
+        'manga' => 'Manga',
+        'novel' => 'Novel',
+        'oneshot' => 'One-shot',
+        'doujin' => 'Doujinshi',
+        'manhwa' => 'Manhwa',
+        'manhua' => 'Manhua'
+    ];
+    private function getMangaTypes($type)
+    {
+        if (is_null($type)) {
+            return null;
+        }
+
+        $type = strtolower($type);
+
+        return $this->mangaTypes[$type] ?? null;
     }
 
     private $statusTypes = [
@@ -243,7 +339,7 @@ class SearchController extends Controller
 
         $type = strtolower($type);
 
-        return $this->statusTypes[$type];
+        return $this->statusTypes[$type] ?? null;
     }
 
     private $ratingType = [
@@ -262,7 +358,7 @@ class SearchController extends Controller
 
         $type = strtolower($type);
 
-        return $this->ratingType[$type];
+        return $this->ratingType[$type] ?? null;
     }
 
     private $orderByType = [
@@ -274,6 +370,8 @@ class SearchController extends Controller
         'members' => 'members',
         'id' => 'mal_id',
         'episodes' => 'episodes',
+        'chapters' => 'chapters',
+        'volumes' => 'volumes',
         'rating' => 'rating'
     ];
     private function getOrderBy($orderBy) {
@@ -286,7 +384,7 @@ class SearchController extends Controller
         }
 
 
-        return $this->orderByType[$orderBy];
+        return $this->orderByType[$orderBy] ?? null;
     }
 
     private $sortType = [
@@ -302,6 +400,6 @@ class SearchController extends Controller
 
         $sort = strtolower($sort);
 
-        return $this->sortType[$sort];
+        return $this->sortType[$sort] ?? null;
     }
 }
