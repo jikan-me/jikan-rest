@@ -38,7 +38,6 @@ class TopController extends Controller
                 'error' => 'Bad Request'
             ])->setStatusCode(400);
         }
-
         $results = DB::table('anime')
             ->whereNotNull('rank')
             ->where('rank', '>', 0)
@@ -48,7 +47,7 @@ class TopController extends Controller
 
         if (!is_null($animeType)) {
             $results = $results
-                ->where('type', $type);
+                ->where('type', $animeType);
         }
 
         if (!is_null($filterType) && $filterType === 'airing') {
@@ -63,14 +62,13 @@ class TopController extends Controller
 
         if (!is_null($filterType) && $filterType === 'bypopularity') {
             $results = $results
-                ->orderBy('popularity', 'desc');
+                ->orderBy('members', 'desc');
         }
 
         if (!is_null($filterType) && $filterType === 'favorite') {
             $results = $results
                 ->orderBy('favorites', 'desc');
         }
-
         $results = $results
             ->paginate(
                 self::MAX_RESULTS_PER_PAGE,
@@ -254,7 +252,7 @@ class TopController extends Controller
     }
 
     private $filterTypes = [
-        'airing', 'upcoming', 'popularity', 'favorites'
+        'airing', 'upcoming', 'bypopularity', 'favorites'
     ];
     private function getFilterType($type)
     {
