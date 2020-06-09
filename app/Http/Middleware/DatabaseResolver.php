@@ -46,7 +46,9 @@ class DatabaseResolver
         'TopController@anime',
         'TopController@manga',
         'GenreController@anime',
-        'GenreController@manga'
+        'GenreController@manga',
+        'ProducerController@main',
+        'MagazineController@main',
     ];
 
     private const NON_QUEUEABLE = [
