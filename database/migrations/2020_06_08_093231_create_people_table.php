@@ -22,9 +22,13 @@ class CreatePeopleTable extends Migration
             $table->index('name');
             $table->string('given_name')->index()->nullable();
             $table->string('family_name')->index()->nullable();
+            $table->index('alternate_names');
             $table->date('birthday');
             $table->integer('member_favorites')->index('member_favorites');
             $table->string('about')->nullable();
+            $table->index('voice_acting_roles');
+            $table->index('anime_staff_positions');
+            $table->index('published_manga');
         });
     }
 

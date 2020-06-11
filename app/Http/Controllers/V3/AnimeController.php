@@ -22,7 +22,6 @@ class AnimeController extends Controller
 {
     public function main(int $id)
     {
-
         $anime = $this->jikan->getAnime(new AnimeRequest($id));
         return response($this->serializer->serialize($anime, 'json'));
     }

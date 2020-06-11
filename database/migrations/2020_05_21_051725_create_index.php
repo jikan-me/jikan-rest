@@ -22,7 +22,7 @@ class CreateIndex extends Migration
         $mapped = [];
 
         foreach ($mappings as $table) {
-            if (in_array($table, $mapped) || in_array($table, self::IGNORE)) {
+            if (in_array($table, $mapped) || in_array($table, self::IGNORE) || Schema::hasTable($table)) {
                 continue;
             }
 

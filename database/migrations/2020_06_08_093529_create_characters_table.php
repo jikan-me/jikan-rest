@@ -20,10 +20,12 @@ class CreateCharactersTable extends Migration
             $table->string('image_url');
             $table->index('name');
             $table->index('name_kanji');
-            $table->integer('popularity')->index('popularity');
-            $table->integer('members')->index('members');
+            $table->index('nicknames');
             $table->integer('member_favorites')->index('member_favorites');
             $table->string('about')->nullable();
+            $table->index('animeography');
+            $table->index('mangaography');
+            $table->index('voice_actors');
         });
     }
 
