@@ -19,7 +19,7 @@ class HttpHelper
     public static function requestType(Request $request): string
     {
         $requestType = $request->segments()[1];
-        if (!\in_array($request->segments()[0], ['v1', 'v2', 'v3'])) {
+        if (!\in_array($request->segments()[0], ['v1', 'v2', 'v3', 'v4'])) {
             $requestType = $request->segments()[0];
         }
 

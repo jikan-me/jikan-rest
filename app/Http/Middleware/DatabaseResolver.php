@@ -82,6 +82,10 @@ class DatabaseResolver
             return $next($request);
         }
 
+        if (HttpHelper::requestAPIVersion($request) >= 4) {
+            return $next($request);
+        }
+
         $this->requestUriHash = HttpHelper::getRequestUriHash($request);
         $this->requestType = HttpHelper::requestType($request);
         $this->requestCacheTtl = HttpHelper::requestCacheExpiry($this->requestType);
