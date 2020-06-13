@@ -22,7 +22,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 
     const MAP_STATUS = [
         'airing' => 'Currently Airing',
-        'completed' => 'Finished Airing',
+        'complete' => 'Finished Airing',
         'upcoming' => 'Not yet aired',
     ];
 
