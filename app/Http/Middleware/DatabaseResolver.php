@@ -40,6 +40,20 @@ class DatabaseResolver
 
     private $table;
 
+    public const SKIP = [
+        'SearchController@anime',
+        'SearchController@manga',
+        'TopController@anime',
+        'TopController@manga',
+        'GenreController@anime',
+        'GenreController@manga',
+        'ProducerController@main',
+        'MagazineController@main',
+        'ScheduleController@main',
+        'SeasonController@main',
+        'SeasonController@later'
+    ];
+
     private const NON_QUEUEABLE = [
         'UserController@profile',
         'UserController@history',
@@ -70,6 +84,10 @@ class DatabaseResolver
             return $next($request);
         }
 
+        if (HttpHelper::requestAPIVersion($request) >= 4) {
+            return $next($request);
+        }
+
         $this->requestUriHash = HttpHelper::getRequestUriHash($request);
         $this->requestType = HttpHelper::requestType($request);
         $this->requestCacheTtl = HttpHelper::requestCacheExpiry($this->requestType);
@@ -78,6 +96,10 @@ class DatabaseResolver
 
         $this->route = explode('\\', $request->route()[1]['uses']);
         $this->route = end($this->route);
+
+        if (\in_array($this->route, self::SKIP)) {
+            return $next($request);
+        }
 
         $db = new DatabaseHandler();
         $this->table = $db::getMappedTableName($this->route);

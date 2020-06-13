@@ -16,8 +16,8 @@ return [
             ]
             */
             'driver' => 'mongodb',
-            'dsn'=> "mongodb+srv://".env('DB_USERNAME', 'jikan').":".env('DB_PASSWORD', '')."@".env('MONGODB_DSN', ''),
-            'database' => env('DB_DATABASE', ''),
+            'dsn'=> "mongodb://".env('DB_USERNAME', 'jikan').":".env('DB_PASSWORD', '')."@".env('MONGODB_DSN', ''),
+            'database' => env('DB_DATABASE', 'jikan'),
         ]
     ],
 

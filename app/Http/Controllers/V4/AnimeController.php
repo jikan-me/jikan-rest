@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\V4;
 
 use App\Http\HttpHelper;
+use App\Http\HttpResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\Anime\AnimeEpisodeRequest;
 use Jikan\Request\Anime\AnimeEpisodesRequest;
@@ -16,10 +19,11 @@ use Jikan\Request\Anime\AnimeRequest;
 use Jikan\Request\Anime\AnimeReviewsRequest;
 use Jikan\Request\Anime\AnimeStatsRequest;
 use Jikan\Request\Anime\AnimeVideosRequest;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnimeController extends Controller
 {
-    public function main(int $id)
+    public function main(Request $request, int $id)
     {
         $anime = $this->jikan->getAnime(new AnimeRequest($id));
 

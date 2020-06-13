@@ -38,6 +38,10 @@ $router->group(
     }
 );
 
+$router->get('/anime', [
+    'uses' => 'SearchController@anime'
+]);
+
 $router->group(
     [
         'prefix' => 'anime/{id:[0-9]+}'
@@ -47,8 +51,12 @@ $router->group(
             'uses' => 'AnimeController@main'
         ]);
 
-        $router->get('/characters_staff', [
-            'uses' => 'AnimeController@characters_staff'
+        $router->get('/characters', [
+            'uses' => 'AnimeController@characters'
+        ]);
+
+        $router->get('/staff', [
+            'uses' => 'AnimeController@staff'
         ]);
 
         $router->get('/episodes', [
@@ -67,8 +75,8 @@ $router->group(
             'uses' => 'AnimeController@forum'
         ]);
 
-        $router->get('/videos', [
-            'uses' => 'AnimeController@videos'
+        $router->get('/media', [
+            'uses' => 'AnimeController@media'
         ]);
 
         $router->get('/statistics', [
@@ -201,8 +209,6 @@ $router->group(
         $router->get('/{year:[0-9]{4}}/{season:[A-Za-z]+}', [
             'uses' => 'SeasonController@main'
         ]);
-
-
     }
 );
 
