@@ -79,10 +79,6 @@ $router->group(
             'uses' => 'AnimeController@media'
         ]);
 
-        $router->get('/pictures', [
-            'uses' => 'AnimeController@pictures'
-        ]);
-
         $router->get('/statistics', [
             'uses' => 'AnimeController@stats'
         ]);
@@ -104,6 +100,10 @@ $router->group(
         ]);
     }
 );
+
+$router->get('/manga', [
+    'uses' => 'SearchController@manga'
+]);
 
 $router->group(
     [
@@ -127,7 +127,7 @@ $router->group(
         ]);
 
         $router->get('/pictures', [
-            'uses' => 'MangaController@pictures'
+            'uses' => 'MangaController@media'
         ]);
 
         $router->get('/statistics', [
@@ -152,6 +152,9 @@ $router->group(
     }
 );
 
+$router->get('/characters', [
+    'uses' => 'SearchController@characters'
+]);
 $router->group(
     [
         'prefix' => 'characters/{id:[0-9]+}'
@@ -162,11 +165,14 @@ $router->group(
         ]);
 
         $router->get('/pictures', [
-            'uses' => 'CharacterController@pictures'
+            'uses' => 'CharacterController@media'
         ]);
     }
 );
 
+$router->get('/people', [
+    'uses' => 'SearchController@people'
+]);
 $router->group(
     [
         'prefix' => 'people/{id:[0-9]+}'
@@ -177,7 +183,7 @@ $router->group(
         ]);
 
         $router->get('/pictures', [
-            'uses' => 'PersonController@pictures'
+            'uses' => 'PersonController@media'
         ]);
     }
 );
@@ -196,7 +202,7 @@ $router->group(
             'uses' => 'SeasonController@main'
         ]);
 
-        $router->get('/later', [
+        $router->get('/upcoming', [
             'uses' => 'SeasonController@later'
         ]);
 

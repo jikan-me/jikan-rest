@@ -40,6 +40,7 @@ class CreateAnimeTable extends Migration
             $table->index('genres');
             $table->index(['aired.from' => 1], 'start_date');
             $table->index(['aired.to' => 1], 'end_date');
+            $table->timestamps();
         });
     }
 

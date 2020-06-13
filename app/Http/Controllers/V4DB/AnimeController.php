@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Anime;
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use Illuminate\Http\Request;
@@ -25,6 +26,17 @@ class AnimeController extends Controller
 {
     public function main(Request $request, int $id)
     {
+
+        return new \App\Http\Resources\V4\AnimeResource(
+            Anime::query()
+                ->where('mal_id', $id)
+                ->get([
+                    'mal_id','url','image_url','trailer_url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
+                ])
+                ->first()
+        );
+
+        return response()->json($result);
 
         $result = DB::table('anime')
             ->where('mal_id', $id)
