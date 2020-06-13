@@ -23,17 +23,6 @@ class CreateQueueIndex extends Migration
             $table->unsignedInteger('available_at');
             $table->unsignedInteger('created_at');
         });
-
-        Schema::create(env('QUEUE_TABLE', 'jobs'), function (Blueprint $table) {
-            $table->index(['queue', 'reserved_at']);
-            $table->bigIncrements('id');
-            $table->string('queue');
-            $table->longText('payload');
-            $table->tinyInteger('attempts')->unsigned();
-            $table->unsignedInteger('reserved_at')->nullable();
-            $table->unsignedInteger('available_at');
-            $table->unsignedInteger('created_at');
-        });
     }
 
     /**

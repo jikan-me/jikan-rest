@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\V3;
 
 use App\Http\HttpHelper;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\Anime\AnimeEpisodesRequest;
 use Jikan\Request\Anime\AnimeForumRequest;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V4;
+namespace App\Http\Controllers\V4DB;
 
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
@@ -25,15 +25,24 @@ class AnimeController extends Controller
 {
     public function main(Request $request, int $id)
     {
-        $anime = $this->jikan->getAnime(new AnimeRequest($id));
 
-        $animeSerialized = $this->serializer->serialize($anime, 'json');
-        $animeSerialized = HttpHelper::serializeEmptyObjectsControllerLevel(
-            json_decode($animeSerialized, true)
-        );
-        $animeSerialized = json_encode($animeSerialized);
+        $result = DB::table('anime')
+            ->where('mal_id', $id)
+            ->get([
+                'mal_id','url','image_url','trailer_url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
+            ]);
 
-        return response($animeSerialized);
+        $response = $result->toArray();
+
+        if (!empty($response)) {
+            $response = $response[0];
+
+            return response(
+                $this->prepareResponse($request, $response)
+            );
+        }
+
+        return HttpResponse::notFound($request);
     }
 
     public function characters_staff(int $id)

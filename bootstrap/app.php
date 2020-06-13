@@ -70,15 +70,15 @@ $app->singleton(
 */
 
 $app->routeMiddleware([
-    'blacklist' => App\Http\Middleware\Blacklist::class,
-    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
-    'meta' => App\Http\Middleware\Meta::class,
-    'cache-resolver' => App\Http\Middleware\CacheResolver::class,
-    'throttle' => App\Http\Middleware\Throttle::class,
-    'etag' => \App\Http\Middleware\EtagMiddleware::class,
-    'microcaching' => \App\Http\Middleware\MicroCaching::class,
+//    'blacklist' => App\Http\Middleware\Blacklist::class,
+//    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
+//    'meta' => App\Http\Middleware\Meta::class,
+//    'cache-resolver' => App\Http\Middleware\CacheResolver::class,
+//    'throttle' => App\Http\Middleware\Throttle::class,
+//    'etag' => \App\Http\Middleware\EtagMiddleware::class,
+//    'microcaching' => \App\Http\Middleware\MicroCaching::class,
     'database-resolver' => \App\Http\Middleware\DatabaseResolver::class,
-    'source-health-monitor' => \App\Http\Middleware\SourceHealthMonitor::class
+//    'source-health-monitor' => \App\Http\Middleware\SourceHealthMonitor::class
 ]);
 
 /*
@@ -139,14 +139,15 @@ $commonMiddleware = [
 //    'microcaching',
 //    'cache-resolver',
 //    'throttle'
-    'source-health-monitor'
+//    'source-health-monitor'
 ];
 
 $app->router->group(
     [
         'prefix' => 'v4',
-        'namespace' => 'App\Http\Controllers\V4',
+        'namespace' => env('SOURCE') === 'local' ? 'App\Http\Controllers\V4DB' : 'App\Http\Controllers\V4',
         'middleware' => $commonMiddleware
+
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v4.php';
@@ -175,7 +176,7 @@ $app->router->group(
             return response()->json([
                 'author_url' => 'http://irfan.dahir.co',
                 'discord_url' => 'https://discord.gg/4tvCr36',
-                'version' => '4.0',
+                'version' => '3.4',
                 'parser_version' => JIKAN_PARSER_VERSION,
                 'website_url' => 'https://jikan.moe',
                 'documentation_url' => 'https://jikan.docs.apiary.io',
