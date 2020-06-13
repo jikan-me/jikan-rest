@@ -145,7 +145,7 @@ class SeasonController extends Controller
             // @todo : no way of knowing this at the moment; defaulted to false
             $item['continuing'] = false;
 
-            unset($item['_id'], $item['oid'], $item['expiresAt'], $item['aired']);
+            unset($item['_id'], $item['oid'], $item['expiresAt'], $item['aired'], $item['rating']);
         }
 
         $items = [$type => $items];
