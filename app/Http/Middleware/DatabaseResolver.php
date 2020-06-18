@@ -51,7 +51,7 @@ class DatabaseResolver
         'MagazineController@main',
         'ScheduleController@main',
         'SeasonController@main',
-        'SeasonController@later'
+            'SeasonController@later'
     ];
 
     private const NON_QUEUEABLE = [

@@ -2,7 +2,7 @@
 
 namespace App\Http\QueryBuilder;
 
-use Illuminate\Database\Query\Builder;
+use Jenssegers\Mongodb\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 interface SearchQueryBuilderInterface

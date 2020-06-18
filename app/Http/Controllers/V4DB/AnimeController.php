@@ -26,35 +26,17 @@ class AnimeController extends Controller
 {
     public function main(Request $request, int $id)
     {
-
-        return new \App\Http\Resources\V4\AnimeResource(
-            Anime::query()
-                ->where('mal_id', $id)
-                ->get([
-                    'mal_id','url','image_url','trailer_url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
-                ])
-                ->first()
-        );
-
-        return response()->json($result);
-
-        $result = DB::table('anime')
+        $results = Anime::query()
             ->where('mal_id', $id)
-            ->get([
-                'mal_id','url','image_url','trailer_url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
-            ]);
+            ->get();
 
-        $response = $result->toArray();
-
-        if (!empty($response)) {
-            $response = $response[0];
-
-            return response(
-                $this->prepareResponse($request, $response)
-            );
+        if (empty($results->all())) {
+            return HttpResponse::notFound($request);
         }
 
-        return HttpResponse::notFound($request);
+        return new \App\Http\Resources\V4\AnimeResource(
+            $results->first()
+        );
     }
 
     public function characters_staff(int $id)

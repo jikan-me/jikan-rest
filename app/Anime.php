@@ -17,7 +17,7 @@ class Anime extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id','url','image_url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
+        'mal_id','url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
     ];
 
     /**
@@ -25,7 +25,7 @@ class Anime extends Model
      *
      * @var array
      */
-    protected $appends = ['trailer', 'season', 'year', 'themes'];
+    protected $appends = ['trailer', 'season', 'year', 'themes', 'images'];
 
     protected $mainDataRequest = true;
     protected $databaseStoreAvailability = true;
@@ -53,7 +53,7 @@ class Anime extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'expiresAt', 'request_hash', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes'
+        '_id', 'expiresAt', 'request_hash', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images'
     ];
 
     public function setRelatedAttribute($value)
@@ -89,8 +89,16 @@ class Anime extends Model
 
     public function getTrailerAttribute()
     {
-        $youtubeId = Media::youtubeIdFromUrl($this->attributes['trailer_url']);
-        $youtubeUrl = Media::generateYoutubeUrlFromId($youtubeId);
+        try {
+            $youtubeId = Media::youtubeIdFromUrl($this->attributes['trailer_url']);
+            $youtubeUrl = Media::generateYoutubeUrlFromId($youtubeId);
+        } catch (\Exception $e) {
+            return [
+                'youtube_id' => null,
+                'url' => null,
+                'embed_url' => null
+            ];
+        }
 
         return [
             'youtube_id' => $youtubeId,
@@ -172,6 +180,29 @@ class Anime extends Model
         return [
             'opening' => $this->attributes['opening_themes'],
             'ending' => $this->attributes['ending_themes'],
+        ];
+    }
+
+    public function setImageAttribute($value)
+    {
+        $this->attributes['image'] = $this->getImageAttribute();
+    }
+
+    public function getImageAttribute()
+    {
+        $imageUrl = $this->attributes['image_url'];
+
+        return [
+            'jpg' => [
+                'image_url' => $imageUrl,
+                'small_image_url' => str_replace('.jpg', 't.jpg', $imageUrl),
+                'large_image_url' => str_replace('.jpg', 'l.jpg', $imageUrl),
+            ],
+            'webp' => [
+                'image_url' => str_replace('.jpg', '.webp', $imageUrl),
+                'small_image_url' => str_replace('.jpg', 't.webp', $imageUrl),
+                'large_image_url' => str_replace('.jpg', 'l.webp', $imageUrl),
+            ]
         ];
     }
 }

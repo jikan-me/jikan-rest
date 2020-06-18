@@ -3,8 +3,9 @@
 namespace App\Http\QueryBuilder;
 
 use App\Http\HttpHelper;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Jenssegers\Mongodb\Eloquent\Builder;
+
 
 class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 {

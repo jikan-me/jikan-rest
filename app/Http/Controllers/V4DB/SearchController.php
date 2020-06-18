@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Anime;
 use App\Http\Middleware\Throttle;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
+use App\Http\Resources\V4\AnimeCollection;
 use App\Http\SearchQueryBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,17 +29,23 @@ class SearchController extends Controller
     public function anime(Request $request)
     {
         $this->request = $request;
+        $page = $this->request->get('page') ?? 1;
 
         $results = SearchQueryBuilderAnime::query(
             $request,
-            DB::table('anime')
-                ->select([
-                    'mal_id','url','image_url','trailer_url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
-                ])
+            Anime::query()
         );
 
-        return response(
-            SearchQueryBuilderAnime::paginate($request, $results)
+        $results = $results
+            ->paginate(
+                self::MAX_RESULTS_PER_PAGE,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new AnimeCollection(
+            $results
         );
     }
 
