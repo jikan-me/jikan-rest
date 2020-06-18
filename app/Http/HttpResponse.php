@@ -20,4 +20,17 @@ class HttpResponse
             404
         );
     }
+
+    public static function badRequest(Request $request) : Response
+    {
+        return response(
+            \json_encode([
+                'status' => 400,
+                'type' => 'BadRequestException',
+                'message' => 'Invalid or incomplete request. Make sure your request is correct. https://docs.api.jikan.moe/',
+                'error' => null
+            ]),
+            400
+        );
+    }
 }
