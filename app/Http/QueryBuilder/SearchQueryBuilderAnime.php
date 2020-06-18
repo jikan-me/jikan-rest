@@ -52,15 +52,22 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $genres = $request->get('genre');
         $orderBy = $request->get('order_by');
         $sort = self::mapSort($request->get('sort'));
+        $letter = $request->get('letter');
+        $producer = $request->get('producer');
 
 
-        if (!empty($query)) {
+        if (!empty($query) && is_null($letter)) {
 
             $results = $results
                 ->where('title', 'like', "%{$query}%")
                 ->where('title_english', 'like', "%{$query}%")
                 ->where('title_japanese', 'like', "%{$query}%")
                 ->where('title_synonyms', 'like', "%{$query}%");
+        }
+
+        if (!is_null($letter)) {
+            $results = $results
+                ->where('title', 'like', "{$letter}%");
         }
 
         if (empty($query)) {
@@ -93,6 +100,14 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         if (!is_null($sfw)) {
             $results = $results
                 ->where('rating', '!=', self::MAP_RATING['rx']);
+        }
+
+        if (!is_null($producer)) {
+
+            $producer = (int) $producer;
+
+            $results = $results
+                ->where('producers.mal_id', $producer);
         }
 
         if (!is_null($genres)) {

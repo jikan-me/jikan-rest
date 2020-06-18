@@ -30,6 +30,19 @@ class SearchController extends Controller
     {
         $this->request = $request;
         $page = $this->request->get('page') ?? 1;
+        $limit = $this->request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
 
         $results = SearchQueryBuilderAnime::query(
             $request,
@@ -38,7 +51,7 @@ class SearchController extends Controller
 
         $results = $results
             ->paginate(
-                self::MAX_RESULTS_PER_PAGE,
+                $limit,
                 ['*'],
                 null,
                 $page
