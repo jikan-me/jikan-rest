@@ -100,23 +100,4 @@ class SearchController extends Controller
 
         return response($this->filter($search));
     }
-
-
-    private function filter($object)
-    {
-        $limit = $_GET['limit'] ?? null;
-
-        $data = json_decode(
-            $this->serializer->serialize($object, 'json'),
-            true
-        );
-
-        if (!is_null($limit)) {
-            $data['results'] = array_slice($data['results'], 0, $limit);
-        }
-
-        return json_encode(
-            $data
-        );
-    }
 }
