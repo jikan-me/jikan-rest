@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Anime;
 use App\Http\HttpHelper;
+use App\Http\HttpResponse;
+use App\Manga;
+use Illuminate\Http\Request;
 use Jikan\Request\Manga\MangaCharactersRequest;
 use Jikan\Request\Manga\MangaForumRequest;
 use Jikan\Request\Manga\MangaMoreInfoRequest;
@@ -16,17 +20,24 @@ use Jikan\Request\Manga\MangaStatsRequest;
 
 class MangaController extends Controller
 {
-    public function main(int $id)
+
+    private $request;
+
+    public function main(Request $request, int $id)
     {
-        $manga = $this->jikan->getManga(new MangaRequest($id));
+        $results = Manga::query()
+            ->where('mal_id', $id)
+            ->get();
 
-        $mangaSerialized = $this->serializer->serialize($manga, 'json');
-        $mangaSerialized = HttpHelper::serializeEmptyObjectsControllerLevel(
-            json_decode($mangaSerialized, true)
+        if (empty($results->all())) {
+            return HttpResponse::notFound($request);
+        }
+
+        return new \App\Http\Resources\V4\MangaResource(
+            $results->first()
         );
-
-        return response($this->serializer->serialize($mangaSerialized, 'json'));
     }
+
 
     public function characters(int $id)
     {
