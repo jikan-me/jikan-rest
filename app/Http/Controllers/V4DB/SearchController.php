@@ -5,8 +5,11 @@ namespace App\Http\Controllers\V4DB;
 use App\Anime;
 use App\Http\Middleware\Throttle;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
+use App\Http\QueryBuilder\SearchQueryBuilderManga;
 use App\Http\Resources\V4\AnimeCollection;
+use App\Http\Resources\V4\MangaCollection;
 use App\Http\SearchQueryBuilder;
+use App\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Jikan;
@@ -62,14 +65,40 @@ class SearchController extends Controller
         );
     }
 
-    public function manga(int $page = 1)
+    public function manga(Request $request, int $page = 1)
     {
-        $search = $this->jikan->getMangaSearch(
-            SearchQueryBuilder::create(
-                (new MangaSearchRequest())->setPage($page)
-            )
+        $this->request = $request;
+        $page = $this->request->get('page') ?? 1;
+        $limit = $this->request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = SearchQueryBuilderManga::query(
+            $request,
+            Manga::query()
         );
-        return response($this->filter($search));
+
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new MangaCollection(
+            $results
+        );
     }
 
     public function people(int $page = 1)

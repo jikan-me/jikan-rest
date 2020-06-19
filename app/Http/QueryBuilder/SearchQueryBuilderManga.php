@@ -7,37 +7,30 @@ use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
 
-class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
+class SearchQueryBuilderManga implements SearchQueryBuilderInterface
 {
 
     const MAX_RESULTS_PER_PAGE = 50;
 
     const MAP_TYPES = [
-        'tv' => 'TV',
-        'movie' => 'Movie',
-        'ova' => 'OVA',
-        'special' => 'Special',
-        'ona' => 'ONA',
-        'music' => 'Music'
+        'manga' => 'Manga',
+        'novel' => 'Novel',
+        'oneshot' => 'One-shot',
+        'doujin' => 'Doujinshi',
+        'manhwa' => 'Manhwa',
+        'manhua' => 'Manhua'
     ];
 
     const MAP_STATUS = [
-        'airing' => 'Currently Airing',
-        'complete' => 'Finished Airing',
-        'upcoming' => 'Not yet aired',
-    ];
-
-    const MAP_RATING = [
-        'g' => 'G - All Ages',
-        'pg' => 'PG - Children',
-        'pg13' => 'PG-13 - Teens 13 or older',
-        'r17' => 'R - 17+ (violence & profanity)',
-        'r' => 'R+ - Mild Nudity',
-        'rx' => 'Rx - Hentai'
+        'airing' => 'Publishing',
+        'complete' => 'Finished',
+        'hiatus' => 'On Hiatus',
+        'discontinued' => 'Discontinued',
+        'upcoming' => 'Not yet published'
     ];
 
     const ORDER_BY = [
-        'mal_id', 'title', 'aired.from', 'aired.to', 'episodes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
+        'mal_id', 'title', 'published.from', 'published.to', 'chapters', 'volumes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
     ];
 
     public static function query(Request $request, Builder $results) : Builder
@@ -47,14 +40,12 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $type = self::mapType($request->get('type'));
         $score = $request->get('score') ?? 0;
         $status = self::mapStatus($request->get('status'));
-        $rating = self::mapRating($request->get('rating'));
         $sfw = $request->get('sfw');
         $genres = $request->get('genres');
         $orderBy = $request->get('order_by');
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
-        $producer = $request->get('producer');
-
+        $magazine = $request->get('magazine');
 
         if (!empty($query) && is_null($letter)) {
 
@@ -92,22 +83,17 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 ->where('status', $status);
         }
 
-        if (!is_null($rating)) {
-            $results = $results
-                ->where('rating', $rating);
-        }
-
         if (!is_null($sfw)) {
             $results = $results
-                ->where('rating', '!=', self::MAP_RATING['rx']);
+                ->where('type', '!=', 'Doujinshi');
         }
 
-        if (!is_null($producer)) {
+        if (!is_null($magazine)) {
 
-            $producer = (int) $producer;
+            $magazine = (int) $magazine;
 
             $results = $results
-                ->where('producers.mal_id', $producer);
+                ->where('producers.mal_id', $magazine);
         }
 
         if (!is_null($genres)) {
@@ -194,17 +180,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $status = strtolower($status);
 
         return self::MAP_STATUS[$status] ?? null;
-    }
-
-    public static function mapRating(?string $rating = null) : ?string
-    {
-        if (!is_null($rating)) {
-            return null;
-        }
-
-        $rating = strtolower($rating);
-
-        return self::MAP_RATING[$rating] ?? null;
     }
 
     public static function mapSort(?string $sort = null) : ?string
