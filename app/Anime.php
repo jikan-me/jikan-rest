@@ -2,11 +2,13 @@
 
 namespace App;
 
+use App\Http\HttpHelper;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jikan\Helper\Media;
 use Jikan\Helper\Parser;
 use Jikan\Jikan;
 use Jikan\Model\Common\YoutubeMeta;
+use Jikan\Request\Anime\AnimeRequest;
 
 class Anime extends Model
 {
@@ -53,7 +55,7 @@ class Anime extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'expiresAt', 'request_hash', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images'
+        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images'
     ];
 
     public function setRelatedAttribute($value)
@@ -61,6 +63,8 @@ class Anime extends Model
         $this->attributes['related'] = $this->getRelatedAttribute();
     }
 
+/*
+    // For V3 or below
     public function getRelatedAttribute()
     {
         // Fix JSON response for empty related object
@@ -85,7 +89,7 @@ class Anime extends Model
     public function setTrailerAttribute($value)
     {
         $this->attributes['trailer'] = $this->getTrailerAttribute();
-    }
+    }*/
 
     public function getTrailerAttribute()
     {
@@ -204,5 +208,18 @@ class Anime extends Model
                 'large_image_url' => str_replace('.jpg', 'l.webp', $imageUrl),
             ]
         ];
+    }
+
+    public static function scrape(int $id)
+    {
+        $data = app('JikanParser')->getAnime(new AnimeRequest($id));
+
+        return HttpHelper::serializeEmptyObjectsControllerLevel(
+            json_decode(
+                app('SerializerV4')
+                    ->serialize($data, 'json'),
+                true
+            )
+        );
     }
 }

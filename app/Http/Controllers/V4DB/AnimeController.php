@@ -3,8 +3,24 @@
 namespace App\Http\Controllers\V4DB;
 
 use App\Anime;
+use App\DatabaseHandler;
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
+use App\Http\Resources\V4\AnimeCharactersResource;
+use App\Http\Resources\V4\AnimeCollection;
+use App\Http\Resources\V4\AnimeEpisodeResource;
+use App\Http\Resources\V4\AnimeEpisodesResource;
+use App\Http\Resources\V4\AnimeForumResource;
+use App\Http\Resources\V4\AnimeMoreInfoResource;
+use App\Http\Resources\V4\AnimeNewsResource;
+use App\Http\Resources\V4\AnimePicturesResource;
+use App\Http\Resources\V4\AnimeRecommendationsResource;
+use App\Http\Resources\V4\AnimeReviewsResource;
+use App\Http\Resources\V4\AnimeStaffResource;
+use App\Http\Resources\V4\AnimeStatisticsResource;
+use App\Http\Resources\V4\AnimeUserUpdatesResource;
+use App\Http\Resources\V4\AnimeVideosResource;
+use App\Http\Resources\V4\CommonResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
@@ -20,95 +36,793 @@ use Jikan\Request\Anime\AnimeRequest;
 use Jikan\Request\Anime\AnimeReviewsRequest;
 use Jikan\Request\Anime\AnimeStatsRequest;
 use Jikan\Request\Anime\AnimeVideosRequest;
+use Laravel\Lumen\Http\ResponseFactory;
+use MongoDB\BSON\UTCDateTime;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnimeController extends Controller
 {
     public function main(Request $request, int $id)
     {
+
         $results = Anime::query()
             ->where('mal_id', $id)
             ->get();
 
-        if (empty($results->all())) {
+        if ($results->isEmpty()) {
+            $response = Anime::scrape($id);
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            $response = [
+                'createdAt' => new UTCDateTime(),
+                'modifiedAt' => new UTCDateTime()
+            ] + $response;
+
+            Anime::query()
+                ->insert($response);
+
+            $results = Anime::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+        if ($this->isExpired($request, $results)) {
+            $response = Anime::scrape($id);
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            $response = [
+                'modifiedAt' => new UTCDateTime()
+            ] + $response;
+
+            Anime::query()
+                ->where('request_hash', $this->fingerprint)
+                ->update($response);
+
+            // requery
+            $results = Anime::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
             return HttpResponse::notFound($request);
         }
 
-        return new \App\Http\Resources\V4\AnimeResource(
+        $response = (new \App\Http\Resources\V4\AnimeResource(
             $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
         );
     }
 
-    public function characters_staff(int $id)
+    public function characters(Request $request, int $id)
     {
-        $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeCharactersResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function episode(int $id, int $episodeId)
+    public function staff(Request $request, int $id)
     {
-        $anime = $this->jikan->getAnimeEpisode(new AnimeEpisodeRequest($id, $episodeId));
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeStaffResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function episodes(int $id)
+    public function episode(Request $request, int $id, int $episodeId)
     {
-        $page = $_GET['page'] ?? 1;
-        $anime = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $anime = $this->jikan->getAnimeEpisode(new AnimeEpisodeRequest($id, $episodeId));
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeEpisodeResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function news(int $id)
+    public function episodes(Request $request, int $id)
     {
-        $anime = ['articles' => $this->jikan->getNewsList(new AnimeNewsRequest($id))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $anime = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeEpisodesResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function forum(int $id)
+    public function news(Request $request, int $id)
     {
-        $anime = ['topics' => $this->jikan->getAnimeForum(new AnimeForumRequest($id))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1; // todo add page support to parser
+            $anime = ['articles' => $this->jikan->getNewsList(new AnimeNewsRequest($id))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeNewsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function videos(int $id)
+    public function forum(Request $request, int $id)
     {
-        $anime = $this->jikan->getAnimeVideos(new AnimeVideosRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $topic = $request->get('topic');
+            $anime = ['topics' => $this->jikan->getAnimeForum(new AnimeForumRequest($id, $topic))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeForumResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function pictures(int $id)
+    public function videos(Request $request, int $id)
     {
-        $anime = ['pictures' => $this->jikan->getAnimePictures(new AnimePicturesRequest($id))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $anime = $this->jikan->getAnimeVideos(new AnimeVideosRequest($id));
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeVideosResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function stats(int $id)
+    public function pictures(Request $request, int $id)
     {
-        $anime = $this->jikan->getAnimeStats(new AnimeStatsRequest($id));
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $anime = ['pictures' => $this->jikan->getAnimePictures(new AnimePicturesRequest($id))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimePicturesResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function moreInfo(int $id)
+    public function stats(Request $request, int $id)
     {
-        $anime = ['moreinfo' => $this->jikan->getAnimeMoreInfo(new AnimeMoreInfoRequest($id))];
-        return response(json_encode($anime));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $anime = $this->jikan->getAnimeStats(new AnimeStatsRequest($id));
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeStatisticsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function recommendations(int $id)
+    public function moreInfo(Request $request, int $id)
     {
-        $anime = ['recommendations' => $this->jikan->getAnimeRecommendations(new AnimeRecommendationsRequest($id))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $anime = ['moreinfo' => $this->jikan->getAnimeMoreInfo(new AnimeMoreInfoRequest($id))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeMoreInfoResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function userupdates(int $id, int $page = 1)
+    public function recommendations(Request $request, int $id)
     {
-        $anime = ['users' => $this->jikan->getAnimeRecentlyUpdatedByUsers(new AnimeRecentlyUpdatedByUsersRequest($id, $page))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $anime = ['recommendations' => $this->jikan->getAnimeRecommendations(new AnimeRecommendationsRequest($id))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeRecommendationsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function reviews(int $id, int $page = 1)
+    public function userupdates(Request $request, int $id)
     {
-        $anime = ['reviews' => $this->jikan->getAnimeReviews(new AnimeReviewsRequest($id, $page))];
-        return response($this->serializer->serialize($anime, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $anime = ['users' => $this->jikan->getAnimeRecentlyUpdatedByUsers(new AnimeRecentlyUpdatedByUsersRequest($id, $page))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeUserUpdatesResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    public function reviews(Request $request, int $id)
+    {
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $anime = ['reviews' => $this->jikan->getAnimeReviews(new AnimeReviewsRequest($id, $page))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new AnimeReviewsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 }

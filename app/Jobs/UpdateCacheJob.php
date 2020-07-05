@@ -48,7 +48,6 @@ class UpdateCacheJob extends Job
         $this->requestCached = (bool) Cache::has($this->fingerprint);
     }
 
-
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -57,9 +56,7 @@ class UpdateCacheJob extends Job
 
         $queueFingerprint = "queue_update:{$this->fingerprint}";
 
-        $client = new Client();
-
-        $response = $client
+        $response = app('GuzzleClient')
             ->request(
                 'GET',
                 env('APP_URL') . $this->requestUri,

@@ -83,12 +83,11 @@ class HttpHelper
         return $data;
     }
 
-    public static function requestControllerName(Request $request) : string
+    public static function getRouteName(Request $request) : string
     {
         $route = explode('\\', $request->route()[1]['uses']);
-        $route = end($route);
 
-        return explode('@', $route)[0];
+        return end($route);
     }
 
     public static function getRequestUriHash(Request $request) : string
@@ -96,4 +95,9 @@ class HttpHelper
         return sha1($request->getRequestUri());
     }
 
+    public static function getRouteTable($request) : string
+    {
+        $routeName = HttpHelper::getRouteName($request);
+        return config("controller.{$routeName}.table_name");
+    }
 }

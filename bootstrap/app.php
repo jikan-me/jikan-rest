@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\SerializerFactory;
 use PackageVersions\Versions;
 
 require_once __DIR__.'/../vendor/autoload.php';
@@ -77,7 +78,8 @@ $app->routeMiddleware([
 //    'throttle' => App\Http\Middleware\Throttle::class,
 //    'etag' => \App\Http\Middleware\EtagMiddleware::class,
 //    'microcaching' => \App\Http\Middleware\MicroCaching::class,
-    'database-resolver' => \App\Http\Middleware\DatabaseResolver::class,
+//    'database-resolver' => \App\Http\Middleware\DatabaseResolver::class,
+    'source-data-manager' => \App\Http\Middleware\SourceDataManager::class,
 //    'source-health-monitor' => \App\Http\Middleware\SourceHealthMonitor::class
 ]);
 
@@ -95,6 +97,7 @@ $app->routeMiddleware([
 $app->configure('database');
 $app->configure('queue');
 $app->configure('controller-to-table-mapping');
+$app->configure('controller');
 
 if (env('CACHING')) {
     $app->configure('cache');
@@ -108,6 +111,8 @@ $app->instance('GuzzleClient', $guzzleClient);
 
 $jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
 $app->instance('JikanParser', $jikan);
+
+$app->instance('SerializerV4', SerializerFactory::createV4());
 
 if (env('SOURCE_BAD_HEALTH_FAILOVER') && env('DB_CACHING')) {
     $app->register(\App\Providers\SourceHealthServiceProvider::class);
@@ -135,11 +140,12 @@ $commonMiddleware = [
 //    'slave-auth',
 //    'meta',
 //    'etag',
-    'database-resolver',
+//    'database-resolver',
 //    'microcaching',
 //    'cache-resolver',
 //    'throttle'
 //    'source-health-monitor'
+//    'source-data-manager'
 ];
 
 $app->router->group(
@@ -168,15 +174,13 @@ $app->router->group(
 $app->router->group(
     [
         'prefix' => '/',
-        'namespace' => 'App\Http\Controllers\V3',
-        'middleware' => $commonMiddleware
     ],
     function ($router) {
         $router->get('/', function () {
             return response()->json([
                 'author_url' => 'http://irfan.dahir.co',
-                'discord_url' => 'https://discord.gg/4tvCr36',
-                'version' => '3.4',
+                'discord_url' => 'http://discord.jikan.moe',
+                'version' => '4.0',
                 'parser_version' => JIKAN_PARSER_VERSION,
                 'website_url' => 'https://jikan.moe',
                 'documentation_url' => 'https://jikan.docs.apiary.io',

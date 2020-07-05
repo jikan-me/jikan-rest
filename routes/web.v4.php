@@ -75,8 +75,12 @@ $router->group(
             'uses' => 'AnimeController@forum'
         ]);
 
-        $router->get('/media', [
-            'uses' => 'AnimeController@media'
+        $router->get('/videos', [
+            'uses' => 'AnimeController@videos'
+        ]);
+
+        $router->get('/pictures', [
+            'uses' => 'AnimeController@pictures'
         ]);
 
         $router->get('/statistics', [
