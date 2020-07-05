@@ -4,7 +4,7 @@ namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AnimeNewsResource extends JsonResource
+class ReviewsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,10 +14,6 @@ class AnimeNewsResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'last_visible_page' => $this['last_visible_page'] ?? null,
-            'has_next_page' => $this['has_next_page'] ?? false,
-            'articles' => $this['articles']
-        ];
+        return $this['reviews'];
     }
 }

@@ -11,16 +11,18 @@ use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\AnimeEpisodeResource;
 use App\Http\Resources\V4\AnimeEpisodesResource;
 use App\Http\Resources\V4\AnimeForumResource;
-use App\Http\Resources\V4\AnimeMoreInfoResource;
+use App\Http\Resources\V4\MoreInfoResource;
 use App\Http\Resources\V4\AnimeNewsResource;
-use App\Http\Resources\V4\AnimePicturesResource;
-use App\Http\Resources\V4\AnimeRecommendationsResource;
-use App\Http\Resources\V4\AnimeReviewsResource;
+use App\Http\Resources\V4\PicturesResource;
+use App\Http\Resources\V4\RecommendationsResource;
+use App\Http\Resources\V4\ReviewsResource;
 use App\Http\Resources\V4\AnimeStaffResource;
 use App\Http\Resources\V4\AnimeStatisticsResource;
-use App\Http\Resources\V4\AnimeUserUpdatesResource;
+use App\Http\Resources\V4\UserUpdatesResource;
 use App\Http\Resources\V4\AnimeVideosResource;
 use App\Http\Resources\V4\CommonResource;
+use App\Http\Resources\V4\ForumResource;
+use App\Http\Resources\V4\NewsResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
@@ -44,49 +46,47 @@ class AnimeController extends Controller
 {
     public function main(Request $request, int $id)
     {
-
         $results = Anime::query()
             ->where('mal_id', $id)
             ->get();
 
-        if ($results->isEmpty()) {
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
             $response = Anime::scrape($id);
+
             if (HttpHelper::hasError($response)) {
                 return HttpResponse::notFound($request);
             }
 
-            $response = [
-                'createdAt' => new UTCDateTime(),
-                'modifiedAt' => new UTCDateTime()
-            ] + $response;
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
 
-            Anime::query()
-                ->insert($response);
+            $response = $meta + $response;
 
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($this->isExpired($request, $results)) {
-            $response = Anime::scrape($id);
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
+            if ($results->isEmpty()) {
+                Anime::query()
+                    ->insert($response);
             }
 
-            $response = [
-                'modifiedAt' => new UTCDateTime()
-            ] + $response;
+            if ($this->isExpired($request, $results)) {
+                Anime::query()
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
 
-            Anime::query()
-                ->where('request_hash', $this->fingerprint)
-                ->update($response);
-
-            // requery
-            $results = Anime::query()
+            $results =Anime::query()
                 ->where('mal_id', $id)
                 ->get();
         }
+
 
         if ($results->isEmpty()) {
             return HttpResponse::notFound($request);
@@ -113,7 +113,6 @@ class AnimeController extends Controller
             $results->isEmpty()
             || $this->isExpired($request, $results)
         ) {
-            $page = $request->get('page') ?? 1;
             $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
@@ -372,7 +371,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new AnimeNewsResource(
+        $response = (new NewsResource(
             $results->first()
         ))->response();
 
@@ -428,7 +427,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new AnimeForumResource(
+        $response = (new ForumResource(
             $results->first()
         ))->response();
 
@@ -538,7 +537,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new AnimePicturesResource(
+        $response = (new PicturesResource(
             $results->first()
         ))->response();
 
@@ -648,7 +647,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new AnimeMoreInfoResource(
+        $response = (new MoreInfoResource(
             $results->first()
         ))->response();
 
@@ -703,7 +702,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new AnimeRecommendationsResource(
+        $response = (new RecommendationsResource(
             $results->first()
         ))->response();
 
@@ -759,7 +758,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new AnimeUserUpdatesResource(
+        $response = (new UserUpdatesResource(
             $results->first()
         ))->response();
 
@@ -815,7 +814,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new AnimeReviewsResource(
+        $response = (new ReviewsResource(
             $results->first()
         ))->response();
 

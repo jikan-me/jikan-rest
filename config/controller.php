@@ -63,16 +63,46 @@ return [
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
-    'MangaController@main' => 'manga',
-    'MangaController@characters' => 'manga_characters',
-    'MangaController@news' => 'manga_news',
-    'MangaController@forum' => 'manga_forum',
-    'MangaController@pictures' => 'manga_pictures',
-    'MangaController@stats' => 'manga_stats',
-    'MangaController@moreInfo' => 'manga_moreinfo',
-    'MangaController@recommendations' => 'manga_recommendations',
-    'MangaController@userupdates' => 'manga_userupdates',
-    'MangaController@reviews' => 'manga_reviews',
+    'MangaController@main' => [
+        'table_name' => 'manga',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@characters' => [
+        'table_name' => 'manga_characters',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@news' => [
+        'table_name' => 'manga_news',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@forum' => [
+        'table_name' => 'manga_news',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@pictures' => [
+        'table_name' => 'manga_pictures',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@stats' => [
+        'table_name' => 'manga_stats',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@moreInfo' => [
+        'table_name' => 'manga_moreinfo',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@recommendations' => [
+        'table_name' => 'manga_recommendations',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@userupdates' => [
+        'table_name' => 'manga_userupdates',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'MangaController@reviews' => [
+        'table_name' => 'manga_reviews',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
     'CharacterController@main' => 'characters',
     'CharacterController@pictures' => 'characters_pictures',

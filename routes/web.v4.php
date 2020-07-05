@@ -131,7 +131,7 @@ $router->group(
         ]);
 
         $router->get('/pictures', [
-            'uses' => 'MangaController@media'
+            'uses' => 'MangaController@pictures'
         ]);
 
         $router->get('/statistics', [
