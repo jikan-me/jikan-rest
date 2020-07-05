@@ -55,7 +55,7 @@ class Anime extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images'
+        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images', 'request_hash', 'expiresAt'
     ];
 
     public function setRelatedAttribute($value)

@@ -2,23 +2,130 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Character;
+use App\Http\HttpHelper;
+use App\Http\HttpResponse;
+use App\Http\Resources\V4\PicturesResource;
+use App\Person;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Jikan\Request\Character\CharacterPicturesRequest;
 use Jikan\Request\Person\PersonRequest;
 use Jikan\Request\Person\PersonPicturesRequest;
+use MongoDB\BSON\UTCDateTime;
 
 class PersonController extends Controller
 {
     public function main(Request $request, int $id)
     {
-        if ($request->header('auth') === env('APP_KEY')) {
-            $person = $this->jikan->getPerson(new PersonRequest($id));
-            return response($this->serializer->serialize($person, 'json'));
+        $results = Person::query()
+            ->where('mal_id', $id)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Person::scrape($id);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Person::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Person::query()
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = Person::query()
+                ->where('mal_id', $id)
+                ->get();
         }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new \App\Http\Resources\V4\PersonResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
-    public function pictures(int $id)
+    public function pictures(Request $request, int $id)
     {
-        $person = ['pictures' => $this->jikan->getPersonPictures(new PersonPicturesRequest($id))];
-        return response($this->serializer->serialize($person, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $person = ['pictures' => $this->jikan->getPersonPictures(new PersonPicturesRequest($id))];
+            $response = \json_decode($this->serializer->serialize($person, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new PicturesResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 }
