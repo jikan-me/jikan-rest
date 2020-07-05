@@ -82,7 +82,7 @@ class AnimeController extends Controller
                     ->update($response);
             }
 
-            $results =Anime::query()
+            $results = Anime::query()
                 ->where('mal_id', $id)
                 ->get();
         }

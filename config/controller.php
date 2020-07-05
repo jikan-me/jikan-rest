@@ -104,11 +104,23 @@ return [
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
-    'CharacterController@main' => 'characters',
-    'CharacterController@pictures' => 'characters_pictures',
+    'CharacterController@main' => [
+        'table_name' => 'characters',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'CharacterController@pictures' => [
+        'table_name' => 'characters_pictures',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
-    'PersonController@main' => 'people',
-    'PersonController@pictures' => 'people_pictures',
+    'PersonController@main' => [
+        'table_name' => 'people',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'PersonController@pictures' => [
+        'table_name' => 'people_pictures',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
     'SeasonController@archive' => 'season_archive',
     'SeasonController@later' => 'season_later',

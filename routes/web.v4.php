@@ -95,11 +95,11 @@ $router->group(
             'uses' => 'AnimeController@recommendations'
         ]);
 
-        $router->get('/userupdates[/{page:[0-9]+}]', [
+        $router->get('/userupdates', [
             'uses' => 'AnimeController@userupdates'
         ]);
 
-        $router->get('/reviews[/{page:[0-9]+}]', [
+        $router->get('/reviews', [
             'uses' => 'AnimeController@reviews'
         ]);
     }
@@ -146,11 +146,11 @@ $router->group(
             'uses' => 'MangaController@recommendations'
         ]);
 
-        $router->get('/userupdates[/{page:[0-9]+}]', [
+        $router->get('/userupdates', [
             'uses' => 'MangaController@userupdates'
         ]);
 
-        $router->get('/reviews[/{page:[0-9]+}]', [
+        $router->get('/reviews', [
             'uses' => 'MangaController@reviews'
         ]);
     }
@@ -169,7 +169,7 @@ $router->group(
         ]);
 
         $router->get('/pictures', [
-            'uses' => 'CharacterController@media'
+            'uses' => 'CharacterController@pictures'
         ]);
     }
 );
@@ -187,7 +187,7 @@ $router->group(
         ]);
 
         $router->get('/pictures', [
-            'uses' => 'PersonController@media'
+            'uses' => 'PersonController@pictures'
         ]);
     }
 );
