@@ -169,8 +169,8 @@ class MangaController extends Controller
             $results->isEmpty()
             || $this->isExpired($request, $results)
         ) {
-            $page = $request->get('page') ?? 1; // todo add page support to parser
-            $manga = ['articles' => $this->jikan->getNewsList(new MangaNewsRequest($id))];
+            $page = $request->get('page') ?? 1;
+            $manga = ['articles' => $this->jikan->getNewsList(new MangaNewsRequest($id, $page))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
             if (HttpHelper::hasError($response)) {

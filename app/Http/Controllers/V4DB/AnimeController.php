@@ -336,8 +336,8 @@ class AnimeController extends Controller
             $results->isEmpty()
             || $this->isExpired($request, $results)
         ) {
-            $page = $request->get('page') ?? 1; // todo add page support to parser
-            $anime = ['articles' => $this->jikan->getNewsList(new AnimeNewsRequest($id))];
+            $page = $request->get('page') ?? 1;
+            $anime = $this->jikan->getNewsList(new AnimeNewsRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
             if (HttpHelper::hasError($response)) {
