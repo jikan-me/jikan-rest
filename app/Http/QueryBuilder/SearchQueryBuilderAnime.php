@@ -7,11 +7,21 @@ use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
 
+/**
+ * Class SearchQueryBuilderAnime
+ * @package App\Http\QueryBuilder
+ */
 class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 {
 
+    /**
+     *
+     */
     const MAX_RESULTS_PER_PAGE = 50;
 
+    /**
+     *
+     */
     const MAP_TYPES = [
         'tv' => 'TV',
         'movie' => 'Movie',
@@ -21,12 +31,18 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         'music' => 'Music'
     ];
 
+    /**
+     *
+     */
     const MAP_STATUS = [
         'airing' => 'Currently Airing',
         'complete' => 'Finished Airing',
         'upcoming' => 'Not yet aired',
     ];
 
+    /**
+     *
+     */
     const MAP_RATING = [
         'g' => 'G - All Ages',
         'pg' => 'PG - Children',
@@ -36,10 +52,18 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         'rx' => 'Rx - Hentai'
     ];
 
+    /**
+     *
+     */
     const ORDER_BY = [
         'mal_id', 'title', 'aired.from', 'aired.to', 'episodes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
     ];
 
+    /**
+     * @param Request $request
+     * @param Builder $results
+     * @return Builder
+     */
     public static function query(Request $request, Builder $results) : Builder
     {
         $requestType = HttpHelper::requestType($request);
@@ -133,6 +157,11 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         return $results;
     }
 
+    /**
+     * @param Request $request
+     * @param Builder $results
+     * @return array
+     */
     public static function paginate(Request $request, Builder $results)
     {
         $page = $request->get('page') ?? 1;
@@ -174,6 +203,10 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         ];
     }
 
+    /**
+     * @param string|null $type
+     * @return string|null
+     */
     public static function mapType(?string $type = null) : ?string
     {
         if (!is_null($type)) {
@@ -185,6 +218,10 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         return self::MAP_TYPES[$type] ?? null;
     }
 
+    /**
+     * @param string|null $status
+     * @return string|null
+     */
     public static function mapStatus(?string $status = null) : ?string
     {
         if (!is_null($status)) {
@@ -196,6 +233,10 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         return self::MAP_STATUS[$status] ?? null;
     }
 
+    /**
+     * @param string|null $rating
+     * @return string|null
+     */
     public static function mapRating(?string $rating = null) : ?string
     {
         if (!is_null($rating)) {
@@ -207,6 +248,10 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         return self::MAP_RATING[$rating] ?? null;
     }
 
+    /**
+     * @param string|null $sort
+     * @return string|null
+     */
     public static function mapSort(?string $sort = null) : ?string
     {
         if (!is_null($sort)) {

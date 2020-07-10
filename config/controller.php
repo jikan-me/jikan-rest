@@ -131,7 +131,10 @@ return [
     'ProducerController@main' => 'producers',
     'ProducerController@resource' => 'producers_anime',
 
-    'MagazineController@main' => 'magazines',
+    'MagazineController@main' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_MAGAZINE_EXPIRE')
+    ],
     'MagazineController@resource' => 'magazines_manga',
 
     'UserController@recentlyOnline' => 'users_recently_online',

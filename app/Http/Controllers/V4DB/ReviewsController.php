@@ -4,13 +4,15 @@ namespace App\Http\Controllers\V4DB;
 
 use Jikan\Helper\Constants;
 use Jikan\Request\Reviews\RecentReviewsRequest;
+use Laravel\Lumen\Http\Request;
 
 class ReviewsController extends Controller
 {
 
-    public function bestVoted()
+    public function bestVoted(Request $request)
     {
-        $page = $_GET['page'] ?? 1;
+        $page = $request->get('page') ?? 1;
+
         $results = $this->jikan->getRecentReviews(
             new RecentReviewsRequest(Constants::RECENT_REVIEW_BEST_VOTED, $page)
         );
@@ -18,9 +20,10 @@ class ReviewsController extends Controller
         return response($this->serializer->serialize($results, 'json'));
     }
 
-    public function anime()
+    public function anime(Request $request)
     {
-        $page = $_GET['page'] ?? 1;
+        $page = $request->get('page') ?? 1;
+
         $results = $this->jikan->getRecentReviews(
             new RecentReviewsRequest(Constants::RECENT_REVIEW_ANIME, $page)
         );
@@ -28,9 +31,10 @@ class ReviewsController extends Controller
         return response($this->serializer->serialize($results, 'json'));
     }
 
-    public function manga()
+    public function manga(Request $request)
     {
-        $page = $_GET['page'] ?? 1;
+        $page = $request->get('page') ?? 1;
+
         $results = $this->jikan->getRecentReviews(
             new RecentReviewsRequest(Constants::RECENT_REVIEW_MANGA, $page)
         );

@@ -6,6 +6,7 @@ use App\Anime;
 use App\Http\Middleware\Throttle;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
 use App\Http\QueryBuilder\SearchQueryBuilderManga;
+use App\Http\QueryBuilder\SearchQueryBuilderUsers;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\MangaCollection;
 use App\Http\SearchQueryBuilder;
@@ -123,11 +124,11 @@ class SearchController extends Controller
         return response($this->filter($search));
     }
 
-    public function users()
+    public function users(Request $request)
     {
         $search = $this->jikan->getUserSearch(
-            SearchQueryBuilder::create(
-                new UserSearchRequest()
+            SearchQueryBuilderUsers::query(
+                $request
             )
         );
 

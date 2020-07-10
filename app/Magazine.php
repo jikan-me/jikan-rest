@@ -11,10 +11,10 @@ use Jikan\Model\Common\YoutubeMeta;
 use Jikan\Request\Magazine\MagazinesRequest;
 
 /**
- * Class Magazines
+ * Class Magazine
  * @package App
  */
-class Magazines extends Model
+class Magazine extends Model
 {
 
     /**

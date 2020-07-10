@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.4",
         "ext-json": "*",
         "ext-mongodb": "*",
         "danielmewes/php-rql": "dev-master",
@@ -14,7 +14,7 @@
         "flipbox/lumen-generator": "^6",
         "illuminate/redis": "^7",
         "jenssegers/mongodb": "^4.0",
-        "jikan-me/jikan": "v3.0.0-alpha.7",
+        "jikan-me/jikan": "v3.0.0-alpha.8",
         "jms/serializer": "^1.13",
         "laravel/lumen-framework": "^7.0",
         "league/flysystem": "^1.0",
