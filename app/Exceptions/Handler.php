@@ -6,6 +6,7 @@ use App\Events\SourceHealthEvent;
 use App\Http\HttpHelper;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -75,6 +76,16 @@ class Handler extends ExceptionHandler
                 ], 500);
         }
 
+        if ($e instanceof ConnectException) {
+            return response()
+                ->json([
+                    'status' => $e->getCode(),
+                    'type' => 'BadResponseException',
+                    'message' => 'Jikan failed to connect to MyAnimeList. MyAnimeList may be down/unavailable or refuses to connect',
+                    'error' => $e->getMessage()
+                ], 503);
+        }
+
         // ParserException from Jikan PHP API
         if ($e instanceof ParserException) {
             $githubReport->setRepo(env('GITHUB_API', 'jikan-me/jikan'));
@@ -87,6 +98,8 @@ class Handler extends ExceptionHandler
                         'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
                     ], 500);
         }
+
+
 
         // BadResponseException from Guzzle dep via Jikan PHP API
         // This is basically the response MyAnimeList returns to Jikan

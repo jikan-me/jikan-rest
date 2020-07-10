@@ -106,7 +106,10 @@ if (env('CACHING')) {
 
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 
-$guzzleClient = new \GuzzleHttp\Client();
+$guzzleClient = new \GuzzleHttp\Client([
+    'timeout' => env('SOURCE_TIMEOUT', 5),
+    'connect_timeout' => env('SOURCE_CONNECT_TIMEOUT', 5)
+]);
 $app->instance('GuzzleClient', $guzzleClient);
 
 $jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
