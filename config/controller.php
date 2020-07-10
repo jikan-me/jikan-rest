@@ -147,8 +147,14 @@ return [
     'UserController@reviews' => 'users_reviews',
     'UserController@clubs' => 'users_clubs',
 
-    'GenreController@animeListing' => 'genres',
-    'GenreController@mangaListing' => 'genres',
+    'GenreController@mainAnime' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_GENRE_EXPIRE')
+    ],
+    'GenreController@mainManga' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_GENRE_EXPIRE')
+    ],
     'GenreController@anime' => 'genres_anime',
     'GenreController@manga' => 'genres_manga',
 

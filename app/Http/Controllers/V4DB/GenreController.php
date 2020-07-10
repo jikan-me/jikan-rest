@@ -3,7 +3,14 @@
 namespace App\Http\Controllers\V4DB;
 
 use App\Anime;
+use App\GenreAnime;
+use App\GenreManga;
+use App\Http\QueryBuilder\SearchQueryBuilderGenre;
+use App\Http\QueryBuilder\SearchQueryBuilderProducer;
 use App\Http\Resources\V4\AnimeCollection;
+use App\Http\Resources\V4\GenreCollection;
+use App\Http\Resources\V4\ProducerCollection;
+use App\Producer;
 use Illuminate\Http\Request;
 use Jikan\Request\Genre\AnimeGenreRequest;
 use Jikan\Request\Genre\AnimeGenresRequest;
@@ -43,15 +50,73 @@ class GenreController extends Controller
         return response($this->serializer->serialize($person, 'json'));
     }
 
-    public function animeListing()
+    public function mainAnime(Request $request)
     {
-        $results = $this->jikan->getAnimeGenres(new AnimeGenresRequest());
-        return response($this->serializer->serialize($results, 'json'));
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = SearchQueryBuilderGenre::query(
+            $request,
+            GenreAnime::query()
+        );
+
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new GenreCollection(
+            $results
+        );
     }
 
-    public function mangaListing()
+    public function mainManga(Request $request)
     {
-        $results = $this->jikan->getAnimeGenres(new AnimeGenresRequest());
-        return response($this->serializer->serialize($results, 'json'));
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = SearchQueryBuilderGenre::query(
+            $request,
+            GenreManga::query()
+        );
+
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new GenreCollection(
+            $results
+        );
     }
 }

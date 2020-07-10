@@ -315,11 +315,11 @@ $router->group(
     ],
     function () use ($router) {
         $router->get('/anime', [
-            'uses' => 'GenreController@animeListing'
+            'uses' => 'GenreController@mainAnime'
         ]);
 
         $router->get('/manga', [
-            'uses' => 'GenreController@mangaListing'
+            'uses' => 'GenreController@mainManga'
         ]);
 
         $router->get('/anime/{id:[0-9]+}[/{page:[0-9]+}]', [

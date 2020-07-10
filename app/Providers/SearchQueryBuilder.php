@@ -193,7 +193,7 @@ class SearchQueryBuilder
                 }
             }
 
-            // Genre
+            // GenreAnime
             if (isset($_GET['genre']) && \is_string($_GET['genre']) && strpos($_GET['genre'], ',')) {
                 $_GET['genre'] = explode(',', $_GET['genre']);
             }
