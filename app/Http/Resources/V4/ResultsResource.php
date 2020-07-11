@@ -15,7 +15,7 @@ class ResultsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'last_visible_page' => $this['last_visible_page'],
+            'last_visible_page' => $this['last_visible_page'] ?? 1,
             'has_next_page' => $this['has_next_page'] ?? false,
             'data' => $this['results']
         ];
