@@ -171,8 +171,14 @@ return [
     'SearchController@users' => 'search_users',
     'SearchController@userById' => 'search_users_by_id',
 
-    'ClubController@main' => 'clubs',
-    'ClubController@members' => 'clubs_members',
+    'ClubController@main' => [
+        'table_name' => 'clubs',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'ClubController@members' => [
+        'table_name' => 'clubs_members',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
     'ReviewsController@anime' => 'reviews',
     'ReviewsController@manga' => 'reviews',
