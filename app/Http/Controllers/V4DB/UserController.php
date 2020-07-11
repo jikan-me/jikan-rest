@@ -5,9 +5,14 @@ namespace App\Http\Controllers\V4DB;
 use App\Anime;
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
+use App\Http\Resources\V4\AnimeCharactersResource;
+use App\Http\Resources\V4\CommonResource;
+use App\Http\Resources\V4\ProfileHistoryResource;
 use App\Profile;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\User\RecentlyOnlineUsersRequest;
 use Jikan\Request\User\UserAnimeListRequest;
 use Jikan\Request\User\UserClubsRequest;
@@ -80,17 +85,64 @@ class UserController extends Controller
         );
     }
 
-    public function history(string $username, ?string $type = null)
+    public function history(Request $request, string $username, ?string $type = null)
     {
-        if (!is_null($type) && !\in_array(strtolower($type), ['anime', 'manga'])) {
-            return response()->json([
-                'error' => 'Bad Request'
-            ])->setStatusCode(400);
+        $type = strtolower($type);
+        if (!is_null($type) && !\in_array($type, ['anime', 'manga'])) {
+            return HttpResponse::badRequest($request);
         }
 
-        $person = ['history' => $this->jikan->getUserHistory(new UserHistoryRequest($username, $type))];
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
 
-        return response($this->serializer->serialize($person, 'json'));
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $anime = ['history'=>$this->jikan->getUserHistory(new UserHistoryRequest($username, $type))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new ProfileHistoryResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
     public function friends(string $username, int $page = 1)
