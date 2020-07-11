@@ -6,6 +6,7 @@ use App\Anime;
 use App\Club;
 use App\Http\Middleware\Throttle;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
+use App\Http\QueryBuilder\SearchQueryBuilderClub;
 use App\Http\QueryBuilder\SearchQueryBuilderManga;
 use App\Http\QueryBuilder\SearchQueryBuilderUsers;
 use App\Http\Resources\V4\AnimeCollection;
@@ -164,7 +165,7 @@ class SearchController extends Controller
             }
         }
 
-        $results = SearchQueryBuilderAnime::query(
+        $results = SearchQueryBuilderClub::query(
             $request,
             Club::query()
         );
