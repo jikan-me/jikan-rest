@@ -4,10 +4,14 @@ namespace App;
 
 use App\Http\HttpHelper;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jikan\Helper\Media;
+use Jikan\Helper\Parser;
+use Jikan\Jikan;
+use Jikan\Model\Common\YoutubeMeta;
 use Jikan\Request\Anime\AnimeRequest;
-use Jikan\Request\Club\ClubRequest;
+use Jikan\Request\User\UserProfileRequest;
 
-class Club extends Model
+class Profile extends Model
 {
 
     /**
@@ -16,7 +20,7 @@ class Club extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'image_url', 'title', 'members_count', 'pictures_count', 'category', 'created', 'type', 'staff', 'anime_relations', 'manga_relations', 'character_relations'
+        'mal_id', 'username', 'url', 'image_url', 'last_online', 'gender', 'birthday', 'location', 'joined', 'anime_stats', 'manga_stats', 'favorites', 'about'
     ];
 
     /**
@@ -31,7 +35,7 @@ class Club extends Model
      *
      * @var string
      */
-    protected $table = 'clubs';
+    protected $table = 'users';
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -39,10 +43,15 @@ class Club extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'request_hash', 'expiresAt', 'image_url'
+        '_id', 'image_url'
     ];
 
-    public function getImageAttribute()
+    public function setImagesAttribute($value)
+    {
+        $this->attributes['images'] = $this->getImagesAttribute();
+    }
+
+    public function getImagesAttribute()
     {
         $imageUrl = $this->attributes['image_url'];
 
@@ -50,12 +59,15 @@ class Club extends Model
             'jpg' => [
                 'image_url' => $imageUrl,
             ],
+            'webp' => [
+                'image_url' => str_replace('.jpg', '.webp', $imageUrl),
+            ]
         ];
     }
 
-    public static function scrape(int $id)
+    public static function scrape(string $username)
     {
-        $data = app('JikanParser')->getClub(new ClubRequest($id));
+        $data = app('JikanParser')->getUserProfile(new UserProfileRequest($username));
 
         return json_decode(
             app('SerializerV4')

@@ -138,14 +138,32 @@ return [
     'MagazineController@resource' => 'magazines_manga',
 
     'UserController@recentlyOnline' => 'users_recently_online',
-    'UserController@profile' => 'users',
-    'UserController@history' => 'users_history',
-    'UserController@friends' => 'users_friends',
+    'UserController@profile' => [
+        'table_name' => 'users',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'UserController@history' => [
+        'table_name' => 'users_history',
+        'ttl' => env('CACHE_USER_EXPIRE')
+    ],
+    'UserController@friends' => [
+        'table_name' => 'users_friends',
+        'ttl' => env('CACHE_USER_EXPIRE')
+    ],
+    'UserController@recommendations' => [
+        'table_name' => 'users_recommendations',
+        'ttl' => env('CACHE_USER_EXPIRE')
+    ],
+    'UserController@reviews' => [
+        'table_name' => 'users_reviews',
+        'ttl' => env('CACHE_USER_EXPIRE')
+    ],
+    'UserController@clubs' => [
+        'table_name' => 'users_clubs',
+        'ttl' => env('CACHE_USER_EXPIRE')
+    ],
     'UserController@animelist' => 'users_animelist',
     'UserController@mangalist' => 'users_mangalist',
-    'UserController@recommendations' => 'users_recommendations',
-    'UserController@reviews' => 'users_reviews',
-    'UserController@clubs' => 'users_clubs',
 
     'GenreController@mainAnime' => [
         'table_name' => 'common',
