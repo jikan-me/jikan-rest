@@ -180,9 +180,21 @@ return [
     'RecommendationsController@anime' => 'recommendations',
     'RecommendationsController@manga' => 'recommendations',
 
-    'WatchController@recentEpisodes' => 'watch',
-    'WatchController@popularEpisodes' => 'watch',
-    'WatchController@recentPromos' => 'watch',
-    'WatchController@popularPromos' => 'watch',
+    'WatchController@recentEpisodes' => [
+        'table_name' => 'watch',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'WatchController@popularEpisodes' => [
+        'table_name' => 'watch',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'WatchController@recentPromos' => [
+        'table_name' => 'watch',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'WatchController@popularPromos' => [
+        'table_name' => 'watch',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
 ];
