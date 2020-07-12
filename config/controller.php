@@ -176,18 +176,51 @@ return [
     'GenreController@anime' => 'genres_anime',
     'GenreController@manga' => 'genres_manga',
 
-    'TopController@anime' => 'top_anime',
-    'TopController@manga' => 'top_manga',
-    'TopController@characters' => 'top_characters',
-    'TopController@people' => 'top_people',
-    'ReviewsController@bestVoted' => 'top_reviews',
+    'TopController@anime' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'TopController@manga' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'TopController@characters' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'TopController@people' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'ReviewsController@bestVoted' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
-    'SearchController@anime' => 'search_anime',
-    'SearchController@manga' => 'search_manga',
-    'SearchController@character' => 'search_characters',
-    'SearchController@people' => 'search_people',
-    'SearchController@users' => 'search_users',
-    'SearchController@userById' => 'search_users_by_id',
+    'SearchController@anime' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_SEARCH_EXPIRE')
+    ],
+    'SearchController@manga' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_SEARCH_EXPIRE')
+    ],
+    'SearchController@character' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_SEARCH_EXPIRE')
+    ],
+    'SearchController@people' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_SEARCH_EXPIRE')
+    ],
+    'SearchController@users' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_SEARCH_EXPIRE')
+    ],
+    'SearchController@userById' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_SEARCH_EXPIRE')
+    ],
 
     'ClubController@main' => [
         'table_name' => 'clubs',
@@ -198,11 +231,23 @@ return [
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
-    'ReviewsController@anime' => 'reviews',
-    'ReviewsController@manga' => 'reviews',
+    'ReviewsController@anime' => [
+        'table_name' => 'reviews',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'ReviewsController@manga' => [
+        'table_name' => 'reviews',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
-    'RecommendationsController@anime' => 'recommendations',
-    'RecommendationsController@manga' => 'recommendations',
+    'RecommendationsController@anime' => [
+        'table_name' => 'recommendations',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'RecommendationsController@manga' => [
+        'table_name' => 'recommendations',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
     'WatchController@recentEpisodes' => [
         'table_name' => 'watch',
