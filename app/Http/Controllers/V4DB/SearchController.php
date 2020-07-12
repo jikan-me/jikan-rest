@@ -8,12 +8,15 @@ use App\Http\Middleware\Throttle;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
 use App\Http\QueryBuilder\SearchQueryBuilderClub;
 use App\Http\QueryBuilder\SearchQueryBuilderManga;
+use App\Http\QueryBuilder\SearchQueryBuilderPeople;
 use App\Http\QueryBuilder\SearchQueryBuilderUsers;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\ClubCollection;
 use App\Http\Resources\V4\MangaCollection;
+use App\Http\Resources\V4\PersonCollection;
 use App\Http\SearchQueryBuilder;
 use App\Manga;
+use App\Person;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Jikan;
@@ -69,7 +72,7 @@ class SearchController extends Controller
         );
     }
 
-    public function manga(Request $request, int $page = 1)
+    public function manga(Request $request)
     {
         $this->request = $request;
         $page = $this->request->get('page') ?? 1;
@@ -105,15 +108,39 @@ class SearchController extends Controller
         );
     }
 
-    public function people(int $page = 1)
+    public function people(Request $request)
     {
-        $search = $this->jikan->getPersonSearch(
-            SearchQueryBuilder::create(
-                (new PersonSearchRequest())->setPage($page)
-            )
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = SearchQueryBuilderPeople::query(
+            $request,
+            Person::query()
         );
 
-        return response($this->filter($search));
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new PersonCollection(
+            $results
+        );
     }
 
     public function character(int $page = 1)
