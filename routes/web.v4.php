@@ -157,8 +157,9 @@ $router->group(
 );
 
 $router->get('/characters', [
-    'uses' => 'SearchController@characters'
+    'uses' => 'SearchController@character'
 ]);
+
 $router->group(
     [
         'prefix' => 'characters/{id:[0-9]+}'

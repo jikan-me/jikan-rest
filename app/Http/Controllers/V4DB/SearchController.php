@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\V4DB;
 
 use App\Anime;
+use App\Character;
 use App\Club;
 use App\Http\Middleware\Throttle;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
+use App\Http\QueryBuilder\SearchQueryBuilderCharacter;
 use App\Http\QueryBuilder\SearchQueryBuilderClub;
 use App\Http\QueryBuilder\SearchQueryBuilderManga;
 use App\Http\QueryBuilder\SearchQueryBuilderPeople;
 use App\Http\QueryBuilder\SearchQueryBuilderUsers;
 use App\Http\Resources\V4\AnimeCollection;
+use App\Http\Resources\V4\CharacterCollection;
 use App\Http\Resources\V4\ClubCollection;
 use App\Http\Resources\V4\MangaCollection;
 use App\Http\Resources\V4\PersonCollection;
@@ -143,15 +146,39 @@ class SearchController extends Controller
         );
     }
 
-    public function character(int $page = 1)
+    public function character(Request $request)
     {
-        $search = $this->jikan->getCharacterSearch(
-            SearchQueryBuilder::create(
-                (new CharacterSearchRequest())->setPage($page)
-            )
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = SearchQueryBuilderCharacter::query(
+            $request,
+            Character::query()
         );
 
-        return response($this->filter($search));
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new CharacterCollection(
+            $results
+        );
     }
 
     public function users(Request $request)
