@@ -261,11 +261,11 @@ $router->group(
             'uses' => 'SearchController@users'
         ]);
 
-        $router->get('/recent', [
+        $router->get('/recentlyonline', [
             'uses' => 'UserController@recentlyOnline'
         ]);
 
-        $router->get('/id/{id:[0-9]+}', [
+        $router->get('/userbyid/{id:[0-9]+}', [
             'uses' => 'SearchController@userById'
         ]);
 

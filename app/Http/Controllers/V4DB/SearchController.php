@@ -246,13 +246,59 @@ class SearchController extends Controller
         );
     }
 
-    public function userById(int $id)
+    public function userById(Request $request, int $id)
     {
-        $search = $this->jikan->getUsernameById(
-            new UsernameByIdRequest($id)
-        );
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
 
-        return response($this->filter($search));
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $anime = ['results'=>$this->jikan->getUsernameById(new UsernameByIdRequest($id))];
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new ResultsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
     public function clubs(Request $request)
