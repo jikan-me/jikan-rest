@@ -2,61 +2,94 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Anime;
+use App\Http\HttpResponse;
+use App\Http\QueryBuilder\SearchQueryBuilderManga;
+use App\Http\QueryBuilder\TopQueryBuilderAnime;
+use App\Http\QueryBuilder\TopQueryBuilderManga;
+use App\Http\Resources\V4\AnimeCollection;
+use App\Http\Resources\V4\MangaCollection;
+use App\Manga;
+use Illuminate\Support\Facades\DB;
 use Jikan\Request\Top\TopAnimeRequest;
 use Jikan\Request\Top\TopMangaRequest;
 use Jikan\Request\Top\TopCharactersRequest;
 use Jikan\Request\Top\TopPeopleRequest;
 use Jikan\Helper\Constants as JikanConstants;
+use Laravel\Lumen\Http\Request;
 
 class TopController extends Controller
 {
-    public function anime(int $page = 1, string $type = null)
+    const MAX_RESULTS_PER_PAGE = 50;
+
+    public function anime(Request $request, int $page = 1)
     {
-        if (!is_null($type) && !\in_array(strtolower($type), [
-                JikanConstants::TOP_AIRING,
-                JikanConstants::TOP_UPCOMING,
-                JikanConstants::TOP_TV,
-                JikanConstants::TOP_MOVIE,
-                JikanConstants::TOP_OVA,
-                JikanConstants::TOP_SPECIAL,
-                JikanConstants::TOP_BY_POPULARITY,
-                JikanConstants::TOP_BY_FAVORITES,
-            ])) {
-            return response()->json([
-                'error' => 'Bad Request'
-            ])->setStatusCode(400);
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
         }
 
-        $anime = $this->jikan->getTopAnime(new TopAnimeRequest($page, $type));
+        $results = TopQueryBuilderAnime::query(
+            $request,
+            Anime::query()
+        );
 
-        $top = ['top' => $this->jikan->getTopAnime(new TopAnimeRequest($page, $type))];
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
 
-        return response($this->serializer->serialize($top, 'json'));
+        return new AnimeCollection(
+            $results
+        );
     }
 
-    public function manga(int $page = 1, string $type = null)
+    public function manga(Request $request, string $type = null)
     {
-        if (!is_null($type) && !\in_array(
-            strtolower($type),
-            [
-                JikanConstants::TOP_MANGA,
-                JikanConstants::TOP_NOVEL,
-                JikanConstants::TOP_ONE_SHOT,
-                JikanConstants::TOP_DOUJINSHI,
-                JikanConstants::TOP_MANHWA,
-                JikanConstants::TOP_MANHUA,
-                JikanConstants::TOP_BY_POPULARITY,
-                JikanConstants::TOP_BY_FAVORITES,
-                ]
-            )) {
-            return response()->json([
-                'error' => 'Bad Request'
-            ])->setStatusCode(400);
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
         }
 
-        $top = ['top' => $this->jikan->getTopManga(new TopMangaRequest($page, $type))];
+        $results = TopQueryBuilderManga::query(
+            $request,
+            Manga::query()
+        );
 
-        return response($this->serializer->serialize($top, 'json'));
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new MangaCollection(
+            $results
+        );
     }
 
     public function people(int $page = 1)
