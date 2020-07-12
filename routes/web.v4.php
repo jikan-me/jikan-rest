@@ -464,3 +464,26 @@ $router->group(
         ]);
     }
 );
+
+$router->group(
+    [
+        'prefix' => 'random'
+    ],
+    function() use ($router) {
+        $router->get('/anime', [
+            'uses' => 'RandomController@anime',
+        ]);
+
+        $router->get('/manga', [
+            'uses' => 'RandomController@manga',
+        ]);
+
+        $router->get('/character', [
+            'uses' => 'RandomController@characters',
+        ]);
+
+        $router->get('/person', [
+            'uses' => 'RandomController@people',
+        ]);
+    }
+);
