@@ -137,7 +137,10 @@ return [
     ],
     'MagazineController@resource' => 'magazines_manga',
 
-    'UserController@recentlyOnline' => 'users_recently_online',
+    'UserController@recentlyOnline' => [
+        'table_name' => 'users_recently_online',
+        'ttl' => env('CACHE_USERS_RECENTLY_ONLINE')
+    ],
     'UserController@profile' => [
         'table_name' => 'users',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
