@@ -7,7 +7,9 @@ use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\Resources\V4\AnimeCharactersResource;
 use App\Http\Resources\V4\CommonResource;
+use App\Http\Resources\V4\ProfileFriendsResource;
 use App\Http\Resources\V4\ProfileHistoryResource;
+use App\Http\Resources\V4\ResultsResource;
 use App\Profile;
 use App\User;
 use Illuminate\Http\Request;
@@ -100,8 +102,8 @@ class UserController extends Controller
             $results->isEmpty()
             || $this->isExpired($request, $results)
         ) {
-            $anime = ['history'=>$this->jikan->getUserHistory(new UserHistoryRequest($username, $type))];
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+            $data = ['history'=>$this->jikan->getUserHistory(new UserHistoryRequest($username, $type))];
+            $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
             if (HttpHelper::hasError($response)) {
                 return HttpResponse::notFound($request);
@@ -145,10 +147,60 @@ class UserController extends Controller
         );
     }
 
-    public function friends(string $username, int $page = 1)
+    public function friends(Request $request, string $username)
     {
-        $person = ['friends' => $this->jikan->getUserFriends(new UserFriendsRequest($username, $page))];
-        return response($this->serializer->serialize($person, 'json'));
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $data = ['results' => $this->jikan->getUserFriends(new UserFriendsRequest($username, $page))];
+            $response = \json_decode($this->serializer->serialize($data, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new ResultsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
     public function animelist(string $username, ?string $status = null, int $page = 1)
@@ -201,14 +253,60 @@ class UserController extends Controller
         );
     }
 
-    public function reviews(string $username)
+    public function reviews(Request $request, string $username)
     {
-        $page = $_GET['page'] ?? 1;
-        $results = $this->jikan->getUserReviews(
-            new UserReviewsRequest($username, $page)
-        );
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
 
-        return response($this->serializer->serialize($results, 'json'));
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $data = $this->jikan->getUserReviews(new UserReviewsRequest($username, $page));
+            $response = \json_decode($this->serializer->serialize($data, 'json'), true);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                DB::table($this->getRouteTable($request))
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                DB::table($this->getRouteTable($request))
+                    ->where('request_hash', $this->fingerprint)
+                    ->update($response);
+            }
+
+            $results = DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->get();
+        }
+
+        $response = (new ResultsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 
     public function recommendations(string $username)
