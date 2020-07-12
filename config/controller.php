@@ -2,6 +2,9 @@
 
 return [
 
+    /**
+     * Anime
+     */
     'AnimeController@main' => [
         'table_name' => 'anime',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
@@ -63,6 +66,9 @@ return [
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
+    /**
+     * Manga
+     */
     'MangaController@main' => [
         'table_name' => 'manga',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
@@ -104,6 +110,9 @@ return [
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
+    /**
+     * Characters
+     */
     'CharacterController@main' => [
         'table_name' => 'characters',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
@@ -113,6 +122,9 @@ return [
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
+    /**
+     * Person
+     */
     'PersonController@main' => [
         'table_name' => 'people',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
@@ -122,21 +134,57 @@ return [
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
-    'SeasonController@archive' => 'season_archive',
-    'SeasonController@later' => 'season_later',
-    'SeasonController@main' => 'season',
+    /**
+     * Season
+     */
+    'SeasonController@archive' => [
+        'table_name' => 'season_archive',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'SeasonController@later' => [
+        'table_name' => 'season_later',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'SeasonController@main' => [
+        'table_name' => 'season',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
-    'ScheduleController@main' => 'schedule',
+    /**
+     * Schedule
+     */
+    'ScheduleController@main' => [
+        'table_name' => 'schedule',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
-    'ProducerController@main' => 'producers',
-    'ProducerController@resource' => 'producers_anime',
+    /**
+     * Producers
+     */
+    'ProducerController@main' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_PRODUCERS_EXPIRE')
+    ],
+    'ProducerController@resource' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
+    /**
+     * Magazines
+     */
     'MagazineController@main' => [
         'table_name' => 'common',
         'ttl' => env('CACHE_MAGAZINE_EXPIRE')
     ],
-    'MagazineController@resource' => 'magazines_manga',
+    'MagazineController@resource' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
+    /**
+     * Users
+     */
     'UserController@recentlyOnline' => [
         'table_name' => 'users_recently_online',
         'ttl' => env('CACHE_USERS_RECENTLY_ONLINE')
@@ -165,9 +213,22 @@ return [
         'table_name' => 'users_clubs',
         'ttl' => env('CACHE_USER_EXPIRE')
     ],
-    'UserController@animelist' => 'users_animelist',
-    'UserController@mangalist' => 'users_mangalist',
 
+    /**
+     * User Lists
+     */
+    'UserController@animelist' => [
+        'table_name' => 'users_animelist',
+        'ttl' => env('CACHE_USERLIST_EXPIRE')
+    ],
+    'UserController@mangalist' => [
+        'table_name' => 'users_animelist',
+        'ttl' => env('CACHE_USERLIST_EXPIRE')
+    ],
+
+    /**
+     * Genre
+     */
     'GenreController@mainAnime' => [
         'table_name' => 'common',
         'ttl' => env('CACHE_GENRE_EXPIRE')
@@ -176,9 +237,18 @@ return [
         'table_name' => 'common',
         'ttl' => env('CACHE_GENRE_EXPIRE')
     ],
-    'GenreController@anime' => 'genres_anime',
-    'GenreController@manga' => 'genres_manga',
+    'GenreController@anime' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'GenreController@manga' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
 
+    /**
+     * Top
+     */
     'TopController@anime' => [
         'table_name' => 'common',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
@@ -200,6 +270,9 @@ return [
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
+    /**
+     * Search
+     */
     'SearchController@anime' => [
         'table_name' => 'common',
         'ttl' => env('CACHE_SEARCH_EXPIRE')
