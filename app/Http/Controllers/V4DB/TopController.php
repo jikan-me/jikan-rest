@@ -3,20 +3,17 @@
 namespace App\Http\Controllers\V4DB;
 
 use App\Anime;
-use App\Http\HttpResponse;
-use App\Http\QueryBuilder\SearchQueryBuilderManga;
+use App\Character;
 use App\Http\QueryBuilder\TopQueryBuilderAnime;
 use App\Http\QueryBuilder\TopQueryBuilderManga;
 use App\Http\Resources\V4\AnimeCollection;
+use App\Http\Resources\V4\CharacterCollection;
 use App\Http\Resources\V4\MangaCollection;
+use App\Http\Resources\V4\PersonCollection;
 use App\Manga;
-use Illuminate\Support\Facades\DB;
-use Jikan\Request\Top\TopAnimeRequest;
-use Jikan\Request\Top\TopMangaRequest;
-use Jikan\Request\Top\TopCharactersRequest;
+use App\Person;
+use Illuminate\Http\Request;
 use Jikan\Request\Top\TopPeopleRequest;
-use Jikan\Helper\Constants as JikanConstants;
-use Laravel\Lumen\Http\Request;
 
 class TopController extends Controller
 {
@@ -92,17 +89,73 @@ class TopController extends Controller
         );
     }
 
-    public function people(int $page = 1)
+    public function people(Request $request)
     {
-        $top = ['top' => $this->jikan->getTopPeople(new TopPeopleRequest($page))];
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
 
-        return response($this->serializer->serialize($top, 'json'));
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = Person::query()
+            ->whereNotNull('member_favorites')
+            ->where('member_favorites', '>', 0)
+            ->orderBy('member_favorites', 'desc');
+
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new PersonCollection(
+            $results
+        );
     }
 
-    public function characters(int $page = 1)
+    public function characters(Request $request)
     {
-        $top = ['top' => $this->jikan->getTopCharacters(new TopCharactersRequest($page))];
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
 
-        return response($this->serializer->serialize($top, 'json'));
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = Character::query()
+            ->whereNotNull('member_favorites')
+            ->where('member_favorites', '>', 0)
+            ->orderBy('member_favorites', 'desc');
+
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new CharacterCollection(
+            $results
+        );
     }
 }
