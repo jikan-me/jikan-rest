@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d853b1c159b5aa408af30b54c37c51f",
+    "content-hash": "2aa457b1ebc4916d31595557c9a0d095",
     "packages": [
         {
             "name": "brick/math",
@@ -2210,16 +2210,16 @@
         },
         {
             "name": "jikan-me/jikan",
-            "version": "v3.0.0-alpha.15",
+            "version": "v3.0.0-alpha.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "d285b878e316d72f0b9f7d22c648da22c00860da"
+                "reference": "9e66270bac020ed5eb919d7f4b7a9d70752d6655"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/d285b878e316d72f0b9f7d22c648da22c00860da",
-                "reference": "d285b878e316d72f0b9f7d22c648da22c00860da",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/9e66270bac020ed5eb919d7f4b7a9d70752d6655",
+                "reference": "9e66270bac020ed5eb919d7f4b7a9d70752d6655",
                 "shasum": ""
             },
             "require": {
@@ -2257,7 +2257,7 @@
                 }
             ],
             "description": "Jikan is an unofficial MyAnimeList API",
-            "time": "2020-07-12T14:54:21+00:00"
+            "time": "2020-07-13T13:51:47+00:00"
         },
         {
             "name": "jms/metadata",
