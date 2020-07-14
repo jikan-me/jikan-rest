@@ -37,6 +37,8 @@ $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 $app->withFacades();
 $app->withEloquent();
 
+$app->configure('swagger-lume');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -98,6 +100,8 @@ $app->configure('database');
 $app->configure('queue');
 $app->configure('controller-to-table-mapping');
 $app->configure('controller');
+
+$app->register(\SwaggerLume\ServiceProvider::class);
 
 if (env('CACHING')) {
     $app->configure('cache');

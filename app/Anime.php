@@ -127,7 +127,8 @@ class Anime extends Model
             return null;
         }
 
-        return explode(' ', $premiered)[0];
+        $season = explode(' ', $premiered)[0];
+        return strtolower($season);
     }
 
     public function setYearAttribute($value)

@@ -4,18 +4,10 @@ namespace App\Http\Controllers\V4DB;
 
 use App\Http\HttpHelper;
 use App\Providers\SerializerFactory;
-use App\Providers\SerializerServiceProdivder;
-use App\Providers\SerializerServiceProviderV3;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Jikan\Jikan;
 use Jikan\MyAnimeList\MalClient;
-use JMS\Serializer\Context;
 use JMS\Serializer\Serializer;
 use Laravel\Lumen\Routing\Controller as BaseController;
-use mysql_xdevapi\Exception;
-use r\Queries\Control\Http;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Controller
@@ -23,6 +15,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Controller extends BaseController
 {
+
+    /**
+     * @OA\Info(
+     *   title="Jikan API",
+     *   version="4.0",
+     *   @OA\Contact(
+     *     email="neko@jikan.moe",
+     *     name="Support"
+     *   )
+     * )
+     */
+
     /**
      * @var Serializer
      */

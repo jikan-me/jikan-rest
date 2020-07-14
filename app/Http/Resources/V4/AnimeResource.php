@@ -7,6 +7,186 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AnimeResource extends JsonResource
 {
     /**
+     *  @OA\Schema(
+     *      schema="anime",
+     *      description="Anime Resource",
+     *
+     *      @OA\Property(
+     *          property="mal_id",
+     *          type="integer",
+     *          description="MyAnimeList ID"
+     *      ),
+     *      @OA\Property(
+     *          property="url",
+     *          type="string",
+     *          description="MyAnimeList URL"
+     *      ),
+     *      @OA\Property(
+     *          property="images",
+     *          type="object",
+     *          description="Images",
+     *          @OA\Property(
+     *              property="jpg",
+     *              type="object",
+     *              description="Available images in JPG",
+     *              @OA\Property(
+     *                  property="image_url",
+     *                  type="string",
+     *                  description="Image URL JPG (225x335)",
+     *              ),
+     *              @OA\Property(
+     *                  property="small_image_url",
+     *                  type="string",
+     *                  description="Small Image URL JPG (50x74)",
+     *              ),
+     *              @OA\Property(
+     *                  property="large_image_url",
+     *                  type="string",
+     *                  description="Image URL JPG (300x446)",
+     *              ),
+     *          ),
+     *          @OA\Property(
+     *              property="webp",
+     *              type="object",
+     *              description="Available images in WEBP",
+     *              @OA\Property(
+     *                  property="image_url",
+     *                  type="string",
+     *                  description="Image URL WEBP (225x335)",
+     *              ),
+     *              @OA\Property(
+     *                  property="small_image_url",
+     *                  type="string",
+     *                  description="Small Image URL WEBP (50x74)",
+     *              ),
+     *              @OA\Property(
+     *                  property="large_image_url",
+     *                  type="string",
+     *                  description="Image URL WEBP (300x446)",
+     *              ),
+     *          ),
+     *      ),
+     *      @OA\Property(
+     *          property="trailer",
+     *          ref="#/components/schemas/trailer"
+     *      ),
+     *
+     *      @OA\Property(
+     *          property="title",
+     *          type="string",
+     *          description="Title"
+     *      ),
+     *      @OA\Property(
+     *          property="title_english",
+     *          type="string",
+     *          description="English Title"
+     *      ),
+     *      @OA\Property(
+     *          property="title_japanese",
+     *          type="string",
+     *          description="Japanese Title"
+     *      ),
+     *      @OA\Property(
+     *          property="title_synonyms",
+     *          type="array",
+     *          description="Other Titles",
+     *          @OA\Items(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Property(
+     *          property="type",
+     *          type="string",
+     *          enum={"TV","OVA","Movie","Special","ONA","Music"},
+     *          description="Anime Type"
+     *      ),
+     *      @OA\Property(
+     *          property="source",
+     *          type="string",
+     *          description="Original Material/Source adapted from"
+     *      ),
+     *      @OA\Property(
+     *          property="episodes",
+     *          type="integer",
+     *          description="Episode count"
+     *      ),
+     *      @OA\Property(
+     *          property="status",
+     *          type="string",
+     *          enum={"Finished Airing", "Currently Airing", "Not yet aired"},
+     *          description="Airing status"
+     *      ),
+     *      @OA\Property(
+     *          property="airing",
+     *          type="bool",
+     *          description="Airing boolean"
+     *      ),
+     *      @OA\Property(
+     *          property="aired",
+     *          ref="#/components/schemas/daterange"
+     *      ),
+     *      @OA\Property(
+     *          property="duration",
+     *          type="string",
+     *          description="Parsed raw duration"
+     *      ),
+     *      @OA\Property(
+     *          property="rating",
+     *          type="string",
+     *          enum={"G - All Ages", "PG - Children", "PG-13 - Teens 13 or older", "R - 17+ (violence & profanity)", "R+ - Mild Nudity", "Rx - Hentai" },
+     *          description="Anime audience rating"
+     *      ),
+     *      @OA\Property(
+     *          property="score",
+     *          type="float",
+     *          description="Score"
+     *      ),
+     *      @OA\Property(
+     *          property="scored_by",
+     *          type="integer",
+     *          description="Number of users"
+     *      ),
+     *      @OA\Property(
+     *          property="rank",
+     *          type="integer",
+     *          description="Ranking"
+     *      ),
+     *      @OA\Property(
+     *          property="popularity",
+     *          type="integer",
+     *          description="Popularity"
+     *      ),
+     *      @OA\Property(
+     *          property="members",
+     *          type="integer",
+     *          description="Number of users who have added this entry to their list"
+     *      ),
+     *      @OA\Property(
+     *          property="favorites",
+     *          type="integer",
+     *          description="Number of users who have favorited this entry"
+     *      ),
+     *      @OA\Property(
+     *          property="synopsis",
+     *          type="string",
+     *          description="Synopsis"
+     *      ),
+     *      @OA\Property(
+     *          property="background",
+     *          type="string",
+     *          description="Background"
+     *      ),
+     *      @OA\Property(
+     *          property="season",
+     *          type="float",
+     *          description="Score"
+     *      ),
+
+     *
+     *  )
+     */
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -31,7 +211,7 @@ class AnimeResource extends JsonResource
             'aired' => $this->aired,
             'duration' => $this->duration,
             'rating' => $this->rating,
-            'scored' => $this->score,
+            'score' => $this->score,
             'scored_by' => $this->scored_by,
             'rank' => $this->rank,
             'popularity' => $this->popularity,

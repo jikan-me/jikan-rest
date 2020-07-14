@@ -9,6 +9,7 @@
         "ext-json": "*",
         "ext-mongodb": "*",
         "danielmewes/php-rql": "dev-master",
+        "darkaonline/swagger-lume": "7",
         "divineomega/cachetphp": "^0.2.0",
         "fabpot/goutte": "3.2.3",
         "flipbox/lumen-generator": "^6",
@@ -22,7 +23,8 @@
         "predis/predis": "^1.1",
         "symfony/yaml": "^4.1",
         "vlucas/phpdotenv": "^4",
-        "voku/anti-xss": "^4.0"
+        "voku/anti-xss": "^4.0",
+        "zircote/swagger-php": "3.*"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.9.1",

@@ -1,0 +1,230 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Jikan API",
+        "contact": {
+            "name": "Support",
+            "email": "neko@jikan.moe"
+        },
+        "version": "4.0"
+    },
+    "paths": {
+        "/anime/{id}": {
+            "get": {
+                "tags": [
+                    "anime"
+                ],
+                "operationId": "getAnimeById",
+                "responses": {
+                    "200": {
+                        "description": "Returns anime resource",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "anime": {
+                "description": "Anime Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "description": "Images",
+                        "properties": {
+                            "jpg": {
+                                "description": "Available images in JPG",
+                                "properties": {
+                                    "image_url": {
+                                        "description": "Image URL JPG (225x335)",
+                                        "type": "string"
+                                    },
+                                    "small_image_url": {
+                                        "description": "Small Image URL JPG (50x74)",
+                                        "type": "string"
+                                    },
+                                    "large_image_url": {
+                                        "description": "Image URL JPG (300x446)",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "webp": {
+                                "description": "Available images in WEBP",
+                                "properties": {
+                                    "image_url": {
+                                        "description": "Image URL WEBP (225x335)",
+                                        "type": "string"
+                                    },
+                                    "small_image_url": {
+                                        "description": "Small Image URL WEBP (50x74)",
+                                        "type": "string"
+                                    },
+                                    "large_image_url": {
+                                        "description": "Image URL WEBP (300x446)",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "trailer": {
+                        "$ref": "#/components/schemas/trailer"
+                    },
+                    "title": {
+                        "description": "Title",
+                        "type": "string"
+                    },
+                    "title_english": {
+                        "description": "English Title",
+                        "type": "string"
+                    },
+                    "title_japanese": {
+                        "description": "Japanese Title",
+                        "type": "string"
+                    },
+                    "title_synonyms": {
+                        "description": "Other Titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "type": {
+                        "description": "Anime Type",
+                        "type": "string",
+                        "enum": [
+                            "TV",
+                            "OVA",
+                            "Movie",
+                            "Special",
+                            "ONA",
+                            "Music"
+                        ]
+                    },
+                    "source": {
+                        "description": "Original Material/Source adapted from",
+                        "type": "string"
+                    },
+                    "episodes": {
+                        "description": "Episode count",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "description": "Airing status",
+                        "type": "string",
+                        "enum": [
+                            "Finished Airing",
+                            "Currently Airing",
+                            "Not yet aired"
+                        ]
+                    },
+                    "airing": {
+                        "description": "Airing boolean",
+                        "type": "bool"
+                    },
+                    "aired": {
+                        "$ref": "#/components/schemas/daterange"
+                    }
+                },
+                "type": "object"
+            },
+            "trailer": {
+                "description": "Youtube Details",
+                "properties": {
+                    "youtube_id": {
+                        "description": "YouTube ID",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "YouTube URL",
+                        "type": "string"
+                    },
+                    "embed_url": {
+                        "description": "Parsed Embed URL",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "daterange": {
+                "description": "Date range",
+                "properties": {
+                    "from": {
+                        "description": "Date ISO8601",
+                        "type": "string"
+                    },
+                    "to": {
+                        "description": "Date ISO8601",
+                        "type": "string"
+                    },
+                    "prop": {
+                        "description": "Date Prop",
+                        "properties": {
+                            "from": {
+                                "description": "Date Prop From",
+                                "properties": {
+                                    "day": {
+                                        "description": "Day",
+                                        "type": "integer"
+                                    },
+                                    "month": {
+                                        "description": "Month",
+                                        "type": "integer"
+                                    },
+                                    "year": {
+                                        "description": "year",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "to": {
+                                "description": "Date Prop To",
+                                "properties": {
+                                    "day": {
+                                        "description": "Day",
+                                        "type": "integer"
+                                    },
+                                    "month": {
+                                        "description": "Month",
+                                        "type": "integer"
+                                    },
+                                    "year": {
+                                        "description": "year",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "string": {
+                                "description": "Raw parsed string",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
