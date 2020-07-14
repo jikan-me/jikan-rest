@@ -28,7 +28,7 @@ class Character extends Model
      *
      * @var array
      */
-    protected $appends = ['images'];
+    protected $appends = ['images', 'favorites'];
 
     /**
      * The table associated with the model.
@@ -43,7 +43,7 @@ class Character extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images'
+        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images', 'member_favorites'
     ];
 
     public function getImageAttribute()
@@ -60,6 +60,11 @@ class Character extends Model
                 'small_image_url' => str_replace('.jpg', 't.webp', $imageUrl),
             ]
         ];
+    }
+
+    public function getFavoritesAttribute()
+    {
+        return $this->attributes['member_favorites'];
     }
 
     public static function scrape(int $id)

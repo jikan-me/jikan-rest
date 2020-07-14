@@ -16,6 +16,23 @@ use MongoDB\BSON\UTCDateTime;
 
 class PersonController extends Controller
 {
+    /**
+     *  @OA\Get(
+     *     path="/people/{id}",
+     *     operationId="getPersonById",
+     *     tags={"person"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns person resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function main(Request $request, int $id)
     {
         $results = Person::query()

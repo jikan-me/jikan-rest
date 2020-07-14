@@ -29,7 +29,7 @@ class Person extends Model
      *
      * @var array
      */
-    protected $appends = ['images'];
+    protected $appends = ['images', 'favorites'];
 
     /**
      * The table associated with the model.
@@ -44,8 +44,13 @@ class Person extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'images'
+        '_id', 'images', 'member_favorites'
     ];
+
+    public function getFavoritesAttribute()
+    {
+        return $this->attributes['member_favorites'];
+    }
 
     public function getImageAttribute()
     {

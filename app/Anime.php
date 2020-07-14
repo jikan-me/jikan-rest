@@ -183,8 +183,8 @@ class Anime extends Model
     public function getThemesAttribute()
     {
         return [
-            'opening' => $this->attributes['opening_themes'],
-            'ending' => $this->attributes['ending_themes'],
+            'openings' => $this->attributes['opening_themes'],
+            'endings' => $this->attributes['ending_themes'],
         ];
     }
 

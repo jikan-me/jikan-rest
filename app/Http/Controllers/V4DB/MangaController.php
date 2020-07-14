@@ -44,7 +44,23 @@ use MongoDB\BSON\UTCDateTime;
 
 class MangaController extends Controller
 {
-
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}",
+     *     operationId="getMangaById",
+     *     tags={"manga"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function main(Request $request, int $id)
     {
         $results = Manga::query()

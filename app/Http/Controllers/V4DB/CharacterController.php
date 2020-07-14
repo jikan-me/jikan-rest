@@ -16,6 +16,24 @@ use MongoDB\BSON\UTCDateTime;
 
 class CharacterController extends Controller
 {
+
+    /**
+     *  @OA\Get(
+     *     path="/characters/{id}",
+     *     operationId="getCharacterById",
+     *     tags={"character"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function main(Request $request, int $id)
     {
         $results = Character::query()

@@ -178,11 +178,73 @@ class AnimeResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="season",
-     *          type="float",
-     *          description="Score"
+     *          type="string",
+     *          enum={"Summer", "Winter", "Spring", "Fall"},
+     *          description="Season"
      *      ),
-
-     *
+     *      @OA\Property(
+     *          property="year",
+     *          type="integer",
+     *          description="Year"
+     *      ),
+     *      @OA\Property(
+     *          property="broadcast",
+     *          ref="#/components/schemas/broadcast"
+     *      ),
+     *      @OA\Property(
+     *          property="related",
+     *          ref="#/components/schemas/relation"
+     *      ),
+     *      @OA\Property(
+     *          property="producers",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *              ref="#/components/schemas/mal_url"
+     *          ),
+     *      ),
+     *      @OA\Property(
+     *          property="licensors",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *              ref="#/components/schemas/mal_url"
+     *          ),
+     *      ),
+     *      @OA\Property(
+     *          property="studios",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *              ref="#/components/schemas/mal_url"
+     *          ),
+     *      ),
+     *      @OA\Property(
+     *          property="genres",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *              ref="#/components/schemas/mal_url"
+     *          ),
+     *      ),
+     *      @OA\Property(
+     *          property="themes",
+     *          type="object",
+     *          @OA\Property(
+     *               property="openings",
+     *               type="array",
+     *               @OA\Items(
+     *                   type="string",
+     *               ),
+     *          ),
+     *          @OA\Property(
+     *               property="endings",
+     *               type="array",
+     *               @OA\Items(
+     *                   type="string",
+     *               ),
+     *          ),
+     *      ),
      *  )
      */
 

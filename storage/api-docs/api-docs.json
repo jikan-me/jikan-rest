@@ -29,6 +29,69 @@
                     }
                 }
             }
+        },
+        "/characters/{id}": {
+            "get": {
+                "tags": [
+                    "character"
+                ],
+                "operationId": "getCharacterById",
+                "responses": {
+                    "200": {
+                        "description": "Returns manga resource",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/manga/{id}": {
+            "get": {
+                "tags": [
+                    "manga"
+                ],
+                "operationId": "getMangaById",
+                "responses": {
+                    "200": {
+                        "description": "Returns manga resource",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/people/{id}": {
+            "get": {
+                "tags": [
+                    "person"
+                ],
+                "operationId": "getPersonById",
+                "responses": {
+                    "200": {
+                        "description": "Returns person resource",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -143,6 +206,252 @@
                     },
                     "aired": {
                         "$ref": "#/components/schemas/daterange"
+                    },
+                    "duration": {
+                        "description": "Parsed raw duration",
+                        "type": "string"
+                    },
+                    "rating": {
+                        "description": "Anime audience rating",
+                        "type": "string",
+                        "enum": [
+                            "G - All Ages",
+                            "PG - Children",
+                            "PG-13 - Teens 13 or older",
+                            "R - 17+ (violence & profanity)",
+                            "R+ - Mild Nudity",
+                            "Rx - Hentai"
+                        ]
+                    },
+                    "score": {
+                        "description": "Score",
+                        "type": "float"
+                    },
+                    "scored_by": {
+                        "description": "Number of users",
+                        "type": "integer"
+                    },
+                    "rank": {
+                        "description": "Ranking",
+                        "type": "integer"
+                    },
+                    "popularity": {
+                        "description": "Popularity",
+                        "type": "integer"
+                    },
+                    "members": {
+                        "description": "Number of users who have added this entry to their list",
+                        "type": "integer"
+                    },
+                    "favorites": {
+                        "description": "Number of users who have favorited this entry",
+                        "type": "integer"
+                    },
+                    "synopsis": {
+                        "description": "Synopsis",
+                        "type": "string"
+                    },
+                    "background": {
+                        "description": "Background",
+                        "type": "string"
+                    },
+                    "season": {
+                        "description": "Season",
+                        "type": "string",
+                        "enum": [
+                            "Summer",
+                            "Winter",
+                            "Spring",
+                            "Fall"
+                        ]
+                    },
+                    "year": {
+                        "description": "Year",
+                        "type": "integer"
+                    },
+                    "broadcast": {
+                        "$ref": "#/components/schemas/broadcast"
+                    },
+                    "related": {
+                        "$ref": "#/components/schemas/relation"
+                    },
+                    "producers": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "licensors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "studios": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "genres": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "themes": {
+                        "properties": {
+                            "openings": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "endings": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "character": {
+                "description": "Character Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "description": "Images",
+                        "properties": {
+                            "jpg": {
+                                "description": "Available images in JPG",
+                                "properties": {
+                                    "image_url": {
+                                        "description": "Image URL JPG (225x335)",
+                                        "type": "string"
+                                    },
+                                    "small_image_url": {
+                                        "description": "Small Image URL JPG (50x74)",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "webp": {
+                                "description": "Available images in WEBP",
+                                "properties": {
+                                    "image_url": {
+                                        "description": "Image URL WEBP (225x335)",
+                                        "type": "string"
+                                    },
+                                    "small_image_url": {
+                                        "description": "Small Image URL WEBP (50x74)",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "name": {
+                        "description": "Name",
+                        "type": "string"
+                    },
+                    "nicknames": {
+                        "description": "Other Names",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "favorites": {
+                        "description": "Number of users who have favorited this entry",
+                        "type": "integer"
+                    },
+                    "about": {
+                        "description": "Synopsis",
+                        "type": "string"
+                    },
+                    "animeography": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/mal_url"
+                                },
+                                {
+                                    "properties": {
+                                        "image_url": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        }
+                    },
+                    "mangaography": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/mal_url"
+                                },
+                                {
+                                    "properties": {
+                                        "image_url": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        }
+                    },
+                    "voice_actors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/mal_url"
+                                },
+                                {
+                                    "properties": {
+                                        "image_url": {
+                                            "type": "string"
+                                        },
+                                        "language": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        }
                     }
                 },
                 "type": "object"
@@ -221,6 +530,367 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "broadcast": {
+                "description": "Broadcast Details",
+                "properties": {
+                    "day": {
+                        "description": "Day of the week",
+                        "type": "string"
+                    },
+                    "time": {
+                        "description": "Time in 24 hour format",
+                        "type": "string"
+                    },
+                    "timezone": {
+                        "description": "Timezone (Tz Database format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)",
+                        "type": "string"
+                    },
+                    "string": {
+                        "description": "Raw parsed broadcast string",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "mal_url": {
+                "description": "Parsed URL Data",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "type": {
+                        "description": "Type of resource",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "Resource Name/Title",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "relation": {
+                "description": "Related resources",
+                "type": "array",
+                "items": {
+                    "properties": {
+                        "relation": {
+                            "description": "Relation type",
+                            "type": "string"
+                        },
+                        "items": {
+                            "description": "Related items",
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/components/schemas/mal_url"
+                            }
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "manga": {
+                "description": "Manga Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "description": "Images",
+                        "properties": {
+                            "jpg": {
+                                "description": "Available images in JPG",
+                                "properties": {
+                                    "image_url": {
+                                        "description": "Image URL JPG (225x335)",
+                                        "type": "string"
+                                    },
+                                    "small_image_url": {
+                                        "description": "Small Image URL JPG (50x74)",
+                                        "type": "string"
+                                    },
+                                    "large_image_url": {
+                                        "description": "Image URL JPG (300x446)",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "webp": {
+                                "description": "Available images in WEBP",
+                                "properties": {
+                                    "image_url": {
+                                        "description": "Image URL WEBP (225x335)",
+                                        "type": "string"
+                                    },
+                                    "small_image_url": {
+                                        "description": "Small Image URL WEBP (50x74)",
+                                        "type": "string"
+                                    },
+                                    "large_image_url": {
+                                        "description": "Image URL WEBP (300x446)",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "title": {
+                        "description": "Title",
+                        "type": "string"
+                    },
+                    "title_english": {
+                        "description": "English Title",
+                        "type": "string"
+                    },
+                    "title_japanese": {
+                        "description": "Japanese Title",
+                        "type": "string"
+                    },
+                    "title_synonyms": {
+                        "description": "Other Titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "type": {
+                        "description": "Manga Type",
+                        "type": "string",
+                        "enum": [
+                            "Manga",
+                            "Novel",
+                            "One-shot",
+                            "Doujinshi",
+                            "Manhua",
+                            "Manhwa",
+                            "OEL"
+                        ]
+                    },
+                    "chapters": {
+                        "description": "Chapter count",
+                        "type": "integer"
+                    },
+                    "volumnes": {
+                        "description": "Volume count",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "description": "Publishing status",
+                        "type": "string",
+                        "enum": [
+                            "Finished",
+                            "Publishing",
+                            "On Hiatus",
+                            "Discontinued",
+                            "Not yet published"
+                        ]
+                    },
+                    "publishing": {
+                        "description": "Publishing boolean",
+                        "type": "bool"
+                    },
+                    "published": {
+                        "$ref": "#/components/schemas/daterange"
+                    },
+                    "score": {
+                        "description": "Score",
+                        "type": "float"
+                    },
+                    "scored_by": {
+                        "description": "Number of users",
+                        "type": "integer"
+                    },
+                    "rank": {
+                        "description": "Ranking",
+                        "type": "integer"
+                    },
+                    "popularity": {
+                        "description": "Popularity",
+                        "type": "integer"
+                    },
+                    "members": {
+                        "description": "Number of users who have added this entry to their list",
+                        "type": "integer"
+                    },
+                    "favorites": {
+                        "description": "Number of users who have favorited this entry",
+                        "type": "integer"
+                    },
+                    "synopsis": {
+                        "description": "Synopsis",
+                        "type": "string"
+                    },
+                    "background": {
+                        "description": "Background",
+                        "type": "string"
+                    },
+                    "broadcast": {
+                        "$ref": "#/components/schemas/broadcast"
+                    },
+                    "related": {
+                        "$ref": "#/components/schemas/relation"
+                    },
+                    "authors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "serializations": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "genres": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "person": {
+                "description": "Person Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "website_url": {
+                        "description": "Person's website URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "description": "Images",
+                        "properties": {
+                            "jpg": {
+                                "description": "Available images in JPG",
+                                "properties": {
+                                    "image_url": {
+                                        "description": "Image URL JPG (225x350)",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "webp": {
+                                "description": "Available images in WEBP",
+                                "properties": {
+                                    "image_url": {
+                                        "description": "Image URL WEBP (225x350)",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "name": {
+                        "description": "Name",
+                        "type": "string"
+                    },
+                    "given_name": {
+                        "description": "Given Name",
+                        "type": "string"
+                    },
+                    "family_name": {
+                        "description": "Family Name",
+                        "type": "string"
+                    },
+                    "alternate_names": {
+                        "description": "Other Names",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "birthday": {
+                        "description": "Birthday Date ISO8601",
+                        "type": "string"
+                    },
+                    "favorites": {
+                        "description": "Number of users who have favorited this entry",
+                        "type": "integer"
+                    },
+                    "about": {
+                        "description": "Synopsis",
+                        "type": "string"
+                    },
+                    "voice_acting_roles": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "role": {
+                                    "description": "Role",
+                                    "type": "string"
+                                },
+                                "anime": {
+                                    "$ref": "#/components/schemas/mal_url"
+                                },
+                                "character": {
+                                    "$ref": "#/components/schemas/mal_url"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "anime_staff_positions": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "position": {
+                                    "description": "Position",
+                                    "type": "string"
+                                },
+                                "anime": {
+                                    "$ref": "#/components/schemas/mal_url"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "published_manga": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "position": {
+                                    "description": "Position",
+                                    "type": "string"
+                                },
+                                "manga": {
+                                    "$ref": "#/components/schemas/mal_url"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
