@@ -9,7 +9,7 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 class SearchQueryBuilderGenre implements SearchQueryBuilderInterface
 {
 
-    const MAX_RESULTS_PER_PAGE = 50;
+    const MAX_RESULTS_PER_PAGE = 25;
 
     const ORDER_BY = [
         'mal_id', 'title', 'count'

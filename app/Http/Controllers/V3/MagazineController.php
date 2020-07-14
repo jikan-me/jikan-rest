@@ -10,7 +10,7 @@ use Jikan\Request\Magazine\MagazineRequest;
 class MagazineController extends Controller
 {
     private $request;
-    const MAX_RESULTS_PER_PAGE = 50;
+    const MAX_RESULTS_PER_PAGE = 25;
 
     public function main(Request $request, int $id, int $page = 1)
     {

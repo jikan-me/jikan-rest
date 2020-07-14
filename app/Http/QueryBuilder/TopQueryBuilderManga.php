@@ -17,7 +17,7 @@
         /**
          *
          */
-        const MAX_RESULTS_PER_PAGE = 50;
+        const MAX_RESULTS_PER_PAGE = 25;
     
         /**
          *
