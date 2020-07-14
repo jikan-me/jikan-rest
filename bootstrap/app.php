@@ -163,7 +163,7 @@ $app->router->group(
     }
 );
 
-$app->router->group(
+/*$app->router->group(
     [
         'prefix' => 'v3',
         'namespace' => 'App\Http\Controllers\V3',
@@ -171,6 +171,25 @@ $app->router->group(
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v3.php';
+    }
+);*/
+
+$app->router->group(
+    [
+        'prefix' => 'v3',
+        'namespace' => 'App\Http\Controllers\V3',
+        'middleware' => $commonMiddleware
+    ],
+    function ($router) {
+        $router->get('/', function () {
+            return response()
+                ->json([
+                    'status' => 400,
+                    'type' => 'HttpException',
+                    'message' => 'Unavailable on test endpoint.',
+                    'error' => null
+                ], 400);
+        });
     }
 );
 
