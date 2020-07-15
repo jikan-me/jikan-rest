@@ -189,7 +189,7 @@ If you don't want to host your instance, there's a public API available.
 | Dart       | [jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol |
 | Elixir     | [JikanEx](https://github.com/seanbreckenridge/jikan_ex) by Sean Breckenridge |
 | Go         | [jikan-go](https://github.com/darenliang/jikan-go) by Daren Liang<br>[jikan2go](https://github.com/nokusukun/jikan2go) by nokusukun |
-| Java       | [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs<br>[Java Jikan Client](https://github.com/Schalar/Jikan) by Schalar |
+| Java       | [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs<br>[Java Jikan Client](https://github.com/Schalar/Jikan) by Schalar<br>[reactive-jikan](https://github.com/SandroHc/reactive-jikan) by Sandro Marques |
 | JavaScript | [JikanJS](https://github.com/zuritor/jikanjs) by Zuritor |
 | Kotlin     | [JikanKt](https://github.com/GSculerlor/JikanKt) by Ganedra Afrasya |
 | Node.js    | [jikan-node](https://github.com/xy137/jikan-node) by xy137 |
