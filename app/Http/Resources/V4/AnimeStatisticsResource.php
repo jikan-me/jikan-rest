@@ -11,6 +11,70 @@ class AnimeStatisticsResource extends JsonResource
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
+     *
+     *  @OA\Schema(
+     *      schema="anime statistics",
+     *      description="Anime Statistics Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
+     *          @OA\Property(
+     *              property="watching",
+     *              type="integer",
+     *              description="Number of users watching the resource"
+     *          ),
+     *          @OA\Property(
+     *              property="completed",
+     *              type="integer",
+     *              description="Number of users who have completed the resource"
+     *          ),
+     *          @OA\Property(
+     *              property="on_hold",
+     *              type="integer",
+     *              description="Number of users who have put the resource on hold"
+     *          ),
+     *          @OA\Property(
+     *              property="dropped",
+     *              type="integer",
+     *              description="Number of users who have dropped the resource"
+     *          ),
+     *          @OA\Property(
+     *              property="plan_to_watch",
+     *              type="integer",
+     *              description="Number of users who have planned to watch the resource"
+     *          ),
+     *          @OA\Property(
+     *              property="total",
+     *              type="integer",
+     *              description="Total number of users who have the resource added to their lists"
+     *          ),
+     *
+     *          @OA\Property(
+     *               property="scores",
+     *               type="array",
+     *               @OA\Items(
+     *                   type="object",
+     *                   @OA\Property(
+     *                       property="score",
+     *                       type="integer",
+     *                       description="The number Score"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="votes",
+     *                       type="integer",
+     *                       description="Number of votes for this score"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="percentage",
+     *                       type="float",
+     *                       description="Percentage of votes for this score"
+     *                   ),
+     *              ),
+     *          ),
+     *     ),
+     *  )
      */
     public function toArray($request)
     {

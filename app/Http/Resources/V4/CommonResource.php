@@ -27,6 +27,35 @@ class CommonResource extends JsonResource
      *          type="string",
      *          description="Parsed Embed URL"
      *      ),
+     *     @OA\Property(
+     *          property="images",
+     *          type="object",
+     *          @OA\Property(
+     *              property="image_url",
+     *              type="string",
+     *              description="Default Image Size URL (120x90)"
+     *          ),
+     *          @OA\Property(
+     *              property="small_image_url",
+     *              type="string",
+     *              description="Small Image Size URL (640x480)"
+     *          ),
+     *          @OA\Property(
+     *              property="medium_image_url",
+     *              type="string",
+     *              description="Medium Image Size URL (320x180)"
+     *          ),
+     *          @OA\Property(
+     *              property="large_image_url",
+     *              type="string",
+     *              description="Large Image Size URL (480x360)"
+     *          ),
+     *          @OA\Property(
+     *              property="maximum_image_url",
+     *              type="string",
+     *              description="Maximum Image Size URL (1280x720)"
+     *          ),
+     *     ),
      *  ),
      *
      *  @OA\Schema(
@@ -171,6 +200,81 @@ class CommonResource extends JsonResource
      *                  ref="#/components/schemas/mal_url"
      *              ),
      *          ),
+     *     ),
+     *  ),
+     *
+     * @OA\Schema(
+     *     schema="pagination",
+     *     type="object",
+     *     @OA\Property(
+     *          property="last_visible_page",
+     *          type="integer"
+     *      ),
+     *     @OA\Property(
+     *          property="has_next_page",
+     *          type="bool"
+     *     ),
+     *  ),
+     *
+     * @OA\Schema(
+     *     schema="news",
+     *     type="object",
+     *     @OA\Property(
+     *          property="results",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="mal_id",
+     *                  type="integer",
+     *                  description="MyAnimeList ID"
+     *              ),
+     *              @OA\Property(
+     *                  property="url",
+     *                  type="string",
+     *                  description="MyAnimeList URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="title",
+     *                  type="string",
+     *                  description="Title"
+     *              ),
+     *              @OA\Property(
+     *                  property="date",
+     *                  type="string",
+     *                  description="Post Date ISO8601"
+     *              ),
+     *              @OA\Property(
+     *                  property="author_username",
+     *                  type="string",
+     *                  description="Author MyAnimeList Username"
+     *              ),
+     *              @OA\Property(
+     *                  property="author_url",
+     *                  type="string",
+     *                  description="Author Profile URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="forum_url",
+     *                  type="string",
+     *                  description="Forum topic URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="image_url",
+     *                  type="string",
+     *                  description="Image URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="comments",
+     *                  type="integer",
+     *                  description="Comment count"
+     *              ),
+     *              @OA\Property(
+     *                  property="excerpt",
+     *                  type="string",
+     *                  description="Excerpt"
+     *              ),
+     *         ),
      *     ),
      *  ),
      */

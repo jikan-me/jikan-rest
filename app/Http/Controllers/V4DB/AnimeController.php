@@ -15,6 +15,7 @@ use App\Http\Resources\V4\MoreInfoResource;
 use App\Http\Resources\V4\AnimeNewsResource;
 use App\Http\Resources\V4\PicturesResource;
 use App\Http\Resources\V4\RecommendationsResource;
+use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\ReviewsResource;
 use App\Http\Resources\V4\AnimeStaffResource;
 use App\Http\Resources\V4\AnimeStatisticsResource;
@@ -120,6 +121,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/characters",
+     *     operationId="getAnimeCharacters",
+     *     tags={"anime characters"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime characters resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function characters(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -175,6 +193,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/staff",
+     *     operationId="getAnimeStaff",
+     *     tags={"anime staff"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime staff resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function staff(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -231,6 +266,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/episodes/{mal_id}",
+     *     operationId="getAnimeEpisodeById",
+     *     tags={"anime episode"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a single anime episode resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function episode(Request $request, int $id, int $episodeId)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -287,6 +339,96 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/episodes",
+     *     operationId="getAnimeEpisodes",
+     *     tags={"anime episodes"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of anime episodes",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     *
+     *  @OA\Schema(
+     *      schema="anime episodes",
+     *      description="Anime Episodes Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
+     *          allOf={
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      property="results",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="object",
+     *                          @OA\Property(
+     *                              property="mal_id",
+     *                              type="integer",
+     *                              description="MyAnimeList ID"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="url",
+     *                              type="string",
+     *                              description="MyAnimeList URL"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="title",
+     *                              type="string",
+     *                              description="Title"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="title_japanese",
+     *                              type="string",
+     *                              description="Title Japanese"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="title_romanji",
+     *                              type="string",
+     *                              description="title_romanji"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="duration",
+     *                              type="integer",
+     *                              description="Episode duration in seconds"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="aired",
+     *                              type="string",
+     *                              description="Aired Date ISO8601"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="filler",
+     *                              type="bool",
+     *                              description="Filler episode"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="recap",
+     *                              type="bool",
+     *                              description="Recap episode"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="synopsis",
+     *                              type="string",
+     *                              description="Episode Synopsis"
+     *                          ),
+     *                      ),
+     *                  ),
+     *              ),
+     *          }
+     *     ),
+     *  )
+     */
     public function episodes(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -332,7 +474,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new AnimeEpisodesResource(
+        $response = (new ResultsResource(
             $results->first()
         ))->response();
 
@@ -343,6 +485,38 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/news",
+     *     operationId="getAnimeNews",
+     *     tags={"anime news"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of anime news topics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     *
+     *  @OA\Schema(
+     *      schema="anime news",
+     *      description="Anime News Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
+     *          allOf={
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(ref="#/components/schemas/news"),
+     *          }
+     *     ),
+     *  )
+     */
     public function news(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -388,7 +562,7 @@ class AnimeController extends Controller
                 ->get();
         }
 
-        $response = (new NewsResource(
+        $response = (new ResultsResource(
             $results->first()
         ))->response();
 
@@ -399,6 +573,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/forum",
+     *     operationId="getAnimeTopics",
+     *     tags={"forum"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of anime forum topics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function forum(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -455,6 +646,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/videos",
+     *     operationId="getAnimeVideos",
+     *     tags={"anime videos"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of anime forum topics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function videos(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -510,6 +718,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/pictures",
+     *     operationId="getAnimePictures",
+     *     tags={"pictures"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of anime forum topics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function pictures(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -565,6 +790,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/statistics",
+     *     operationId="getAnimeStatistics",
+     *     tags={"anime statistics"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime statistics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function stats(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -620,6 +862,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/moreinfo",
+     *     operationId="getAnimeMoreInfo",
+     *     tags={"moreinfo"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime statistics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function moreInfo(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -675,6 +934,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/recommendations",
+     *     operationId="getAnimeRecommendations",
+     *     tags={"recommendations"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime recommendations",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function recommendations(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -730,6 +1006,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/userupdates",
+     *     operationId="getAnimeUserUpdates",
+     *     tags={"anime userupdates"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime recommendations",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function userupdates(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -786,6 +1079,23 @@ class AnimeController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/reviews",
+     *     operationId="getAnimeReviews",
+     *     tags={"anime reviews"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime reviews",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function reviews(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))

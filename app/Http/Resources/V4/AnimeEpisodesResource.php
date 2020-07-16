@@ -15,9 +15,9 @@ class AnimeEpisodesResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'last_visible_page' => $this['episodes_last_page'],
+            'last_visible_page' => $this['last_visible_page'] ?? 1,
             'has_next_page' => $this['has_next_page'] ?? false,
-            'episodes' => $this['episodes']
+            'results' => $this['results']
         ];
     }
 }

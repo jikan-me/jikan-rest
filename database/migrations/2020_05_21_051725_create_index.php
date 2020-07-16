@@ -18,10 +18,11 @@ class CreateIndex extends Migration
      */
     public function up()
     {
-        $mappings = config('controller-to-table-mapping');
+        $mappings = config('controller');
         $mapped = [];
 
-        foreach ($mappings as $table) {
+        foreach ($mappings as $controller) {
+            $table = $controller['table_name'];
             if (in_array($table, $mapped) || in_array($table, self::IGNORE) || Schema::hasTable($table)) {
                 continue;
             }

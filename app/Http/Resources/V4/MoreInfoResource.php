@@ -11,6 +11,22 @@ class MoreInfoResource extends JsonResource
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
+     *
+     *  @OA\Schema(
+     *      schema="moreinfo",
+     *      description="More Info Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
+     *          @OA\Property(
+     *              property="moreinfo",
+     *              type="string",
+     *              description="Additional information on the entry"
+     *          ),
+     *     ),
+     *  )
      */
     public function toArray($request)
     {

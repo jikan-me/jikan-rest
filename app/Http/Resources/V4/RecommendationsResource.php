@@ -11,6 +11,45 @@ class RecommendationsResource extends JsonResource
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
+     *
+     *  @OA\Schema(
+     *      schema="recommendations",
+     *      description="Recommendations Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="array",
+     *
+     *          @OA\Items(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="mal_id",
+     *                  type="integer",
+     *                  description="Recommended MyAnimeList ID"
+     *              ),
+     *              @OA\Property(
+     *                  property="url",
+     *                  type="string",
+     *                  description="Recommended MyAnimeList URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="recommendation_url",
+     *                  type="string",
+     *                  description="Recommendation MyAnimeList URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="title",
+     *                  type="string",
+     *                  description="Recommended Entry Title"
+     *              ),
+     *              @OA\Property(
+     *                  property="recommendation_count",
+     *                  type="integer",
+     *                  description="Number of users who have recommended this entry"
+     *              ),
+     *          ),
+     *     ),
+     *  )
      */
     public function toArray($request)
     {

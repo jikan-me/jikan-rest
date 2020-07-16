@@ -91,6 +91,23 @@ class PersonController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/people/{id}/pictures",
+     *     operationId="getPersonPictures",
+     *     tags={"pictures"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of pictures of the person",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function pictures(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))

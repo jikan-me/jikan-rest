@@ -12,6 +12,21 @@ class AnimeCollection extends ResourceCollection
      * The resource that this resource collects.
      *
      * @var string
+     *
+     *  @OA\Schema(
+     *      schema="anime search",
+     *      description="Anime Search Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
+     *          allOf={
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(ref="#/components/schemas/anime"),
+     *          }
+     *     ),
+     *  )
      */
     public $collects = 'App\Http\Resources\V4\AnimeResource';
 

@@ -92,6 +92,23 @@ class CharacterController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/characters/{id}/pictures",
+     *     operationId="getCharacterPictures",
+     *     tags={"pictures"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of pictures of the character",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function pictures(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))

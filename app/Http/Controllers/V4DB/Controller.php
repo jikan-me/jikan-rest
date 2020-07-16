@@ -17,13 +17,28 @@ class Controller extends BaseController
 {
 
     /**
-     * @OA\Info(
-     *   title="Jikan API",
-     *   version="4.0",
-     *   @OA\Contact(
-     *     email="neko@jikan.moe",
-     *     name="Support"
-     *   )
+     * @OA\OpenApi(
+     *     @OA\Info(
+     *         version="4.0.0",
+     *         title="Jikan API",
+     *         description="[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. It scrapes the website to satisfy the need for an API - which MyAnimeList lacks.",
+     *         termsOfService="https://jikan.moe/terms",
+     *         @OA\Contact(
+     *             email="neko@jikan.moe"
+     *         ),
+     *         @OA\License(
+     *             name="MIT",
+     *             url="https://github.com/jikan-me/jikan-rest/blob/master/LICENSE"
+     *         )
+     *     ),
+     *     @OA\Server(
+     *         description="Jikan REST API Alpha",
+     *         url="https://api.jikan.moe/v4-alpha"
+     *     ),
+     *     @OA\ExternalDocumentation(
+     *         description="Find out more about Jikan",
+     *         url="https://jikan.moe"
+     *     )
      * )
      */
 

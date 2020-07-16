@@ -45,6 +45,23 @@ class SearchController extends Controller
     private $request;
     const MAX_RESULTS_PER_PAGE = 25;
 
+    /**
+     *  @OA\Get(
+     *     path="/anime",
+     *     operationId="getAnimeSearch",
+     *     tags={"anime search"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns search results for anime",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function anime(Request $request)
     {
         $this->request = $request;
@@ -81,6 +98,23 @@ class SearchController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga",
+     *     operationId="getMangaSearch",
+     *     tags={"manga search"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns search results for manga",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function manga(Request $request)
     {
         $this->request = $request;
@@ -117,6 +151,23 @@ class SearchController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/people",
+     *     operationId="getPeopleSearch",
+     *     tags={"people search"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns search results for people",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function people(Request $request)
     {
         $page = $request->get('page') ?? 1;
@@ -152,6 +203,23 @@ class SearchController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/characters",
+     *     operationId="getCharactersSearch",
+     *     tags={"characters search"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns search results for characters",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function character(Request $request)
     {
         $page = $request->get('page') ?? 1;
@@ -187,6 +255,23 @@ class SearchController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users",
+     *     operationId="getUsersSearch",
+     *     tags={"users search"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns search results for users",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function users(Request $request)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -246,6 +331,23 @@ class SearchController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/userbyid",
+     *     operationId="getUserById",
+     *     tags={"user by id search"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns username by ID search",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function userById(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -301,6 +403,23 @@ class SearchController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/clubs",
+     *     operationId="getClubsSearch",
+     *     tags={"clubs search"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns search results for clubs",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function clubs(Request $request)
     {
         $this->request = $request;

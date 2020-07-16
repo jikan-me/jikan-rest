@@ -7,6 +7,7 @@ use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\Resources\V4\AnimeCharactersResource;
 use App\Http\Resources\V4\AnimeForumResource;
+use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\ReviewsResource;
 use App\Http\Resources\V4\UserUpdatesResource;
 use App\Http\Resources\V4\RecommendationsResource;
@@ -120,6 +121,23 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/characters",
+     *     operationId="getMangaCharacters",
+     *     tags={"manga characters"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga characters resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function characters(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -175,6 +193,38 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/news",
+     *     operationId="getMangaNews",
+     *     tags={"manga news"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of manga news topics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     *
+     *  @OA\Schema(
+     *      schema="manga news",
+     *      description="Manga News Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
+     *          allOf={
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(ref="#/components/schemas/news"),
+     *          }
+     *     ),
+     *  )
+     */
     public function news(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -186,7 +236,7 @@ class MangaController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $manga = ['articles' => $this->jikan->getNewsList(new MangaNewsRequest($id, $page))];
+            $manga = $this->jikan->getNewsList(new MangaNewsRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
             if (HttpHelper::hasError($response)) {
@@ -220,7 +270,7 @@ class MangaController extends Controller
                 ->get();
         }
 
-        $response = (new NewsResource(
+        $response = (new ResultsResource(
             $results->first()
         ))->response();
 
@@ -231,6 +281,23 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/forum",
+     *     operationId="getMangaTopics",
+     *     tags={"forum"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of manga forum topics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function forum(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -287,6 +354,23 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/pictures",
+     *     operationId="getMangaPictures",
+     *     tags={"pictures"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a list of manga forum topics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function pictures(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -342,6 +426,23 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/statistics",
+     *     operationId="getMangaStatistics",
+     *     tags={"manga statistics"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime statistics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function stats(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -397,6 +498,23 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/moreinfo",
+     *     operationId="getMangaMoreInfo",
+     *     tags={"moreinfo"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga moreinfo",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function moreInfo(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -452,6 +570,23 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/recommendations",
+     *     operationId="getMangaRecommendations",
+     *     tags={"recommendations"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga recommendations",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function recommendations(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -507,6 +642,23 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/userupdates",
+     *     operationId="getMangaUserUpdates",
+     *     tags={"manga userupdates"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga user updates",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function userupdates(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -563,6 +715,23 @@ class MangaController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/reviews",
+     *     operationId="getMangaReviews",
+     *     tags={"manga reviews"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga reviews",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function reviews(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
