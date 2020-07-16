@@ -356,6 +356,48 @@
                 }
             }
         },
+        "/magazines": {
+            "get": {
+                "tags": [
+                    "magazines"
+                ],
+                "operationId": "getMagazines",
+                "responses": {
+                    "200": {
+                        "description": "Returns Magazines Resource",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/magazines/{id}": {
+            "get": {
+                "tags": [
+                    "manga collection"
+                ],
+                "operationId": "getMagazineById",
+                "responses": {
+                    "200": {
+                        "description": "Returns Magazine's manga",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/manga/{id}": {
             "get": {
                 "tags": [
@@ -608,10 +650,73 @@
                 }
             }
         },
+        "/producers": {
+            "get": {
+                "tags": [
+                    "producers"
+                ],
+                "operationId": "getProducers",
+                "responses": {
+                    "200": {
+                        "description": "Returns Producers Resource",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/producers/{id}": {
+            "get": {
+                "tags": [
+                    "anime collection"
+                ],
+                "operationId": "getProducerById",
+                "responses": {
+                    "200": {
+                        "description": "Returns Producer's anime",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/schedules": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "operationId": "getSchedules",
+                "responses": {
+                    "200": {
+                        "description": "Returns weekly schedule",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/anime": {
             "get": {
                 "tags": [
-                    "anime search"
+                    "anime collection"
                 ],
                 "operationId": "getAnimeSearch",
                 "responses": {
@@ -754,6 +859,69 @@
                     }
                 }
             }
+        },
+        "/seasons/{year}/{season}": {
+            "get": {
+                "tags": [
+                    "anime collection"
+                ],
+                "operationId": "getSeason",
+                "responses": {
+                    "200": {
+                        "description": "Returns seasonal anime",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/seasons": {
+            "get": {
+                "tags": [
+                    "seasons"
+                ],
+                "operationId": "getSeasons",
+                "responses": {
+                    "200": {
+                        "description": "Returns available list of seasons",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/seasons/upcoming": {
+            "get": {
+                "tags": [
+                    "anime collection"
+                ],
+                "operationId": "getSeasonUpcoming",
+                "responses": {
+                    "200": {
+                        "description": "Returns upcoming season's anime",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -859,6 +1027,105 @@
                 },
                 "type": "object"
             },
+            "schedules": {
+                "description": "List of weekly schedule",
+                "properties": {
+                    "data": {
+                        "properties": {
+                            "monday": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            },
+                            "tuesday": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            },
+                            "wednesday": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            },
+                            "thursday": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            },
+                            "friday": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            },
+                            "saturday": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            },
+                            "sunday": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            },
+                            "other": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            },
+                            "unknown": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/anime"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "seasons": {
+                "description": "List of available seasons",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "year": {
+                                    "description": "Year",
+                                    "type": "integer"
+                                },
+                                "seasons": {
+                                    "description": "List of available seasons",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "anime characters": {
                 "description": "Anime Characters Resource",
                 "properties": {
@@ -915,8 +1182,8 @@
                 },
                 "type": "object"
             },
-            "anime search": {
-                "description": "Anime Search Resource",
+            "anime collection": {
+                "description": "Anime Collection Resource",
                 "properties": {
                     "data": {
                         "description": "The resource that this resource collects.",
@@ -1810,6 +2077,46 @@
                 },
                 "type": "object"
             },
+            "magazines": {
+                "description": "Magazine Collection Resource",
+                "properties": {
+                    "data": {
+                        "description": "Transform the resource collection into an array.",
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/pagination"
+                            },
+                            {
+                                "$ref": "#/components/schemas/producer"
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "magazine": {
+                "description": "Magazine Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Magazine Name",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "count": {
+                        "description": "Magazine's manga count",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "manga characters": {
                 "description": "Manga Characters Resource",
                 "properties": {
@@ -2292,6 +2599,46 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "producers": {
+                "description": "Producer Collection Resource",
+                "properties": {
+                    "data": {
+                        "description": "Transform the resource collection into an array.",
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/pagination"
+                            },
+                            {
+                                "$ref": "#/components/schemas/producer"
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "producer": {
+                "description": "Producer Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Producer Name",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "count": {
+                        "description": "Producer's anime count",
+                        "type": "integer"
                     }
                 },
                 "type": "object"

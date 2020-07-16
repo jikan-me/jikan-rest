@@ -11,6 +11,31 @@ class MagazineResource extends JsonResource
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
+     *
+     *  @OA\Schema(
+     *      schema="magazine",
+     *      description="Magazine Resource",
+     *      @OA\Property(
+     *          property="mal_id",
+     *          type="integer",
+     *          description="MyAnimeList ID"
+     *      ),
+     *      @OA\Property(
+     *          property="name",
+     *          type="string",
+     *          description="Magazine Name"
+     *      ),
+     *      @OA\Property(
+     *          property="url",
+     *          type="string",
+     *          description="MyAnimeList URL"
+     *      ),
+     *      @OA\Property(
+     *          property="count",
+     *          type="integer",
+     *          description="Magazine's manga count"
+     *      ),
+     *  ),
      */
     public function toArray($request)
     {

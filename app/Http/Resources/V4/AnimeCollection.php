@@ -14,8 +14,8 @@ class AnimeCollection extends ResourceCollection
      * @var string
      *
      *  @OA\Schema(
-     *      schema="anime search",
-     *      description="Anime Search Resource",
+     *      schema="anime collection",
+     *      description="Anime Collection Resource",
      *
      *     @OA\Property(
      *          property="data",

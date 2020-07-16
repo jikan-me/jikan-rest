@@ -24,6 +24,23 @@ class MagazineController extends Controller
 
     const MAX_RESULTS_PER_PAGE = 25;
 
+    /**
+     *  @OA\Get(
+     *     path="/magazines",
+     *     operationId="getMagazines",
+     *     tags={"magazines"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Magazines Resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function main(Request $request)
     {
 /*
@@ -118,6 +135,23 @@ class MagazineController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/magazines/{id}",
+     *     operationId="getMagazineById",
+     *     tags={"manga collection"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Magazine's manga",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function resource(int $id, int $page = 1)
     {
         $magazine = $this->jikan->getMagazine(new MagazineRequest($id, $page));

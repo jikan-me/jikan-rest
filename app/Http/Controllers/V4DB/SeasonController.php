@@ -24,6 +24,23 @@ class SeasonController extends Controller
     private $season;
     private $year;
 
+    /**
+     *  @OA\Get(
+     *     path="/seasons/{year}/{season}",
+     *     operationId="getSeason",
+     *     tags={"anime collection"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns seasonal anime",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function main(Request $request, ?int $year = null, ?string $season = null)
     {
         $this->request = $request;
@@ -57,6 +74,50 @@ class SeasonController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/seasons",
+     *     operationId="getSeasons",
+     *     tags={"seasons"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns available list of seasons",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *     schema="seasons",
+     *     description="List of available seasons",
+     *
+     *      @OA\Property(
+     *          property="data",
+     *          type="array",
+     *
+     *          @OA\Items(
+     *              type="object",
+     *              @OA\Property(
+     *                   property="year",
+     *                   type="integer",
+     *                   description="Year"
+     *              ),
+     *              @OA\Property(
+     *                   property="seasons",
+     *                   type="array",
+     *                   description="List of available seasons",
+     *                   @OA\Items(
+     *                       type="string"
+     *                   ),
+     *              ),
+     *          ),
+     *      ),
+     * ),
+     */
     public function archive()
     {
         return response(
@@ -67,6 +128,23 @@ class SeasonController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/seasons/upcoming",
+     *     operationId="getSeasonUpcoming",
+     *     tags={"anime collection"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns upcoming season's anime",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function later(Request $request)
     {
         $this->request = $request;

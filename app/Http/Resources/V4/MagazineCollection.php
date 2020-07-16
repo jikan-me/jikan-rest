@@ -20,6 +20,21 @@ class MagazineCollection extends ResourceCollection
      *
      * @param \Illuminate\Http\Request $request
      * @return array
+     *
+     *  @OA\Schema(
+     *      schema="magazines",
+     *      description="Magazine Collection Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
+     *          allOf={
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(ref="#/components/schemas/producer"),
+     *          }
+     *     ),
+     *  ),
      */
     public function toArray($request)
     {

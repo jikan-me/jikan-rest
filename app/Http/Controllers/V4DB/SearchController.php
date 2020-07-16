@@ -49,7 +49,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/anime",
      *     operationId="getAnimeSearch",
-     *     tags={"anime search"},
+     *     tags={"anime collection"},
      *
      *     @OA\Response(
      *         response="200",

@@ -17,6 +17,23 @@ class ProducerController extends Controller
     private $request;
     const MAX_RESULTS_PER_PAGE = 25;
 
+    /**
+     *  @OA\Get(
+     *     path="/producers",
+     *     operationId="getProducers",
+     *     tags={"producers"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Producers Resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function main(Request $request)
     {
         $page = $request->get('page') ?? 1;
@@ -52,6 +69,23 @@ class ProducerController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/producers/{id}",
+     *     operationId="getProducerById",
+     *     tags={"anime collection"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Producer's anime",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function resource(Request $request, int $id)
     {
         $this->request = $request;
