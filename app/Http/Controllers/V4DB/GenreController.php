@@ -9,7 +9,9 @@ use App\Http\QueryBuilder\SearchQueryBuilderGenre;
 use App\Http\QueryBuilder\SearchQueryBuilderProducer;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\GenreCollection;
+use App\Http\Resources\V4\MangaCollection;
 use App\Http\Resources\V4\ProducerCollection;
+use App\Manga;
 use App\Producer;
 use Illuminate\Http\Request;
 use Jikan\Request\Genre\AnimeGenreRequest;
@@ -22,6 +24,23 @@ class GenreController extends Controller
     private $request;
     const MAX_RESULTS_PER_PAGE = 25;
 
+    /**
+     *  @OA\Get(
+     *     path="/genres/anime/{id}",
+     *     operationId="getAnimeGenreById",
+     *     tags={"anime collection"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Genres's anime",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function anime(Request $request, int $id)
     {
         $this->request = $request;
@@ -43,13 +62,61 @@ class GenreController extends Controller
             $results
         );
     }
-
-    public function manga(int $id, int $page = 1)
+    /**
+     *  @OA\Get(
+     *     path="/genres/manga/{id}",
+     *     operationId="getMangaGenreById",
+     *     tags={"manga collection"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Genres's manga",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function manga(Request $request, int $id)
     {
-        $person = $this->jikan->getMangaGenre(new MangaGenreRequest($id, $page));
-        return response($this->serializer->serialize($person, 'json'));
+        $page = $request->get('page') ?? 1;
+
+        $results = Manga::query()
+            ->where('genres.mal_id', $id)
+            ->orderBy('title');
+
+        $results = $results
+            ->paginate(
+                self::MAX_RESULTS_PER_PAGE,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new MangaCollection(
+            $results
+        );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/genres/anime",
+     *     operationId="getAnimeGenres",
+     *     tags={"genres"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Anime Genres Resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function mainAnime(Request $request)
     {
         $page = $request->get('page') ?? 1;
@@ -85,6 +152,23 @@ class GenreController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/genres/manga",
+     *     operationId="getMangaGenres",
+     *     tags={"genres"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Manga Genres Resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function mainManga(Request $request)
     {
         $page = $request->get('page') ?? 1;

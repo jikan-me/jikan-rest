@@ -20,6 +20,21 @@ class GenreCollection extends ResourceCollection
      *
      * @param \Illuminate\Http\Request $request
      * @return array
+     *
+     *  @OA\Schema(
+     *      schema="genres",
+     *      description="Genres Collection Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
+     *          allOf={
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(ref="#/components/schemas/genre"),
+     *          }
+     *     ),
+     *  ),
      */
     public function toArray($request)
     {

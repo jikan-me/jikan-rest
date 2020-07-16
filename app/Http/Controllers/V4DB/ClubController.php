@@ -17,6 +17,24 @@ use MongoDB\BSON\UTCDateTime;
 
 class ClubController extends Controller
 {
+
+    /**
+     *  @OA\Get(
+     *     path="/clubs/{id}",
+     *     operationId="getClubsById",
+     *     tags={"club"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Club Resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
     public function main(Request $request, int $id)
     {
         $results = Club::query()
@@ -76,6 +94,50 @@ class ClubController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/clubs/{id}/members",
+     *     operationId="getClubMembers",
+     *     tags={"club"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Club Members Resource",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *      schema="club member",
+     *      description="Club Member",
+     *      @OA\Property(
+     *          property="data",
+     *          type="array",
+     *           @OA\Items(
+     *               type="object",
+     *               @OA\Property(
+     *                   property="username",
+     *                   type="string",
+     *                   description="MyAnimeList Username"
+     *               ),
+     *               @OA\Property(
+     *                   property="url",
+     *                   type="string",
+     *                   description="MyAnimeList URL"
+     *               ),
+     *               @OA\Property(
+     *                   property="image_url",
+     *                   type="string",
+     *                   description="MyAnimeList Image URL"
+     *               ),
+     *           ),
+     *      ),
+     * ),
+     */
     public function members(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))

@@ -11,6 +11,31 @@ class GenreResource extends JsonResource
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array
+     *
+     *  @OA\Schema(
+     *      schema="genre",
+     *      description="Genre Resource",
+     *      @OA\Property(
+     *          property="mal_id",
+     *          type="integer",
+     *          description="MyAnimeList ID"
+     *      ),
+     *      @OA\Property(
+     *          property="name",
+     *          type="string",
+     *          description="Genre Name"
+     *      ),
+     *      @OA\Property(
+     *          property="url",
+     *          type="string",
+     *          description="MyAnimeList URL"
+     *      ),
+     *      @OA\Property(
+     *          property="count",
+     *          type="integer",
+     *          description="Genre's anime count"
+     *      ),
+     *  ),
      */
     public function toArray($request)
     {
