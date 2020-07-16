@@ -355,7 +355,7 @@ $router->group(
         ]);
 
         $router->get('/reviews', [
-            'uses' => 'ReviewsController@bestVoted'
+            'uses' => 'TopController@reviews'
         ]);
     }
 );

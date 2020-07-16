@@ -14,17 +14,6 @@ use MongoDB\BSON\UTCDateTime;
 class ReviewsController extends Controller
 {
 
-    public function bestVoted(Request $request)
-    {
-        $page = $request->get('page') ?? 1;
-
-        $results = $this->jikan->getRecentReviews(
-            new RecentReviewsRequest(Constants::RECENT_REVIEW_BEST_VOTED, $page)
-        );
-
-        return response($this->serializer->serialize($results, 'json'));
-    }
-
     public function anime(Request $request)
     {
         $results = DB::table($this->getRouteTable($request))

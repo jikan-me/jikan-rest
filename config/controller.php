@@ -265,7 +265,7 @@ return [
         'table_name' => 'common',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
-    'ReviewsController@bestVoted' => [
+    'TopController@reviews' => [
         'table_name' => 'common',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
