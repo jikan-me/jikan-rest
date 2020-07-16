@@ -9,8 +9,10 @@ use App\Http\QueryBuilder\SearchQueryBuilderAnime;
 use App\Http\QueryBuilder\SearchQueryBuilderMagazine;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\MagazineCollection;
+use App\Http\Resources\V4\MangaCollection;
 use App\Http\Resources\V4\NewsResource;
 use App\Magazine;
+use App\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jenssegers\Mongodb\Eloquent\Builder;
@@ -152,9 +154,24 @@ class MagazineController extends Controller
      *     ),
      * )
      */
-    public function resource(int $id, int $page = 1)
+    public function resource(Request $request, int $id)
     {
-        $magazine = $this->jikan->getMagazine(new MagazineRequest($id, $page));
-        return response($this->serializer->serialize($magazine, 'json'));
+        $page = $request->get('page') ?? 1;
+
+        $results = Manga::query()
+            ->where('serializations.mal_id', $id)
+            ->orderBy('title');
+
+        $results = $results
+            ->paginate(
+                self::MAX_RESULTS_PER_PAGE,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new MangaCollection(
+            $results
+        );
     }
 }

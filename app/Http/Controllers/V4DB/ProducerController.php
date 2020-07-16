@@ -93,6 +93,8 @@ class ProducerController extends Controller
 
         $results = Anime::query()
             ->where('producers.mal_id', $id)
+            ->orWhere('licensors.mal_id', $id)
+            ->orWhere('studios.mal_id', $id)
             ->orderBy('title');
 
         $results = $results
