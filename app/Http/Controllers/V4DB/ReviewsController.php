@@ -13,7 +13,23 @@ use MongoDB\BSON\UTCDateTime;
 
 class ReviewsController extends Controller
 {
-
+    /**
+     *  @OA\Get(
+     *     path="/reviews/anime",
+     *     operationId="getAnimeReviews",
+     *     tags={"anime reviews"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns recent anime reviews",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function anime(Request $request)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -70,6 +86,23 @@ class ReviewsController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/reviews/manga",
+     *     operationId="getMangaReviews",
+     *     tags={"manga reviews"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns recent manga reviews",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function manga(Request $request)
     {
         $results = DB::table($this->getRouteTable($request))

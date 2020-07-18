@@ -28,6 +28,24 @@ use MongoDB\BSON\UTCDateTime;
 
 class UserController extends Controller
 {
+
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}",
+     *     operationId="getUserProfile",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user profile",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function profile(Request $request, string $username)
     {
         $results = Profile::query()
@@ -87,6 +105,23 @@ class UserController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/history/{type}",
+     *     operationId="getUserHistory",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user history (past 30 days)",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function history(Request $request, string $username, ?string $type = null)
     {
         $type = strtolower($type);
@@ -147,6 +182,67 @@ class UserController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/friends",
+     *     operationId="getUserFriends",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user friends",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     *
+     *  @OA\Schema(
+     *      schema="user friends",
+     *      description="User Friends",
+     *
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *
+     *
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="object",
+     *
+     *
+     *                   @OA\Property(
+     *                       property="url",
+     *                       type="string",
+     *                       description="MyAnimeList URL"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="username",
+     *                       type="string",
+     *                       description="MyAnimeList Username"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="image_url",
+     *                       type="string",
+     *                       description="Image URL"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="last_online",
+     *                       type="string",
+     *                       description="Last Online Date ISO8601"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="friends_since",
+     *                       type="string",
+     *                       description="Friends Since Date ISO8601"
+     *                   ),
+     *              ),
+     *          ),
+     *     }
+     *  ),
+     */
     public function friends(Request $request, string $username)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -158,7 +254,7 @@ class UserController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $data = ['results' => $this->jikan->getUserFriends(new UserFriendsRequest($username, $page))];
+            $data = $this->jikan->getUserFriends(new UserFriendsRequest($username, $page));
             $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
             if (HttpHelper::hasError($response)) {
@@ -202,6 +298,7 @@ class UserController extends Controller
             $request
         );
     }
+
 
     public function animelist(string $username, ?string $status = null, int $page = 1)
     {
@@ -253,6 +350,23 @@ class UserController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/reviews",
+     *     operationId="getUserReviews",
+     *     tags={"reviews collection"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user reviews",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function reviews(Request $request, string $username)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -309,6 +423,24 @@ class UserController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/recommendations",
+     *     operationId="getUserRecommendations",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Recent Anime Recommendations",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     *
+     */
     public function recommendations(Request $request, string $username)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -365,6 +497,53 @@ class UserController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/clubs",
+     *     operationId="getUserClubs",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user clubs",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     *
+     *  @OA\Schema(
+     *      schema="user clubs",
+     *      description="User Clubs",
+     *
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *                   @OA\Items(
+     *                      type="object",
+     *
+     *                      @OA\Property(
+     *                          property="mal_id",
+     *                          type="integer",
+     *                          description="MyAnimeList ID"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="name",
+     *                          type="string",
+     *                          description="Club Name"
+     *                      ),
+     *                  ),
+     *              ),
+     *          ),
+     *     }
+     *  ),
+     */
     public function clubs(Request $request, string $username)
     {
         $results = DB::table($this->getRouteTable($request))

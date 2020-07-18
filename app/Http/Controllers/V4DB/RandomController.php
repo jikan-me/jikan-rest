@@ -18,6 +18,46 @@ use MongoDB\BSON\UTCDateTime;
 
 class RandomController extends Controller
 {
+    /**
+     *  @OA\Schema(
+     *      schema="random",
+     *      description="Random Resources",
+     *
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *                   @OA\Items(
+     *                      type="object",
+     *                      anyOf={
+     *                          @OA\Schema(ref="#/components/schemas/anime"),
+     *                          @OA\Schema(ref="#/components/schemas/manga"),
+     *                          @OA\Schema(ref="#/components/schemas/character"),
+     *                          @OA\Schema(ref="#/components/schemas/person"),
+     *                      }
+     *                  ),
+     *              ),
+     *          ),
+     *     }
+     *  ),
+     */
+
+    /**
+     *  @OA\Get(
+     *     path="/random/anime",
+     *     operationId="getRandomAnime",
+     *     tags={"random"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Random Anime",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function anime(Request $request)
     {
         $sfw = $request->get('sfw');
@@ -38,6 +78,23 @@ class RandomController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/random/manga",
+     *     operationId="getRandomManga",
+     *     tags={"random"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Random Manga",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function manga(Request $request)
     {
         $sfw = $request->get('sfw');
@@ -58,6 +115,23 @@ class RandomController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/random/characters",
+     *     operationId="getRandomCharacters",
+     *     tags={"random"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Random Character",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function characters(Request $request)
     {
 
@@ -69,6 +143,23 @@ class RandomController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/random/people",
+     *     operationId="getRandomPeople",
+     *     tags={"random"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Random People",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function people(Request $request)
     {
 

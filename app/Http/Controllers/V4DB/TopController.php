@@ -250,7 +250,25 @@ class TopController extends Controller
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
-     * )
+     * ),
+     *
+     *  @OA\Schema(
+     *      schema="reviews collection",
+     *      description="Anime & Manga Reviews Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="array",
+     *
+     *          @OA\Items(
+     *              type="object",
+     *              anyOf = {
+     *                  @OA\Schema(ref="#/components/schemas/anime review"),
+     *                  @OA\Schema(ref="#/components/schemas/manga review"),
+     *              },
+     *          ),
+     *     ),
+     *  ),
      */
     public function reviews(Request $request)
     {

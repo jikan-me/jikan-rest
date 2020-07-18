@@ -125,7 +125,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/characters",
      *     operationId="getAnimeCharacters",
-     *     tags={"anime characters"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -197,7 +197,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/staff",
      *     operationId="getAnimeStaff",
-     *     tags={"anime staff"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -270,7 +270,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/episodes/{mal_id}",
      *     operationId="getAnimeEpisodeById",
-     *     tags={"anime episode"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -343,7 +343,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/episodes",
      *     operationId="getAnimeEpisodes",
-     *     tags={"anime episodes"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -489,7 +489,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/news",
      *     operationId="getAnimeNews",
-     *     tags={"anime news"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -577,7 +577,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/forum",
      *     operationId="getAnimeTopics",
-     *     tags={"forum"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -650,7 +650,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/videos",
      *     operationId="getAnimeVideos",
-     *     tags={"anime videos"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -722,7 +722,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/pictures",
      *     operationId="getAnimePictures",
-     *     tags={"pictures"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -794,7 +794,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/statistics",
      *     operationId="getAnimeStatistics",
-     *     tags={"anime statistics"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -866,7 +866,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/moreinfo",
      *     operationId="getAnimeMoreInfo",
-     *     tags={"moreinfo"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -938,7 +938,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/recommendations",
      *     operationId="getAnimeRecommendations",
-     *     tags={"recommendations"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -1010,7 +1010,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/userupdates",
      *     operationId="getAnimeUserUpdates",
-     *     tags={"anime userupdates"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -1083,7 +1083,7 @@ class AnimeController extends Controller
      *  @OA\Get(
      *     path="/anime/{id}/reviews",
      *     operationId="getAnimeReviews",
-     *     tags={"anime reviews"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",

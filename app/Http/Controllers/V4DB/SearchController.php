@@ -259,7 +259,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/users",
      *     operationId="getUsersSearch",
-     *     tags={"users search"},
+     *     tags={"users"},
      *
      *     @OA\Response(
      *         response="200",
@@ -270,7 +270,45 @@ class SearchController extends Controller
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
-     * )
+     * ),
+     *
+     *  @OA\Schema(
+     *      schema="user collection",
+     *      description="User Results",
+     *
+     *      allOf={
+     *           @OA\Schema(ref="#/components/schemas/pagination"),
+     *           @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="object",
+     *
+     *                   @OA\Schema(
+     *                       @OA\Property(
+     *                           property="url",
+     *                           type="string",
+     *                           description="MyAnimeList URL"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="username",
+     *                           type="string",
+     *                           description="MyAnimeList Username"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="image_url",
+     *                           type="string",
+     *                           description="Image URL"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="last_online",
+     *                           type="string",
+     *                           description="Last Online Date ISO8601"
+     *                       ),
+     *                   ),
+     *              ),
+     *          ),
+     *      },
+     *  ),
      */
     public function users(Request $request)
     {
@@ -335,7 +373,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/userbyid",
      *     operationId="getUserById",
-     *     tags={"user by id search"},
+     *     tags={"user"},
      *
      *     @OA\Response(
      *         response="200",
@@ -346,7 +384,29 @@ class SearchController extends Controller
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
-     * )
+     * ),
+     *
+     *  @OA\Schema(
+     *      schema="user by id",
+     *      description="User Meta By ID",
+     *
+     *      @OA\Property(
+     *           property="data",
+     *           type="object",
+     *
+     *           @OA\Property(
+     *               property="url",
+     *               type="string",
+     *               description="MyAnimeList URL"
+     *           ),
+     *           @OA\Property(
+     *               property="username",
+     *               type="string",
+     *               description="MyAnimeList Username"
+     *           ),
+     *      ),
+     *  ),
+     *
      */
     public function userById(Request $request, int $id)
     {
