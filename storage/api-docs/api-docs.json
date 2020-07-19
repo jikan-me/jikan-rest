@@ -317,7 +317,7 @@
         "/characters/{id}": {
             "get": {
                 "tags": [
-                    "character"
+                    "characters"
                 ],
                 "operationId": "getCharacterById",
                 "responses": {
@@ -338,7 +338,7 @@
         "/characters/{id}/pictures": {
             "get": {
                 "tags": [
-                    "pictures"
+                    "characters"
                 ],
                 "operationId": "getCharacterPictures",
                 "responses": {
@@ -359,7 +359,7 @@
         "/clubs/{id}": {
             "get": {
                 "tags": [
-                    "club"
+                    "clubs"
                 ],
                 "operationId": "getClubsById",
                 "responses": {
@@ -380,7 +380,7 @@
         "/clubs/{id}/members": {
             "get": {
                 "tags": [
-                    "club"
+                    "clubs"
                 ],
                 "operationId": "getClubMembers",
                 "responses": {
@@ -401,7 +401,7 @@
         "/genres/anime/{id}": {
             "get": {
                 "tags": [
-                    "anime collection"
+                    "genres"
                 ],
                 "operationId": "getAnimeGenreById",
                 "responses": {
@@ -422,7 +422,7 @@
         "/genres/manga/{id}": {
             "get": {
                 "tags": [
-                    "manga collection"
+                    "genres"
                 ],
                 "operationId": "getMangaGenreById",
                 "responses": {
@@ -506,7 +506,7 @@
         "/magazines/{id}": {
             "get": {
                 "tags": [
-                    "manga collection"
+                    "magazines"
                 ],
                 "operationId": "getMagazineById",
                 "responses": {
@@ -548,7 +548,7 @@
         "/manga/{id}/characters": {
             "get": {
                 "tags": [
-                    "manga characters"
+                    "manga"
                 ],
                 "operationId": "getMangaCharacters",
                 "responses": {
@@ -569,7 +569,7 @@
         "/manga/{id}/news": {
             "get": {
                 "tags": [
-                    "manga news"
+                    "manga"
                 ],
                 "operationId": "getMangaNews",
                 "responses": {
@@ -590,7 +590,7 @@
         "/manga/{id}/forum": {
             "get": {
                 "tags": [
-                    "forum"
+                    "manga"
                 ],
                 "operationId": "getMangaTopics",
                 "responses": {
@@ -611,7 +611,7 @@
         "/manga/{id}/pictures": {
             "get": {
                 "tags": [
-                    "pictures"
+                    "manga"
                 ],
                 "operationId": "getMangaPictures",
                 "responses": {
@@ -632,7 +632,7 @@
         "/manga/{id}/statistics": {
             "get": {
                 "tags": [
-                    "manga statistics"
+                    "manga"
                 ],
                 "operationId": "getMangaStatistics",
                 "responses": {
@@ -653,7 +653,7 @@
         "/manga/{id}/moreinfo": {
             "get": {
                 "tags": [
-                    "moreinfo"
+                    "manga"
                 ],
                 "operationId": "getMangaMoreInfo",
                 "responses": {
@@ -674,7 +674,7 @@
         "/manga/{id}/recommendations": {
             "get": {
                 "tags": [
-                    "recommendations"
+                    "manga"
                 ],
                 "operationId": "getMangaRecommendations",
                 "responses": {
@@ -695,7 +695,7 @@
         "/manga/{id}/userupdates": {
             "get": {
                 "tags": [
-                    "manga userupdates"
+                    "manga"
                 ],
                 "operationId": "getMangaUserUpdates",
                 "responses": {
@@ -716,7 +716,7 @@
         "/manga/{id}/reviews": {
             "get": {
                 "tags": [
-                    "manga reviews"
+                    "manga"
                 ],
                 "operationId": "getMangaReviews",
                 "responses": {
@@ -737,7 +737,7 @@
         "/people/{id}": {
             "get": {
                 "tags": [
-                    "person"
+                    "people"
                 ],
                 "operationId": "getPersonById",
                 "responses": {
@@ -758,7 +758,7 @@
         "/people/{id}/pictures": {
             "get": {
                 "tags": [
-                    "pictures"
+                    "people"
                 ],
                 "operationId": "getPersonPictures",
                 "responses": {
@@ -800,7 +800,7 @@
         "/producers/{id}": {
             "get": {
                 "tags": [
-                    "anime collection"
+                    "producers"
                 ],
                 "operationId": "getProducerById",
                 "responses": {
@@ -947,7 +947,7 @@
         "/reviews/anime": {
             "get": {
                 "tags": [
-                    "anime reviews"
+                    "reviews"
                 ],
                 "operationId": "getAnimeReviews",
                 "responses": {
@@ -968,7 +968,7 @@
         "/reviews/manga": {
             "get": {
                 "tags": [
-                    "manga reviews"
+                    "reviews"
                 ],
                 "operationId": "getMangaReviews",
                 "responses": {
@@ -1010,7 +1010,7 @@
         "/anime": {
             "get": {
                 "tags": [
-                    "anime collection"
+                    "anime"
                 ],
                 "operationId": "getAnimeSearch",
                 "responses": {
@@ -1031,7 +1031,7 @@
         "/manga": {
             "get": {
                 "tags": [
-                    "manga search"
+                    "manga"
                 ],
                 "operationId": "getMangaSearch",
                 "responses": {
@@ -1052,7 +1052,7 @@
         "/people": {
             "get": {
                 "tags": [
-                    "people search"
+                    "people"
                 ],
                 "operationId": "getPeopleSearch",
                 "responses": {
@@ -1073,7 +1073,7 @@
         "/characters": {
             "get": {
                 "tags": [
-                    "characters search"
+                    "characters"
                 ],
                 "operationId": "getCharactersSearch",
                 "responses": {
@@ -1136,7 +1136,7 @@
         "/clubs": {
             "get": {
                 "tags": [
-                    "clubs search"
+                    "clubs"
                 ],
                 "operationId": "getClubsSearch",
                 "responses": {
@@ -1157,7 +1157,7 @@
         "/seasons/{year}/{season}": {
             "get": {
                 "tags": [
-                    "anime collection"
+                    "seasons"
                 ],
                 "operationId": "getSeason",
                 "responses": {
@@ -1199,7 +1199,7 @@
         "/seasons/upcoming": {
             "get": {
                 "tags": [
-                    "anime collection"
+                    "seasons"
                 ],
                 "operationId": "getSeasonUpcoming",
                 "responses": {
@@ -1220,7 +1220,7 @@
         "/top/anime": {
             "get": {
                 "tags": [
-                    "anime collection"
+                    "top"
                 ],
                 "operationId": "getTopAnime",
                 "responses": {
@@ -1241,7 +1241,7 @@
         "/top/manga": {
             "get": {
                 "tags": [
-                    "manga collection"
+                    "top"
                 ],
                 "operationId": "getTopManga",
                 "responses": {
@@ -1262,7 +1262,7 @@
         "/top/people": {
             "get": {
                 "tags": [
-                    "people collection"
+                    "top"
                 ],
                 "operationId": "getTopPeople",
                 "responses": {
@@ -1283,7 +1283,7 @@
         "/top/characters": {
             "get": {
                 "tags": [
-                    "characters collection"
+                    "top"
                 ],
                 "operationId": "getTopCharacters",
                 "responses": {
@@ -1304,7 +1304,7 @@
         "/top/reviews": {
             "get": {
                 "tags": [
-                    "reviews collection"
+                    "top"
                 ],
                 "operationId": "getTopReviews",
                 "responses": {
@@ -1388,7 +1388,7 @@
         "/users/{username}/reviews": {
             "get": {
                 "tags": [
-                    "reviews collection"
+                    "users"
                 ],
                 "operationId": "getUserReviews",
                 "responses": {

@@ -22,7 +22,7 @@ class ClubController extends Controller
      *  @OA\Get(
      *     path="/clubs/{id}",
      *     operationId="getClubsById",
-     *     tags={"club"},
+     *     tags={"clubs"},
      *
      *     @OA\Response(
      *         response="200",
@@ -98,7 +98,7 @@ class ClubController extends Controller
      *  @OA\Get(
      *     path="/clubs/{id}/members",
      *     operationId="getClubMembers",
-     *     tags={"club"},
+     *     tags={"clubs"},
      *
      *     @OA\Response(
      *         response="200",

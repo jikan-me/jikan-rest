@@ -20,7 +20,7 @@ class PersonController extends Controller
      *  @OA\Get(
      *     path="/people/{id}",
      *     operationId="getPersonById",
-     *     tags={"person"},
+     *     tags={"people"},
      *
      *     @OA\Response(
      *         response="200",
@@ -95,7 +95,7 @@ class PersonController extends Controller
      *  @OA\Get(
      *     path="/people/{id}/pictures",
      *     operationId="getPersonPictures",
-     *     tags={"pictures"},
+     *     tags={"people"},
      *
      *     @OA\Response(
      *         response="200",

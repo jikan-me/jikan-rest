@@ -28,7 +28,7 @@ class SeasonController extends Controller
      *  @OA\Get(
      *     path="/seasons/{year}/{season}",
      *     operationId="getSeason",
-     *     tags={"anime collection"},
+     *     tags={"seasons"},
      *
      *     @OA\Response(
      *         response="200",
@@ -132,7 +132,7 @@ class SeasonController extends Controller
      *  @OA\Get(
      *     path="/seasons/upcoming",
      *     operationId="getSeasonUpcoming",
-     *     tags={"anime collection"},
+     *     tags={"seasons"},
      *
      *     @OA\Response(
      *         response="200",

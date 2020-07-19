@@ -354,7 +354,7 @@ class UserController extends Controller
      *  @OA\Get(
      *     path="/users/{username}/reviews",
      *     operationId="getUserReviews",
-     *     tags={"reviews collection"},
+     *     tags={"users"},
      *
      *     @OA\Response(
      *         response="200",

@@ -141,7 +141,7 @@ class MagazineController extends Controller
      *  @OA\Get(
      *     path="/magazines/{id}",
      *     operationId="getMagazineById",
-     *     tags={"manga collection"},
+     *     tags={"magazines"},
      *
      *     @OA\Response(
      *         response="200",

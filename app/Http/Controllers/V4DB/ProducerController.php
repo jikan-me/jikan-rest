@@ -73,7 +73,7 @@ class ProducerController extends Controller
      *  @OA\Get(
      *     path="/producers/{id}",
      *     operationId="getProducerById",
-     *     tags={"anime collection"},
+     *     tags={"producers"},
      *
      *     @OA\Response(
      *         response="200",

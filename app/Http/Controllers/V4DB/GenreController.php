@@ -28,7 +28,7 @@ class GenreController extends Controller
      *  @OA\Get(
      *     path="/genres/anime/{id}",
      *     operationId="getAnimeGenreById",
-     *     tags={"anime collection"},
+     *     tags={"genres"},
      *
      *     @OA\Response(
      *         response="200",
@@ -66,7 +66,7 @@ class GenreController extends Controller
      *  @OA\Get(
      *     path="/genres/manga/{id}",
      *     operationId="getMangaGenreById",
-     *     tags={"manga collection"},
+     *     tags={"genres"},
      *
      *     @OA\Response(
      *         response="200",

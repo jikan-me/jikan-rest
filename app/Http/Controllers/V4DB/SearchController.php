@@ -49,7 +49,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/anime",
      *     operationId="getAnimeSearch",
-     *     tags={"anime collection"},
+     *     tags={"anime"},
      *
      *     @OA\Response(
      *         response="200",
@@ -102,7 +102,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/manga",
      *     operationId="getMangaSearch",
-     *     tags={"manga search"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -155,7 +155,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/people",
      *     operationId="getPeopleSearch",
-     *     tags={"people search"},
+     *     tags={"people"},
      *
      *     @OA\Response(
      *         response="200",
@@ -207,7 +207,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/characters",
      *     operationId="getCharactersSearch",
-     *     tags={"characters search"},
+     *     tags={"characters"},
      *
      *     @OA\Response(
      *         response="200",
@@ -467,7 +467,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/clubs",
      *     operationId="getClubsSearch",
-     *     tags={"clubs search"},
+     *     tags={"clubs"},
      *
      *     @OA\Response(
      *         response="200",

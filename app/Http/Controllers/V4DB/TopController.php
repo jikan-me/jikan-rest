@@ -31,7 +31,7 @@ class TopController extends Controller
      *  @OA\Get(
      *     path="/top/anime",
      *     operationId="getTopAnime",
-     *     tags={"anime collection"},
+     *     tags={"top"},
      *
      *     @OA\Response(
      *         response="200",
@@ -83,7 +83,7 @@ class TopController extends Controller
      *  @OA\Get(
      *     path="/top/manga",
      *     operationId="getTopManga",
-     *     tags={"manga collection"},
+     *     tags={"top"},
      *
      *     @OA\Response(
      *         response="200",
@@ -135,7 +135,7 @@ class TopController extends Controller
      *  @OA\Get(
      *     path="/top/people",
      *     operationId="getTopPeople",
-     *     tags={"people collection"},
+     *     tags={"top"},
      *
      *     @OA\Response(
      *         response="200",
@@ -187,7 +187,7 @@ class TopController extends Controller
      *  @OA\Get(
      *     path="/top/characters",
      *     operationId="getTopCharacters",
-     *     tags={"characters collection"},
+     *     tags={"top"},
      *
      *     @OA\Response(
      *         response="200",
@@ -239,7 +239,7 @@ class TopController extends Controller
      *  @OA\Get(
      *     path="/top/reviews",
      *     operationId="getTopReviews",
-     *     tags={"reviews collection"},
+     *     tags={"top"},
      *
      *     @OA\Response(
      *         response="200",

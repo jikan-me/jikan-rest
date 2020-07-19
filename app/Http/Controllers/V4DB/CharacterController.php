@@ -21,7 +21,7 @@ class CharacterController extends Controller
      *  @OA\Get(
      *     path="/characters/{id}",
      *     operationId="getCharacterById",
-     *     tags={"character"},
+     *     tags={"characters"},
      *
      *     @OA\Response(
      *         response="200",
@@ -96,7 +96,7 @@ class CharacterController extends Controller
      *  @OA\Get(
      *     path="/characters/{id}/pictures",
      *     operationId="getCharacterPictures",
-     *     tags={"pictures"},
+     *     tags={"characters"},
      *
      *     @OA\Response(
      *         response="200",

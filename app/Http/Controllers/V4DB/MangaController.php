@@ -125,7 +125,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/characters",
      *     operationId="getMangaCharacters",
-     *     tags={"manga characters"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -197,7 +197,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/news",
      *     operationId="getMangaNews",
-     *     tags={"manga news"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -285,7 +285,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/forum",
      *     operationId="getMangaTopics",
-     *     tags={"forum"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -358,7 +358,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/pictures",
      *     operationId="getMangaPictures",
-     *     tags={"pictures"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -430,7 +430,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/statistics",
      *     operationId="getMangaStatistics",
-     *     tags={"manga statistics"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -502,7 +502,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/moreinfo",
      *     operationId="getMangaMoreInfo",
-     *     tags={"moreinfo"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -574,7 +574,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/recommendations",
      *     operationId="getMangaRecommendations",
-     *     tags={"recommendations"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -646,7 +646,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/userupdates",
      *     operationId="getMangaUserUpdates",
-     *     tags={"manga userupdates"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
@@ -719,7 +719,7 @@ class MangaController extends Controller
      *  @OA\Get(
      *     path="/manga/{id}/reviews",
      *     operationId="getMangaReviews",
-     *     tags={"manga reviews"},
+     *     tags={"manga"},
      *
      *     @OA\Response(
      *         response="200",
