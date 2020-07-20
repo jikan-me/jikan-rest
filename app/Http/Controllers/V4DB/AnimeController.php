@@ -55,7 +55,10 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime resource",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime"
+     *              @OA\Property( 
+     *                  property="data",
+     *                  ref="#/components/schemas/anime"
+     *              )
      *         )
      *     ),
      *     @OA\Response(
