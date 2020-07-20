@@ -31,7 +31,9 @@
                         "description": "Returns anime resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime"
+                                }
                             }
                         }
                     },
@@ -52,7 +54,9 @@
                         "description": "Returns anime characters resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime characters"
+                                }
                             }
                         }
                     },
@@ -73,7 +77,9 @@
                         "description": "Returns anime staff resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime staff"
+                                }
                             }
                         }
                     },
@@ -94,7 +100,9 @@
                         "description": "Returns a single anime episode resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime episode"
+                                }
                             }
                         }
                     },
@@ -115,7 +123,9 @@
                         "description": "Returns a list of anime episodes",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime episodes"
+                                }
                             }
                         }
                     },
@@ -136,7 +146,9 @@
                         "description": "Returns a list of anime news topics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime news"
+                                }
                             }
                         }
                     },
@@ -157,7 +169,9 @@
                         "description": "Returns a list of anime forum topics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/forum"
+                                }
                             }
                         }
                     },
@@ -178,7 +192,9 @@
                         "description": "Returns a list of anime forum topics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime videos"
+                                }
                             }
                         }
                     },
@@ -220,7 +236,9 @@
                         "description": "Returns anime statistics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime statistics"
+                                }
                             }
                         }
                     },
@@ -241,7 +259,9 @@
                         "description": "Returns anime statistics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/moreinfo"
+                                }
                             }
                         }
                     },
@@ -262,7 +282,9 @@
                         "description": "Returns anime recommendations",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/recommendations"
+                                }
                             }
                         }
                     },
@@ -283,7 +305,9 @@
                         "description": "Returns anime recommendations",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime userupdates"
+                                }
                             }
                         }
                     },
@@ -304,7 +328,9 @@
                         "description": "Returns anime reviews",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime reviews"
+                                }
                             }
                         }
                     },
@@ -1580,11 +1606,11 @@
                                                 },
                                                 "filler": {
                                                     "description": "Filler episode",
-                                                    "type": "bool"
+                                                    "type": "boolean"
                                                 },
                                                 "recap": {
                                                     "description": "Recap episode",
-                                                    "type": "bool"
+                                                    "type": "boolean"
                                                 },
                                                 "synopsis": {
                                                     "description": "Episode Synopsis",
@@ -2269,11 +2295,11 @@
                             },
                             "filler": {
                                 "description": "Filler episode",
-                                "type": "bool"
+                                "type": "boolean"
                             },
                             "recap": {
                                 "description": "Recap episode",
-                                "type": "bool"
+                                "type": "boolean"
                             },
                             "synopsis": {
                                 "description": "Episode Synopsis",
@@ -2391,7 +2417,7 @@
                     },
                     "airing": {
                         "description": "Airing boolean",
-                        "type": "bool"
+                        "type": "boolean"
                     },
                     "aired": {
                         "$ref": "#/components/schemas/daterange"
@@ -2414,7 +2440,8 @@
                     },
                     "score": {
                         "description": "Score",
-                        "type": "float"
+                        "type": "number",
+                        "format": "float"
                     },
                     "scored_by": {
                         "description": "Number of users",
@@ -2590,7 +2617,8 @@
                                         },
                                         "percentage": {
                                             "description": "Percentage of votes for this score",
-                                            "type": "float"
+                                            "type": "number",
+                                            "format": "float"
                                         }
                                     },
                                     "type": "object"
@@ -3148,7 +3176,7 @@
                         "type": "integer"
                     },
                     "has_next_page": {
-                        "type": "bool"
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
@@ -3668,14 +3696,15 @@
                     },
                     "publishing": {
                         "description": "Publishing boolean",
-                        "type": "bool"
+                        "type": "boolean"
                     },
                     "published": {
                         "$ref": "#/components/schemas/daterange"
                     },
                     "score": {
                         "description": "Score",
-                        "type": "float"
+                        "type": "number",
+                        "format": "float"
                     },
                     "scored_by": {
                         "description": "Number of users",
@@ -3780,7 +3809,8 @@
                                         },
                                         "percentage": {
                                             "description": "Percentage of votes for this score",
-                                            "type": "float"
+                                            "type": "number",
+                                            "format": "float"
                                         }
                                     },
                                     "type": "object"
@@ -4177,11 +4207,13 @@
                                     "properties": {
                                         "days_watched": {
                                             "description": "Number of days spent watching Anime",
-                                            "type": "float"
+                                            "type": "number",
+                                            "format": "float"
                                         },
                                         "mean_score": {
                                             "description": "Mean Score",
-                                            "type": "float"
+                                            "type": "number",
+                                            "format": "float"
                                         },
                                         "watching": {
                                             "description": "Anime Watching",
@@ -4223,11 +4255,13 @@
                                     "properties": {
                                         "days_read": {
                                             "description": "Number of days spent reading Manga",
-                                            "type": "float"
+                                            "type": "number",
+                                            "format": "float"
                                         },
                                         "mean_score": {
                                             "description": "Mean Score",
-                                            "type": "float"
+                                            "type": "number",
+                                            "format": "float"
                                         },
                                         "reading": {
                                             "description": "Manga Reading",

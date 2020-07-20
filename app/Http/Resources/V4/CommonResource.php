@@ -238,7 +238,7 @@ class CommonResource extends JsonResource
      *      ),
      *     @OA\Property(
      *          property="has_next_page",
-     *          type="bool"
+     *          type="boolean"
      *     ),
      *  ),
      *

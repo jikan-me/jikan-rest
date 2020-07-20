@@ -51,12 +51,12 @@ class AnimeEpisodeResource extends JsonResource
      *          ),
      *          @OA\Property(
      *              property="filler",
-     *              type="bool",
+     *              type="boolean",
      *              description="Filler episode"
      *          ),
      *          @OA\Property(
      *              property="recap",
-     *              type="bool",
+     *              type="boolean",
      *              description="Recap episode"
      *          ),
      *          @OA\Property(

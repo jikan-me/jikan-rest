@@ -93,12 +93,14 @@ class ProfileResource extends JsonResource
      *                  description="Anime Stats",
      *                  @OA\Property(
      *                      property="days_watched",
-     *                      type="float",
+     *                      type="number",
+     *                      format="float",
      *                      description="Number of days spent watching Anime"
      *                  ),
      *                  @OA\Property(
      *                      property="mean_score",
-     *                      type="float",
+     *                      type="number",
+     *                      format="float",
      *                      description="Mean Score"
      *                  ),
      *                  @OA\Property(
@@ -148,12 +150,14 @@ class ProfileResource extends JsonResource
      *                  description="Manga Stats",
      *                  @OA\Property(
      *                      property="days_read",
-     *                      type="float",
+     *                      type="number",
+     *                      format="float",
      *                      description="Number of days spent reading Manga"
      *                  ),
      *                  @OA\Property(
      *                      property="mean_score",
-     *                      type="float",
+     *                      type="number",
+     *                      format="float",
      *                      description="Mean Score"
      *                  ),
      *                  @OA\Property(

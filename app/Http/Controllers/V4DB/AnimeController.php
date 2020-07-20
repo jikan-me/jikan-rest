@@ -54,7 +54,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -130,7 +132,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime characters resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime characters"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -202,7 +206,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime staff resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime staff"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -275,7 +281,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a single anime episode resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime episode"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -348,7 +356,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of anime episodes",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime episodes"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -409,12 +419,12 @@ class AnimeController extends Controller
      *                          ),
      *                          @OA\Property(
      *                              property="filler",
-     *                              type="bool",
+     *                              type="boolean",
      *                              description="Filler episode"
      *                          ),
      *                          @OA\Property(
      *                              property="recap",
-     *                              type="bool",
+     *                              type="boolean",
      *                              description="Recap episode"
      *                          ),
      *                          @OA\Property(
@@ -494,7 +504,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of anime news topics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime news"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -582,7 +594,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of anime forum topics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/forum"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -655,7 +669,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of anime forum topics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime videos"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -799,7 +815,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime statistics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime statistics"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -871,7 +889,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime statistics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/moreinfo"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -943,7 +963,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime recommendations",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/recommendations"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -1015,7 +1037,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime recommendations",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime userupdates"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -1088,7 +1112,9 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime reviews",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime reviews"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
