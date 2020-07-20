@@ -32,7 +32,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/anime"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/anime"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -215,7 +220,9 @@
                         "description": "Returns a list of anime forum topics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime pictures"
+                                }
                             }
                         }
                     },
@@ -603,7 +610,9 @@
                         "description": "Returns a list of manga news topics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga news"
+                                }
                             }
                         }
                     },
@@ -1044,7 +1053,9 @@
                         "description": "Returns search results for anime",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime search"
+                                }
                             }
                         }
                     },
@@ -1630,17 +1641,33 @@
             },
             "anime news": {
                 "description": "Anime News Resource",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "$ref": "#/components/schemas/news"
+                    }
+                ]
+            },
+            "anime pictures": {
+                "description": "Anime Pictures",
                 "properties": {
                     "data": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "image_url": {
+                                    "description": "Default JPG Image Size URL",
+                                    "type": "string"
+                                },
+                                "large_image_url": {
+                                    "description": "Large JPG Image Size URL",
+                                    "type": "string"
+                                }
                             },
-                            {
-                                "$ref": "#/components/schemas/news"
-                            }
-                        ]
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -1673,20 +1700,14 @@
             },
             "manga news": {
                 "description": "Manga News Resource",
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/news"
-                            }
-                        ]
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "$ref": "#/components/schemas/news"
                     }
-                },
-                "type": "object"
+                ]
             },
             "random": {
                 "description": "Random Resources",
@@ -2216,23 +2237,24 @@
                                 "voice_actors": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "allOf": [
-                                            {
-                                                "$ref": "#/components/schemas/mal_url"
+                                        "properties": {
+                                            "mal_id": {
+                                                "type": "integer"
                                             },
-                                            {
-                                                "properties": {
-                                                    "image_url": {
-                                                        "type": "string"
-                                                    },
-                                                    "language": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "url": {
+                                                "type": "string"
+                                            },
+                                            "image_url": {
+                                                "type": "string"
+                                            },
+                                            "language": {
+                                                "type": "string"
                                             }
-                                        ]
+                                        },
+                                        "type": "object"
                                     }
                                 }
                             },
@@ -2242,23 +2264,29 @@
                 },
                 "type": "object"
             },
-            "anime collection": {
+            "anime search": {
                 "description": "Anime Collection Resource",
-                "properties": {
-                    "data": {
-                        "description": "The resource that this resource collects.",
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/anime"
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "description": "The resource that this resource collects.",
+                                "type": "array",
+                                "items": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/anime"
+                                        }
+                                    ]
+                                }
                             }
-                        ]
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "anime episode": {
                 "description": "Anime Episode Resource",
@@ -2365,7 +2393,7 @@
                         "type": "object"
                     },
                     "trailer": {
-                        "$ref": "#/components/schemas/trailer"
+                        "$ref": "#/components/schemas/trailer base"
                     },
                     "title": {
                         "description": "Title",
@@ -2558,6 +2586,10 @@
                                     "description": "Name",
                                     "type": "string"
                                 },
+                                "image_url": {
+                                    "description": "MyAnimeList Image URL",
+                                    "type": "string"
+                                },
                                 "positions": {
                                     "description": "Staff Positions",
                                     "type": "array",
@@ -2607,10 +2639,6 @@
                                 "type": "array",
                                 "items": {
                                     "properties": {
-                                        "score": {
-                                            "description": "The number Score",
-                                            "type": "integer"
-                                        },
                                         "votes": {
                                             "description": "Number of votes for this score",
                                             "type": "integer"
@@ -2982,6 +3010,18 @@
             },
             "trailer": {
                 "description": "Youtube Details",
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/trailer base"
+                    },
+                    {
+                        "$ref": "#/components/schemas/trailer images"
+                    }
+                ]
+            },
+            "trailer base": {
+                "description": "Youtube Details",
                 "properties": {
                     "youtube_id": {
                         "description": "YouTube ID",
@@ -2994,10 +3034,16 @@
                     "embed_url": {
                         "description": "Parsed Embed URL",
                         "type": "string"
-                    },
+                    }
+                },
+                "type": "object"
+            },
+            "trailer images": {
+                "description": "Youtube Images",
+                "properties": {
                     "images": {
                         "properties": {
-                            "image_url": {
+                            "default_image_url": {
                                 "description": "Default Image Size URL (120x90)",
                                 "type": "string"
                             },
@@ -3183,7 +3229,7 @@
             },
             "news": {
                 "properties": {
-                    "results": {
+                    "data": {
                         "type": "array",
                         "items": {
                             "properties": {
@@ -3290,7 +3336,7 @@
                         "description": "Review content",
                         "type": "string"
                     },
-                    "reviewer": {
+                    "author": {
                         "description": "Reviewer details",
                         "properties": {
                             "username": {
@@ -3308,6 +3354,36 @@
                             "episodes_seen": {
                                 "description": "Number of episodes seen",
                                 "type": "integer"
+                            },
+                            "scores": {
+                                "description": "Review Scores breakdown",
+                                "properties": {
+                                    "overall": {
+                                        "description": "Overall Score",
+                                        "type": "integer"
+                                    },
+                                    "story": {
+                                        "description": "Story Score",
+                                        "type": "integer"
+                                    },
+                                    "animation": {
+                                        "description": "Animation Score",
+                                        "type": "integer"
+                                    },
+                                    "sound": {
+                                        "description": "Sound Score",
+                                        "type": "integer"
+                                    },
+                                    "character": {
+                                        "description": "Character Score",
+                                        "type": "integer"
+                                    },
+                                    "enjoyment": {
+                                        "description": "Enjoyment Score",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
                             }
                         },
                         "type": "object"
@@ -4365,6 +4441,10 @@
                                 },
                                 "url": {
                                     "description": "Recommended MyAnimeList URL",
+                                    "type": "string"
+                                },
+                                "image_url": {
+                                    "description": "Recommended MyAnimeList Image URL",
                                     "type": "string"
                                 },
                                 "recommendation_url": {
