@@ -114,7 +114,7 @@ class MangaResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="publishing",
-     *          type="bool",
+     *          type="boolean",
      *          description="Publishing boolean"
      *      ),
      *      @OA\Property(

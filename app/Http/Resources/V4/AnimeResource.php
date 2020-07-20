@@ -118,7 +118,7 @@ class AnimeResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="airing",
-     *          type="bool",
+     *          type="boolean",
      *          description="Airing boolean"
      *      ),
      *      @OA\Property(
