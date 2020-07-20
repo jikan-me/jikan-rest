@@ -391,7 +391,7 @@ class CommonResource extends JsonResource
      *         description="Review content"
      *     ),
      *     @OA\Property(
-     *         property="reviewer",
+     *         property="author",
      *         type="object",
      *         description="Reviewer details",
      *         @OA\Property(
@@ -413,6 +413,41 @@ class CommonResource extends JsonResource
      *             property="episodes_seen",
      *             type="integer",
      *             description="Number of episodes seen"
+     *         ),
+     *         @OA\Property(
+     *             property="scores",
+     *             type="object",
+     *             description="Review Scores breakdown",
+     *             @OA\Property(
+     *                 property="overall",
+     *                 type="integer",
+     *                 description="Overall Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="story",
+     *                 type="integer",
+     *                 description="Story Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="animation",
+     *                 type="integer",
+     *                 description="Animation Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="sound",
+     *                 type="integer",
+     *                 description="Sound Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="character",
+     *                 type="integer",
+     *                 description="Character Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="enjoyment",
+     *                 type="integer",
+     *                 description="Enjoyment Score"
+     *             ),
      *         ),
      *     ),
      *  ),
