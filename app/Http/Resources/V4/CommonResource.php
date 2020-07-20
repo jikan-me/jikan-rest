@@ -264,7 +264,7 @@ class CommonResource extends JsonResource
      *     schema="news",
      *     type="object",
      *     @OA\Property(
-     *          property="results",
+     *          property="data",
      *          type="array",
      *          @OA\Items(
      *              type="object",

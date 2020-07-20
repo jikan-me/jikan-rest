@@ -518,15 +518,12 @@ class AnimeController extends Controller
      *      schema="anime news",
      *      description="Anime News Resource",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
-     *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/news"),
-     *          }
-     *     ),
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              ref="#/components/schemas/news",
+     *          ),
+     *      }
      *  )
      */
     public function news(Request $request, int $id)

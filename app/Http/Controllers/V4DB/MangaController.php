@@ -202,7 +202,9 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of manga news topics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/manga news"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -214,15 +216,10 @@ class MangaController extends Controller
      *      schema="manga news",
      *      description="Manga News Resource",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
-     *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/news"),
-     *          }
-     *     ),
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(ref="#/components/schemas/news"),
+     *      }
      *  )
      */
     public function news(Request $request, int $id)
