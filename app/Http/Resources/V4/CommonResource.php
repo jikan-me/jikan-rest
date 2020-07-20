@@ -11,6 +11,17 @@ class CommonResource extends JsonResource
      *      schema="trailer",
      *      type="object",
      *      description="Youtube Details",
+     *      
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/trailer base"),
+     *          @OA\Schema(ref="#/components/schemas/trailer images"),
+     *      } 
+     *  ),
+     * 
+     *  @OA\Schema(
+     *      schema="trailer base",
+     *      type="object",
+     *      description="Youtube Details",
      *
      *      @OA\Property(
      *          property="youtube_id",
@@ -27,7 +38,14 @@ class CommonResource extends JsonResource
      *          type="string",
      *          description="Parsed Embed URL"
      *      ),
-     *     @OA\Property(
+     *  ),
+     * 
+     *  @OA\Schema(
+     *      schema="trailer images",
+     *      type="object",
+     *      description="Youtube Images",
+     *
+     *      @OA\Property(
      *          property="images",
      *          type="object",
      *          @OA\Property(
