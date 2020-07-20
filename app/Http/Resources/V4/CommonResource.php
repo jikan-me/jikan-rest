@@ -31,7 +31,7 @@ class CommonResource extends JsonResource
      *          property="images",
      *          type="object",
      *          @OA\Property(
-     *              property="image_url",
+     *              property="default_image_url",
      *              type="string",
      *              description="Default Image Size URL (120x90)"
      *          ),
