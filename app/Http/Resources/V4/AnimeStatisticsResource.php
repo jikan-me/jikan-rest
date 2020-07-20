@@ -57,11 +57,6 @@ class AnimeStatisticsResource extends JsonResource
      *               @OA\Items(
      *                   type="object",
      *                   @OA\Property(
-     *                       property="score",
-     *                       type="integer",
-     *                       description="The number Score"
-     *                   ),
-     *                   @OA\Property(
      *                       property="votes",
      *                       type="integer",
      *                       description="Number of votes for this score"
