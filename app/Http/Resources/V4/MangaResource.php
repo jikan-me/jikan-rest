@@ -123,7 +123,8 @@ class MangaResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="score",
-     *          type="float",
+     *          type="number",
+     *          format="float",
      *          description="Score"
      *      ),
      *      @OA\Property(

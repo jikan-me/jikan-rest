@@ -68,7 +68,8 @@ class AnimeStatisticsResource extends JsonResource
      *                   ),
      *                   @OA\Property(
      *                       property="percentage",
-     *                       type="float",
+     *                       type="number",
+     *                       format="float",
      *                       description="Percentage of votes for this score"
      *                   ),
      *              ),
