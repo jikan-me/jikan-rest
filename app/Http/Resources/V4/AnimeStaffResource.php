@@ -34,6 +34,11 @@ class AnimeStaffResource extends JsonResource
      *                   description="Name"
      *               ),
      *               @OA\Property(
+     *                   property="image_url",
+     *                   type="string",
+     *                   description="MyAnimeList Image URL"
+     *               ),
+     *               @OA\Property(
      *                   property="positions",
      *                   type="array",
      *                   description="Staff Positions",
