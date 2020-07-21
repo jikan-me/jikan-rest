@@ -33,6 +33,11 @@ class RecommendationsResource extends JsonResource
      *                  description="Recommended MyAnimeList URL"
      *              ),
      *              @OA\Property(
+     *                  property="image_url",
+     *                  type="string",
+     *                  description="Recommended MyAnimeList Image URL"
+     *              ),
+     *              @OA\Property(
      *                  property="recommendation_url",
      *                  type="string",
      *                  description="Recommendation MyAnimeList URL"

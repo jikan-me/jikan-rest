@@ -55,7 +55,10 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime resource",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime"
+     *              @OA\Property( 
+     *                  property="data",
+     *                  ref="#/components/schemas/anime"
+     *              )
      *         )
      *     ),
      *     @OA\Response(
@@ -518,15 +521,12 @@ class AnimeController extends Controller
      *      schema="anime news",
      *      description="Anime News Resource",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
-     *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/news"),
-     *          }
-     *     ),
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              ref="#/components/schemas/news",
+     *          ),
+     *      }
      *  )
      */
     public function news(Request $request, int $id)
@@ -743,13 +743,37 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of anime forum topics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime pictures"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
+     * 
+     *  @OA\Schema(
+     *      schema="anime pictures",
+     *      description="Anime Pictures",
+     *      @OA\Property(
+     *          property="data",
+     *          type="array",
+     * 
+     *          @OA\Items(
+     *              @OA\Property(
+     *                  property="image_url",
+     *                  type="string",
+     *                  description="Default JPG Image Size URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="large_image_url",
+     *                  type="string",
+     *                  description="Large JPG Image Size URL"
+     *              ),
+     *          )
+     *      )
+     *  )
      */
     public function pictures(Request $request, int $id)
     {

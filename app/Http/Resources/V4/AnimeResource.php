@@ -68,7 +68,7 @@ class AnimeResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="trailer",
-     *          ref="#/components/schemas/trailer"
+     *          ref="#/components/schemas/trailer base"
      *      ),
      *
      *      @OA\Property(

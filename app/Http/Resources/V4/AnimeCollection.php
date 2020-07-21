@@ -14,18 +14,24 @@ class AnimeCollection extends ResourceCollection
      * @var string
      *
      *  @OA\Schema(
-     *      schema="anime collection",
+     *      schema="anime search",
      *      description="Anime Collection Resource",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
      *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/anime"),
-     *          }
-     *     ),
+     *                   @OA\Items(
+     *                       allOf={
+     *                           @OA\Schema(ref="#/components/schemas/anime"),
+     *                       }
+     *                   )
+     *              ),
+     *          )
+     *      }
      *  )
      */
     public $collects = 'App\Http\Resources\V4\AnimeResource';

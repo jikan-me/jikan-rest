@@ -47,19 +47,26 @@ class AnimeCharactersResource extends JsonResource
      *                   type="array",
      *                   @OA\Items(
      *                       type="object",
-     *                       allOf={
-     *                           @OA\Schema(ref="#/components/schemas/mal_url"),
-     *                           @OA\Schema(
-     *                               @OA\Property(
-     *                                   property="image_url",
-     *                                   type="string",
-     *                               ),
-     *                               @OA\Property(
-     *                                   property="language",
-     *                                   type="string",
-     *                               ),
-     *                           ),
-     *                       },
+     *                       @OA\Property(
+     *                           property="mal_id",
+     *                           type="integer",
+     *                       ),
+     *                       @OA\Property(
+     *                           property="name",
+     *                           type="string",
+     *                       ),
+     *                       @OA\Property(
+     *                           property="url",
+     *                           type="string",
+     *                       ),
+     *                       @OA\Property(
+     *                           property="image_url",
+     *                           type="string",
+     *                       ),
+     *                       @OA\Property(
+     *                           property="language",
+     *                           type="string",
+     *                       ),
      *                   ),
      *               ),
      *          ),
