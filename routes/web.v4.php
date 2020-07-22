@@ -16,28 +16,6 @@ $router->get('/', function () use ($router) {
     ]);
 });
 
-$router->group(
-    [
-        'prefix' => 'meta'
-    ],
-    function () use ($router) {
-        $router->get('/status', [
-           'uses' => 'MetaController@status'
-        ]);
-
-        $router->group(
-            [
-                'prefix' => 'requests'
-            ],
-            function () use ($router) {
-                $router->get('/{type:[a-z]+}/{period:[a-z]+}[/{offset:[0-9]+}]', [
-                   'uses' => 'MetaController@requests'
-                ]);
-            }
-        );
-    }
-);
-
 $router->get('/anime', [
     'uses' => 'SearchController@anime'
 ]);
