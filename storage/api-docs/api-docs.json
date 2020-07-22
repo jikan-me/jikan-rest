@@ -568,7 +568,14 @@
                         "description": "Returns manga resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/manga"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -589,7 +596,9 @@
                         "description": "Returns manga characters resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga characters"
+                                }
                             }
                         }
                     },
@@ -633,7 +642,9 @@
                         "description": "Returns a list of manga forum topics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/forum"
+                                }
                             }
                         }
                     },
@@ -654,7 +665,9 @@
                         "description": "Returns a list of manga forum topics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga pictures"
+                                }
                             }
                         }
                     },
@@ -675,7 +688,9 @@
                         "description": "Returns anime statistics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga statistics"
+                                }
                             }
                         }
                     },
@@ -696,7 +711,9 @@
                         "description": "Returns manga moreinfo",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/moreinfo"
+                                }
                             }
                         }
                     },
@@ -717,7 +734,9 @@
                         "description": "Returns manga recommendations",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/recommendations"
+                                }
                             }
                         }
                     },
@@ -738,7 +757,9 @@
                         "description": "Returns manga user updates",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga userupdates"
+                                }
                             }
                         }
                     },
@@ -759,7 +780,9 @@
                         "description": "Returns manga reviews",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga reviews"
+                                }
                             }
                         }
                     },
@@ -1076,7 +1099,9 @@
                         "description": "Returns search results for manga",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga search"
+                                }
                             }
                         }
                     },
@@ -1708,6 +1733,28 @@
                         "$ref": "#/components/schemas/news"
                     }
                 ]
+            },
+            "manga pictures": {
+                "description": "Anime Pictures",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "image_url": {
+                                    "description": "Default JPG Image Size URL",
+                                    "type": "string"
+                                },
+                                "large_image_url": {
+                                    "description": "Large JPG Image Size URL",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
             },
             "random": {
                 "description": "Random Resources",
@@ -3461,6 +3508,32 @@
                             "chapters_read": {
                                 "description": "Number of chapters read",
                                 "type": "integer"
+                            },
+                            "scores": {
+                                "description": "Review Scores breakdown",
+                                "properties": {
+                                    "overall": {
+                                        "description": "Overall Score",
+                                        "type": "integer"
+                                    },
+                                    "story": {
+                                        "description": "Story Score",
+                                        "type": "integer"
+                                    },
+                                    "art": {
+                                        "description": "Animation Score",
+                                        "type": "integer"
+                                    },
+                                    "character": {
+                                        "description": "Character Score",
+                                        "type": "integer"
+                                    },
+                                    "enjoyment": {
+                                        "description": "Enjoyment Score",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
                             }
                         },
                         "type": "object"
@@ -3650,21 +3723,27 @@
             },
             "manga search": {
                 "description": "Manga Search Resource",
-                "properties": {
-                    "data": {
-                        "description": "The resource that this resource collects.",
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/manga"
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "description": "The resource that this resource collects.",
+                                "type": "array",
+                                "items": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/manga"
+                                        }
+                                    ]
+                                }
                             }
-                        ]
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "manga": {
                 "description": "Manga Resource",
@@ -3777,7 +3856,7 @@
                     "published": {
                         "$ref": "#/components/schemas/daterange"
                     },
-                    "score": {
+                    "scored": {
                         "description": "Score",
                         "type": "number",
                         "format": "float"
@@ -3809,9 +3888,6 @@
                     "background": {
                         "description": "Background",
                         "type": "string"
-                    },
-                    "broadcast": {
-                        "$ref": "#/components/schemas/broadcast"
                     },
                     "related": {
                         "$ref": "#/components/schemas/relation"
@@ -3875,10 +3951,6 @@
                                 "type": "array",
                                 "items": {
                                     "properties": {
-                                        "score": {
-                                            "description": "The number Score",
-                                            "type": "integer"
-                                        },
                                         "votes": {
                                             "description": "Number of votes for this score",
                                             "type": "integer"
