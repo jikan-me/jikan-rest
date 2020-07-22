@@ -122,7 +122,7 @@ class MangaResource extends JsonResource
      *          ref="#/components/schemas/daterange"
      *      ),
      *      @OA\Property(
-     *          property="scored",
+     *          property="score",
      *          type="number",
      *          format="float",
      *          description="Score"
