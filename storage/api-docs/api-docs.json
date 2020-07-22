@@ -3856,7 +3856,7 @@
                     "published": {
                         "$ref": "#/components/schemas/daterange"
                     },
-                    "scored": {
+                    "score": {
                         "description": "Score",
                         "type": "number",
                         "format": "float"
