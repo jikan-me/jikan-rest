@@ -27,7 +27,7 @@ class Anime extends Model
      *
      * @var array
      */
-    protected $appends = ['trailer', 'season', 'year', 'themes', 'images'];
+    protected $appends = ['season', 'year', 'themes', 'images'];
 
     protected $mainDataRequest = true;
     protected $databaseStoreAvailability = true;
@@ -40,22 +40,12 @@ class Anime extends Model
     protected $table = 'anime';
 
     /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
-//    protected $primaryKey = 'mal_id';
-//
-//    const CREATED_AT = 'creation_date';
-//    const UPDATED_AT = 'last_update';
-
-    /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
     protected $hidden = [
-        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images', 'request_hash', 'expiresAt'
+        '_id', 'premiered', 'opening_themes', 'ending_themes', 'request_hash', 'expiresAt'
     ];
 
     public function setRelatedAttribute($value)
@@ -91,25 +81,25 @@ class Anime extends Model
         $this->attributes['trailer'] = $this->getTrailerAttribute();
     }*/
 
-    public function getTrailerAttribute()
-    {
-        try {
-            $youtubeId = Media::youtubeIdFromUrl($this->attributes['trailer_url']);
-            $youtubeUrl = Media::generateYoutubeUrlFromId($youtubeId);
-        } catch (\Exception $e) {
-            return [
-                'youtube_id' => null,
-                'url' => null,
-                'embed_url' => null
-            ];
-        }
-
-        return [
-            'youtube_id' => $youtubeId,
-            'url' => $youtubeUrl,
-            'embed_url' => $this->attributes['trailer_url']
-        ];
-    }
+//    public function getTrailerAttribute()
+//    {
+//        try {
+//            $youtubeId = Media::youtubeIdFromUrl($this->attributes['trailer_url']);
+//            $youtubeUrl = Media::generateYoutubeUrlFromId($youtubeId);
+//        } catch (\Exception $e) {
+//            return [
+//                'youtube_id' => null,
+//                'url' => null,
+//                'embed_url' => null
+//            ];
+//        }
+//
+//        return [
+//            'youtube_id' => $youtubeId,
+//            'url' => $youtubeUrl,
+//            'embed_url' => $this->attributes['trailer_url']
+//        ];
+//    }
 
     public function setSeasonAttribute($value)
     {
