@@ -165,10 +165,7 @@ class PersonResource extends JsonResource
             'alternate_names' => $this->alternate_names,
             'birthday' => $this->birthday,
             'favorites' => $this->favorites,
-            'about' => $this->about,
-            'voice_acting_roles' => $this->voice_acting_roles,
-            'anime_staff_positions' => $this->anime_staff_positions,
-            'published_manga' => $this->published_manga,
+            'about' => $this->about
         ];
     }
 }

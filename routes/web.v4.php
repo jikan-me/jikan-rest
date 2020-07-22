@@ -165,6 +165,18 @@ $router->group(
             'uses' => 'PersonController@main'
         ]);
 
+        $router->get('/anime', [
+            'uses' => 'PersonController@anime'
+        ]);
+
+        $router->get('/voices', [
+            'uses' => 'PersonController@voices'
+        ]);
+
+        $router->get('/manga', [
+            'uses' => 'PersonController@manga'
+        ]);
+
         $router->get('/pictures', [
             'uses' => 'PersonController@pictures'
         ]);
