@@ -68,7 +68,7 @@ class AnimeResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="trailer",
-     *          ref="#/components/schemas/trailer"
+     *          ref="#/components/schemas/trailer base"
      *      ),
      *
      *      @OA\Property(
@@ -118,7 +118,7 @@ class AnimeResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="airing",
-     *          type="bool",
+     *          type="boolean",
      *          description="Airing boolean"
      *      ),
      *      @OA\Property(
@@ -138,7 +138,8 @@ class AnimeResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="score",
-     *          type="float",
+     *          type="number",
+     *          format="float",
      *          description="Score"
      *      ),
      *      @OA\Property(

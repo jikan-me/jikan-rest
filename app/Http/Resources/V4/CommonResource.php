@@ -11,6 +11,17 @@ class CommonResource extends JsonResource
      *      schema="trailer",
      *      type="object",
      *      description="Youtube Details",
+     *      
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/trailer base"),
+     *          @OA\Schema(ref="#/components/schemas/trailer images"),
+     *      } 
+     *  ),
+     * 
+     *  @OA\Schema(
+     *      schema="trailer base",
+     *      type="object",
+     *      description="Youtube Details",
      *
      *      @OA\Property(
      *          property="youtube_id",
@@ -27,11 +38,18 @@ class CommonResource extends JsonResource
      *          type="string",
      *          description="Parsed Embed URL"
      *      ),
-     *     @OA\Property(
+     *  ),
+     * 
+     *  @OA\Schema(
+     *      schema="trailer images",
+     *      type="object",
+     *      description="Youtube Images",
+     *
+     *      @OA\Property(
      *          property="images",
      *          type="object",
      *          @OA\Property(
-     *              property="image_url",
+     *              property="default_image_url",
      *              type="string",
      *              description="Default Image Size URL (120x90)"
      *          ),
@@ -238,7 +256,7 @@ class CommonResource extends JsonResource
      *      ),
      *     @OA\Property(
      *          property="has_next_page",
-     *          type="bool"
+     *          type="boolean"
      *     ),
      *  ),
      *
@@ -246,7 +264,7 @@ class CommonResource extends JsonResource
      *     schema="news",
      *     type="object",
      *     @OA\Property(
-     *          property="results",
+     *          property="data",
      *          type="array",
      *          @OA\Items(
      *              type="object",
@@ -373,7 +391,7 @@ class CommonResource extends JsonResource
      *         description="Review content"
      *     ),
      *     @OA\Property(
-     *         property="reviewer",
+     *         property="author",
      *         type="object",
      *         description="Reviewer details",
      *         @OA\Property(
@@ -395,6 +413,41 @@ class CommonResource extends JsonResource
      *             property="episodes_seen",
      *             type="integer",
      *             description="Number of episodes seen"
+     *         ),
+     *         @OA\Property(
+     *             property="scores",
+     *             type="object",
+     *             description="Review Scores breakdown",
+     *             @OA\Property(
+     *                 property="overall",
+     *                 type="integer",
+     *                 description="Overall Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="story",
+     *                 type="integer",
+     *                 description="Story Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="animation",
+     *                 type="integer",
+     *                 description="Animation Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="sound",
+     *                 type="integer",
+     *                 description="Sound Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="character",
+     *                 type="integer",
+     *                 description="Character Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="enjoyment",
+     *                 type="integer",
+     *                 description="Enjoyment Score"
+     *             ),
      *         ),
      *     ),
      *  ),

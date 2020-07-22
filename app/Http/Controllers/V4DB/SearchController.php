@@ -54,7 +54,9 @@ class SearchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for anime",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime search"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
