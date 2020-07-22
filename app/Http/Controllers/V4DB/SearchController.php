@@ -389,7 +389,7 @@ class SearchController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="user by id",
+     *      schema="users",
      *      description="User Meta By ID",
      *
      *      @OA\Property(
