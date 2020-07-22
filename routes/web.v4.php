@@ -3,15 +3,15 @@
 
 $router->get('/', function () use ($router) {
     return response()->json([
-        'author_url' => 'http://irfan.dahir.co',
-        'discord_url' => 'https://discord.gg/4tvCr36',
-        'version' => '4.0',
+        'author_url' => 'https://github.com/irfan-dahir',
+        'discord_url' => 'http://discord.jikan.moe',
+        'version' => '4.0 Alpha Preview',
         'parser_version' => JIKAN_PARSER_VERSION,
         'website_url' => 'https://jikan.moe',
-        'documentation_url' => 'https://jikan.docs.apiary.io',
-        'github_url' => 'https://github.com/jikan-me/jikan-me',
+        'documentation_url' => 'https://docs.api.jikan.moe/',
+        'github_url' => 'https://github.com/jikan-me/jikan-rest',
         'parser_github_url' => 'https://github.com/jikan-me/jikan',
-        'production_api_url' => 'https://api.jikan.moe/v4/',
+        'production_api_url' => 'https://api.jikan.moe/v4-alpha/',
         'status_url' => 'https://status.jikan.moe'
     ]);
 });
