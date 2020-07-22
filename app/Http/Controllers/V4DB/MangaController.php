@@ -54,7 +54,12 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              @OA\Property( 
+     *                  property="data",
+     *                  ref="#/components/schemas/manga"
+     *              )
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -130,7 +135,9 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga characters resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/manga characters"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -287,7 +294,9 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of manga forum topics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/forum"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -360,12 +369,35 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of manga forum topics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/manga pictures"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
+     * )
+     * @OA\Schema(
+     *     schema="manga pictures",
+     *     description="Anime Pictures",
+     *     @OA\Property(
+     *         property="data",
+     *         type="array",
+     * 
+     *         @OA\Items(
+     *             @OA\Property(
+     *                 property="image_url",
+     *                 type="string",
+     *                 description="Default JPG Image Size URL"
+     *             ),
+     *             @OA\Property(
+     *                 property="large_image_url",
+     *                 type="string",
+     *                 description="Large JPG Image Size URL"
+     *             ),
+     *         )
+     *     )
      * )
      */
     public function pictures(Request $request, int $id)
@@ -432,7 +464,9 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime statistics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/manga statistics"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -504,7 +538,9 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga moreinfo",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/moreinfo"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -576,7 +612,9 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga recommendations",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/recommendations"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -648,7 +686,9 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga user updates",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/manga userupdates"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -721,7 +761,9 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga reviews",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/manga reviews"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",

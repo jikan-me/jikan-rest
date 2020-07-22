@@ -163,10 +163,6 @@ class MangaResource extends JsonResource
      *          description="Background"
      *      ),
      *      @OA\Property(
-     *          property="broadcast",
-     *          ref="#/components/schemas/broadcast"
-     *      ),
-     *      @OA\Property(
      *          property="related",
      *          ref="#/components/schemas/relation"
      *      ),
