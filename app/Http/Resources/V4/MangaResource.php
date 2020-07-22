@@ -204,7 +204,7 @@ class MangaResource extends JsonResource
         return [
             'mal_id' => $this->mal_id,
             'url' => $this->url,
-            'images' => $this->image,
+            'images' => $this->images,
             'title' => $this->title,
             'title_english' => $this->title_english,
             'title_japanese' => $this->title_japanese,

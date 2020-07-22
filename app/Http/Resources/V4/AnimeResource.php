@@ -260,7 +260,7 @@ class AnimeResource extends JsonResource
         return [
             'mal_id' => $this->mal_id,
             'url' => $this->url,
-            'images' => $this->image,
+            'images' => $this->images,
             'trailer' => $this->trailer,
             'title' => $this->title,
             'title_english' => $this->title_english,

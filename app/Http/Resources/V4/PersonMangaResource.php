@@ -20,8 +20,8 @@ class PersonMangaResource extends JsonResource
             'manga' => [
                 'mal_id' => $this['manga']['mal_id'],
                 'url' => $this['manga']['url'],
-                'image_url' => $this['manga']['image_url'],
-                'name' => $this['manga']['name']
+                'images' => $this['manga']['images'],
+                'title' => $this['manga']['title']
             ],
         ];
     }

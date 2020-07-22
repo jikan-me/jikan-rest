@@ -19,7 +19,7 @@ class Anime extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id','url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
+        'mal_id','url','title','title_english','title_japanese','title_synonyms', 'images', 'type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
     ];
 
     /**
@@ -27,10 +27,7 @@ class Anime extends Model
      *
      * @var array
      */
-    protected $appends = ['season', 'year', 'themes', 'images'];
-
-    protected $mainDataRequest = true;
-    protected $databaseStoreAvailability = true;
+    protected $appends = ['season', 'year', 'themes'];
 
     /**
      * The table associated with the model.
@@ -52,54 +49,6 @@ class Anime extends Model
     {
         $this->attributes['related'] = $this->getRelatedAttribute();
     }
-
-/*
-    // For V3 or below
-    public function getRelatedAttribute()
-    {
-        // Fix JSON response for empty related object
-        if (\count($this->attributes['related']) === 0) {
-            $this->attributes['related'] = new \stdClass();
-        }
-
-        if (!is_object($this->attributes['related']) && !empty($this->attributes['related'])) {
-            $relation = [];
-            foreach ($this->attributes['related'] as $relationType => $related) {
-                $relation[] = [
-                    'relation' => $relationType,
-                    'items' => $related
-                ];
-            }
-            $this->attributes['related'] = $relation;
-        }
-
-        return $this->attributes['related'];
-    }
-
-    public function setTrailerAttribute($value)
-    {
-        $this->attributes['trailer'] = $this->getTrailerAttribute();
-    }*/
-
-//    public function getTrailerAttribute()
-//    {
-//        try {
-//            $youtubeId = Media::youtubeIdFromUrl($this->attributes['trailer_url']);
-//            $youtubeUrl = Media::generateYoutubeUrlFromId($youtubeId);
-//        } catch (\Exception $e) {
-//            return [
-//                'youtube_id' => null,
-//                'url' => null,
-//                'embed_url' => null
-//            ];
-//        }
-//
-//        return [
-//            'youtube_id' => $youtubeId,
-//            'url' => $youtubeUrl,
-//            'embed_url' => $this->attributes['trailer_url']
-//        ];
-//    }
 
     public function setSeasonAttribute($value)
     {
@@ -175,29 +124,6 @@ class Anime extends Model
         return [
             'openings' => $this->attributes['opening_themes'],
             'endings' => $this->attributes['ending_themes'],
-        ];
-    }
-
-    public function setImageAttribute($value)
-    {
-        $this->attributes['image'] = $this->getImageAttribute();
-    }
-
-    public function getImageAttribute()
-    {
-        $imageUrl = $this->attributes['image_url'];
-
-        return [
-            'jpg' => [
-                'image_url' => $imageUrl,
-                'small_image_url' => str_replace('.jpg', 't.jpg', $imageUrl),
-                'large_image_url' => str_replace('.jpg', 'l.jpg', $imageUrl),
-            ],
-            'webp' => [
-                'image_url' => str_replace('.jpg', '.webp', $imageUrl),
-                'small_image_url' => str_replace('.jpg', 't.webp', $imageUrl),
-                'large_image_url' => str_replace('.jpg', 'l.webp', $imageUrl),
-            ]
         ];
     }
 

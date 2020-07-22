@@ -20,7 +20,7 @@ class Manga extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
+        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'images', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
         'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related', 'genres', 'authors', 'serializations',
     ];
 
@@ -29,7 +29,7 @@ class Manga extends Model
      *
      * @var array
      */
-    protected $appends = ['images'];
+    protected $appends = [];
 
 
     /**
@@ -45,31 +45,8 @@ class Manga extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'expiresAt', 'request_hash', 'images_url'
+        '_id', 'expiresAt', 'request_hash'
     ];
-
-    public function setImageAttribute($value)
-    {
-        $this->attributes['image'] = $this->getImageAttribute();
-    }
-
-    public function getImageAttribute()
-    {
-        $imageUrl = $this->attributes['image_url'];
-
-        return [
-            'jpg' => [
-                'image_url' => $imageUrl,
-                'small_image_url' => str_replace('.jpg', 't.jpg', $imageUrl),
-                'large_image_url' => str_replace('.jpg', 'l.jpg', $imageUrl),
-            ],
-            'webp' => [
-                'image_url' => str_replace('.jpg', '.webp', $imageUrl),
-                'small_image_url' => str_replace('.jpg', 't.webp', $imageUrl),
-                'large_image_url' => str_replace('.jpg', 'l.webp', $imageUrl),
-            ]
-        ];
-    }
 
     public static function scrape(int $id)
     {

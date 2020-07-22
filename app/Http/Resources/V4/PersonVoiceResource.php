@@ -20,8 +20,8 @@ class PersonVoiceResource extends JsonResource
             'anime' => [
                 'mal_id' => $this['anime']['mal_id'],
                 'url' => $this['anime']['url'],
-                'image_url' => $this['anime']['image_url'],
-                'name' => $this['anime']['name']
+                'images' => $this['anime']['images'],
+                'title' => $this['anime']['title']
             ],
             'character' => [
                 'mal_id' => $this['character']['mal_id'],
