@@ -456,11 +456,11 @@ $router->group(
             'uses' => 'RandomController@manga',
         ]);
 
-        $router->get('/character', [
+        $router->get('/characters', [
             'uses' => 'RandomController@characters',
         ]);
 
-        $router->get('/person', [
+        $router->get('/people', [
             'uses' => 'RandomController@people',
         ]);
     }
