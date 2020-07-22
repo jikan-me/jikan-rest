@@ -539,6 +539,36 @@ class CommonResource extends JsonResource
      *             type="integer",
      *             description="Number of chapters read"
      *         ),
+     *         @OA\Property(
+     *             property="scores",
+     *             type="object",
+     *             description="Review Scores breakdown",
+     *             @OA\Property(
+     *                 property="overall",
+     *                 type="integer",
+     *                 description="Overall Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="story",
+     *                 type="integer",
+     *                 description="Story Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="art",
+     *                 type="integer",
+     *                 description="Animation Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="character",
+     *                 type="integer",
+     *                 description="Character Score"
+     *             ),
+     *             @OA\Property(
+     *                 property="enjoyment",
+     *                 type="integer",
+     *                 description="Enjoyment Score"
+     *             ),
+     *         ),
      *     ),
      *  ),
      */

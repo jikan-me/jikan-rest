@@ -16,16 +16,22 @@ class MangaCollection extends ResourceCollection
      *  @OA\Schema(
      *      schema="manga search",
      *      description="Manga Search Resource",
+     * 
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
-     *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/manga"),
-     *          }
-     *     ),
+     *                   @OA\Items(
+     *                       allOf={
+     *                           @OA\Schema(ref="#/components/schemas/manga"),
+     *                       }
+     *                   )
+     *              ),
+     *          )
+     *      }
      *  )
      */
     public $collects = 'App\Http\Resources\V4\MangaResource';
