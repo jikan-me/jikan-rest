@@ -20,7 +20,12 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     const MAX_RESULTS_PER_PAGE = 25;
 
     /**
-     *
+     * @OA\Schema(
+     *   schema="anime search query type",
+     *   description="Anime Search Query Type",
+     *   type="string",
+     *   enum={"tv","movie","ova","special","ona","music"}
+     * )
      */
     const MAP_TYPES = [
         'tv' => 'TV',
@@ -32,7 +37,12 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     ];
 
     /**
-     *
+     * @OA\Schema(
+     *   schema="anime search query status",
+     *   description="Anime Search Query Status",
+     *   type="string",
+     *   enum={"airing","complete","upcoming"}
+     * )
      */
     const MAP_STATUS = [
         'airing' => 'Currently Airing',
@@ -41,7 +51,12 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     ];
 
     /**
-     *
+     * @OA\Schema(
+     *   schema="anime search query rating",
+     *   description="Anime Search Query Rating",
+     *   type="string",
+     *   enum={"g","pg","pg13","r17","r","rx"}
+     * )
      */
     const MAP_RATING = [
         'g' => 'G - All Ages',
@@ -53,7 +68,12 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     ];
 
     /**
-     *
+     * @OA\Schema(
+     *   schema="anime search query orderby",
+     *   description="Anime Search Query OrderBy",
+     *   type="string",
+     *   enum={"mal_id", "title", "aired.from", "aired.to", "episodes", "score", "scored_by", "rank", "popularity", "members", "favorites" }
+     * )
      */
     const ORDER_BY = [
         'mal_id', 'title', 'aired.from', 'aired.to', 'episodes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'

@@ -12,6 +12,14 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
 
     const MAX_RESULTS_PER_PAGE = 25;
 
+    /**
+     * @OA\Schema(
+     *   schema="manga search query type",
+     *   description="Manga Search Query Type",
+     *   type="string",
+     *   enum={"manga","novel","oneshot","doujin","manhwa","manhua"}
+     * )
+     */
     const MAP_TYPES = [
         'manga' => 'Manga',
         'novel' => 'Novel',
@@ -21,6 +29,14 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         'manhua' => 'Manhua'
     ];
 
+    /**
+     * @OA\Schema(
+     *   schema="manga search query status",
+     *   description="Manga Search Query Status",
+     *   type="string",
+     *   enum={"airing","complete","hiatus","discontinued","upcoming"}
+     * )
+     */
     const MAP_STATUS = [
         'airing' => 'Publishing',
         'complete' => 'Finished',
@@ -29,6 +45,14 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         'upcoming' => 'Not yet published'
     ];
 
+    /**
+     * @OA\Schema(
+     *   schema="manga search query orderby",
+     *   description="Manga Search Query OrderBy",
+     *   type="string",
+     *   enum={"mal_id", "title", "published.from", "published.to", "chapters", "volumes", "score", "scored_by", "rank", "popularity", "members", "favorites"}
+     * )
+     */
     const ORDER_BY = [
         'mal_id', 'title', 'published.from', 'published.to', 'chapters', 'volumes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
     ];

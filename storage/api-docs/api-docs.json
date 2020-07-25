@@ -813,6 +813,69 @@
                 }
             }
         },
+        "/people/{id}/anime": {
+            "get": {
+                "tags": [
+                    "people"
+                ],
+                "operationId": "getPersonAnime",
+                "responses": {
+                    "200": {
+                        "description": "Returns person's anime staff positions",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/people/{id}/voices": {
+            "get": {
+                "tags": [
+                    "people"
+                ],
+                "operationId": "getPersonVoices",
+                "responses": {
+                    "200": {
+                        "description": "Returns person's voice acting roles",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/people/{id}/manga": {
+            "get": {
+                "tags": [
+                    "people"
+                ],
+                "operationId": "getPersonManga",
+                "responses": {
+                    "200": {
+                        "description": "Returns person's published manga",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/people/{id}/pictures": {
             "get": {
                 "tags": [
@@ -1071,6 +1134,91 @@
                     "anime"
                 ],
                 "operationId": "getAnimeSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime search query type"
+                        }
+                    },
+                    {
+                        "name": "score",
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime search query status"
+                        }
+                    },
+                    {
+                        "name": "rating",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime search query rating"
+                        }
+                    },
+                    {
+                        "name": "sfw",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "genres",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "producer",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for anime",
@@ -1094,6 +1242,84 @@
                     "manga"
                 ],
                 "operationId": "getMangaSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/manga search query type"
+                        }
+                    },
+                    {
+                        "name": "score",
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/manga search query status"
+                        }
+                    },
+                    {
+                        "name": "sfw",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "genres",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/manga search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "magazine",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for manga",
@@ -1117,6 +1343,42 @@
                     "people"
                 ],
                 "operationId": "getPeopleSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/people search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for people",
@@ -1138,6 +1400,42 @@
                     "characters"
                 ],
                 "operationId": "getCharactersSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/characters search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for characters",
@@ -1159,6 +1457,49 @@
                     "users"
                 ],
                 "operationId": "getUsersSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/users search query gender"
+                        }
+                    },
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "maxAge",
+                        "in": "query",
+                        "schema": {
+                            "type": "intager"
+                        }
+                    },
+                    {
+                        "name": "minAge",
+                        "in": "query",
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for users",
@@ -1201,6 +1542,56 @@
                     "clubs"
                 ],
                 "operationId": "getClubsSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/club search query type"
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/club search query category"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/club search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for clubs",
@@ -1911,6 +2302,14 @@
                 },
                 "type": "object"
             },
+            "search query sort": {
+                "description": "Characters Search Query Sort",
+                "type": "string",
+                "enum": [
+                    "desc",
+                    "asc"
+                ]
+            },
             "user collection": {
                 "description": "User Results",
                 "allOf": [
@@ -1927,7 +2326,7 @@
                     }
                 ]
             },
-            "user by id": {
+            "users": {
                 "description": "User Meta By ID",
                 "properties": {
                     "data": {
@@ -2252,6 +2651,164 @@
                         },
                         "type": "object"
                     }
+                ]
+            },
+            "anime search query type": {
+                "description": "Anime Search Query Type",
+                "type": "string",
+                "enum": [
+                    "tv",
+                    "movie",
+                    "ova",
+                    "special",
+                    "ona",
+                    "music"
+                ]
+            },
+            "anime search query status": {
+                "description": "Anime Search Query Status",
+                "type": "string",
+                "enum": [
+                    "airing",
+                    "complete",
+                    "upcoming"
+                ]
+            },
+            "anime search query rating": {
+                "description": "Anime Search Query Rating",
+                "type": "string",
+                "enum": [
+                    "g",
+                    "pg",
+                    "pg13",
+                    "r17",
+                    "r",
+                    "rx"
+                ]
+            },
+            "anime search query orderby": {
+                "description": "Anime Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "title",
+                    "aired.from",
+                    "aired.to",
+                    "episodes",
+                    "score",
+                    "scored_by",
+                    "rank",
+                    "popularity",
+                    "members",
+                    "favorites"
+                ]
+            },
+            "characters search query orderby": {
+                "description": "Characters Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "member_favorites"
+                ]
+            },
+            "club search query type": {
+                "description": "Club Search Query Type",
+                "type": "string",
+                "enum": [
+                    "public",
+                    "private",
+                    "secret"
+                ]
+            },
+            "club search query category": {
+                "description": "Club Search Query Category",
+                "type": "string",
+                "enum": [
+                    "anime",
+                    "manga",
+                    "actors_and_artists",
+                    "characters",
+                    "cities_and_neighborhoods",
+                    "companies",
+                    "conventions",
+                    "games",
+                    "japan",
+                    "music",
+                    "other",
+                    "schools"
+                ]
+            },
+            "club search query orderby": {
+                "description": "Club Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "title",
+                    "members_count",
+                    "pictures_count",
+                    "created"
+                ]
+            },
+            "manga search query type": {
+                "description": "Manga Search Query Type",
+                "type": "string",
+                "enum": [
+                    "manga",
+                    "novel",
+                    "oneshot",
+                    "doujin",
+                    "manhwa",
+                    "manhua"
+                ]
+            },
+            "manga search query status": {
+                "description": "Manga Search Query Status",
+                "type": "string",
+                "enum": [
+                    "airing",
+                    "complete",
+                    "hiatus",
+                    "discontinued",
+                    "upcoming"
+                ]
+            },
+            "manga search query orderby": {
+                "description": "Manga Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "title",
+                    "published.from",
+                    "published.to",
+                    "chapters",
+                    "volumes",
+                    "score",
+                    "scored_by",
+                    "rank",
+                    "popularity",
+                    "members",
+                    "favorites"
+                ]
+            },
+            "people search query orderby": {
+                "description": "People Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "birthday",
+                    "member_favorites"
+                ]
+            },
+            "users search query gender": {
+                "description": "Users Search Query Gender",
+                "type": "string",
+                "enum": [
+                    "any",
+                    "male",
+                    "female",
+                    "nonbinary"
                 ]
             },
             "anime characters": {
@@ -4213,7 +4770,7 @@
                 },
                 "type": "object"
             },
-            "user": {
+            "users2": {
                 "properties": {
                     "data": {
                         "description": "Transform the resource into an array.",
@@ -4665,6 +5222,22 @@
                     }
                 },
                 "type": "object"
+            }
+        },
+        "parameters": {
+            "page": {
+                "name": "page",
+                "in": "query",
+                "schema": {
+                    "type": "number"
+                }
+            },
+            "limit": {
+                "name": "limit",
+                "in": "query",
+                "schema": {
+                    "type": "number"
+                }
             }
         }
     },

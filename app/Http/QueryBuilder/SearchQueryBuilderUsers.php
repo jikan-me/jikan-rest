@@ -14,6 +14,14 @@ class SearchQueryBuilderUsers
 
     const MAX_RESULTS_PER_PAGE = 25;
 
+    /**
+     * @OA\Schema(
+     *   schema="users search query gender",
+     *   description="Users Search Query Gender",
+     *   type="string",
+     *   enum={"any","male","female","nonbinary"}
+     * )
+     */
     private const MAP_GENDERS = [
         'any' => JikanConstants::SEARCH_USER_GENDER_ANY,
         'male' => JikanConstants::SEARCH_USER_GENDER_MALE,

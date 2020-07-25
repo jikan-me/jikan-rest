@@ -20,7 +20,12 @@ class SearchQueryBuilderClub implements SearchQueryBuilderInterface
     const MAX_RESULTS_PER_PAGE = 25;
 
     /**
-     *
+     * @OA\Schema(
+     *   schema="club search query type",
+     *   description="Club Search Query Type",
+     *   type="string",
+     *   enum={"public","private","secret"}
+     * )
      */
     const MAP_TYPES = [
         'public' => 'public',
@@ -29,7 +34,16 @@ class SearchQueryBuilderClub implements SearchQueryBuilderInterface
     ];
 
     /**
-     *
+     * @OA\Schema(
+     *   schema="club search query category",
+     *   description="Club Search Query Category",
+     *   type="string",
+     *   enum={
+     *      "anime","manga","actors_and_artists","characters",
+     *      "cities_and_neighborhoods","companies","conventions","games",
+     *      "japan","music","other","schools"
+     *   }
+     * )
      */
     const MAP_CATEGORY = [
         'anime' => 'Anime',
@@ -47,7 +61,12 @@ class SearchQueryBuilderClub implements SearchQueryBuilderInterface
     ];
 
     /**
-     *
+     * @OA\Schema(
+     *   schema="club search query orderby",
+     *   description="Club Search Query OrderBy",
+     *   type="string",
+     *   enum={"mal_id","title","members_count","pictures_count","created"}
+     * )
      */
     const ORDER_BY = [
         'mal_id', 'title', 'members_count', 'pictures_count', 'created'
