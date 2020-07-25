@@ -271,13 +271,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     /**
      * @param string|null $sort
      * @return string|null
-     * 
-     * @OA\Schema(
-     *   schema="anime search query sort",
-     *   description="Anime Search Query Sort",
-     *   type="string",
-     *   enum={"desc","asc"}
-     * )
      */
     public static function mapSort(?string $sort = null) : ?string
     {

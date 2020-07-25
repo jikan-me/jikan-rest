@@ -58,14 +58,6 @@ class SearchQueryBuilderCharacter implements SearchQueryBuilderInterface
         return $results;
     }
 
-    /**
-      * @OA\Schema(
-      *   schema="characters search query sort",
-      *   description="Characters Search Query Sort",
-      *   type="string",
-      *   enum={"desc","asc"}
-      * )
-      */
     public static function mapSort(?string $sort = null) : ?string
     {
         $sort = strtolower($sort);

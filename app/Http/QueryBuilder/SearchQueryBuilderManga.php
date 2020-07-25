@@ -206,14 +206,6 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         return self::MAP_STATUS[$status] ?? null;
     }
 
-    /**
-      * @OA\Schema(
-      *   schema="manga search query sort",
-      *   description="Anime Search Query Sort",
-      *   type="string",
-      *   enum={"desc","asc"}
-      * )
-      */
     public static function mapSort(?string $sort = null) : ?string
     {
         if (!is_null($sort)) {

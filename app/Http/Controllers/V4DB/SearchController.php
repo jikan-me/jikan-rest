@@ -56,6 +56,13 @@ class SearchController extends Controller
      *    in="query",
      *    @OA\Schema(type="number")
      *  ),
+     * 
+     * @OA\Schema(
+     *   schema="search query sort",
+     *   description="Characters Search Query Sort",
+     *   type="string",
+     *   enum={"desc","asc"}
+     * )
      */
 
     /**
@@ -118,7 +125,7 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/anime search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search query sort")
      *     ),
      * 
      *     @OA\Parameter(
@@ -236,7 +243,7 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/manga search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search query sort")
      *     ),
      * 
      *     @OA\Parameter(
@@ -379,7 +386,7 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/characters search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search query sort")
      *     ),
      * 
      *     @OA\Parameter(
