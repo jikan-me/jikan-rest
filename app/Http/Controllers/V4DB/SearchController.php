@@ -316,6 +316,30 @@ class SearchController extends Controller
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      * 
+     *     @OA\Parameter(
+     *       name="q",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="order_by",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/people search query orderby")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="sort",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/search query sort")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="letter",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for people",

@@ -12,6 +12,14 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
 
     const MAX_RESULTS_PER_PAGE = 25;
 
+    /**
+     * @OA\Schema(
+     *   schema="people search query orderby",
+     *   description="People Search Query OrderBy",
+     *   type="string",
+     *   enum={"mal_id","name","birthday","member_favorites"}
+     * )
+     */
     const ORDER_BY = [
         'mal_id', 'name', 'birthday', 'member_favorites'
     ];
