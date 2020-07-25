@@ -658,6 +658,42 @@ class SearchController extends Controller
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      * 
+     *     @OA\Parameter(
+     *       name="q",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="type",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/club search query type")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="category",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/club search query category")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="order_by",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/club search query orderby")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="sort",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/search query sort")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="letter",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for clubs",
