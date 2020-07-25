@@ -12,6 +12,14 @@ class SearchQueryBuilderCharacter implements SearchQueryBuilderInterface
 
     const MAX_RESULTS_PER_PAGE = 25;
 
+    /**
+     * @OA\Schema(
+     *   schema="characters search query orderby",
+     *   description="Characters Search Query OrderBy",
+     *   type="string",
+     *   enum={"mal_id", "name","member_favorites"}
+     * )
+     */
     const ORDER_BY = [
         'mal_id', 'name', 'member_favorites'
     ];
@@ -50,6 +58,14 @@ class SearchQueryBuilderCharacter implements SearchQueryBuilderInterface
         return $results;
     }
 
+    /**
+      * @OA\Schema(
+      *   schema="characters search query sort",
+      *   description="Characters Search Query Sort",
+      *   type="string",
+      *   enum={"desc","asc"}
+      * )
+      */
     public static function mapSort(?string $sort = null) : ?string
     {
         $sort = strtolower($sort);
