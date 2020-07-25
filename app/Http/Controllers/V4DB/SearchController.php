@@ -171,6 +171,66 @@ class SearchController extends Controller
      *     path="/manga",
      *     operationId="getMangaSearch",
      *     tags={"manga"},
+     * 
+     *     @OA\Parameter(
+     *       name="q",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="type",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/manga search query type")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="score",
+     *       in="query",
+     *       @OA\Schema(type="number")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="status",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/manga search query status")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="sfw",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="genres",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="order_by",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/manga search query orderby")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="sort",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/manga search query sort")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="letter",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="magazine",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
