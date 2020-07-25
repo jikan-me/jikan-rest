@@ -46,10 +46,26 @@ class SearchController extends Controller
     const MAX_RESULTS_PER_PAGE = 25;
 
     /**
+     *  @OA\Parameter(
+     *    name="page",
+     *    in="query",
+     *    @OA\Schema(type="number")
+     *  ),
+     *  @OA\Parameter(
+     *    name="limit",
+     *    in="query",
+     *    @OA\Schema(type="number")
+     *  ),
+     */
+
+    /**
      *  @OA\Get(
      *     path="/anime",
      *     operationId="getAnimeSearch",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      * 
      *     @OA\Parameter(
      *       name="q",
@@ -172,6 +188,9 @@ class SearchController extends Controller
      *     operationId="getMangaSearch",
      *     tags={"manga"},
      * 
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     * 
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
@@ -287,6 +306,9 @@ class SearchController extends Controller
      *     operationId="getPeopleSearch",
      *     tags={"people"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     * 
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for people",
@@ -339,6 +361,9 @@ class SearchController extends Controller
      *     operationId="getCharactersSearch",
      *     tags={"characters"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     * 
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for characters",
@@ -599,6 +624,9 @@ class SearchController extends Controller
      *     operationId="getClubsSearch",
      *     tags={"clubs"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     * 
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for clubs",
