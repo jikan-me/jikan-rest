@@ -470,7 +470,40 @@ class SearchController extends Controller
      *     path="/users",
      *     operationId="getUsersSearch",
      *     tags={"users"},
+     * 
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
+     *     @OA\Parameter(
+     *       name="q",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="gender",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/users search query gender")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="location",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="maxAge",
+     *       in="query",
+     *       @OA\Schema(type="intager")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="minAge",
+     *       in="query",
+     *       @OA\Schema(type="intager")
+     *     ),
+     * 
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for users",
