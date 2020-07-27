@@ -49,7 +49,7 @@ class SeasonController extends Controller
             ->where('premiered', "{$this->season} $this->year")
             ->orderBy('members', 'desc')
             ->get([
-                'mal_id', 'url', 'title', 'image_url', 'synopsis', 'type', 'airing_start', 'episodes', 'members', 'genres', 'source', 'producers', 'score', 'licensors', 'rating'
+                'mal_id', 'url', 'title', 'image_url', 'synopsis', 'type', 'aired', 'episodes', 'members', 'genres', 'source', 'producers', 'score', 'licensors', 'rating'
             ]);
 
         $items = $this->applyBackwardsCompatibility($results, 'anime');
@@ -83,7 +83,7 @@ class SeasonController extends Controller
             ->where('premiered', 'like', "%{$nextYear}%")
             ->orderBy('members', 'desc')
             ->get([
-                'mal_id', 'url', 'title', 'image_url', 'synopsis', 'type', 'airing_start', 'episodes', 'members', 'genres', 'source', 'producers', 'score', 'licensors', 'rating'
+                'mal_id', 'url', 'title', 'image_url', 'synopsis', 'type', 'aired', 'episodes', 'members', 'genres', 'source', 'producers', 'score', 'licensors', 'rating'
             ]);
 
         $this->season = 'Later';
