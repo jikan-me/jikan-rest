@@ -38,6 +38,9 @@ class SearchController extends Controller
         $genres = $request->get('genre');
         $orderBy = $this->getOrderBy($request->get('order_by'));
         $sort = $this->getSort($request->get('sort'));
+        $letter = $request->get('letter');
+        $producer = $request->get('producer');
+
 
         $results = DB::table('anime')
             ->select('mal_id', 'url', 'image_url', 'title', 'airing', 'synopsis', 'type', 'episodes', 'score', 'aired.from', 'aired.to', 'members', 'rating');
@@ -45,10 +48,18 @@ class SearchController extends Controller
         if (!empty($query)) {
             $results
                 ->where('title', 'like', "%$query%")
-                ->orWhere('title_english', 'like', "%$query%")
-                ->orWhere('title_japanese', 'like', "%$query%");
-        } else {
-            $results
+                ->where('title_english', 'like', "%$query%")
+                ->where('title_japanese', 'like', "%$query%")
+                ->where('title_synonyms', 'like', "%{$query}%");
+        }
+
+        if (!is_null($letter)) {
+            $results = $results
+                ->where('title', 'like', "{$letter}%");
+        }
+
+        if (empty($query)) {
+            $results = $results
                 ->orderBy('mal_id');
         }
 
@@ -63,6 +74,29 @@ class SearchController extends Controller
                 ->where('score', '>=', $score);
         }
 
+        if (!is_null($producer)) {
+
+            $producer = (int) $producer;
+
+            $results = $results
+                ->where('producers.mal_id', $producer);
+        }
+
+        if (!is_null($genres)) {
+            $genres = explode(',', $genres);
+
+            foreach ($genres as $genre) {
+                if (empty($genre)) {
+                    continue;
+                }
+
+                $genre = (int) $genre;
+
+                $results = $results
+                    ->where('genres.mal_id', $genre);
+            }
+        }
+
         if (!is_null($status)) {
             $results = $results
                 ->where('status', $status);
@@ -71,12 +105,6 @@ class SearchController extends Controller
         if (!is_null($rating)) {
             $results = $results
                 ->where('rating', $rating);
-        }
-
-        if (!is_null($genres)) {
-            $genres = explode(',', $genres);
-
-            // @todo WIP. Need genre indexing
         }
 
         if (!is_null($orderBy)) {
@@ -107,15 +135,6 @@ class SearchController extends Controller
         $items = $this->applyBackwardsCompatibility($results);
 
         return response()->json($items);
-
-
-//        $search = $this->jikan->getAnimeSearch(
-//            SearchQueryBuilder::create(
-//                (new AnimeSearchRequest())->setPage($page)
-//            )
-//        );
-//
-//        return response($this->filter($search));
     }
 
     public function manga(Request $request, int $page = 1)
@@ -382,7 +401,6 @@ class SearchController extends Controller
         ])) {
             return null;
         }
-
 
         return $this->orderByType[$orderBy] ?? null;
     }
