@@ -131,31 +131,29 @@ class DatabaseResolver
         // If cache is expired, handle it depending on whether it's queueable
         $expiresAt = $cacheMutable['expiresAt']['$date']['$numberLong']/1000;
 
-        if ($this->requestCached && $expiresAt < time() && !$this->queueable) {
-            $response = $next($request);
-
-            if (HttpHelper::hasError($response)) {
-                return $response;
-            }
-
-            $this->insertCache($response);
-        }
-
-
-
-        if ( $this->queueable && $expiresAt < time()) {
-            $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);
-
-            // Don't duplicate the job in the queue for same request
-            $job = DB::table(env('QUEUE_TABLE', 'jobs'))->where('request_hash', $this->fingerprint);
-
-            if (!$job->exists()) {
-                dispatch(
-                    (new UpdateDatabaseJob($request, $this->table))
-                        ->onQueue($queueHighPriority ? 'high' : 'low')
-                );
-            }
-        }
+//        if ($this->requestCached && $expiresAt < time() && !$this->queueable) {
+//            $response = $next($request);
+//
+//            if (HttpHelper::hasError($response)) {
+//                return $response;
+//            }
+//
+//            $this->insertCache($response);
+//        }
+//
+//        if ( $this->queueable && $expiresAt < time()) {
+//            $queueHighPriority = \in_array($this->route, self::HIGH_PRIORITY_QUEUE);
+//
+//            // Don't duplicate the job in the queue for same request
+//            $job = DB::table(env('QUEUE_TABLE', 'jobs'))->where('request_hash', $this->fingerprint);
+//
+//            if (!$job->exists()) {
+//                dispatch(
+//                    (new UpdateDatabaseJob($request, $this->table))
+//                        ->onQueue($queueHighPriority ? 'high' : 'low')
+//                );
+//            }
+//        }
 
         $response = array_merge($meta, $cacheMutable);
         unset($response['createdAt'], $response['expireAfterSeconds'], $response['_id'], $response['expiresAt']);
