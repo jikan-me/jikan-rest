@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V3;
 
 use App\Anime;
 use App\Http\HttpHelper;
+use App\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -155,17 +156,32 @@ class SearchController extends Controller
         $genres = $request->get('genre');
         $orderBy = $this->getOrderBy($request->get('order_by'));
         $sort = $this->getSort($request->get('sort'));
+        $letter = $request->get('letter');
+        $magazine = $request->get('magazine');
 
-        $results = DB::table('manga')
-            ->select('mal_id', 'url', 'image_url', 'title', 'publishing', 'synopsis', 'type', 'chapters', 'volumes', 'score', 'published.from', 'published.to', 'members');
+        $results = Manga::query();
 
         if (!empty($query)) {
             $results
-                ->where('title', 'like', "%$query%")
-                ->orWhere('title_english', 'like', "%$query%")
-                ->orWhere('title_japanese', 'like', "%$query%");
-        } else {
+                ->getQuery()->projections = ['distance_score'=>['$meta'=>'textScore']];
+
             $results
+                ->orderBy('distance_score',['$meta'=>'textScore'])
+                ->whereRaw([
+                    '$text' => [
+                        '$search' => "{$query}",
+                        '$language' => 'en'
+                    ],
+                ]);
+        }
+
+        if (!is_null($letter)) {
+            $results = $results
+                ->where('title', 'like', "{$letter}%");
+        }
+
+        if (empty($query)) {
+            $results = $results
                 ->orderBy('mal_id');
         }
 
@@ -185,11 +201,27 @@ class SearchController extends Controller
                 ->where('status', $status);
         }
 
+        if (!is_null($magazine)) {
+
+            $magazine = (int) $magazine;
+
+            $results = $results
+                ->where('serializations.mal_id', $magazine);
+        }
 
         if (!is_null($genres)) {
             $genres = explode(',', $genres);
 
-            // @todo WIP. Need genre indexing
+            foreach ($genres as $genre) {
+                if (empty($genre)) {
+                    continue;
+                }
+
+                $genre = (int) $genre;
+
+                $results = $results
+                    ->where('genres.mal_id', $genre);
+            }
         }
 
         if (!is_null($orderBy)) {
@@ -212,7 +244,7 @@ class SearchController extends Controller
         $results = $results
             ->paginate(
                 $limit,
-                null,
+                ['mal_id', 'url', 'image_url', 'title', 'publishing', 'synopsis', 'type', 'chapters', 'volumes', 'score', 'published.from', 'published.to', 'members'],
                 null,
                 $page
             );
@@ -220,13 +252,6 @@ class SearchController extends Controller
         $items = $this->applyBackwardsCompatibility($results);
 
         return response()->json($items);
-
-        $search = $this->jikan->getMangaSearch(
-            SearchQueryBuilder::create(
-                (new MangaSearchRequest())->setPage($page)
-            )
-        );
-        return response($this->filter($search));
     }
 
     public function people(int $page = 1)
@@ -283,26 +308,20 @@ class SearchController extends Controller
 
         $items = $data->items() ?? [];
         foreach ($items as &$item) {
-            if (isset($item['aired']['from'])) {
-                $item['start_date'] = $item['aired']['from'];
+            if (isset($item['aired'])) {
+                $item['start_date'] = $item['aired']['from'] ?? null;
+                $item['end_date'] = $item['aired']['to'] ?? null;
             }
-
-            if (isset($item['aired']['to'])) {
-                $item['end_date'] = $item['aired']['to'];
-            }
-            if (isset($item['published']['from'])) {
-                $item['start_date'] = $item['published']['from'];
-            }
-
-            if (isset($item['published']['to'])) {
-                $item['end_date'] = $item['published']['to'];
+            if (isset($item['published'])) {
+                $item['start_date'] = $item['published']['from'] ?? null;
+                $item['end_date'] = $item['published']['to'] ?? null;
             }
 
             if (isset($item['rating'])) {
                 $item['rated'] = $item['rating'];
             }
 
-            unset($item['_id'], $item['oid'], $item['expiresAt'], $item['aired'], $item['published'], $item['rating']);
+            unset($item['_id'], $item['oid'], $item['expiresAt'], $item['aired'], $item['published'], $item['rating'], $item['distance_score']);
         }
         $items = ['results' => $items];
 

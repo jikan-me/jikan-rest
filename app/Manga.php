@@ -4,7 +4,7 @@ namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Anime extends Model
+class Manga extends Model
 {
 
     /**
@@ -13,7 +13,7 @@ class Anime extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id','url','image_url','title','title_english','title_japanese','title_synonyms','type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
+        'mal_id', 'url', 'title_english', 'title_synonyms', 'title_japanese', 'status', 'image_url', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score', 'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related', 'genres', 'authors', 'serializations'
     ];
 
     /**
@@ -21,7 +21,7 @@ class Anime extends Model
      *
      * @var string
      */
-    protected $table = 'anime';
+    protected $table = 'manga';
 
     /**
      * The attributes excluded from the model's JSON form.

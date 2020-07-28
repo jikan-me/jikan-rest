@@ -25,7 +25,7 @@ class MagazineController extends Controller
             ->paginate(
                 self::MAX_RESULTS_PER_PAGE,
                 [
-                    'mal_id', 'url', 'title', 'image_url', 'synopsis', 'type', 'aired.from', 'volumes', 'members', 'genres', 'authors', 'score', 'serializations'
+                    'mal_id', 'url', 'title', 'image_url', 'synopsis', 'type', 'published', 'volumes', 'members', 'genres', 'authors', 'score', 'serializations'
                 ],
                 null,
                 $page
@@ -60,12 +60,12 @@ class MagazineController extends Controller
         $items = $data->items() ?? [];
         foreach ($items as &$item) {
 
-            if (isset($item['aired']['from'])) {
-                $item['airing_start'] = $item['aired']['from'];
+            if (isset($item['aired'])) {
+                $item['airing_start'] = $item['aired']['from'] ?? null;
             }
 
-            if (isset($item['published']['from'])) {
-                $item['publishing_start'] = $item['aired']['from'];
+            if (isset($item['published'])) {
+                $item['publishing_start'] = $item['aired']['from'] ?? null;
             }
 
             if (isset($item['serializations'])) {

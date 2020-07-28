@@ -87,12 +87,12 @@ class GenreController extends Controller
         $items = $data->items() ?? [];
         foreach ($items as &$item) {
 
-            if (isset($item['aired']['from'])) {
-                $item['airing_start'] = $item['aired']['from'];
+            if (isset($item['aired'])) {
+                $item['airing_start'] = $item['aired']['from'] ?? null;
             }
 
-            if (isset($item['published']['from'])) {
-                $item['publishing_start'] = $item['aired']['from'];
+            if (isset($item['published'])) {
+                $item['publishing_start'] = $item['aired']['from'] ?? null;
             }
 
             if (isset($item['serializations'])) {

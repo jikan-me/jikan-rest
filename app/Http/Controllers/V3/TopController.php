@@ -73,7 +73,7 @@ class TopController extends Controller
             ->paginate(
                 self::MAX_RESULTS_PER_PAGE,
                 [
-                    'mal_id', 'rank', 'title', 'url', 'image_url', 'type', 'episodes', 'aired.from', 'aired.to', 'members', 'score'
+                    'mal_id', 'rank', 'title', 'url', 'image_url', 'type', 'episodes', 'aired', 'members', 'score'
                 ],
                 null,
                 $page
@@ -82,12 +82,6 @@ class TopController extends Controller
         $items = $this->applyBackwardsCompatibility($results);
 
         return response()->json($items);
-//
-//        $anime = $this->jikan->getTopAnime(new TopAnimeRequest($page, $type));
-//
-//        $top = ['top' => $this->jikan->getTopAnime(new TopAnimeRequest($page, $type))];
-//
-//        return response($this->serializer->serialize($top, 'json'));
     }
 
     public function manga(Request $request, int $page = 1, string $type = null)
@@ -145,7 +139,7 @@ class TopController extends Controller
             ->paginate(
                 self::MAX_RESULTS_PER_PAGE,
                 [
-                    'mal_id', 'rank', 'title', 'url', 'image_url', 'type', 'episodes', 'aired.from', 'aired.to', 'members', 'score'
+                    'mal_id', 'rank', 'title', 'url', 'image_url', 'type', 'volumes', 'chapters', 'published', 'members', 'score'
                 ],
                 null,
                 $page
@@ -154,10 +148,6 @@ class TopController extends Controller
         $items = $this->applyBackwardsCompatibility($results);
 
         return response()->json($items);
-
-//        $top = ['top' => $this->jikan->getTopManga(new TopMangaRequest($page, $type))];
-//
-//        return response($this->serializer->serialize($top, 'json'));
     }
 
     public function people(int $page = 1)
@@ -187,19 +177,13 @@ class TopController extends Controller
 
         $items = $data->items() ?? [];
         foreach ($items as &$item) {
-            if (isset($item['aired']['from'])) {
-                $item['start_date'] = $item['aired']['from'];
+            if (isset($item['aired'])) {
+                $item['start_date'] = $item['aired']['from'] ?? null;
+                $item['end_date'] = $item['aired']['to'] ?? null;
             }
-
-            if (isset($item['aired']['to'])) {
-                $item['end_date'] = $item['aired']['to'];
-            }
-            if (isset($item['published']['from'])) {
-                $item['start_date'] = $item['published']['from'];
-            }
-
-            if (isset($item['published']['to'])) {
-                $item['end_date'] = $item['published']['to'];
+            if (isset($item['published'])) {
+                $item['start_date'] = $item['published']['from'] ?? null;
+                $item['end_date'] = $item['published']['to'] ?? null;
             }
 
             if (isset($item['rating'])) {
