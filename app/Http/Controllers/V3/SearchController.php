@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V3;
 
+use App\Anime;
 use App\Http\HttpHelper;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -41,16 +42,20 @@ class SearchController extends Controller
         $letter = $request->get('letter');
         $producer = $request->get('producer');
 
-
-        $results = DB::table('anime')
-            ->select('mal_id', 'url', 'image_url', 'title', 'airing', 'synopsis', 'type', 'episodes', 'score', 'aired.from', 'aired.to', 'members', 'rating');
+        $results = Anime::query();
 
         if (!empty($query)) {
             $results
-                ->where('title', 'like', "%$query%")
-                ->where('title_english', 'like', "%$query%")
-                ->where('title_japanese', 'like', "%$query%")
-                ->where('title_synonyms', 'like', "%{$query}%");
+                ->getQuery()->projections = ['distance_score'=>['$meta'=>'textScore']];
+
+            $results
+                ->orderBy('distance_score',['$meta'=>'textScore'])
+                ->whereRaw([
+                    '$text' => [
+                        '$search' => "{$query}",
+                        '$language' => 'en'
+                    ],
+                ]);
         }
 
         if (!is_null($letter)) {
@@ -127,7 +132,7 @@ class SearchController extends Controller
         $results = $results
             ->paginate(
                 $limit,
-                null,
+                ['mal_id', 'url', 'image_url', 'title', 'type', 'episodes', 'aired', 'airing', 'score', 'members', 'synopsis', 'rated'],
                 null,
                 $page
             );
