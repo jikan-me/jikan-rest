@@ -20,15 +20,8 @@ class Profile extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'username', 'url', 'image_url', 'last_online', 'gender', 'birthday', 'location', 'joined', 'anime_stats', 'manga_stats', 'favorites', 'about'
+        'mal_id', 'username', 'url', 'images', 'last_online', 'gender', 'birthday', 'location', 'joined', 'anime_stats', 'manga_stats', 'favorites', 'about'
     ];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['images'];
 
     /**
      * The table associated with the model.
@@ -43,27 +36,8 @@ class Profile extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'image_url'
+        '_id',
     ];
-
-    public function setImagesAttribute($value)
-    {
-        $this->attributes['images'] = $this->getImagesAttribute();
-    }
-
-    public function getImagesAttribute()
-    {
-        $imageUrl = $this->attributes['image_url'];
-
-        return [
-            'jpg' => [
-                'image_url' => $imageUrl,
-            ],
-            'webp' => [
-                'image_url' => str_replace('.jpg', '.webp', $imageUrl),
-            ]
-        ];
-    }
 
     public static function scrape(string $username)
     {
