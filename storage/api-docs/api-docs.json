@@ -813,6 +813,69 @@
                 }
             }
         },
+        "/people/{id}/anime": {
+            "get": {
+                "tags": [
+                    "people"
+                ],
+                "operationId": "getPersonAnime",
+                "responses": {
+                    "200": {
+                        "description": "Returns person's anime staff positions",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/people/{id}/voices": {
+            "get": {
+                "tags": [
+                    "people"
+                ],
+                "operationId": "getPersonVoices",
+                "responses": {
+                    "200": {
+                        "description": "Returns person's voice acting roles",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/people/{id}/manga": {
+            "get": {
+                "tags": [
+                    "people"
+                ],
+                "operationId": "getPersonManga",
+                "responses": {
+                    "200": {
+                        "description": "Returns person's published manga",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/people/{id}/pictures": {
             "get": {
                 "tags": [
@@ -1013,7 +1076,51 @@
                         "description": "Returns recent anime reviews",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/pagination"
+                                                },
+                                                {
+                                                    "properties": {
+                                                        "data": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "allOf": [
+                                                                    {
+                                                                        "$ref": "#/components/schemas/anime review"
+                                                                    },
+                                                                    {
+                                                                        "properties": {
+                                                                            "anime": {
+                                                                                "type": "object",
+                                                                                "$ref": "#/components/schemas/anime meta"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    {
+                                                                        "properties": {
+                                                                            "user": {
+                                                                                "type": "object",
+                                                                                "$ref": "#/components/schemas/user meta"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -1034,7 +1141,51 @@
                         "description": "Returns recent manga reviews",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/pagination"
+                                                },
+                                                {
+                                                    "properties": {
+                                                        "data": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "allOf": [
+                                                                    {
+                                                                        "$ref": "#/components/schemas/manga review"
+                                                                    },
+                                                                    {
+                                                                        "properties": {
+                                                                            "manga": {
+                                                                                "type": "object",
+                                                                                "$ref": "#/components/schemas/manga meta"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    {
+                                                                        "properties": {
+                                                                            "user": {
+                                                                                "type": "object",
+                                                                                "$ref": "#/components/schemas/user meta"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -1374,7 +1525,80 @@
                         "description": "Returns top reviews",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/pagination"
+                                                },
+                                                {
+                                                    "properties": {
+                                                        "data": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "anyOf": [
+                                                                    {
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "#/components/schemas/anime review"
+                                                                            },
+                                                                            {
+                                                                                "properties": {
+                                                                                    "anime": {
+                                                                                        "type": "object",
+                                                                                        "$ref": "#/components/schemas/anime meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            {
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "type": "object",
+                                                                                        "$ref": "#/components/schemas/user meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "#/components/schemas/manga review"
+                                                                            },
+                                                                            {
+                                                                                "properties": {
+                                                                                    "manga": {
+                                                                                        "type": "object",
+                                                                                        "$ref": "#/components/schemas/manga meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            {
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "type": "object",
+                                                                                        "$ref": "#/components/schemas/user meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -1458,7 +1682,80 @@
                         "description": "Returns user reviews",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/pagination"
+                                                },
+                                                {
+                                                    "properties": {
+                                                        "data": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "anyOf": [
+                                                                    {
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "#/components/schemas/anime review"
+                                                                            },
+                                                                            {
+                                                                                "properties": {
+                                                                                    "anime": {
+                                                                                        "type": "object",
+                                                                                        "$ref": "#/components/schemas/anime meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            {
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "type": "object",
+                                                                                        "$ref": "#/components/schemas/user meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "#/components/schemas/manga review"
+                                                                            },
+                                                                            {
+                                                                                "properties": {
+                                                                                    "manga": {
+                                                                                        "type": "object",
+                                                                                        "$ref": "#/components/schemas/manga meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            {
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "type": "object",
+                                                                                        "$ref": "#/components/schemas/user meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -1927,7 +2224,7 @@
                     }
                 ]
             },
-            "user by id": {
+            "users": {
                 "description": "User Meta By ID",
                 "properties": {
                     "data": {
@@ -3327,6 +3624,164 @@
                 },
                 "type": "object"
             },
+            "user meta": {
+                "properties": {
+                    "username": {
+                        "description": "MyAnimeList Username",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "MyAnimeList Profile URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/user images"
+                    }
+                },
+                "type": "object"
+            },
+            "user images": {
+                "properties": {
+                    "jpg": {
+                        "description": "Available images in JPG",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL JPG (225x335)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "webp": {
+                        "description": "Available images in WEBP",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL WEBP (225x335)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "anime meta": {
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/anime images"
+                    }
+                },
+                "type": "object"
+            },
+            "manga meta": {
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/manga images"
+                    }
+                },
+                "type": "object"
+            },
+            "anime images": {
+                "properties": {
+                    "jpg": {
+                        "description": "Available images in JPG",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL JPG (225x335)",
+                                "type": "string"
+                            },
+                            "small_image_url": {
+                                "description": "Small Image URL JPG (50x74)",
+                                "type": "string"
+                            },
+                            "large_image_url": {
+                                "description": "Image URL JPG (300x446)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "webp": {
+                        "description": "Available images in WEBP",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL WEBP (225x335)",
+                                "type": "string"
+                            },
+                            "small_image_url": {
+                                "description": "Small Image URL WEBP (50x74)",
+                                "type": "string"
+                            },
+                            "large_image_url": {
+                                "description": "Image URL WEBP (300x446)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "manga images": {
+                "properties": {
+                    "jpg": {
+                        "description": "Available images in JPG",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL JPG (225x335)",
+                                "type": "string"
+                            },
+                            "small_image_url": {
+                                "description": "Small Image URL JPG (50x74)",
+                                "type": "string"
+                            },
+                            "large_image_url": {
+                                "description": "Image URL JPG (300x446)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "webp": {
+                        "description": "Available images in WEBP",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL WEBP (225x335)",
+                                "type": "string"
+                            },
+                            "small_image_url": {
+                                "description": "Small Image URL WEBP (50x74)",
+                                "type": "string"
+                            },
+                            "large_image_url": {
+                                "description": "Image URL WEBP (300x446)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "anime review": {
                 "properties": {
                     "mal_id": {
@@ -3382,58 +3837,6 @@
                     "review": {
                         "description": "Review content",
                         "type": "string"
-                    },
-                    "author": {
-                        "description": "Reviewer details",
-                        "properties": {
-                            "username": {
-                                "description": "MyAnimeList Username",
-                                "type": "string"
-                            },
-                            "url": {
-                                "description": "MyAnimeList Profile URL",
-                                "type": "string"
-                            },
-                            "image_url": {
-                                "description": "User Display Picture Image URL",
-                                "type": "string"
-                            },
-                            "episodes_seen": {
-                                "description": "Number of episodes seen",
-                                "type": "integer"
-                            },
-                            "scores": {
-                                "description": "Review Scores breakdown",
-                                "properties": {
-                                    "overall": {
-                                        "description": "Overall Score",
-                                        "type": "integer"
-                                    },
-                                    "story": {
-                                        "description": "Story Score",
-                                        "type": "integer"
-                                    },
-                                    "animation": {
-                                        "description": "Animation Score",
-                                        "type": "integer"
-                                    },
-                                    "sound": {
-                                        "description": "Sound Score",
-                                        "type": "integer"
-                                    },
-                                    "character": {
-                                        "description": "Character Score",
-                                        "type": "integer"
-                                    },
-                                    "enjoyment": {
-                                        "description": "Enjoyment Score",
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "type": "object"
                     }
                 },
                 "type": "object"
@@ -3489,54 +3892,6 @@
                     "review": {
                         "description": "Review content",
                         "type": "string"
-                    },
-                    "reviewer": {
-                        "description": "Reviewer details",
-                        "properties": {
-                            "username": {
-                                "description": "MyAnimeList Username",
-                                "type": "string"
-                            },
-                            "url": {
-                                "description": "MyAnimeList Profile URL",
-                                "type": "string"
-                            },
-                            "image_url": {
-                                "description": "User Display Picture Image URL",
-                                "type": "string"
-                            },
-                            "chapters_read": {
-                                "description": "Number of chapters read",
-                                "type": "integer"
-                            },
-                            "scores": {
-                                "description": "Review Scores breakdown",
-                                "properties": {
-                                    "overall": {
-                                        "description": "Overall Score",
-                                        "type": "integer"
-                                    },
-                                    "story": {
-                                        "description": "Story Score",
-                                        "type": "integer"
-                                    },
-                                    "art": {
-                                        "description": "Animation Score",
-                                        "type": "integer"
-                                    },
-                                    "character": {
-                                        "description": "Character Score",
-                                        "type": "integer"
-                                    },
-                                    "enjoyment": {
-                                        "description": "Enjoyment Score",
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "type": "object"
                     }
                 },
                 "type": "object"
@@ -4213,7 +4568,7 @@
                 },
                 "type": "object"
             },
-            "user": {
+            "users history": {
                 "properties": {
                     "data": {
                         "description": "Transform the resource into an array.",

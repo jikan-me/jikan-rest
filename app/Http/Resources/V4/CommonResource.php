@@ -323,6 +323,181 @@ class CommonResource extends JsonResource
      *  ),
      *
      * @OA\Schema(
+     *     schema="user meta",
+     *     type="object",
+     *     @OA\Property(
+     *         property="username",
+     *         type="string",
+     *         description="MyAnimeList Username"
+     *     ),
+     *     @OA\Property(
+     *         property="url",
+     *         type="string",
+     *         description="MyAnimeList Profile URL"
+     *     ),
+     *     @OA\Property(
+     *         property="images",
+     *         type="object",
+     *         ref="#/components/schemas/user images",
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *     schema="user images",
+     *     type="object",
+     *     @OA\Property(
+     *         property="jpg",
+     *         type="object",
+     *         description="Available images in JPG",
+     *         @OA\Property(
+     *             property="image_url",
+     *             type="string",
+     *             description="Image URL JPG (225x335)",
+     *         ),
+     *     ),
+     *     @OA\Property(
+     *         property="webp",
+     *         type="object",
+     *         description="Available images in WEBP",
+     *         @OA\Property(
+     *             property="image_url",
+     *             type="string",
+     *             description="Image URL WEBP (225x335)",
+     *         ),
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *     schema="anime meta",
+     *     type="object",
+     *     @OA\Property(
+     *         property="mal_id",
+     *         type="integer",
+     *         description="MyAnimeList ID"
+     *     ),
+     *     @OA\Property(
+     *         property="url",
+     *         type="string",
+     *         description="MyAnimeList URL"
+     *     ),
+     *     @OA\Property(
+     *         property="images",
+     *         type="object",
+     *         ref="#/components/schemas/anime images",
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *     schema="manga meta",
+     *     type="object",
+     *     @OA\Property(
+     *         property="mal_id",
+     *         type="integer",
+     *         description="MyAnimeList ID"
+     *     ),
+     *     @OA\Property(
+     *         property="url",
+     *         type="string",
+     *         description="MyAnimeList URL"
+     *     ),
+     *     @OA\Property(
+     *         property="images",
+     *         type="object",
+     *         ref="#/components/schemas/manga images",
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *     schema="anime images",
+     *     type="object",
+     *     @OA\Property(
+     *         property="jpg",
+     *         type="object",
+     *         description="Available images in JPG",
+     *         @OA\Property(
+     *             property="image_url",
+     *             type="string",
+     *             description="Image URL JPG (225x335)",
+     *         ),
+     *         @OA\Property(
+     *             property="small_image_url",
+     *             type="string",
+     *             description="Small Image URL JPG (50x74)",
+     *         ),
+     *         @OA\Property(
+     *             property="large_image_url",
+     *             type="string",
+     *             description="Image URL JPG (300x446)",
+     *         ),
+     *     ),
+     *     @OA\Property(
+     *         property="webp",
+     *         type="object",
+     *         description="Available images in WEBP",
+     *         @OA\Property(
+     *             property="image_url",
+     *             type="string",
+     *             description="Image URL WEBP (225x335)",
+     *         ),
+     *         @OA\Property(
+     *             property="small_image_url",
+     *             type="string",
+     *             description="Small Image URL WEBP (50x74)",
+     *         ),
+     *         @OA\Property(
+     *             property="large_image_url",
+     *             type="string",
+     *             description="Image URL WEBP (300x446)",
+     *         ),
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *     schema="manga images",
+     *     type="object",
+     *     @OA\Property(
+     *         property="jpg",
+     *         type="object",
+     *         description="Available images in JPG",
+     *         @OA\Property(
+     *             property="image_url",
+     *             type="string",
+     *             description="Image URL JPG (225x335)",
+     *         ),
+     *         @OA\Property(
+     *             property="small_image_url",
+     *             type="string",
+     *             description="Small Image URL JPG (50x74)",
+     *         ),
+     *         @OA\Property(
+     *             property="large_image_url",
+     *             type="string",
+     *             description="Image URL JPG (300x446)",
+     *         ),
+     *     ),
+     *     @OA\Property(
+     *         property="webp",
+     *         type="object",
+     *         description="Available images in WEBP",
+     *         @OA\Property(
+     *             property="image_url",
+     *             type="string",
+     *             description="Image URL WEBP (225x335)",
+     *         ),
+     *         @OA\Property(
+     *             property="small_image_url",
+     *             type="string",
+     *             description="Small Image URL WEBP (50x74)",
+     *         ),
+     *         @OA\Property(
+     *             property="large_image_url",
+     *             type="string",
+     *             description="Image URL WEBP (300x446)",
+     *         ),
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
      *     schema="anime review",
      *     type="object",
      *     @OA\Property(
@@ -390,66 +565,6 @@ class CommonResource extends JsonResource
      *         type="string",
      *         description="Review content"
      *     ),
-     *     @OA\Property(
-     *         property="author",
-     *         type="object",
-     *         description="Reviewer details",
-     *         @OA\Property(
-     *             property="username",
-     *             type="string",
-     *             description="MyAnimeList Username"
-     *         ),
-     *         @OA\Property(
-     *             property="url",
-     *             type="string",
-     *             description="MyAnimeList Profile URL"
-     *         ),
-     *         @OA\Property(
-     *             property="image_url",
-     *             type="string",
-     *             description="User Display Picture Image URL"
-     *         ),
-     *         @OA\Property(
-     *             property="episodes_seen",
-     *             type="integer",
-     *             description="Number of episodes seen"
-     *         ),
-     *         @OA\Property(
-     *             property="scores",
-     *             type="object",
-     *             description="Review Scores breakdown",
-     *             @OA\Property(
-     *                 property="overall",
-     *                 type="integer",
-     *                 description="Overall Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="story",
-     *                 type="integer",
-     *                 description="Story Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="animation",
-     *                 type="integer",
-     *                 description="Animation Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="sound",
-     *                 type="integer",
-     *                 description="Sound Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="character",
-     *                 type="integer",
-     *                 description="Character Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="enjoyment",
-     *                 type="integer",
-     *                 description="Enjoyment Score"
-     *             ),
-     *         ),
-     *     ),
      *  ),
      *
      * @OA\Schema(
@@ -514,61 +629,6 @@ class CommonResource extends JsonResource
      *         property="review",
      *         type="string",
      *         description="Review content"
-     *     ),
-     *     @OA\Property(
-     *         property="reviewer",
-     *         type="object",
-     *         description="Reviewer details",
-     *         @OA\Property(
-     *             property="username",
-     *             type="string",
-     *             description="MyAnimeList Username"
-     *         ),
-     *         @OA\Property(
-     *             property="url",
-     *             type="string",
-     *             description="MyAnimeList Profile URL"
-     *         ),
-     *         @OA\Property(
-     *             property="image_url",
-     *             type="string",
-     *             description="User Display Picture Image URL"
-     *         ),
-     *         @OA\Property(
-     *             property="chapters_read",
-     *             type="integer",
-     *             description="Number of chapters read"
-     *         ),
-     *         @OA\Property(
-     *             property="scores",
-     *             type="object",
-     *             description="Review Scores breakdown",
-     *             @OA\Property(
-     *                 property="overall",
-     *                 type="integer",
-     *                 description="Overall Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="story",
-     *                 type="integer",
-     *                 description="Story Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="art",
-     *                 type="integer",
-     *                 description="Animation Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="character",
-     *                 type="integer",
-     *                 description="Character Score"
-     *             ),
-     *             @OA\Property(
-     *                 property="enjoyment",
-     *                 type="integer",
-     *                 description="Enjoyment Score"
-     *             ),
-     *         ),
      *     ),
      *  ),
      */
