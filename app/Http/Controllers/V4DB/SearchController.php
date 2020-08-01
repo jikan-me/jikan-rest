@@ -49,12 +49,12 @@ class SearchController extends Controller
      *  @OA\Parameter(
      *    name="page",
      *    in="query",
-     *    @OA\Schema(type="number")
+     *    @OA\Schema(type="intager")
      *  ),
      *  @OA\Parameter(
      *    name="limit",
      *    in="query",
-     *    @OA\Schema(type="number")
+     *    @OA\Schema(type="intager")
      *  ),
      * 
      * @OA\Schema(
