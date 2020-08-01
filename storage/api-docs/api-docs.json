@@ -26,6 +26,16 @@
                     "anime"
                 ],
                 "operationId": "getAnimeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime resource",
@@ -54,6 +64,16 @@
                     "anime"
                 ],
                 "operationId": "getAnimeCharacters",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime characters resource",
@@ -77,6 +97,16 @@
                     "anime"
                 ],
                 "operationId": "getAnimeStaff",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime staff resource",
@@ -94,12 +124,30 @@
                 }
             }
         },
-        "/anime/{id}/episodes/{mal_id}": {
+        "/anime/{id}/episodes/{ep_id}": {
             "get": {
                 "tags": [
                     "anime"
                 ],
                 "operationId": "getAnimeEpisodeById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    },
+                    {
+                        "name": "ep_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a single anime episode resource",
@@ -123,6 +171,19 @@
                     "anime"
                 ],
                 "operationId": "getAnimeEpisodes",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a list of anime episodes",
@@ -146,6 +207,19 @@
                     "anime"
                 ],
                 "operationId": "getAnimeNews",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a list of anime news topics",
@@ -169,6 +243,23 @@
                     "anime"
                 ],
                 "operationId": "getAnimeTopics",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    },
+                    {
+                        "name": "topic",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a list of anime forum topics",
@@ -192,6 +283,16 @@
                     "anime"
                 ],
                 "operationId": "getAnimeVideos",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a list of anime forum topics",
@@ -215,6 +316,16 @@
                     "anime"
                 ],
                 "operationId": "getAnimePictures",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a list of anime forum topics",
@@ -238,6 +349,16 @@
                     "anime"
                 ],
                 "operationId": "getAnimeStatistics",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime statistics",
@@ -261,6 +382,16 @@
                     "anime"
                 ],
                 "operationId": "getAnimeMoreInfo",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime statistics",
@@ -284,6 +415,16 @@
                     "anime"
                 ],
                 "operationId": "getAnimeRecommendations",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime recommendations",
@@ -307,6 +448,19 @@
                     "anime"
                 ],
                 "operationId": "getAnimeUserUpdates",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime recommendations",
@@ -330,6 +484,19 @@
                     "anime"
                 ],
                 "operationId": "getAnimeReviews",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "intager"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime reviews",
@@ -1222,6 +1389,91 @@
                     "anime"
                 ],
                 "operationId": "getAnimeSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime search query type"
+                        }
+                    },
+                    {
+                        "name": "score",
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime search query status"
+                        }
+                    },
+                    {
+                        "name": "rating",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime search query rating"
+                        }
+                    },
+                    {
+                        "name": "sfw",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "genres",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "producer",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for anime",
@@ -1245,6 +1497,84 @@
                     "manga"
                 ],
                 "operationId": "getMangaSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/manga search query type"
+                        }
+                    },
+                    {
+                        "name": "score",
+                        "in": "query",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/manga search query status"
+                        }
+                    },
+                    {
+                        "name": "sfw",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "genres",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/manga search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "magazine",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for manga",
@@ -1268,6 +1598,42 @@
                     "people"
                 ],
                 "operationId": "getPeopleSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/people search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for people",
@@ -1289,6 +1655,42 @@
                     "characters"
                 ],
                 "operationId": "getCharactersSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/characters search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for characters",
@@ -1310,6 +1712,49 @@
                     "users"
                 ],
                 "operationId": "getUsersSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/users search query gender"
+                        }
+                    },
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "maxAge",
+                        "in": "query",
+                        "schema": {
+                            "type": "intager"
+                        }
+                    },
+                    {
+                        "name": "minAge",
+                        "in": "query",
+                        "schema": {
+                            "type": "intager"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for users",
@@ -1352,6 +1797,56 @@
                     "clubs"
                 ],
                 "operationId": "getClubsSearch",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/club search query type"
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/club search query category"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/club search query orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search query sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns search results for clubs",
@@ -1896,70 +2391,64 @@
         "schemas": {
             "anime episodes": {
                 "description": "Anime Episodes Resource",
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "properties": {
-                                    "results": {
-                                        "type": "array",
-                                        "items": {
-                                            "properties": {
-                                                "mal_id": {
-                                                    "description": "MyAnimeList ID",
-                                                    "type": "integer"
-                                                },
-                                                "url": {
-                                                    "description": "MyAnimeList URL",
-                                                    "type": "string"
-                                                },
-                                                "title": {
-                                                    "description": "Title",
-                                                    "type": "string"
-                                                },
-                                                "title_japanese": {
-                                                    "description": "Title Japanese",
-                                                    "type": "string"
-                                                },
-                                                "title_romanji": {
-                                                    "description": "title_romanji",
-                                                    "type": "string"
-                                                },
-                                                "duration": {
-                                                    "description": "Episode duration in seconds",
-                                                    "type": "integer"
-                                                },
-                                                "aired": {
-                                                    "description": "Aired Date ISO8601",
-                                                    "type": "string"
-                                                },
-                                                "filler": {
-                                                    "description": "Filler episode",
-                                                    "type": "boolean"
-                                                },
-                                                "recap": {
-                                                    "description": "Recap episode",
-                                                    "type": "boolean"
-                                                },
-                                                "synopsis": {
-                                                    "description": "Episode Synopsis",
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "mal_id": {
+                                            "description": "MyAnimeList ID",
+                                            "type": "integer"
+                                        },
+                                        "url": {
+                                            "description": "MyAnimeList URL",
+                                            "type": "string"
+                                        },
+                                        "title": {
+                                            "description": "Title",
+                                            "type": "string"
+                                        },
+                                        "title_japanese": {
+                                            "description": "Title Japanese",
+                                            "type": "string"
+                                        },
+                                        "title_romanji": {
+                                            "description": "title_romanji",
+                                            "type": "string"
+                                        },
+                                        "duration": {
+                                            "description": "Episode duration in seconds",
+                                            "type": "integer"
+                                        },
+                                        "aired": {
+                                            "description": "Aired Date ISO8601",
+                                            "type": "string"
+                                        },
+                                        "filler": {
+                                            "description": "Filler episode",
+                                            "type": "boolean"
+                                        },
+                                        "recap": {
+                                            "description": "Recap episode",
+                                            "type": "boolean"
+                                        },
+                                        "synopsis": {
+                                            "description": "Episode Synopsis",
+                                            "type": "string"
                                         }
-                                    }
-                                },
-                                "type": "object"
+                                    },
+                                    "type": "object"
+                                }
                             }
-                        ]
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "anime news": {
                 "description": "Anime News Resource",
@@ -2207,6 +2696,14 @@
                     }
                 },
                 "type": "object"
+            },
+            "search query sort": {
+                "description": "Characters Search Query Sort",
+                "type": "string",
+                "enum": [
+                    "desc",
+                    "asc"
+                ]
             },
             "user collection": {
                 "description": "User Results",
@@ -2549,6 +3046,164 @@
                         },
                         "type": "object"
                     }
+                ]
+            },
+            "anime search query type": {
+                "description": "Anime Search Query Type",
+                "type": "string",
+                "enum": [
+                    "tv",
+                    "movie",
+                    "ova",
+                    "special",
+                    "ona",
+                    "music"
+                ]
+            },
+            "anime search query status": {
+                "description": "Anime Search Query Status",
+                "type": "string",
+                "enum": [
+                    "airing",
+                    "complete",
+                    "upcoming"
+                ]
+            },
+            "anime search query rating": {
+                "description": "Anime Search Query Rating",
+                "type": "string",
+                "enum": [
+                    "g",
+                    "pg",
+                    "pg13",
+                    "r17",
+                    "r",
+                    "rx"
+                ]
+            },
+            "anime search query orderby": {
+                "description": "Anime Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "title",
+                    "aired.from",
+                    "aired.to",
+                    "episodes",
+                    "score",
+                    "scored_by",
+                    "rank",
+                    "popularity",
+                    "members",
+                    "favorites"
+                ]
+            },
+            "characters search query orderby": {
+                "description": "Characters Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "member_favorites"
+                ]
+            },
+            "club search query type": {
+                "description": "Club Search Query Type",
+                "type": "string",
+                "enum": [
+                    "public",
+                    "private",
+                    "secret"
+                ]
+            },
+            "club search query category": {
+                "description": "Club Search Query Category",
+                "type": "string",
+                "enum": [
+                    "anime",
+                    "manga",
+                    "actors_and_artists",
+                    "characters",
+                    "cities_and_neighborhoods",
+                    "companies",
+                    "conventions",
+                    "games",
+                    "japan",
+                    "music",
+                    "other",
+                    "schools"
+                ]
+            },
+            "club search query orderby": {
+                "description": "Club Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "title",
+                    "members_count",
+                    "pictures_count",
+                    "created"
+                ]
+            },
+            "manga search query type": {
+                "description": "Manga Search Query Type",
+                "type": "string",
+                "enum": [
+                    "manga",
+                    "novel",
+                    "oneshot",
+                    "doujin",
+                    "manhwa",
+                    "manhua"
+                ]
+            },
+            "manga search query status": {
+                "description": "Manga Search Query Status",
+                "type": "string",
+                "enum": [
+                    "airing",
+                    "complete",
+                    "hiatus",
+                    "discontinued",
+                    "upcoming"
+                ]
+            },
+            "manga search query orderby": {
+                "description": "Manga Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "title",
+                    "published.from",
+                    "published.to",
+                    "chapters",
+                    "volumes",
+                    "score",
+                    "scored_by",
+                    "rank",
+                    "popularity",
+                    "members",
+                    "favorites"
+                ]
+            },
+            "people search query orderby": {
+                "description": "People Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "birthday",
+                    "member_favorites"
+                ]
+            },
+            "users search query gender": {
+                "description": "Users Search Query Gender",
+                "type": "string",
+                "enum": [
+                    "any",
+                    "male",
+                    "female",
+                    "nonbinary"
                 ]
             },
             "anime characters": {
@@ -5020,6 +5675,22 @@
                     }
                 },
                 "type": "object"
+            }
+        },
+        "parameters": {
+            "page": {
+                "name": "page",
+                "in": "query",
+                "schema": {
+                    "type": "intager"
+                }
+            },
+            "limit": {
+                "name": "limit",
+                "in": "query",
+                "schema": {
+                    "type": "intager"
+                }
             }
         }
     },
