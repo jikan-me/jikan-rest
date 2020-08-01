@@ -50,6 +50,13 @@ class AnimeController extends Controller
      *     path="/anime/{id}",
      *     operationId="getAnimeById",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -131,6 +138,13 @@ class AnimeController extends Controller
      *     path="/anime/{id}/characters",
      *     operationId="getAnimeCharacters",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -206,6 +220,13 @@ class AnimeController extends Controller
      *     operationId="getAnimeStaff",
      *     tags={"anime"},
      *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
+     * 
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime staff resource",
@@ -277,9 +298,23 @@ class AnimeController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/anime/{id}/episodes/{mal_id}",
+     *     path="/anime/{id}/episodes/{ep_id}",
      *     operationId="getAnimeEpisodeById",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="ep_id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -355,6 +390,15 @@ class AnimeController extends Controller
      *     path="/anime/{id}/episodes",
      *     operationId="getAnimeEpisodes",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
+     * 
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
@@ -373,73 +417,68 @@ class AnimeController extends Controller
      *      schema="anime episodes",
      *      description="Anime Episodes Resource",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
-     *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(
-     *                  @OA\Property(
-     *                      property="results",
-     *                      type="array",
-     *                      @OA\Items(
-     *                          type="object",
-     *                          @OA\Property(
-     *                              property="mal_id",
-     *                              type="integer",
-     *                              description="MyAnimeList ID"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="url",
-     *                              type="string",
-     *                              description="MyAnimeList URL"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="title",
-     *                              type="string",
-     *                              description="Title"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="title_japanese",
-     *                              type="string",
-     *                              description="Title Japanese"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="title_romanji",
-     *                              type="string",
-     *                              description="title_romanji"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="duration",
-     *                              type="integer",
-     *                              description="Episode duration in seconds"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="aired",
-     *                              type="string",
-     *                              description="Aired Date ISO8601"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="filler",
-     *                              type="boolean",
-     *                              description="Filler episode"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="recap",
-     *                              type="boolean",
-     *                              description="Recap episode"
-     *                          ),
-     *                          @OA\Property(
-     *                              property="synopsis",
-     *                              type="string",
-     *                              description="Episode Synopsis"
-     *                          ),
-     *                      ),
-     *                  ),
-     *              ),
-     *          }
-     *     ),
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *          @OA\Property(
+     *               property="data",
+     *               type="array",
+     *               @OA\Items(
+     *                   type="object",
+     *                   @OA\Property(
+     *                       property="mal_id",
+     *                       type="integer",
+     *                       description="MyAnimeList ID"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="url",
+     *                       type="string",
+     *                       description="MyAnimeList URL"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="title",
+     *                       type="string",
+     *                       description="Title"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="title_japanese",
+     *                       type="string",
+     *                       description="Title Japanese"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="title_romanji",
+     *                       type="string",
+     *                       description="title_romanji"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="duration",
+     *                       type="integer",
+     *                       description="Episode duration in seconds"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="aired",
+     *                       type="string",
+     *                       description="Aired Date ISO8601"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="filler",
+     *                       type="boolean",
+     *                       description="Filler episode"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="recap",
+     *                       type="boolean",
+     *                       description="Recap episode"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="synopsis",
+     *                       type="string",
+     *                       description="Episode Synopsis"
+     *                   ),
+     *               ),
+     *          ),
+     *          ),
+     *      }
      *  )
      */
     public function episodes(Request $request, int $id)
@@ -503,6 +542,15 @@ class AnimeController extends Controller
      *     path="/anime/{id}/news",
      *     operationId="getAnimeNews",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
+     * 
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
@@ -590,6 +638,19 @@ class AnimeController extends Controller
      *     path="/anime/{id}/forum",
      *     operationId="getAnimeTopics",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="topic",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -665,6 +726,13 @@ class AnimeController extends Controller
      *     path="/anime/{id}/videos",
      *     operationId="getAnimeVideos",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -739,6 +807,13 @@ class AnimeController extends Controller
      *     path="/anime/{id}/pictures",
      *     operationId="getAnimePictures",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -835,6 +910,13 @@ class AnimeController extends Controller
      *     path="/anime/{id}/statistics",
      *     operationId="getAnimeStatistics",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -909,6 +991,13 @@ class AnimeController extends Controller
      *     path="/anime/{id}/moreinfo",
      *     operationId="getAnimeMoreInfo",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -983,6 +1072,13 @@ class AnimeController extends Controller
      *     path="/anime/{id}/recommendations",
      *     operationId="getAnimeRecommendations",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -1057,6 +1153,15 @@ class AnimeController extends Controller
      *     path="/anime/{id}/userupdates",
      *     operationId="getAnimeUserUpdates",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -1132,6 +1237,15 @@ class AnimeController extends Controller
      *     path="/anime/{id}/reviews",
      *     operationId="getAnimeReviews",
      *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="intager")
+     *     ),
+     * 
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
