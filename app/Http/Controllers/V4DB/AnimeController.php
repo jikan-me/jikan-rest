@@ -55,7 +55,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -143,7 +143,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -224,7 +224,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Response(
@@ -306,14 +306,14 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="ep_id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -395,7 +395,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Parameter(ref="#/components/parameters/page"),
@@ -547,7 +547,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Parameter(ref="#/components/parameters/page"),
@@ -643,7 +643,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Parameter(
@@ -731,7 +731,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -812,7 +812,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -915,7 +915,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -996,7 +996,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -1077,7 +1077,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -1160,7 +1160,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
@@ -1242,7 +1242,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Parameter(ref="#/components/parameters/page"),

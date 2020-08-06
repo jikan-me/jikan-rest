@@ -49,12 +49,12 @@ class SearchController extends Controller
      *  @OA\Parameter(
      *    name="page",
      *    in="query",
-     *    @OA\Schema(type="intager")
+     *    @OA\Schema(type="integer")
      *  ),
      *  @OA\Parameter(
      *    name="limit",
      *    in="query",
-     *    @OA\Schema(type="intager")
+     *    @OA\Schema(type="integer")
      *  ),
      * 
      * @OA\Schema(
@@ -495,13 +495,13 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="maxAge",
      *       in="query",
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="minAge",
      *       in="query",
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Response(
