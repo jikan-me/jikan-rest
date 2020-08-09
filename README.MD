@@ -1,6 +1,6 @@
 ![Jikan](http://i.imgur.com/ctoJ3Jp.png)
 # Jikan - Unofficial MyAnimeList.net REST API
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^%207.1-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](https://discordapp.com/invite/4tvCr36)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^%207.1-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe/)
 
 Jikan is a REST API for [MyAnimeList.net](https://myanimelist.net). It scrapes the website to satisfy the need for an API - which MyAnimeList lacks.
 
@@ -169,11 +169,11 @@ stderr_logfile=/var/www/jikan-is-installed-here/storage/logs/worker.error.log
 
 ## Troubleshooting
 Please read the [troubleshooting guide](https://github.com/jikan-me/jikan-rest/blob/master/TROUBLESHOOTING.md).
-For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
+For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
 ## Artisan Commands
 Please read the [commands guide](https://github.com/jikan-me/jikan-rest/blob/master/COMMANDS.MD).
-For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
+For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
 ## Information
 If you don't want to host your instance, there's a public API available.
@@ -182,18 +182,21 @@ If you don't want to host your instance, there's a public API available.
 - **[Apps/Projects using JikanREST](https://jikan.moe/showcase)**
 
 ## Wrappers
-- **[.NET]** [Jikan.net](https://github.com/Ervie/jikan.net) by Ervie
-- **[Python]** [JikanPy](https://github.com/abhinavk99/jikanpy) by Abhinav Kasamsetty
-- **[Ruby]** [Jikan.rb](https://github.com/Zerocchi/jikan.rb) by Zerocchi
-- **[JavaScript]** [JikanJS](https://github.com/zuritor/jikanjs) by Zuritor
-- **[Java]** [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs
-- **[PHP]** [jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe
-- **[Node.js]** [jikan-node](https://github.com/xy137/jikan-node) by xy137
-- **[Dart]** [jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol
-- **[TypeScript]** [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard
-- **[TypeScript]** [jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco
-- **[Go]** [jikan-go](https://github.com/darenliang/jikan-go) by Daren Liang
-- **[Elixir]** [JikanEx](https://github.com/seanbreckenridge/jikan_ex) by Sean Breckenridge
+
+| Language   | Wrappers |
+|------------|----------|
+| .NET       | [Jikan.net](https://github.com/Ervie/jikan.net) by Ervie |
+| Dart       | [jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol |
+| Elixir     | [JikanEx](https://github.com/seanbreckenridge/jikan_ex) by Sean Breckenridge |
+| Go         | [jikan-go](https://github.com/darenliang/jikan-go) by Daren Liang<br>[jikan2go](https://github.com/nokusukun/jikan2go) by nokusukun |
+| Java       | [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs<br>[Java Jikan Client](https://github.com/Schalar/Jikan) by Schalar<br>[reactive-jikan](https://github.com/SandroHc/reactive-jikan) by Sandro Marques |
+| JavaScript | [JikanJS](https://github.com/zuritor/jikanjs) by Zuritor |
+| Kotlin     | [JikanKt](https://github.com/GSculerlor/JikanKt) by Ganedra Afrasya |
+| Node.js    | [jikan-node](https://github.com/xy137/jikan-node) by xy137 |
+| PHP        | [jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe |
+| Python     | [JikanPy](https://github.com/abhinavk99/jikanpy) by Abhinav Kasamsetty |
+| Ruby       | [Jikan.rb](https://github.com/Zerocchi/jikan.rb) by Zerocchi |
+| TypeScript | [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard<br>[jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco |
 
 [Add your wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
 
