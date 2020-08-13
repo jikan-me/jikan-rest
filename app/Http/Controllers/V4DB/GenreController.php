@@ -29,11 +29,27 @@ class GenreController extends Controller
      *     path="/genres/anime/{id}",
      *     operationId="getAnimeGenreById",
      *     tags={"genres"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Genres's anime",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *
+     *                   @OA\Items(
+     *                          ref="#/components/schemas/anime"
+     *                   )
+     *              ),
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -67,11 +83,27 @@ class GenreController extends Controller
      *     path="/genres/manga/{id}",
      *     operationId="getMangaGenreById",
      *     tags={"genres"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Genres's manga",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *
+     *                   @OA\Items(
+     *                          ref="#/components/schemas/manga"
+     *                   )
+     *              ),
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
