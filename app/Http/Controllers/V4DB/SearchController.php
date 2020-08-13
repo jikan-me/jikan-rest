@@ -422,7 +422,9 @@ class SearchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for characters",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/characters search"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",

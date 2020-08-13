@@ -34,6 +34,19 @@ class ClubCollection extends ResourceCollection
      *              @OA\Schema(ref="#/components/schemas/club"),
      *          }
      *     ),
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *
+     *                   @OA\Items(
+     *                          ref="#/components/schemas/club"
+     *                   )
+     *              ),
+     *          )
+     *      }
      *  )
      */
     public function toArray($request)
