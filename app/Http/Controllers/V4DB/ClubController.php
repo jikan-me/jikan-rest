@@ -23,11 +23,20 @@ class ClubController extends Controller
      *     path="/clubs/{id}",
      *     operationId="getClubsById",
      *     tags={"clubs"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Club Resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/club"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -99,11 +108,27 @@ class ClubController extends Controller
      *     path="/clubs/{id}/members",
      *     operationId="getClubMembers",
      *     tags={"clubs"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     * 
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Club Members Resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              allOf={
+     *                  @OA\Schema(ref="#/components/schemas/pagination"),
+     *                  @OA\Schema(
+     *                      ref="#/components/schemas/club member"
+     *                  )
+     *              }
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",

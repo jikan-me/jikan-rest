@@ -32,7 +32,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -70,7 +70,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -103,7 +103,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -136,7 +136,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     },
                     {
@@ -144,7 +144,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -177,7 +177,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     },
                     {
@@ -213,7 +213,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     },
                     {
@@ -249,7 +249,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     },
                     {
@@ -289,7 +289,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -322,7 +322,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -355,7 +355,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -388,7 +388,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -421,7 +421,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -457,7 +457,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -490,7 +490,7 @@
                         "in": "path",
                         "required": true,
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     },
                     {
@@ -520,12 +520,24 @@
                     "characters"
                 ],
                 "operationId": "getCharacterById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns manga resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/character"
+                                }
                             }
                         }
                     },
@@ -541,12 +553,24 @@
                     "characters"
                 ],
                 "operationId": "getCharacterPictures",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a list of pictures of the character",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/character pictures"
+                                }
                             }
                         }
                     },
@@ -562,12 +586,24 @@
                     "clubs"
                 ],
                 "operationId": "getClubsById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Club Resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/club"
+                                }
                             }
                         }
                     },
@@ -583,12 +619,34 @@
                     "clubs"
                 ],
                 "operationId": "getClubMembers",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Club Members Resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/pagination"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/club member"
+                                        }
+                                    ]
+                                }
                             }
                         }
                     },
@@ -604,12 +662,32 @@
                     "genres"
                 ],
                 "operationId": "getAnimeGenreById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Genres's anime",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/anime"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -625,12 +703,32 @@
                     "genres"
                 ],
                 "operationId": "getMangaGenreById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Genres's manga",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/manga"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -709,12 +807,24 @@
                     "magazines"
                 ],
                 "operationId": "getMagazineById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Magazine's manga",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/magazine"
+                                }
                             }
                         }
                     },
@@ -1696,7 +1806,9 @@
                         "description": "Returns search results for characters",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/characters search"
+                                }
                             }
                         }
                     },
@@ -1744,14 +1856,14 @@
                         "name": "maxAge",
                         "in": "query",
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     },
                     {
                         "name": "minAge",
                         "in": "query",
                         "schema": {
-                            "type": "intager"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1852,7 +1964,9 @@
                         "description": "Returns search results for clubs",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/clubs search"
+                                }
                             }
                         }
                     },
@@ -2463,6 +2577,28 @@
             },
             "anime pictures": {
                 "description": "Anime Pictures",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "image_url": {
+                                    "description": "Default JPG Image Size URL",
+                                    "type": "string"
+                                },
+                                "large_image_url": {
+                                    "description": "Large JPG Image Size URL",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "character pictures": {
+                "description": "Character Pictures",
                 "properties": {
                     "data": {
                         "type": "array",
@@ -3275,11 +3411,7 @@
                                 "description": "The resource that this resource collects.",
                                 "type": "array",
                                 "items": {
-                                    "allOf": [
-                                        {
-                                            "$ref": "#/components/schemas/anime"
-                                        }
-                                    ]
+                                    "$ref": "#/components/schemas/anime"
                                 }
                             }
                         },
@@ -3720,21 +3852,23 @@
             },
             "characters search": {
                 "description": "Characters Search Resource",
-                "properties": {
-                    "data": {
-                        "description": "The resource that this resource collects.",
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/character"
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "description": "The resource that this resource collects.",
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/character"
+                                }
                             }
-                        ]
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "character": {
                 "description": "Character Resource",
@@ -3885,7 +4019,24 @@
                         ]
                     }
                 },
-                "type": "object"
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "description": "Transform the resource collection into an array.",
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/club"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
             },
             "club": {
                 "description": "Club Resource",
@@ -5682,14 +5833,14 @@
                 "name": "page",
                 "in": "query",
                 "schema": {
-                    "type": "intager"
+                    "type": "integer"
                 }
             },
             "limit": {
                 "name": "limit",
                 "in": "query",
                 "schema": {
-                    "type": "intager"
+                    "type": "integer"
                 }
             }
         }

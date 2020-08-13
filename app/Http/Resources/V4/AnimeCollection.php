@@ -25,9 +25,7 @@ class AnimeCollection extends ResourceCollection
      *                   type="array",
      *
      *                   @OA\Items(
-     *                       allOf={
-     *                           @OA\Schema(ref="#/components/schemas/anime"),
-     *                       }
+     *                          ref="#/components/schemas/anime"
      *                   )
      *              ),
      *          )

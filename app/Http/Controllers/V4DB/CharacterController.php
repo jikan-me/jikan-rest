@@ -22,11 +22,20 @@ class CharacterController extends Controller
      *     path="/characters/{id}",
      *     operationId="getCharacterById",
      *     tags={"characters"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/character"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -97,17 +106,48 @@ class CharacterController extends Controller
      *     path="/characters/{id}/pictures",
      *     operationId="getCharacterPictures",
      *     tags={"characters"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of pictures of the character",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/character pictures"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
+     * 
+     *  @OA\Schema(
+     *      schema="character pictures",
+     *      description="Character Pictures",
+     *      @OA\Property(
+     *          property="data",
+     *          type="array",
+     * 
+     *          @OA\Items(
+     *              @OA\Property(
+     *                  property="image_url",
+     *                  type="string",
+     *                  description="Default JPG Image Size URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="large_image_url",
+     *                  type="string",
+     *                  description="Large JPG Image Size URL"
+     *              ),
+     *          )
+     *      )
+     *  )
      */
     public function pictures(Request $request, int $id)
     {

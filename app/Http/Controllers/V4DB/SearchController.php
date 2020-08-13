@@ -49,12 +49,12 @@ class SearchController extends Controller
      *  @OA\Parameter(
      *    name="page",
      *    in="query",
-     *    @OA\Schema(type="intager")
+     *    @OA\Schema(type="integer")
      *  ),
      *  @OA\Parameter(
      *    name="limit",
      *    in="query",
-     *    @OA\Schema(type="intager")
+     *    @OA\Schema(type="integer")
      *  ),
      * 
      * @OA\Schema(
@@ -422,7 +422,9 @@ class SearchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for characters",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/characters search"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -495,13 +497,13 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="maxAge",
      *       in="query",
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="minAge",
      *       in="query",
-     *       @OA\Schema(type="intager")
+     *       @OA\Schema(type="integer")
      *     ),
      * 
      *     @OA\Response(
@@ -754,7 +756,9 @@ class SearchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for clubs",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/clubs search"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",

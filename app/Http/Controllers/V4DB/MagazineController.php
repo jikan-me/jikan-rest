@@ -142,11 +142,20 @@ class MagazineController extends Controller
      *     path="/magazines/{id}",
      *     operationId="getMagazineById",
      *     tags={"magazines"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Magazine's manga",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/magazine"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
