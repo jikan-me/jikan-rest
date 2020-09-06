@@ -172,35 +172,7 @@ class AnimeController extends Controller
             $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new AnimeCharactersResource(
@@ -254,35 +226,7 @@ class AnimeController extends Controller
             $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new AnimeStaffResource(
@@ -343,35 +287,7 @@ class AnimeController extends Controller
             $anime = $this->jikan->getAnimeEpisode(new AnimeEpisodeRequest($id, $episodeId));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new AnimeEpisodeResource(
@@ -495,35 +411,7 @@ class AnimeController extends Controller
             $anime = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(
@@ -591,35 +479,7 @@ class AnimeController extends Controller
             $anime = $this->jikan->getNewsList(new AnimeNewsRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(
@@ -679,35 +539,7 @@ class AnimeController extends Controller
             $anime = ['topics' => $this->jikan->getAnimeForum(new AnimeForumRequest($id, $topic))];
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ForumResource(
@@ -760,35 +592,7 @@ class AnimeController extends Controller
             $anime = $this->jikan->getAnimeVideos(new AnimeVideosRequest($id));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new AnimeVideosResource(
@@ -863,35 +667,7 @@ class AnimeController extends Controller
             $anime = ['pictures' => $this->jikan->getAnimePictures(new AnimePicturesRequest($id))];
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new PicturesResource(
@@ -944,35 +720,7 @@ class AnimeController extends Controller
             $anime = $this->jikan->getAnimeStats(new AnimeStatsRequest($id));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new AnimeStatisticsResource(
@@ -1025,35 +773,7 @@ class AnimeController extends Controller
             $anime = ['moreinfo' => $this->jikan->getAnimeMoreInfo(new AnimeMoreInfoRequest($id))];
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new MoreInfoResource(
@@ -1106,35 +826,7 @@ class AnimeController extends Controller
             $anime = ['recommendations' => $this->jikan->getAnimeRecommendations(new AnimeRecommendationsRequest($id))];
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new RecommendationsResource(
@@ -1190,35 +882,7 @@ class AnimeController extends Controller
             $anime = ['users' => $this->jikan->getAnimeRecentlyUpdatedByUsers(new AnimeRecentlyUpdatedByUsersRequest($id, $page))];
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new UserUpdatesResource(
@@ -1274,35 +938,7 @@ class AnimeController extends Controller
             $anime = ['reviews' => $this->jikan->getAnimeReviews(new AnimeReviewsRequest($id, $page))];
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ReviewsResource(

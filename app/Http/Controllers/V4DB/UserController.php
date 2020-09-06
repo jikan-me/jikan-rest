@@ -140,35 +140,7 @@ class UserController extends Controller
             $data = ['history'=>$this->jikan->getUserHistory(new UserHistoryRequest($username, $type))];
             $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ProfileHistoryResource(
@@ -257,35 +229,7 @@ class UserController extends Controller
             $data = $this->jikan->getUserFriends(new UserFriendsRequest($username, $page));
             $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(
@@ -437,35 +381,7 @@ class UserController extends Controller
             $data = $this->jikan->getUserReviews(new UserReviewsRequest($username, $page));
             $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(
@@ -511,35 +427,7 @@ class UserController extends Controller
             $data = $this->jikan->getUserRecommendations(new UserRecommendationsRequest($username, $page));
             $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(
@@ -613,35 +501,7 @@ class UserController extends Controller
             $data = ['results' => $this->jikan->getUserClubs(new UserClubsRequest($username))];
             $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(
@@ -668,35 +528,7 @@ class UserController extends Controller
             $data = ['results'=>$this->jikan->getRecentOnlineUsers(new RecentlyOnlineUsersRequest())];
             $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(

@@ -572,35 +572,7 @@ class SearchController extends Controller
             );
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(
@@ -666,35 +638,7 @@ class SearchController extends Controller
             $anime = ['results'=>$this->jikan->getUsernameById(new UsernameByIdRequest($id))];
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(

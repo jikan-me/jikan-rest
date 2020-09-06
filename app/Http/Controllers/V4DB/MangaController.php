@@ -158,35 +158,7 @@ class MangaController extends Controller
             $manga = ['characters' => $this->jikan->getMangaCharacters(new MangaCharactersRequest($id))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new MangaCharactersResource(
@@ -243,35 +215,7 @@ class MangaController extends Controller
             $manga = $this->jikan->getNewsList(new MangaNewsRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ResultsResource(
@@ -318,35 +262,7 @@ class MangaController extends Controller
             $manga = ['topics' => $this->jikan->getMangaForum(new MangaForumRequest($id))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ForumResource(
@@ -413,35 +329,7 @@ class MangaController extends Controller
             $manga = ['pictures' => $this->jikan->getMangaPictures(new MangaPicturesRequest($id))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new PicturesResource(
@@ -487,35 +375,7 @@ class MangaController extends Controller
             $manga = $this->jikan->getMangaStats(new MangaStatsRequest($id));
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new MangaStatisticsResource(
@@ -561,35 +421,7 @@ class MangaController extends Controller
             $manga = ['moreinfo' => $this->jikan->getMangaMoreInfo(new MangaMoreInfoRequest($id))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new MoreInfoResource(
@@ -635,35 +467,7 @@ class MangaController extends Controller
             $manga = ['recommendations' => $this->jikan->getMangaRecommendations(new MangaRecommendationsRequest($id))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new RecommendationsResource(
@@ -710,35 +514,7 @@ class MangaController extends Controller
             $manga = ['users' => $this->jikan->getMangaRecentlyUpdatedByUsers(new MangaRecentlyUpdatedByUsersRequest($id, $page))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new UserUpdatesResource(
@@ -785,35 +561,7 @@ class MangaController extends Controller
             $manga = ['reviews' => $this->jikan->getMangaReviews(new MangaReviewsRequest($id, $page))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
+            $results = $this->updateCache($request, $results, $response);
         }
 
         $response = (new ReviewsResource(

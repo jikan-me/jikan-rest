@@ -5,9 +5,11 @@ namespace App\Http\Controllers\V4DB;
 use App\Http\HttpHelper;
 use App\Providers\SerializerFactory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\Serializer;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Class Controller
@@ -156,6 +158,41 @@ class Controller extends BaseController
                     $this->getLastModified($results)
                 )
             );
+    }
+
+    protected function updateCache($request, $results, $response)
+    {
+        // If resource doesn't exist, prepare meta
+        if ($results->isEmpty()) {
+            $meta = [
+                'createdAt' => new UTCDateTime(),
+                'modifiedAt' => new UTCDateTime(),
+                'request_hash' => $this->fingerprint
+            ];
+        }
+
+        // Update `modifiedAt` meta
+        $meta['modifiedAt'] = new UTCDateTime();
+        // join meta data with response
+        $response = $meta + $response;
+
+        // insert cache if resource doesn't exist
+        if ($results->isEmpty()) {
+            DB::table($this->getRouteTable($request))
+                ->insert($response);
+        }
+
+        // update cache if resource exists
+        if ($this->isExpired($request, $results)) {
+            DB::table($this->getRouteTable($request))
+                ->where('request_hash', $this->fingerprint)
+                ->update($response);
+        }
+
+        // return results
+        return DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
     }
 
     /**
