@@ -69,10 +69,12 @@ class ReviewsController extends Controller
             ->where('request_hash', $this->fingerprint)
             ->get();
 
+
         if (
             $results->isEmpty()
             || $this->isExpired($request, $results)
         ) {
+
             $page = $request->get('page') ?? 1;
             $anime = $this->jikan->getRecentReviews(new RecentReviewsRequest(Constants::RECENT_REVIEW_ANIME, $page));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
@@ -88,8 +90,8 @@ class ReviewsController extends Controller
                     'request_hash' => $this->fingerprint
                 ];
             }
-            $meta['modifiedAt'] = new UTCDateTime();
 
+            $meta['modifiedAt'] = new UTCDateTime();
             $response = $meta + $response;
 
             if ($results->isEmpty()) {

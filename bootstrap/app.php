@@ -229,7 +229,7 @@ $app->router->group(
                 ->json([
                     'status' => 400,
                     'type' => 'HttpException',
-                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported versions.',
+                    'message' => 'This version is discontinued. Please check the documentation for supported version(s).',
                     'error' => null
                 ], 400);
         });
@@ -246,7 +246,7 @@ $app->router->group(
                 ->json([
                     'status' => 400,
                     'type' => 'HttpException',
-                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported versions.',
+                    'message' => 'This version is discontinued. Please check the documentation for supported version(s).',
                     'error' => null
                 ], 400);
         });

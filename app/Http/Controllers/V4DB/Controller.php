@@ -81,20 +81,17 @@ class Controller extends BaseController
 
     protected  function isExpired($request, $results) : bool
     {
-        try {
-            if ($results->first()->modifiedAt === null) {
-                return true;
-            }
+        $lastModified = $this->getLastModified($results);
 
-            $modifiedAt = (int) $results->first()->modifiedAt->toDateTime()->format('U');
-            $routeName = HttpHelper::getRouteName($request);
-            $expiry = (int) config("controller.{$routeName}.ttl") + $modifiedAt;
+        if ($lastModified === null) {
+            return true;
+        }
 
-            if (time() > $expiry) {
-                return true;
-            }
-        } catch (\Exception $e) {
-            return false;
+        $routeName = HttpHelper::getRouteName($request);
+        $expiry = (int) config("controller.{$routeName}.ttl") + $lastModified;
+
+        if (time() > $expiry) {
+            return true;
         }
 
         return false;
@@ -114,7 +111,7 @@ class Controller extends BaseController
         return (int) config("controller.{$routeName}.ttl");
     }
 
-    protected function getLastModified($results) : int
+    protected function getLastModified($results) : ?int
     {
         if (is_array($results->first())) {
             return (int) $results->first()['modifiedAt']->toDateTime()->format('U');
@@ -124,7 +121,7 @@ class Controller extends BaseController
             return (int) $results->first()->modifiedAt->toDateTime()->format('U');
         }
 
-        throw new \Exception('Failed to get Last Modified');
+        return null;
     }
 
     protected function serialize($data) : array
