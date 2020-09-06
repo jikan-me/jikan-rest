@@ -10,6 +10,7 @@ use Jikan\Request\Genre\AnimeGenresRequest;
 use Jikan\Request\Genre\MangaGenresRequest;
 use Jikan\Request\Magazine\MagazinesRequest;
 use Jikan\Request\Producer\ProducersRequest;
+use Jikan\Request\SeasonList\SeasonListRequest;
 
 class CommonIndexing extends Command
 {
@@ -70,7 +71,7 @@ class CommonIndexing extends Command
         foreach ($results as $i => $item) {
             $result = DB::table('producers')
                 ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:magazines:'.sha1($item['mal_id'].$item['name'].$item['count'])]+$item);
+                ->updateOrInsert(['request_hash'=>'request:producers:'.sha1($item['mal_id'].$item['name'].$item['count'])]+$item);
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
@@ -151,9 +152,10 @@ class CommonIndexing extends Command
         foreach ($results as $i => $item) {
             $result = DB::table('genres_manga')
                 ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:anime_manga:'.sha1($item['mal_id'].$item['name'].$item['count'])]+$item);
+                ->updateOrInsert(['request_hash'=>'request:manga_genres:'.sha1($item['mal_id'].$item['name'].$item['count'])]+$item);
             echo "Indexing {$i}/{$itemCount} \r";
         }
+
         echo str_pad("Indexing complete", 10).PHP_EOL;
     }
 }
