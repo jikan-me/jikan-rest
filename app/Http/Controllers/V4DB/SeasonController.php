@@ -6,10 +6,12 @@ use App\Anime;
 use App\Http\HttpResponse;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
 use App\Http\Resources\V4\AnimeCollection;
+use App\Http\Resources\V4\ResultsResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Seasonal\SeasonalRequest;
 use Jikan\Request\SeasonList\SeasonListRequest;
+use Jikan\Request\Watch\PopularPromotionalVideosRequest;
 
 class SeasonController extends Controller
 {
@@ -118,13 +120,30 @@ class SeasonController extends Controller
      *      ),
      * ),
      */
-    public function archive()
+    public function archive(Request $request)
     {
-        return response(
-            $this->serializer->serialize(
-                ['data' => $this->jikan->getSeasonList(new SeasonListRequest())],
-                'json'
-            )
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $items = $this->jikan->getSeasonList(new SeasonListRequest());
+            $response = \json_decode($this->serializer->serialize($items, 'json'), true);
+
+            $results = $this->updateCache($request, $results, $response);
+        }
+
+        $response = (new ResultsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
         );
     }
 
