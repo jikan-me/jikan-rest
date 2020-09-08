@@ -8,6 +8,7 @@ use App\Console\Commands\BlacklistRemove;
 use App\Console\Commands\ClearQueuedJobs;
 use App\Console\Commands\CacheRemove;
 use App\Console\Commands\CommonIndexing;
+use App\Console\Commands\Indexer\ScheduleIndexer;
 use App\Console\Commands\ModifyCacheDriver;
 use App\Console\Commands\ModifyCacheMethod;
 use Illuminate\Console\Scheduling\Schedule;
@@ -29,7 +30,8 @@ class Kernel extends ConsoleKernel
         BlacklistAdd::class,
         BlacklistRemove::class,
         BlacklistFlush::class,
-        CommonIndexing::class
+        CommonIndexing::class,
+        ScheduleIndexer::class
     ];
 
     /**

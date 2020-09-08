@@ -16,7 +16,7 @@ class CommonIndexing extends Command
 {
     /**
      * The name and signature of the console command.
-     *
+     *`
      * @var string
      */
     protected $signature = 'indexing:start';
