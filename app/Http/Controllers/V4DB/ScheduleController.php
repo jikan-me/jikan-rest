@@ -180,12 +180,17 @@ class ScheduleController extends Controller
 
         $items = $results->toArray() ?? [];
         foreach ($items as $item) {
+
+            if ($item['broadcast']['string'] === 'Unknown') {
+                $return['unknown'][] = $item;
+            }
+
+            if ($item['broadcast']['string'] === 'Not scheduled once per week') {
+                $return['other'][] = $item;
+            }
+
             foreach (self::VALID_FILTERS as $day) {
                 $broadcastDay = ucfirst($day);
-
-                if (!isset($item['broadcast']['day'])) {
-                    continue 2;
-                }
 
                 if (preg_match("~^{$broadcastDay}~", $item['broadcast']['day'])) {
                     $return[$day][] = $item;

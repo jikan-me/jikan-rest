@@ -98,8 +98,13 @@ class Anime extends Model
     {
         $broadcastStr = $this->attributes['broadcast'];
 
-        if (is_null($broadcastStr)) {
-            return null;
+        if (!preg_match('~(.*) at (.*) \(~', $broadcastStr, $matches)) {
+            return [
+                'day' => null,
+                'time' => null,
+                'timezone' => null,
+                'string' => $broadcastStr
+            ];
         }
 
         if (preg_match('~(.*) at (.*) \(~', $broadcastStr, $matches)) {
@@ -111,7 +116,12 @@ class Anime extends Model
             ];
         }
 
-        return null;
+        return [
+            'day' => null,
+            'time' => null,
+            'timezone' => null,
+            'string' => null
+        ];
     }
 
     public function setThemesAttribute($value)
