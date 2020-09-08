@@ -158,10 +158,7 @@ class CharacterResource extends JsonResource
             'name' => $this->name,
             'nicknames' => $this->nicknames,
             'favorites' => $this->favorites,
-            'about' => $this->about,
-            'animeography' => $this->animeography,
-            'mangaography' => $this->mangaography,
-            'voice_actors' => $this->voice_actors,
+            'about' => $this->about
         ];
     }
 }

@@ -147,6 +147,18 @@ $router->group(
             'uses' => 'CharacterController@main'
         ]);
 
+        $router->get('/anime', [
+            'uses' => 'CharacterController@anime'
+        ]);
+
+        $router->get('/seiyuu', [
+            'uses' => 'CharacterController@voices'
+        ]);
+
+        $router->get('/manga', [
+            'uses' => 'CharacterController@manga'
+        ]);
+
         $router->get('/pictures', [
             'uses' => 'CharacterController@pictures'
         ]);
@@ -169,7 +181,7 @@ $router->group(
             'uses' => 'PersonController@anime'
         ]);
 
-        $router->get('/voices', [
+        $router->get('/seiyuu', [
             'uses' => 'PersonController@voices'
         ]);
 
