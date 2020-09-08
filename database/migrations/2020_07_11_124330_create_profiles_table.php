@@ -14,7 +14,7 @@ class CreateProfilesTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->unique(['request_hash' => 1], 'request_hash');
+            $table->string('request_hash');
             $table->unique(['mal_id' => 1], 'mal_id');
             $table->unique(['username' => 1], 'username');
             $table->date('last_online')->index();

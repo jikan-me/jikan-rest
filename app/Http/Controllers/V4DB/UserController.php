@@ -48,8 +48,11 @@ class UserController extends Controller
      */
     public function profile(Request $request, string $username)
     {
+
+        $username = strtolower($username);
+
         $results = Profile::query()
-            ->where('request_hash', $this->fingerprint)
+            ->where('username', $username)
             ->get();
 
         if (
@@ -57,10 +60,6 @@ class UserController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $response = Profile::scrape($username);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
 
             if ($results->isEmpty()) {
                 $meta = [
@@ -80,15 +79,14 @@ class UserController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Profile::query()
-                    ->where('request_hash', $this->fingerprint)
+                    ->where('username', $username)
                     ->update($response);
             }
 
             $results = Profile::query()
-                ->where('request_hash', $this->fingerprint)
+                ->where('username', $username)
                 ->get();
         }
-
 
         if ($results->isEmpty()) {
             return HttpResponse::notFound($request);
