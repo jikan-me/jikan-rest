@@ -15,7 +15,7 @@
         "flipbox/lumen-generator": "^6",
         "illuminate/redis": "^7",
         "jenssegers/mongodb": "^4.0",
-        "jikan-me/jikan": "v3.0.0-alpha.24",
+        "jikan-me/jikan": "v3.0.0-alpha.27",
         "jms/serializer": "^1.13",
         "laravel/lumen-framework": "^7.0",
         "league/flysystem": "^1.0",
