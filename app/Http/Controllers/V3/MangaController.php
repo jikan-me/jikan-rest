@@ -4,15 +4,6 @@ namespace App\Http\Controllers\V3;
 
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
-use App\Http\Resources\V4\ForumResource;
-use App\Http\Resources\V4\MangaCharactersResource;
-use App\Http\Resources\V4\MangaStatisticsResource;
-use App\Http\Resources\V4\MoreInfoResource;
-use App\Http\Resources\V4\PicturesResource;
-use App\Http\Resources\V4\RecommendationsResource;
-use App\Http\Resources\V4\ResultsResource;
-use App\Http\Resources\V4\ReviewsResource;
-use App\Http\Resources\V4\UserUpdatesResource;
 use App\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +14,6 @@ use Jikan\Request\Manga\MangaNewsRequest;
 use Jikan\Request\Manga\MangaPicturesRequest;
 use Jikan\Request\Manga\MangaRecentlyUpdatedByUsersRequest;
 use Jikan\Request\Manga\MangaRecommendationsRequest;
-use Jikan\Request\Manga\MangaRequest;
 use Jikan\Request\Manga\MangaReviewsRequest;
 use Jikan\Request\Manga\MangaStatsRequest;
 use MongoDB\BSON\UTCDateTime;
@@ -213,7 +203,7 @@ class MangaController extends Controller
 
         if (
             $results->isEmpty()
-            || $this->isExpired($request, $results)
+            || $isExpired
         ) {
             $manga = ['pictures' => $this->jikan->getMangaPictures(new MangaPicturesRequest($id))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
@@ -246,7 +236,7 @@ class MangaController extends Controller
 
         if (
             $results->isEmpty()
-            || $this->isExpired($request, $results)
+            || $isExpired
         ) {
             $manga = $this->jikan->getMangaStats(new MangaStatsRequest($id));
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
@@ -279,7 +269,7 @@ class MangaController extends Controller
 
         if (
             $results->isEmpty()
-            || $this->isExpired($request, $results)
+            || $isExpired
         ) {
             $manga = ['moreinfo' => $this->jikan->getMangaMoreInfo(new MangaMoreInfoRequest($id))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
@@ -312,7 +302,7 @@ class MangaController extends Controller
 
         if (
             $results->isEmpty()
-            || $this->isExpired($request, $results)
+            || $isExpired
         ) {
             $manga = ['recommendations' => $this->jikan->getMangaRecommendations(new MangaRecommendationsRequest($id))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
@@ -345,7 +335,7 @@ class MangaController extends Controller
 
         if (
             $results->isEmpty()
-            || $this->isExpired($request, $results)
+            || $isExpired
         ) {
             $page = $request->get('page') ?? 1;
             $manga = ['users' => $this->jikan->getMangaRecentlyUpdatedByUsers(new MangaRecentlyUpdatedByUsersRequest($id, $page))];
@@ -379,7 +369,7 @@ class MangaController extends Controller
 
         if (
             $results->isEmpty()
-            || $this->isExpired($request, $results)
+            || $isExpired
         ) {
             $page = $request->get('page') ?? 1;
             $manga = $this->jikan->getMangaReviews(new MangaReviewsRequest($id, $page));
