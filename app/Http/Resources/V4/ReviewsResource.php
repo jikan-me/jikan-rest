@@ -46,6 +46,6 @@ class ReviewsResource extends JsonResource
      */
     public function toArray($request)
     {
-        return $this['reviews'];
+        return $this['results'];
     }
 }
