@@ -4,7 +4,7 @@ namespace App\Http\Resources\V3;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReviewsResource extends JsonResource
+class MangaReviewsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -33,7 +33,7 @@ class ReviewsResource extends JsonResource
                     'url' => $review['user']['url'],
                     'image_url' => $review['user']['images']['jpg']['image_url'],
                     'username' => $review['user']['username'],
-                    'episodes_seen' => $review['episodes_watched'],
+                    'chapters_read' => $review['chapters_read'],
                     'scores' => $review['scores'],
                 ],
                 'content' => $review['review'],
