@@ -169,36 +169,6 @@ $app->router->group(
 
 $app->router->group(
     [
-        'prefix' => 'v3',
-        'namespace' => 'App\Http\Controllers\V3',
-        'middleware' => $commonMiddleware
-    ],
-    function ($router) {
-        require __DIR__.'/../routes/web.v3.php';
-    }
-);
-
-$app->router->group(
-    [
-        'prefix' => 'v3',
-        'namespace' => 'App\Http\Controllers\V3',
-        'middleware' => $commonMiddleware
-    ],
-    function ($router) {
-        $router->get('/', function () {
-            return response()
-                ->json([
-                    'status' => 400,
-                    'type' => 'HttpException',
-                    'message' => 'Unavailable on test endpoint.',
-                    'error' => null
-                ], 400);
-        });
-    }
-);
-
-$app->router->group(
-    [
         'prefix' => '/',
     ],
     function ($router) {
@@ -239,6 +209,23 @@ $app->router->group(
 $app->router->group(
     [
         'prefix' => 'v2',
+    ],
+    function ($router) {
+        $router->get('/', function () {
+            return response()
+                ->json([
+                    'status' => 400,
+                    'type' => 'HttpException',
+                    'message' => 'This version is discontinued. Please check the documentation for supported version(s).',
+                    'error' => null
+                ], 400);
+        });
+    }
+);
+
+$app->router->group(
+    [
+        'prefix' => 'v3',
     ],
     function ($router) {
         $router->get('/', function () {
