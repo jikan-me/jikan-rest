@@ -268,12 +268,6 @@ class ProfileResource extends JsonResource
             'birthday' => $this->birthday,
             'location' => $this->location,
             'joined' => $this->joined,
-            'statistics' => [
-                'anime' => $this->anime_stats,
-                'manga' => $this->manga_stats,
-            ],
-            'favorites' => $this->favorites,
-            'about' => $this->about,
         ];
     }
 }

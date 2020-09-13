@@ -105,6 +105,229 @@ class UserController extends Controller
 
     /**
      *  @OA\Get(
+     *     path="/users/{username}/statistics",
+     *     operationId="getUserStatistics",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user statistics",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
+    public function statistics(Request $request, string $username)
+    {
+
+        $username = strtolower($username);
+
+        $results = Profile::query()
+            ->where('username', $username)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Profile::scrape($username);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Profile::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Profile::query()
+                    ->where('username', $username)
+                    ->update($response);
+            }
+
+            $results = Profile::query()
+                ->where('username', $username)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new \App\Http\Resources\V4\ProfileStatisticsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/favorites",
+     *     operationId="getUserFavorites",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user favorites",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
+    public function favorites(Request $request, string $username)
+    {
+
+        $username = strtolower($username);
+
+        $results = Profile::query()
+            ->where('username', $username)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Profile::scrape($username);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Profile::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Profile::query()
+                    ->where('username', $username)
+                    ->update($response);
+            }
+
+            $results = Profile::query()
+                ->where('username', $username)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new \App\Http\Resources\V4\ProfileFavoritesResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/about",
+     *     operationId="getUserAbout",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user about (HTML)",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
+    public function about(Request $request, string $username)
+    {
+
+        $username = strtolower($username);
+
+        $results = Profile::query()
+            ->where('username', $username)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Profile::scrape($username);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Profile::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Profile::query()
+                    ->where('username', $username)
+                    ->update($response);
+            }
+
+            $results = Profile::query()
+                ->where('username', $username)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new \App\Http\Resources\V4\ProfileAboutResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
      *     path="/users/{username}/history/{type}",
      *     operationId="getUserHistory",
      *     tags={"users"},

@@ -280,6 +280,18 @@ $router->group(
                     'uses' => 'UserController@profile'
                 ]);
 
+                $router->get('/statistics', [
+                    'uses' => 'UserController@statistics'
+                ]);
+
+                $router->get('/favorites', [
+                    'uses' => 'UserController@favorites'
+                ]);
+
+                $router->get('/about', [
+                    'uses' => 'UserController@about'
+                ]);
+
                 $router->get('/history[/{type:[A-Za-z]+}]', [
                     'uses' => 'UserController@history'
                 ]);
