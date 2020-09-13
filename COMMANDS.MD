@@ -5,10 +5,6 @@ For an entire list of commands, you can run `php artisan list`
 
 ## Index
 - [Serve](#serve)
-- [Blacklist](#blacklist)
-    - [Add](#blacklist-add)
-    - [Remove](#blacklist-remove)
-    - [Flush](#blacklist-flush)
 - [Queue](#queue)
     - [Clear](#queue-clear)
 - [Cache](#cache)
