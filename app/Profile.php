@@ -2,13 +2,7 @@
 
 namespace App;
 
-use App\Http\HttpHelper;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Helper\Media;
-use Jikan\Helper\Parser;
-use Jikan\Jikan;
-use Jikan\Model\Common\YoutubeMeta;
-use Jikan\Request\Anime\AnimeRequest;
 use Jikan\Request\User\UserProfileRequest;
 
 class Profile extends Model

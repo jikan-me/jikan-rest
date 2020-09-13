@@ -10,6 +10,8 @@ use App\Http\Resources\V4\CommonResource;
 use App\Http\Resources\V4\ProfileFriendsResource;
 use App\Http\Resources\V4\ProfileHistoryResource;
 use App\Http\Resources\V4\ResultsResource;
+use App\Http\Resources\V4\UserProfileAnimeListResource;
+use App\Http\Resources\V4\UserProfileMangaListResource;
 use App\Profile;
 use App\User;
 use Illuminate\Http\Request;
@@ -465,32 +467,45 @@ class UserController extends Controller
     }
 
 
-    public function animelist(string $username, ?string $status = null, int $page = 1)
+    public function animelist(Request $request, string $username, ?string $status = null, int $page = 1)
     {
         if (!is_null($status)) {
             $status = strtolower($status);
 
-            if (!\in_array($status, ['all', 'watching', 'completed', 'onhold', 'dropped', 'plantowatch', 'ptw'])) {
-                return response()->json([
-                    'error' => 'Bad Request'
-                ])->setStatusCode(400);
+            if (!\in_array($status, ['all', 'watching', 'completed', 'onhold', 'dropped', 'plantowatch'])) {
+                return HttpResponse::badRequest($request);
             }
         }
         $status = $this->listStatusToId($status);
 
-        return response(
-            $this->serializer->serialize(
-                [
-                    'anime' => $this->jikan->getUserAnimeList(
-                        new UserAnimeListRequest($username, $page, $status)
-                    )
-                ],
-                'json'
-            )
+
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $data = $this->jikan->getUserAnimeList(new UserAnimeListRequest($username, $page, $status));
+            $response = ['anime' => \json_decode($this->serializer->serialize($data, 'json'), true)];
+
+            $results = $this->updateCache($request, $results, $response);
+        }
+
+        $response = (new UserProfileAnimeListResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
         );
     }
 
-    public function mangalist(string $username, ?string $status = null, int $page = 1)
+    public function mangalist(Request $request, string $username, ?string $status = null, int $page = 1)
     {
         if (!is_null($status)) {
             $status = strtolower($status);
@@ -503,15 +518,29 @@ class UserController extends Controller
         }
         $status = $this->listStatusToId($status);
 
-        return response(
-            $this->serializer->serialize(
-                [
-                    'manga' => $this->jikan->getUserMangaList(
-                        new UserMangaListRequest($username, $page, $status)
-                    )
-                ],
-                'json'
-            )
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $data = $this->jikan->getUserMangaList(new UserMangaListRequest($username, $page, $status));
+            $response = ['manga' => \json_decode($this->serializer->serialize($data, 'json'), true)];
+
+            $results = $this->updateCache($request, $results, $response);
+        }
+
+        $response = (new UserProfileMangaListResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
         );
     }
 
