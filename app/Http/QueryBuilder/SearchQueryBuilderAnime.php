@@ -98,7 +98,8 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
         $producer = $request->get('producer');
-
+        $minScore = $request->get('min_score');
+        $maxScore = $request->get('max_score');
 
         if (!empty($query) && is_null($letter)) {
 
@@ -129,6 +130,20 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 
             $results = $results
                 ->where('score', '>=', $score);
+        }
+
+        if ($minScore !== null) {
+            $minScore = (float) $minScore;
+
+            $results = $results
+                ->where('score', '>=', $minScore);
+        }
+
+        if ($maxScore !== null) {
+            $maxScore = (float) $maxScore;
+
+            $results = $results
+                ->where('score', '<=', $maxScore);
         }
 
         if (!is_null($status)) {
@@ -229,10 +244,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
      */
     public static function mapType(?string $type = null) : ?string
     {
-        if (!is_null($type)) {
-            return null;
-        }
-
         $type = strtolower($type);
 
         return self::MAP_TYPES[$type] ?? null;
@@ -244,10 +255,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
      */
     public static function mapStatus(?string $status = null) : ?string
     {
-        if (!is_null($status)) {
-            return null;
-        }
-
         $status = strtolower($status);
 
         return self::MAP_STATUS[$status] ?? null;
@@ -259,10 +266,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
      */
     public static function mapRating(?string $rating = null) : ?string
     {
-        if (!is_null($rating)) {
-            return null;
-        }
-
         $rating = strtolower($rating);
 
         return self::MAP_RATING[$rating] ?? null;
@@ -274,10 +277,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
      */
     public static function mapSort(?string $sort = null) : ?string
     {
-        if (!is_null($sort)) {
-            return null;
-        }
-
         $sort = strtolower($sort);
 
         return $sort === 'desc' ? 'desc' : 'asc';

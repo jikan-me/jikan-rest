@@ -45,11 +45,6 @@ class Anime extends Model
         '_id', 'premiered', 'opening_themes', 'ending_themes', 'request_hash', 'expiresAt'
     ];
 
-    public function setRelatedAttribute($value)
-    {
-        $this->attributes['related'] = $this->getRelatedAttribute();
-    }
-
     public function setSeasonAttribute($value)
     {
         $this->attributes['season'] = $this->getSeasonAttribute();

@@ -70,6 +70,8 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
         $magazine = $request->get('magazine');
+        $minScore = $request->get('min_score');
+        $maxScore = $request->get('max_score');
 
         if (!empty($query) && is_null($letter)) {
 
@@ -100,6 +102,20 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
 
             $results = $results
                 ->where('score', '>=', $score);
+        }
+
+        if ($minScore !== null) {
+            $minScore = (float) $minScore;
+
+            $results = $results
+                ->where('score', '>=', $minScore);
+        }
+
+        if ($maxScore !== null) {
+            $maxScore = (float) $maxScore;
+
+            $results = $results
+                ->where('score', '<=', $maxScore);
         }
 
         if (!is_null($status)) {
