@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Providers\EventServiceProvider as ServiceProvider;
 
-class SourceHealthServiceProvider extends ServiceProvider
+class SourceHeartbeatProvider extends ServiceProvider
 {
 
     const BAD_HEALTH_STATUSES = [403, 500, 501, 502, 503, 504, 505];
@@ -17,7 +17,7 @@ class SourceHealthServiceProvider extends ServiceProvider
      */
     protected $listen = [
         'App\Events\SourceHeartbeatEvent' => [
-            'App\Listeners\SourceHealthListener',
+            'App\Listeners\SourceHeartbeatListener',
         ],
     ];
 

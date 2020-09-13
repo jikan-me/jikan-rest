@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\ExampleEvent;
 use App\Events\SourceHeartbeatEvent;
-use App\Providers\SourceHealthServiceProvider;
+use App\Providers\SourceHeartbeatProvider;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +12,7 @@ use League\Flysystem\FileNotFoundException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-class SourceHealthListener
+class SourceHeartbeatListener
 {
 
     private $logger;
@@ -27,7 +27,7 @@ class SourceHealthListener
         $this->logger = new Logger('source-health-monitor');
         $this->logger->pushHandler(new StreamHandler(storage_path().'/logs/source-health-monitor.log'), env('APP_DEBUG') ? Logger::DEBUG : Logger::WARNING);
 
-        if (SourceHealthServiceProvider::isFailoverEnabled()) {
+        if (SourceHeartbeatProvider::isFailoverEnabled()) {
             $lastFailoverLockTimestamp = $this->getLastFailoverLockTimestamp();
             $this->logger->debug('Failover is RUNNING');
 

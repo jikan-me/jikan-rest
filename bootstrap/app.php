@@ -121,9 +121,7 @@ $app->instance('JikanParser', $jikan);
 
 $app->instance('SerializerV4', SerializerFactory::createV4());
 
-if (env('SOURCE_BAD_HEALTH_FAILOVER') && env('DB_CACHING')) {
-    $app->register(\App\Providers\SourceHealthServiceProvider::class);
-}
+$app->register(\App\Providers\SourceHeartbeatProvider::class);
 
 
 /**

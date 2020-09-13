@@ -130,9 +130,7 @@ class Handler extends ExceptionHandler
                 case 503:
                 case 504:
                     // Dispatch Bad source health event to prompt database fallback if enabled
-                    if (env('SOURCE_BAD_HEALTH_FALLBACK') && env('DB_CACHING')) {
-                        event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
-                    }
+                    event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
 
                     return response()
                         ->json([

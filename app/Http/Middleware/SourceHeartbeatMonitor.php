@@ -16,9 +16,7 @@ class SourceHeartbeatMonitor
      */
     public function handle($request, Closure $next)
     {
-        if (env('SOURCE_BAD_HEALTH_FAILOVER') && env('DB_CACHING')) {
-            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::GOOD_HEALTH, 200));
-        }
+        event(new SourceHeartbeatEvent(SourceHeartbeatEvent::GOOD_HEALTH, 200));
 
         return $next($request);
     }
