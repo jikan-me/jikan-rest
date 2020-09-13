@@ -27,9 +27,6 @@ class Kernel extends ConsoleKernel
         ModifyCacheDriver::class,
         ClearQueuedJobs::class,
         CacheRemove::class,
-        BlacklistAdd::class,
-        BlacklistRemove::class,
-        BlacklistFlush::class,
         CommonIndexing::class,
         ScheduleIndexer::class
     ];
