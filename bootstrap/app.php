@@ -82,7 +82,7 @@ $app->routeMiddleware([
 //    'microcaching' => \App\Http\Middleware\MicroCaching::class,
 //    'database-resolver' => \App\Http\Middleware\DatabaseResolver::class,
     'source-data-manager' => \App\Http\Middleware\SourceDataManager::class,
-//    'source-health-monitor' => \App\Http\Middleware\SourceHealthMonitor::class
+//    'source-health-monitor' => \App\Http\Middleware\SourceHeartbeatMonitor::class
 ]);
 
 /*

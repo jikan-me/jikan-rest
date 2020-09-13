@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Events\SourceHealthEvent;
+use App\Events\SourceHeartbeatEvent;
 use App\Http\HttpHelper;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
@@ -131,7 +131,7 @@ class Handler extends ExceptionHandler
                 case 504:
                     // Dispatch Bad source health event to prompt database fallback if enabled
                     if (env('SOURCE_BAD_HEALTH_FALLBACK') && env('DB_CACHING')) {
-                        event(new SourceHealthEvent(SourceHealthEvent::BAD_HEALTH, $e->getCode()));
+                        event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
                     }
 
                     return response()

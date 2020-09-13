@@ -16,7 +16,7 @@ class SourceHealthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SourceHealthEvent' => [
+        'App\Events\SourceHeartbeatEvent' => [
             'App\Listeners\SourceHealthListener',
         ],
     ];

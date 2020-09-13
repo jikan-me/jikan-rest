@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\DatabaseHandler;
-use App\Events\SourceHealthEvent;
+use App\Events\SourceHeartbeatEvent;
 use App\Http\HttpHelper;
 use App\Jobs\UpdateCacheJob;
 use App\Jobs\UpdateDatabaseJob;

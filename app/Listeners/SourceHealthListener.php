@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ExampleEvent;
-use App\Events\SourceHealthEvent;
+use App\Events\SourceHeartbeatEvent;
 use App\Providers\SourceHealthServiceProvider;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -45,7 +45,7 @@ class SourceHealthListener
      * @param  ExampleEvent  $event
      * @return void
      */
-    public function handle(SourceHealthEvent $event)
+    public function handle(SourceHeartbeatEvent $event)
     {
         $eventCount = $this->insertFail($event);
         $this->logger->debug('Event count: '.$eventCount);
@@ -55,7 +55,7 @@ class SourceHealthListener
         }
     }
 
-    private function insertFail(SourceHealthEvent $event) : int
+    private function insertFail(SourceHeartbeatEvent $event) : int
     {
         $fails = $this->getRecentFails();
         $fails[] = [time(), $event->status, $event->health];
@@ -137,7 +137,7 @@ class SourceHealthListener
         $totalFails = count($fails) - 1;
 
         foreach ($fails as $fail) {
-            if ((int) $fail[2] === SourceHealthEvent::GOOD_HEALTH) {
+            if ((int) $fail[2] === SourceHeartbeatEvent::GOOD_HEALTH) {
                 $score++;
             }
         }

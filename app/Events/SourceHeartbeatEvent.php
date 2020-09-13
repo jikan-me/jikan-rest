@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Class SourceHealthEvent
+ * Class SourceHeartbeatEvent
  * @package App\Events
  */
-class SourceHealthEvent extends Event
+class SourceHeartbeatEvent extends Event
 {
     public const BAD_HEALTH = 1;
     public const GOOD_HEALTH = 0;
@@ -19,7 +19,7 @@ class SourceHealthEvent extends Event
     public $status;
 
     /**
-     * SourceHealthEvent constructor.
+     * SourceHeartbeatEvent constructor.
      * @param int $health
      * @param int $status
      */
