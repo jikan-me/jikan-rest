@@ -1,9 +1,0 @@
-Jikan\Model\Search\CharacterSearchListItem:
-  exclusion_policy: NONE
-  properties:
-    startDateString:
-      exclude: true
-    endDateString:
-      exclude: true
-    malUrl:
-      serialized_name: meta
