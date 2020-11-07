@@ -5,18 +5,8 @@ return [
 
     'connections' => [
         'mongodb' => [
-            /*
             'driver' => 'mongodb',
-            'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PORT', 27017),
-            'username' => env('DB_USERNAME', ''),
-            'password' => env('DB_PASSWORD', ''),
-            'options' => [
-                'db' => env('MONGODB_AUTHDATABASE', '')
-            ]
-            */
-            'driver' => 'mongodb',
-            'dsn'=> "mongodb://".env('DB_USERNAME', 'jikan').":".env('DB_PASSWORD', '')."@".env('MONGODB_DSN', ''),
+            'dsn'=> "mongodb://".env('DB_USERNAME', 'admin').":".env('DB_PASSWORD', '')."@".env('DB_HOST', 'localhost').":".env('DB_PORT', 27017),
             'database' => env('DB_DATABASE', 'jikan'),
         ]
     ],
