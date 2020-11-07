@@ -35,9 +35,9 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
 
             $results = $results
                 ->where('name', 'like', "%{$query}%")
-                ->where('given_name', 'like', "%{$query}%")
-                ->where('family_name', 'like', "%{$query}%")
-                ->where('alternate_names', 'like', "%{$query}%");
+                ->orWhere('given_name', 'like', "%{$query}%")
+                ->orWhere('family_name', 'like', "%{$query}%")
+                ->orWhere('alternate_names', 'like', "%{$query}%");
         }
 
         if (!is_null($letter)) {

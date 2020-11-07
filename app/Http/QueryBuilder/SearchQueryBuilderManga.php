@@ -77,9 +77,9 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
 
             $results = $results
                 ->where('title', 'like', "%{$query}%")
-                ->where('title_english', 'like', "%{$query}%")
-                ->where('title_japanese', 'like', "%{$query}%")
-                ->where('title_synonyms', 'like', "%{$query}%");
+                ->orWhere('title_english', 'like', "%{$query}%")
+                ->orWhere('title_japanese', 'like', "%{$query}%")
+                ->orWhere('title_synonyms', 'like', "%{$query}%");
         }
 
         if (!is_null($letter)) {

@@ -35,8 +35,8 @@ class SearchQueryBuilderCharacter implements SearchQueryBuilderInterface
 
             $results = $results
                 ->where('name', 'like', "%{$query}%")
-                ->where('name_kanji', 'like', "%{$query}%")
-                ->where('nicknames', 'like', "%{$query}%");
+                ->orWhere('name_kanji', 'like', "%{$query}%")
+                ->orWhere('nicknames', 'like', "%{$query}%");
         }
 
         if (!is_null($letter)) {
