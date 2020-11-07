@@ -36,6 +36,24 @@ class CreateMangaTable extends Migration
             $table->index('genres');
             $table->index(['published.from' => 1], 'start_date');
             $table->index(['published.to' => 1], 'end_date');
+            $table->index([
+                'title' => 'text',
+                'title_japanese' => 'text',
+                'title_english' => 'text',
+                'title_synonyms' => 'text',
+            ],
+                'manga_search_index',
+                null,
+                [
+                    'weights' => [
+                        'title' => 50,
+                        'title_japanese' => 10,
+                        'title_english' => 10,
+                        'title_synonyms' => 1
+                    ],
+                    'name' => 'manga_search_index'
+                ]
+            );
         });
     }
 
