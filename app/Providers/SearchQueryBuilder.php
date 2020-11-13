@@ -130,7 +130,7 @@ class SearchQueryBuilder
 
         if (isset($_GET['genre_exclude'])) {
             $request->setGenreExclude(
-                ((int) $_GET['genre_exclude'] == 1) ? false : true
+                ((int) $_GET['genre_exclude'] == 1) ? true : false
             );
         }
 
