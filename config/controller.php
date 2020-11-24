@@ -217,6 +217,18 @@ return [
         'table_name' => 'users',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
+    'UserController@statistics' => [
+        'table_name' => 'users',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'UserController@favorites' => [
+        'table_name' => 'users',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'UserController@about' => [
+        'table_name' => 'users',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
     'UserController@history' => [
         'table_name' => 'users_history',
         'ttl' => env('CACHE_USER_EXPIRE')
