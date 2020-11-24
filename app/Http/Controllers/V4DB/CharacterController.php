@@ -130,6 +130,7 @@ class CharacterController extends Controller
             ->where('mal_id', $id)
             ->get();
 
+
         if (
             $results->isEmpty()
             || $this->isExpired($request, $results)

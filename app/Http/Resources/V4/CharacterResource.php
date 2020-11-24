@@ -154,7 +154,7 @@ class CharacterResource extends JsonResource
         return [
             'mal_id' => $this->mal_id,
             'url' => $this->url,
-            'images' => $this->image,
+            'images' => $this->images,
             'name' => $this->name,
             'nicknames' => $this->nicknames,
             'favorites' => $this->favorites,

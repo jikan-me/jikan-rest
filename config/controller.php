@@ -117,6 +117,18 @@ return [
         'table_name' => 'characters',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
+    'CharacterController@anime' => [
+        'table_name' => 'characters',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'CharacterController@manga' => [
+        'table_name' => 'characters',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'CharacterController@voices' => [
+        'table_name' => 'characters',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
     'CharacterController@pictures' => [
         'table_name' => 'characters_pictures',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
@@ -126,6 +138,18 @@ return [
      * Person
      */
     'PersonController@main' => [
+        'table_name' => 'people',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'PersonController@anime' => [
+        'table_name' => 'people',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'PersonController@manga' => [
+        'table_name' => 'people',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
+    'PersonController@seiyuu' => [
         'table_name' => 'people',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],

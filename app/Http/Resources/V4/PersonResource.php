@@ -158,7 +158,7 @@ class PersonResource extends JsonResource
             'mal_id' => $this->mal_id,
             'url' => $this->url,
             'website_url' => $this->website_url,
-            'images' => $this->image,
+            'images' => $this->images,
             'name' => $this->name,
             'given_name' => $this->given_name,
             'family_name' => $this->family_name,

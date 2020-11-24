@@ -232,7 +232,7 @@ $router->group(
             'uses' => 'ProducerController@main',
         ]);
 
-        $router->get('/{id:[0-9]+}[/{page:[0-9]+}]', [
+        $router->get('/{id:[0-9]+}', [
             'uses' => 'ProducerController@resource'
         ]);
     }
