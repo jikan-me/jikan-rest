@@ -8,6 +8,8 @@ use App\Console\Commands\BlacklistRemove;
 use App\Console\Commands\ClearQueuedJobs;
 use App\Console\Commands\CacheRemove;
 use App\Console\Commands\CommonIndexing;
+use App\Console\Commands\Indexer\AnimeScheduleIndexer;
+use App\Console\Commands\Indexer\CommonIndexer;
 use App\Console\Commands\Indexer\ScheduleIndexer;
 use App\Console\Commands\ModifyCacheDriver;
 use App\Console\Commands\ModifyCacheMethod;
@@ -27,8 +29,8 @@ class Kernel extends ConsoleKernel
         ModifyCacheDriver::class,
         ClearQueuedJobs::class,
         CacheRemove::class,
-        CommonIndexing::class,
-        ScheduleIndexer::class
+        CommonIndexer::class,
+        AnimeScheduleIndexer::class
     ];
 
     /**
@@ -39,7 +41,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('indexing:start')
+        // Update Scheduled Anime data daily
+        // since they're airing, they're more prone to
+        // have their information updated
+        $schedule->command('indexer:anime-schedule')
+            ->daily();
+
+        // Update common indexes daily
+        $schedule->command('indexer:common')
             ->daily();
     }
 }

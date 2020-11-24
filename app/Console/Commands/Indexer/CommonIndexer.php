@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Indexer;
 
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
@@ -12,21 +12,21 @@ use Jikan\Request\Magazine\MagazinesRequest;
 use Jikan\Request\Producer\ProducersRequest;
 use Jikan\Request\SeasonList\SeasonListRequest;
 
-class CommonIndexing extends Command
+class CommonIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
      * @var string
      */
-    protected $signature = 'indexing:start';
+    protected $signature = 'indexer:common';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Index common endpoints';
+    protected $description = 'Index common endpoints: Producers, Magazines, Anime & Manga Genres';
 
     /**
      * Create a new command instance.
@@ -46,7 +46,7 @@ class CommonIndexing extends Command
     public function handle()
     {
 
-        echo "Note: Indexer will update entries if they already exist.\n\n";
+        echo "Note: If an entry already exists, it will be updated instead.\n\n";
 
         /**
          * Producers

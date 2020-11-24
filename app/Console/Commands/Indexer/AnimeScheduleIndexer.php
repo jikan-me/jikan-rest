@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\DB;
 use Jikan\Request\Schedule\ScheduleRequest;
 
 
-class ScheduleIndexer extends Command
+class AnimeScheduleIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
      * @var string
      */
-    protected $signature = 'indexer:schedule';
+    protected $signature = 'indexer:anime-schedule';
 
     /**
      * The console command description.
@@ -42,7 +42,7 @@ class ScheduleIndexer extends Command
     public function handle()
     {
 
-        echo "Note: ScheduleIndexer makes sure anime currently airing are upto update so the schedules endpoint returns proper information\n\n";
+        echo "Note: AnimeScheduleIndexer makes sure anime currently airing are upto update so the schedules endpoint returns fresh information\n\n";
 
         /**
          * Schedule
