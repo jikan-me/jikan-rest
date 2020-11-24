@@ -21,7 +21,7 @@ class Person extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'image_url', 'website_url', 'name', 'given_name', 'family_name', 'alternative_names', 'birthday', 'member_favorites', 'about', 'voice_acting_roles', 'anime_staff_positions', 'published_manga'
+        'mal_id', 'url', 'images', 'website_url', 'name', 'given_name', 'family_name', 'alternative_names', 'birthday', 'member_favorites', 'about', 'voice_acting_roles', 'anime_staff_positions', 'published_manga'
     ];
 
     /**
@@ -52,16 +52,6 @@ class Person extends Model
         return $this->attributes['member_favorites'];
     }
 
-    public function getImageAttribute()
-    {
-        $imageUrl = $this->attributes['image_url'];
-
-        return [
-            'jpg' => [
-                'image_url' => $imageUrl,
-            ],
-        ];
-    }
 
     public static function scrape(int $id)
     {

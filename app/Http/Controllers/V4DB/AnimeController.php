@@ -117,7 +117,6 @@ class AnimeController extends Controller
                 ->get();
         }
 
-
         if ($results->isEmpty()) {
             return HttpResponse::notFound($request);
         }
