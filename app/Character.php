@@ -20,7 +20,7 @@ class Character extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'name', 'name_kanji', 'nicknames', 'about', 'member_favorites', 'image_url', 'animeography', 'mangaography', 'voice_actors'
+        'mal_id', 'url', 'name', 'name_kanji', 'nicknames', 'about', 'member_favorites', 'images', 'animeography', 'mangaography', 'voice_actors'
     ];
 
     /**
@@ -45,22 +45,6 @@ class Character extends Model
     protected $hidden = [
         '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images', 'member_favorites'
     ];
-
-    public function getImageAttribute()
-    {
-        $imageUrl = $this->attributes['image_url'];
-
-        return [
-            'jpg' => [
-                'image_url' => $imageUrl,
-                'small_image_url' => str_replace('.jpg', 't.jpg', $imageUrl),
-            ],
-            'webp' => [
-                'image_url' => str_replace('.jpg', '.webp', $imageUrl),
-                'small_image_url' => str_replace('.jpg', 't.webp', $imageUrl),
-            ]
-        ];
-    }
 
     public function getFavoritesAttribute()
     {

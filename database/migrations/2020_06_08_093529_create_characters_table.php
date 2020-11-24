@@ -17,7 +17,7 @@ class CreateCharactersTable extends Migration
             $table->unique(['request_hash' => 1], 'request_hash');
             $table->unique(['mal_id' => 1], 'mal_id');
             $table->string('url');
-            $table->string('image_url');
+            $table->string('images');
             $table->index('name');
             $table->index('name_kanji');
             $table->index('nicknames');

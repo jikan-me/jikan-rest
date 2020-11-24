@@ -26,7 +26,7 @@ class PersonVoiceResource extends JsonResource
             'character' => [
                 'mal_id' => $this['character']['mal_id'],
                 'url' => $this['character']['url'],
-                'image_url' => $this['character']['image_url'],
+                'images' => $this['character']['images'],
                 'name' => $this['character']['name']
             ]
         ];

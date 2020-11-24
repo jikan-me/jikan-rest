@@ -16,7 +16,7 @@ class Club extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'image_url', 'title', 'members_count', 'pictures_count', 'category', 'created', 'type', 'staff', 'anime_relations', 'manga_relations', 'character_relations'
+        'mal_id', 'url', 'images', 'title', 'members_count', 'pictures_count', 'category', 'created', 'type', 'staff', 'anime_relations', 'manga_relations', 'character_relations'
     ];
 
     /**
@@ -39,19 +39,8 @@ class Club extends Model
      * @var array
      */
     protected $hidden = [
-        '_id', 'request_hash', 'expiresAt', 'image_url'
+        '_id', 'request_hash', 'expiresAt', 'images'
     ];
-
-    public function getImageAttribute()
-    {
-        $imageUrl = $this->attributes['image_url'];
-
-        return [
-            'jpg' => [
-                'image_url' => $imageUrl,
-            ],
-        ];
-    }
 
     public static function scrape(int $id)
     {
