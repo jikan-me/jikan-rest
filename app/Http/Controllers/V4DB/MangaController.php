@@ -558,7 +558,7 @@ class MangaController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $manga = ['reviews' => $this->jikan->getMangaReviews(new MangaReviewsRequest($id, $page))];
+            $manga = $this->jikan->getMangaReviews(new MangaReviewsRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
             $results = $this->updateCache($request, $results, $response);
