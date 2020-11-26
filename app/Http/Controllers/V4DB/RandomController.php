@@ -11,8 +11,12 @@ use App\Http\Resources\V4\AnimeResource;
 use App\Http\Resources\V4\CharacterCollection;
 use App\Http\Resources\V4\MangaCollection;
 use App\Http\Resources\V4\PersonCollection;
+use App\Http\Resources\V4\ResultsResource;
+use App\Http\Resources\V4\UserCollection;
 use App\Manga;
 use App\Person;
+use App\Profile;
+use App\User;
 use Illuminate\Http\Request;
 use MongoDB\BSON\UTCDateTime;
 
@@ -167,6 +171,34 @@ class RandomController extends Controller
             ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
 
         return new PersonCollection(
+            $results
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/random/users",
+     *     operationId="getRandomUsers",
+     *     tags={"random"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns Random Users",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
+    public function users(Request $request)
+    {
+
+        $results = Profile::query()
+            ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
+
+        return new UserCollection(
             $results
         );
     }

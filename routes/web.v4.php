@@ -511,5 +511,9 @@ $router->group(
         $router->get('/people', [
             'uses' => 'RandomController@people',
         ]);
+
+        $router->get('/users', [
+            'uses' => 'RandomController@users',
+        ]);
     }
 );
