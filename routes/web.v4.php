@@ -84,6 +84,10 @@ $router->group(
         $router->get('/relations', [
             'uses' => 'AnimeController@relations'
         ]);
+
+        $router->get('/themes', [
+            'uses' => 'AnimeController@themes'
+        ]);
     }
 );
 

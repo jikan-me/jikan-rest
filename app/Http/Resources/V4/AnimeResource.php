@@ -289,7 +289,6 @@ class AnimeResource extends JsonResource
             'licensors' => $this->licensors,
             'studios' => $this->studios,
             'genres' => $this->genres,
-            'themes' => $this->themes
         ];
     }
 }
