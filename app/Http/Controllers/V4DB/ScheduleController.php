@@ -5,7 +5,9 @@ namespace App\Http\Controllers\V4DB;
 use App\Anime;
 use App\Http\HttpResponse;
 use App\Http\Resources\V4\AnimeCollection;
+use App\Http\Resources\V4\AnimeResource;
 use App\Http\Resources\V4\CommonResource;
+use App\Http\Resources\V4\ScheduleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Schedule\ScheduleRequest;
@@ -152,60 +154,33 @@ class ScheduleController extends Controller
         $results = Anime::query()
             ->orderBy('members')
             ->where('type', 'TV')
-            ->where('status', 'Currently Airing')
-            ->get();
+            ->where('status', 'Currently Airing');
 
-        $results = $this->mutateQueryResponse($results);
+        if ($this->day !== null && in_array($day, self::VALID_DAYS)) {
+            $this->day = ucfirst($this->day);
 
-        if (!is_null($this->day)) {
-            $results = [$this->day => new AnimeCollection($results[$this->day])];
+            $results
+                ->where('broadcast', 'like', "{$day}%");
         }
 
-        return new CommonResource($results);
-    }
-
-    private function mutateQueryResponse($results)
-    {
-        $return = [
-            'monday' => [],
-            'tuesday' => [],
-            'wednesday' => [],
-            'thursday' => [],
-            'friday' => [],
-            'saturday' => [],
-            'sunday' => [],
-            'other' => [],
-            'unknown' => []
-        ];
-
-        $items = $results->toArray() ?? [];
-        foreach ($items as $item) {
-
-            if ($item['broadcast']['string'] === 'Unknown') {
-                $return['unknown'][] = $item;
-            }
-
-            if ($item['broadcast']['string'] === 'Not scheduled once per week') {
-                $return['other'][] = $item;
-            }
-
-            foreach (self::VALID_FILTERS as $day) {
-                $broadcastDay = ucfirst($day);
-
-                if (preg_match("~^{$broadcastDay}~", $item['broadcast']['day'])) {
-                    $return[$day][] = $item;
-                }
-            }
+        if ($this->day === 'unknown') {
+            $results
+                ->where('broadcast', 'Unknown');
         }
 
-        foreach ($return as &$day) {
-            $day = array_reverse($day);
+        if ($this->day === 'other') {
+            $results
+                ->where('broadcast', 'Not scheduled once per week');
         }
 
-        if (!is_null($this->day)) {
-            $return = [$this->day => $return[$this->day]];
-        }
+        $response = (new AnimeCollection(
+            $results->get()
+        ))->response();
 
-        return $return;
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
     }
 }

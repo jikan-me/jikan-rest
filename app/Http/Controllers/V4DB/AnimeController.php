@@ -1026,7 +1026,6 @@ class AnimeController extends Controller
             return HttpResponse::notFound($request);
         }
 
-
         $response = (new AnimeRelationsResource(
             $results->first()
         ))->response();
