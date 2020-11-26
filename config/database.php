@@ -6,7 +6,7 @@ return [
     'connections' => [
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn'=> "mongodb://".env('DB_USERNAME', 'admin').":".env('DB_PASSWORD', '')."@".env('DB_HOST', 'localhost').":".env('DB_PORT', 27017),
+            'dsn'=> "mongodb://".env('DB_USERNAME', 'admin').":".env('DB_PASSWORD', '')."@".env('DB_HOST', 'localhost').":".env('DB_PORT', 27017)."/".env('DB_ADMIN', 'admin'),
             'database' => env('DB_DATABASE', 'jikan'),
         ]
     ],
