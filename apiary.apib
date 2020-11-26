@@ -28,25 +28,8 @@ Notice: Jikan does not support authenticated requests. You can not update your l
 
 
 ## Wrappers
-- [PHP API - JikanPHP](https://github.com/jikan-me/jikan/) by [Contributors](https://github.com/jikan-me/jikan/graphs/contributors)
-- [Python - JikanPy](https://github.com/abhinavk99/jikanpy) by Abhinav Kasamsetty
-- [Ruby - Jikan.rb](https://github.com/Zerocchi/jikan.rb) by Zerocchi
-- [.NET/C# - Jikan.Net](https://github.com/Ervie/jikan.net) by Ervie (Bartłomiej Buchała)
-- [JavaScript - JikanJs](https://github.com/zuritor/jikanjs) by zuritor (Sven)
-- [Java - Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs
-- [PHP - Jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe
-- [NodeJS - Jikan-node](https://github.com/xy137/jikan-node) by xy137
-- [NodeJS - Jikan-nodejs](https://github.com/ribeirogab/jikan-nodejs) by ribeirogab
-- [Dart - Jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol
-- [TypeScript - Jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard
-- [TypeScript - jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco
-- [Elixir - JikanEx](https://github.com/seanbreckenridge/jikan_ex) by Sean Breckenridge
-- [Go - Jikan-go](https://github.com/darenliang/jikan-go) by Daren Liang
-- [Go - jikan2go](https://github.com/nokusukun/Jikan2Go) by nokusukun
-- [Kotlin - JikanKt](https://github.com/GSculerlor/JikanKt) by Ganendra Afrasya
-- [Java - Jikan](https://github.com/Schalar/Jikan) by Schalar
 
-[Add your wrapper here!](https://github.com/jikan-me/jikan-rest/edit/master/apiary.apib)
+Wrappers are available in more than 10 different languages, see the [Wrapper List](https://github.com/jikan-me/jikan#wrappers)
 
 ## Rate Limiting
 Daily Limit: **Unlimited**
@@ -198,7 +181,6 @@ A single anime object with all its details
 | `/userupdates` | Page number (integer) | List of the latest list updates made by users |
 
 
-
 #### Remarks
 
 ##### `/episodes`
@@ -210,10 +192,10 @@ A single anime object with all its details
 - Only 20 items are shown per page for reviews
 
 ### Examples
-- `/anime/1/characters_staff` // Returns the list of characters and staff
-- `/anime/1/episodes` // Defaults to the 1st page
-- `/anime/1/episodes/1` // Same as above
-- `/anime/1/episodes/2` // Returns 2nd page if there's any
+- `/anime/1/characters_staff` - Returns the list of characters and staff
+- `/anime/1/episodes` - Defaults to the 1st page
+- `/anime/1/episodes/1` - Same as above
+- `/anime/1/episodes/2` - Returns 2nd page if there's any
 
 
 ### Fetch Resource [GET]
@@ -246,7 +228,7 @@ A single manga object with all its details
 | userupdates | Page number (integer) | Latest list updates made by users |
 
 ### Example Calls
-- `/manga/1/characters` // Returns the list of characters and staff
+- `/manga/1/characters` Returns the list of characters and staff
 
 
 #### Remarks 
@@ -444,13 +426,18 @@ Read more about them [here](https://myanimelist.net/info.php?go=mpaa)
 |  | **Thriller:** `45` |
 
 #### Examples
+- `/search/manga?q=Grand%20Blue&page=1` - Search manga for 'Grand Blue'
+- `/search/anime?q=Fate/Zero&page=1` - Search anime for 'Fate/Zero'
+- `/search/people/?q=Sawashiro&limit=3` - Search people for 'Sawashiro', limit to 3 results
+- `/search/anime?q=Boku&page=1&genre=12&genre_exclude=0` - Filter out NSFW entries by using the `genre` and `genre_exclude` parameters
 
-`/search/manga?q=Grand%20Blue&page=1`
+In many cases, if you want to filter results by a condition, you can provide an empty query (`q=`) with the `order_by` and `sort` parameters:
 
-`/search/anime?q=Fate/Zero&page=1`
+- `/search/anime?q=&order_by=members&sort=desc&page=1` - Search for all anime, ordered by popularity (members, descending)
+- `/search/anime?q=&page=1&genre=1,10&order_by=start_date&sort=desc` - Search for all anime which have both Genre 1 and 10 (Action, Fantasy), order by most recently released
 
-`/search/people/?q=Sawashiro&limit=3`
-
+#### Remarks
+- The `last_page` field is the same as what is avaiable on the MAL Search page, its often paginated to 20 pages if there are too many results.
 
 ### Search Request Example+Schema [GET]
 
@@ -463,7 +450,6 @@ Read more about them [here](https://myanimelist.net/info.php?go=mpaa)
         [
  
         ]
-        
 
 ## Season [/season/{year}/{season}]
 Anime of the specified season
@@ -487,7 +473,6 @@ Anime of the specified season
         [
  
         ]
-        
 ## Season Archive [/season/archive]
 All the years & their respective seasons that can be parsed from MyAnimeList
 
@@ -736,15 +721,11 @@ Just pass it as `yyyy-00-00` or `yyyy-mm-00`. e.g `2018-00-00`, `2018-12-00`
 
 
 #### Examples
-`/user/nekomata1037` - Parses Profile
-
-`/user/nekomata1037/profile` (alias)
-
-`/user/nekomata1037/history` - Parses user history (anime+manga)
-
-`/user/nekomata1037/history/anime` - Parses user history (anime only)
-
-`/user/nekomata1037/friends` - Parses user friends
+- `/user/nekomata1037` - Parses Profile
+- `/user/nekomata1037/profile` (alias)
+- `/user/nekomata1037/history` - Parses user history (anime+manga)
+- `/user/nekomata1037/history/anime` - Parses user history (anime only)
+- `/user/nekomata1037/friends` - Parses user friends
 
 The request below will return 404 because I don't have that many friends on MAL to generate a second page.
 `/user/nekomata1037/friends/2` - Parses user friends (from page 2)
@@ -754,11 +735,9 @@ The request below will return 404 because I don't have that many friends on MAL 
 
 Lists are paginated (300 items per page).
 
-`/user/nekomata1037/animelist/all` - All anime in user list
-
-`/user/nekomata1037/animelist/all/2` - Page 2
-
-`/user/nekomata1037/mangalist/reading` - Manga that I'm currently reading
+- `/user/nekomata1037/animelist/all` - All anime in user list
+- `/user/nekomata1037/animelist/all/2` - Page 2
+- `/user/nekomata1037/mangalist/reading` - Manga that I'm currently reading
 
 ### User Request Example+Schema [GET]
 + Parameters
