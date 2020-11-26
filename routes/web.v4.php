@@ -139,6 +139,10 @@ $router->group(
         $router->get('/reviews', [
             'uses' => 'MangaController@reviews'
         ]);
+
+        $router->get('/relations', [
+            'uses' => 'MangaController@relations'
+        ]);
     }
 );
 

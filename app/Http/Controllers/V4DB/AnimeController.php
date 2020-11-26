@@ -1055,7 +1055,7 @@ class AnimeController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns anime relations",
+     *         description="Returns anime themes",
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime reviews"
      *         )

@@ -7,6 +7,7 @@ use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\Resources\V4\AnimeCharactersResource;
 use App\Http\Resources\V4\AnimeForumResource;
+use App\Http\Resources\V4\MangaRelationsResource;
 use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\ReviewsResource;
 use App\Http\Resources\V4\UserUpdatesResource;
@@ -565,6 +566,89 @@ class MangaController extends Controller
         }
 
         $response = (new ReviewsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/relations",
+     *     operationId="getMangaRelations",
+     *     tags={"manga"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga relations",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/manga reviews"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function relations(Request $request, int $id)
+    {
+        $results = Manga::query()
+            ->where('mal_id', $id)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Manga::scrape($id);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Manga::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Manga::query()
+                    ->where('mal_id', $id)
+                    ->update($response);
+            }
+
+            $results = Manga::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+
+        $response = (new MangaRelationsResource(
             $results->first()
         ))->response();
 

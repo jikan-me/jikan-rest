@@ -223,7 +223,6 @@ class MangaResource extends JsonResource
             'favorites' => $this->favorites,
             'synopsis' => $this->synopsis,
             'background' => $this->background,
-            'related' => $this->related,
             'authors' => $this->authors,
             'serializations' => $this->serializations,
             'genres' => $this->genres,
