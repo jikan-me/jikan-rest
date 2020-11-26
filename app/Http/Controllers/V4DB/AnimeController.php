@@ -11,6 +11,8 @@ use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\AnimeEpisodeResource;
 use App\Http\Resources\V4\AnimeEpisodesResource;
 use App\Http\Resources\V4\AnimeForumResource;
+use App\Http\Resources\V4\AnimeRelationsCollection;
+use App\Http\Resources\V4\AnimeRelationsResource;
 use App\Http\Resources\V4\MoreInfoResource;
 use App\Http\Resources\V4\AnimeNewsResource;
 use App\Http\Resources\V4\PicturesResource;
@@ -900,14 +902,14 @@ class AnimeController extends Controller
      *     path="/anime/{id}/reviews",
      *     operationId="getAnimeReviews",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
@@ -941,6 +943,90 @@ class AnimeController extends Controller
         }
 
         $response = (new ReviewsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/relations",
+     *     operationId="getAnimeRelations",
+     *     tags={"anime"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime relations",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime reviews"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function relations(Request $request, int $id)
+    {
+        $results = Anime::query()
+            ->where('mal_id', $id)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Anime::scrape($id);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Anime::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Anime::query()
+                    ->where('mal_id', $id)
+                    ->update($response);
+            }
+
+            $results = Anime::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+
+        $response = (new AnimeRelationsResource(
             $results->first()
         ))->response();
 

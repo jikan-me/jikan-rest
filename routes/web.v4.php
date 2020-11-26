@@ -80,6 +80,10 @@ $router->group(
         $router->get('/reviews', [
             'uses' => 'AnimeController@reviews'
         ]);
+
+        $router->get('/relations', [
+            'uses' => 'AnimeController@relations'
+        ]);
     }
 );
 

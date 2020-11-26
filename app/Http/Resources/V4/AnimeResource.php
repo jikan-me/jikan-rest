@@ -285,7 +285,6 @@ class AnimeResource extends JsonResource
             'season' => $this->season,
             'year' => $this->year,
             'broadcast' => $this->broadcast,
-            'related' => $this->related,
             'producers' => $this->producers,
             'licensors' => $this->licensors,
             'studios' => $this->studios,
