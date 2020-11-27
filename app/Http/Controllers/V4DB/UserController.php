@@ -10,6 +10,7 @@ use App\Http\Resources\V4\CommonResource;
 use App\Http\Resources\V4\ProfileFriendsResource;
 use App\Http\Resources\V4\ProfileHistoryResource;
 use App\Http\Resources\V4\ResultsResource;
+use App\Http\Resources\V4\UserProfileAnimeListCollection;
 use App\Http\Resources\V4\UserProfileAnimeListResource;
 use App\Http\Resources\V4\UserProfileMangaListResource;
 use App\Profile;
@@ -494,9 +495,15 @@ class UserController extends Controller
             $results = $this->updateCache($request, $results, $response);
         }
 
-        $response = (new UserProfileAnimeListResource(
-            $results->first()
-        ))->response();
+        $listResults = $results->first()['anime'];
+
+        foreach ($listResults as &$result) {
+            $result = (new UserProfileAnimeListResource($result));
+        }
+
+        $response = (new UserProfileAnimeListCollection(
+            $listResults
+        ))->response($request);
 
         return $this->prepareResponse(
             $response,
