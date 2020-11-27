@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V4DB;
 use App\Anime;
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
+use App\Http\QueryBuilder\UserListQueryBuilder;
 use App\Http\Resources\V4\AnimeCharactersResource;
 use App\Http\Resources\V4\CommonResource;
 use App\Http\Resources\V4\ProfileFriendsResource;
@@ -469,7 +470,7 @@ class UserController extends Controller
     }
 
 
-    public function animelist(Request $request, string $username, ?string $status = null, int $page = 1)
+    public function animelist(Request $request, string $username, ?string $status = null)
     {
         if (!is_null($status)) {
             $status = strtolower($status);
@@ -490,7 +491,12 @@ class UserController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $data = $this->jikan->getUserAnimeList(new UserAnimeListRequest($username, $page, $status));
+            $data = $this->jikan->getUserAnimeList(
+                UserListQueryBuilder::create(
+                    $request,
+                    new UserAnimeListRequest($username, $page, $status)
+                )
+            );
             $response = ['anime' => \json_decode($this->serializer->serialize($data, 'json'), true)];
 
             $results = $this->updateCache($request, $results, $response);
@@ -513,7 +519,7 @@ class UserController extends Controller
         );
     }
 
-    public function mangalist(Request $request, string $username, ?string $status = null, int $page = 1)
+    public function mangalist(Request $request, string $username, ?string $status = null)
     {
         if (!is_null($status)) {
             $status = strtolower($status);
@@ -535,7 +541,12 @@ class UserController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $data = $this->jikan->getUserMangaList(new UserMangaListRequest($username, $page, $status));
+            $data = $this->jikan->getUserMangaList(
+                UserListQueryBuilder::create(
+                    $request,
+                    new UserMangaListRequest($username, $page, $status)
+                )
+            );
             $response = ['manga' => \json_decode($this->serializer->serialize($data, 'json'), true)];
 
             $results = $this->updateCache($request, $results, $response);

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Providers;
+namespace App\Http\QueryBuilder;
 
 use Jikan\Request\User\UserAnimeListRequest;
 use Jikan\Request\User\UserMangaListRequest;
-use \voku\helper\AntiXSS;
+use Illuminate\Http\Request;
 use Jikan\Helper\Constants as JikanConstants;
 
 class UserListQueryBuilder
@@ -82,69 +82,69 @@ class UserListQueryBuilder
         'nya' => JikanConstants::USER_MANGA_LIST_NOT_YET_PUBLISHED,
     ];
 
-    public static function create($request)
+    public static function create(Request $request, $parserRequest)
     {
-        $xss = new AntiXSS();
+        $query = $request->get('q');
+        $sort = $request->get('sort');
+        $orderBy = $request->get('order_by');
+        $orderBy2 = $request->get('order_by2');
+        $airedFrom = $request->get('aired_from');
+        $airedTo = $request->get('aired_to');
+        $producer = $request->get('producer');
+        $magazine = $request->get('magazine');
+        $season = $request->get('season');
+        $year = $request->get('year');
+        $airingStatus = $request->get('airing_status');
+        $publishedFrom = $request->get('published_from');
+        $publishedTo = $request->get('published_to');
+        $publishingStatus = $request->get('publishing_status');
 
         // Search
-        if (isset($_GET['search'])) {
-            $request->setTitle(
-                $xss->xss_clean($_GET['search'])
-            );
-        }
-
-        // Search Alias
-        if (isset($_GET['q'])) {
-            $request->setTitle(
-                $xss->xss_clean($_GET['q'])
-            );
+        if (!is_null($query)) {
+            $parserRequest->setTitle($query);
         }
 
         // Page
-        if (isset($_GET['page'])) {
-            $page = (int) $_GET['page'];
-            $request->setPage($page);
-        }
+        $parserRequest->setPage(
+            (int) $request->get('page') ?? 1
+        );
 
         // Sort
-        $sort = null;
-        if (isset($_GET['sort'])) {
-            $sort = $xss->xss_clean($_GET['sort']);
+        $sort = $request->get('sort');
+        if (!is_null($sort)) {
 
             if (array_key_exists($sort, self::VALID_SORT)) {
                 $sort = self::VALID_SORT[$sort];
             }
         }
 
-        if ($request instanceof UserAnimeListRequest) {
+        if ($parserRequest instanceof UserAnimeListRequest) {
             // Order By
-            if (isset($_GET['order_by'])) {
-                $orderby = $xss->xss_clean($_GET['order_by']);
+            if (!is_null($orderBy)) {
 
-                if (array_key_exists($orderby, self::VALID_ANIME_ORDER_BY)) {
-                    $orderby = self::VALID_ANIME_ORDER_BY[$orderby];
+                if (array_key_exists($orderBy, self::VALID_ANIME_ORDER_BY)) {
+                    $orderBy = self::VALID_ANIME_ORDER_BY[$orderBy];
 
-                    $request->setOrderBy($orderby, $sort);
+                    $parserRequest->setOrderBy($orderBy, $sort);
                 }
             }
 
             // Order By 2
-            if (isset($_GET['order_by2'])) {
-                $orderby = $xss->xss_clean($_GET['order_by2']);
+            if (!is_null($orderBy2)) {
 
-                if (array_key_exists($orderby, self::VALID_ANIME_ORDER_BY)) {
-                    $orderby = self::VALID_ANIME_ORDER_BY[$orderby];
+                if (array_key_exists($orderBy2, self::VALID_ANIME_ORDER_BY)) {
+                    $orderBy2 = self::VALID_ANIME_ORDER_BY[$orderBy2];
 
-                    $request->setOrderBy2($orderby, $sort);
+                    $parserRequest->setOrderBy2($orderBy2, $sort);
                 }
             }
 
             // Aired From
-            if (isset($_GET['aired_from'])) {
-                $airedFrom = $xss->xss_clean($_GET['aired_from']);
+            if (!is_null($airedFrom)) {
+
                 if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $airedFrom)) {
                     $airedFrom = explode("-", $airedFrom);
-                    $request->setAiredFrom(
+                    $parserRequest->setAiredFrom(
                         (int) $airedFrom[2],
                         (int) $airedFrom[1],
                         (int) $airedFrom[0]
@@ -153,11 +153,11 @@ class UserListQueryBuilder
             }
 
             // Aired To
-            if (isset($_GET['aired_to'])) {
-                $airedTo = $xss->xss_clean($_GET['aired_to']);
+            if (!is_null($airedTo)) {
+
                 if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $airedTo)) {
                     $airedTo = explode("-", $airedTo);
-                    $request->setAiredTo(
+                    $parserRequest->setAiredTo(
                         (int) $airedTo[2],
                         (int) $airedTo[1],
                         (int) $airedTo[0]
@@ -166,65 +166,66 @@ class UserListQueryBuilder
             }
 
             // Producer
-            if (isset($_GET['producer'])) {
-                $producer = (int) $_GET['producer'];
-                $request->setProducer($producer);
+            if (!is_null($producer)) {
+
+                $parserRequest->setProducer(
+                    (int) $producer
+                );
             }
 
             // Season
-            if (isset($_GET['season'])) {
-                $season = $xss->xss_clean($_GET['season']);
+            if (!is_null($season)) {
+
                 if (\in_array($season, self::VALID_SEASONS)) {
-                    $request->setSeason($season);
+                    $parserRequest->setSeason($season);
                 }
             }
 
             // Year
-            if (isset($_GET['year'])) {
-                $year = (int) $_GET['year'];
-                $request->setSeasonYear($year);
+            if (!is_null($year)) {
+
+                $parserRequest->setSeasonYear(
+                    (int) $year
+                );
             }
 
             // Airing Status
-            if (isset($_GET['airing_status'])) {
-                $airingStatus = $xss->xss_clean($_GET['airing_status']);
+            if (!is_null($airingStatus)) {
 
                 if (array_key_exists($airingStatus, self::VALID_AIRING_STATUS)) {
                     $airingStatus = self::VALID_AIRING_STATUS[$airingStatus];
-                    $request->setAiringStatus($airingStatus);
+                    $parserRequest->setAiringStatus($airingStatus);
                 }
             }
         }
 
-        if ($request instanceof UserMangaListRequest) {
+        if ($parserRequest instanceof UserMangaListRequest) {
             // Order By
-            if (isset($_GET['order_by'])) {
-                $orderby = $xss->xss_clean($_GET['order_by']);
+            if (!is_null($orderBy)) {
 
-                if (array_key_exists($orderby, self::VALID_MANGA_ORDER_BY)) {
-                    $orderby = self::VALID_MANGA_ORDER_BY[$orderby];
+                if (array_key_exists($orderBy, self::VALID_MANGA_ORDER_BY)) {
+                    $orderBy = self::VALID_MANGA_ORDER_BY[$orderBy];
 
-                    $request->setOrderBy($orderby, $sort);
+                    $parserRequest->setOrderBy($orderBy, $sort);
                 }
             }
 
             // Order By 2
-            if (isset($_GET['order_by2'])) {
-                $orderby = $xss->xss_clean($_GET['order_by2']);
+            if (!is_null($orderBy2)) {
 
-                if (array_key_exists($orderby, self::VALID_MANGA_ORDER_BY)) {
-                    $orderby = self::VALID_MANGA_ORDER_BY[$orderby];
+                if (array_key_exists($orderBy2, self::VALID_MANGA_ORDER_BY)) {
+                    $orderBy2 = self::VALID_MANGA_ORDER_BY[$orderBy2];
 
-                    $request->setOrderBy2($orderby, $sort);
+                    $parserRequest->setOrderBy2($orderBy2, $sort);
                 }
             }
 
             // Published From
-            if (isset($_GET['published_from'])) {
-                $publishedFrom = $xss->xss_clean($_GET['published_from']);
+            if (!is_null($publishedFrom)) {
+
                 if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $publishedFrom)) {
                     $publishedFrom = explode("-", $publishedFrom);
-                    $request->setPublishedFrom(
+                    $parserRequest->setPublishedFrom(
                         (int) $publishedFrom[2],
                         (int) $publishedFrom[1],
                         (int) $publishedFrom[0]
@@ -233,11 +234,11 @@ class UserListQueryBuilder
             }
 
             // Published To
-            if (isset($_GET['published_to'])) {
-                $publishedTo = $xss->xss_clean($_GET['published_to']);
+            if (!is_null($publishedTo)) {
+
                 if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $publishedTo)) {
                     $publishedTo = explode("-", $publishedTo);
-                    $request->setPublishedTo(
+                    $parserRequest->setPublishedTo(
                         (int) $publishedTo[2],
                         (int) $publishedTo[1],
                         (int) $publishedTo[0]
@@ -246,22 +247,22 @@ class UserListQueryBuilder
             }
 
             // Magazine
-            if (isset($_GET['magazine'])) {
-                $magazine = (int) $_GET['magazine'];
-                $request->setMagazine($magazine);
+            if (!is_null($magazine)) {
+                $parserRequest->setMagazine(
+                    (int) $magazine
+                );
             }
 
             // Publishing Status
-            if (isset($_GET['publishing_status'])) {
-                $publishingStatus = $xss->xss_clean($_GET['publishing_status']);
+            if (!is_null($publishingStatus)) {
 
                 if (array_key_exists($publishingStatus, self::VALID_PUBLISHING_STATUS)) {
                     $publishingStatus = self::VALID_PUBLISHING_STATUS[$publishingStatus];
-                    $request->setPublishingStatus($publishingStatus);
+                    $parserRequest->setPublishingStatus($publishingStatus);
                 }
             }
         }
 
-        return $request;
+        return $parserRequest;
     }
 }
