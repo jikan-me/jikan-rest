@@ -11,9 +11,9 @@ use JMS\Serializer\Serializer;
 class UserProfileAnimeListResource extends JsonResource
 {
     private const VALID_AIRING_STATUS = [
-        JikanConstants::USER_ANIME_LIST_CURRENTLY_AIRING => 'airing',
-        JikanConstants::USER_ANIME_LIST_FINISHED_AIRING => 'complete',
-        JikanConstants::USER_ANIME_LIST_NOT_YET_AIRED => 'not_yet_aired'
+        JikanConstants::STATUS_ANIME_AIRING => 'airing',
+        JikanConstants::STATUS_ANIME_FINISHED => 'complete',
+        JikanConstants::STATUS_ANIME_NOT_YET_AIRED => 'not_yet_aired'
     ];
     /**
      * Transform the resource into an array.
@@ -34,7 +34,7 @@ class UserProfileAnimeListResource extends JsonResource
         return [
             'watching_status' => $this['watching_status'],
             'score' => $this['score'],
-            'episodes_watched' => $this['watching_status'],
+            'episodes_watched' => $this['watched_episodes'],
             'tags' => $this['tags'],
             'is_rewatching' => $this['is_rewatching'],
             'watch_start_date' => $this['watch_start_date'],
