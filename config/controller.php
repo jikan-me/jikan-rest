@@ -258,7 +258,7 @@ return [
         'ttl' => env('CACHE_USERLIST_EXPIRE')
     ],
     'UserController@mangalist' => [
-        'table_name' => 'users_animelist',
+        'table_name' => 'users_mangalist',
         'ttl' => env('CACHE_USERLIST_EXPIRE')
     ],
 
