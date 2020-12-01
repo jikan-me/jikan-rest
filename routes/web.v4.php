@@ -378,20 +378,20 @@ $router->group(
     }
 );
 
-$router->get('/clubs', [
-    'uses' => 'SearchController@clubs'
-]);
-
 $router->group(
     [
-        'prefix' => 'clubs/{id:[0-9]+}'
+        'prefix' => 'clubs'
     ],
     function () use ($router) {
         $router->get('/', [
+            'uses' => 'ClubController@clubs'
+        ]);
+
+        $router->get('/{id:[0-9]+}', [
             'uses' => 'ClubController@main'
         ]);
 
-        $router->get('/members[/{page:[0-9]+}]', [
+        $router->get('/members', [
             'uses' => 'ClubController@members'
         ]);
     }
