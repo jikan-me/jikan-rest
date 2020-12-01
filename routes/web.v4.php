@@ -342,18 +342,10 @@ $router->group(
     ],
     function () use ($router) {
         $router->get('/anime', [
-            'uses' => 'GenreController@mainAnime'
-        ]);
-
-        $router->get('/manga', [
-            'uses' => 'GenreController@mainManga'
-        ]);
-
-        $router->get('/anime/{id:[0-9]+}[/{page:[0-9]+}]', [
             'uses' => 'GenreController@anime'
         ]);
 
-        $router->get('/manga/{id:[0-9]+}[/{page:[0-9]+}]', [
+        $router->get('/manga', [
             'uses' => 'GenreController@manga'
         ]);
     }
