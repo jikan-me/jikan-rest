@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V4DB;
 use App\Anime;
 use App\GenreAnime;
 use App\GenreManga;
+use App\Http\QueryBuilder\SearchQueryBuilderGenre;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\GenreCollection;
 use App\Http\Resources\V4\MangaCollection;
@@ -32,7 +33,10 @@ class GenreController extends Controller
      */
     public function anime(Request $request)
     {
-        $results = GenreAnime::query();
+        $results = SearchQueryBuilderGenre::query(
+            $request,
+            GenreAnime::query()
+        );
 
         return new GenreCollection(
             $results->get()

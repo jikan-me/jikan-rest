@@ -341,6 +341,7 @@ $router->group(
         'prefix' => 'genres'
     ],
     function () use ($router) {
+
         $router->get('/anime', [
             'uses' => 'GenreController@anime'
         ]);

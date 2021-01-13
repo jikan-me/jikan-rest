@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
 
-class SearchQueryBuilderMagazine implements SearchQueryBuilderInterface
+class SearchQueryBuilderGenre implements SearchQueryBuilderInterface
 {
+
+    const MAX_RESULTS_PER_PAGE = 25;
 
     const ORDER_BY = [
         'mal_id', 'name', 'count'
