@@ -53,11 +53,10 @@ class UserController extends Controller
      */
     public function profile(Request $request, string $username)
     {
-
         $username = strtolower($username);
 
         $results = Profile::query()
-            ->where('username', $username)
+            ->where('internal_username', $username)
             ->get();
 
         if (
@@ -70,7 +69,8 @@ class UserController extends Controller
                 $meta = [
                     'createdAt' => new UTCDateTime(),
                     'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
+                    'request_hash' => $this->fingerprint,
+                    'internal_username' => $username
                 ];
             }
             $meta['modifiedAt'] = new UTCDateTime();
@@ -84,12 +84,12 @@ class UserController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Profile::query()
-                    ->where('username', $username)
+                    ->where('internal_username', $username)
                     ->update($response);
             }
 
             $results = Profile::query()
-                ->where('username', $username)
+                ->where('internal_username', $username)
                 ->get();
         }
 
@@ -131,7 +131,7 @@ class UserController extends Controller
         $username = strtolower($username);
 
         $results = Profile::query()
-            ->where('username', $username)
+            ->where('internal_username', $username)
             ->get();
 
         if (
@@ -144,7 +144,8 @@ class UserController extends Controller
                 $meta = [
                     'createdAt' => new UTCDateTime(),
                     'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
+                    'request_hash' => $this->fingerprint,
+                    'internal_username' => $username
                 ];
             }
             $meta['modifiedAt'] = new UTCDateTime();
@@ -158,12 +159,12 @@ class UserController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Profile::query()
-                    ->where('username', $username)
+                    ->where('internal_username', $username)
                     ->update($response);
             }
 
             $results = Profile::query()
-                ->where('username', $username)
+                ->where('internal_username', $username)
                 ->get();
         }
 
@@ -206,7 +207,7 @@ class UserController extends Controller
         $username = strtolower($username);
 
         $results = Profile::query()
-            ->where('username', $username)
+            ->where('internal_username', $username)
             ->get();
 
         if (
@@ -219,7 +220,8 @@ class UserController extends Controller
                 $meta = [
                     'createdAt' => new UTCDateTime(),
                     'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
+                    'request_hash' => $this->fingerprint,
+                    'internal_username' => $username
                 ];
             }
             $meta['modifiedAt'] = new UTCDateTime();
@@ -233,12 +235,12 @@ class UserController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Profile::query()
-                    ->where('username', $username)
+                    ->where('internal_username', $username)
                     ->update($response);
             }
 
             $results = Profile::query()
-                ->where('username', $username)
+                ->where('internal_username', $username)
                 ->get();
         }
 
@@ -280,7 +282,7 @@ class UserController extends Controller
         $username = strtolower($username);
 
         $results = Profile::query()
-            ->where('username', $username)
+            ->where('internal_username', $username)
             ->get();
 
         if (
@@ -293,7 +295,8 @@ class UserController extends Controller
                 $meta = [
                     'createdAt' => new UTCDateTime(),
                     'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
+                    'request_hash' => $this->fingerprint,
+                    'internal_username' => $username
                 ];
             }
             $meta['modifiedAt'] = new UTCDateTime();
@@ -307,12 +310,12 @@ class UserController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Profile::query()
-                    ->where('username', $username)
+                    ->where('internal_username', $username)
                     ->update($response);
             }
 
             $results = Profile::query()
-                ->where('username', $username)
+                ->where('internal_username', $username)
                 ->get();
         }
 
