@@ -166,7 +166,9 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
             $producer = (int) $producer;
 
             $results = $results
-                ->where('producers.mal_id', $producer);
+                ->where('producers.mal_id', $producer)
+                ->orWhere('licensors.mal_id', $producer)
+                ->orWhere('studios.mal_id', $producer);
         }
 
         if (!is_null($genres)) {

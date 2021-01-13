@@ -133,7 +133,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
             $magazine = (int) $magazine;
 
             $results = $results
-                ->where('producers.mal_id', $magazine);
+                ->where('serializations.mal_id', $magazine);
         }
 
         if (!is_null($genres)) {
