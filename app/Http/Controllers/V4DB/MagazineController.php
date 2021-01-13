@@ -45,65 +45,6 @@ class MagazineController extends Controller
      */
     public function main(Request $request)
     {
-/*
-        // shift to queue job and inital indexing, only query for now
-
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Magazine::scrape();
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                DB::table($this->getRouteTable($request))
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                DB::table($this->getRouteTable($request))
-                    ->where('request_hash', $this->fingerprint)
-                    ->update($response);
-            }
-
-            $results = DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->get();
-        }
-
-
-
-        if (
-            $this->isExpired($request, $results)
-        ) {
-            $results = $results->first()['magazines'];
-
-            // todo implement DB transaction when added to `jenssegers/laravel-mongodb`
-            foreach ($results as $magazine) {
-                Magazine::query()
-                    ->where('mal_id', (int)$magazine['mal_id'])
-                    ->updateOrCreate($magazine);
-            }
-        }*/
-
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
 

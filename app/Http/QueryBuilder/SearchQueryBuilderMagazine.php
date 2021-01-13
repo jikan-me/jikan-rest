@@ -10,8 +10,6 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 class SearchQueryBuilderMagazine implements SearchQueryBuilderInterface
 {
 
-    const MAX_RESULTS_PER_PAGE = 25;
-
     const ORDER_BY = [
         'mal_id', 'title', 'count'
     ];
@@ -35,14 +33,14 @@ class SearchQueryBuilderMagazine implements SearchQueryBuilderInterface
                 ->where('name', 'like', "{$letter}%");
         }
 
-        if (empty($query)) {
-            $results = $results
-                ->orderBy('mal_id');
-        }
-
         if (!is_null($orderBy)) {
             $results = $results
                 ->orderBy($orderBy, $sort ?? 'asc');
+        }
+
+        if (empty($query)) {
+            $results = $results
+                ->orderBy('mal_id');
         }
 
         return $results;
@@ -54,7 +52,7 @@ class SearchQueryBuilderMagazine implements SearchQueryBuilderInterface
      */
     public static function mapSort(?string $sort = null) : ?string
     {
-        if (!is_null($sort)) {
+        if (is_null($sort)) {
             return null;
         }
 

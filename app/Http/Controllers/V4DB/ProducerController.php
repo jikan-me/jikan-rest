@@ -15,7 +15,7 @@ class ProducerController extends Controller
 {
 
     private $request;
-    const MAX_RESULTS_PER_PAGE = 25;
+    const MAX_RESULTS_PER_PAGE = 100;
 
     /**
      *  @OA\Get(

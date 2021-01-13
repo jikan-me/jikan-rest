@@ -35,14 +35,14 @@ class SearchQueryBuilderProducer implements SearchQueryBuilderInterface
                 ->where('name', 'like', "{$letter}%");
         }
 
-        if (empty($query)) {
-            $results = $results
-                ->orderBy('mal_id');
-        }
-
         if (!is_null($orderBy)) {
             $results = $results
                 ->orderBy($orderBy, $sort ?? 'asc');
+        }
+
+        if (empty($query)) {
+            $results = $results
+                ->orderBy('mal_id');
         }
 
         return $results;
@@ -54,7 +54,7 @@ class SearchQueryBuilderProducer implements SearchQueryBuilderInterface
      */
     public static function mapSort(?string $sort = null) : ?string
     {
-        if (!is_null($sort)) {
+        if (is_null($sort)) {
             return null;
         }
 
