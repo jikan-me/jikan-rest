@@ -20,46 +20,6 @@ Example: `php artisan serve`
 
 Serve the application on the PHP development server 
 
-### Blacklist
-Add IPs to your API's blacklist. A blacklisted IP will get a HTTP 403 with the following JSON body:
-```json
-{
-    "status": 403,
-    "type": null,
-    "message": "You have been blocked from the service for breaching Terms of Use",
-    "error": null
-}
-```
-
-The blacklist is stored in `/storage/app/blacklist.json`. Once your application starts, the blacklist is loaded into memory via Redis.
-
-#### Blacklist: Add
-Command: `blacklist:add {ip} {--reload}`
-
-Example: `php artisan blacklist:add 123.456.789.10`
-
-**Note:** Without `--reload`, the blacklist won't take immediate effect as it will only be saved to `blacklist.json` and won't updated in-memory. 
-
-Therefore, it's recommended to use `--reload` for real-time effect.
-
-#### Blacklist: Remove
-Command: `blacklist:remove {ip} {--reload}`
-
-Example: `php artisan blacklist:remove 123.456.789.10`
-
-**Note:** Without `--reload`, the blacklist won't take immediate effect as it will only be removed from `blacklist.json` and won't be updated in-memory. 
-
-Therefore, it's recommended to use `--reload` for real-time effect.
-
-#### Blacklist: Flush
-Command: `blacklist:flush {--reload}`
-
-Example: `php artisan blacklist:flush`
-
-**Note:** Without `--reload`, the blacklist won't take immediate effect as it will only empty `blacklist.json` and won't be updated in-memory. 
-
-Therefore, it's recommended to use `--reload` for real-time effect.
-
 ### Queue
 
 #### Queue: Clear
