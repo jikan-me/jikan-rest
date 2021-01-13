@@ -43,6 +43,7 @@ use Jikan\Request\Manga\MangaRequest;
 use Jikan\Request\Manga\MangaReviewsRequest;
 use Jikan\Request\Manga\MangaStatsRequest;
 use MongoDB\BSON\UTCDateTime;
+use mysql_xdevapi\Result;
 
 class MangaController extends Controller
 {
@@ -512,13 +513,13 @@ class MangaController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $manga = ['users' => $this->jikan->getMangaRecentlyUpdatedByUsers(new MangaRecentlyUpdatedByUsersRequest($id, $page))];
+            $manga = $this->jikan->getMangaRecentlyUpdatedByUsers(new MangaRecentlyUpdatedByUsersRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
             $results = $this->updateCache($request, $results, $response);
         }
 
-        $response = (new UserUpdatesResource(
+        $response = (new ResultsResource(
             $results->first()
         ))->response();
 

@@ -881,7 +881,7 @@ class AnimeController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $anime = ['users' => $this->jikan->getAnimeRecentlyUpdatedByUsers(new AnimeRecentlyUpdatedByUsersRequest($id, $page))];
+            $anime = $this->jikan->getAnimeRecentlyUpdatedByUsers(new AnimeRecentlyUpdatedByUsersRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
             $results = $this->updateCache($request, $results, $response);
