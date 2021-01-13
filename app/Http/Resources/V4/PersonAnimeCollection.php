@@ -23,10 +23,7 @@ class PersonAnimeCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection,
-            'links' => [
-                'self' => 'link-value',
-            ],
+            'data' => $this->collection
         ];
     }
 }

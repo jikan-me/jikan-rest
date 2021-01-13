@@ -46,6 +46,12 @@ class ReviewsResource extends JsonResource
      */
     public function toArray($request)
     {
-        return $this['results'];
+        return [
+            'meta' => [
+                'last_visible_page' => $this['last_visible_page'],
+                'has_next_page' => $this['has_next_page'],
+            ],
+            'data' => $this['results'],
+        ];
     }
 }
