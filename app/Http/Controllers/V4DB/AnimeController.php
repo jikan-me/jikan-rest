@@ -887,7 +887,7 @@ class AnimeController extends Controller
             $results = $this->updateCache($request, $results, $response);
         }
 
-        $response = (new UserUpdatesResource(
+        $response = (new ResultsResource(
             $results->first()
         ))->response();
 
@@ -943,7 +943,7 @@ class AnimeController extends Controller
             $results = $this->updateCache($request, $results, $response);
         }
 
-        $response = (new ReviewsResource(
+        $response = (new ResultsResource(
             $results->first()
         ))->response();
 
