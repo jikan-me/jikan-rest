@@ -387,9 +387,122 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    public function testUserRecommendations()
+    {
+        $this->get('/v4/users/xinil/recommendations')
+            ->seeStatusCode(200)
+            ->seeJsonStructure([
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => [
+                    [
+                        'mal_id',
+                        'entry' => [
+                            [
+                                'mal_id',
+                                'url',
+                                'images' => [
+                                    'jpg' => [
+                                        'image_url',
+                                        'small_image_url',
+                                        'large_image_url'
+                                    ],
+                                    'webp' => [
+                                        'image_url',
+                                        'small_image_url',
+                                        'large_image_url'
+                                    ],
+                                ],
+                                'title'
+                            ]
+                        ],
+                        'content',
+                        'date',
+                        'user'
+                    ]
+                ]
+            ]);
+
+        $this->get('/v4/users/xinil/recommendations?page=200')
+            ->seeStatusCode(200)
+            ->seeJsonStructure([
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => [
+                ]
+            ]);
+    }
+
+    public function testUserReviews()
+    {
+        $this->get('/v4/users/xinil/reviews')
+            ->seeStatusCode(200)
+            ->seeJsonStructure([
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => [
+                    [
+                        'mal_id',
+                        'url',
+                        'type',
+                        'votes',
+                        'date',
+                        'review',
+                        'entry' => [
+                            [
+                                'mal_id',
+                                'url',
+                                'images' => [
+                                    'jpg' => [
+                                        'image_url',
+                                        'small_image_url',
+                                        'large_image_url'
+                                    ],
+                                    'webp' => [
+                                        'image_url',
+                                        'small_image_url',
+                                        'large_image_url'
+                                    ],
+                                ],
+                                'title'
+                            ]
+                        ],
+                    ]
+                ]
+            ]);
+
+        $this->get('/v4/users/xinil/reviews?page=200')
+            ->seeStatusCode(404);
+    }
+
     public function testUserPrivateList()
     {
-        $this->get('/v4/user/nekomata1037/mangalist?order_by=last_updated&sort=descending')
+        $this->get('/v4/users/nekomata1037/mangalist?order_by=last_updated&sort=descending')
             ->seeStatusCode(400);
+    }
+
+    public function testUserClubs()
+    {
+        $this->get('/v4/users/nekomata1037/clubs')
+            ->seeStatusCode(200)
+            ->seeJsonStructure([
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => [
+                    [
+                        'mal_id',
+                        'name',
+                        'url',
+                    ]
+                ]
+            ]);
     }
 }
