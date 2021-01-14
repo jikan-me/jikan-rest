@@ -381,7 +381,7 @@ $router->group(
             'uses' => 'ClubController@main'
         ]);
 
-        $router->get('/members', [
+        $router->get('/{id:[0-9]+}/members', [
             'uses' => 'ClubController@members'
         ]);
     }
