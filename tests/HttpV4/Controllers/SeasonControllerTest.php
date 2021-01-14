@@ -2,48 +2,22 @@
 
 class SeasonControllerTest extends TestCase
 {
-    public function testSchedule()
+    public function testSeasons()
     {
-        $this->get('/v3/season')
+        $this->get('/v4/seasons')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'season_name',
-                'season_year',
-                'anime' => [
-                    [
-                        'mal_id',
-                        'url',
-                        'title',
-                        'image_url',
-                        'synopsis',
-                        'type',
-                        'airing_start',
-                        'episodes',
-                        'members',
-                        'genres' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
-                        ],
-                        'source',
-                        'producers' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
-                        ],
-                        'score',
-                        'licensors',
-                        'r18',
-                        'kids',
-                        'continuing'
-                    ]
+                'data' => [
+                    'year',
+                    'seasons'
                 ]
             ]);
+
+        // @todo add seasons test once database is populated
+    }
+
+    public function testSchedule()
+    {
+        // @todo add schedules tests once database is populated
     }
 }
