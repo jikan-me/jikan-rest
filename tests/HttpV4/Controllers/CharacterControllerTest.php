@@ -4,45 +4,101 @@ class CharacterControllerTest extends TestCase
 {
     public function testMain()
     {
-        $this->get('/v3/character/1')
+        $this->get('/v4/characters/1')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->seeJsonStructure(['data'=>[
                 'mal_id',
                 'url',
-                'image_url',
+                'images' => [
+                    'jpg' => [
+                        'image_url',
+                    ],
+                    'webp' => [
+                        'image_url',
+                    ],
+                ],
                 'name',
-                'name_kanji',
                 'nicknames',
+                'favorites',
                 'about',
-                'member_favorites',
-                'animeography' => [
-                    [
+            ]]);
+    }
+
+    public function testAnimeography()
+    {
+        $this->get('/v4/characters/1/anime')
+            ->seeStatusCode(200)
+            ->seeJsonStructure(['data'=>[
+                [
+                    'role',
+                    'anime' => [
                         'mal_id',
-                        'name',
                         'url',
-                        'image_url',
-                        'role'
-                    ]
-                ],
-                'mangaography' => [
-                    [
-                        'mal_id',
-                        'name',
-                        'url',
-                        'image_url',
-                        'role'
-                    ]
-                ],
-                'voice_actors' => [
-                    [
-                        'mal_id',
-                        'name',
-                        'url',
-                        'image_url',
-                        'language'
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                        ],
+                        'title'
                     ]
                 ]
-            ]);
+            ]]);
+    }
+
+    public function testMangaography()
+    {
+        $this->get('/v4/characters/1/manga')
+            ->seeStatusCode(200)
+            ->seeJsonStructure(['data'=>[
+                [
+                    'role',
+                    'manga' => [
+                        'mal_id',
+                        'url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                        ],
+                        'title'
+                    ]
+                ]
+            ]]);
+    }
+
+    public function testSeiyuu()
+    {
+        $this->get('/v4/characters/1/seiyuu')
+            ->seeStatusCode(200)
+            ->seeJsonStructure(['data'=>[
+                [
+                    'language',
+                    'person' => [
+                        'mal_id',
+                        'url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                            ],
+                        ],
+                        'name'
+                    ]
+                ]
+            ]]);
     }
 
     public function testPictures()
@@ -52,8 +108,8 @@ class CharacterControllerTest extends TestCase
             ->seeJsonStructure([
                 'pictures' => [
                     [
-                        'large',
-                        'small',
+                        'image_url',
+                        'large_image_url',
                     ]
                 ]
             ]);
