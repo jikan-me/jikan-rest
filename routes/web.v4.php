@@ -5,7 +5,7 @@ $router->get('/', function () use ($router) {
     return response()->json([
         'author_url' => 'https://github.com/irfan-dahir',
         'discord_url' => 'http://discord.jikan.moe',
-        'version' => '4.0 Alpha Preview',
+        'version' => env('APP_VERSION'),
         'parser_version' => JIKAN_PARSER_VERSION,
         'website_url' => 'https://jikan.moe',
         'documentation_url' => 'https://docs.api.jikan.moe/',
