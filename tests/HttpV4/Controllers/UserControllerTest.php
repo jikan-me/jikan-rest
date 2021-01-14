@@ -23,59 +23,6 @@ class UserControllerTest extends TestCase
                 'birthday',
                 'location',
                 'joined',
-                /* 'anime_stats' => [
-                     'days_watched',
-                     'mean_score',
-                     'watching',
-                     'completed',
-                     'on_hold',
-                     'dropped',
-                     'plan_to_watch',
-                     'total_entries',
-                     'rewatched',
-                     'episodes_watched'
-                 ],
-                 'manga_stats' => [
-                     'days_read',
-                     'mean_score',
-                     'reading',
-                     'completed',
-                     'on_hold',
-                     'dropped',
-                     'plan_to_read',
-                     'total_entries',
-                     'reread',
-                     'chapters_read',
-                     'volumes_read'
-                 ],
-                 'favorites' => [
-                     'anime' => [
-                         [
-                             'mal_id',
-                             'url',
-                             'image_url',
-                             'name' // todo should be `title`
-                         ]
-                     ],
-                     'manga' => [],
-                     'characters' => [
-                         [
-                             'mal_id',
-                             'url',
-                             'image_url',
-                             'name'
-                         ]
-                     ],
-                     'people' => [
-                         [
-                             'mal_id',
-                             'url',
-                             'image_url',
-                             'name'
-                         ]
-                     ],
-                 ],
-                 'about'*/
             ]]);
     }
 
@@ -250,7 +197,14 @@ class UserControllerTest extends TestCase
                         'user' => [
                             'username',
                             'url',
-                            'images'
+                            'images' => [
+                                'jpg' => [
+                                    'image_url'
+                                ],
+                                'webp' => [
+                                    'image_url'
+                                ]
+                            ]
                         ],
                         'last_online',
                         'friends_since'
