@@ -376,9 +376,6 @@ $router->group(
         'prefix' => 'clubs'
     ],
     function () use ($router) {
-        $router->get('/', [
-            'uses' => 'ClubController@clubs'
-        ]);
 
         $router->get('/{id:[0-9]+}', [
             'uses' => 'ClubController@main'
