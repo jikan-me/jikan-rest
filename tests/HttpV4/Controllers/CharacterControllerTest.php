@@ -103,10 +103,10 @@ class CharacterControllerTest extends TestCase
 
     public function testPictures()
     {
-        $this->get('/v3/character/1/pictures')
+        $this->get('/v4/characters/1/pictures')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'pictures' => [
+                'data' => [
                     [
                         'image_url',
                         'large_image_url',

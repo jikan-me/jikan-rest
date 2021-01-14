@@ -4,58 +4,133 @@ class PersonControllerTest extends TestCase
 {
     public function testMain()
     {
-        $this->get('/v3/person/1')
+        $this->get('/v4/people/1')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->seeJsonStructure(['data'=>[
                 'mal_id',
                 'url',
-                'image_url',
                 'website_url',
+                'images' => [
+                    'jpg' => [
+                        'image_url',
+                    ],
+                ],
                 'name',
                 'given_name',
                 'family_name',
                 'alternate_names',
                 'birthday',
+                'favorites',
                 'about',
-                'member_favorites',
-                'voice_acting_roles' => [
-                    [
-                        'role',
-                        'anime' => [
-                            'mal_id',
-                            'url',
-                            'image_url',
-                            'name'
+            ]]);
+    }
+
+
+    public function testAnimeography()
+    {
+        $this->get('/v4/people/1/anime')
+            ->seeStatusCode(200)
+            ->seeJsonStructure(['data'=>[
+                [
+                    'position',
+                    'anime' => [
+                        'mal_id',
+                        'url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
                         ],
-                        'character' => [
-                            'mal_id',
-                            'url',
-                            'image_url',
-                            'name'
-                        ]
+                        'title'
                     ]
-                ],
-                'anime_staff_positions' => [
-                    [
-                        'position',
-                        'anime' => [
-                            'mal_id',
-                            'url',
-                            'image_url',
-                            'name'
+                ]
+            ]]);
+    }
+
+    public function testMangaography()
+    {
+        $this->get('/v4/characters/1/manga')
+            ->seeStatusCode(200)
+            ->seeJsonStructure(['data'=>[
+                [
+                    'position',
+                    'manga' => [
+                        'mal_id',
+                        'url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
                         ],
+                        'title'
                     ]
-                ],
-                'published_manga' => []
-            ]);
+                ]
+            ]]);
+    }
+
+    public function testSeiyuu()
+    {
+        $this->get('/v4/people/1/seiyuu')
+            ->seeStatusCode(200)
+            ->seeJsonStructure(['data'=>[
+                [
+                    'role',
+                    'anime' => [
+                        'mal_id',
+                        'url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                        ],
+                        'title'
+                    ],
+                    'character' => [
+                        'mal_id',
+                        'url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                            ],
+                        ],
+                        'name'
+                    ]
+                ]
+            ]]);
     }
 
     public function testPictures()
     {
-        $this->get('/v3/person/1/pictures')
+        $this->get('/v4/people/1/pictures')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'pictures' => [
+                'data' => [
                     [
                         'large',
                         'small',
@@ -66,7 +141,7 @@ class PersonControllerTest extends TestCase
 
     public function test404()
     {
-        $this->get('/v3/person/1000000')
+        $this->get('/v4/people/1000000')
             ->seeStatusCode(404);
     }
 }
