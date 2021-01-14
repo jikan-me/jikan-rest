@@ -9,14 +9,25 @@ class MangaControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'mal_id',
                 'url',
-                'image_url',
+                'images' => [
+                    'jpg' => [
+                        'image_url',
+                        'small_image_url',
+                        'large_image_url'
+                    ],
+                    'webp' => [
+                        'image_url',
+                        'small_image_url',
+                        'large_image_url'
+                    ],
+                ],
                 'title',
                 'title_english',
                 'title_japanese',
                 'title_synonyms',
                 'type',
-                'volumes',
                 'chapters',
+                'volumes',
                 'status',
                 'publishing',
                 'published' => [
@@ -44,17 +55,6 @@ class MangaControllerV4Test extends TestCase
                 'favorites',
                 'synopsis',
                 'background',
-                'related' => [
-                    [
-                        'relation',
-                        'items' => [
-                            'mal_id',
-                            'type',
-                            'name',
-                            'url'
-                        ]
-                    ]
-                ],
                 'authors' => [
                     [
                         'mal_id',
@@ -86,17 +86,26 @@ class MangaControllerV4Test extends TestCase
     {
         $this->get('/v4/manga/1/characters')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'characters' => [
-                    [
+            ->seeJsonStructure(['data'=>[
+                [
+                    'character' => [
                         'mal_id',
                         'url',
-                        'image_url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                            ],
+                        ],
                         'name',
-                        'role'
-                    ]
+                    ],
+                    'role',
                 ]
-            ]);
+            ]]);
     }
 
     public function testNews()
@@ -104,15 +113,24 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/news')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'articles' => [
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => [
                     [
+                        'mal_id',
                         'url',
                         'title',
                         'date',
                         'author_name',
                         'author_url',
                         'forum_url',
-                        'image_url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                            ],
+                        ],
                         'comments',
                         'excerpt'
                     ]
@@ -138,7 +156,7 @@ class MangaControllerV4Test extends TestCase
     {
         $this->get('/v4/manga/1/statistics')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->seeJsonStructure(['data'=>[
                 'reading',
                 'completed',
                 'on_hold',
@@ -146,12 +164,13 @@ class MangaControllerV4Test extends TestCase
                 'plan_to_read',
                 'total',
                 'scores' => [
-                    1 => [
+                    [
+                        'score',
                         'votes',
                         'percentage'
                     ]
                 ]
-            ]);
+            ]]);
     }
 
     public function testForum()
@@ -159,7 +178,7 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/forum')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'topics' => [
+                'data' => [
                     [
                         'mal_id',
                         'url',
@@ -167,7 +186,7 @@ class MangaControllerV4Test extends TestCase
                         'date',
                         'author_name',
                         'author_url',
-                        'replies',
+                        'comments',
                         'last_comment' => [
                             'url',
                             'author_name',
@@ -183,9 +202,9 @@ class MangaControllerV4Test extends TestCase
     {
         $this->get('/v4/manga/1/moreinfo')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->seeJsonStructure(['data'=>[
                 'moreinfo'
-            ]);
+            ]]);
     }
 
     public function testReviews()
@@ -193,35 +212,49 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/reviews')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'reviews' => [
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => [
                     [
                         'mal_id',
                         'url',
-                        'helpful_count',
+                        'votes',
                         'date',
+                        'review',
+                        'chapters_read',
                         'scores' => [
                             'overall',
                             'story',
-                            'animation',
-                            'sound',
+                            'art',
                             'character',
                             'enjoyment'
                         ],
-                        'content',
-                        'reviewer' => [
+                        'user' => [
                             'url',
-                            'image_url',
                             'username',
-                            'episodes_seen'
+                            'images' => [
+                                'jpg' => [
+                                    'image_url',
+                                ],
+                                'webp' => [
+                                    'image_url',
+                                ],
+                            ],
                         ]
                     ]
                 ]
             ]);
 
-        $this->get('/v4/manga/1/reviews/100')
+        $this->get('/v3/manga/1/reviews?page=100')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'reviews' => []
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => []
             ]);
     }
 
@@ -230,14 +263,27 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/recommendations')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'recommendations' => [
+                'data' => [
                     [
-                        'mal_id',
+                        'entry' => [
+                            'mal_id',
+                            'url',
+                            'images' => [
+                                'jpg' => [
+                                    'image_url',
+                                    'small_image_url',
+                                    'large_image_url'
+                                ],
+                                'webp' => [
+                                    'image_url',
+                                    'small_image_url',
+                                    'large_image_url'
+                                ],
+                            ],
+                            'title'
+                        ],
                         'url',
-                        'image_url',
-                        'recommendation_url',
-                        'title',
-                        'recommendation_count'
+                        'votes',
                     ]
                 ]
             ]);
@@ -248,11 +294,24 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/userupdates')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'users' => [
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => [
                     [
-                        'username',
-                        'url',
-                        'image_url',
+                        'user' => [
+                            'username',
+                            'url',
+                            'images' => [
+                                'jpg' => [
+                                    'image_url',
+                                ],
+                                'webp' => [
+                                    'image_url',
+                                ],
+                            ],
+                        ],
                         'score',
                         'status',
                         'volumes_read',
@@ -264,8 +323,29 @@ class MangaControllerV4Test extends TestCase
                 ]
             ]);
 
-        $this->get('/v4/manga/1/userupdates/1000')
+        $this->get('/v4/manga/1/userupdates?page=100')
             ->seeStatusCode(404);
+    }
+
+    public function testMangaRelations()
+    {
+        $this->get('/v4/manga/1/relations')
+            ->seeStatusCode(200)
+            ->seeJsonStructure([
+                'data' => [
+                    [
+                        'relation',
+                        'entry' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                    ]
+                ]
+            ]);
     }
 
     public function test404()

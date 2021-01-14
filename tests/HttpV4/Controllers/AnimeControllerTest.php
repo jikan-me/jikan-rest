@@ -149,15 +149,6 @@ class AnimeControllerV4Test extends TestCase
                         ]
                     ]
                 ]
-                /*                'staff' => [
-                                    [
-                                        'mal_id',
-                                        'url',
-                                        'name',
-                                        'image_url',
-                                        'positions'
-                                    ]
-                                ],*/
             ]]);
     }
 
