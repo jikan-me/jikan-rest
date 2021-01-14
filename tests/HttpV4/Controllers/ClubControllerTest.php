@@ -4,12 +4,12 @@ class ClubControllerTest extends TestCase
 {
     public function testMain()
     {
-        $this->get('/v3/club/1')
+        $this->get('/v4/clubs/1')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->seeJsonStructure(['data'=>[
                 'mal_id',
                 'url',
-                'image_url',
+                'images',
                 'title',
                 'members_count',
                 'pictures_count',
@@ -24,7 +24,7 @@ class ClubControllerTest extends TestCase
                         'url',
                     ]
                 ],
-                'anime_relations' => [
+                'anime' => [
                     [
                         'mal_id',
                         'type',
@@ -32,7 +32,7 @@ class ClubControllerTest extends TestCase
                         'url',
                     ]
                 ],
-                'manga_relations' => [
+                'manga' => [
                     [
                         'mal_id',
                         'type',
@@ -40,7 +40,7 @@ class ClubControllerTest extends TestCase
                         'url',
                     ]
                 ],
-                'character_relations' => [
+                'characters' => [
                     [
                         'mal_id',
                         'type',
@@ -48,19 +48,30 @@ class ClubControllerTest extends TestCase
                         'url',
                     ]
                 ],
-            ]);
+            ]]);
     }
 
     public function testMembers()
     {
-        $this->get('/v3/club/1/members')
+        $this->get('/v4/club/1/members')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'members' => [
+                'meta' => [
+                    'last_visible_page',
+                    'hast_next_page',
+                ],
+                'data' => [
                     [
                         'username',
                         'url',
-                        'image_url'
+                        'images' => [
+                            'jpg' => [
+                                'image_url'
+                            ],
+                            'webp' => [
+                                'image_url'
+                            ]
+                        ],
                     ]
                 ]
             ]);
@@ -71,7 +82,7 @@ class ClubControllerTest extends TestCase
 
     public function test404()
     {
-        $this->get('/v3/club/1000000')
+        $this->get('/v4/clubs/1000000')
             ->seeStatusCode(404);
     }
 }
