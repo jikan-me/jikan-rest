@@ -54,7 +54,7 @@ class HttpHelper
             foreach ($related as $relation => $items) {
                 $data['related'][] = [
                     'relation' => $relation,
-                    'items' => $items
+                    'entry' => $items
                 ];
             }
         }
@@ -75,7 +75,7 @@ class HttpHelper
             foreach ($related as $relation => $items) {
                 $data['related'][] = [
                     'relation' => $relation,
-                    'items' => $items
+                    'entry' => $items
                 ];
             }
         }

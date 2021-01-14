@@ -233,7 +233,7 @@ class Controller extends BaseController
                 foreach ($this->response['related'] as $relationType => $related) {
                     $relation[] = [
                         'relation' => $relationType,
-                        'items' => $related
+                        'entry' => $related
                     ];
                 }
                 $this->response['related'] = $relation;
