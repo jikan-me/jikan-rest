@@ -44,7 +44,7 @@ class TopController extends Controller
      *     ),
      * )
      */
-    public function anime(Request $request, int $page = 1)
+    public function anime(Request $request)
     {
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
@@ -96,7 +96,7 @@ class TopController extends Controller
      *     ),
      * )
      */
-    public function manga(Request $request, string $type = null)
+    public function manga(Request $request)
     {
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
