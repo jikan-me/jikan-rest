@@ -2,61 +2,17 @@
 
 class MagazineControllerTest extends TestCase
 {
-    public function testMagazine()
+    public function testMagazinesListing()
     {
-        $this->get('/v3/magazine/1')
+        $this->get('/v4/magazines')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'meta' => [
+            ->seeJsonStructure(['data'=>[
+                [
                     'mal_id',
-                    'type',
                     'name',
-                    'url'
-                ],
-                'manga' => [
-                    [
-                        'mal_id',
-                        'url',
-                        'title',
-                        'image_url',
-                        'synopsis',
-                        'type',
-                        'publishing_start',
-                        'volumes',
-                        'members',
-                        'genres' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
-                        ],
-                        'authors' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
-                        ],
-                        'score',
-                        'serialization',
-//                        'r18', todo ?
-                    ]
+                    'url',
+                    'count'
                 ]
-            ]);
-    }
-
-    public function test404()
-    {
-        $this->get('/v3/magazine/1/1000')
-            ->seeStatusCode(404);
-        $this->get('/v3/magazine/1/1000')
-            ->seeStatusCode(404);
-        $this->get('/v3/magazine/100000')
-            ->seeStatusCode(404);
-        $this->get('/v3/magazine/100000')
-            ->seeStatusCode(404);
+            ]]);
     }
 }

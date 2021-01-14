@@ -2,63 +2,19 @@
 
 class ProducerControllerTest extends TestCase
 {
-    public function testProducer()
+
+    public function testProducersListing()
     {
-        $this->get('/v3/producer/1')
+        $this->get('/v4/producers')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'meta' => [
+            ->seeJsonStructure(['data'=>[
+                [
                     'mal_id',
-                    'type',
                     'name',
-                    'url'
-                ],
-                'anime' => [
-                    [
-                        'mal_id',
-                        'url',
-                        'title',
-                        'image_url',
-                        'synopsis',
-                        'type',
-                        'airing_start',
-                        'episodes',
-                        'members',
-                        'genres' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
-                        ],
-                        'source',
-                        'producers' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
-                        ],
-                        'score',
-                        'licensors',
-                        'r18',
-                        'kids'
-                    ]
+                    'url',
+                    'count'
                 ]
-            ]);
+            ]]);
     }
 
-    public function test404()
-    {
-        $this->get('/v3/producer/1/1000')
-            ->seeStatusCode(404);
-        $this->get('/v3/producer/1/1000')
-            ->seeStatusCode(404);
-        $this->get('/v3/producer/100000')
-            ->seeStatusCode(404);
-        $this->get('/v3/producer/100000')
-            ->seeStatusCode(404);
-    }
 }
