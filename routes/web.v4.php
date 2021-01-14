@@ -243,10 +243,6 @@ $router->group(
         $router->get('/', [
             'uses' => 'ProducerController@main',
         ]);
-
-        $router->get('/{id:[0-9]+}', [
-            'uses' => 'ProducerController@resource'
-        ]);
     }
 );
 
@@ -257,10 +253,6 @@ $router->group(
     function() use ($router) {
         $router->get('/', [
             'uses' => 'MagazineController@main',
-        ]);
-
-        $router->get('/{id:[0-9]+}[/{page:[0-9]+}]', [
-            'uses' => 'MagazineController@resource'
         ]);
     }
 );
