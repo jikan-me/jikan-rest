@@ -8,7 +8,7 @@ class WatchControllerTest extends TestCase
         $this->get('/v4/watch/episodes')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -48,7 +48,7 @@ class WatchControllerTest extends TestCase
         $this->get('/v4/watch/popular')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -91,7 +91,7 @@ class WatchControllerTest extends TestCase
         $this->get('/v4/watch/promos')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -136,7 +136,7 @@ class WatchControllerTest extends TestCase
         $this->get('/v4/watch/popular')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],

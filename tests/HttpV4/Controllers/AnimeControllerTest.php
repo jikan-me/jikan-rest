@@ -177,7 +177,7 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/1/episodes')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -199,7 +199,7 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/21/episodes?page=2')
             ->seeStatusCode(200)
             ->seeJson([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -251,7 +251,7 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/1/news')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -385,7 +385,7 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/1/reviews')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -424,7 +424,7 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/1/reviews?page=100')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -468,7 +468,7 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/1/userupdates')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],

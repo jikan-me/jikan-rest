@@ -8,7 +8,7 @@ class RecommendationsControllerTest extends TestCase
         $this->get('/v4/recommendations/anime')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],

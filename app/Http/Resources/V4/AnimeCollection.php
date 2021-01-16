@@ -4,6 +4,7 @@
 namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AnimeCollection extends ResourceCollection
 {
@@ -34,6 +35,20 @@ class AnimeCollection extends ResourceCollection
      */
     public $collects = 'App\Http\Resources\V4\AnimeResource';
 
+    private $pagination;
+
+    public function __construct(LengthAwarePaginator $resource)
+    {
+        $this->pagination = [
+            'last_visible_page' => $resource->lastPage(),
+            'has_next_page' => $resource->hasMorePages()
+        ];
+
+        $this->collection = $resource->getCollection();
+
+        parent::__construct($resource);
+    }
+
     /**
      * Transform the resource collection into an array.
      *
@@ -42,6 +57,16 @@ class AnimeCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return $this->collection;
+        return [
+            'pagination' => $this->pagination,
+            'data' => $this->collection
+        ];
+    }
+
+    public function withResponse($request, $response)
+    {
+        $jsonResponse = json_decode($response->getContent(), true);
+        unset($jsonResponse['links'],$jsonResponse['meta']);
+        $response->setContent(json_encode($jsonResponse));
     }
 }

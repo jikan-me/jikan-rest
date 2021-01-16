@@ -113,7 +113,7 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/news')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -212,7 +212,7 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/reviews')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -250,7 +250,7 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/reviews?page=100')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -294,7 +294,7 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/userupdates')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],

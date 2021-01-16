@@ -8,7 +8,7 @@ class ReviewsControllerTest extends TestCase
         $this->get('/v4/reviews/anime')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -70,7 +70,7 @@ class ReviewsControllerTest extends TestCase
         $this->get('/v4/reviews/manga')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],

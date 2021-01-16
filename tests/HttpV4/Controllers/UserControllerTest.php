@@ -188,7 +188,7 @@ class UserControllerTest extends TestCase
         $this->get('/v4/users/nekomata1037/friends')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -346,7 +346,7 @@ class UserControllerTest extends TestCase
         $this->get('/v4/users/xinil/recommendations')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -382,7 +382,7 @@ class UserControllerTest extends TestCase
         $this->get('/v4/users/xinil/recommendations?page=200')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -396,7 +396,7 @@ class UserControllerTest extends TestCase
         $this->get('/v4/users/xinil/reviews')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],
@@ -446,7 +446,7 @@ class UserControllerTest extends TestCase
         $this->get('/v4/users/nekomata1037/clubs')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'meta' => [
+                'pagination' => [
                     'last_visible_page',
                     'hast_next_page',
                 ],

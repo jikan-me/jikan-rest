@@ -47,7 +47,7 @@ class ReviewsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'meta' => [
+            'pagination' => [
                 'last_visible_page' => $this['last_visible_page'],
                 'has_next_page' => $this['has_next_page'],
             ],
