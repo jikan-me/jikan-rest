@@ -15,7 +15,6 @@ class CreateMagazinesTable extends Migration
     public function up()
     {
         Schema::create('magazines', function (Blueprint $table) {
-            $table->unique(['request_hash' => 1], 'request_hash');
             $table->unique(['mal_id' => 1], 'mal_id');
             $table->index('count');
             $table->timestamps();
