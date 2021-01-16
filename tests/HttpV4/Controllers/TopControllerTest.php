@@ -4,7 +4,7 @@ class TopControllerTest extends TestCase
 {
     public function testTopAnime()
     {
-        $this->get('/v3/top/anime')
+        $this->get('/v4/top/anime')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'top' => [
@@ -26,7 +26,7 @@ class TopControllerTest extends TestCase
 
     public function testTopManga()
     {
-        $this->get('/v3/top/manga')
+        $this->get('/v4/top/manga')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'top' => [
@@ -49,7 +49,7 @@ class TopControllerTest extends TestCase
 
     public function testTopPeople()
     {
-        $this->get('/v3/top/people')
+        $this->get('/v4/top/people')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'top' => [
@@ -69,7 +69,7 @@ class TopControllerTest extends TestCase
 
     public function testTopCharacters()
     {
-        $this->get('/v3/top/characters')
+        $this->get('/v4/top/characters')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'top' => [
@@ -105,7 +105,7 @@ class TopControllerTest extends TestCase
 
     public function test404()
     {
-        $this->get('/v3/top/anime/999')
+        $this->get('/v4/top/anime/999')
             ->seeStatusCode(404);
     }
 }

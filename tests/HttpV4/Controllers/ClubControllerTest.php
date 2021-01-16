@@ -76,7 +76,7 @@ class ClubControllerTest extends TestCase
                 ]
             ]);
 
-        $this->get('/v3/club/1/members/1000')
+        $this->get('/v4/club/1/members/1000')
             ->seeStatusCode(404);
     }
 

@@ -4,7 +4,7 @@ class ScheduleControllerTest extends TestCase
 {
     public function testSchedule()
     {
-        $this->get('/v3/schedule')
+        $this->get('/v4/schedules')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'monday' => [
@@ -53,7 +53,7 @@ class ScheduleControllerTest extends TestCase
 
     public function test400()
     {
-        $this->get('/v3/schedule/asdjkhas')
+        $this->get('/v4/schedules/asdjkhas')
             ->seeStatusCode(400);
     }
 }

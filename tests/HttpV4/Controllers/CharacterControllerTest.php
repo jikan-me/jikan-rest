@@ -117,7 +117,7 @@ class CharacterControllerTest extends TestCase
 
     public function test404()
     {
-        $this->get('/v3/character/1000000')
+        $this->get('/v4/character/1000000')
             ->seeStatusCode(404);
     }
 }

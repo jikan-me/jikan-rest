@@ -247,7 +247,7 @@ class MangaControllerV4Test extends TestCase
                 ]
             ]);
 
-        $this->get('/v3/manga/1/reviews?page=100')
+        $this->get('/v4/manga/1/reviews?page=100')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'meta' => [

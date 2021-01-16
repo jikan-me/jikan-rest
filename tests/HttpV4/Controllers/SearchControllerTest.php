@@ -4,7 +4,7 @@ class SearchControllerTest extends TestCase
 {
     public function testAnimeSearch()
     {
-        $this->get('/v3/search/anime?order_by=id&sort=asc')
+        $this->get('/v4/search/anime?order_by=id&sort=asc')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'results' => [
@@ -30,7 +30,7 @@ class SearchControllerTest extends TestCase
 
     public function testMangaSearch()
     {
-        $this->get('/v3/search/manga?order_by=id&sort=asc')
+        $this->get('/v4/search/manga?order_by=id&sort=asc')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'results' => [
@@ -56,7 +56,7 @@ class SearchControllerTest extends TestCase
 
     public function testPeopleSearch()
     {
-        $this->get('/v3/search/people?q=Sawano')
+        $this->get('/v4/search/people?q=Sawano')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'results' => [
@@ -74,7 +74,7 @@ class SearchControllerTest extends TestCase
 
     public function testCharacterSearch()
     {
-        $this->get('/v3/search/character?q=Okabe,%20Rintarou')
+        $this->get('/v4/search/character?q=Okabe,%20Rintarou')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'results' => [
