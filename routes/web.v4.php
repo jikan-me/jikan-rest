@@ -292,6 +292,10 @@ $router->group(
                     'uses' => 'UserController@favorites'
                 ]);
 
+                $router->get('/userupdates', [
+                    'uses' => 'UserController@userupdates'
+                ]);
+
                 $router->get('/about', [
                     'uses' => 'UserController@about'
                 ]);
