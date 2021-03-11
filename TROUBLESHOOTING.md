@@ -9,7 +9,7 @@ You probably have a low RAM resource, switch over to file caching `CACHE_DRIVER=
 
 Redis throws this error even if you have about 1/4 of your RAM free. This is because it does a background save of your entire Redis cache - which is stored in-memory and which fails without the sufficient required memory.
 
-You can stop Redis from haggling you and override that by running the following command: `redis-cli config set stop-writes-on-bgsave-error`
+You can stop Redis from haggling you and override that by running the following command: `redis-cli config set stop-writes-on-bgsave-error no`
 
 **2. Jikan is failing to cache (when `CACHE_DRIVER=file`) because the "disk is out of space" - but you're sure you have enough space available.**
 
