@@ -41,6 +41,40 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 - [MongoDB]()
 
 
+## Getting started
+
+### Requirements
+
+- PHP ^7.4.7
+- MongoDB
+- Apache (optional)
+
+### Installation
+
+#### Prerequisites
+
+1. Install git and build-essentials for compiling PHP MongoDB library `sudo apt install git build-essential`
+2. Install
+    1. PHP: `sudo apt update && sudo apt -y install software-properties-common && sudo add-apt-repository ppa:ondrej/php && sudo apt-get update && sudo apt -y install php7.4`
+    2. PHP dependencies `sudo apt install php7.4-{mbstring,xml,dev,pear,zip,common}`
+3. Install PHP MongoDB driver `sudo pecl install mongodb`
+4. Add `extension=mongodb.so` to your `php.ini`
+5. Installing Apache (optional)
+    1. `sudo apt install apache2`
+    2. Set `AllowOverride All` in `apache2.conf` for `<Directory /var/www/>`
+    3. Edit your virtual host document root
+        1. By default in `/etc/apache2/sites-available/000-default.conf`: `DocumentRoot /var/www/jikan-rest/public`
+   
+    4. Enable mod rewrite `sudo a2enmod deflate && sudo a2enmod rewrite`
+    5. Enable mod deflate (for GZIP responses): `sudo a2enmod deflate && sudo a2enmod rewrite`
+    4. Restart apache: `sudo service apache2 restart`
+    
+    
+#### Jikan REST
+1. Clone the repo in `/var/www` - `git clone https://github.com/jikan-me/jikan-rest.git`
+2. Switch to v4 branch `git checkout v4`
+3. Install [composer](https://getcomposer.org/download/)
+4. Install project dependencies with composer `php path/to/composer.phar install`
 
 ## Information
 If you don't want to host your instance, there's a public API available.
