@@ -259,6 +259,23 @@ class UserController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/userupdates",
+     *     operationId="getUserUpdates",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user updates",
+     *         @OA\JsonContent()
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function userupdates(Request $request, string $username)
     {
 

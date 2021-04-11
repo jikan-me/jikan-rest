@@ -9,6 +9,6 @@ class ProfileLastUpdatesResource extends JsonResource
 
     public function toArray($request)
     {
-        return $this->userLastUpdates;
+        return $this->last_updates;
     }
 }
