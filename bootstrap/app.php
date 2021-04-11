@@ -152,7 +152,7 @@ $commonMiddleware = [
 
 $app->router->group(
     [
-        'prefix' => 'v4-alpha',
+        'prefix' => 'v4',
         'namespace' => env('SOURCE') === 'local' ? 'App\Http\Controllers\V4DB' : 'App\Http\Controllers\V4',
         'middleware' => $commonMiddleware
     ],
