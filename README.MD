@@ -56,6 +56,7 @@ This is specifically for Ubuntu, but other distributions should work similarly.
   - `sudo apt update && sudo apt upgrade`
   - Install requirements: `sudo apt install curl git php redis unzip`
   - Verify that PHP 7.1-7.3 is installed: `php -v` (PHP 7.4 is not currently supported)
+    - If not, install it by running `sudo apt install php7.3` and change the default PHP version with `sudo update-alternatives --set php /usr/bin/php7.3`
   - Install the corresponding `php-xml` and `php-mbstring` packages for your version, e.g:
     - PHP 7.1: `sudo apt install php7.1-xml php7.1-mbstring`
     - PHP 7.3: `sudo apt install php7.3-xml php7.3-mbstring`
