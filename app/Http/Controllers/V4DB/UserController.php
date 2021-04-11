@@ -259,6 +259,64 @@ class UserController extends Controller
         );
     }
 
+    public function userupdates(Request $request, string $username)
+    {
+
+        $username = strtolower($username);
+
+        $results = Profile::query()
+            ->where('internal_username', $username)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Profile::scrape($username);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint,
+                    'internal_username' => $username
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Profile::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Profile::query()
+                    ->where('internal_username', $username)
+                    ->update($response);
+            }
+
+            $results = Profile::query()
+                ->where('internal_username', $username)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new \App\Http\Resources\V4\ProfileLastUpdatesResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
     /**
      *  @OA\Get(
      *     path="/users/{username}/about",
