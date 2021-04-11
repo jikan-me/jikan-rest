@@ -11,7 +11,7 @@ $router->get('/', function () use ($router) {
         'documentation_url' => 'https://docs.api.jikan.moe/',
         'github_url' => 'https://github.com/jikan-me/jikan-rest',
         'parser_github_url' => 'https://github.com/jikan-me/jikan',
-        'production_api_url' => 'https://api.jikan.moe/v4-alpha/',
+        'production_api_url' => 'https://api.jikan.moe/v4/',
         'status_url' => 'https://status.jikan.moe'
     ]);
 });

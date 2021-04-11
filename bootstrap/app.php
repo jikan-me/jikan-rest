@@ -170,13 +170,13 @@ $app->router->group(
             return response()->json([
                 'author_url' => 'https://github.com/irfan-dahir',
                 'discord_url' => 'http://discord.jikan.moe',
-                'version' => '4.0 Alpha Preview',
+                'version' => env('APP_VERSION'),
                 'parser_version' => JIKAN_PARSER_VERSION,
                 'website_url' => 'https://jikan.moe',
                 'documentation_url' => 'https://docs.api.jikan.moe/',
                 'github_url' => 'https://github.com/jikan-me/jikan-rest',
                 'parser_github_url' => 'https://github.com/jikan-me/jikan',
-                'production_api_url' => 'https://api.jikan.moe/v4-alpha/',
+                'production_api_url' => 'https://api.jikan.moe/v4/',
                 'status_url' => 'https://status.jikan.moe'
             ]);
         });
