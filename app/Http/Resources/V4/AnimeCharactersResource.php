@@ -14,61 +14,76 @@ class AnimeCharactersResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="array",
-     *          @OA\Items(
-     *               type="object",
      *
-     *               @OA\Property(
-     *                   property="mal_id",
-     *                   type="integer",
-     *                   description="MyAnimeList ID"
-     *               ),
-     *               @OA\Property(
-     *                   property="url",
-     *                   type="string",
-     *                   description="MyAnimeList URL"
-     *               ),
-     *               @OA\Property(
-     *                   property="image_url",
-     *                   type="string",
-     *                   description="Image URL"
-     *               ),
-     *               @OA\Property(
-     *                   property="name",
-     *                   type="string",
-     *                   description="Character Name"
-     *               ),
-     *               @OA\Property(
-     *                   property="role",
-     *                   type="string",
-     *                   description="Character's Role"
-     *               ),
-     *               @OA\Property(
-     *                   property="voice_actors",
-     *                   type="array",
-     *                   @OA\Items(
-     *                       type="object",
-     *                       @OA\Property(
-     *                           property="mal_id",
-     *                           type="integer",
-     *                       ),
-     *                       @OA\Property(
-     *                           property="name",
-     *                           type="string",
-     *                       ),
-     *                       @OA\Property(
-     *                           property="url",
-     *                           type="string",
-     *                       ),
-     *                       @OA\Property(
-     *                           property="image_url",
-     *                           type="string",
-     *                       ),
-     *                       @OA\Property(
-     *                           property="language",
-     *                           type="string",
-     *                       ),
-     *                   ),
-     *               ),
+     *          @OA\Items(
+     *              type="object",
+     *
+     *              @OA\Property(
+     *                  property="character",
+     *                  type="object",
+     *                  description="Character details",
+     *
+     *                  @OA\Property(
+     *                      property="mal_id",
+     *                      type="integer",
+     *                      description="MyAnimeList ID"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="url",
+     *                      type="string",
+     *                      description="MyAnimeList URL"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="images",
+     *                      type="string",
+     *                      ref="#/components/schemas/character images"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="name",
+     *                      type="string",
+     *                      description="Character Name"
+     *                  ),
+     *              ),
+     *              @OA\Property(
+     *                  property="role",
+     *                  type="string",
+     *                  description="Character's Role"
+     *              ),
+     *              @OA\Property(
+     *                  property="voice_actors",
+     *                  type="array",
+     *
+     *                  @OA\Items(
+     *                      type="object",
+     *
+     *                      @OA\Property(
+     *                          property="person",
+     *                          type="object",
+     *
+     *                          @OA\Property(
+     *                              property="mal_id",
+     *                              type="integer",
+     *                          ),
+     *                          @OA\Property(
+     *                              property="url",
+     *                              type="string",
+     *                          ),
+     *                          @OA\Property(
+     *                              property="images",
+     *                              type="object",
+     *                              ref="#/components/schemas/people images"
+     *                          ),
+     *                          @OA\Property(
+     *                              property="name",
+     *                              type="string",
+     *                          ),
+     *                      ),
+     *                  ),
+     *              ),
+     *              @OA\Property(
+     *                  property="language",
+     *                  type="string",
+     *              ),
      *          ),
      *     ),
      *  )

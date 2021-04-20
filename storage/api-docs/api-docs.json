@@ -3493,21 +3493,26 @@
                         "type": "array",
                         "items": {
                             "properties": {
-                                "mal_id": {
-                                    "description": "MyAnimeList ID",
-                                    "type": "integer"
-                                },
-                                "url": {
-                                    "description": "MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "image_url": {
-                                    "description": "Image URL",
-                                    "type": "string"
-                                },
-                                "name": {
-                                    "description": "Character Name",
-                                    "type": "string"
+                                "character": {
+                                    "description": "Character details",
+                                    "properties": {
+                                        "mal_id": {
+                                            "description": "MyAnimeList ID",
+                                            "type": "integer"
+                                        },
+                                        "url": {
+                                            "description": "MyAnimeList URL",
+                                            "type": "string"
+                                        },
+                                        "images": {
+                                            "$ref": "#/components/schemas/character images"
+                                        },
+                                        "name": {
+                                            "description": "Character Name",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
                                 },
                                 "role": {
                                     "description": "Character's Role",
@@ -3517,24 +3522,29 @@
                                     "type": "array",
                                     "items": {
                                         "properties": {
-                                            "mal_id": {
-                                                "type": "integer"
-                                            },
-                                            "name": {
-                                                "type": "string"
-                                            },
-                                            "url": {
-                                                "type": "string"
-                                            },
-                                            "image_url": {
-                                                "type": "string"
-                                            },
-                                            "language": {
-                                                "type": "string"
+                                            "person": {
+                                                "properties": {
+                                                    "mal_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "url": {
+                                                        "type": "string"
+                                                    },
+                                                    "images": {
+                                                        "$ref": "#/components/schemas/people images"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
                                             }
                                         },
                                         "type": "object"
                                     }
+                                },
+                                "language": {
+                                    "type": "string"
                                 }
                             },
                             "type": "object"
@@ -4740,6 +4750,54 @@
                             },
                             "large_image_url": {
                                 "description": "Image URL WEBP (300x446)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "character images": {
+                "properties": {
+                    "jpg": {
+                        "description": "Available images in JPG",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL JPG (225x335)",
+                                "type": "string"
+                            },
+                            "small_image_url": {
+                                "description": "Small Image URL JPG (50x74)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "webp": {
+                        "description": "Available images in WEBP",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL WEBP (225x335)",
+                                "type": "string"
+                            },
+                            "small_image_url": {
+                                "description": "Small Image URL WEBP (50x74)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "people images": {
+                "properties": {
+                    "jpg": {
+                        "description": "Available images in JPG",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL JPG (225x335)",
                                 "type": "string"
                             }
                         },
