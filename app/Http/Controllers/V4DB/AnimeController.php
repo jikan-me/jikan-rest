@@ -635,6 +635,7 @@ class AnimeController extends Controller
      *         description="Returns a list of anime forum topics",
      *         @OA\JsonContent(
      *              @OA\Schema(
+     *                  schema="anime pictures",
      *                  description="Anime Pictures",
      *                  @OA\Property(
      *                      property="data",
