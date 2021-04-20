@@ -25,15 +25,11 @@ class AnimeVideosResource extends JsonResource
      *               type="array",
      *               @OA\Items(
      *                   type="object",
+     *
      *                   @OA\Property(
      *                       property="title",
      *                       type="string",
      *                       description="Title"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="image_url",
-     *                       type="string",
-     *                       description="Image URL"
      *                   ),
      *                   @OA\Property(
      *                       property="trailer",
@@ -68,9 +64,9 @@ class AnimeVideosResource extends JsonResource
      *                       description="Episode"
      *                   ),
      *                   @OA\Property(
-     *                       property="image_url",
-     *                       type="string",
-     *                       description="Image URL"
+     *                       property="images",
+     *                       type="object",
+     *                       ref="#/components/schemas/common images"
      *                   ),
      *               ),
      *          ),

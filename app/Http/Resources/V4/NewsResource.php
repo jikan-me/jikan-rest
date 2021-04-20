@@ -53,7 +53,7 @@ class NewsResource extends JsonResource
      *              @OA\Property(
      *                  property="images",
      *                  type="object",
-     *                  ref="#/components/schemas/news images"
+     *                  ref="#/components/schemas/common images"
      *              ),
      *              @OA\Property(
      *                  property="comments",

@@ -217,6 +217,14 @@
                         }
                     },
                     {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     }
                 ],
@@ -3995,10 +4003,6 @@
                                             "description": "Title",
                                             "type": "string"
                                         },
-                                        "image_url": {
-                                            "description": "Image URL",
-                                            "type": "string"
-                                        },
                                         "trailer": {
                                             "$ref": "#/components/schemas/trailer"
                                         }
@@ -4027,9 +4031,8 @@
                                             "description": "Episode",
                                             "type": "string"
                                         },
-                                        "image_url": {
-                                            "description": "Image URL",
-                                            "type": "string"
+                                        "images": {
+                                            "$ref": "#/components/schemas/common images"
                                         }
                                     },
                                     "type": "object"
@@ -4769,7 +4772,7 @@
                 },
                 "type": "object"
             },
-            "news images": {
+            "common images": {
                 "properties": {
                     "jpg": {
                         "description": "Available images in JPG",
@@ -5375,7 +5378,7 @@
                                     "type": "string"
                                 },
                                 "images": {
-                                    "$ref": "#/components/schemas/news images"
+                                    "$ref": "#/components/schemas/common images"
                                 },
                                 "comments": {
                                     "description": "Comment count",

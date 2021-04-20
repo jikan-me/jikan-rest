@@ -493,7 +493,7 @@ class CommonResource extends JsonResource
      * ),
      *
      * @OA\Schema(
-     *     schema="news images",
+     *     schema="common images",
      *     type="object",
      *     @OA\Property(
      *         property="jpg",
