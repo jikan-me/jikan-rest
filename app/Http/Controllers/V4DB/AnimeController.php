@@ -380,7 +380,7 @@ class AnimeController extends Controller
      *     ),
      * 
      *     @OA\Parameter(
-     *       name="ep_id",
+     *       name="episode",
      *       in="path",
      *       required=true,
      *       @OA\Schema(type="integer")
