@@ -18,32 +18,37 @@ class AnimeStaffResource extends JsonResource
      *          @OA\Items(
      *               type="object",
      *
-     *               @OA\Property(
-     *                   property="mal_id",
-     *                   type="integer",
-     *                   description="MyAnimeList ID"
-     *               ),
-     *               @OA\Property(
-     *                   property="url",
-     *                   type="string",
-     *                   description="MyAnimeList URL"
-     *               ),
-     *               @OA\Property(
-     *                   property="name",
-     *                   type="string",
-     *                   description="Name"
-     *               ),
-     *               @OA\Property(
-     *                   property="image_url",
-     *                   type="string",
-     *                   description="MyAnimeList Image URL"
-     *               ),
-     *               @OA\Property(
-     *                   property="positions",
-     *                   type="array",
-     *                   description="Staff Positions",
-     *                   @OA\Items(type="string")
-     *               ),
+     *              @OA\Property(
+     *                  property="person",
+     *                  type="object",
+     *                  description="Person details",
+     *                  @OA\Property(
+     *                      property="mal_id",
+     *                      type="integer",
+     *                      description="MyAnimeList ID"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="url",
+     *                      type="string",
+     *                      description="MyAnimeList URL"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="images",
+     *                      type="string",
+     *                      ref="#/components/schemas/people images"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="name",
+     *                      type="string",
+     *                      description="Name"
+     *                  ),
+     *              ),
+     *              @OA\Property(
+     *                  property="positions",
+     *                  type="array",
+     *                  description="Staff Positions",
+     *                  @OA\Items(type="string")
+     *              ),
      *          ),
      *     ),
      *  )

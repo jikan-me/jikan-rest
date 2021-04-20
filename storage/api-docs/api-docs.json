@@ -3862,21 +3862,26 @@
                         "type": "array",
                         "items": {
                             "properties": {
-                                "mal_id": {
-                                    "description": "MyAnimeList ID",
-                                    "type": "integer"
-                                },
-                                "url": {
-                                    "description": "MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "name": {
-                                    "description": "Name",
-                                    "type": "string"
-                                },
-                                "image_url": {
-                                    "description": "MyAnimeList Image URL",
-                                    "type": "string"
+                                "person": {
+                                    "description": "Person details",
+                                    "properties": {
+                                        "mal_id": {
+                                            "description": "MyAnimeList ID",
+                                            "type": "integer"
+                                        },
+                                        "url": {
+                                            "description": "MyAnimeList URL",
+                                            "type": "string"
+                                        },
+                                        "images": {
+                                            "$ref": "#/components/schemas/people images"
+                                        },
+                                        "name": {
+                                            "description": "Name",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
                                 },
                                 "positions": {
                                     "description": "Staff Positions",
