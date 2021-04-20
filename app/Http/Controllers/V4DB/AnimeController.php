@@ -957,7 +957,7 @@ class AnimeController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/anime/{id}/relations",
+     *     path="/anime/{id}/anime relations",
      *     operationId="getAnimeRelations",
      *     tags={"anime"},
      *
@@ -974,7 +974,7 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime relations",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime reviews"
+     *              ref="#/components/schemas/anime relations"
      *         )
      *     ),
      *     @OA\Response(
@@ -1039,7 +1039,7 @@ class AnimeController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/anime/{id}/themes",
+     *     path="/anime/{id}/anime themes",
      *     operationId="getAnimeThemes",
      *     tags={"anime"},
      *
@@ -1056,7 +1056,7 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime themes",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime reviews"
+     *              ref="#/components/schemas/anime themes"
      *         )
      *     ),
      *     @OA\Response(

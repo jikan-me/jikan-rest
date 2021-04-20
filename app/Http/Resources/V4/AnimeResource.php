@@ -228,24 +228,6 @@ class AnimeResource extends JsonResource
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
-     *      @OA\Property(
-     *          property="themes",
-     *          type="object",
-     *          @OA\Property(
-     *               property="openings",
-     *               type="array",
-     *               @OA\Items(
-     *                   type="string",
-     *               ),
-     *          ),
-     *          @OA\Property(
-     *               property="endings",
-     *               type="array",
-     *               @OA\Items(
-     *                   type="string",
-     *               ),
-     *          ),
-     *      ),
      *  )
      */
 

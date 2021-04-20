@@ -514,7 +514,7 @@
                 }
             }
         },
-        "/anime/{id}/relations": {
+        "/anime/{id}/anime relations": {
             "get": {
                 "tags": [
                     "anime"
@@ -539,7 +539,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/anime reviews"
+                                    "$ref": "#/components/schemas/anime relations"
                                 }
                             }
                         }
@@ -550,7 +550,7 @@
                 }
             }
         },
-        "/anime/{id}/themes": {
+        "/anime/{id}/anime themes": {
             "get": {
                 "tags": [
                     "anime"
@@ -575,7 +575,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/anime reviews"
+                                    "$ref": "#/components/schemas/anime themes"
                                 }
                             }
                         }
@@ -3640,6 +3640,15 @@
                 },
                 "type": "object"
             },
+            "anime relations": {
+                "description": "Anime Relations",
+                "properties": {
+                    "related": {
+                        "$ref": "#/components/schemas/anime relations"
+                    }
+                },
+                "type": "object"
+            },
             "anime": {
                 "description": "Anime Resource",
                 "properties": {
@@ -3843,23 +3852,6 @@
                         "items": {
                             "$ref": "#/components/schemas/mal_url"
                         }
-                    },
-                    "themes": {
-                        "properties": {
-                            "openings": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            },
-                            "endings": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "type": "object"
                     }
                 },
                 "type": "object"
@@ -3947,6 +3939,29 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "anime themes": {
+                "description": "Anime Opening and Ending Themes",
+                "properties": {
+                    "themes": {
+                        "properties": {
+                            "openings": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "endings": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
                                 }
                             }
                         },

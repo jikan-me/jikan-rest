@@ -8,6 +8,32 @@ class AnimeThemesResource extends JsonResource
 {
 
     /**
+     *  @OA\Schema(
+     *      schema="anime themes",
+     *      description="Anime Opening and Ending Themes",
+     *
+     *      @OA\Property(
+     *          property="themes",
+     *          type="object",
+     *          @OA\Property(
+     *               property="openings",
+     *               type="array",
+     *               @OA\Items(
+     *                   type="string",
+     *               ),
+     *          ),
+     *          @OA\Property(
+     *               property="endings",
+     *               type="array",
+     *               @OA\Items(
+     *                   type="string",
+     *               ),
+     *          ),
+     *      ),
+     *  )
+     */
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
