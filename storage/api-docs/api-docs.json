@@ -514,6 +514,78 @@
                 }
             }
         },
+        "/anime/{id}/relations": {
+            "get": {
+                "tags": [
+                    "anime"
+                ],
+                "operationId": "getAnimeRelations",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns anime relations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime reviews"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/anime/{id}/themes": {
+            "get": {
+                "tags": [
+                    "anime"
+                ],
+                "operationId": "getAnimeThemes",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns anime themes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime reviews"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/characters/{id}": {
             "get": {
                 "tags": [
@@ -538,6 +610,69 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/character"
                                 }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/characters/{id}/anime": {
+            "get": {
+                "tags": [
+                    "characters"
+                ],
+                "operationId": "getCharacterAnime",
+                "responses": {
+                    "200": {
+                        "description": "Returns characters's anime",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/characters/{id}/manga": {
+            "get": {
+                "tags": [
+                    "characters"
+                ],
+                "operationId": "getCharacterManga",
+                "responses": {
+                    "200": {
+                        "description": "Returns characters's manga",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/characters/{id}/seiyuu": {
+            "get": {
+                "tags": [
+                    "characters"
+                ],
+                "operationId": "getCharacterSeiyuu",
+                "responses": {
+                    "200": {
+                        "description": "Returns characters's Seiyuu (voice actors)",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
                             }
                         }
                     },
@@ -646,88 +781,6 @@
                                             "$ref": "#/components/schemas/club member"
                                         }
                                     ]
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Error: Bad request. When required parameters were not supplied."
-                    }
-                }
-            }
-        },
-        "/genres/anime/{id}": {
-            "get": {
-                "tags": [
-                    "genres"
-                ],
-                "operationId": "getAnimeGenreById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Returns Genres's anime",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/anime"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Error: Bad request. When required parameters were not supplied."
-                    }
-                }
-            }
-        },
-        "/genres/manga/{id}": {
-            "get": {
-                "tags": [
-                    "genres"
-                ],
-                "operationId": "getMangaGenreById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Returns Genres's manga",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/manga"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
                                 }
                             }
                         }
@@ -1069,6 +1122,42 @@
                 }
             }
         },
+        "/manga/{id}/relations": {
+            "get": {
+                "tags": [
+                    "manga"
+                ],
+                "operationId": "getMangaRelations",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns manga relations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga reviews"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/people/{id}": {
             "get": {
                 "tags": [
@@ -1300,6 +1389,27 @@
                 }
             }
         },
+        "/random/users": {
+            "get": {
+                "tags": [
+                    "random"
+                ],
+                "operationId": "getRandomUsers",
+                "responses": {
+                    "200": {
+                        "description": "Returns Random Users",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/recommendations/anime": {
             "get": {
                 "tags": [
@@ -1372,7 +1482,6 @@
                                                                     {
                                                                         "properties": {
                                                                             "anime": {
-                                                                                "type": "object",
                                                                                 "$ref": "#/components/schemas/anime meta"
                                                                             }
                                                                         },
@@ -1381,7 +1490,6 @@
                                                                     {
                                                                         "properties": {
                                                                             "user": {
-                                                                                "type": "object",
                                                                                 "$ref": "#/components/schemas/user meta"
                                                                             }
                                                                         },
@@ -1437,7 +1545,6 @@
                                                                     {
                                                                         "properties": {
                                                                             "manga": {
-                                                                                "type": "object",
                                                                                 "$ref": "#/components/schemas/manga meta"
                                                                             }
                                                                         },
@@ -1446,7 +1553,6 @@
                                                                     {
                                                                         "properties": {
                                                                             "user": {
-                                                                                "type": "object",
                                                                                 "$ref": "#/components/schemas/user meta"
                                                                             }
                                                                         },
@@ -2155,7 +2261,6 @@
                                                                             {
                                                                                 "properties": {
                                                                                     "anime": {
-                                                                                        "type": "object",
                                                                                         "$ref": "#/components/schemas/anime meta"
                                                                                     }
                                                                                 },
@@ -2164,7 +2269,6 @@
                                                                             {
                                                                                 "properties": {
                                                                                     "user": {
-                                                                                        "type": "object",
                                                                                         "$ref": "#/components/schemas/user meta"
                                                                                     }
                                                                                 },
@@ -2180,7 +2284,6 @@
                                                                             {
                                                                                 "properties": {
                                                                                     "manga": {
-                                                                                        "type": "object",
                                                                                         "$ref": "#/components/schemas/manga meta"
                                                                                     }
                                                                                 },
@@ -2189,7 +2292,6 @@
                                                                             {
                                                                                 "properties": {
                                                                                     "user": {
-                                                                                        "type": "object",
                                                                                         "$ref": "#/components/schemas/user meta"
                                                                                     }
                                                                                 },
@@ -2226,6 +2328,90 @@
                 "responses": {
                     "200": {
                         "description": "Returns user profile",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/users/{username}/statistics": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getUserStatistics",
+                "responses": {
+                    "200": {
+                        "description": "Returns user statistics",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/users/{username}/favorites": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getUserFavorites",
+                "responses": {
+                    "200": {
+                        "description": "Returns user favorites",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/users/{username}/userupdates": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getUserUpdates",
+                "responses": {
+                    "200": {
+                        "description": "Returns user updates",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/users/{username}/about": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getUserAbout",
+                "responses": {
+                    "200": {
+                        "description": "Returns user about (HTML)",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -2312,7 +2498,6 @@
                                                                             {
                                                                                 "properties": {
                                                                                     "anime": {
-                                                                                        "type": "object",
                                                                                         "$ref": "#/components/schemas/anime meta"
                                                                                     }
                                                                                 },
@@ -2321,7 +2506,6 @@
                                                                             {
                                                                                 "properties": {
                                                                                     "user": {
-                                                                                        "type": "object",
                                                                                         "$ref": "#/components/schemas/user meta"
                                                                                     }
                                                                                 },
@@ -2337,7 +2521,6 @@
                                                                             {
                                                                                 "properties": {
                                                                                     "manga": {
-                                                                                        "type": "object",
                                                                                         "$ref": "#/components/schemas/manga meta"
                                                                                     }
                                                                                 },
@@ -2346,7 +2529,6 @@
                                                                             {
                                                                                 "properties": {
                                                                                     "user": {
-                                                                                        "type": "object",
                                                                                         "$ref": "#/components/schemas/user meta"
                                                                                     }
                                                                                 },
@@ -2738,7 +2920,6 @@
                         "description": "Similar Anime",
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     }
@@ -2752,7 +2933,6 @@
                         "description": "Similar Manga",
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     }
@@ -2767,63 +2947,54 @@
                             "monday": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             },
                             "tuesday": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             },
                             "wednesday": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             },
                             "thursday": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             },
                             "friday": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             },
                             "saturday": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             },
                             "sunday": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             },
                             "other": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             },
                             "unknown": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "$ref": "#/components/schemas/anime"
                                 }
                             }
@@ -3171,7 +3342,6 @@
                                         "trailer": {
                                             "type": "array",
                                             "items": {
-                                                "type": "object",
                                                 "$ref": "#/components/schemas/trailer"
                                             }
                                         }
@@ -3653,28 +3823,24 @@
                     "producers": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     },
                     "licensors": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     },
                     "studios": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     },
                     "genres": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     },
@@ -4129,8 +4295,6 @@
                                 "description": "Anime Relations",
                                 "type": "array",
                                 "items": {
-                                    "description": "Resource",
-                                    "type": "object",
                                     "$ref": "#/components/schemas/mal_url"
                                 }
                             },
@@ -4138,8 +4302,6 @@
                                 "description": "Manga Relations",
                                 "type": "array",
                                 "items": {
-                                    "description": "Resource",
-                                    "type": "object",
                                     "$ref": "#/components/schemas/mal_url"
                                 }
                             },
@@ -4147,8 +4309,6 @@
                                 "description": "Character Relations",
                                 "type": "array",
                                 "items": {
-                                    "description": "Resource",
-                                    "type": "object",
                                     "$ref": "#/components/schemas/mal_url"
                                 }
                             }
@@ -4358,7 +4518,6 @@
                             "description": "Related items",
                             "type": "array",
                             "items": {
-                                "type": "object",
                                 "$ref": "#/components/schemas/mal_url"
                             }
                         }
@@ -4441,7 +4600,6 @@
                         "type": "string"
                     },
                     "images": {
-                        "type": "object",
                         "$ref": "#/components/schemas/user images"
                     }
                 },
@@ -4483,7 +4641,6 @@
                         "type": "string"
                     },
                     "images": {
-                        "type": "object",
                         "$ref": "#/components/schemas/anime images"
                     }
                 },
@@ -4500,7 +4657,6 @@
                         "type": "string"
                     },
                     "images": {
-                        "type": "object",
                         "$ref": "#/components/schemas/manga images"
                     }
                 },
@@ -5056,21 +5212,18 @@
                     "authors": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     },
                     "serializations": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     },
                     "genres": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/mal_url"
                         }
                     }
@@ -5409,8 +5562,6 @@
                         "type": "string"
                     },
                     "anime": {
-                        "description": "Anime Meta",
-                        "type": "object",
                         "$ref": "#/components/schemas/mal_url"
                     },
                     "increment": {
@@ -5435,8 +5586,6 @@
                         "type": "string"
                     },
                     "manga": {
-                        "description": "Manga Meta",
-                        "type": "object",
                         "$ref": "#/components/schemas/mal_url"
                     },
                     "increment": {
@@ -5618,7 +5767,6 @@
                                             "description": "Favorite Anime",
                                             "type": "array",
                                             "items": {
-                                                "type": "object",
                                                 "$ref": "#/components/schemas/entry_meta"
                                             }
                                         },
@@ -5626,7 +5774,6 @@
                                             "description": "Favorite Manga",
                                             "type": "array",
                                             "items": {
-                                                "type": "object",
                                                 "$ref": "#/components/schemas/entry_meta"
                                             }
                                         },
@@ -5634,7 +5781,6 @@
                                             "description": "Favorite Characters",
                                             "type": "array",
                                             "items": {
-                                                "type": "object",
                                                 "$ref": "#/components/schemas/entry_meta"
                                             }
                                         },
@@ -5642,7 +5788,6 @@
                                             "description": "Favorite People",
                                             "type": "array",
                                             "items": {
-                                                "type": "object",
                                                 "$ref": "#/components/schemas/entry_meta"
                                             }
                                         }
@@ -5705,7 +5850,6 @@
                     "data": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/anime review"
                         }
                     }
@@ -5718,7 +5862,6 @@
                     "data": {
                         "type": "array",
                         "items": {
-                            "type": "object",
                             "$ref": "#/components/schemas/manga review"
                         }
                     }
