@@ -15,6 +15,7 @@ class AnimeStaffResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="array",
+     *
      *          @OA\Items(
      *               type="object",
      *
@@ -22,6 +23,7 @@ class AnimeStaffResource extends JsonResource
      *                  property="person",
      *                  type="object",
      *                  description="Person details",
+     *
      *                  @OA\Property(
      *                      property="mal_id",
      *                      type="integer",

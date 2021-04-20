@@ -244,78 +244,17 @@ class AnimeController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/anime/{id}/episodes/{ep_id}",
-     *     operationId="getAnimeEpisodeById",
+     *     path="/anime/{id}/episodes",
+     *     operationId="getAnimeEpisodes",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
-     *       in="path",
-     *       required=true,
-     *       @OA\Schema(type="integer")
-     *     ),
-     * 
-     *     @OA\Parameter(
-     *       name="ep_id",
      *       in="path",
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
      *
-     *     @OA\Response(
-     *         response="200",
-     *         description="Returns a single anime episode resource",
-     *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime episode"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error: Bad request. When required parameters were not supplied.",
-     *     ),
-     * )
-     */
-    public function episode(Request $request, int $id, int $episodeId)
-    {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getAnimeEpisode(new AnimeEpisodeRequest($id, $episodeId));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new AnimeEpisodeResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
-    }
-
-    /**
-     *  @OA\Get(
-     *     path="/anime/{id}/episodes",
-     *     operationId="getAnimeEpisodes",
-     *     tags={"anime"},
-     * 
-     *     @OA\Parameter(
-     *       name="id",
-     *       in="path",
-     *       required=true,
-     *       @OA\Schema(type="integer")
-     *     ),
-     * 
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
@@ -389,9 +328,9 @@ class AnimeController extends Controller
      *                       description="Recap episode"
      *                   ),
      *                   @OA\Property(
-     *                       property="synopsis",
+     *                       property="forum_url",
      *                       type="string",
-     *                       description="Episode Synopsis"
+     *                       description="Episode discussion forum URL"
      *                   ),
      *               ),
      *          ),
@@ -417,6 +356,67 @@ class AnimeController extends Controller
         }
 
         $response = (new ResultsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/episodes/{episode}",
+     *     operationId="getAnimeEpisodeById",
+     *     tags={"anime"},
+     * 
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     * 
+     *     @OA\Parameter(
+     *       name="ep_id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns a single anime episode resource",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime episode"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function episode(Request $request, int $id, int $episodeId)
+    {
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $anime = $this->jikan->getAnimeEpisode(new AnimeEpisodeRequest($id, $episodeId));
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            $results = $this->updateCache($request, $results, $response);
+        }
+
+        $response = (new AnimeEpisodeResource(
             $results->first()
         ))->response();
 

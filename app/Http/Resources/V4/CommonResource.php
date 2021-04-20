@@ -250,14 +250,20 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="pagination",
      *     type="object",
+     *
      *     @OA\Property(
-     *          property="last_visible_page",
-     *          type="integer"
+     *          property="pagination",
+     *          type="object",
+     *
+     *          @OA\Property(
+     *               property="last_visible_page",
+     *               type="integer"
+     *           ),
+     *          @OA\Property(
+     *               property="has_next_page",
+     *               type="boolean"
+     *          ),
      *      ),
-     *     @OA\Property(
-     *          property="has_next_page",
-     *          type="boolean"
-     *     ),
      *  ),
      *
      * @OA\Schema(

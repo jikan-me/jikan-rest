@@ -124,7 +124,43 @@
                 }
             }
         },
-        "/anime/{id}/episodes/{ep_id}": {
+        "/anime/{id}/episodes": {
+            "get": {
+                "tags": [
+                    "anime"
+                ],
+                "operationId": "getAnimeEpisodes",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns a list of anime episodes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime episodes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/anime/{id}/episodes/{episode}": {
             "get": {
                 "tags": [
                     "anime"
@@ -155,42 +191,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/anime episode"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Error: Bad request. When required parameters were not supplied."
-                    }
-                }
-            }
-        },
-        "/anime/{id}/episodes": {
-            "get": {
-                "tags": [
-                    "anime"
-                ],
-                "operationId": "getAnimeEpisodes",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "$ref": "#/components/parameters/page"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Returns a list of anime episodes",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/anime episodes"
                                 }
                             }
                         }
@@ -2707,8 +2707,8 @@
                                             "description": "Recap episode",
                                             "type": "boolean"
                                         },
-                                        "synopsis": {
-                                            "description": "Episode Synopsis",
+                                        "forum_url": {
+                                            "description": "Episode discussion forum URL",
                                             "type": "string"
                                         }
                                     },
@@ -4546,11 +4546,16 @@
             },
             "pagination": {
                 "properties": {
-                    "last_visible_page": {
-                        "type": "integer"
-                    },
-                    "has_next_page": {
-                        "type": "boolean"
+                    "pagination": {
+                        "properties": {
+                            "last_visible_page": {
+                                "type": "integer"
+                            },
+                            "has_next_page": {
+                                "type": "boolean"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"
