@@ -439,6 +439,13 @@ class AnimeController extends Controller
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
+     *
+     *     @OA\Parameter(
+     *       name="page",
+     *       in="query",
+     *       required=false,
+     *       @OA\Schema(type="integer")
+     *     ),
      * 
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *
