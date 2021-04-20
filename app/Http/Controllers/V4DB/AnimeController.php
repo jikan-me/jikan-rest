@@ -634,7 +634,19 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns a list of anime forum topics",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime pictures"
+     *              @OA\Schema(
+     *                  description="Anime Pictures",
+     *                  @OA\Property(
+     *                      property="data",
+     *                      type="array",
+     *
+     *                      @OA\Items(
+     *                          @OA\Schema(
+     *                              ref="#/components/schemas/anime images"
+     *                          ),
+     *                      ),
+     *                  ),
+     *              )
      *         )
      *     ),
      *     @OA\Response(
@@ -643,27 +655,6 @@ class AnimeController extends Controller
      *     ),
      * )
      * 
-     *  @OA\Schema(
-     *      schema="anime pictures",
-     *      description="Anime Pictures",
-     *      @OA\Property(
-     *          property="data",
-     *          type="array",
-     * 
-     *          @OA\Items(
-     *              @OA\Property(
-     *                  property="image_url",
-     *                  type="string",
-     *                  description="Default JPG Image Size URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="large_image_url",
-     *                  type="string",
-     *                  description="Large JPG Image Size URL"
-     *              ),
-     *          )
-     *      )
-     *  )
      */
     public function pictures(Request $request, int $id)
     {

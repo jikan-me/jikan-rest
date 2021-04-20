@@ -345,9 +345,7 @@
                         "description": "Returns a list of anime forum topics",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/anime pictures"
-                                }
+                                "schema": {}
                             }
                         }
                     },
@@ -2744,28 +2742,6 @@
                         "$ref": "#/components/schemas/news"
                     }
                 ]
-            },
-            "anime pictures": {
-                "description": "Anime Pictures",
-                "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "image_url": {
-                                    "description": "Default JPG Image Size URL",
-                                    "type": "string"
-                                },
-                                "large_image_url": {
-                                    "description": "Large JPG Image Size URL",
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "type": "object"
             },
             "character pictures": {
                 "description": "Character Pictures",
