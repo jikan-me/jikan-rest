@@ -176,7 +176,7 @@
                         }
                     },
                     {
-                        "name": "ep_id",
+                        "name": "episode",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -255,8 +255,14 @@
                     {
                         "name": "topic",
                         "in": "query",
+                        "description": "Filter topics",
+                        "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "episode",
+                                "other"
+                            ]
                         }
                     }
                 ],
@@ -4560,59 +4566,6 @@
                 },
                 "type": "object"
             },
-            "news": {
-                "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "mal_id": {
-                                    "description": "MyAnimeList ID",
-                                    "type": "integer"
-                                },
-                                "url": {
-                                    "description": "MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "title": {
-                                    "description": "Title",
-                                    "type": "string"
-                                },
-                                "date": {
-                                    "description": "Post Date ISO8601",
-                                    "type": "string"
-                                },
-                                "author_username": {
-                                    "description": "Author MyAnimeList Username",
-                                    "type": "string"
-                                },
-                                "author_url": {
-                                    "description": "Author Profile URL",
-                                    "type": "string"
-                                },
-                                "forum_url": {
-                                    "description": "Forum topic URL",
-                                    "type": "string"
-                                },
-                                "image_url": {
-                                    "description": "Image URL",
-                                    "type": "string"
-                                },
-                                "comments": {
-                                    "description": "Comment count",
-                                    "type": "integer"
-                                },
-                                "excerpt": {
-                                    "description": "Excerpt",
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    }
-                },
-                "type": "object"
-            },
             "user meta": {
                 "properties": {
                     "username": {
@@ -4802,6 +4755,21 @@
                 "type": "object"
             },
             "people images": {
+                "properties": {
+                    "jpg": {
+                        "description": "Available images in JPG",
+                        "properties": {
+                            "image_url": {
+                                "description": "Image URL JPG (225x335)",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "news images": {
                 "properties": {
                     "jpg": {
                         "description": "Available images in JPG",
@@ -5368,6 +5336,58 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "news": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "mal_id": {
+                                    "description": "MyAnimeList ID",
+                                    "type": "integer"
+                                },
+                                "url": {
+                                    "description": "MyAnimeList URL",
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "description": "Title",
+                                    "type": "string"
+                                },
+                                "date": {
+                                    "description": "Post Date ISO8601",
+                                    "type": "string"
+                                },
+                                "author_username": {
+                                    "description": "Author MyAnimeList Username",
+                                    "type": "string"
+                                },
+                                "author_url": {
+                                    "description": "Author Profile URL",
+                                    "type": "string"
+                                },
+                                "forum_url": {
+                                    "description": "Forum topic URL",
+                                    "type": "string"
+                                },
+                                "images": {
+                                    "$ref": "#/components/schemas/news images"
+                                },
+                                "comments": {
+                                    "description": "Comment count",
+                                    "type": "integer"
+                                },
+                                "excerpt": {
+                                    "description": "Excerpt",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"

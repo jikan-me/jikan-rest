@@ -35,7 +35,7 @@ class AnimeCharactersResource extends JsonResource
      *                  ),
      *                  @OA\Property(
      *                      property="images",
-     *                      type="string",
+     *                      type="object",
      *                      ref="#/components/schemas/character images"
      *                  ),
      *                  @OA\Property(

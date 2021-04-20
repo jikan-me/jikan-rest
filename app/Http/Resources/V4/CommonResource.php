@@ -266,67 +266,6 @@ class CommonResource extends JsonResource
      *      ),
      *  ),
      *
-     * @OA\Schema(
-     *     schema="news",
-     *     type="object",
-     *     @OA\Property(
-     *          property="data",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="mal_id",
-     *                  type="integer",
-     *                  description="MyAnimeList ID"
-     *              ),
-     *              @OA\Property(
-     *                  property="url",
-     *                  type="string",
-     *                  description="MyAnimeList URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="title",
-     *                  type="string",
-     *                  description="Title"
-     *              ),
-     *              @OA\Property(
-     *                  property="date",
-     *                  type="string",
-     *                  description="Post Date ISO8601"
-     *              ),
-     *              @OA\Property(
-     *                  property="author_username",
-     *                  type="string",
-     *                  description="Author MyAnimeList Username"
-     *              ),
-     *              @OA\Property(
-     *                  property="author_url",
-     *                  type="string",
-     *                  description="Author Profile URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="forum_url",
-     *                  type="string",
-     *                  description="Forum topic URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="image_url",
-     *                  type="string",
-     *                  description="Image URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="comments",
-     *                  type="integer",
-     *                  description="Comment count"
-     *              ),
-     *              @OA\Property(
-     *                  property="excerpt",
-     *                  type="string",
-     *                  description="Excerpt"
-     *              ),
-     *         ),
-     *     ),
-     *  ),
      *
      * @OA\Schema(
      *     schema="user meta",
@@ -540,6 +479,21 @@ class CommonResource extends JsonResource
      *
      * @OA\Schema(
      *     schema="people images",
+     *     type="object",
+     *     @OA\Property(
+     *         property="jpg",
+     *         type="object",
+     *         description="Available images in JPG",
+     *         @OA\Property(
+     *             property="image_url",
+     *             type="string",
+     *             description="Image URL JPG (225x335)",
+     *         ),
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *     schema="news images",
      *     type="object",
      *     @OA\Property(
      *         property="jpg",

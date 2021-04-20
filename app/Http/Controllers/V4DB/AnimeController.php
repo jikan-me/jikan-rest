@@ -508,11 +508,13 @@ class AnimeController extends Controller
      *       @OA\Schema(type="integer")
      *     ),
      * 
-     *     @OA\Parameter(
-     *       name="topic",
-     *       in="query",
-     *       @OA\Schema(type="string")
-     *     ),
+     *      @OA\Parameter(
+     *          name="topic",
+     *          in="query",
+     *          required=false,
+     *          description="Filter topics",
+     *          @OA\Schema(type="string",enum={"episode", "other"})
+     *      ),
      *
      *     @OA\Response(
      *         response="200",
