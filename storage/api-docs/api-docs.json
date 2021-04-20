@@ -514,25 +514,12 @@
                 }
             }
         },
-        "/anime/{id}/anime relations": {
+        "/anime/{id}/relations": {
             "get": {
                 "tags": [
                     "anime"
                 ],
                 "operationId": "getAnimeRelations",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "$ref": "#/components/parameters/page"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime relations",
@@ -550,25 +537,12 @@
                 }
             }
         },
-        "/anime/{id}/anime themes": {
+        "/anime/{id}/themes": {
             "get": {
                 "tags": [
                     "anime"
                 ],
                 "operationId": "getAnimeThemes",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "$ref": "#/components/parameters/page"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Returns anime themes",
@@ -3643,8 +3617,23 @@
             "anime relations": {
                 "description": "Anime Relations",
                 "properties": {
-                    "related": {
-                        "$ref": "#/components/schemas/anime relations"
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "relation": {
+                                    "description": "Relation type",
+                                    "type": "string"
+                                },
+                                "entry": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/mal_url"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"

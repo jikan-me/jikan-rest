@@ -957,18 +957,10 @@ class AnimeController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/anime/{id}/anime relations",
+     *     path="/anime/{id}/relations",
      *     operationId="getAnimeRelations",
      *     tags={"anime"},
      *
-     *     @OA\Parameter(
-     *       name="id",
-     *       in="path",
-     *       required=true,
-     *       @OA\Schema(type="integer")
-     *     ),
-     *
-     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
@@ -1039,18 +1031,9 @@ class AnimeController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/anime/{id}/anime themes",
+     *     path="/anime/{id}/themes",
      *     operationId="getAnimeThemes",
      *     tags={"anime"},
-     *
-     *     @OA\Parameter(
-     *       name="id",
-     *       in="path",
-     *       required=true,
-     *       @OA\Schema(type="integer")
-     *     ),
-     *
-     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",

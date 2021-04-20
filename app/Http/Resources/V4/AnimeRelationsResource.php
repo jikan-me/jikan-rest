@@ -12,11 +12,28 @@ class AnimeRelationsResource extends JsonResource
      *      schema="anime relations",
      *      description="Anime Relations",
      *
-     *      @OA\Property(
-     *          property="related",
-     *          ref="#/components/schemas/anime relations"
-     *      ),
-     *  )
+     *     @OA\Property(
+     *          property="data",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *
+     *              @OA\Property(
+     *                  property="relation",
+     *                  type="string",
+     *                  description="Relation type"
+     *              ),
+     *              @OA\Property(
+     *                  property="entry",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="object",
+     *                      ref="#/components/schemas/mal_url"
+     *                  ),
+     *              )
+     *          )
+     *     )
+     * )
      */
 
     /**
