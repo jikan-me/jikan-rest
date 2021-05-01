@@ -22,6 +22,8 @@ class SeasonController extends Controller
         'Fall'
     ];
 
+    const MAX_RESULTS_PER_PAGE = 25;
+
     private $request;
     private $season;
     private $year;
@@ -46,6 +48,20 @@ class SeasonController extends Controller
     public function main(Request $request, ?int $year = null, ?string $season = null)
     {
         $this->request = $request;
+        $page = $this->request->get('page') ?? 1;
+        $limit = $this->request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
 
         if (!is_null($season)) {
             $this->season = ucfirst(
@@ -69,7 +85,11 @@ class SeasonController extends Controller
         $results = Anime::query()
             ->where('premiered', "{$this->season} $this->year")
             ->orderBy('members', 'desc')
-            ->get();
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page);
 
         return new AnimeCollection(
             $results
