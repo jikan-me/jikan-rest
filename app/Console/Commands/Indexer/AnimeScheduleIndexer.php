@@ -74,7 +74,7 @@ class AnimeScheduleIndexer extends Command
         $itemCount = count($anime);
         echo "Anime currently airing: {$itemCount} entries\n";
         foreach ($anime as $entry) {
-            $url = env('APP_URL') . "/v4-alpha/anime/{$entry['mal_id']}";
+            $url = env('APP_URL') . "/v4/anime/{$entry['mal_id']}";
 
             file_get_contents($url);
             //sleep(5); // prevent rate-limit
