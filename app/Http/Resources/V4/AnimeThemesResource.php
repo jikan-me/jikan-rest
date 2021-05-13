@@ -13,7 +13,7 @@ class AnimeThemesResource extends JsonResource
      *      description="Anime Opening and Ending Themes",
      *
      *      @OA\Property(
-     *          property="themes",
+     *          property="data",
      *          type="object",
      *          @OA\Property(
      *               property="openings",

@@ -15,7 +15,7 @@
     },
     "servers": [
         {
-            "url": "https://api.jikan.moe/v4-alpha",
+            "url": "https://api.jikan.moe/v4",
             "description": "Jikan REST API Alpha"
         }
     ],
@@ -468,7 +468,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns anime recommendations",
+                        "description": "Returns a list of users who have added/updated/removed the entry on their list",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1629,13 +1629,15 @@
                     {
                         "name": "sfw",
                         "in": "query",
+                        "description": "Filter out Adult entries",
                         "schema": {
-                            "type": "string"
+                            "type": "boolean"
                         }
                     },
                     {
                         "name": "genres",
                         "in": "query",
+                        "description": "Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
                         "schema": {
                             "type": "string"
                         }
@@ -1657,6 +1659,7 @@
                     {
                         "name": "letter",
                         "in": "query",
+                        "description": "Return entries starting with the given letter",
                         "schema": {
                             "type": "string"
                         }
@@ -1664,6 +1667,7 @@
                     {
                         "name": "producer",
                         "in": "query",
+                        "description": "Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
                         "schema": {
                             "type": "string"
                         }
@@ -3345,13 +3349,15 @@
                 ]
             },
             "anime search query orderby": {
-                "description": "Anime Search Query OrderBy",
+                "description": "Anime search query order_by",
                 "type": "string",
                 "enum": [
                     "mal_id",
                     "title",
-                    "aired.from",
-                    "aired.to",
+                    "type",
+                    "rating",
+                    "start_date",
+                    "end_date",
                     "episodes",
                     "score",
                     "scored_by",
@@ -3938,7 +3944,7 @@
             "anime themes": {
                 "description": "Anime Opening and Ending Themes",
                 "properties": {
-                    "themes": {
+                    "data": {
                         "properties": {
                             "openings": {
                                 "type": "array",
@@ -4779,6 +4785,14 @@
                         "description": "Review created date ISO8601",
                         "type": "string"
                     },
+                    "review": {
+                        "description": "Review content",
+                        "type": "string"
+                    },
+                    "episodes_watched": {
+                        "description": "Number of episodes watched",
+                        "type": "integer"
+                    },
                     "scores": {
                         "description": "Review Scores breakdown",
                         "properties": {
@@ -4808,10 +4822,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    "review": {
-                        "description": "Review content",
-                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -5956,15 +5966,30 @@
             },
             "anime reviews": {
                 "description": "Anime Reviews Resource",
-                "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/anime review"
-                        }
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/anime review"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/user meta"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "manga reviews": {
                 "description": "Manga Reviews Resource",
@@ -5980,50 +6005,57 @@
             },
             "anime userupdates": {
                 "description": "Anime User Updates Resource",
-                "properties": {
-                    "data": {
-                        "description": "Transform the resource into an array.",
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "username": {
-                                    "description": "MyAnimeList Username",
-                                    "type": "string"
-                                },
-                                "url": {
-                                    "description": "MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "image_url": {
-                                    "description": "Image URL",
-                                    "type": "string"
-                                },
-                                "score": {
-                                    "description": "User Score",
-                                    "type": "integer"
-                                },
-                                "status": {
-                                    "description": "User list status",
-                                    "type": "string"
-                                },
-                                "episodes_seen": {
-                                    "description": "Number of episodes seen",
-                                    "type": "integer"
-                                },
-                                "episodes_total": {
-                                    "description": "Total number of episodes",
-                                    "type": "integer"
-                                },
-                                "date": {
-                                    "description": "Last updated date ISO8601",
-                                    "type": "string"
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "description": "Transform the resource into an array.",
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "username": {
+                                            "description": "MyAnimeList Username",
+                                            "type": "string"
+                                        },
+                                        "url": {
+                                            "description": "MyAnimeList URL",
+                                            "type": "string"
+                                        },
+                                        "images": {
+                                            "description": "MyAnimeList Image URL",
+                                            "type": "object"
+                                        },
+                                        "score": {
+                                            "description": "User Score",
+                                            "type": "integer"
+                                        },
+                                        "status": {
+                                            "description": "User list status",
+                                            "type": "string"
+                                        },
+                                        "episodes_seen": {
+                                            "description": "Number of episodes seen",
+                                            "type": "integer"
+                                        },
+                                        "episodes_total": {
+                                            "description": "Total number of episodes",
+                                            "type": "integer"
+                                        },
+                                        "date": {
+                                            "description": "Last updated date ISO8601",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
-                            },
-                            "type": "object"
-                        }
+                            }
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "manga userupdates": {
                 "description": "Manga User Updates Resource",

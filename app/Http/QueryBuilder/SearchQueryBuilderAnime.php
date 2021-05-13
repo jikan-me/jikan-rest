@@ -70,13 +70,13 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="anime search query orderby",
-     *   description="Anime Search Query OrderBy",
+     *   description="Anime search query order_by",
      *   type="string",
-     *   enum={"mal_id", "title", "aired.from", "aired.to", "episodes", "score", "scored_by", "rank", "popularity", "members", "favorites" }
+     *   enum={"mal_id", "title", "type", "rating", "start_date", "end_date", "episodes", "score", "scored_by", "rank", "popularity", "members", "favorites" }
      * )
      */
     const ORDER_BY = [
-        'mal_id', 'title', 'aired.from', 'aired.to', 'episodes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
+        'mal_id', 'title', 'type', 'rating', 'aired.from', 'aired.to', 'episodes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
     ];
 
     /**

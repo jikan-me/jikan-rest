@@ -11,15 +11,25 @@ class ReviewsResource extends JsonResource
      *      schema="anime reviews",
      *      description="Anime Reviews Resource",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="array",
      *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/anime review"
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *
+     *                   @OA\Items(
+     *                      type="object",
+     *
+     *                      allOf={
+     *                          @OA\Schema(ref="#/components/schemas/anime review"),
+     *                          @OA\Schema(ref="#/components/schemas/user meta"),
+     *                      },
+     *                   ),
+     *              ),
      *          ),
-     *     ),
+     *      },
      *  ),
      *
      *  @OA\Schema(

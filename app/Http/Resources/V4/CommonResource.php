@@ -536,6 +536,16 @@ class CommonResource extends JsonResource
      *         description="Review created date ISO8601"
      *     ),
      *     @OA\Property(
+     *         property="review",
+     *         type="string",
+     *         description="Review content"
+     *     ),
+     *     @OA\Property(
+     *         property="episodes_watched",
+     *         type="integer",
+     *         description="Number of episodes watched"
+     *     ),
+     *     @OA\Property(
      *         property="scores",
      *         type="object",
      *         description="Review Scores breakdown",
@@ -569,11 +579,6 @@ class CommonResource extends JsonResource
      *             type="integer",
      *             description="Enjoyment Score"
      *         ),
-     *     ),
-     *     @OA\Property(
-     *         property="review",
-     *         type="string",
-     *         description="Review content"
      *     ),
      *  ),
      *

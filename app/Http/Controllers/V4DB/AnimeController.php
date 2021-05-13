@@ -854,7 +854,7 @@ class AnimeController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns anime recommendations",
+     *         description="Returns a list of users who have added/updated/removed the entry on their list",
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime userupdates"
      *         )
