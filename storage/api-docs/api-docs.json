@@ -436,7 +436,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/recommendations"
+                                    "$ref": "#/components/schemas/entry recommendations"
                                 }
                             }
                         }
@@ -531,7 +531,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/anime relations"
+                                    "$ref": "#/components/schemas/relation"
                                 }
                             }
                         }
@@ -1044,7 +1044,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/recommendations"
+                                    "$ref": "#/components/schemas/entry recommendations"
                                 }
                             }
                         }
@@ -1115,9 +1115,6 @@
                         "schema": {
                             "type": "integer"
                         }
-                    },
-                    {
-                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -1126,7 +1123,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/manga reviews"
+                                    "$ref": "#/components/schemas/relation"
                                 }
                             }
                         }
@@ -2800,7 +2797,7 @@
                 ]
             },
             "manga pictures": {
-                "description": "Anime Pictures",
+                "description": "Manga Pictures",
                 "properties": {
                     "data": {
                         "type": "array",
@@ -4618,6 +4615,26 @@
                 },
                 "type": "object"
             },
+            "character meta": {
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/character images"
+                    },
+                    "name": {
+                        "description": "Character name",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "anime images": {
                 "properties": {
                     "jpg": {
@@ -4759,124 +4776,6 @@
                             }
                         },
                         "type": "object"
-                    }
-                },
-                "type": "object"
-            },
-            "anime review": {
-                "properties": {
-                    "mal_id": {
-                        "description": "MyAnimeList ID",
-                        "type": "integer"
-                    },
-                    "url": {
-                        "description": "MyAnimeList URL",
-                        "type": "string"
-                    },
-                    "type": {
-                        "description": "Entry Type",
-                        "type": "string"
-                    },
-                    "votes": {
-                        "description": "Number of user votes on the Review",
-                        "type": "integer"
-                    },
-                    "date": {
-                        "description": "Review created date ISO8601",
-                        "type": "string"
-                    },
-                    "review": {
-                        "description": "Review content",
-                        "type": "string"
-                    },
-                    "episodes_watched": {
-                        "description": "Number of episodes watched",
-                        "type": "integer"
-                    },
-                    "scores": {
-                        "description": "Review Scores breakdown",
-                        "properties": {
-                            "overall": {
-                                "description": "Overall Score",
-                                "type": "integer"
-                            },
-                            "story": {
-                                "description": "Story Score",
-                                "type": "integer"
-                            },
-                            "animation": {
-                                "description": "Animation Score",
-                                "type": "integer"
-                            },
-                            "sound": {
-                                "description": "Sound Score",
-                                "type": "integer"
-                            },
-                            "character": {
-                                "description": "Character Score",
-                                "type": "integer"
-                            },
-                            "enjoyment": {
-                                "description": "Enjoyment Score",
-                                "type": "integer"
-                            }
-                        },
-                        "type": "object"
-                    }
-                },
-                "type": "object"
-            },
-            "manga review": {
-                "properties": {
-                    "mal_id": {
-                        "description": "MyAnimeList ID",
-                        "type": "integer"
-                    },
-                    "url": {
-                        "description": "MyAnimeList URL",
-                        "type": "string"
-                    },
-                    "type": {
-                        "description": "Entry Type",
-                        "type": "string"
-                    },
-                    "votes": {
-                        "description": "Number of user votes on the Review",
-                        "type": "integer"
-                    },
-                    "date": {
-                        "description": "Review created date ISO8601",
-                        "type": "string"
-                    },
-                    "scores": {
-                        "description": "Review Scores breakdown",
-                        "properties": {
-                            "overall": {
-                                "description": "Overall Score",
-                                "type": "integer"
-                            },
-                            "story": {
-                                "description": "Story Score",
-                                "type": "integer"
-                            },
-                            "art": {
-                                "description": "Art Score",
-                                "type": "integer"
-                            },
-                            "character": {
-                                "description": "Character Score",
-                                "type": "integer"
-                            },
-                            "enjoyment": {
-                                "description": "Enjoyment Score",
-                                "type": "integer"
-                            }
-                        },
-                        "type": "object"
-                    },
-                    "review": {
-                        "description": "Review content",
-                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -5034,21 +4933,8 @@
                         "type": "array",
                         "items": {
                             "properties": {
-                                "mal_id": {
-                                    "description": "MyAnimeList ID",
-                                    "type": "integer"
-                                },
-                                "url": {
-                                    "description": "MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "image_url": {
-                                    "description": "Image URL",
-                                    "type": "string"
-                                },
-                                "name": {
-                                    "description": "Character Name",
-                                    "type": "string"
+                                "character": {
+                                    "$ref": "#/components/schemas/character meta"
                                 },
                                 "role": {
                                     "description": "Character's Role",
@@ -5229,9 +5115,6 @@
                         "description": "Background",
                         "type": "string"
                     },
-                    "related": {
-                        "$ref": "#/components/schemas/relation"
-                    },
                     "authors": {
                         "type": "array",
                         "items": {
@@ -5288,6 +5171,10 @@
                                 "type": "array",
                                 "items": {
                                     "properties": {
+                                        "score": {
+                                            "description": "Scoring value",
+                                            "type": "integer"
+                                        },
                                         "votes": {
                                             "description": "Number of votes for this score",
                                             "type": "integer"
@@ -5964,6 +5851,128 @@
                 },
                 "type": "object"
             },
+            "manga review": {
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "Entry Type",
+                        "type": "string"
+                    },
+                    "votes": {
+                        "description": "Number of user votes on the Review",
+                        "type": "integer"
+                    },
+                    "date": {
+                        "description": "Review created date ISO8601",
+                        "type": "string"
+                    },
+                    "chapters_read": {
+                        "description": "Number of chapters read by the reviewer",
+                        "type": "integer"
+                    },
+                    "review": {
+                        "description": "Review content",
+                        "type": "string"
+                    },
+                    "scores": {
+                        "description": "Review Scores breakdown",
+                        "properties": {
+                            "overall": {
+                                "description": "Overall Score",
+                                "type": "integer"
+                            },
+                            "story": {
+                                "description": "Story Score",
+                                "type": "integer"
+                            },
+                            "art": {
+                                "description": "Art Score",
+                                "type": "integer"
+                            },
+                            "character": {
+                                "description": "Character Score",
+                                "type": "integer"
+                            },
+                            "enjoyment": {
+                                "description": "Enjoyment Score",
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "anime review": {
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "Entry Type",
+                        "type": "string"
+                    },
+                    "votes": {
+                        "description": "Number of user votes on the Review",
+                        "type": "integer"
+                    },
+                    "date": {
+                        "description": "Review created date ISO8601",
+                        "type": "string"
+                    },
+                    "review": {
+                        "description": "Review content",
+                        "type": "string"
+                    },
+                    "episodes_watched": {
+                        "description": "Number of episodes watched",
+                        "type": "integer"
+                    },
+                    "scores": {
+                        "description": "Review Scores breakdown",
+                        "properties": {
+                            "overall": {
+                                "description": "Overall Score",
+                                "type": "integer"
+                            },
+                            "story": {
+                                "description": "Story Score",
+                                "type": "integer"
+                            },
+                            "animation": {
+                                "description": "Animation Score",
+                                "type": "integer"
+                            },
+                            "sound": {
+                                "description": "Sound Score",
+                                "type": "integer"
+                            },
+                            "character": {
+                                "description": "Character Score",
+                                "type": "integer"
+                            },
+                            "enjoyment": {
+                                "description": "Enjoyment Score",
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "anime reviews": {
                 "description": "Anime Reviews Resource",
                 "allOf": [
@@ -5981,7 +5990,12 @@
                                             "$ref": "#/components/schemas/anime review"
                                         },
                                         {
-                                            "$ref": "#/components/schemas/user meta"
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/user meta"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     ]
                                 }
@@ -5993,15 +6007,35 @@
             },
             "manga reviews": {
                 "description": "Manga Reviews Resource",
-                "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/manga review"
-                        }
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/manga review"
+                                        },
+                                        {
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/user meta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "anime userupdates": {
                 "description": "Anime User Updates Resource",
@@ -6016,17 +6050,8 @@
                                 "type": "array",
                                 "items": {
                                     "properties": {
-                                        "username": {
-                                            "description": "MyAnimeList Username",
-                                            "type": "string"
-                                        },
-                                        "url": {
-                                            "description": "MyAnimeList URL",
-                                            "type": "string"
-                                        },
-                                        "images": {
-                                            "description": "MyAnimeList Image URL",
-                                            "type": "object"
+                                        "user": {
+                                            "$ref": "#/components/schemas/user meta"
                                         },
                                         "score": {
                                             "description": "User Score",
@@ -6059,23 +6084,18 @@
             },
             "manga userupdates": {
                 "description": "Manga User Updates Resource",
-                "properties": {
-                    "data": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "property": "data",
                         "description": "Transform the resource into an array.",
                         "type": "array",
                         "items": {
                             "properties": {
-                                "username": {
-                                    "description": "MyAnimeList Username",
-                                    "type": "string"
-                                },
-                                "url": {
-                                    "description": "MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "image_url": {
-                                    "description": "Image URL",
-                                    "type": "string"
+                                "user": {
+                                    "$ref": "#/components/schemas/user meta"
                                 },
                                 "score": {
                                     "description": "User Score",
@@ -6109,8 +6129,7 @@
                             "type": "object"
                         }
                     }
-                },
-                "type": "object"
+                ]
             }
         },
         "parameters": {

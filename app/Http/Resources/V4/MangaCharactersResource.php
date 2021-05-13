@@ -23,24 +23,9 @@ class MangaCharactersResource extends JsonResource
      *               type="object",
      *
      *               @OA\Property(
-     *                   property="mal_id",
-     *                   type="integer",
-     *                   description="MyAnimeList ID"
-     *               ),
-     *               @OA\Property(
-     *                   property="url",
-     *                   type="string",
-     *                   description="MyAnimeList URL"
-     *               ),
-     *               @OA\Property(
-     *                   property="image_url",
-     *                   type="string",
-     *                   description="Image URL"
-     *               ),
-     *               @OA\Property(
-     *                   property="name",
-     *                   type="string",
-     *                   description="Character Name"
+     *                   property="character",
+     *                   type="object",
+     *                   ref="#/components/schemas/character meta",
      *               ),
      *               @OA\Property(
      *                   property="role",

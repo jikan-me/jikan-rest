@@ -48,11 +48,12 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="manga search query orderby",
-     *   description="Manga Search Query OrderBy",
+     *   description="Manga search query order_by",
      *   type="string",
-     *   enum={"mal_id", "title", "published.from", "published.to", "chapters", "volumes", "score", "scored_by", "rank", "popularity", "members", "favorites"}
+     *   enum={"mal_id", "title", "start_date", "end_date", "chapters", "volumes", "score", "scored_by", "rank", "popularity", "members", "favorites"}
      * )
      */
+
     const ORDER_BY = [
         'mal_id', 'title', 'published.from', 'published.to', 'chapters', 'volumes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
     ];

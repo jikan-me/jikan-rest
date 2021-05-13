@@ -801,7 +801,7 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime recommendations",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/recommendations"
+     *              ref="#/components/schemas/entry recommendations"
      *         )
      *     ),
      *     @OA\Response(
@@ -961,7 +961,7 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime relations",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime relations"
+     *              ref="#/components/schemas/relation"
      *         )
      *     ),
      *     @OA\Response(

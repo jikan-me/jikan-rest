@@ -353,6 +353,31 @@ class CommonResource extends JsonResource
      * ),
      *
      * @OA\Schema(
+     *     schema="character meta",
+     *     type="object",
+     *     @OA\Property(
+     *         property="mal_id",
+     *         type="integer",
+     *         description="MyAnimeList ID"
+     *     ),
+     *     @OA\Property(
+     *         property="url",
+     *         type="string",
+     *         description="MyAnimeList URL"
+     *     ),
+     *     @OA\Property(
+     *         property="images",
+     *         type="object",
+     *         ref="#/components/schemas/character images",
+     *     ),
+     *     @OA\Property(
+     *         property="name",
+     *         type="string",
+     *         description="Character name"
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
      *     schema="anime images",
      *     type="object",
      *     @OA\Property(
@@ -507,144 +532,6 @@ class CommonResource extends JsonResource
      *     ),
      * ),
      *
-     * @OA\Schema(
-     *     schema="anime review",
-     *     type="object",
-     *     @OA\Property(
-     *         property="mal_id",
-     *         type="integer",
-     *         description="MyAnimeList ID"
-     *     ),
-     *     @OA\Property(
-     *         property="url",
-     *         type="string",
-     *         description="MyAnimeList URL"
-     *     ),
-     *     @OA\Property(
-     *         property="type",
-     *         type="string",
-     *         description="Entry Type"
-     *     ),
-     *     @OA\Property(
-     *         property="votes",
-     *         type="integer",
-     *         description="Number of user votes on the Review"
-     *     ),
-     *     @OA\Property(
-     *         property="date",
-     *         type="string",
-     *         description="Review created date ISO8601"
-     *     ),
-     *     @OA\Property(
-     *         property="review",
-     *         type="string",
-     *         description="Review content"
-     *     ),
-     *     @OA\Property(
-     *         property="episodes_watched",
-     *         type="integer",
-     *         description="Number of episodes watched"
-     *     ),
-     *     @OA\Property(
-     *         property="scores",
-     *         type="object",
-     *         description="Review Scores breakdown",
-     *         @OA\Property(
-     *             property="overall",
-     *             type="integer",
-     *             description="Overall Score"
-     *         ),
-     *         @OA\Property(
-     *             property="story",
-     *             type="integer",
-     *             description="Story Score"
-     *         ),
-     *         @OA\Property(
-     *             property="animation",
-     *             type="integer",
-     *             description="Animation Score"
-     *         ),
-     *         @OA\Property(
-     *             property="sound",
-     *             type="integer",
-     *             description="Sound Score"
-     *         ),
-     *         @OA\Property(
-     *             property="character",
-     *             type="integer",
-     *             description="Character Score"
-     *         ),
-     *         @OA\Property(
-     *             property="enjoyment",
-     *             type="integer",
-     *             description="Enjoyment Score"
-     *         ),
-     *     ),
-     *  ),
      *
-     * @OA\Schema(
-     *     schema="manga review",
-     *     type="object",
-     *     @OA\Property(
-     *         property="mal_id",
-     *         type="integer",
-     *         description="MyAnimeList ID"
-     *     ),
-     *     @OA\Property(
-     *         property="url",
-     *         type="string",
-     *         description="MyAnimeList URL"
-     *     ),
-     *     @OA\Property(
-     *         property="type",
-     *         type="string",
-     *         description="Entry Type"
-     *     ),
-     *     @OA\Property(
-     *         property="votes",
-     *         type="integer",
-     *         description="Number of user votes on the Review"
-     *     ),
-     *     @OA\Property(
-     *         property="date",
-     *         type="string",
-     *         description="Review created date ISO8601"
-     *     ),
-     *     @OA\Property(
-     *         property="scores",
-     *         type="object",
-     *         description="Review Scores breakdown",
-     *         @OA\Property(
-     *             property="overall",
-     *             type="integer",
-     *             description="Overall Score"
-     *         ),
-     *         @OA\Property(
-     *             property="story",
-     *             type="integer",
-     *             description="Story Score"
-     *         ),
-     *         @OA\Property(
-     *             property="art",
-     *             type="integer",
-     *             description="Art Score"
-     *         ),
-     *         @OA\Property(
-     *             property="character",
-     *             type="integer",
-     *             description="Character Score"
-     *         ),
-     *         @OA\Property(
-     *             property="enjoyment",
-     *             type="integer",
-     *             description="Enjoyment Score"
-     *         ),
-     *     ),
-     *     @OA\Property(
-     *         property="review",
-     *         type="string",
-     *         description="Review content"
-     *     ),
-     *  ),
      */
 }

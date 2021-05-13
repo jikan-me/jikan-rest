@@ -110,7 +110,7 @@ class SearchController extends Controller
      *       description="Filter out Adult entries",
      *       @OA\Schema(type="boolean")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="genres",
      *       in="query",
@@ -225,16 +225,18 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/manga search query status")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="sfw",
      *       in="query",
-     *       @OA\Schema(type="string")
+     *       description="Filter out Adult entries",
+     *       @OA\Schema(type="boolean")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="genres",
      *       in="query",
+     *       description="Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
      *       @OA\Schema(type="string")
      *     ),
      * 
@@ -249,16 +251,18 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/search query sort")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="letter",
      *       in="query",
+     *       description="Return entries starting with the given letter",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="magazine",
      *       in="query",
+     *       description="Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
      *       @OA\Schema(type="string")
      *     ),
      *

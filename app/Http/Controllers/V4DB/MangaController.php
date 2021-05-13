@@ -298,7 +298,7 @@ class MangaController extends Controller
      * )
      * @OA\Schema(
      *     schema="manga pictures",
-     *     description="Anime Pictures",
+     *     description="Manga Pictures",
      *     @OA\Property(
      *         property="data",
      *         type="array",
@@ -447,7 +447,7 @@ class MangaController extends Controller
      *         response="200",
      *         description="Returns manga recommendations",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/recommendations"
+     *              ref="#/components/schemas/entry recommendations"
      *         )
      *     ),
      *     @OA\Response(
@@ -590,13 +590,11 @@ class MangaController extends Controller
      *       @OA\Schema(type="integer")
      *     ),
      *
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga relations",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/manga reviews"
+     *              ref="#/components/schemas/relation"
      *         )
      *     ),
      *     @OA\Response(
