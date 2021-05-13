@@ -70,7 +70,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         $orderBy = $request->get('order_by');
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
-        $magazine = $request->get('magazine');
+        $magazine = $request->get('magazines');
         $minScore = $request->get('min_score');
         $maxScore = $request->get('max_score');
 
