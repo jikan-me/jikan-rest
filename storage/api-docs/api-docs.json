@@ -217,20 +217,12 @@
                         }
                     },
                     {
-                        "name": "page",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
                         "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns a list of anime news topics",
+                        "description": "Returns a list of news articles related to the entry",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -250,7 +242,7 @@
                 "tags": [
                     "anime"
                 ],
-                "operationId": "getAnimeTopics",
+                "operationId": "getAnimeForum",
                 "parameters": [
                     {
                         "name": "id",
@@ -268,6 +260,7 @@
                         "schema": {
                             "type": "string",
                             "enum": [
+                                "all",
                                 "episode",
                                 "other"
                             ]
@@ -276,7 +269,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns a list of anime forum topics",
+                        "description": "Returns a list of forum topics related to the entry",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -309,7 +302,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns a list of anime forum topics",
+                        "description": "Returns videos related to the entry",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -342,7 +335,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns a list of anime forum topics",
+                        "description": "Returns pictures related to the entry",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -3528,13 +3521,13 @@
                                                     }
                                                 },
                                                 "type": "object"
+                                            },
+                                            "language": {
+                                                "type": "string"
                                             }
                                         },
                                         "type": "object"
                                     }
-                                },
-                                "language": {
-                                    "type": "string"
                                 }
                             },
                             "type": "object"
@@ -3815,9 +3808,6 @@
                     "broadcast": {
                         "$ref": "#/components/schemas/broadcast"
                     },
-                    "related": {
-                        "$ref": "#/components/schemas/relation"
-                    },
                     "producers": {
                         "type": "array",
                         "items": {
@@ -3922,6 +3912,10 @@
                                 "type": "array",
                                 "items": {
                                     "properties": {
+                                        "score": {
+                                            "description": "Scoring value",
+                                            "type": "integer"
+                                        },
                                         "votes": {
                                             "description": "Number of votes for this score",
                                             "type": "integer"
@@ -5905,6 +5899,51 @@
                                     "type": "string"
                                 },
                                 "recommendation_count": {
+                                    "description": "Number of users who have recommended this entry",
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "entry recommendations": {
+                "description": "Entry Recommendations Resource",
+                "properties": {
+                    "data": {
+                        "description": "Transform the resource into an array.",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "entry": {
+                                    "description": "Transform the resource into an array.",
+                                    "properties": {
+                                        "mal_id": {
+                                            "description": "Recommended MyAnimeList ID",
+                                            "type": "integer"
+                                        },
+                                        "url": {
+                                            "description": "Recommended MyAnimeList URL",
+                                            "type": "string"
+                                        },
+                                        "images": {
+                                            "description": "Recommended MyAnimeList Image URL",
+                                            "type": "object"
+                                        },
+                                        "title": {
+                                            "description": "Recommended Entry Title",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "url": {
+                                    "description": "Recommendation MyAnimeList URL",
+                                    "type": "string"
+                                },
+                                "votes": {
                                     "description": "Number of users who have recommended this entry",
                                     "type": "integer"
                                 }

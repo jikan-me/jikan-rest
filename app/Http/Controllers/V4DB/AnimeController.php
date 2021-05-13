@@ -440,18 +440,12 @@ class AnimeController extends Controller
      *       @OA\Schema(type="integer")
      *     ),
      *
-     *     @OA\Parameter(
-     *       name="page",
-     *       in="query",
-     *       required=false,
-     *       @OA\Schema(type="integer")
-     *     ),
-     * 
+     *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a list of anime news topics",
+     *         description="Returns a list of news articles related to the entry",
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime news"
      *         )
@@ -505,7 +499,7 @@ class AnimeController extends Controller
     /**
      *  @OA\Get(
      *     path="/anime/{id}/forum",
-     *     operationId="getAnimeTopics",
+     *     operationId="getAnimeForum",
      *     tags={"anime"},
      * 
      *     @OA\Parameter(
@@ -520,12 +514,12 @@ class AnimeController extends Controller
      *          in="query",
      *          required=false,
      *          description="Filter topics",
-     *          @OA\Schema(type="string",enum={"episode", "other"})
+     *          @OA\Schema(type="string",enum={"all", "episode", "other"})
      *      ),
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a list of anime forum topics",
+     *         description="Returns a list of forum topics related to the entry",
      *         @OA\JsonContent(
      *              ref="#/components/schemas/forum"
      *         )
@@ -579,7 +573,7 @@ class AnimeController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a list of anime forum topics",
+     *         description="Returns videos related to the entry",
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime videos"
      *         )
@@ -632,7 +626,7 @@ class AnimeController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a list of anime forum topics",
+     *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
      *              @OA\Schema(
      *                  schema="anime pictures",
@@ -643,7 +637,7 @@ class AnimeController extends Controller
      *
      *                      @OA\Items(
      *                          @OA\Schema(
-     *                              ref="#/components/schemas/anime images"
+     *                              ref="#/components/schemas/pictures"
      *                          ),
      *                      ),
      *                  ),

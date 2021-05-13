@@ -193,10 +193,6 @@ class AnimeResource extends JsonResource
      *          ref="#/components/schemas/broadcast"
      *      ),
      *      @OA\Property(
-     *          property="related",
-     *          ref="#/components/schemas/relation"
-     *      ),
-     *      @OA\Property(
      *          property="producers",
      *          type="array",
      *          @OA\Items(

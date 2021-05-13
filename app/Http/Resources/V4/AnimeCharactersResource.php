@@ -78,11 +78,11 @@ class AnimeCharactersResource extends JsonResource
      *                              type="string",
      *                          ),
      *                      ),
+     *                      @OA\Property(
+     *                          property="language",
+     *                          type="string",
+     *                      ),
      *                  ),
-     *              ),
-     *              @OA\Property(
-     *                  property="language",
-     *                  type="string",
      *              ),
      *          ),
      *     ),
