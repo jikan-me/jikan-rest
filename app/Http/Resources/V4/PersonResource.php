@@ -30,29 +30,8 @@ class PersonResource extends JsonResource
      *      @OA\Property(
      *          property="images",
      *          type="object",
-     *          description="Images",
-     *          @OA\Property(
-     *              property="jpg",
-     *              type="object",
-     *              description="Available images in JPG",
-     *              @OA\Property(
-     *                  property="image_url",
-     *                  type="string",
-     *                  description="Image URL JPG (225x350)",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="webp",
-     *              type="object",
-     *              description="Available images in WEBP",
-     *              @OA\Property(
-     *                  property="image_url",
-     *                  type="string",
-     *                  description="Image URL WEBP (225x350)",
-     *              ),
-     *          ),
+     *          ref="#/components/schemas/people images",
      *      ),
-     *
      *      @OA\Property(
      *          property="name",
      *          type="string",
@@ -89,59 +68,7 @@ class PersonResource extends JsonResource
      *      @OA\Property(
      *          property="about",
      *          type="string",
-     *          description="Synopsis"
-     *      ),
-     *      @OA\Property(
-     *          property="voice_acting_roles",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="role",
-     *                  type="string",
-     *                  description="Role"
-     *              ),
-     *              @OA\Property(
-     *                  property="anime",
-     *                  ref="#/components/schemas/mal_url"
-     *              ),
-     *              @OA\Property(
-     *                  property="character",
-     *                  ref="#/components/schemas/mal_url"
-     *              ),
-     *          ),
-     *      ),
-     *      @OA\Property(
-     *          property="anime_staff_positions",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="position",
-     *                  type="string",
-     *                  description="Position"
-     *              ),
-     *              @OA\Property(
-     *                  property="anime",
-     *                  ref="#/components/schemas/mal_url"
-     *              ),
-     *          ),
-     *      ),
-     *      @OA\Property(
-     *          property="published_manga",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="position",
-     *                  type="string",
-     *                  description="Position"
-     *              ),
-     *              @OA\Property(
-     *                  property="manga",
-     *                  ref="#/components/schemas/mal_url"
-     *              ),
-     *          ),
+     *          description="Biography"
      *      ),
      *  )
      */

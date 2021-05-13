@@ -583,7 +583,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns manga resource",
+                        "description": "Returns character resource",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -606,10 +606,12 @@
                 "operationId": "getCharacterAnime",
                 "responses": {
                     "200": {
-                        "description": "Returns characters's anime",
+                        "description": "Returns anime that character is in",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/character anime"
+                                }
                             }
                         }
                     },
@@ -627,10 +629,12 @@
                 "operationId": "getCharacterManga",
                 "responses": {
                     "200": {
-                        "description": "Returns characters's manga",
+                        "description": "Returns manga that character is in",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/character manga"
+                                }
                             }
                         }
                     },
@@ -640,18 +644,20 @@
                 }
             }
         },
-        "/characters/{id}/seiyuu": {
+        "/characters/{id}/voices": {
             "get": {
                 "tags": [
                     "characters"
                 ],
-                "operationId": "getCharacterSeiyuu",
+                "operationId": "getCharacterVoiceActors",
                 "responses": {
                     "200": {
-                        "description": "Returns characters's Seiyuu (voice actors)",
+                        "description": "Returns the character's voice actors",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/character voice actors"
+                                }
                             }
                         }
                     },
@@ -1140,12 +1146,24 @@
                     "people"
                 ],
                 "operationId": "getPersonById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns person resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/person"
+                                }
                             }
                         }
                     },
@@ -1166,7 +1184,9 @@
                         "description": "Returns person's anime staff positions",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/person anime"
+                                }
                             }
                         }
                     },
@@ -1187,7 +1207,9 @@
                         "description": "Returns person's voice acting roles",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/person voice acting roles"
+                                }
                             }
                         }
                     },
@@ -1205,10 +1227,12 @@
                 "operationId": "getPersonManga",
                 "responses": {
                     "200": {
-                        "description": "Returns person's published manga",
+                        "description": "Returns person's published manga works",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/person manga"
+                                }
                             }
                         }
                     },
@@ -1224,12 +1248,24 @@
                     "people"
                 ],
                 "operationId": "getPersonPictures",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a list of pictures of the person",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/person pictures"
+                                }
                             }
                         }
                     },
@@ -1731,13 +1767,15 @@
                     {
                         "name": "sfw",
                         "in": "query",
+                        "description": "Filter out Adult entries",
                         "schema": {
-                            "type": "string"
+                            "type": "boolean"
                         }
                     },
                     {
                         "name": "genres",
                         "in": "query",
+                        "description": "Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
                         "schema": {
                             "type": "string"
                         }
@@ -1759,6 +1797,7 @@
                     {
                         "name": "letter",
                         "in": "query",
+                        "description": "Return entries starting with the given letter",
                         "schema": {
                             "type": "string"
                         }
@@ -1766,6 +1805,7 @@
                     {
                         "name": "magazine",
                         "in": "query",
+                        "description": "Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
                         "schema": {
                             "type": "string"
                         }
@@ -2818,6 +2858,28 @@
                 },
                 "type": "object"
             },
+            "person pictures": {
+                "description": "Character Pictures",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "image_url": {
+                                    "description": "Default JPG Image Size URL",
+                                    "type": "string"
+                                },
+                                "large_image_url": {
+                                    "description": "Large JPG Image Size URL",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "random": {
                 "description": "Random Resources",
                 "properties": {
@@ -3435,13 +3497,13 @@
                 ]
             },
             "manga search query orderby": {
-                "description": "Manga Search Query OrderBy",
+                "description": "Manga search query order_by",
                 "type": "string",
                 "enum": [
                     "mal_id",
                     "title",
-                    "published.from",
-                    "published.to",
+                    "start_date",
+                    "end_date",
                     "chapters",
                     "volumes",
                     "score",
@@ -4017,6 +4079,28 @@
                 },
                 "type": "object"
             },
+            "character anime": {
+                "description": "Character casted in anime",
+                "properties": {
+                    "data": {
+                        "description": "The resource that this resource collects.",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "role": {
+                                    "description": "Character's Role",
+                                    "type": "string"
+                                },
+                                "anime": {
+                                    "$ref": "#/components/schemas/anime meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "characters search": {
                 "description": "Characters Search Resource",
                 "allOf": [
@@ -4036,6 +4120,28 @@
                         "type": "object"
                     }
                 ]
+            },
+            "character manga": {
+                "description": "Character casted in manga",
+                "properties": {
+                    "data": {
+                        "description": "The resource that this resource collects.",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "role": {
+                                    "description": "Character's Role",
+                                    "type": "string"
+                                },
+                                "manga": {
+                                    "$ref": "#/components/schemas/manga meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
             },
             "character": {
                 "description": "Character Resource",
@@ -4165,6 +4271,28 @@
                                     "type": "object"
                                 }
                             ]
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "character voice actors": {
+                "description": "Character voice actors",
+                "properties": {
+                    "data": {
+                        "description": "The resource that this resource collects.",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "language": {
+                                    "description": "Character's Role",
+                                    "type": "string"
+                                },
+                                "person": {
+                                    "$ref": "#/components/schemas/person meta"
+                                }
+                            },
+                            "type": "object"
                         }
                     }
                 },
@@ -4595,6 +4723,10 @@
                     },
                     "images": {
                         "$ref": "#/components/schemas/anime images"
+                    },
+                    "title": {
+                        "description": "Entry title",
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -4611,6 +4743,10 @@
                     },
                     "images": {
                         "$ref": "#/components/schemas/manga images"
+                    },
+                    "title": {
+                        "description": "Entry title",
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -4629,7 +4765,27 @@
                         "$ref": "#/components/schemas/character images"
                     },
                     "name": {
-                        "description": "Character name",
+                        "description": "Entry name",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "person meta": {
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/people images"
+                    },
+                    "name": {
+                        "description": "Entry name",
                         "type": "string"
                     }
                 },
@@ -5262,6 +5418,28 @@
                 },
                 "type": "object"
             },
+            "person anime": {
+                "description": "Person anime staff positions",
+                "properties": {
+                    "data": {
+                        "description": "The resource that this resource collects.",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "position": {
+                                    "description": "Person's position",
+                                    "type": "string"
+                                },
+                                "anime": {
+                                    "$ref": "#/components/schemas/anime meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "people search": {
                 "description": "People Search Resource",
                 "properties": {
@@ -5276,6 +5454,28 @@
                                 "$ref": "#/components/schemas/person"
                             }
                         ]
+                    }
+                },
+                "type": "object"
+            },
+            "person manga": {
+                "description": "Person's mangaography",
+                "properties": {
+                    "data": {
+                        "description": "The resource that this resource collects.",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "position": {
+                                    "description": "Person's position",
+                                    "type": "string"
+                                },
+                                "manga": {
+                                    "$ref": "#/components/schemas/manga meta"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -5296,30 +5496,7 @@
                         "type": "string"
                     },
                     "images": {
-                        "description": "Images",
-                        "properties": {
-                            "jpg": {
-                                "description": "Available images in JPG",
-                                "properties": {
-                                    "image_url": {
-                                        "description": "Image URL JPG (225x350)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "webp": {
-                                "description": "Available images in WEBP",
-                                "properties": {
-                                    "image_url": {
-                                        "description": "Image URL WEBP (225x350)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "type": "object"
+                        "$ref": "#/components/schemas/people images"
                     },
                     "name": {
                         "description": "Name",
@@ -5349,52 +5526,29 @@
                         "type": "integer"
                     },
                     "about": {
-                        "description": "Synopsis",
+                        "description": "Biography",
                         "type": "string"
-                    },
-                    "voice_acting_roles": {
+                    }
+                },
+                "type": "object"
+            },
+            "person voice acting roles": {
+                "description": "Person's voice acting roles",
+                "properties": {
+                    "data": {
+                        "description": "The resource that this resource collects.",
                         "type": "array",
                         "items": {
                             "properties": {
                                 "role": {
-                                    "description": "Role",
+                                    "description": "Person's Character's role in the anime",
                                     "type": "string"
                                 },
                                 "anime": {
-                                    "$ref": "#/components/schemas/mal_url"
+                                    "$ref": "#/components/schemas/anime meta"
                                 },
                                 "character": {
-                                    "$ref": "#/components/schemas/mal_url"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    },
-                    "anime_staff_positions": {
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "position": {
-                                    "description": "Position",
-                                    "type": "string"
-                                },
-                                "anime": {
-                                    "$ref": "#/components/schemas/mal_url"
-                                }
-                            },
-                            "type": "object"
-                        }
-                    },
-                    "published_manga": {
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "position": {
-                                    "description": "Position",
-                                    "type": "string"
-                                },
-                                "manga": {
-                                    "$ref": "#/components/schemas/mal_url"
+                                    "$ref": "#/components/schemas/character meta"
                                 }
                             },
                             "type": "object"

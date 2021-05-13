@@ -10,7 +10,31 @@ class CharacterMangaCollection extends ResourceCollection
 
     /**
      * The resource that this resource collects.
-
+     *
+     *  @OA\Schema(
+     *      schema="character manga",
+     *      description="Character casted in manga",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="array",
+     *
+     *          @OA\Items(
+     *              type="object",
+     *
+     *              @OA\Property(
+     *                  property="role",
+     *                  type="string",
+     *                  description="Character's Role"
+     *              ),
+     *              @OA\Property(
+     *                  property="manga",
+     *                  type="object",
+     *                  ref="#/components/schemas/manga meta"
+     *              ),
+     *          ),
+     *     ),
+     *  )
      */
     public $collects = 'App\Http\Resources\V4\CharacterMangaResource';
 

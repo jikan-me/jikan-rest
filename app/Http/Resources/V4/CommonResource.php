@@ -330,6 +330,11 @@ class CommonResource extends JsonResource
      *         type="object",
      *         ref="#/components/schemas/anime images",
      *     ),
+     *     @OA\Property(
+     *         property="title",
+     *         type="string",
+     *         description="Entry title"
+     *     ),
      * ),
      *
      * @OA\Schema(
@@ -349,6 +354,11 @@ class CommonResource extends JsonResource
      *         property="images",
      *         type="object",
      *         ref="#/components/schemas/manga images",
+     *     ),
+     *     @OA\Property(
+     *         property="title",
+     *         type="string",
+     *         description="Entry title"
      *     ),
      * ),
      *
@@ -373,7 +383,32 @@ class CommonResource extends JsonResource
      *     @OA\Property(
      *         property="name",
      *         type="string",
-     *         description="Character name"
+     *         description="Entry name"
+     *     ),
+     * ),
+     *
+     * @OA\Schema(
+     *     schema="person meta",
+     *     type="object",
+     *     @OA\Property(
+     *         property="mal_id",
+     *         type="integer",
+     *         description="MyAnimeList ID"
+     *     ),
+     *     @OA\Property(
+     *         property="url",
+     *         type="string",
+     *         description="MyAnimeList URL"
+     *     ),
+     *     @OA\Property(
+     *         property="images",
+     *         type="object",
+     *         ref="#/components/schemas/people images",
+     *     ),
+     *     @OA\Property(
+     *         property="name",
+     *         type="string",
+     *         description="Entry name"
      *     ),
      * ),
      *

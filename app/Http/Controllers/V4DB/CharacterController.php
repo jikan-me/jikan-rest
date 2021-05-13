@@ -38,7 +38,7 @@ class CharacterController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns manga resource",
+     *         description="Returns character resource",
      *         @OA\JsonContent(
      *              ref="#/components/schemas/character"
      *         )
@@ -115,8 +115,8 @@ class CharacterController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns characters's anime",
-     *         @OA\JsonContent()
+     *         description="Returns anime that character is in",
+     *         @OA\JsonContent(ref="#/components/schemas/character anime")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -179,6 +179,7 @@ class CharacterController extends Controller
         );
     }
 
+
     /**
      *  @OA\Get(
      *     path="/characters/{id}/manga",
@@ -187,8 +188,8 @@ class CharacterController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns characters's manga",
-     *         @OA\JsonContent()
+     *         description="Returns manga that character is in",
+     *         @OA\JsonContent(ref="#/components/schemas/character manga")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -252,14 +253,14 @@ class CharacterController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/characters/{id}/seiyuu",
-     *     operationId="getCharacterSeiyuu",
+     *     path="/characters/{id}/voices",
+     *     operationId="getCharacterVoiceActors",
      *     tags={"characters"},
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns characters's Seiyuu (voice actors)",
-     *         @OA\JsonContent()
+     *         description="Returns the character's voice actors",
+     *         @OA\JsonContent(ref="#/components/schemas/character voice actors")
      *     ),
      *     @OA\Response(
      *         response="400",

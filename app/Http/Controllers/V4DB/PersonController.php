@@ -27,10 +27,19 @@ class PersonController extends Controller
      *     operationId="getPersonById",
      *     tags={"people"},
      *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns person resource",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/person"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -105,7 +114,7 @@ class PersonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's anime staff positions",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/person anime")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -180,7 +189,7 @@ class PersonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's voice acting roles",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/person voice acting roles")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -254,8 +263,8 @@ class PersonController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns person's published manga",
-     *         @OA\JsonContent()
+     *         description="Returns person's published manga works",
+     *         @OA\JsonContent(ref="#/components/schemas/person manga")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -327,16 +336,47 @@ class PersonController extends Controller
      *     operationId="getPersonPictures",
      *     tags={"people"},
      *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of pictures of the person",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/person pictures"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
+     *
+     *  @OA\Schema(
+     *      schema="person pictures",
+     *      description="Character Pictures",
+     *      @OA\Property(
+     *          property="data",
+     *          type="array",
+     *
+     *          @OA\Items(
+     *              @OA\Property(
+     *                  property="image_url",
+     *                  type="string",
+     *                  description="Default JPG Image Size URL"
+     *              ),
+     *              @OA\Property(
+     *                  property="large_image_url",
+     *                  type="string",
+     *                  description="Large JPG Image Size URL"
+     *              ),
+     *          )
+     *      )
+     *  )
      */
     public function pictures(Request $request, int $id)
     {
