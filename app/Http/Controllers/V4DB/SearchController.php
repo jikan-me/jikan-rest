@@ -341,17 +341,18 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/search query sort")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="letter",
      *       in="query",
+     *       description="Return entries starting with the given letter",
      *       @OA\Schema(type="string")
      *     ),
      * 
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for people",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/people search")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -420,10 +421,11 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/search query sort")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="letter",
      *       in="query",
+     *       description="Return entries starting with the given letter",
      *       @OA\Schema(type="string")
      *     ),
      * 
@@ -698,10 +700,11 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/search query sort")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="letter",
      *       in="query",
+     *       description="Return entries starting with the given letter",
      *       @OA\Schema(type="string")
      *     ),
      * 

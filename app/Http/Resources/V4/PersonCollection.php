@@ -16,17 +16,23 @@ class PersonCollection extends ResourceCollection
      *
      *  @OA\Schema(
      *      schema="people search",
-     *      description="People Search Resource",
+     *      description="People Search",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
      *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/person"),
-     *          }
-     *     ),
+     *                   @OA\Items(
+     *                       allOf={
+     *                           @OA\Schema(ref="#/components/schemas/person"),
+     *                       }
+     *                   )
+     *              ),
+     *          )
+     *      }
      *  )
      */
     public $collects = 'App\Http\Resources\V4\PersonResource';

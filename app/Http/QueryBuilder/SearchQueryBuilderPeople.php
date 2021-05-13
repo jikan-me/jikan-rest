@@ -17,7 +17,7 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
      *   schema="people search query orderby",
      *   description="People Search Query OrderBy",
      *   type="string",
-     *   enum={"mal_id","name","birthday","member_favorites"}
+     *   enum={"mal_id","name","birthday","favorites"}
      * )
      */
     const ORDER_BY = [
