@@ -1865,6 +1865,7 @@
                     {
                         "name": "letter",
                         "in": "query",
+                        "description": "Return entries starting with the given letter",
                         "schema": {
                             "type": "string"
                         }
@@ -1875,7 +1876,9 @@
                         "description": "Returns search results for people",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/people search"
+                                }
                             }
                         }
                     },
@@ -1922,6 +1925,7 @@
                     {
                         "name": "letter",
                         "in": "query",
+                        "description": "Return entries starting with the given letter",
                         "schema": {
                             "type": "string"
                         }
@@ -2080,6 +2084,7 @@
                     {
                         "name": "letter",
                         "in": "query",
+                        "description": "Return entries starting with the given letter",
                         "schema": {
                             "type": "string"
                         }
@@ -3521,7 +3526,7 @@
                     "mal_id",
                     "name",
                     "birthday",
-                    "member_favorites"
+                    "favorites"
                 ]
             },
             "users search query gender": {
@@ -5441,22 +5446,28 @@
                 "type": "object"
             },
             "people search": {
-                "description": "People Search Resource",
-                "properties": {
-                    "data": {
-                        "description": "The resource that this resource collects.",
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/person"
+                "description": "People Search",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "description": "The resource that this resource collects.",
+                                "type": "array",
+                                "items": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/person"
+                                        }
+                                    ]
+                                }
                             }
-                        ]
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "person manga": {
                 "description": "Person's mangaography",
