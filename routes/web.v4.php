@@ -163,7 +163,7 @@ $router->group(
             'uses' => 'CharacterController@anime'
         ]);
 
-        $router->get('/seiyuu', [
+        $router->get('/voices', [
             'uses' => 'CharacterController@voices'
         ]);
 
@@ -193,7 +193,7 @@ $router->group(
             'uses' => 'PersonController@anime'
         ]);
 
-        $router->get('/seiyuu', [
+        $router->get('/voices', [
             'uses' => 'PersonController@voices'
         ]);
 
