@@ -97,7 +97,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $orderBy = $request->get('order_by');
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
-        $producer = $request->get('producer');
+        $producer = $request->get('producers');
         $minScore = $request->get('min_score');
         $maxScore = $request->get('max_score');
 
