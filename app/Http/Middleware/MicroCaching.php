@@ -31,7 +31,7 @@ class MicroCaching
             return $next($request);
         }
 
-        $fingerprint = "microcache::".HttpHelper::resolveRequestFingerprint($request);
+        $fingerprint = "microcache:".HttpHelper::resolveRequestFingerprint($request);
         if (Cache::has($fingerprint)) {
             return response()
                 ->json(
@@ -43,7 +43,7 @@ class MicroCaching
     }
 
     public static function setMicroCache($fingerprint, $cache) {
-        $fingerprint = "microcache::".$fingerprint;
+        $fingerprint = "microcache:".$fingerprint;
         $cache = json_encode($cache);
 
         Cache::add($fingerprint, $cache, env('MICROCACHING_EXPIRE', 5));

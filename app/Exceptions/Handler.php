@@ -77,6 +77,8 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof ConnectException) {
+            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
+
             return response()
                 ->json([
                     'status' => $e->getCode(),
@@ -98,8 +100,6 @@ class Handler extends ExceptionHandler
                         'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
                     ], 500);
         }
-
-
 
         // BadResponseException from Guzzle dep via Jikan PHP API
         // This is basically the response MyAnimeList returns to Jikan
