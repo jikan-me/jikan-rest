@@ -76,10 +76,8 @@ $app->routeMiddleware([
 //    'cache-resolver' => App\Http\Middleware\CacheResolver::class,
 //    'throttle' => App\Http\Middleware\Throttle::class,
 //    'etag' => \App\Http\Middleware\EtagMiddleware::class,
-//    'microcaching' => \App\Http\Middleware\MicroCaching::class,
-//    'database-resolver' => \App\Http\Middleware\DatabaseResolver::class,
-    'source-data-manager' => \App\Http\Middleware\SourceDataManager::class,
-//    'source-health-monitor' => \App\Http\Middleware\SourceHeartbeatMonitor::class
+    'microcaching' => \App\Http\Middleware\MicroCaching::class,
+    'source-health-monitor' => \App\Http\Middleware\SourceHeartbeatMonitor::class
 ]);
 
 /*
@@ -142,11 +140,10 @@ $commonMiddleware = [
 //    'meta',
 //    'etag',
 //    'database-resolver',
-//    'microcaching',
 //    'cache-resolver',
 //    'throttle'
-//    'source-health-monitor'
-//    'source-data-manager'
+    'microcaching',
+    'source-health-monitor'
 ];
 
 
