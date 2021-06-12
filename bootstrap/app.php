@@ -91,38 +91,30 @@ $app->routeMiddleware([
 |
 */
 
+if (env('CACHING')) {
+    $app->configure('cache');
+    $app->register(Illuminate\Redis\RedisServiceProvider::class);
+}
+
 $app->configure('database');
 $app->configure('queue');
 $app->configure('controller-to-table-mapping');
 $app->configure('controller');
 
 $app->register(\SwaggerLume\ServiceProvider::class);
-
-if (env('CACHING')) {
-    $app->configure('cache');
-    $app->register(Illuminate\Redis\RedisServiceProvider::class);
-}
-
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+$app->register(\App\Providers\SourceHeartbeatProvider::class);
 
 $guzzleClient = new \GuzzleHttp\Client([
     'timeout' => env('SOURCE_TIMEOUT', 5),
     'connect_timeout' => env('SOURCE_CONNECT_TIMEOUT', 5)
 ]);
-$app->instance('GuzzleClient', $guzzleClient);
 
+$app->instance('GuzzleClient', $guzzleClient);
 $jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
 $app->instance('JikanParser', $jikan);
 
 $app->instance('SerializerV4', SerializerFactory::createV4());
-
-$app->register(\App\Providers\SourceHeartbeatProvider::class);
-
-
-/**
- * Load Blacklist into Redis
- */
-//\App\HttpV3\Middleware\Blacklist::loadList(); causing issues on high load todo: add it as a one time init
 
 /*
 |--------------------------------------------------------------------------
@@ -142,8 +134,8 @@ $commonMiddleware = [
 //    'database-resolver',
 //    'cache-resolver',
 //    'throttle'
-    'microcaching',
-    'source-health-monitor'
+    'source-health-monitor',
+    'microcaching'
 ];
 
 
@@ -174,7 +166,13 @@ $app->router->group(
                 'github_url' => 'https://github.com/jikan-me/jikan-rest',
                 'parser_github_url' => 'https://github.com/jikan-me/jikan',
                 'production_api_url' => 'https://api.jikan.moe/v4/',
-                'status_url' => 'https://status.jikan.moe'
+                'status_url' => 'https://status.jikan.moe',
+                'myanimelist_heartbeat' => [
+                    'status' => \App\Providers\SourceHeartbeatProvider::getHeartbeatStatus(),
+                    'score' => \App\Providers\SourceHeartbeatProvider::getHeartbeatScore(),
+                    'down' => \App\Providers\SourceHeartbeatProvider::isFailoverEnabled(),
+                    'last_downtime' => \App\Providers\SourceHeartbeatProvider::getLastDowntime()
+                ]
             ]);
         });
     }

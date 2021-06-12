@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Http\HttpHelper;
 use Closure;
 use Illuminate\Support\Facades\Cache;
+use Jikan\Exception\BadResponseException;
 
 class MicroCaching
 {
@@ -17,35 +18,38 @@ class MicroCaching
      */
     public function handle($request, Closure $next)
     {
-
         if ($request->header('auth') === env('APP_KEY')) {
             return $next($request);
         }
 
-        if (!env('CACHING')) {
+        if (
+            !env('CACHING')
+            || !env('MICROCACHING')
+            || env('CACHE_DRIVER') !== 'redis'
+        )
             return $next($request);
-        }
-
-        // Microcaching should not work alongside redis caching
-        if (!env('MICROCACHING', false) || env('CACHE_DRIVER', 'file') === 'redis') {
-            return $next($request);
-        }
 
         $fingerprint = "microcache:".HttpHelper::resolveRequestFingerprint($request);
-        if (Cache::has($fingerprint)) {
+
+        // if cache exists, return cache
+        if (app('redis')->exists($fingerprint)) {
             return response()
                 ->json(
-                    json_decode(Cache::get($fingerprint), true)
+                   \json_decode(app('redis')->get($fingerprint), true)
                 );
         }
+
+        // set cache
+        app('redis')->set(
+            $fingerprint,
+            json_encode(
+                $next($request)->getData()
+            )
+        );
+
+        app('redis')->expire($fingerprint, env('MICROCACHING_EXPIRE', 5));
 
         return $next($request);
     }
 
-    public static function setMicroCache($fingerprint, $cache) {
-        $fingerprint = "microcache:".$fingerprint;
-        $cache = json_encode($cache);
-
-        Cache::add($fingerprint, $cache, env('MICROCACHING_EXPIRE', 5));
-    }
 }

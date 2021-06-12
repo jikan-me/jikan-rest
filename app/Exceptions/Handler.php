@@ -180,7 +180,7 @@ class Handler extends ExceptionHandler
      */
     private function set404Cache(Request $request, BadResponseException $e)
     {
-        if (!env('CACHING')) {
+        if (!env('CACHING') || env('MICROCACHING')) {
             return;
         }
 
