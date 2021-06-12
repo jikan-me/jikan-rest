@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Http\HttpHelper;
 use Closure;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 
 class MicroCaching
 {
@@ -31,11 +31,11 @@ class MicroCaching
             return $next($request);
         }
 
-        $fingerprint = "microcache:".HttpHelper::resolveRequestFingerprint($request);
-        if (app('redis')->exists($fingerprint)) {
+        $fingerprint = "microcache::".HttpHelper::resolveRequestFingerprint($request);
+        if (Cache::has($fingerprint)) {
             return response()
                 ->json(
-                    json_decode(app('redis')->get($fingerprint), true)
+                    json_decode(Cache::get($fingerprint), true)
                 );
         }
 
@@ -43,10 +43,9 @@ class MicroCaching
     }
 
     public static function setMicroCache($fingerprint, $cache) {
-        $fingerprint = "microcache:".$fingerprint;
+        $fingerprint = "microcache::".$fingerprint;
         $cache = json_encode($cache);
 
-        app('redis')->set($fingerprint, $cache);
-        app('redis')->expire($fingerprint, env('MICROCACHING_EXPIRE', 5));
+        Cache::add($fingerprint, $cache, env('MICROCACHING_EXPIRE', 5));
     }
 }
