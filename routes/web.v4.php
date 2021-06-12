@@ -12,7 +12,13 @@ $router->get('/', function () use ($router) {
         'github_url' => 'https://github.com/jikan-me/jikan-rest',
         'parser_github_url' => 'https://github.com/jikan-me/jikan',
         'production_api_url' => 'https://api.jikan.moe/v4/',
-        'status_url' => 'https://status.jikan.moe'
+        'status_url' => 'https://status.jikan.moe',
+        'myanimelist_heartbeat' => [
+            'status' => \App\Providers\SourceHeartbeatProvider::getHeartbeatStatus(),
+            'score' => \App\Providers\SourceHeartbeatProvider::getHeartbeatScore(),
+            'down' => \App\Providers\SourceHeartbeatProvider::isFailoverEnabled(),
+            'last_downtime' => \App\Providers\SourceHeartbeatProvider::getLastDowntime()
+        ]
     ]);
 });
 

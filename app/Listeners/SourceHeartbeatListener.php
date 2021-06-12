@@ -86,7 +86,7 @@ class SourceHeartbeatListener
     {
         $score = $this->getSuccessfulRequestsScore();
 
-        if ($score >= 0.9) {
+        if ($score >= env('SOURCE_GOOD_HEALTH_SCORE', 0.9)) {
             $this->disableFailover();
             $this->logger->debug('Failover disabled; Score: '.$score);
             $this->logger->debug('Failover DISABLED');
