@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\SourceHeartbeatMonitor;
 use App\Providers\SerializerFactory;
 use PackageVersions\Versions;
 
@@ -58,7 +59,6 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -77,7 +77,7 @@ $app->routeMiddleware([
 //    'throttle' => App\Http\Middleware\Throttle::class,
 //    'etag' => \App\Http\Middleware\EtagMiddleware::class,
     'microcaching' => \App\Http\Middleware\MicroCaching::class,
-    'source-health-monitor' => \App\Http\Middleware\SourceHeartbeatMonitor::class
+    'source-health-monitor' => SourceHeartbeatMonitor::class
 ]);
 
 /*

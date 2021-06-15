@@ -20,6 +20,7 @@
         "laravel/lumen-framework": "^7.0",
         "league/flysystem": "^1.0",
         "ocramius/package-versions": "^1.4",
+        "patreon/patreon": "^1.0",
         "predis/predis": "^1.1",
         "symfony/yaml": "^4.1",
         "vlucas/phpdotenv": "^4",
