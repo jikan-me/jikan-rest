@@ -16,7 +16,7 @@ class SourceHeartbeatMonitor
      */
     public function handle($request, Closure $next)
     {
-        event(new SourceHeartbeatEvent(SourceHeartbeatEvent::GOOD_HEALTH, 500));
+        event(new SourceHeartbeatEvent(SourceHeartbeatEvent::GOOD_HEALTH, 200));
 
         return $next($request);
     }
