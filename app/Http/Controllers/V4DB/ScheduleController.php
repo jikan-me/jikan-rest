@@ -143,7 +143,7 @@ class ScheduleController extends Controller
         $this->request = $request;
 
         $page = $this->request->get('page') ?? 1;
-        $limit = (int) $this->request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
+        $limit = $this->request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
 
         if (!is_null($day)) {
             $this->day = strtolower($day);
@@ -178,7 +178,7 @@ class ScheduleController extends Controller
 
         $results = $results
             ->paginate(
-                $limit,
+                (int) $limit,
                 ['*'],
                 null,
                 $page
