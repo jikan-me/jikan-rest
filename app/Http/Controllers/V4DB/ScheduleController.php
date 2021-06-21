@@ -178,7 +178,7 @@ class ScheduleController extends Controller
 
         $results = $results
             ->paginate(
-                (int) $limit,
+                intval($limit),
                 ['*'],
                 null,
                 $page
