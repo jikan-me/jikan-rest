@@ -142,6 +142,9 @@ class ScheduleController extends Controller
     {
         $this->request = $request;
 
+        $page = $this->request->get('page') ?? 1;
+        $limit = $this->request->get('limit') ?? (int) env('MAX_RESULTS_PER_PAGE', 25);
+
         if (!is_null($day)) {
             $this->day = strtolower($day);
         }
@@ -173,8 +176,16 @@ class ScheduleController extends Controller
                 ->where('broadcast', 'Not scheduled once per week');
         }
 
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
         $response = (new AnimeCollection(
-            $results->get()
+            $results
         ))->response();
 
         return $this->prepareResponse(
