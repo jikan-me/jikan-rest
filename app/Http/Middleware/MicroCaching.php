@@ -23,6 +23,13 @@ class MicroCaching
         }
 
         if (
+            empty($request->segments())
+            || !isset($request->segments()[1])
+        ) {
+            return $next($request);
+        }
+
+        if (
             !env('CACHING')
             || !env('MICROCACHING')
             || env('CACHE_DRIVER') !== 'redis'
