@@ -37,7 +37,7 @@ class AnimeCollection extends ResourceCollection
 
     private $pagination;
 
-    public function __construct(LengthAwarePaginator $resource)
+    public function __construct($resource)
     {
         $this->pagination = [
             'last_visible_page' => $resource->lastPage(),

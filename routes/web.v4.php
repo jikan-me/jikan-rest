@@ -22,6 +22,31 @@ $router->get('/', function () use ($router) {
     ]);
 });
 
+/*$router->group( @todo secure sensitive endpoints
+    [
+        'prefix' => 'patreon'
+    ],
+    function () use ($router) {
+        $router->get('/oauth', [
+            'uses' => 'PatreonController@login'
+        ]);
+
+        $router->get('/url', [
+            'uses' => 'PatreonController@url'
+        ]);
+
+        $router->get('/campaigns', [
+            'uses' => 'PatreonController@campaigns'
+        ]);
+
+        $router->get('/pledges', [
+            'uses' => 'PatreonController@pledges'
+        ]);
+    }
+);*/
+
+
+
 $router->get('/anime', [
     'uses' => 'SearchController@anime'
 ]);

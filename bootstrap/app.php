@@ -116,6 +116,7 @@ $app->instance('JikanParser', $jikan);
 
 $app->instance('SerializerV4', SerializerFactory::createV4());
 
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
