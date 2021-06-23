@@ -6,23 +6,24 @@ use App\Http\HttpHelper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Schedule\ScheduleRequest;
+use Jikan\Request\Seasonal\SeasonalRequest;
 
 
-class AnimeScheduleIndexer extends Command
+class CurrentSeasonIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
      * @var string
      */
-    protected $signature = 'indexer:anime-schedule';
+    protected $signature = 'indexer:anime-current-season';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Index anime schedule';
+    protected $description = 'Index anime in current season';
 
     /**
      * Create a new command instance.
@@ -42,16 +43,16 @@ class AnimeScheduleIndexer extends Command
     public function handle()
     {
 
-        echo "Note: AnimeScheduleIndexer makes sure anime currently airing are upto update so the schedules endpoint returns fresh information\n\n";
+        echo "Note: CurrentSeasonIndexer makes sure anime in current season are upto update so the /seasons/now endpoint returns fresh information\n\n";
 
         /**
-         * Schedule
+         * Current Season
          */
-        echo "Fetching Schedule...\n";
+        echo "Fetching Current Season...\n";
         $results = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getSchedule(new ScheduleRequest()),
+                    ->getSeasonal(new SeasonalRequest()),
                 'json'
             ),
             true
@@ -62,31 +63,22 @@ class AnimeScheduleIndexer extends Command
             return;
         }
 
-        $anime = [];
-
-        foreach ($results as $day) {
-            foreach ($day as $entry) {
-                $anime[] = $entry;
-            }
-        }
-
-        $i = 1;
+        $anime = $results['anime'];
         $itemCount = count($anime);
-        echo "Anime currently airing: {$itemCount} entries\n";
-        foreach ($anime as $entry) {
+        echo "Anime in current season: {$itemCount} entries\n";
+        foreach ($anime as $i => $entry) {
             $url = env('APP_URL') . "/v4/anime/{$entry['mal_id']}";
 
             file_get_contents($url);
             sleep(3); // prevent rate-limit
 
-            echo "Updating {$i}/{$itemCount} \r";
+            echo "Updating {$i}/{$itemCount} [{$entry['mal_id']} - {$entry['title']}] \r";
             try {
             } catch (\Exception $e) {
                 echo "[SKIPPED] Failed to fetch {$url}";
             }
-            $i++;
         }
 
-        echo str_pad("Indexing complete", 10).PHP_EOL;
+        echo str_pad("Indexing complete", 100).PHP_EOL;
     }
 }

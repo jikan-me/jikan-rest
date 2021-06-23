@@ -14,6 +14,7 @@ class SourceHeartbeatMonitor
      * @param \Closure $next
      * @return mixed
      */
+
     public function handle($request, Closure $next)
     {
         event(new SourceHeartbeatEvent(SourceHeartbeatEvent::GOOD_HEALTH, 200));
