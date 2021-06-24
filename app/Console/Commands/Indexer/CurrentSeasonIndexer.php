@@ -72,10 +72,10 @@ class CurrentSeasonIndexer extends Command
             file_get_contents($url);
             sleep(3); // prevent rate-limit
 
-            echo "Updating {$i}/{$itemCount} [{$entry['mal_id']} - {$entry['title']}] \r";
+            echo "Updating {$i}/{$itemCount} {$url} [{$entry['mal_id']} - {$entry['title']}] \n";
             try {
             } catch (\Exception $e) {
-                echo "[SKIPPED] Failed to fetch {$url}";
+                echo "[SKIPPED] Failed to fetch {$url}\n";
             }
         }
 
