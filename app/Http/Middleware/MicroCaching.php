@@ -33,8 +33,9 @@ class MicroCaching
             !env('CACHING')
             || !env('MICROCACHING')
             || env('CACHE_DRIVER') !== 'redis'
-        )
+        ) {
             return $next($request);
+        }
 
         $fingerprint = "microcache:".HttpHelper::resolveRequestFingerprint($request);
 

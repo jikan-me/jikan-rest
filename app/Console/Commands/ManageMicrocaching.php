@@ -42,10 +42,14 @@ class ManageMicrocaching extends Command
             return;
         }
 
+        if (!env('CACHING') || env('CACHE_DRIVER') !== 'redis') {
+            $this->error('Could not enable MICROCACHING. CACHING must be set to true and CACHE_DRIVER must be redis');
+        }
+
         $enabled = $this->argument('status') === 'enable';
 
         if ($enabled === env('MICROCACHING')) {
-            $this->error("MICROCASHING is already '{$this->argument('status')}'");
+            $this->error("MICROCACHING is already '{$this->argument('status')}'");
             return;
         }
 
