@@ -117,6 +117,11 @@ class SourceHeartbeatListener
         // remove any fails greater than SOURCE_BAD_HEALTH_RANGE
         foreach ($fails as $fail) {
 
+            if (!isset($fail[0])) {
+                unset($fail);
+                continue;
+            }
+
             if ($fail[0] >= (time()-env('SOURCE_BAD_HEALTH_RANGE'))) {
                 unset($fail);
             }
