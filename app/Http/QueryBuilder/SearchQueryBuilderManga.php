@@ -15,7 +15,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="manga search query type",
-     *   description="Manga Search Query Type",
+     *   description="Available Manga types",
      *   type="string",
      *   enum={"manga","novel", "lightnovel", "oneshot","doujin","manhwa","manhua"}
      * )
@@ -33,7 +33,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="manga search query status",
-     *   description="Manga Search Query Status",
+     *   description="Available Manga statuses",
      *   type="string",
      *   enum={"publishing","complete","hiatus","discontinued","upcoming"}
      * )
@@ -49,14 +49,25 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="manga search query orderby",
-     *   description="Manga search query order_by",
+     *   description="Available Manga order_by properties",
      *   type="string",
      *   enum={"mal_id", "title", "start_date", "end_date", "chapters", "volumes", "score", "scored_by", "rank", "popularity", "members", "favorites"}
      * )
      */
 
     const ORDER_BY = [
-        'mal_id', 'title', 'published.from', 'published.to', 'chapters', 'volumes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
+        'mal_id' => 'mal_id',
+        'title' => 'title',
+        'start_date' => 'published.from',
+        'end_date' => 'published.to',
+        'chapters' => 'chapters',
+        'volumes' => 'volumes',
+        'score' => 'score',
+        'scored_by' => 'scored_by',
+        'rank' => 'rank',
+        'popularity' => 'popularity',
+        'members' => 'members',
+        'favorites' => 'favorites'
     ];
 
     public static function query(Request $request, Builder $results) : Builder
@@ -68,7 +79,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         $status = self::mapStatus($request->get('status'));
         $sfw = $request->get('sfw');
         $genres = $request->get('genres');
-        $orderBy = $request->get('order_by');
+        $orderBy = self::mapOrderBy($request->get('order_by'));
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
         $magazine = $request->get('magazines');
@@ -90,7 +101,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
                 ->where('title', 'like', "{$letter}%");
         }
 
-        if (empty($query)) {
+        if (empty($query) && is_null($orderBy)) {
             $results = $results
                 ->orderBy('mal_id');
         }
@@ -203,36 +214,46 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         ];
     }
 
+    /**
+     * @param string|null $type
+     * @return string|null
+     */
     public static function mapType(?string $type = null) : ?string
     {
-        if (!is_null($type)) {
-            return null;
-        }
-
         $type = strtolower($type);
 
         return self::MAP_TYPES[$type] ?? null;
     }
 
+    /**
+     * @param string|null $status
+     * @return string|null
+     */
     public static function mapStatus(?string $status = null) : ?string
     {
-        if (!is_null($status)) {
-            return null;
-        }
-
         $status = strtolower($status);
 
         return self::MAP_STATUS[$status] ?? null;
     }
 
+    /**
+     * @param string|null $sort
+     * @return string|null
+     */
     public static function mapSort(?string $sort = null) : ?string
     {
-        if (!is_null($sort)) {
-            return null;
-        }
-
         $sort = strtolower($sort);
 
         return $sort === 'desc' ? 'desc' : 'asc';
+    }
+    /**
+     * @param string|null $orderBy
+     * @return string|null
+     */
+    public static function mapOrderBy(?string $orderBy) : ?string
+    {
+        $orderBy = strtolower($orderBy);
+
+        return self::ORDER_BY[$orderBy] ?? null;
     }
 }

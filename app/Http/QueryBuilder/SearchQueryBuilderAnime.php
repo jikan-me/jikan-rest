@@ -22,7 +22,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="anime search query type",
-     *   description="Anime Search Query Type",
+     *   description="Available Anime types",
      *   type="string",
      *   enum={"tv","movie","ova","special","ona","music"}
      * )
@@ -39,7 +39,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="anime search query status",
-     *   description="Anime Search Query Status",
+     *   description="Available Anime statuses",
      *   type="string",
      *   enum={"airing","complete","upcoming"}
      * )
@@ -53,7 +53,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="anime search query rating",
-     *   description="Anime Search Query Rating",
+     *   description="Available Anime ratings\n\n<b>Ratings</b>\n<ul><li>G - All Ages</li><li>PG - Children</li><li>PG-13 - Teens 13 or older</li><li>R - 17+ (violence & profanity)</li><li>R+ - Mild Nudity</li><li>Rx - Hentai</li></ul>",
      *   type="string",
      *   enum={"g","pg","pg13","r17","r","rx"}
      * )
@@ -70,13 +70,25 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     /**
      * @OA\Schema(
      *   schema="anime search query orderby",
-     *   description="Anime search query order_by",
+     *   description="Available Anime order_by properties",
      *   type="string",
      *   enum={"mal_id", "title", "type", "rating", "start_date", "end_date", "episodes", "score", "scored_by", "rank", "popularity", "members", "favorites" }
      * )
      */
     const ORDER_BY = [
-        'mal_id', 'title', 'type', 'rating', 'aired.from', 'aired.to', 'episodes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'
+        'mal_id' => 'mal_id',
+        'title' => 'title',
+        'type' => 'type',
+        'rating' => 'rating',
+        'start_date' => 'aired.from',
+        'end_date' => 'aired.to',
+        'episodes' => 'episodes',
+        'score' => 'score',
+        'scored_by' => 'scored_by',
+        'rank' => 'rank',
+        'popularity' => 'popularity',
+        'members' => 'members',
+        'favorites' => 'favorites'
     ];
 
     /**
@@ -94,7 +106,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $rating = self::mapRating($request->get('rating'));
         $sfw = $request->get('sfw');
         $genres = $request->get('genres');
-        $orderBy = $request->get('order_by');
+        $orderBy = self::mapOrderBy($request->get('order_by'));
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
         $producer = $request->get('producers');
@@ -116,7 +128,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 ->where('title', 'like', "{$letter}%");
         }
 
-        if (empty($query)) {
+        if (empty($query) && is_null($orderBy)) {
             $results = $results
                 ->orderBy('mal_id');
         }
@@ -283,5 +295,16 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $sort = strtolower($sort);
 
         return $sort === 'desc' ? 'desc' : 'asc';
+    }
+
+    /**
+     * @param string|null $orderBy
+     * @return string|null
+     */
+    public static function mapOrderBy(?string $orderBy) : ?string
+    {
+        $orderBy = strtolower($orderBy);
+
+        return self::ORDER_BY[$orderBy] ?? null;
     }
 }

@@ -7,27 +7,42 @@ use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
 
+/**
+ * Class SearchQueryBuilderPeople
+ * @package App\Http\QueryBuilder
+ */
 class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
 {
 
+    /**
+     *
+     */
     const MAX_RESULTS_PER_PAGE = 25;
 
     /**
      * @OA\Schema(
      *   schema="people search query orderby",
-     *   description="People Search Query OrderBy",
+     *   description="Available People order_by properties",
      *   type="string",
-     *   enum={"mal_id","name","birthday","favorites"}
+     *   enum={"mal_id", "name", "birthday", "favorites"}
      * )
      */
     const ORDER_BY = [
-        'mal_id', 'name', 'birthday', 'member_favorites'
+        'mal_id' => 'mal_id',
+        'name' => 'name',
+        'birthday' => 'birthday',
+        'favorites' => 'member_favorites'
     ];
 
+    /**
+     * @param Request $request
+     * @param Builder $results
+     * @return Builder
+     */
     public static function query(Request $request, Builder $results) : Builder
     {
         $query = $request->get('q');
-        $orderBy = $request->get('order_by');
+        $orderBy = self::mapOrderBy($request->get('order_by'));
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
 
@@ -46,11 +61,10 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
                 ->where('name', 'like', "{$letter}%");
         }
 
-        if (empty($query)) {
+        if (empty($query) && is_null($orderBy)) {
             $results = $results
                 ->orderBy('mal_id');
         }
-
 
         if (!is_null($orderBy)) {
             $results = $results
@@ -60,10 +74,25 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
         return $results;
     }
 
+    /**
+     * @param string|null $sort
+     * @return string|null
+     */
     public static function mapSort(?string $sort = null) : ?string
     {
         $sort = strtolower($sort);
 
         return $sort === 'desc' ? 'desc' : 'asc';
+    }
+
+    /**
+     * @param string|null $orderBy
+     * @return string|null
+     */
+    public static function mapOrderBy(?string $orderBy) : ?string
+    {
+        $orderBy = strtolower($orderBy);
+
+        return self::ORDER_BY[$orderBy] ?? null;
     }
 }
