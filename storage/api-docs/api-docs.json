@@ -3380,7 +3380,7 @@
                 ]
             },
             "anime search query type": {
-                "description": "Anime Search Query Type",
+                "description": "Available Anime types",
                 "type": "string",
                 "enum": [
                     "tv",
@@ -3392,7 +3392,7 @@
                 ]
             },
             "anime search query status": {
-                "description": "Anime Search Query Status",
+                "description": "Available Anime statuses",
                 "type": "string",
                 "enum": [
                     "airing",
@@ -3401,7 +3401,7 @@
                 ]
             },
             "anime search query rating": {
-                "description": "Anime Search Query Rating",
+                "description": "Available Anime ratings\\n\\n<b>Ratings</b>\\n<ul><li>G - All Ages</li><li>PG - Children</li><li>PG-13 - Teens 13 or older</li><li>R - 17+ (violence & profanity)</li><li>R+ - Mild Nudity</li><li>Rx - Hentai</li></ul>",
                 "type": "string",
                 "enum": [
                     "g",
@@ -3413,7 +3413,7 @@
                 ]
             },
             "anime search query orderby": {
-                "description": "Anime search query order_by",
+                "description": "Available Anime order_by properties",
                 "type": "string",
                 "enum": [
                     "mal_id",
@@ -3432,12 +3432,12 @@
                 ]
             },
             "characters search query orderby": {
-                "description": "Characters Search Query OrderBy",
+                "description": "Available Character order_by properties",
                 "type": "string",
                 "enum": [
                     "mal_id",
                     "name",
-                    "member_favorites"
+                    "favorites"
                 ]
             },
             "club search query type": {
@@ -3479,7 +3479,7 @@
                 ]
             },
             "manga search query type": {
-                "description": "Manga Search Query Type",
+                "description": "Available Manga types",
                 "type": "string",
                 "enum": [
                     "manga",
@@ -3492,7 +3492,7 @@
                 ]
             },
             "manga search query status": {
-                "description": "Manga Search Query Status",
+                "description": "Available Manga statuses",
                 "type": "string",
                 "enum": [
                     "publishing",
@@ -3503,7 +3503,7 @@
                 ]
             },
             "manga search query orderby": {
-                "description": "Manga search query order_by",
+                "description": "Available Manga order_by properties",
                 "type": "string",
                 "enum": [
                     "mal_id",
@@ -3521,7 +3521,7 @@
                 ]
             },
             "people search query orderby": {
-                "description": "People Search Query OrderBy",
+                "description": "Available People order_by properties",
                 "type": "string",
                 "enum": [
                     "mal_id",
