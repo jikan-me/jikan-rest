@@ -21,7 +21,7 @@ class CreateMangaTable extends Migration
             $table->index('title');
             $table->index('title_english');
             $table->index('title_japanese');
-            $table->enum('type', ['Manga', 'Novel', 'One-shot', 'Doujinshi', 'Manhwa', 'Manhua', 'OEL']);
+            $table->enum('type', ['Manga', 'Novel', 'Light Novel', 'One-shot', 'Doujinshi', 'Manhwa', 'Manhua', 'OEL']);
             $table->integer('chapters')->index('chapters');
             $table->integer('volumes')->index('volumes');
             $table->string('status')->index();

@@ -17,12 +17,13 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
      *   schema="manga search query type",
      *   description="Manga Search Query Type",
      *   type="string",
-     *   enum={"manga","novel","oneshot","doujin","manhwa","manhua"}
+     *   enum={"manga","novel", "lightnovel", "oneshot","doujin","manhwa","manhua"}
      * )
      */
     const MAP_TYPES = [
         'manga' => 'Manga',
         'novel' => 'Novel',
+        'lightnovel' => 'Light Novel',
         'oneshot' => 'One-shot',
         'doujin' => 'Doujinshi',
         'manhwa' => 'Manhwa',
