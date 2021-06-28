@@ -29,6 +29,24 @@ class CreatePeopleTable extends Migration
             $table->index('voice_acting_roles');
             $table->index('anime_staff_positions');
             $table->index('published_manga');
+            $table->index([
+                'name' => 'text',
+                'given_name' => 'text',
+                'family_name' => 'text',
+                'alternate_names' => 'text',
+            ],
+                'people_search_index',
+                null,
+                [
+                    'weights' => [
+                        'name' => 50,
+                        'given_name' => 10,
+                        'family_name' => 10,
+                        'alternate_names' => 1
+                    ],
+                    'name' => 'people_search_index'
+                ]
+            );
         });
     }
 
