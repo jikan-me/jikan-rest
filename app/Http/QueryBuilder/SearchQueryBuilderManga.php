@@ -89,11 +89,16 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         if (!empty($query) && is_null($letter)) {
 
             $results = $results
-                ->whereRaw([
-                    '$text' => [
-                        '$search' => $query
-                    ]
-                ]);
+                ->where('title', 'like', "%{$query}%")
+                ->orWhere('title_english', 'like', "%{$query}%")
+                ->orWhere('title_japanese', 'like', "%{$query}%")
+                ->orWhere('title_synonyms', 'like', "%{$query}%");
+//            $results = $results
+//                ->whereRaw([
+//                    '$text' => [
+//                        '$search' => $query
+//                    ]
+//                ]);
         }
 
         if (!is_null($letter)) {

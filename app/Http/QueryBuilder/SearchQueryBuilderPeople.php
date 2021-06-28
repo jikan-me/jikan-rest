@@ -49,11 +49,16 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
         if (!empty($query) && is_null($letter)) {
 
             $results = $results
-                ->whereRaw([
-                    '$text' => [
-                        '$search' => $query
-                    ]
-                ]);
+                ->where('name', 'like', "%{$query}%")
+                ->orWhere('given_name', 'like', "%{$query}%")
+                ->orWhere('family_name', 'like', "%{$query}%")
+                ->orWhere('alternate_names', 'like', "%{$query}%");
+//            $results = $results
+//                ->whereRaw([
+//                    '$text' => [
+//                        '$search' => $query
+//                    ]
+//                ]);
         }
 
         if (!is_null($letter)) {
