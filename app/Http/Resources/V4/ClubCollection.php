@@ -26,15 +26,6 @@ class ClubCollection extends ResourceCollection
      *      schema="clubs search",
      *      description="Clubs Search Resource",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
-     *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/club"),
-     *          }
-     *     ),
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(

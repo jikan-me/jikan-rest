@@ -3484,6 +3484,7 @@
                 "enum": [
                     "manga",
                     "novel",
+                    "lightnovel",
                     "oneshot",
                     "doujin",
                     "manhwa",
@@ -3494,7 +3495,7 @@
                 "description": "Manga Search Query Status",
                 "type": "string",
                 "enum": [
-                    "airing",
+                    "publishing",
                     "complete",
                     "hiatus",
                     "discontinued",
@@ -3615,7 +3616,6 @@
                     {
                         "properties": {
                             "data": {
-                                "description": "The resource that this resource collects.",
                                 "type": "array",
                                 "items": {
                                     "$ref": "#/components/schemas/anime"
@@ -3951,7 +3951,6 @@
                 "description": "Anime Statistics Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "properties": {
                             "watching": {
                                 "description": "Number of users watching the resource",
@@ -3978,7 +3977,6 @@
                                 "type": "integer"
                             },
                             "scores": {
-                                "description": "Transform the resource into an array.",
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -4032,10 +4030,8 @@
                 "description": "Anime Videos Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "properties": {
                             "promos": {
-                                "description": "Transform the resource into an array.",
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -4051,7 +4047,6 @@
                                 }
                             },
                             "episodes": {
-                                "description": "Transform the resource into an array.",
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -4088,7 +4083,6 @@
                 "description": "Character casted in anime",
                 "properties": {
                     "data": {
-                        "description": "The resource that this resource collects.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -4115,7 +4109,6 @@
                     {
                         "properties": {
                             "data": {
-                                "description": "The resource that this resource collects.",
                                 "type": "array",
                                 "items": {
                                     "$ref": "#/components/schemas/character"
@@ -4130,7 +4123,6 @@
                 "description": "Character casted in manga",
                 "properties": {
                     "data": {
-                        "description": "The resource that this resource collects.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -4285,7 +4277,6 @@
                 "description": "Character voice actors",
                 "properties": {
                     "data": {
-                        "description": "The resource that this resource collects.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -4305,21 +4296,6 @@
             },
             "clubs search": {
                 "description": "Clubs Search Resource",
-                "properties": {
-                    "data": {
-                        "description": "Transform the resource collection into an array.",
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/club"
-                            }
-                        ]
-                    }
-                },
-                "type": "object",
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/pagination"
@@ -4327,7 +4303,6 @@
                     {
                         "properties": {
                             "data": {
-                                "description": "Transform the resource collection into an array.",
                                 "type": "array",
                                 "items": {
                                     "$ref": "#/components/schemas/club"
@@ -4342,7 +4317,6 @@
                 "description": "Club Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "properties": {
                             "mal_id": {
                                 "description": "MyAnimeList ID",
@@ -4945,7 +4919,6 @@
                 "description": "Forum Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -5010,7 +4983,6 @@
                 "description": "Genres Collection Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource collection into an array.",
                         "type": "object",
                         "allOf": [
                             {
@@ -5050,7 +5022,6 @@
                 "description": "Magazine Collection Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource collection into an array.",
                         "type": "object",
                         "allOf": [
                             {
@@ -5090,7 +5061,6 @@
                 "description": "Manga Characters Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -5117,7 +5087,6 @@
                     {
                         "properties": {
                             "data": {
-                                "description": "The resource that this resource collects.",
                                 "type": "array",
                                 "items": {
                                     "allOf": [
@@ -5301,7 +5270,6 @@
                 "description": "Manga Statistics Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "properties": {
                             "reading": {
                                 "description": "Number of users reading the resource",
@@ -5328,7 +5296,6 @@
                                 "type": "integer"
                             },
                             "scores": {
-                                "description": "Transform the resource into an array.",
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -5359,7 +5326,6 @@
                 "description": "More Info Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "properties": {
                             "moreinfo": {
                                 "description": "Additional information on the entry",
@@ -5427,7 +5393,6 @@
                 "description": "Person anime staff positions",
                 "properties": {
                     "data": {
-                        "description": "The resource that this resource collects.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -5454,7 +5419,6 @@
                     {
                         "properties": {
                             "data": {
-                                "description": "The resource that this resource collects.",
                                 "type": "array",
                                 "items": {
                                     "allOf": [
@@ -5473,7 +5437,6 @@
                 "description": "Person's mangaography",
                 "properties": {
                     "data": {
-                        "description": "The resource that this resource collects.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -5547,7 +5510,6 @@
                 "description": "Person's voice acting roles",
                 "properties": {
                     "data": {
-                        "description": "The resource that this resource collects.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -5572,10 +5534,8 @@
                 "description": "Pictures Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "properties": {
                             "jpg": {
-                                "description": "Transform the resource into an array.",
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -5592,7 +5552,6 @@
                                 }
                             },
                             "webp": {
-                                "description": "Transform the resource into an array.",
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -5618,7 +5577,6 @@
                 "description": "Producer Collection Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource collection into an array.",
                         "type": "object",
                         "allOf": [
                             {
@@ -5657,7 +5615,6 @@
             "users history": {
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -5699,6 +5656,7 @@
                 "type": "object"
             },
             "history manga": {
+                "description": "Transform the resource into an array.",
                 "properties": {
                     "mal_id": {
                         "description": "MyAnimeList ID",
@@ -5723,9 +5681,9 @@
                 "type": "object"
             },
             "user history": {
+                "description": "Transform the resource into an array.",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -5936,7 +5894,6 @@
                 "description": "Recommendations Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "type": "array",
                         "items": {
                             "properties": {
@@ -5975,12 +5932,10 @@
                 "description": "Entry Recommendations Resource",
                 "properties": {
                     "data": {
-                        "description": "Transform the resource into an array.",
                         "type": "array",
                         "items": {
                             "properties": {
                                 "entry": {
-                                    "description": "Transform the resource into an array.",
                                     "properties": {
                                         "mal_id": {
                                             "description": "Recommended MyAnimeList ID",
@@ -6211,7 +6166,6 @@
                     {
                         "properties": {
                             "data": {
-                                "description": "Transform the resource into an array.",
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -6255,7 +6209,6 @@
                     },
                     {
                         "property": "data",
-                        "description": "Transform the resource into an array.",
                         "type": "array",
                         "items": {
                             "properties": {
