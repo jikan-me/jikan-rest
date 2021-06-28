@@ -34,9 +34,11 @@ class SearchQueryBuilderCharacter implements SearchQueryBuilderInterface
         if (!empty($query) && is_null($letter)) {
 
             $results = $results
-                ->where('name', 'like', "%{$query}%")
-                ->orWhere('name_kanji', 'like', "%{$query}%")
-                ->orWhere('nicknames', 'like', "%{$query}%");
+                ->whereRaw([
+                    '$text' => [
+                        '$search' => $query
+                    ]
+                ]);
         }
 
         if (!is_null($letter)) {

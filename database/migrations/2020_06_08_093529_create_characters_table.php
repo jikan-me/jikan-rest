@@ -23,9 +23,20 @@ class CreateCharactersTable extends Migration
             $table->index('nicknames');
             $table->integer('member_favorites')->index('member_favorites');
             $table->string('about')->nullable();
-            $table->index('animeography');
-            $table->index('mangaography');
-            $table->index('voice_actors');
+            $table->index([
+                'name' => 'text',
+                'nicknames' => 'text',
+            ],
+                'characters_search_index',
+                null,
+                [
+                    'weights' => [
+                        'name' => 50,
+                        'nicknames' => 10,
+                    ],
+                    'name' => 'characters_search_index'
+                ]
+            );
         });
     }
 
