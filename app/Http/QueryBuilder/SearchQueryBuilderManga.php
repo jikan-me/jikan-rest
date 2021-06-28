@@ -35,11 +35,11 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
      *   schema="manga search query status",
      *   description="Manga Search Query Status",
      *   type="string",
-     *   enum={"airing","complete","hiatus","discontinued","upcoming"}
+     *   enum={"publishing","complete","hiatus","discontinued","upcoming"}
      * )
      */
     const MAP_STATUS = [
-        'airing' => 'Publishing',
+        'publishing' => 'Publishing',
         'complete' => 'Finished',
         'hiatus' => 'On Hiatus',
         'discontinued' => 'Discontinued',
