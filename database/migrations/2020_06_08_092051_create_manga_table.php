@@ -27,13 +27,15 @@ class CreateMangaTable extends Migration
             $table->string('status')->index();
             $table->boolean('publishing');
             $table->float('score')->index('score');
-            $table->integer('rank')->index('rank')->nullable();
+            $table->float('scored_by')->index('scored_by');
+            $table->integer('rank')->index('rank');
             $table->integer('popularity')->index('popularity');
             $table->integer('members')->index('members');
             $table->integer('favorites')->index('favorites');
             $table->string('synopsis')->nullable();
             $table->string('background')->nullable();
-            $table->index('genres');
+            $table->index('genres.mal_id');
+            $table->index('serializations.mal_id');
             $table->index(['published.from' => 1], 'start_date');
             $table->index(['published.to' => 1], 'end_date');
             $table->index([
