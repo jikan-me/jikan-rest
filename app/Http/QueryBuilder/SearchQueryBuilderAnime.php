@@ -116,7 +116,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         if (!empty($query) && is_null($letter)) {
 
             $results = $results
-                ->whereRaw((string)[
+                ->whereRaw([
                     '$text' => [
                         '$search' => $query
                     ]
