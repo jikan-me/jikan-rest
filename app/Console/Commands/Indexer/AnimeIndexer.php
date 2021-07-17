@@ -71,7 +71,7 @@ class AnimeIndexer extends Command
                     echo "[SKIPPED] Failed to fetch {$url} - {$response['error']}\n";
                 }
 
-                sleep(1);
+                sleep(3);
             } catch (\Exception $e) {
                 echo "[SKIPPED] Failed to fetch {$url}\n";
             }
