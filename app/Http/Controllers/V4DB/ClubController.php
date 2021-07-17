@@ -78,7 +78,7 @@ class ClubController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Club::query()
-                    ->where('request_hash', $this->fingerprint)
+                    ->where('mal_id', $id)
                     ->update($response);
             }
 

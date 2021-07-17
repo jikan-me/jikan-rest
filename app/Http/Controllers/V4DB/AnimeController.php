@@ -111,7 +111,7 @@ class AnimeController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Anime::query()
-                    ->where('request_hash', $this->fingerprint)
+                    ->where('mal_id', $id)
                     ->update($response);
             }
 

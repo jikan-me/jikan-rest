@@ -103,7 +103,7 @@ class MangaController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Manga::query()
-                    ->where('request_hash', $this->fingerprint)
+                    ->where('mal_id', $id)
                     ->update($response);
             }
 

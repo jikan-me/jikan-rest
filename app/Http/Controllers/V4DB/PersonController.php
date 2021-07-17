@@ -81,7 +81,7 @@ class PersonController extends Controller
 
             if ($this->isExpired($request, $results)) {
                 Person::query()
-                    ->where('request_hash', $this->fingerprint)
+                    ->where('mal_id', $id)
                     ->update($response);
             }
 
