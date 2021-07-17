@@ -9,8 +9,13 @@ use App\Http\HttpResponse;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\AnimeResource;
 use App\Http\Resources\V4\CharacterCollection;
+use App\Http\Resources\V4\CharacterResource;
+use App\Http\Resources\V4\CommonResource;
 use App\Http\Resources\V4\MangaCollection;
+use App\Http\Resources\V4\MangaResource;
 use App\Http\Resources\V4\PersonCollection;
+use App\Http\Resources\V4\PersonResource;
+use App\Http\Resources\V4\ProfileResource;
 use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\UserCollection;
 use App\Manga;
@@ -66,7 +71,6 @@ class RandomController extends Controller
     {
         $sfw = $request->get('sfw');
 
-
         $results = Anime::query();
 
         if (!is_null($sfw)) {
@@ -77,8 +81,8 @@ class RandomController extends Controller
         $results = $results
             ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
 
-        return new AnimeCollection(
-            $results
+        return new AnimeResource(
+            $results->first()
         );
     }
 
@@ -114,8 +118,8 @@ class RandomController extends Controller
         $results = $results
             ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
 
-        return new MangaCollection(
-            $results
+        return new MangaResource(
+            $results->first()
         );
     }
 
@@ -138,12 +142,11 @@ class RandomController extends Controller
      */
     public function characters(Request $request)
     {
-
         $results = Character::query()
             ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
 
-        return new CharacterCollection(
-            $results
+        return new CharacterResource(
+            $results->first()
         );
     }
 
@@ -166,12 +169,11 @@ class RandomController extends Controller
      */
     public function people(Request $request)
     {
-
         $results = Person::query()
             ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
 
-        return new PersonCollection(
-            $results
+        return new PersonResource(
+            $results->first()
         );
     }
 
@@ -194,12 +196,11 @@ class RandomController extends Controller
      */
     public function users(Request $request)
     {
-
         $results = Profile::query()
             ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
 
-        return new UserCollection(
-            $results
+        return new ProfileResource(
+            $results->first()
         );
     }
 }
