@@ -9,6 +9,14 @@ use Jikan\Exception\BadResponseException;
 
 class MicroCaching
 {
+    private const NO_CACHING = [
+        'RandomController@anime',
+        'RandomController@manga',
+        'RandomController@characters',
+        'RandomController@people',
+        'RandomController@users',
+    ];
+
     /**
      * Handle an incoming request.
      *
@@ -18,6 +26,12 @@ class MicroCaching
      */
     public function handle($request, Closure $next)
     {
+        $route = explode('\\', $request->route()[1]['uses']);
+        $route = end($route);
+        if (\in_array($route, self::NO_CACHING)) {
+            return $next($request);
+        }
+
         if ($request->header('auth') === env('APP_KEY')) {
             return $next($request);
         }
