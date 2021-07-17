@@ -104,14 +104,23 @@ $app->configure('controller');
 $app->register(\SwaggerLume\ServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(\App\Providers\SourceHeartbeatProvider::class);
+$app->register(Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
 
-$guzzleClient = new \GuzzleHttp\Client([
-    'timeout' => env('SOURCE_TIMEOUT', 5),
-    'connect_timeout' => env('SOURCE_CONNECT_TIMEOUT', 5)
-]);
+// Guzzle removed as of lumen 8.x
+//$guzzleClient = new \GuzzleHttp\Client([
+//    'timeout' => env('SOURCE_TIMEOUT', 5),
+//    'connect_timeout' => env('SOURCE_CONNECT_TIMEOUT', 5)
+//]);
+//$app->instance('GuzzleClient', $guzzleClient);
 
-$app->instance('GuzzleClient', $guzzleClient);
-$jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
+$httpClient = \Symfony\Component\HttpClient\HttpClient::create(
+    [
+        'timeout' => env('SOURCE_TIMEOUT', 1)
+    ]
+);
+$app->instance('HttpClient', $httpClient);
+
+$jikan = new \Jikan\MyAnimeList\MalClient(app('HttpClient'));
 $app->instance('JikanParser', $jikan);
 
 $app->instance('SerializerV4', SerializerFactory::createV4());
