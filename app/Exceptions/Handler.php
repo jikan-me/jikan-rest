@@ -16,6 +16,7 @@ use Jikan\Exception\ParserException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Predis\Connection\ConnectionException;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\HttpClient\Exception\TimeoutException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\Cache;
 
@@ -159,6 +160,16 @@ class Handler extends ExceptionHandler
                     'message' => 'Invalid or incomplete request. Please double check the request documentation',
                     'error' => null
                 ], 400);
+        }
+
+        if ($e instanceof TimeoutException) {
+            return response()
+                ->json([
+                    'status' => 408,
+                    'type' => 'TimeoutException',
+                    'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds)',
+                    'error' => $e->getMessage()
+                ], 408);
         }
 
         if ($e instanceof Exception) {
