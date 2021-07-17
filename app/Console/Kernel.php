@@ -8,9 +8,11 @@ use App\Console\Commands\BlacklistRemove;
 use App\Console\Commands\ClearQueuedJobs;
 use App\Console\Commands\CacheRemove;
 use App\Console\Commands\CommonIndexing;
+use App\Console\Commands\Indexer\AnimeIndexer;
 use App\Console\Commands\Indexer\AnimeScheduleIndexer;
 use App\Console\Commands\Indexer\CommonIndexer;
 use App\Console\Commands\Indexer\CurrentSeasonIndexer;
+use App\Console\Commands\Indexer\MangaIndexer;
 use App\Console\Commands\Indexer\ScheduleIndexer;
 use App\Console\Commands\ManageMicrocaching;
 use App\Console\Commands\ModifyCacheDriver;
@@ -34,7 +36,9 @@ class Kernel extends ConsoleKernel
         CommonIndexer::class,
         AnimeScheduleIndexer::class,
         CurrentSeasonIndexer::class,
-        ManageMicrocaching::class
+        ManageMicrocaching::class,
+        AnimeIndexer::class,
+        MangaIndexer::class
     ];
 
     /**
