@@ -108,27 +108,40 @@ If you don't want to host your instance, there's a public API available.
 Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
 
 ---
-## Backers
+# Backers
 
-## Sugoi (すごい) Backers
-Thank you to all our **Sugoi (すごい)** backers! 🙏 [[Become a sugoi backer](https://patreon.com/jikan)]
+A huge thank you to all our Patrons! 🙏 This project wouldn't be running without your support.
+
+We have a free [REST API service](https://jikan.moe), if you wish to support us you can [become a Patron!](https://patreon.com/jikan)
+
+## Sugoi (すごい) Patrons
+
 - [Jared Allard (jaredallard)](https://github.com/jaredallard)
 - [hugonun (hug_onun)](https://twitter.com/hug_onun)
 
-## Backers
-Thank you to all our backers! 🙏 [[Become a backer](https://patreon.com/jikan)]
-- [PurplePinapples](https://github.com/purplepinapples/)
-- [Barkdoll (Jesse)](https://github.com/barkdoll/)
-- [Piotr Szymczak (Drutol)](https://github.com/Drutol)
-- [Jason Weatherly (jamesthebard)](https://twitter.com/jamesthebard)
-- [Cesar Irad Mendoza (aberuwu)](https://github.com/aberuwu)
+## Patrons
 
-## Sponsors
-Thank you to all our sponsors! [[Become a sponsor](https://patreon.com/jikan)]
-- [Hibiki Matsujo](https://github.com/assintates)
+- Aaron Treinish
+- Cesar Irad Mendoza
+- Jason Weatherly
+- Jesse
+- Kundan Chintamaneni
+- Kururin
+- Purplepinapples
+- Sakamotodesu
+- TeraNovaLP
+
+## Development
+
+|||
+|------------|----------|
+| ![JetBrain](https://user-images.githubusercontent.com/9166451/126047249-9e5bdc63-ae91-4082-bca5-ffe271b421da.png) | Jikan's development is powered by [JetBrain's Open Source License](https://jb.gg/OpenSource) |
+
+A shoutout to their amazing products and for supporting Jikan since early versions!
 
 ---
 
-## DISCLAIMER
-- Jikan is not affiliated with MyAnimeList.net 
+# DISCLAIMER
+
+- Jikan is not affiliated with MyAnimeList.net
 - You are responsible for the usage of this API. Please be respectful towards MyAnimeList's [Terms Of Service](https://myanimelist.net/about/terms_of_use)
