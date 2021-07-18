@@ -11,7 +11,10 @@ For an entire list of commands, you can run `php artisan list`
     - [Remove](#cache-remove)
     - [Change Cache Driver](#cache-change-cache-driver)
     - [Change Cache Method](#cache-change-cache-method)
-
+- [Indexer](#indexer)
+    - [Anime](#anime)
+    - [Manga](#manga)
+  
 ## Commands
 
 ### Serve
@@ -57,3 +60,52 @@ Command: `cache:method {method}`
 Example: `cache:method queue`
 
 [Read more on how it works](https://github.com/jikan-me/jikan-rest/blob/master/README.md#06-configuring-how-jikan-handles-expired-cache-optional)
+
+
+#### Indexer: Anime
+Since v4 uses MongoDB as a means to index cache on some endpoints, having a built cache is important since it
+works best for endpoints like search or top.
+
+`Indexer:Anime` uses [https://github.com/seanbreckenridge/mal-id-cache](https://github.com/seanbreckenridge/mal-id-cache) to fetch available MAL IDs and indexes them.
+
+This function only needs to be run once. Any entry's cache updating will automatically be taken care of if it's expired, and a client makes a request for that entry.
+
+⚠ This is strictly for performance and experience and providing better search functionality. Don't build your own anime database as that's against MyAnimeList's Terms of Service.
+
+Command:
+```
+indexer:anime
+    {--failed : Run only entries that failed to index last time}
+    {--resume : Resume from the last position}
+    {--reverse : Start from the end of the array}
+    {--index=0 : Start from a specific index}
+    {--delay=3 : Set a delay between requests}
+```
+
+Example: `indexer:anime --reverse --delay=5 --failed`
+
+This translates to running entries that previously failed to index or update, in reverse, with a delay of 5 seconds between each request.
+
+#### Indexer: Manga
+Since v4 uses MongoDB as a means to index cache on some endpoints, having a built cache is important since it
+works best for endpoints like search or top.
+
+`Indexer:Manga` uses [https://github.com/seanbreckenridge/mal-id-cache](https://github.com/seanbreckenridge/mal-id-cache) to fetch available MAL IDs and indexes them.
+
+This function only needs to be run once. Any entry's cache updating will automatically be taken care of if it's expired, and a client makes a request for that entry.
+
+⚠ This is strictly for performance and experience and providing better search functionality. Don't build your own anime database as that's against MyAnimeList's Terms of Service.
+
+Command:
+```
+indexer:anime
+    {--failed : Run only entries that failed to index last time}
+    {--resume : Resume from the last position}
+    {--reverse : Start from the end of the array}
+    {--index=0 : Start from a specific index}
+    {--delay=3 : Set a delay between requests}
+```
+
+Example: `indexer:manga`
+
+This simply translates to running the indexer without any additional configuration.
