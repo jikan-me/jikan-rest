@@ -51,9 +51,8 @@ class MangaIndexer extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      * @throws FileNotFoundException
-     * @throws CommandAlreadyRunningException
      */
     public function handle()
     {
