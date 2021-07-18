@@ -9,7 +9,7 @@ You probably have a low RAM resource, switch over to file caching `CACHE_DRIVER=
 
 Redis throws this error even if you have about 1/4 of your RAM free. This is because it does a background save of your entire Redis cache - which is stored in-memory and which fails without the sufficient required memory.
 
-You can stop Redis from haggling you and override that by running the following command: `redis-cli config set stop-writes-on-bgsave-error`
+You can stop Redis from haggling you and override that by running the following command: `redis-cli config set stop-writes-on-bgsave-error no`
 
 **2. Jikan is failing to cache (when `CACHE_DRIVER=file`) because the "disk is out of space" - but you're sure you have enough space available.**
 
@@ -43,6 +43,9 @@ And then reload the supervisor configuration:
 
 If Redis is taking too long to restart, follow this: https://stackoverflow.com/a/45069100/2326811 and then start it `sudo service redis start`
 
+## My local instance is returning HTTP 503
+
+ This is an error forwarded from MAL, it typically happens when MAL is down. The Jikan response body includes the HTTP status from MAL, like: `[HTTP code] on [request url]` 
 
 ## I want to clear the cache in Jikan
 `php artisan cache:clear`

@@ -2,15 +2,21 @@ FORMAT: 1A
 HOST: https://api.jikan.moe/v3
 
 # Jikan
-[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. 
-It's built on the Lumen microframework, uses Redis for caching and is powered by the [Jikan PHP API](https://github.com/jikan-me/jikan).
+[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. It scrapes the website to satisfy the need for an API - which MyAnimeList lacks.
+
+The word Jikan literally translates to Time in Japanese (時間). And that's what this API saves you of. ;)
+
+Notice: Jikan does not support authenticated requests. You can not update your lists.
+
+⚡ Jikan is powered thanks to all  its [backers](https://github.com/jikan-me/jikan#sugoi-%E3%81%99%E3%81%94%E3%81%84-backers)! 🙏 [[Become a backer]](https://patreon.com/jikan)
 
 
+## 
 **API Path:** `https://api.jikan.moe/v3`
 
-**API Version**: `v3.4 RC`
+**API Version**: `v3.4`
 
-[Status](https://status.jikan.moe) | [Report an Issue](https://github.com/jikan-me/jikan-rest/issues/new) | **[Discord](https://discordapp.com/invite/4tvCr36)**
+[Status](https://status.jikan.moe) | [Report an Issue](https://github.com/jikan-me/jikan-rest/issues/new) | **[Discord](http://discord.jikan.moe)**
 
 
 # Information
@@ -18,25 +24,12 @@ It's built on the Lumen microframework, uses Redis for caching and is powered by
 ## Links
 - [Jikan.moe](https://jikan.moe)
 - [About](https://jikan.moe/about)
-- [Projects/Apps using Jikan](https://jikan.moe/showcase)
+- [Stuff using Jikan](https://jikan.moe/showcase)
 
 
 ## Wrappers
-- [PHP API - JikanPHP](https://github.com/jikan-me/jikan/) by [Contributors](https://github.com/jikan-me/jikan/graphs/contributors)
-- [Python - JikanPy](https://github.com/AWConant/jikanpy) by Andrew Conant & abhinavk99 (Abhinav Kasamsetty)
-- [Ruby - Jikan.rb](https://github.com/Zerocchi/jikan.rb) by Zerocchi
-- [.NET/C# - Jikan.Net](https://github.com/Ervie/jikan.net) by Ervie (Bartłomiej Buchała)
-- [JavaScript - JikanJs](https://github.com/zuritor/jikanjs) by zuritor (Sven)
-- [Java - Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs
-- [PHP - Jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe
-- [NodeJS - Jikan-node](https://github.com/xy137/jikan-node) by xy137
-- [Dart - Jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol
-- [TypeScript - Jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard
-- [TypeScript - jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco
-- [Go - Jikan-go](https://github.com/darenliang/jikan-go) by Daren Liang
-- [Go - jikan2go](https://github.com/nokusukun/Jikan2Go) by nokusukun
 
-[Add your wrapper here!](https://github.com/jikan-me/jikan-rest/edit/master/apiary.apib)
+Wrappers are available in more than 10 different languages, see the [Wrapper List](https://github.com/jikan-me/jikan#wrappers)
 
 ## Rate Limiting
 Daily Limit: **Unlimited**
@@ -73,7 +66,7 @@ If you're not comfortable being that restrictive, consider setting up your own J
 
 ## Caching
 
-By "caching", we refer to the data parsed from MyAnimeList that is cached temporarily on our servers for performance/faster responses.
+By "caching", we refer to the data parsed from MyAnimeList that is cached temporarily on our servers for better performance.
 
 All requests by default are cached for **24 hours** except for a few API endpoints which have their own unique cache expiry time.
 
@@ -96,7 +89,7 @@ Header | Remarks
 
 **FAQ: Why is `X-Request-Cache-Ttl` negative?**
 
-Jikan REST API v3.3+ uses a different caching logic. If the cache expires, it queues a job in the background to update the cache.
+If the cache expires, it queues a job in the background to update the cache.
 So you're getting stale cache until the cache update completes.
 
 
@@ -120,11 +113,13 @@ Furthermore, [JikanAuth](https://github.com/jikan-me/jikan-auth) is a PHP API wh
 # HTTP Response
 - 200 `OK` - the request was successful.
 - 304 `Not Modified` - You have the latest data
-- 400 `Bad Request` - You've made an invalid request or to an invalid endpoint.
-- 404 `Not Found` - MyAnimeList responded with a 404
-- 405 `Method Not Allowed` - requested method is not supported for resource.
-- 429 `Too Many Requests` - You are being rate limited or Jikan is being rate-limited by MyAnimeList
-- 500 `Internal Server Error` - Something broke on our end :(
+- 400 `Bad Request` - You’ve made an invalid request
+- 404 `Not Found` - Resource not found, i.e MyAnimeList responded with a 404
+- 405 `Method Not Allowed` - requested method is not supported for resource
+- 429 `Too Many Requests` - You are being rate limited or Jikan is being rate limited by MyAnimeList (either is specified in the error message)
+- 500 `Internal Server Error` - Something is not working on our end, please open a Github issue by clicking on the generated `report_url`
+- 503 `Service Unavailable` - Something is not working on MyAnimeList’s end. MyAnimeList is either down/unavailable or is refusing to connect
+
 
 # JSON Error Response
 This is a typical error response
@@ -186,7 +181,6 @@ A single anime object with all its details
 | `/userupdates` | Page number (integer) | List of the latest list updates made by users |
 
 
-
 #### Remarks
 
 ##### `/episodes`
@@ -198,10 +192,10 @@ A single anime object with all its details
 - Only 20 items are shown per page for reviews
 
 ### Examples
-- `/anime/1/characters_staff` // Returns the list of characters and staff
-- `/anime/1/episodes` // Defaults to the 1st page
-- `/anime/1/episodes/1` // Same as above
-- `/anime/1/episodes/2` // Returns 2nd page if there's any
+- `/anime/1/characters_staff` - Returns the list of characters and staff
+- `/anime/1/episodes` - Defaults to the 1st page
+- `/anime/1/episodes/1` - Same as above
+- `/anime/1/episodes/2` - Returns 2nd page if there's any
 
 
 ### Fetch Resource [GET]
@@ -234,7 +228,7 @@ A single manga object with all its details
 | userupdates | Page number (integer) | Latest list updates made by users |
 
 ### Example Calls
-- `/manga/1/characters` // Returns the list of characters and staff
+- `/manga/1/characters` Returns the list of characters and staff
 
 
 #### Remarks 
@@ -432,13 +426,18 @@ Read more about them [here](https://myanimelist.net/info.php?go=mpaa)
 |  | **Thriller:** `45` |
 
 #### Examples
+- `/search/manga?q=Grand%20Blue&page=1` - Search manga for 'Grand Blue'
+- `/search/anime?q=Fate/Zero&page=1` - Search anime for 'Fate/Zero'
+- `/search/people/?q=Sawashiro&limit=3` - Search people for 'Sawashiro', limit to 3 results
+- `/search/anime?q=Boku&page=1&genre=12&genre_exclude=0` - Filter out NSFW entries by using the `genre` and `genre_exclude` parameters
 
-`/search/manga?q=Grand%20Blue&page=1`
+In many cases, if you want to filter results by a condition, you can provide an empty query (`q=`) with the `order_by` and `sort` parameters:
 
-`/search/anime?q=Fate/Zero&page=1`
+- `/search/anime?q=&order_by=members&sort=desc&page=1` - Search for all anime, ordered by popularity (members, descending)
+- `/search/anime?q=&page=1&genre=1,10&order_by=start_date&sort=desc` - Search for all anime which have both Genre 1 and 10 (Action, Fantasy), order by most recently released
 
-`/search/people/?q=Sawashiro&limit=3`
-
+#### Remarks
+- The `last_page` field is the same as what is avaiable on the MAL Search page, its often paginated to 20 pages if there are too many results.
 
 ### Search Request Example+Schema [GET]
 
@@ -451,7 +450,6 @@ Read more about them [here](https://myanimelist.net/info.php?go=mpaa)
         [
  
         ]
-        
 
 ## Season [/season/{year}/{season}]
 Anime of the specified season
@@ -475,7 +473,6 @@ Anime of the specified season
         [
  
         ]
-        
 ## Season Archive [/season/archive]
 All the years & their respective seasons that can be parsed from MyAnimeList
 
@@ -724,15 +721,11 @@ Just pass it as `yyyy-00-00` or `yyyy-mm-00`. e.g `2018-00-00`, `2018-12-00`
 
 
 #### Examples
-`/user/nekomata1037` - Parses Profile
-
-`/user/nekomata1037/profile` (alias)
-
-`/user/nekomata1037/history` - Parses user history (anime+manga)
-
-`/user/nekomata1037/history/anime` - Parses user history (anime only)
-
-`/user/nekomata1037/friends` - Parses user friends
+- `/user/nekomata1037` - Parses Profile
+- `/user/nekomata1037/profile` (alias)
+- `/user/nekomata1037/history` - Parses user history (anime+manga)
+- `/user/nekomata1037/history/anime` - Parses user history (anime only)
+- `/user/nekomata1037/friends` - Parses user friends
 
 The request below will return 404 because I don't have that many friends on MAL to generate a second page.
 `/user/nekomata1037/friends/2` - Parses user friends (from page 2)
@@ -742,11 +735,9 @@ The request below will return 404 because I don't have that many friends on MAL 
 
 Lists are paginated (300 items per page).
 
-`/user/nekomata1037/animelist/all` - All anime in user list
-
-`/user/nekomata1037/animelist/all/2` - Page 2
-
-`/user/nekomata1037/mangalist/reading` - Manga that I'm currently reading
+- `/user/nekomata1037/animelist/all` - All anime in user list
+- `/user/nekomata1037/animelist/all/2` - Page 2
+- `/user/nekomata1037/mangalist/reading` - Manga that I'm currently reading
 
 ### User Request Example+Schema [GET]
 + Parameters

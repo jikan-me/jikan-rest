@@ -1,6 +1,6 @@
 ![Jikan](http://i.imgur.com/ctoJ3Jp.png)
 # Jikan - Unofficial MyAnimeList.net REST API
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^%207.1-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](https://discordapp.com/invite/4tvCr36)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^%207.1-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe/)
 
 Jikan is a REST API for [MyAnimeList.net](https://myanimelist.net). It scrapes the website to satisfy the need for an API - which MyAnimeList lacks.
 
@@ -34,7 +34,7 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 
 ### Requirements
 
-- PHP 7.1+
+- PHP 7.1-7.3
 - [Composer](https://getcomposer.org/download/)
 - [Redis](https://redis.io)
 - [Supervisord](http://supervisord.org/) (optional)
@@ -55,7 +55,8 @@ This is specifically for Ubuntu, but other distributions should work similarly.
     - If `add-apt-repository` is not installed, you can install it by doing `sudo apt install python-software-properties` or `sudo apt install software-properties-common`
   - `sudo apt update && sudo apt upgrade`
   - Install requirements: `sudo apt install curl git php redis unzip`
-  - Verify that PHP 7.1+ is installed: `php -v`
+  - Verify that PHP 7.1-7.3 is installed: `php -v` (PHP 7.4 is not currently supported)
+    - If not, install it by running `sudo apt install php7.3` and change the default PHP version with `sudo update-alternatives --set php /usr/bin/php7.3`
   - Install the corresponding `php-xml` and `php-mbstring` packages for your version, e.g:
     - PHP 7.1: `sudo apt install php7.1-xml php7.1-mbstring`
     - PHP 7.3: `sudo apt install php7.3-xml php7.3-mbstring`
@@ -169,11 +170,11 @@ stderr_logfile=/var/www/jikan-is-installed-here/storage/logs/worker.error.log
 
 ## Troubleshooting
 Please read the [troubleshooting guide](https://github.com/jikan-me/jikan-rest/blob/master/TROUBLESHOOTING.md).
-For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
+For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
 ## Artisan Commands
 Please read the [commands guide](https://github.com/jikan-me/jikan-rest/blob/master/COMMANDS.MD).
-For any additional help, join our [Discord server](https://discord.gg/4q8E4Gg).
+For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
 ## Information
 If you don't want to host your instance, there's a public API available.
@@ -182,20 +183,8 @@ If you don't want to host your instance, there's a public API available.
 - **[Apps/Projects using JikanREST](https://jikan.moe/showcase)**
 
 ## Wrappers
-- **[.NET]** [Jikan.net](https://github.com/Ervie/jikan.net) by Ervie
-- **[Python]** [JikanPy](https://github.com/AWConant/jikanpy) by Andrew Conant & Abhinav Kasamsetty
-- **[Ruby]** [Jikan.rb](https://github.com/Zerocchi/jikan.rb) by Zerocchi
-- **[JavaScript]** [JikanJS](https://github.com/zuritor/jikanjs) by Zuritor
-- **[Java]** [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs
-- **[PHP]** [jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe
-- **[Node.js]** [jikan-node](https://github.com/xy137/jikan-node) by xy137
-- **[Dart]** [jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol
-- **[TypeScript]** [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard
-- **[TypeScript]** [jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco
-- **[Go]** [jikan-go](https://github.com/darenliang/jikan-go) by Daren Liang
-- **[Elixir]** [JikanEx](https://github.com/seanbreckenridge/jikan_ex) by Sean Breckenridge
 
-[Add your wrapper here](https://github.com/jikan-me/jikan/edit/master/readme.md)
+See the list of wrappers [here](https://github.com/jikan-me/jikan#wrappers)
 
 ## Running Tests
 
@@ -204,27 +193,41 @@ If you don't want to host your instance, there's a public API available.
 Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
 
 ---
-## Backers
 
-## Sugoi (すごい) Backers
-Thank you to all our **Sugoi (すごい)** backers! 🙏 [[Become a sugoi backer](https://patreon.com/jikan)]
+# Backers
+
+A huge thank you to all our Patrons! 🙏 This project wouldn't be running without your support.
+
+We have a free [REST API service](https://jikan.moe), if you wish to support us you can [become a Patron!](https://patreon.com/jikan)
+
+## Sugoi (すごい) Patrons
+
 - [Jared Allard (jaredallard)](https://github.com/jaredallard)
 - [hugonun (hug_onun)](https://twitter.com/hug_onun)
 
-## Backers
-Thank you to all our backers! 🙏 [[Become a backer](https://patreon.com/jikan)]
-- [PurplePinapples](https://github.com/purplepinapples/)
-- [Barkdoll (Jesse)](https://github.com/barkdoll/)
-- [Piotr Szymczak (Drutol)](https://github.com/Drutol)
-- [Jason Weatherly (jamesthebard)](https://twitter.com/jamesthebard)
-- [Cesar Irad Mendoza (aberuwu)](https://github.com/aberuwu)
+## Patrons
 
-## Sponsors
-Thank you to all our sponsors! [[Become a sponsor](https://patreon.com/jikan)]
-- [Hibiki Matsujo](https://github.com/assintates)
+- Aaron Treinish
+- Cesar Irad Mendoza
+- Jason Weatherly
+- Jesse
+- Kundan Chintamaneni
+- Kururin
+- Purplepinapples
+- Sakamotodesu
+- TeraNovaLP
+
+## Development
+
+|||
+|------------|----------|
+| ![JetBrain](https://user-images.githubusercontent.com/9166451/126047249-9e5bdc63-ae91-4082-bca5-ffe271b421da.png) | Jikan's development is powered by [JetBrain's Open Source License](https://jb.gg/OpenSource) |
+
+A shoutout to their amazing products and for supporting Jikan since early versions!
 
 ---
 
-## DISCLAIMER
-- Jikan is not affiliated with MyAnimeList.net 
+# DISCLAIMER
+
+- Jikan is not affiliated with MyAnimeList.net
 - You are responsible for the usage of this API. Please be respectful towards MyAnimeList's [Terms Of Service](https://myanimelist.net/about/terms_of_use)

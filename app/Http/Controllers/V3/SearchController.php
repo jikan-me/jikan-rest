@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V3;
 
+use Illuminate\Http\Request;
 use Jikan\Jikan;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Search\AnimeSearchRequest;
@@ -15,10 +16,11 @@ use phpDocumentor\Reflection\Types\Object_;
 
 class SearchController extends Controller
 {
-    public function anime(int $page = 1)
+    public function anime(Request $request, int $page = 1)
     {
         $search = $this->jikan->getAnimeSearch(
             SearchQueryBuilder::create(
+                $request,
                 (new AnimeSearchRequest())->setPage($page)
             )
         );
@@ -26,20 +28,22 @@ class SearchController extends Controller
         return response($this->filter($search));
     }
 
-    public function manga(int $page = 1)
+    public function manga(Request $request, int $page = 1)
     {
         $search = $this->jikan->getMangaSearch(
             SearchQueryBuilder::create(
+                $request,
                 (new MangaSearchRequest())->setPage($page)
             )
         );
         return response($this->filter($search));
     }
 
-    public function people(int $page = 1)
+    public function people(Request $request, int $page = 1)
     {
         $search = $this->jikan->getPersonSearch(
             SearchQueryBuilder::create(
+                $request,
                 (new PersonSearchRequest())->setPage($page)
             )
         );
@@ -47,10 +51,11 @@ class SearchController extends Controller
         return response($this->filter($search));
     }
 
-    public function character(int $page = 1)
+    public function character(Request $request, int $page = 1)
     {
         $search = $this->jikan->getCharacterSearch(
             SearchQueryBuilder::create(
+                $request,
                 (new CharacterSearchRequest())->setPage($page)
             )
         );
