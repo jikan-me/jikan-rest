@@ -71,7 +71,7 @@ class CommonIndexer extends Command
         foreach ($results as $i => $item) {
             $result = DB::table('producers')
                 ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:producers:'.sha1($item['mal_id'].$item['name'].$item['count'])]+$item);
+                ->updateOrInsert(['request_hash'=>'request:producers:'.sha1($item['mal_id'].$item['name'])]+$item);
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
@@ -98,7 +98,7 @@ class CommonIndexer extends Command
         foreach ($results as $i => $item) {
             $result = DB::table('magazines')
                 ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:magazines:'.sha1($item['mal_id'].$item['name'].$item['count'])]+$item);
+                ->updateOrInsert(['request_hash'=>'request:magazines:'.sha1($item['mal_id'].$item['name'])]+$item);
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
@@ -125,7 +125,7 @@ class CommonIndexer extends Command
         foreach ($results as $i => $item) {
             $result = DB::table('genres_anime')
                 ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:anime_genres:'.sha1($item['mal_id'].$item['name'].$item['count'])]+$item);
+                ->updateOrInsert(['request_hash'=>'request:anime_genres:'.sha1($item['mal_id'].$item['name'])]+$item);
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
@@ -152,7 +152,7 @@ class CommonIndexer extends Command
         foreach ($results as $i => $item) {
             $result = DB::table('genres_manga')
                 ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:manga_genres:'.sha1($item['mal_id'].$item['name'].$item['count'])]+$item);
+                ->updateOrInsert(['request_hash'=>'request:manga_genres:'.sha1($item['mal_id'].$item['name'])]+$item);
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
