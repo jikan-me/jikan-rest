@@ -15,6 +15,7 @@ class MicroCaching
         'RandomController@characters',
         'RandomController@people',
         'RandomController@users',
+        'InsightsController@main'
     ];
 
     /**
@@ -26,10 +27,12 @@ class MicroCaching
      */
     public function handle($request, Closure $next)
     {
-        $route = explode('\\', $request->route()[1]['uses']);
-        $route = end($route);
-        if (\in_array($route, self::NO_CACHING)) {
-            return $next($request);
+        if (isset($request->route()[1]['uses'])) {
+            $route = explode('\\', $request->route()[1]['uses']);
+            $route = end($route);
+            if (\in_array($route, self::NO_CACHING)) {
+                return $next($request);
+            }
         }
 
         if ($request->header('auth') === env('APP_KEY')) {
