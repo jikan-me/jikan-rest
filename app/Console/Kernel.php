@@ -11,7 +11,6 @@ use App\Console\Commands\ModifyCacheDriver;
 use App\Console\Commands\ModifyCacheMethod;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
-use r\Queries\Writing\Delete;
 
 class Kernel extends ConsoleKernel
 {

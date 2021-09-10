@@ -11,7 +11,6 @@
         "danielmewes/php-rql": "dev-master",
         "illuminate/redis": "^5.5",
         "predis/predis": "^1.1",
-        "voku/anti-xss": "^4.0",
         "divineomega/cachetphp": "^0.2.0",
         "jms/serializer": "^1.13",
         "symfony/yaml": "^4.1",
