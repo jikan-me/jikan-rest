@@ -61,7 +61,5 @@ class Kernel extends ConsoleKernel
         // Update common indexes daily
         $schedule->command('indexer:common')
             ->daily();
-
-
     }
 }

@@ -70,6 +70,14 @@ $app->singleton(
 |
 */
 
+$globalMiddleware = [];
+
+if (env('INSIGHTS', false)) {
+    $globalMiddleware[] = \App\Http\Middleware\Insights::class;
+}
+
+$app->middleware($globalMiddleware);
+
 $app->routeMiddleware([
 //    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
 //    'meta' => App\Http\Middleware\Meta::class,
@@ -77,7 +85,7 @@ $app->routeMiddleware([
 //    'throttle' => App\Http\Middleware\Throttle::class,
 //    'etag' => \App\Http\Middleware\EtagMiddleware::class,
     'microcaching' => \App\Http\Middleware\MicroCaching::class,
-    'source-health-monitor' => SourceHeartbeatMonitor::class
+    'source-health-monitor' => SourceHeartbeatMonitor::class,
 ]);
 
 /*
@@ -145,7 +153,7 @@ $commonMiddleware = [
 //    'cache-resolver',
 //    'throttle'
     'source-health-monitor',
-    'microcaching'
+    'microcaching',
 ];
 
 

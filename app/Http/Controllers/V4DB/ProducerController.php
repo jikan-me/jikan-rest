@@ -5,11 +5,9 @@ namespace App\Http\Controllers\V4DB;
 use App\Anime;
 use App\Http\QueryBuilder\SearchQueryBuilderProducer;
 use App\Http\Resources\V4\AnimeCollection;
-use App\Http\Resources\V4\MagazineCollection;
 use App\Http\Resources\V4\ProducerCollection;
 use App\Producer;
 use Illuminate\Http\Request;
-use Jikan\Request\Producer\ProducersRequest;
 
 class ProducerController extends Controller
 {

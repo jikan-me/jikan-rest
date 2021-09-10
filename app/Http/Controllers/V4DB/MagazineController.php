@@ -2,24 +2,12 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\QueryBuilder\SearchQueryBuilderAnime;
 use App\Http\QueryBuilder\SearchQueryBuilderMagazine;
-use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\MagazineCollection;
 use App\Http\Resources\V4\MangaCollection;
-use App\Http\Resources\V4\NewsResource;
 use App\Magazine;
 use App\Manga;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jenssegers\Mongodb\Eloquent\Builder;
-use Jikan\Request\Anime\AnimeNewsRequest;
-use Jikan\Request\Magazine\MagazineRequest;
-use Jikan\Request\Magazine\MagazinesRequest;
-use MongoDB\BSON\UTCDateTime;
 
 class MagazineController extends Controller
 {

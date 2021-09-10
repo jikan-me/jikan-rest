@@ -502,3 +502,19 @@ $router->group(
         ]);
     }
 );
+
+
+$router->group(
+    [
+        'prefix' => 'insights'
+    ],
+    function() use ($router) {
+        $router->get('/', [
+            'uses' => 'InsightsController@main'
+        ]);
+
+        $router->get('/trends', [
+            'uses' => 'InsightsController@trends'
+        ]);
+    }
+);
