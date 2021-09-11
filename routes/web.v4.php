@@ -45,8 +45,6 @@ $router->get('/', function () use ($router) {
     }
 );*/
 
-
-
 $router->get('/anime', [
     'uses' => 'SearchController@anime'
 ]);

@@ -57,6 +57,10 @@ class Handler extends ExceptionHandler
     {
         $githubReport = GithubReport::make($e, $request);
 
+        if (app()->bound('sentry') && $this->shouldReport($e)) {
+            app('sentry')->captureException($e);
+        }
+
         // ConnectionException from Redis server
         if ($e instanceof ConnectionException) {
             /*

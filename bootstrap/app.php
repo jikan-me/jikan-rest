@@ -33,6 +33,7 @@ $app = new Laravel\Lumen\Application(
 
 $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 
+
 $app->withFacades();
 $app->withEloquent();
 
@@ -113,6 +114,12 @@ $app->register(\SwaggerLume\ServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(\App\Providers\SourceHeartbeatProvider::class);
 $app->register(Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
+
+if (env('REPORTING') && env('REPORTING_DRIVER') === 'sentry') {
+    $app->register(\Sentry\Laravel\ServiceProvider::class);
+    // Sentry Performance Monitoring (optional)
+    $app->register(\Sentry\Laravel\Tracing\ServiceProvider::class);
+}
 
 // Guzzle removed as of lumen 8.x
 //$guzzleClient = new \GuzzleHttp\Client([

@@ -22,6 +22,7 @@
         "league/flysystem": "^1.0",
         "ocramius/package-versions": "^1.4",
         "predis/predis": "^1.1",
+        "sentry/sentry-laravel": "^2.8",
         "soatok/patreon": "^0.6.0",
         "symfony/yaml": "^4.1",
         "vlucas/phpdotenv": "^5",
