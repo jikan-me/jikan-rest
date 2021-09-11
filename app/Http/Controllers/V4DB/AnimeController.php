@@ -79,7 +79,6 @@ class AnimeController extends Controller
      */
     public function main(Request $request, int $id)
     {
-        throw new Exception('My first Sentry error!');
         $results = Anime::query()
             ->where('mal_id', $id)
             ->get();
