@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V3;
 
 use App\Providers\UserListQueryBuilder;
+use Illuminate\Http\Request;
 use Jikan\Request\User\UserAnimeListRequest;
 use Jikan\Request\User\UserMangaListRequest;
 use Jikan\Request\User\UserProfileRequest;
@@ -36,7 +37,7 @@ class UserController extends Controller
         return response($this->serializer->serialize($person, 'json'));
     }
 
-    public function animelist(string $username, ?string $status = null, int $page = 1)
+    public function animelist(Request $request, string $username, ?string $status = null, int $page = 1)
     {
         if (!is_null($status)) {
             $status = strtolower($status);
@@ -54,6 +55,7 @@ class UserController extends Controller
                 [
                     'anime' => $this->jikan->getUserAnimeList(
                         UserListQueryBuilder::create(
+                            $request,
                             (new UserAnimeListRequest($username))
                                 ->setPage($page)
                                 ->setStatus($status)
@@ -65,7 +67,7 @@ class UserController extends Controller
         );
     }
 
-    public function mangalist(string $username, ?string $status = null, int $page = 1)
+    public function mangalist(Request $request, string $username, ?string $status = null, int $page = 1)
     {
         if (!is_null($status)) {
             $status = strtolower($status);
@@ -83,6 +85,7 @@ class UserController extends Controller
                 [
                     'manga' => $this->jikan->getUserMangaList(
                         UserListQueryBuilder::create(
+                            $request,
                             (new UserMangaListRequest($username))
                                 ->setPage($page)
                                 ->setStatus($status)
