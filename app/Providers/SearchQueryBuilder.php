@@ -7,7 +7,6 @@ use Jikan\Model\Anime\Anime;
 use Jikan\Request\Search\AnimeSearchRequest;
 use Jikan\Request\Search\MangaSearchRequest;
 use Jikan\Request\Search\PersonSearchRequest;
-use \voku\helper\AntiXSS;
 use Jikan\Helper\Constants as JikanConstants;
 
 class SearchQueryBuilder

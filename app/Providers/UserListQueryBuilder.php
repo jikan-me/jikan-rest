@@ -124,7 +124,7 @@ class UserListQueryBuilder
         }
 
         // animelist only queries
-        if ($request instanceof UserAnimeListRequest) {
+        if ($parser instanceof UserAnimeListRequest) {
 
             // order by
             if ($orderBy !== null && array_key_exists($orderBy, self::VALID_ANIME_ORDER_BY)) {
@@ -141,27 +141,25 @@ class UserListQueryBuilder
             }
 
             // aired from
-            if ($airedFrom !== null) {
-                if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $airedFrom)) {
-                    $airedFrom = explode("-", $airedFrom);
+            if ($airedFrom !== null && preg_match("~[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}~", $airedFrom)) {
+                $airedFrom = explode("-", $airedFrom);
 
-                    $parser->setAiredFrom(
-                        (int) $airedFrom[2],
-                        (int) $airedFrom[1],
-                        (int) $airedFrom[0]
-                    );
-                }
+                $parser->setAiredFrom(
+                    (int) $airedFrom[0],
+                    (int) $airedFrom[1],
+                    (int) $airedFrom[2]
+                );
             }
 
             // aired to
             if ($airedTo !== null) {
-                if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $airedTo)) {
+                if (preg_match("~[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}~", $airedTo)) {
                     $airedTo = explode("-", $airedTo);
 
                     $parser->setAiredTo(
-                        (int) $airedTo[2],
+                        (int) $airedTo[0],
                         (int) $airedTo[1],
-                        (int) $airedTo[0]
+                        (int) $airedTo[2]
                     );
                 }
             }
@@ -190,7 +188,7 @@ class UserListQueryBuilder
 
         }
 
-        if ($request instanceof UserMangaListRequest) {
+        if ($parser instanceof UserMangaListRequest) {
             // order by
             if ($orderBy !== null && array_key_exists($orderBy, self::VALID_MANGA_ORDER_BY)) {
                 $orderBy = self::VALID_MANGA_ORDER_BY[$orderBy];
@@ -207,26 +205,26 @@ class UserListQueryBuilder
 
             // published from
             if ($publishedFrom !== null) {
-                if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $publishedFrom)) {
+                if (preg_match("~[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}~", $publishedFrom)) {
                     $publishedFrom = explode("-", $publishedFrom);
 
                     $parser->setPublishedFrom(
-                        (int) $publishedFrom[2],
+                        (int) $publishedFrom[0],
                         (int) $publishedFrom[1],
-                        (int) $publishedFrom[0]
+                        (int) $publishedFrom[2]
                     );
                 }
             }
 
             // published to
             if ($publishedTo !== null) {
-                if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $publishedTo)) {
+                if (preg_match("~[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}~", $publishedTo)) {
                     $publishedTo = explode("-", $publishedTo);
 
                     $parser->setPublishedTo(
-                        (int) $publishedTo[2],
+                        (int) $publishedTo[0],
                         (int) $publishedTo[1],
-                        (int) $publishedTo[0]
+                        (int) $publishedTo[2]
                     );
                 }
             }
