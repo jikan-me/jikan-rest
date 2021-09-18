@@ -2333,16 +2333,16 @@
         },
         {
             "name": "jikan-me/jikan",
-            "version": "v2.16.27",
+            "version": "v2.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "133aac504d14cc1b06e613c068520441045026b1"
+                "reference": "34d70c15907b164ce83dccd356a22251babb5e94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/133aac504d14cc1b06e613c068520441045026b1",
-                "reference": "133aac504d14cc1b06e613c068520441045026b1",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/34d70c15907b164ce83dccd356a22251babb5e94",
+                "reference": "34d70c15907b164ce83dccd356a22251babb5e94",
                 "shasum": ""
             },
             "require": {
@@ -2382,7 +2382,7 @@
             "description": "Jikan is an unofficial MyAnimeList API",
             "support": {
                 "issues": "https://github.com/jikan-me/jikan/issues",
-                "source": "https://github.com/jikan-me/jikan/tree/v2.16.27"
+                "source": "https://github.com/jikan-me/jikan/tree/v2.17.0"
             },
             "funding": [
                 {
@@ -2390,7 +2390,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-09-10T23:29:37+00:00"
+            "time": "2021-09-15T21:58:17+00:00"
         },
         {
             "name": "jms/metadata",
@@ -6272,16 +6272,16 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.4.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0"
+                "reference": "30f38bffc6f24293dadd1823936372dfa9e86e2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0",
-                "reference": "6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/30f38bffc6f24293dadd1823936372dfa9e86e2f",
+                "reference": "30f38bffc6f24293dadd1823936372dfa9e86e2f",
                 "shasum": ""
             },
             "require": {
@@ -6289,7 +6289,8 @@
                 "phpdocumentor/reflection-common": "^2.0"
             },
             "require-dev": {
-                "ext-tokenizer": "*"
+                "ext-tokenizer": "*",
+                "psalm/phar": "^4.8"
             },
             "type": "library",
             "extra": {
@@ -6315,9 +6316,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.4.0"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.5.0"
             },
-            "time": "2020-09-17T18:55:26+00:00"
+            "time": "2021-09-17T15:28:14+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -7380,7 +7381,6 @@
                     "type": "github"
                 }
             ],
-            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {
