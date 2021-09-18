@@ -68,7 +68,6 @@ $app->singleton(
 */
 
 $app->routeMiddleware([
-    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
     'meta' => App\Http\Middleware\Meta::class,
     'jikan-response' => App\Http\Middleware\JikanResponseHandler::class,
     'throttle' => App\Http\Middleware\Throttle::class,
@@ -113,7 +112,6 @@ $app->instance('JikanParser', $jikan);
 */
 
 $commonMiddleware = [
-    'slave-auth',
     'meta',
     'etag',
     'microcaching',
