@@ -152,7 +152,7 @@ $app->router->group(
             return response()->json([
                 'NOTICE' => 'Append an API version for API requests. Please check the documentation for the latest and supported versions.',
                 'Author' => '@irfanDahir',
-                'Discord' => 'https://discord.gg/4tvCr36',
+                'Discord' => 'http://discord.jikan.moe',
                 'Version' => JIKAN_REST_API_VERSION,
                 'JikanPHP' => JIKAN_PARSER_VERSION,
                 'Website' => 'https://jikan.moe',
