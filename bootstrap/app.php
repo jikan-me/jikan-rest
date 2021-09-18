@@ -12,7 +12,7 @@ require_once __DIR__.'/../vendor/autoload.php';
     Defines
 */
 defined('JIKAN_PARSER_VERSION') or define('JIKAN_PARSER_VERSION', Versions::getVersion('jikan-me/jikan'));
-defined('JIKAN_REST_API_VERSION') or define('JIKAN_REST_API_VERSION', '3.4');
+defined('JIKAN_REST_API_VERSION') or define('JIKAN_REST_API_VERSION', '3.4.3');
 
 
 /*
@@ -153,7 +153,7 @@ $app->router->group(
                 'NOTICE' => 'Append an API version for API requests. Please check the documentation for the latest and supported versions.',
                 'Author' => '@irfanDahir',
                 'Discord' => 'https://discord.gg/4tvCr36',
-                'Version' => '3.4',
+                'Version' => JIKAN_REST_API_VERSION,
                 'JikanPHP' => JIKAN_PARSER_VERSION,
                 'Website' => 'https://jikan.moe',
                 'Docs' => 'https://jikan.docs.apiary.io',
