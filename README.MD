@@ -40,10 +40,8 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 - [Supervisord](http://supervisord.org/) (optional)
 
 #### 🐳 Docker
-If you don't want to install it yourself, there are dockerized options available:
 
-- [JikanREST Docker](https://github.com/fethica/jikan-rest-docker) by Fethi El Hassasna
-- [JikanDocerized](https://github.com/zunjae/JikanDockerized) by Zunjae
+If you don't want to install it yourself, you can use the [docker image](https://github.com/jikan-me/jikan-docker)
 
 ### 01. Installation Prerequisites
 
