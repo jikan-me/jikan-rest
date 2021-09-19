@@ -1,6 +1,6 @@
 ![Jikan](http://i.imgur.com/ctoJ3Jp.png)
 # Jikan - Unofficial MyAnimeList.net REST API
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^%207.1-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe/)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^%207.4-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe/)
 
 Jikan is a REST API for [MyAnimeList.net](https://myanimelist.net). It scrapes the website to satisfy the need for an API - which MyAnimeList lacks.
 
@@ -34,7 +34,7 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 
 ### Requirements
 
-- PHP 7.1-7.3
+- PHP `^7.4`
 - [Composer](https://getcomposer.org/download/)
 - [Redis](https://redis.io)
 - [Supervisord](http://supervisord.org/) (optional)
@@ -55,11 +55,10 @@ This is specifically for Ubuntu, but other distributions should work similarly.
     - If `add-apt-repository` is not installed, you can install it by doing `sudo apt install python-software-properties` or `sudo apt install software-properties-common`
   - `sudo apt update && sudo apt upgrade`
   - Install requirements: `sudo apt install curl git php redis unzip`
-  - Verify that PHP 7.1-7.3 is installed: `php -v` (PHP 7.4 is not currently supported)
-    - If not, install it by running `sudo apt install php7.3` and change the default PHP version with `sudo update-alternatives --set php /usr/bin/php7.3`
+  - Verify that PHP 7.4 is installed: `php -v`
+    - If not, install it by running `sudo apt install php7.4` and change the default PHP version with `sudo update-alternatives --set php /usr/bin/php7.4`
   - Install the corresponding `php-xml` and `php-mbstring` packages for your version, e.g:
-    - PHP 7.1: `sudo apt install php7.1-xml php7.1-mbstring`
-    - PHP 7.3: `sudo apt install php7.3-xml php7.3-mbstring`
+    - PHP 7.4: `sudo apt install php7.4-xml php7.4-mbstring`
   - Install composer: `curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer`
 2. Start the redis server: `sudo service redis start`
 
