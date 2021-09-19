@@ -86,7 +86,7 @@ class UserListQueryBuilder
     {
         $query = $request->get('search') ?? null;
         $search = $request->get('q') ?? null;
-        $page = $request->get('page') ?? 1;
+        $page = $request->get('page') ?? null;
         $sort = $request->get('sort') ?? null;
         $orderBy = $request->get('order_by') ?? null;
         $orderBy2 = $request->get('order_by2') ?? null;
@@ -116,7 +116,9 @@ class UserListQueryBuilder
         }
 
         // page
-        $parser->setPage((int) $page);
+        if ($page !== null) {
+            $parser->setPage((int) $page);
+        }
 
         // sort
         if ($sort !== null && array_key_exists($sort, self::VALID_SORT)) {
