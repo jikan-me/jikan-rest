@@ -197,6 +197,32 @@ class CommonResource extends JsonResource
      *  ),
      *
      *  @OA\Schema(
+     *      schema="mal_url_2",
+     *      type="object",
+     *      description="Parsed URL Data",
+     *      @OA\Property(
+     *          property="mal_id",
+     *          type="integer",
+     *          description="MyAnimeList ID"
+     *      ),
+     *      @OA\Property(
+     *          property="type",
+     *          type="string",
+     *          description="Type of resource"
+     *      ),
+     *      @OA\Property(
+     *          property="title",
+     *          type="string",
+     *          description="Resource Name/Title"
+     *      ),
+     *      @OA\Property(
+     *          property="url",
+     *          type="string",
+     *          description="MyAnimeList URL"
+     *      ),
+     *  ),
+     *
+     *  @OA\Schema(
      *      schema="entry_meta",
      *      type="object",
      *      description="Entry Meta data",

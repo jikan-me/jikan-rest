@@ -2373,7 +2373,9 @@
                         "description": "Returns user profile",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/user profile"
+                                }
                             }
                         }
                     },
@@ -2394,7 +2396,9 @@
                         "description": "Returns user statistics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/user statistics"
+                                }
                             }
                         }
                     },
@@ -2415,7 +2419,9 @@
                         "description": "Returns user favorites",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/user favorites"
+                                }
                             }
                         }
                     },
@@ -2436,7 +2442,9 @@
                         "description": "Returns user updates",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/user updates"
+                                }
                             }
                         }
                     },
@@ -4518,6 +4526,28 @@
                 },
                 "type": "object"
             },
+            "mal_url_2": {
+                "description": "Parsed URL Data",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "type": {
+                        "description": "Type of resource",
+                        "type": "string"
+                    },
+                    "title": {
+                        "description": "Resource Name/Title",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "entry_meta": {
                 "description": "Entry Meta data",
                 "properties": {
@@ -5539,6 +5569,110 @@
                 },
                 "type": "object"
             },
+            "user favorites": {
+                "properties": {
+                    "data": {
+                        "description": "Favorite entries",
+                        "properties": {
+                            "anime": {
+                                "description": "Favorite Anime",
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/anime meta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string"
+                                                },
+                                                "start_year": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            },
+                            "manga": {
+                                "description": "Favorite Manga",
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/manga meta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string"
+                                                },
+                                                "start_year": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            },
+                            "characters": {
+                                "description": "Favorite Characters",
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/character meta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/mal_url_2"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            },
+                            "people": {
+                                "description": "Favorite People",
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "": {
+                                            "$ref": "#/components/schemas/character meta"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "users history": {
                 "properties": {
                     "data": {
@@ -5607,7 +5741,147 @@
                 },
                 "type": "object"
             },
-            "user history": {
+            "user updates": {
+                "properties": {
+                    "data": {
+                        "properties": {
+                            "anime": {
+                                "description": "Last updated Anime",
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "entry": {
+                                                    "$ref": "#/components/schemas/anime meta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "score": {
+                                                    "type": "integer"
+                                                },
+                                                "status": {
+                                                    "type": "string"
+                                                },
+                                                "episodes_seen": {
+                                                    "type": "integer"
+                                                },
+                                                "episodes_total": {
+                                                    "type": "integer"
+                                                },
+                                                "date": {
+                                                    "description": "ISO8601 format",
+                                                    "type": "String"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            },
+                            "manga": {
+                                "description": "Last updated Manga",
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "entry": {
+                                                    "$ref": "#/components/schemas/manga meta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "score": {
+                                                    "type": "integer"
+                                                },
+                                                "status": {
+                                                    "type": "string"
+                                                },
+                                                "chapters_read": {
+                                                    "type": "integer"
+                                                },
+                                                "chapters_total": {
+                                                    "type": "integer"
+                                                },
+                                                "volumes_read": {
+                                                    "type": "integer"
+                                                },
+                                                "volumes_total": {
+                                                    "type": "integer"
+                                                },
+                                                "date": {
+                                                    "description": "ISO8601 format",
+                                                    "type": "String"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "user profile": {
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "mal_id": {
+                                    "description": "MyAnimeList ID",
+                                    "type": "integer"
+                                },
+                                "username": {
+                                    "description": "MyAnimeList Username",
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "description": "MyAnimeList URL",
+                                    "type": "string"
+                                },
+                                "images": {
+                                    "$ref": "#/components/schemas/user images"
+                                },
+                                "last_online": {
+                                    "description": "Last Online Date ISO8601",
+                                    "type": "string"
+                                },
+                                "gender": {
+                                    "description": "User Gender",
+                                    "type": "string"
+                                },
+                                "birthday": {
+                                    "description": "Birthday Date ISO8601",
+                                    "type": "string"
+                                },
+                                "location": {
+                                    "description": "Location",
+                                    "type": "string"
+                                },
+                                "joined": {
+                                    "description": "Joined Date ISO8601",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "users temp": {
                 "description": "Transform the resource into an array.",
                 "properties": {
                     "data": {
@@ -5813,6 +6087,116 @@
                             },
                             "type": "object"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "user statistics": {
+                "properties": {
+                    "data": {
+                        "properties": {
+                            "anime": {
+                                "description": "Anime Statistics",
+                                "properties": {
+                                    "days_watched": {
+                                        "description": "Number of days spent watching Anime",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "mean_score": {
+                                        "description": "Mean Score",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "watching": {
+                                        "description": "Anime Watching",
+                                        "type": "integer"
+                                    },
+                                    "completed": {
+                                        "description": "Anime Completed",
+                                        "type": "integer"
+                                    },
+                                    "on_hold": {
+                                        "description": "Anime On-Hold",
+                                        "type": "integer"
+                                    },
+                                    "dropped": {
+                                        "description": "Anime Dropped",
+                                        "type": "integer"
+                                    },
+                                    "plan_to_watch": {
+                                        "description": "Anime Planned to Watch",
+                                        "type": "integer"
+                                    },
+                                    "total_entries": {
+                                        "description": "Total Anime entries on User list",
+                                        "type": "integer"
+                                    },
+                                    "rewatched": {
+                                        "description": "Anime re-watched",
+                                        "type": "integer"
+                                    },
+                                    "episodes_watched": {
+                                        "description": "Number of Anime Episodes Watched",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "manga": {
+                                "description": "Manga Statistics",
+                                "properties": {
+                                    "days_read": {
+                                        "description": "Number of days spent reading Manga",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "mean_score": {
+                                        "description": "Mean Score",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "reading": {
+                                        "description": "Manga Reading",
+                                        "type": "integer"
+                                    },
+                                    "completed": {
+                                        "description": "Manga Completed",
+                                        "type": "integer"
+                                    },
+                                    "on_hold": {
+                                        "description": "Manga On-Hold",
+                                        "type": "integer"
+                                    },
+                                    "dropped": {
+                                        "description": "Manga Dropped",
+                                        "type": "integer"
+                                    },
+                                    "plan_to_read": {
+                                        "description": "Manga Planned to Read",
+                                        "type": "integer"
+                                    },
+                                    "total_entries": {
+                                        "description": "Total Manga entries on User list",
+                                        "type": "integer"
+                                    },
+                                    "reread": {
+                                        "description": "Manga re-read",
+                                        "type": "integer"
+                                    },
+                                    "chapters_read": {
+                                        "description": "Number of Manga Chapters Read",
+                                        "type": "integer"
+                                    },
+                                    "volumes_read": {
+                                        "description": "Number of Manga Volumes Read",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"

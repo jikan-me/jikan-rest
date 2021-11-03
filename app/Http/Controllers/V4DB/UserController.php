@@ -43,7 +43,9 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user profile",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/user profile"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -117,7 +119,9 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user statistics",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/user statistics"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -193,7 +197,9 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user favorites",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/user favorites"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -268,7 +274,9 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user updates",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/user updates"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
