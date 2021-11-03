@@ -519,7 +519,9 @@ class SearchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for users",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/users search"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -528,7 +530,7 @@ class SearchController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="user collection",
+     *      schema="users search",
      *      description="User Results",
      *
      *      allOf={
@@ -605,7 +607,9 @@ class SearchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns username by ID search",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/user by id"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -614,7 +618,7 @@ class SearchController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="users",
+     *      schema="user by id",
      *      description="User Meta By ID",
      *
      *      @OA\Property(
