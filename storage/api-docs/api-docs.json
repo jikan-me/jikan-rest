@@ -2002,7 +2002,9 @@
                         "description": "Returns search results for users",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/users search"
+                                }
                             }
                         }
                     },
@@ -2023,7 +2025,9 @@
                         "description": "Returns username by ID search",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/user by id"
+                                }
                             }
                         }
                     },
@@ -2118,7 +2122,9 @@
                         "description": "Returns seasonal anime",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime search"
+                                }
                             }
                         }
                     },
@@ -2139,7 +2145,9 @@
                         "description": "Returns available list of seasons",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/seasons"
+                                }
                             }
                         }
                     },
@@ -2160,7 +2168,9 @@
                         "description": "Returns upcoming season's anime",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime search"
+                                }
                             }
                         }
                     },
@@ -2181,7 +2191,9 @@
                         "description": "Returns top anime",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime search"
+                                }
                             }
                         }
                     },
@@ -2202,7 +2214,9 @@
                         "description": "Returns top manga",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga search"
+                                }
                             }
                         }
                     },
@@ -2223,7 +2237,9 @@
                         "description": "Returns top people",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/people search"
+                                }
                             }
                         }
                     },
@@ -2244,7 +2260,9 @@
                         "description": "Returns top characters",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/characters search"
+                                }
                             }
                         }
                     },
@@ -3045,7 +3063,7 @@
                     "asc"
                 ]
             },
-            "user collection": {
+            "users search": {
                 "description": "User Results",
                 "allOf": [
                     {
@@ -3061,7 +3079,7 @@
                     }
                 ]
             },
-            "users": {
+            "user by id": {
                 "description": "User Meta By ID",
                 "properties": {
                     "data": {
