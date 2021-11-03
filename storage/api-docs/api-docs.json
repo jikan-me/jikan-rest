@@ -3222,6 +3222,9 @@
                                 "type": "array",
                                 "items": {
                                     "properties": {
+                                        "entry": {
+                                            "$ref": "#/components/schemas/user meta"
+                                        },
                                         "episodes": {
                                             "description": "Recent Episodes (max 2 listed)",
                                             "type": "array",

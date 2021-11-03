@@ -51,13 +51,11 @@ class WatchController extends Controller
      *                   @OA\Items(
      *                      type="object",
      *
-     *                      @OA\Schema(
-     *                          @OA\Property(
-     *                              property="entry",
-     *                              type="object",
-     *                              ref="#/components/schemas/user meta"
-     *                          ),
-     *                      ),
+     *                       @OA\Property(
+     *                           property="entry",
+     *                           type="object",
+     *                           ref="#/components/schemas/user meta"
+     *                       ),
      *                      @OA\Property(
      *                          property="episodes",
      *                          type="array",
