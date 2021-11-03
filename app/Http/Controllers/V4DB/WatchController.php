@@ -194,34 +194,39 @@ class WatchController extends Controller
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
-     *              @OA\Property(
-     *                  property="title",
-     *                  type="string",
-     *                  description="Promo Title"
-     *              ),
-     *          ),
-     *          @OA\Schema(
-     *              @OA\Property(
-     *                   property="data",
-     *                   type="array",
-     *                   @OA\Items(
-     *                      type="object",
      *
-     *                       @OA\Property(
-     *                           property="entry",
-     *                           type="object",
-     *                           ref="#/components/schemas/anime meta"
-     *                       ),
+     *              allOf={
+     *                  @OA\Schema(
      *                      @OA\Property(
-     *                          property="trailer",
-     *                          type="array",
-     *                          @OA\Items(
+     *                          property="title",
+     *                          type="string",
+     *                          description="Promo Title"
+     *                      ),
+     *                  ),
+     *                  @OA\Schema (
+     *                      @OA\Property(
+     *                           property="data",
+     *                           type="array",
+     *
+     *                           @OA\Items(
      *                              type="object",
-     *                              ref="#/components/schemas/trailer",
+     *                               @OA\Property(
+     *                                   property="entry",
+     *                                   type="object",
+     *                                   ref="#/components/schemas/anime meta"
+     *                               ),
+     *                              @OA\Property(
+     *                                  property="trailer",
+     *                                  type="array",
+     *                                  @OA\Items(
+     *                                      type="object",
+     *                                      ref="#/components/schemas/trailer",
+     *                                  ),
+     *                              ),
      *                          ),
      *                      ),
      *                  ),
-     *              ),
+     *              },
      *          ),
      *     },
      *  ),

@@ -3270,35 +3270,39 @@
                         "$ref": "#/components/schemas/pagination"
                     },
                     {
-                        "properties": {
-                            "title": {
-                                "description": "Promo Title",
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
-                    },
-                    {
-                        "properties": {
-                            "data": {
-                                "type": "array",
-                                "items": {
-                                    "properties": {
-                                        "entry": {
-                                            "$ref": "#/components/schemas/anime meta"
-                                        },
-                                        "trailer": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/trailer"
-                                            }
+                        "allOf": [
+                            {
+                                "properties": {
+                                    "title": {
+                                        "description": "Promo Title",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "properties": {
+                                    "data": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "entry": {
+                                                    "$ref": "#/components/schemas/anime meta"
+                                                },
+                                                "trailer": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/trailer"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    },
-                                    "type": "object"
-                                }
+                                    }
+                                },
+                                "type": "object"
                             }
-                        },
-                        "type": "object"
+                        ]
                     }
                 ]
             },
