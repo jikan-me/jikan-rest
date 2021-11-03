@@ -50,9 +50,6 @@
     "scripts": {
         "post-root-package-install": [
             "php -r \"copy('.env.dist', '.env');\""
-        ],
-        "server:run": [
-            "php -S localhost:8000 -t public"
         ]
     },
     "minimum-stability": "dev",
