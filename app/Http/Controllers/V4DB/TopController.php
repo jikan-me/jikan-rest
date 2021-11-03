@@ -36,7 +36,9 @@ class TopController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns top anime",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/anime search"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -88,7 +90,9 @@ class TopController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns top manga",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/manga search"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -140,7 +144,9 @@ class TopController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns top people",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/people search"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -192,7 +198,9 @@ class TopController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns top characters",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/characters search"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
