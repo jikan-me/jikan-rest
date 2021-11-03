@@ -111,7 +111,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof BadResponseException || $e instanceof ClientException) {
             switch ($e->getCode()) {
                 case 404:
-                    $this->set404Cache($request, $e);
+//                    $this->set404Cache($request, $e);
 
                     return response()
                         ->json([
