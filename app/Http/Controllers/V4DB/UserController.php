@@ -477,7 +477,9 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user friends",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/user friends"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -493,37 +495,36 @@ class UserController extends Controller
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
      *
-     *
      *              @OA\Property(
      *                   property="data",
-     *                   type="object",
+     *                   type="array",
      *
+     *                   @OA\Items(
+     *                      type="object",
      *
-     *                   @OA\Property(
-     *                       property="url",
-     *                       type="string",
-     *                       description="MyAnimeList URL"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="username",
-     *                       type="string",
-     *                       description="MyAnimeList Username"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="image_url",
-     *                       type="string",
-     *                       description="Image URL"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="last_online",
-     *                       type="string",
-     *                       description="Last Online Date ISO8601"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="friends_since",
-     *                       type="string",
-     *                       description="Friends Since Date ISO8601"
-     *                   ),
+     *                      allOf={
+     *                          @OA\Schema(
+     *
+     *                              @OA\Property(
+     *                                  property="user",
+     *                                  type="object",
+     *                                  ref="#/components/schemas/user meta"
+     *                              ),
+     *                          ),
+     *                          @OA\Schema (
+     *                              @OA\Property(
+     *                                  property="last_online",
+     *                                  type="string",
+     *                                  description="Last Online Date ISO8601 format"
+     *                              ),
+     *                              @OA\Property(
+     *                                  property="friends_since",
+     *                                  type="string",
+     *                                  description="Friends Since Date ISO8601 format"
+     *                              ),
+     *                          ),
+     *                      },
+     *                  ),
      *              ),
      *          ),
      *     }

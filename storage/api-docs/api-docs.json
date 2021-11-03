@@ -2509,7 +2509,9 @@
                         "description": "Returns user friends",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/user friends"
+                                }
                             }
                         }
                     },
@@ -3162,29 +3164,33 @@
                     {
                         "properties": {
                             "data": {
-                                "properties": {
-                                    "url": {
-                                        "description": "MyAnimeList URL",
-                                        "type": "string"
-                                    },
-                                    "username": {
-                                        "description": "MyAnimeList Username",
-                                        "type": "string"
-                                    },
-                                    "image_url": {
-                                        "description": "Image URL",
-                                        "type": "string"
-                                    },
-                                    "last_online": {
-                                        "description": "Last Online Date ISO8601",
-                                        "type": "string"
-                                    },
-                                    "friends_since": {
-                                        "description": "Friends Since Date ISO8601",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/user meta"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "last_online": {
+                                                    "description": "Last Online Date ISO8601 format",
+                                                    "type": "string"
+                                                },
+                                                "friends_since": {
+                                                    "description": "Friends Since Date ISO8601 format",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
                             }
                         },
                         "type": "object"
