@@ -195,6 +195,13 @@ class WatchController extends Controller
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
      *              @OA\Property(
+     *                  property="title",
+     *                  type="string",
+     *                  description="Promo Title"
+     *              ),
+     *          ),
+     *          @OA\Schema(
+     *              @OA\Property(
      *                   property="data",
      *                   type="array",
      *                   @OA\Items(
@@ -205,11 +212,6 @@ class WatchController extends Controller
      *                           type="object",
      *                           ref="#/components/schemas/anime meta"
      *                       ),
-     *                      @OA\Property(
-     *                          property="title",
-     *                          type="string",
-     *                          description="Promo Title"
-     *                      ),
      *                      @OA\Property(
      *                          property="trailer",
      *                          type="array",

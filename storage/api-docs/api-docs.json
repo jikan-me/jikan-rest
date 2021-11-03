@@ -3271,16 +3271,21 @@
                     },
                     {
                         "properties": {
+                            "title": {
+                                "description": "Promo Title",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "properties": {
                             "data": {
                                 "type": "array",
                                 "items": {
                                     "properties": {
                                         "entry": {
                                             "$ref": "#/components/schemas/anime meta"
-                                        },
-                                        "title": {
-                                            "description": "Promo Title",
-                                            "type": "string"
                                         },
                                         "trailer": {
                                             "type": "array",
