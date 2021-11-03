@@ -37,7 +37,9 @@ class SeasonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns seasonal anime",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/anime search"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -105,7 +107,9 @@ class SeasonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns available list of seasons",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/seasons"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -176,7 +180,9 @@ class SeasonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns upcoming season's anime",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/anime search"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
