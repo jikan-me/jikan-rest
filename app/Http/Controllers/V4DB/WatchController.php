@@ -54,7 +54,7 @@ class WatchController extends Controller
      *                       @OA\Property(
      *                           property="entry",
      *                           type="object",
-     *                           ref="#/components/schemas/user meta"
+     *                           ref="#/components/schemas/anime meta"
      *                       ),
      *                      @OA\Property(
      *                          property="episodes",

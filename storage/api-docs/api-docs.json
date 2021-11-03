@@ -3223,7 +3223,7 @@
                                 "items": {
                                     "properties": {
                                         "entry": {
-                                            "$ref": "#/components/schemas/user meta"
+                                            "$ref": "#/components/schemas/anime meta"
                                         },
                                         "episodes": {
                                             "description": "Recent Episodes (max 2 listed)",
