@@ -55,7 +55,7 @@ class ProfileLastUpdatesResource extends JsonResource
      *                          @OA\Property (
      *                              property="date",
      *                              description="ISO8601 format",
-     *                              type="String"
+     *                              type="string"
      *                          ),
      *                      ),
      *                  },
@@ -105,7 +105,7 @@ class ProfileLastUpdatesResource extends JsonResource
      *                          @OA\Property (
      *                              property="date",
      *                              description="ISO8601 format",
-     *                              type="String"
+     *                              type="string"
      *                          ),
      *                      ),
      *                  },

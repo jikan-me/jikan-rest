@@ -350,8 +350,10 @@ class UserController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns user about (HTML)",
-     *         @OA\JsonContent()
+     *         description="Returns user about in raw HTML",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/user about"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
