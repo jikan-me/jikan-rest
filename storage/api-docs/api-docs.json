@@ -5581,12 +5581,7 @@
                                     "type": "object",
                                     "allOf": [
                                         {
-                                            "properties": {
-                                                "": {
-                                                    "$ref": "#/components/schemas/anime meta"
-                                                }
-                                            },
-                                            "type": "object"
+                                            "$ref": "#/components/schemas/anime meta"
                                         },
                                         {
                                             "properties": {
@@ -5609,12 +5604,7 @@
                                     "type": "object",
                                     "allOf": [
                                         {
-                                            "properties": {
-                                                "": {
-                                                    "$ref": "#/components/schemas/manga meta"
-                                                }
-                                            },
-                                            "type": "object"
+                                            "$ref": "#/components/schemas/manga meta"
                                         },
                                         {
                                             "properties": {
@@ -5637,12 +5627,7 @@
                                     "type": "object",
                                     "allOf": [
                                         {
-                                            "properties": {
-                                                "": {
-                                                    "$ref": "#/components/schemas/character meta"
-                                                }
-                                            },
-                                            "type": "object"
+                                            "$ref": "#/components/schemas/character meta"
                                         },
                                         {
                                             "properties": {

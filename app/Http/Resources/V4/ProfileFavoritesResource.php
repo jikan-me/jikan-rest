@@ -30,12 +30,7 @@ class ProfileFavoritesResource extends JsonResource
      *                  type="object",
      *
      *                  allOf={
-     *                      @OA\Schema (
-     *                          @OA\Property (
-     *                               type="object",
-     *                               ref="#/components/schemas/anime meta",
-     *                          ),
-     *                      ),
+     *                      @OA\Schema (ref="#/components/schemas/anime meta"),
      *                      @OA\Schema (
      *                          @OA\Property (
      *                              property="type",
@@ -57,12 +52,7 @@ class ProfileFavoritesResource extends JsonResource
      *              @OA\Items (
      *                  type="object",
      *                  allOf={
-     *                      @OA\Schema (
-     *                          @OA\Property (
-     *                               type="object",
-     *                               ref="#/components/schemas/manga meta",
-     *                          ),
-     *                      ),
+     *                      @OA\Schema (ref="#/components/schemas/manga meta"),
      *                      @OA\Schema (
      *                          @OA\Property (
      *                              property="type",
@@ -85,12 +75,7 @@ class ProfileFavoritesResource extends JsonResource
      *              @OA\Items (
      *                  type="object",
      *                  allOf={
-     *                      @OA\Schema (
-     *                          @OA\Property (
-     *                               type="object",
-     *                               ref="#/components/schemas/character meta",
-     *                          ),
-     *                      ),
+     *                      @OA\Schema (ref="#/components/schemas/character meta"),
      *                      @OA\Schema (
      *                          @OA\Property (
      *                               type="object",
