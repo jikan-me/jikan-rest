@@ -202,11 +202,11 @@ class AnimeController extends Controller
      *     ),
      * 
      *     @OA\Response(
-     *         response="200",
-     *         description="Returns anime staff resource",
-     *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime staff"
-     *         )
+     *          response="200",
+     *          description="Returns anime staff resource",
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/anime staff"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",

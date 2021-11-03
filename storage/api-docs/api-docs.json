@@ -2634,7 +2634,9 @@
                         "description": "Returns Recently Added Episodes",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/watch episodes"
+                                }
                             }
                         }
                     },
@@ -2655,7 +2657,9 @@
                         "description": "Returns Popular Episodes",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/watch episodes"
+                                }
                             }
                         }
                     },
@@ -2676,7 +2680,9 @@
                         "description": "Returns Recently Added Promotional Videos",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/watch promos"
+                                }
                             }
                         }
                     },
@@ -2697,7 +2703,9 @@
                         "description": "Returns Popular Promotional Videos",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/watch promos"
+                                }
                             }
                         }
                     },

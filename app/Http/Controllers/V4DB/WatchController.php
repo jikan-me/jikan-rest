@@ -27,7 +27,9 @@ class WatchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns Recently Added Episodes",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/watch episodes"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -183,7 +185,9 @@ class WatchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns Popular Episodes",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/watch episodes"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -227,7 +231,9 @@ class WatchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns Recently Added Promotional Videos",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/watch promos"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -370,7 +376,9 @@ class WatchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns Popular Promotional Videos",
-     *         @OA\JsonContent()
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/watch promos"
+     *          )
      *     ),
      *     @OA\Response(
      *         response="400",
