@@ -12,8 +12,8 @@ use App\Console\Commands\Indexer\AnimeIndexer;
 use App\Console\Commands\Indexer\AnimeScheduleIndexer;
 use App\Console\Commands\Indexer\CommonIndexer;
 use App\Console\Commands\Indexer\CurrentSeasonIndexer;
+use App\Console\Commands\Indexer\GenreIndexer;
 use App\Console\Commands\Indexer\MangaIndexer;
-use App\Console\Commands\Indexer\ScheduleIndexer;
 use App\Console\Commands\ManageMicrocaching;
 use App\Console\Commands\ModifyCacheDriver;
 use App\Console\Commands\ModifyCacheMethod;
@@ -38,7 +38,8 @@ class Kernel extends ConsoleKernel
         CurrentSeasonIndexer::class,
         ManageMicrocaching::class,
         AnimeIndexer::class,
-        MangaIndexer::class
+        MangaIndexer::class,
+        GenreIndexer::class
     ];
 
     /**
@@ -60,6 +61,9 @@ class Kernel extends ConsoleKernel
 
         // Update common indexes daily
         $schedule->command('indexer:common')
+            ->daily();
+
+        $schedule->command('indexer:genres')
             ->daily();
     }
 }
