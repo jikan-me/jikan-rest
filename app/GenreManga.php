@@ -28,7 +28,6 @@ class GenreManga extends Model
      */
     protected $table = 'genres_manga';
 
-
     /**
      * The attributes excluded from the model's JSON form.
      *

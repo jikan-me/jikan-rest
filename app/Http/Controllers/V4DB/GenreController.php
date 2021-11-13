@@ -10,7 +10,10 @@ use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\GenreCollection;
 use App\Http\Resources\V4\MangaCollection;
 use App\Manga;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class GenreController extends Controller
 {
@@ -31,15 +34,39 @@ class GenreController extends Controller
      *     ),
      * )
      */
-    public function anime(Request $request)
+    public function anime(Request $request): GenreCollection
     {
-        $results = SearchQueryBuilderGenre::query(
-            $request,
-            GenreAnime::query()
-        );
+        $filter = $request->get('filter') ?? null;
+
+        $explicitGenres = DB::table('explicit_genres_anime')->get();
+        $themes = DB::table('themes_anime')->get();
+        $demographics = DB::table('demographics_anime')->get();
+
+        switch ($filter) {
+            case 'genres':
+                $results = GenreAnime::query()
+                    ->get();
+                break;
+            case 'explicit_genres':
+                $results = $explicitGenres;
+                break;
+            case 'themes':
+                $results = $themes;
+                break;
+            case 'demographics':
+                $results = $demographics;
+                break;
+            default:
+                $results = GenreAnime::query()
+                    ->get()
+                    ->concat($explicitGenres->all())
+                    ->concat($themes->all())
+                    ->concat($demographics->all());
+                break;
+        }
 
         return new GenreCollection(
-            $results->get()
+            $results
         );
     }
 
@@ -60,12 +87,39 @@ class GenreController extends Controller
      *     ),
      * )
      */
-    public function manga(Request $request)
+    public function manga(Request $request): GenreCollection
     {
-        $results = GenreManga::query();
+        $filter = $request->get('filter') ?? null;
+
+        $explicitGenres = DB::table('explicit_genres_manga')->get();
+        $themes = DB::table('themes_manga')->get();
+        $demographics = DB::table('demographics_manga')->get();
+
+        switch ($filter) {
+            case 'genres':
+                $results = GenreManga::query()
+                    ->get();
+                break;
+            case 'explicit_genres':
+                $results = $explicitGenres;
+                break;
+            case 'themes':
+                $results = $themes;
+                break;
+            case 'demographics':
+                $results = $demographics;
+                break;
+            default:
+                $results = GenreManga::query()
+                    ->get()
+                    ->concat($explicitGenres->all())
+                    ->concat($themes->all())
+                    ->concat($demographics->all());
+                break;
+        }
 
         return new GenreCollection(
-            $results->get()
+            $results
         );
     }
 }
