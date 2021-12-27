@@ -1675,7 +1675,9 @@
                         "description": "Returns weekly schedule",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/schedules"
+                                }
                             }
                         }
                     },

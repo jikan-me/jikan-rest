@@ -48,7 +48,9 @@ class ScheduleController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns weekly schedule",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/schedules",
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
