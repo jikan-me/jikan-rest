@@ -13,7 +13,7 @@ class SerializationContextFactory implements SerializationContextFactoryInterfac
     /**
      * {@InheritDoc}
      */
-    public function createSerializationContext()
+    public function createSerializationContext(): SerializationContext
     {
         return (new SerializationContext())
             ->setSerializeNull(true);

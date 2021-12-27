@@ -23,9 +23,9 @@ class SourceHeartbeatEvent extends Event
      * @param int $health
      * @param int $status
      */
-    public function __construct(int $health = self::BAD_HEALTH, ?int $status)
+    public function __construct(?int $health, ?int $status)
     {
-        $this->health = $health;
+        $this->health = $health ?? self::BAD_HEALTH;
         $this->status = $status ?? 0;
     }
 }

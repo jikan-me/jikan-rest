@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Jikan\Model\Common\DateRange;
 use Jikan\Model\Common\MalUrl;
+use JMS\Serializer\GraphNavigatorInterface;
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
@@ -17,29 +18,29 @@ class SerializerFactory
             ->configureHandlers(
                 function (HandlerRegistry $registry) {
                     $registry->registerHandler(
-                        'serialization',
+                        GraphNavigatorInterface::DIRECTION_SERIALIZATION,
                         MalUrl::class,
                         'json',
                         \Closure::fromCallable('self::convertMalUrl')
                     );
 
                     $registry->registerHandler(
-                        'serialization',
+                        GraphNavigatorInterface::DIRECTION_SERIALIZATION,
                         DateRange::class,
                         'json',
                         \Closure::fromCallable('self::convertDateRange')
                     );
 
                     $registry->registerHandler(
-                        'serialization',
+                        GraphNavigatorInterface::DIRECTION_SERIALIZATION,
                         \DateTimeImmutable::class,
                         'json',
                         \Closure::fromCallable('self::convertDateTimeImmutable')
                     );
                 }
             )
+            ->setSerializationContextFactory(new SerializationContextFactory())
             ->build();
-        $serializer->setSerializationContextFactory(new SerializationContextFactory());
 
         return $serializer;
     }
