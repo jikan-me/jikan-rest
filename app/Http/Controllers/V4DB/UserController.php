@@ -428,7 +428,9 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user history (past 30 days)",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/user history"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",

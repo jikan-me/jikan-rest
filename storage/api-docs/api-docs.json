@@ -2564,7 +2564,9 @@
                         "description": "Returns user history (past 30 days)",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/user history"
+                                }
                             }
                         }
                     },
@@ -5830,7 +5832,7 @@
                 },
                 "type": "object"
             },
-            "users history": {
+            "user history": {
                 "properties": {
                     "data": {
                         "type": "array",
