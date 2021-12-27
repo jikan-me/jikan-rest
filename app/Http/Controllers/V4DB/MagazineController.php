@@ -69,32 +69,6 @@ class MagazineController extends Controller
         );
     }
 
-    /**
-     *  @OA\Get(
-     *     path="/magazines/{id}",
-     *     operationId="getMagazineById",
-     *     tags={"magazines"},
-     * 
-     *     @OA\Parameter(
-     *       name="id",
-     *       in="path",
-     *       required=true,
-     *       @OA\Schema(type="integer")
-     *     ),
-     *
-     *     @OA\Response(
-     *         response="200",
-     *         description="Returns Magazine's manga",
-     *         @OA\JsonContent(
-     *              ref="#/components/schemas/magazine"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error: Bad request. When required parameters were not supplied.",
-     *     ),
-     * )
-     */
     public function resource(Request $request, int $id)
     {
         $page = $request->get('page') ?? 1;

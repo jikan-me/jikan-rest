@@ -25,15 +25,14 @@ class GenreCollection extends ResourceCollection
      *      schema="genres",
      *      description="Genres Collection Resource",
      *
-     *     @OA\Property(
+     *      @OA\Property(
      *          property="data",
      *          type="array",
-     *
      *          @OA\Items(
      *              type="object",
-     *              @OA\Schema(ref="#/components/schemas/genre"),
+     *              ref="#/components/schemas/genre"
      *          ),
-     *     ),
+     *      ),
      *  ),
      *
      *  @OA\Schema(

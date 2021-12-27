@@ -70,23 +70,6 @@ class ProducerController extends Controller
         );
     }
 
-    /**
-     *  @OA\Get(
-     *     path="/producers/{id}",
-     *     operationId="getProducerById",
-     *     tags={"producers"},
-     *
-     *     @OA\Response(
-     *         response="200",
-     *         description="Returns Producer's anime",
-     *         @OA\JsonContent()
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error: Bad request. When required parameters were not supplied.",
-     *     ),
-     * )
-     */
     public function resource(Request $request, int $id)
     {
         $this->request = $request;
