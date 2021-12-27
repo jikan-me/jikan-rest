@@ -30,15 +30,21 @@ class PicturesResource extends JsonResource
      *                       type="string",
      *                       description="Default JPG Image Size URL"
      *                   ),
-     *                   @OA\Property(
-     *                       property="large_image_url",
-     *                       type="string",
-     *                       description="Large JPG Image Size URL"
-     *                   ),
      *              ),
      *          ),
+     *     ),
+     *  ),
+     *
+     *  @OA\Schema(
+     *      schema="pictures variants",
+     *      description="Pictures Resource",
+     *
+     *     @OA\Property(
+     *          property="data",
+     *          type="object",
+     *
      *          @OA\Property(
-     *               property="webp",
+     *               property="jpg",
      *               type="array",
      *               @OA\Items(
      *                   type="object",

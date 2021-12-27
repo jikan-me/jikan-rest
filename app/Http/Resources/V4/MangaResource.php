@@ -186,6 +186,30 @@ class MangaResource extends JsonResource
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *      @OA\Property(
+     *          property="explicit_genres",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *              ref="#/components/schemas/mal_url"
+     *          ),
+     *      ),
+     *      @OA\Property(
+     *          property="themes",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *              ref="#/components/schemas/mal_url"
+     *          ),
+     *      ),
+     *      @OA\Property(
+     *          property="demographics",
+     *          type="array",
+     *          @OA\Items(
+     *              type="object",
+     *              ref="#/components/schemas/mal_url"
+     *          ),
+     *      ),
      *  )
      */
 

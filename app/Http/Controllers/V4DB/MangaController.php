@@ -55,14 +55,12 @@ class MangaController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns manga resource",
+     *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              @OA\Property( 
-     *                  property="data",
-     *                  ref="#/components/schemas/manga"
-     *              )
+     *              ref="#/components/schemas/pictures"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

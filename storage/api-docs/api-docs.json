@@ -338,7 +338,9 @@
                         "description": "Returns pictures related to the entry",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/pictures variants"
+                                }
                             }
                         }
                     },
@@ -685,11 +687,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns a list of pictures of the character",
+                        "description": "Returns pictures related to the entry",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/character pictures"
+                                    "$ref": "#/components/schemas/pictures"
                                 }
                             }
                         }
@@ -880,16 +882,11 @@
                 "operationId": "getMangaById",
                 "responses": {
                     "200": {
-                        "description": "Returns manga resource",
+                        "description": "Returns pictures related to the entry",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/components/schemas/manga"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/pictures"
                                 }
                             }
                         }
@@ -1158,11 +1155,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns person resource",
+                        "description": "Returns pictures related to the entry",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/person"
+                                    "$ref": "#/components/schemas/pictures variants"
                                 }
                             }
                         }
@@ -1480,16 +1477,18 @@
                                         "data": {
                                             "allOf": [
                                                 {
-                                                    "$ref": "#/components/schemas/pagination"
-                                                },
-                                                {
                                                     "properties": {
                                                         "data": {
                                                             "type": "array",
                                                             "items": {
                                                                 "allOf": [
                                                                     {
-                                                                        "$ref": "#/components/schemas/anime review"
+                                                                        "properties": {
+                                                                            "user": {
+                                                                                "$ref": "#/components/schemas/user meta"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
                                                                     },
                                                                     {
                                                                         "properties": {
@@ -1500,18 +1499,16 @@
                                                                         "type": "object"
                                                                     },
                                                                     {
-                                                                        "properties": {
-                                                                            "user": {
-                                                                                "$ref": "#/components/schemas/user meta"
-                                                                            }
-                                                                        },
-                                                                        "type": "object"
+                                                                        "$ref": "#/components/schemas/anime review"
                                                                     }
                                                                 ]
                                                             }
                                                         }
                                                     },
                                                     "type": "object"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/pagination"
                                                 }
                                             ]
                                         }
@@ -1543,16 +1540,18 @@
                                         "data": {
                                             "allOf": [
                                                 {
-                                                    "$ref": "#/components/schemas/pagination"
-                                                },
-                                                {
                                                     "properties": {
                                                         "data": {
                                                             "type": "array",
                                                             "items": {
                                                                 "allOf": [
                                                                     {
-                                                                        "$ref": "#/components/schemas/manga review"
+                                                                        "properties": {
+                                                                            "user": {
+                                                                                "$ref": "#/components/schemas/user meta"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
                                                                     },
                                                                     {
                                                                         "properties": {
@@ -1563,18 +1562,16 @@
                                                                         "type": "object"
                                                                     },
                                                                     {
-                                                                        "properties": {
-                                                                            "user": {
-                                                                                "$ref": "#/components/schemas/user meta"
-                                                                            }
-                                                                        },
-                                                                        "type": "object"
+                                                                        "$ref": "#/components/schemas/manga review"
                                                                     }
                                                                 ]
                                                             }
                                                         }
                                                     },
                                                     "type": "object"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/pagination"
                                                 }
                                             ]
                                         }
@@ -2288,9 +2285,6 @@
                                         "data": {
                                             "allOf": [
                                                 {
-                                                    "$ref": "#/components/schemas/pagination"
-                                                },
-                                                {
                                                     "properties": {
                                                         "data": {
                                                             "type": "array",
@@ -2299,7 +2293,12 @@
                                                                     {
                                                                         "allOf": [
                                                                             {
-                                                                                "$ref": "#/components/schemas/anime review"
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "$ref": "#/components/schemas/user meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
                                                                             },
                                                                             {
                                                                                 "properties": {
@@ -2310,19 +2309,19 @@
                                                                                 "type": "object"
                                                                             },
                                                                             {
-                                                                                "properties": {
-                                                                                    "user": {
-                                                                                        "$ref": "#/components/schemas/user meta"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
+                                                                                "$ref": "#/components/schemas/anime review"
                                                                             }
                                                                         ]
                                                                     },
                                                                     {
                                                                         "allOf": [
                                                                             {
-                                                                                "$ref": "#/components/schemas/manga review"
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "$ref": "#/components/schemas/user meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
                                                                             },
                                                                             {
                                                                                 "properties": {
@@ -2333,12 +2332,7 @@
                                                                                 "type": "object"
                                                                             },
                                                                             {
-                                                                                "properties": {
-                                                                                    "user": {
-                                                                                        "$ref": "#/components/schemas/user meta"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
+                                                                                "$ref": "#/components/schemas/manga review"
                                                                             }
                                                                         ]
                                                                     }
@@ -2347,6 +2341,9 @@
                                                         }
                                                     },
                                                     "type": "object"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/pagination"
                                                 }
                                             ]
                                         }
@@ -2537,9 +2534,6 @@
                                         "data": {
                                             "allOf": [
                                                 {
-                                                    "$ref": "#/components/schemas/pagination"
-                                                },
-                                                {
                                                     "properties": {
                                                         "data": {
                                                             "type": "array",
@@ -2548,7 +2542,12 @@
                                                                     {
                                                                         "allOf": [
                                                                             {
-                                                                                "$ref": "#/components/schemas/anime review"
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "$ref": "#/components/schemas/user meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
                                                                             },
                                                                             {
                                                                                 "properties": {
@@ -2559,19 +2558,19 @@
                                                                                 "type": "object"
                                                                             },
                                                                             {
-                                                                                "properties": {
-                                                                                    "user": {
-                                                                                        "$ref": "#/components/schemas/user meta"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
+                                                                                "$ref": "#/components/schemas/anime review"
                                                                             }
                                                                         ]
                                                                     },
                                                                     {
                                                                         "allOf": [
                                                                             {
-                                                                                "$ref": "#/components/schemas/manga review"
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "$ref": "#/components/schemas/user meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
                                                                             },
                                                                             {
                                                                                 "properties": {
@@ -2582,12 +2581,7 @@
                                                                                 "type": "object"
                                                                             },
                                                                             {
-                                                                                "properties": {
-                                                                                    "user": {
-                                                                                        "$ref": "#/components/schemas/user meta"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
+                                                                                "$ref": "#/components/schemas/manga review"
                                                                             }
                                                                         ]
                                                                     }
@@ -2596,6 +2590,9 @@
                                                         }
                                                     },
                                                     "type": "object"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/pagination"
                                                 }
                                             ]
                                         }
@@ -2752,9 +2749,6 @@
                 "description": "Anime Episodes Resource",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -2806,6 +2800,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -2953,9 +2950,6 @@
                 "description": "Recent Recommendations",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -2973,6 +2967,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -3079,15 +3076,15 @@
                 "description": "User Results",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "object"
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -3159,9 +3156,6 @@
                 "description": "User Friends",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -3194,15 +3188,15 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
             "user clubs": {
                 "description": "User Clubs",
                 "allOf": [
-                    {
-                        "$ref": "#/components/schemas/pagination"
-                    },
                     {
                         "properties": {
                             "data": {
@@ -3223,15 +3217,15 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
             "watch episodes": {
                 "description": "Watch Episodes",
                 "allOf": [
-                    {
-                        "$ref": "#/components/schemas/pagination"
-                    },
                     {
                         "properties": {
                             "data": {
@@ -3276,6 +3270,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -3554,9 +3551,6 @@
                 "description": "Anime Collection Resource",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -3566,6 +3560,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -3844,6 +3841,24 @@
                         "items": {
                             "$ref": "#/components/schemas/mal_url"
                         }
+                    },
+                    "explicit_genres": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "themes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "demographics": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
                     }
                 },
                 "type": "object"
@@ -4047,9 +4062,6 @@
                 "description": "Characters Search Resource",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -4059,6 +4071,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -4153,9 +4168,6 @@
                             "type": "object",
                             "allOf": [
                                 {
-                                    "$ref": "#/components/schemas/mal_url"
-                                },
-                                {
                                     "properties": {
                                         "image_url": {
                                             "type": "string"
@@ -4165,6 +4177,9 @@
                                         }
                                     },
                                     "type": "object"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/mal_url"
                                 }
                             ]
                         }
@@ -4175,9 +4190,6 @@
                             "type": "object",
                             "allOf": [
                                 {
-                                    "$ref": "#/components/schemas/mal_url"
-                                },
-                                {
                                     "properties": {
                                         "image_url": {
                                             "type": "string"
@@ -4187,6 +4199,9 @@
                                         }
                                     },
                                     "type": "object"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/mal_url"
                                 }
                             ]
                         }
@@ -4197,9 +4212,6 @@
                             "type": "object",
                             "allOf": [
                                 {
-                                    "$ref": "#/components/schemas/mal_url"
-                                },
-                                {
                                     "properties": {
                                         "image_url": {
                                             "type": "string"
@@ -4209,6 +4221,9 @@
                                         }
                                     },
                                     "type": "object"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/mal_url"
                                 }
                             ]
                         }
@@ -4241,9 +4256,6 @@
                 "description": "Clubs Search Resource",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -4253,6 +4265,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -5047,9 +5062,6 @@
                 "description": "Manga Search Resource",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -5063,6 +5075,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -5227,6 +5242,24 @@
                         "items": {
                             "$ref": "#/components/schemas/mal_url"
                         }
+                    },
+                    "explicit_genres": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "themes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "demographics": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
                     }
                 },
                 "type": "object"
@@ -5379,9 +5412,6 @@
                 "description": "People Search",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -5395,6 +5425,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -5507,16 +5540,23 @@
                                         "image_url": {
                                             "description": "Default JPG Image Size URL",
                                             "type": "string"
-                                        },
-                                        "large_image_url": {
-                                            "description": "Large JPG Image Size URL",
-                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
                                 }
-                            },
-                            "webp": {
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "pictures variants": {
+                "description": "Pictures Resource",
+                "properties": {
+                    "data": {
+                        "properties": {
+                            "jpg": {
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -5606,9 +5646,6 @@
                                     "type": "object",
                                     "allOf": [
                                         {
-                                            "$ref": "#/components/schemas/anime meta"
-                                        },
-                                        {
                                             "properties": {
                                                 "type": {
                                                     "type": "string"
@@ -5618,6 +5655,9 @@
                                                 }
                                             },
                                             "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/anime meta"
                                         }
                                     ]
                                 }
@@ -5629,9 +5669,6 @@
                                     "type": "object",
                                     "allOf": [
                                         {
-                                            "$ref": "#/components/schemas/manga meta"
-                                        },
-                                        {
                                             "properties": {
                                                 "type": {
                                                     "type": "string"
@@ -5641,6 +5678,9 @@
                                                 }
                                             },
                                             "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/manga meta"
                                         }
                                     ]
                                 }
@@ -5652,15 +5692,15 @@
                                     "type": "object",
                                     "allOf": [
                                         {
-                                            "$ref": "#/components/schemas/character meta"
-                                        },
-                                        {
                                             "properties": {
                                                 "": {
                                                     "$ref": "#/components/schemas/mal_url_2"
                                                 }
                                             },
                                             "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/character meta"
                                         }
                                     ]
                                 }
@@ -6418,9 +6458,6 @@
                 "description": "Anime Reviews Resource",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -6428,21 +6465,24 @@
                                     "type": "object",
                                     "allOf": [
                                         {
-                                            "$ref": "#/components/schemas/anime review"
-                                        },
-                                        {
                                             "properties": {
                                                 "user": {
                                                     "$ref": "#/components/schemas/user meta"
                                                 }
                                             },
                                             "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/anime review"
                                         }
                                     ]
                                 }
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -6450,9 +6490,6 @@
                 "description": "Manga Reviews Resource",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
-                    },
-                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -6460,30 +6497,30 @@
                                     "type": "object",
                                     "allOf": [
                                         {
-                                            "$ref": "#/components/schemas/manga review"
-                                        },
-                                        {
                                             "properties": {
                                                 "user": {
                                                     "$ref": "#/components/schemas/user meta"
                                                 }
                                             },
                                             "type": "object"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/manga review"
                                         }
                                     ]
                                 }
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
             "anime userupdates": {
                 "description": "Anime User Updates Resource",
                 "allOf": [
-                    {
-                        "$ref": "#/components/schemas/pagination"
-                    },
                     {
                         "properties": {
                             "data": {
@@ -6519,6 +6556,9 @@
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },

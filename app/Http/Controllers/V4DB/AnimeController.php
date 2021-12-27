@@ -628,22 +628,10 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              @OA\Schema(
-     *                  schema="anime pictures",
-     *                  description="Anime Pictures",
-     *                  @OA\Property(
-     *                      property="data",
-     *                      type="array",
-     *
-     *                      @OA\Items(
-     *                          @OA\Schema(
-     *                              ref="#/components/schemas/pictures"
-     *                          ),
-     *                      ),
-     *                  ),
-     *              )
+     *              ref="#/components/schemas/pictures variants"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

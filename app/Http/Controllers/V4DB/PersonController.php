@@ -36,11 +36,12 @@ class PersonController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns person resource",
+     *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/person"
+     *              ref="#/components/schemas/pictures variants"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

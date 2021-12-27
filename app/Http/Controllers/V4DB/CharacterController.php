@@ -337,11 +337,12 @@ class CharacterController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a list of pictures of the character",
+     *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/character pictures"
+     *              ref="#/components/schemas/pictures"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
