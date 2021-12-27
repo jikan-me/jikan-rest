@@ -1616,6 +1616,26 @@
                     "schedules"
                 ],
                 "operationId": "getSchedules",
+                "parameters": [
+                    {
+                        "name": "topic",
+                        "in": "path",
+                        "description": "Filter by day",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "monday",
+                                "tuesday",
+                                "wednesday",
+                                "thursday",
+                                "friday",
+                                "unknown",
+                                "other"
+                            ]
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns weekly schedule",
@@ -3027,69 +3047,27 @@
                 "type": "object"
             },
             "schedules": {
-                "description": "List of weekly schedule",
-                "properties": {
-                    "data": {
+                "description": "Anime resources currently airing",
+                "allOf": [
+                    {
                         "properties": {
-                            "monday": {
+                            "data": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "#/components/schemas/anime"
-                                }
-                            },
-                            "tuesday": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/anime"
-                                }
-                            },
-                            "wednesday": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/anime"
-                                }
-                            },
-                            "thursday": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/anime"
-                                }
-                            },
-                            "friday": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/anime"
-                                }
-                            },
-                            "saturday": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/anime"
-                                }
-                            },
-                            "sunday": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/anime"
-                                }
-                            },
-                            "other": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/anime"
-                                }
-                            },
-                            "unknown": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/anime"
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/anime"
+                                        }
+                                    ]
                                 }
                             }
                         },
                         "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
-                },
-                "type": "object"
+                ]
             },
             "search query sort": {
                 "description": "Characters Search Query Sort",

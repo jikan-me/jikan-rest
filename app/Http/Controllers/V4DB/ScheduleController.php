@@ -45,6 +45,14 @@ class ScheduleController extends Controller
      *     operationId="getSchedules",
      *     tags={"schedules"},
      *
+     *      @OA\Parameter(
+     *          name="topic",
+     *          in="path",
+     *          required=false,
+     *          description="Filter by day",
+     *          @OA\Schema(type="string",enum={"monday", "tuesday", "wednesday", "thursday", "friday", "unknown", "other"})
+     *      ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns weekly schedule",
@@ -58,87 +66,26 @@ class ScheduleController extends Controller
      *     ),
      * ),
      *
-     * @OA\Schema(
-     *     schema="schedules",
-     *     description="List of weekly schedule",
+     *  @OA\Schema(
+     *      schema="schedules",
+     *      description="Anime resources currently airing",
      *
-     *      @OA\Property(
-     *          property="data",
-     *          type="object",
-     *          @OA\Property(
-     *              property="monday",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *
+     *                   @OA\Items(
+     *                       allOf={
+     *                           @OA\Schema(ref="#/components/schemas/anime"),
+     *                       }
+     *                   )
      *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="tuesday",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="wednesday",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="thursday",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="friday",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="saturday",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="sunday",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="other",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="unknown",
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/anime",
-     *              ),
-     *          ),
-     *      ),
-     * ),
+     *          )
+     *      }
+     *  )
      */
     public function main(Request $request, ?string $day = null)
     {
