@@ -47,8 +47,10 @@ class RecommendationsController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Recent Anime Recommendations",
-     *         @OA\JsonContent()
+     *         description="Returns recent anime recommendations",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/recent recommendations"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -106,8 +108,10 @@ class RecommendationsController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Recent Manga Recommendations",
-     *         @OA\JsonContent()
+     *         description="Returns recent manga recommendations",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/recent recommendations"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",

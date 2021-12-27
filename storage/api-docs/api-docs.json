@@ -1500,10 +1500,12 @@
                 "operationId": "getAnimeRecommendations",
                 "responses": {
                     "200": {
-                        "description": "Returns Recent Anime Recommendations",
+                        "description": "Returns recent anime recommendations",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/recent recommendations"
+                                }
                             }
                         }
                     },
@@ -1521,10 +1523,12 @@
                 "operationId": "getMangaRecommendations",
                 "responses": {
                     "200": {
-                        "description": "Returns Recent Manga Recommendations",
+                        "description": "Returns recent manga recommendations",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/recent recommendations"
+                                }
                             }
                         }
                     },
