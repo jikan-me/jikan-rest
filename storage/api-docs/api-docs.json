@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Jikan API",
-        "description": "[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. It scrapes the website to satisfy the need for an API - which MyAnimeList lacks.",
+        "description": "[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.",
         "termsOfService": "https://jikan.moe/terms",
         "contact": {
             "email": "neko@jikan.moe"
@@ -16,7 +16,7 @@
     "servers": [
         {
             "url": "https://api.jikan.moe/v4",
-            "description": "Jikan REST API Alpha"
+            "description": "Jikan REST API Beta"
         }
     ],
     "paths": {
@@ -3698,46 +3698,7 @@
                         "type": "string"
                     },
                     "images": {
-                        "description": "Images",
-                        "properties": {
-                            "jpg": {
-                                "description": "Available images in JPG",
-                                "properties": {
-                                    "image_url": {
-                                        "description": "Image URL JPG (225x335)",
-                                        "type": "string"
-                                    },
-                                    "small_image_url": {
-                                        "description": "Small Image URL JPG (50x74)",
-                                        "type": "string"
-                                    },
-                                    "large_image_url": {
-                                        "description": "Image URL JPG (300x446)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "webp": {
-                                "description": "Available images in WEBP",
-                                "properties": {
-                                    "image_url": {
-                                        "description": "Image URL WEBP (225x335)",
-                                        "type": "string"
-                                    },
-                                    "small_image_url": {
-                                        "description": "Small Image URL WEBP (50x74)",
-                                        "type": "string"
-                                    },
-                                    "large_image_url": {
-                                        "description": "Image URL WEBP (300x446)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "type": "object"
+                        "$ref": "#/components/schemas/anime images"
                     },
                     "trailer": {
                         "$ref": "#/components/schemas/trailer base"
@@ -4155,38 +4116,7 @@
                         "type": "string"
                     },
                     "images": {
-                        "description": "Images",
-                        "properties": {
-                            "jpg": {
-                                "description": "Available images in JPG",
-                                "properties": {
-                                    "image_url": {
-                                        "description": "Image URL JPG (225x335)",
-                                        "type": "string"
-                                    },
-                                    "small_image_url": {
-                                        "description": "Small Image URL JPG (50x74)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "webp": {
-                                "description": "Available images in WEBP",
-                                "properties": {
-                                    "image_url": {
-                                        "description": "Image URL WEBP (225x335)",
-                                        "type": "string"
-                                    },
-                                    "small_image_url": {
-                                        "description": "Small Image URL WEBP (50x74)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "type": "object"
+                        "$ref": "#/components/schemas/character images"
                     },
                     "name": {
                         "description": "Name",
@@ -5143,46 +5073,7 @@
                         "type": "string"
                     },
                     "images": {
-                        "description": "Images",
-                        "properties": {
-                            "jpg": {
-                                "description": "Available images in JPG",
-                                "properties": {
-                                    "image_url": {
-                                        "description": "Image URL JPG (225x335)",
-                                        "type": "string"
-                                    },
-                                    "small_image_url": {
-                                        "description": "Small Image URL JPG (50x74)",
-                                        "type": "string"
-                                    },
-                                    "large_image_url": {
-                                        "description": "Image URL JPG (300x446)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "webp": {
-                                "description": "Available images in WEBP",
-                                "properties": {
-                                    "image_url": {
-                                        "description": "Image URL WEBP (225x335)",
-                                        "type": "string"
-                                    },
-                                    "small_image_url": {
-                                        "description": "Small Image URL WEBP (50x74)",
-                                        "type": "string"
-                                    },
-                                    "large_image_url": {
-                                        "description": "Image URL WEBP (300x446)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        },
-                        "type": "object"
+                        "$ref": "#/components/schemas/manga images"
                     },
                     "title": {
                         "description": "Title",
@@ -5585,14 +5476,8 @@
                         "type": "array",
                         "items": {
                             "properties": {
-                                "jpg": {
-                                    "properties": {
-                                        "image_url": {
-                                            "description": "Default JPG Image Size URL",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
+                                "images": {
+                                    "$ref": "#/components/schemas/anime images"
                                 }
                             },
                             "type": "object"
@@ -5608,18 +5493,8 @@
                         "type": "array",
                         "items": {
                             "properties": {
-                                "jpg": {
-                                    "properties": {
-                                        "image_url": {
-                                            "description": "Default JPG Image Size URL",
-                                            "type": "string"
-                                        },
-                                        "large_image_url": {
-                                            "description": "Large JPG Image Size URL",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
+                                "images": {
+                                    "$ref": "#/components/schemas/common images"
                                 }
                             },
                             "type": "object"

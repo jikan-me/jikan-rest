@@ -23,14 +23,8 @@ class PicturesResource extends JsonResource
      *          @OA\Items(
      *              type="object",
      *              @OA\Property(
-     *                   property="jpg",
-     *                   type="object",
-     *                       @OA\Property(
-     *                           property="image_url",
-     *                           type="string",
-     *                           description="Default JPG Image Size URL"
-     *                       ),
-     *                  ),
+     *                  property="images",
+     *                  ref="#/components/schemas/anime images"
      *              ),
      *          ),
      *     ),
@@ -47,19 +41,8 @@ class PicturesResource extends JsonResource
      *          @OA\Items(
      *              type="object",
      *              @OA\Property(
-     *                   property="jpg",
-     *                   type="object",
-     *                      @OA\Property(
-     *                          property="image_url",
-     *                          type="string",
-     *                          description="Default JPG Image Size URL"
-     *                      ),
-     *                      @OA\Property(
-     *                          property="large_image_url",
-     *                          type="string",
-     *                          description="Large JPG Image Size URL"
-     *                      ),
-     *                  ),
+     *                  property="images",
+     *                  ref="#/components/schemas/common images"
      *              ),
      *          ),
      *     ),

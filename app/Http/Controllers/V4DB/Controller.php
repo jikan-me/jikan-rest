@@ -23,7 +23,7 @@ class Controller extends BaseController
      *     @OA\Info(
      *         version="4.0.0",
      *         title="Jikan API",
-     *         description="[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. It scrapes the website to satisfy the need for an API - which MyAnimeList lacks.",
+     *         description="[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.",
      *         termsOfService="https://jikan.moe/terms",
      *         @OA\Contact(
      *             email="neko@jikan.moe"
@@ -34,7 +34,7 @@ class Controller extends BaseController
      *         )
      *     ),
      *     @OA\Server(
-     *         description="Jikan REST API Alpha",
+     *         description="Jikan REST API Beta",
      *         url="https://api.jikan.moe/v4"
      *     ),
      *     @OA\ExternalDocumentation(

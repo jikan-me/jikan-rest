@@ -23,50 +23,8 @@ class MangaResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="images",
-     *          type="object",
-     *          description="Images",
-     *          @OA\Property(
-     *              property="jpg",
-     *              type="object",
-     *              description="Available images in JPG",
-     *              @OA\Property(
-     *                  property="image_url",
-     *                  type="string",
-     *                  description="Image URL JPG (225x335)",
-     *              ),
-     *              @OA\Property(
-     *                  property="small_image_url",
-     *                  type="string",
-     *                  description="Small Image URL JPG (50x74)",
-     *              ),
-     *              @OA\Property(
-     *                  property="large_image_url",
-     *                  type="string",
-     *                  description="Image URL JPG (300x446)",
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="webp",
-     *              type="object",
-     *              description="Available images in WEBP",
-     *              @OA\Property(
-     *                  property="image_url",
-     *                  type="string",
-     *                  description="Image URL WEBP (225x335)",
-     *              ),
-     *              @OA\Property(
-     *                  property="small_image_url",
-     *                  type="string",
-     *                  description="Small Image URL WEBP (50x74)",
-     *              ),
-     *              @OA\Property(
-     *                  property="large_image_url",
-     *                  type="string",
-     *                  description="Image URL WEBP (300x446)",
-     *              ),
-     *          ),
+     *          ref="#/components/schemas/manga images"
      *      ),
-     *
      *      @OA\Property(
      *          property="title",
      *          type="string",
