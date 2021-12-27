@@ -57,7 +57,7 @@ class MangaController extends Controller
      *         response="200",
      *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/pictures"
+     *              ref="#/components/schemas/manga"
      *         )
      *     ),
      *
@@ -286,7 +286,7 @@ class MangaController extends Controller
      *         response="200",
      *         description="Returns a list of manga forum topics",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/manga pictures"
+     *              ref="#/components/schemas/pictures"
      *         )
      *     ),
      *     @OA\Response(

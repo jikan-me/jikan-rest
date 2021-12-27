@@ -877,39 +877,6 @@
                 }
             }
         },
-        "/magazines/{id}": {
-            "get": {
-                "tags": [
-                    "magazines"
-                ],
-                "operationId": "getMagazineById",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Returns Magazine's manga",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/magazine"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Error: Bad request. When required parameters were not supplied."
-                    }
-                }
-            }
-        },
         "/manga/{id}": {
             "get": {
                 "tags": [
@@ -922,7 +889,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/pictures"
+                                    "$ref": "#/components/schemas/manga"
                                 }
                             }
                         }
@@ -1014,7 +981,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/manga pictures"
+                                    "$ref": "#/components/schemas/pictures"
                                 }
                             }
                         }
@@ -1322,27 +1289,6 @@
                                 "schema": {
                                     "$ref": "#/components/schemas/producers"
                                 }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Error: Bad request. When required parameters were not supplied."
-                    }
-                }
-            }
-        },
-        "/producers/{id}": {
-            "get": {
-                "tags": [
-                    "producers"
-                ],
-                "operationId": "getProducerById",
-                "responses": {
-                    "200": {
-                        "description": "Returns Producer's anime",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
                             }
                         }
                     },
@@ -5636,10 +5582,10 @@
                 "description": "Pictures Resource",
                 "properties": {
                     "data": {
-                        "properties": {
-                            "jpg": {
-                                "type": "array",
-                                "items": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "jpg": {
                                     "properties": {
                                         "image_url": {
                                             "description": "Default JPG Image Size URL",
@@ -5648,9 +5594,9 @@
                                     },
                                     "type": "object"
                                 }
-                            }
-                        },
-                        "type": "object"
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -5659,10 +5605,10 @@
                 "description": "Pictures Resource",
                 "properties": {
                     "data": {
-                        "properties": {
-                            "jpg": {
-                                "type": "array",
-                                "items": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "jpg": {
                                     "properties": {
                                         "image_url": {
                                             "description": "Default JPG Image Size URL",
@@ -5675,9 +5621,9 @@
                                     },
                                     "type": "object"
                                 }
-                            }
-                        },
-                        "type": "object"
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"

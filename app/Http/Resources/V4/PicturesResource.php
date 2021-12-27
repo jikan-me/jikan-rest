@@ -18,18 +18,19 @@ class PicturesResource extends JsonResource
      *
      *     @OA\Property(
      *          property="data",
-     *          type="object",
+     *          type="array",
      *
-     *          @OA\Property(
-     *               property="jpg",
-     *               type="array",
-     *               @OA\Items(
+     *          @OA\Items(
+     *              type="object",
+     *              @OA\Property(
+     *                   property="jpg",
      *                   type="object",
-     *                   @OA\Property(
-     *                       property="image_url",
-     *                       type="string",
-     *                       description="Default JPG Image Size URL"
-     *                   ),
+     *                       @OA\Property(
+     *                           property="image_url",
+     *                           type="string",
+     *                           description="Default JPG Image Size URL"
+     *                       ),
+     *                  ),
      *              ),
      *          ),
      *     ),
@@ -41,23 +42,24 @@ class PicturesResource extends JsonResource
      *
      *     @OA\Property(
      *          property="data",
-     *          type="object",
+     *          type="array",
      *
-     *          @OA\Property(
-     *               property="jpg",
-     *               type="array",
-     *               @OA\Items(
+     *          @OA\Items(
+     *              type="object",
+     *              @OA\Property(
+     *                   property="jpg",
      *                   type="object",
-     *                   @OA\Property(
-     *                       property="image_url",
-     *                       type="string",
-     *                       description="Default JPG Image Size URL"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="large_image_url",
-     *                       type="string",
-     *                       description="Large JPG Image Size URL"
-     *                   ),
+     *                      @OA\Property(
+     *                          property="image_url",
+     *                          type="string",
+     *                          description="Default JPG Image Size URL"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="large_image_url",
+     *                          type="string",
+     *                          description="Large JPG Image Size URL"
+     *                      ),
+     *                  ),
      *              ),
      *          ),
      *     ),
