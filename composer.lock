@@ -809,28 +809,28 @@
         },
         {
             "name": "fabpot/goutte",
-            "version": "v4.0.2",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/Goutte.git",
-                "reference": "f51940fbe0db060bc4fc0b3f1d19bc4ff3054b17"
+                "reference": "293e754f0be2f1e85f9b31262cb811de39874e03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/Goutte/zipball/f51940fbe0db060bc4fc0b3f1d19bc4ff3054b17",
-                "reference": "f51940fbe0db060bc4fc0b3f1d19bc4ff3054b17",
+                "url": "https://api.github.com/repos/FriendsOfPHP/Goutte/zipball/293e754f0be2f1e85f9b31262cb811de39874e03",
+                "reference": "293e754f0be2f1e85f9b31262cb811de39874e03",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.3",
-                "symfony/browser-kit": "^4.4|^5.0|^6.0",
-                "symfony/css-selector": "^4.4|^5.0|^6.0",
-                "symfony/dom-crawler": "^4.4|^5.0|^6.0",
-                "symfony/http-client": "^4.4|^5.0|^6.0",
-                "symfony/mime": "^4.4|^5.0|^6.0"
+                "symfony/browser-kit": "^4.4|^5.0",
+                "symfony/css-selector": "^4.4|^5.0",
+                "symfony/dom-crawler": "^4.4|^5.0",
+                "symfony/http-client": "^4.4|^5.0",
+                "symfony/mime": "^4.4|^5.0"
             },
             "require-dev": {
-                "symfony/phpunit-bridge": "^5.0|^6.0"
+                "symfony/phpunit-bridge": "^5.0"
             },
             "type": "application",
             "autoload": {
@@ -858,9 +858,9 @@
             ],
             "support": {
                 "issues": "https://github.com/FriendsOfPHP/Goutte/issues",
-                "source": "https://github.com/FriendsOfPHP/Goutte/tree/v4.0.2"
+                "source": "https://github.com/FriendsOfPHP/Goutte/tree/v4.0.1"
             },
-            "time": "2021-12-17T17:15:01+00:00"
+            "time": "2020-10-14T06:49:09+00:00"
         },
         {
             "name": "flipbox/lumen-generator",
@@ -2932,28 +2932,28 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "86f725f2db58bb1c7048cc7113f9f996150be22d"
+                "reference": "18ed493a1e8a953ed9a9fba568e715db97b07827"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/86f725f2db58bb1c7048cc7113f9f996150be22d",
-                "reference": "86f725f2db58bb1c7048cc7113f9f996150be22d",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/18ed493a1e8a953ed9a9fba568e715db97b07827",
+                "reference": "18ed493a1e8a953ed9a9fba568e715db97b07827",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "fabpot/goutte": "^4.0",
+                "fabpot/goutte": "4.0.1",
                 "php": "^7.4|^8.0"
             },
             "require-dev": {
-                "brianium/paratest": "~4.0",
+                "brianium/paratest": "^6.4.1",
                 "doctrine/collections": "^1.5",
                 "friendsofphp/php-cs-fixer": "^2.16",
                 "jakub-onderka/php-parallel-lint": "^1.0",
                 "jikan-me/jikan-fixtures": "dev-master",
-                "php-vcr/php-vcr": "~1.4",
+                "php-vcr/php-vcr": "^1.6",
                 "php-vcr/phpunit-testlistener-vcr": "~3.2",
-                "phpro/grumphp": "^0.19",
+                "phpro/grumphp": "^1.7.0",
                 "phpunit/phpunit": "~9.0",
                 "squizlabs/php_codesniffer": "^3.3"
             },
@@ -2986,7 +2986,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-12-25T10:11:47+00:00"
+            "time": "2021-12-27T17:38:03+00:00"
         },
         {
             "name": "jms/metadata",

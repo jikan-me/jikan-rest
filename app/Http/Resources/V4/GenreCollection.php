@@ -27,12 +27,12 @@ class GenreCollection extends ResourceCollection
      *
      *     @OA\Property(
      *          property="data",
-     *          type="object",
+     *          type="array",
      *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Items(
+     *              type="object",
      *              @OA\Schema(ref="#/components/schemas/genre"),
-     *          }
+     *          ),
      *     ),
      *  ),
      *

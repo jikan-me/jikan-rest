@@ -5062,15 +5062,10 @@
                 "description": "Genres Collection Resource",
                 "properties": {
                     "data": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/genre"
-                            }
-                        ]
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
