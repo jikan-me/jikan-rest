@@ -41,6 +41,9 @@ class AnimeThemesResource extends JsonResource
      */
     public function toArray($request)
     {
-        return $this['themes'];
+        return [
+            'openings' => $this->opening_themes,
+            'endings' => $this->ending_themes
+        ];
     }
 }

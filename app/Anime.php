@@ -19,7 +19,7 @@ class Anime extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id','url','title','title_english','title_japanese','title_synonyms', 'images', 'type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres','opening_themes','ending_themes'
+        'mal_id','url','title','title_english','title_japanese','title_synonyms', 'images', 'type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres', 'explicit_genres', 'themes', 'demographics', 'opening_themes','ending_themes'
     ];
 
     /**
@@ -116,19 +116,6 @@ class Anime extends Model
             'time' => null,
             'timezone' => null,
             'string' => null
-        ];
-    }
-
-    public function setThemesAttribute($value)
-    {
-        $this->attributes['themes'] = $this->getThemesAttribute();
-    }
-
-    public function getThemesAttribute()
-    {
-        return [
-            'openings' => $this->attributes['opening_themes'],
-            'endings' => $this->attributes['ending_themes'],
         ];
     }
 

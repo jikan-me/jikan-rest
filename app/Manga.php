@@ -21,7 +21,7 @@ class Manga extends Model
      */
     protected $fillable = [
         'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'images', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
-        'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related', 'genres', 'authors', 'serializations',
+        'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related', 'genres', 'explicit_genres', 'themes', 'demographics', 'authors', 'serializations',
     ];
 
     /**

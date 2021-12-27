@@ -222,6 +222,9 @@ class MangaResource extends JsonResource
             'authors' => $this->authors,
             'serializations' => $this->serializations,
             'genres' => $this->genres,
+            'explicit_genres' => $this->explicit_genres,
+            'themes' => $this->themes,
+            'demographics' => $this->demographics,
         ];
     }
 }
