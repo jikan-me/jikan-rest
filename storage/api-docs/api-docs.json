@@ -784,12 +784,29 @@
                     "genres"
                 ],
                 "operationId": "getAnimeGenres",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/genre query filter"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Returns Anime Genres Resource",
+                        "description": "Returns entry genres, explicit_genres, themes and demographics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/genres"
+                                }
                             }
                         }
                     },
@@ -804,13 +821,30 @@
                 "tags": [
                     "genres"
                 ],
-                "operationId": "getMangaGenres",
+                "operationId": "getAnimeGenres",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/genre query filter"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Returns Manga Genres Resource",
+                        "description": "Returns entry genres, explicit_genres, themes and demographics",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/genres"
+                                }
                             }
                         }
                     },
@@ -4975,6 +5009,16 @@
                     }
                 },
                 "type": "object"
+            },
+            "genre query filter": {
+                "description": "Filter genres by type",
+                "type": "string",
+                "enum": [
+                    "genres",
+                    "explicit_genres",
+                    "themes",
+                    "demographics"
+                ]
             },
             "genre": {
                 "description": "Genre Resource",

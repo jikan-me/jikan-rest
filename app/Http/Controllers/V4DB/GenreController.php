@@ -23,10 +23,21 @@ class GenreController extends Controller
      *     operationId="getAnimeGenres",
      *     tags={"genres"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
+     *     @OA\Parameter(
+     *       name="filter",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/genre query filter")
+     *     ),
+
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Anime Genres Resource",
-     *         @OA\JsonContent()
+     *         description="Returns entry genres, explicit_genres, themes and demographics",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/genres"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -73,13 +84,24 @@ class GenreController extends Controller
     /**
      *  @OA\Get(
      *     path="/genres/manga",
-     *     operationId="getMangaGenres",
+     *     operationId="getAnimeGenres",
      *     tags={"genres"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
+     *     @OA\Parameter(
+     *       name="filter",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/genre query filter")
+     *     ),
+
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Manga Genres Resource",
-     *         @OA\JsonContent()
+     *         description="Returns entry genres, explicit_genres, themes and demographics",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/genres"
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
