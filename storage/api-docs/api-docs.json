@@ -1360,10 +1360,17 @@
                 "operationId": "getRandomAnime",
                 "responses": {
                     "200": {
-                        "description": "Returns Random Anime",
+                        "description": "Returns a random anime resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/anime"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -1381,10 +1388,17 @@
                 "operationId": "getRandomManga",
                 "responses": {
                     "200": {
-                        "description": "Returns Random Manga",
+                        "description": "Returns a random manga resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/manga"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -1402,10 +1416,17 @@
                 "operationId": "getRandomCharacters",
                 "responses": {
                     "200": {
-                        "description": "Returns Random Character",
+                        "description": "Returns a random character resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/character"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -1423,10 +1444,17 @@
                 "operationId": "getRandomPeople",
                 "responses": {
                     "200": {
-                        "description": "Returns Random People",
+                        "description": "Returns a random person resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/person"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },
@@ -1444,10 +1472,17 @@
                 "operationId": "getRandomUsers",
                 "responses": {
                     "200": {
-                        "description": "Returns Random Users",
+                        "description": "Returns a random user profile resource",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/user profile"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     },

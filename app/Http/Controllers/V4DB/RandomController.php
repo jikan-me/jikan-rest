@@ -58,8 +58,13 @@ class RandomController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Random Anime",
-     *         @OA\JsonContent()
+     *         description="Returns a random anime resource",
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  ref="#/components/schemas/anime"
+     *              )
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -94,8 +99,13 @@ class RandomController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Random Manga",
-     *         @OA\JsonContent()
+     *         description="Returns a random manga resource",
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  ref="#/components/schemas/manga"
+     *              )
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -131,8 +141,13 @@ class RandomController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Random Character",
-     *         @OA\JsonContent()
+     *         description="Returns a random character resource",
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  ref="#/components/schemas/character"
+     *              )
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -158,8 +173,13 @@ class RandomController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Random People",
-     *         @OA\JsonContent()
+     *         description="Returns a random person resource",
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  ref="#/components/schemas/person"
+     *              )
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -185,8 +205,13 @@ class RandomController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Random Users",
-     *         @OA\JsonContent()
+     *         description="Returns a random user profile resource",
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  ref="#/components/schemas/user profile"
+     *              )
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",
