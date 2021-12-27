@@ -23,9 +23,12 @@ class ProducerController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Producers Resource",
-     *         @OA\JsonContent()
+     *         description="Returns producers collection",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/producers"
+     *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

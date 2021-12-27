@@ -33,7 +33,7 @@ class GenreResource extends JsonResource
      *      @OA\Property(
      *          property="count",
      *          type="integer",
-     *          description="Genre's anime count"
+     *          description="Genre's entry count"
      *      ),
      *  ),
      */

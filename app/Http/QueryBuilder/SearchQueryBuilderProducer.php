@@ -6,7 +6,17 @@ use App\Http\HttpHelper;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
-
+/**
+ * Class SearchQueryBuilderProducer
+ * @package App\Http\QueryBuilder
+ *
+ *  @OA\Schema(
+ *    schema="producers query orderby",
+ *    description="Order by producers data",
+ *    type="string",
+ *    enum={"mal_id", "name", "count"}
+ *  )
+ */
 class SearchQueryBuilderProducer implements SearchQueryBuilderInterface
 {
 

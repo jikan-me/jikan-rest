@@ -103,6 +103,7 @@ class GenreController extends Controller
      *              ref="#/components/schemas/genres"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

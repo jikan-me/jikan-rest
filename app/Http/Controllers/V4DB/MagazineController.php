@@ -22,9 +22,12 @@ class MagazineController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns Magazines Resource",
-     *         @OA\JsonContent()
+     *         description="Returns magazines collection",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/magazines"
+     *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

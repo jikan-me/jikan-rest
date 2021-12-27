@@ -7,6 +7,17 @@ use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 
 
+/**
+ * Class SearchQueryBuilderMagazine
+ * @package App\Http\QueryBuilder
+ *
+ *  @OA\Schema(
+ *    schema="magazines query orderby",
+ *    description="Order by magazine data",
+ *    type="string",
+ *    enum={"mal_id", "name", "count"}
+ *  )
+ */
 class SearchQueryBuilderMagazine implements SearchQueryBuilderInterface
 {
 

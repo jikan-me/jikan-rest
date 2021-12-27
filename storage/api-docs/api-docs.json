@@ -862,10 +862,12 @@
                 "operationId": "getMagazines",
                 "responses": {
                     "200": {
-                        "description": "Returns Magazines Resource",
+                        "description": "Returns magazines collection",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/magazines"
+                                }
                             }
                         }
                     },
@@ -1314,10 +1316,12 @@
                 "operationId": "getProducers",
                 "responses": {
                     "200": {
-                        "description": "Returns Producers Resource",
+                        "description": "Returns producers collection",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "$ref": "#/components/schemas/producers"
+                                }
                             }
                         }
                     },
@@ -3452,6 +3456,15 @@
                     "created"
                 ]
             },
+            "magazines query orderby": {
+                "description": "Order by magazine data",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "count"
+                ]
+            },
             "manga search query type": {
                 "description": "Available Manga types",
                 "type": "string",
@@ -3502,6 +3515,15 @@
                     "name",
                     "birthday",
                     "favorites"
+                ]
+            },
+            "producers query orderby": {
+                "description": "Order by producers data",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "count"
                 ]
             },
             "users search query gender": {
@@ -5036,7 +5058,7 @@
                         "type": "string"
                     },
                     "count": {
-                        "description": "Genre's anime count",
+                        "description": "Genre's entry count",
                         "type": "integer"
                     }
                 },
@@ -5052,7 +5074,7 @@
                                 "$ref": "#/components/schemas/pagination"
                             },
                             {
-                                "$ref": "#/components/schemas/producer"
+                                "$ref": "#/components/schemas/magazine"
                             }
                         ]
                     }
