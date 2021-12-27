@@ -65,7 +65,7 @@ class GenreIndexer extends Command
         $itemCount = count($results['genres']);
         echo "Parsed {$itemCount} anime genres\n";
         foreach ($results['genres'] as $i => $item) {
-            $item['count'] = $item['count'] - 587;
+            $item['count'] = $item['count'];
 
             $result = DB::table('genres_anime')
 //                ->where('mal_id', $item['mal_id'])
