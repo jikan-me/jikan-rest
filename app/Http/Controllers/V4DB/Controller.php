@@ -23,12 +23,11 @@ class Controller extends BaseController
      *     @OA\Info(
      *         version="4.0.0",
      *         title="Jikan API",
-     *         description="
+     *         description="[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.
      *
      *         ## Information
-     *
-     *         [Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API. It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.
-     *
+     *         It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.
+     *     
      *         ⚡ Jikan is powered by it's awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)
      *
      *         ### Rate Limiting
