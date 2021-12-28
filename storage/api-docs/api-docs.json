@@ -812,6 +812,39 @@
                 }
             }
         },
+        "/clubs/{id}/relations": {
+            "get": {
+                "tags": [
+                    "clubs"
+                ],
+                "operationId": "getClubRelations",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns Club Relations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/club relations"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/genres/anime": {
             "get": {
                 "tags": [
@@ -4261,6 +4294,50 @@
                     }
                 ]
             },
+            "club relations": {
+                "description": "Club Relations",
+                "properties": {
+                    "data": {
+                        "properties": {
+                            "anime": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "": {
+                                            "$ref": "#/components/schemas/mal_url"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "manga": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "": {
+                                            "$ref": "#/components/schemas/mal_url"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "characters": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "": {
+                                            "$ref": "#/components/schemas/mal_url"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "club": {
                 "description": "Club Resource",
                 "properties": {
@@ -4270,103 +4347,51 @@
                                 "description": "MyAnimeList ID",
                                 "type": "integer"
                             },
+                            "name": {
+                                "description": "Club name",
+                                "type": "string"
+                            },
                             "url": {
-                                "description": "MyAnimeList URL",
+                                "description": "Club URL",
                                 "type": "string"
                             },
                             "images": {
-                                "description": "Images",
-                                "properties": {
-                                    "jpg": {
-                                        "description": "Available images in JPG",
-                                        "properties": {
-                                            "image_url": {
-                                                "description": "Image URL JPG (225x335)",
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/common images"
                             },
-                            "members_count": {
+                            "members": {
                                 "description": "Number of club members",
-                                "type": "integer"
-                            },
-                            "pictures_count": {
-                                "description": "Number of club pictures",
                                 "type": "integer"
                             },
                             "category": {
                                 "description": "Club Category",
                                 "type": "string",
                                 "enum": [
-                                    "Actors & Artists",
-                                    "Anime",
-                                    "Characters",
-                                    "Cities & Neighborhoods",
-                                    "Companies",
-                                    "Conventions",
-                                    "Games",
-                                    "Japan",
-                                    "Manga",
-                                    "Music",
-                                    "Others",
-                                    "Schools"
+                                    "actors & artists",
+                                    "anime",
+                                    "characters",
+                                    "cities & neighborhoods",
+                                    "companies",
+                                    "conventions",
+                                    "games",
+                                    "japan",
+                                    "manga",
+                                    "music",
+                                    "others",
+                                    "schools"
                                 ]
                             },
                             "created": {
                                 "description": "Date Created ISO8601",
                                 "type": "string"
                             },
-                            "type": {
-                                "description": "Type",
+                            "access": {
+                                "description": "Club access",
                                 "type": "string",
                                 "enum": [
                                     "public",
                                     "private",
                                     "secret"
                                 ]
-                            },
-                            "staff": {
-                                "description": "Staff members",
-                                "type": "array",
-                                "items": {
-                                    "description": "Staff member",
-                                    "properties": {
-                                        "url": {
-                                            "description": "MyAnimeList URL",
-                                            "type": "string"
-                                        },
-                                        "username": {
-                                            "description": "MyAnimeList Username",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            },
-                            "anime_relations": {
-                                "description": "Anime Relations",
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/mal_url"
-                                }
-                            },
-                            "manga_relations": {
-                                "description": "Manga Relations",
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/mal_url"
-                                }
-                            },
-                            "character_relations": {
-                                "description": "Character Relations",
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/mal_url"
-                                }
                             }
                         },
                         "type": "object"
