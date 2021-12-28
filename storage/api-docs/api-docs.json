@@ -779,6 +779,39 @@
                 }
             }
         },
+        "/clubs/{id}/staff": {
+            "get": {
+                "tags": [
+                    "clubs"
+                ],
+                "operationId": "getClubStaff",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns Club Staff",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/club staff"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/genres/anime": {
             "get": {
                 "tags": [
@@ -3084,7 +3117,10 @@
                     {
                         "properties": {
                             "data": {
-                                "type": "object"
+                                "type": "array",
+                                "items": {
+                                    "type": "object"
+                                }
                             }
                         },
                         "type": "object"
@@ -4334,6 +4370,28 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "club staff": {
+                "description": "Club Staff Resource",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "url": {
+                                    "description": "User URL",
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "description": "User's username",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"

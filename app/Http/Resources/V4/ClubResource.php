@@ -136,7 +136,6 @@ class ClubResource extends JsonResource
             'category' => $this->category,
             'created' => $this->created,
             'type' => $this->type,
-            'staff' => $this->staff,
             'anime_relations' => $this->anime_relations,
             'manga_relations' => $this->manga_relations,
             'character_relations' => $this->character_relations,

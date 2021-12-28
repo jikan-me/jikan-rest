@@ -394,6 +394,10 @@ $router->group(
         $router->get('/{id:[0-9]+}/members', [
             'uses' => 'ClubController@members'
         ]);
+
+        $router->get('/{id:[0-9]+}/staff', [
+            'uses' => 'ClubController@staff'
+        ]);
     }
 );
 
