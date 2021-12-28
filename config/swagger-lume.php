@@ -201,12 +201,14 @@ return [
     'constants' => [
         // 'SWAGGER_LUME_CONST_HOST' => env('SWAGGER_LUME_CONST_HOST', 'http://my-default-host.com'),
         'API_DESCRIPTION' => <<<EOF
-        [Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.\n## Information
+        [Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.
+        
+        # Information
         It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.
 
         ⚡ Jikan is powered by it's awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)
 
-        ### Rate Limiting
+        ## Rate Limiting
 
         | Duration | Requests |
         |----|----|
@@ -215,13 +217,13 @@ return [
         | Per Second | 3 requests |
 
 
-        ### JSON Notes
+        ## JSON Notes
         - Any property (except arrays or objects) whose value does not exist or is undetermined, will be `null`.
         - Any array or object property whose value does not exist or is undetermined, will be `null`.
         - Any `score` property whose value does not exist or is undetermined, will be `0`.
         - All dates and timestamps are returned in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format and in UTC timezone
 
-        ### Caching
+        ## Caching
         By **CACHING**, we refer to the data parsed from MyAnimeList which is stored temporarily on our servers to provide better API performance.
 
         All requests, by default are cached for **24 hours** except the following endpoints which have their own unique cache **Time To Live**.
@@ -239,12 +241,12 @@ return [
         | `Expires` | Expiry unix timestamp |
 
 
-        ### Allowed HTTP(s) requests
+        ## Allowed HTTP(s) requests
 
         **Jikan REST API does not provide authenticated requests for MyAnimeList.** This means you can not use it to update your anime/manga list.
         Only GET requests are supported which return READ-ONLY data.
 
-        ### HTTP Responses
+        ## HTTP Responses
 
         | HTTP Status | Remarks |
         | ---- | ---- |
@@ -258,7 +260,7 @@ return [
         | `503 - Service Unavailable` | The service has broke. |
 
 
-        ### JSON Error Response
+        ## JSON Error Response
 
         ```json
          {
@@ -279,7 +281,7 @@ return [
         | `report_url` | Clicking this would redirect you to a generated GitHub issue. ℹ It's only returned on a parser error. |
 
 
-        ### Cache Validation
+        ## Cache Validation
 
         - All requests return a `ETag` header which is an MD5 hash of the response
         - You can use this hash to verify if there's new or updated content by suppliying it as the value for the `If-None-Match` in your next request header
@@ -288,7 +290,7 @@ return [
 
         ![Cache Validation](https://i.imgur.com/925ozVn.png 'Cache Validation')
 
-        ### Disclaimer
+        ## Disclaimer
 
         - Jikan is not affiliated with MyAnimeList.net.
         - Jikan is a free, open-source API. Please use it responsibly.
@@ -297,8 +299,7 @@ return [
 
         By using the API, you are agreeing to Jikan's [terms of use](https://jikan.moe/terms) policy.
 
-        [v3 Documentation](https://jikan.docs.apiary.io/) - [Wrappers/SDKs](https://github.com/jikan-me/jikan#wrappers) - [Report an issue](https://github.com/jikan-me/jikan-rest/issues/new)
-        [Host your own server](https://github.com/jikan-me/jikan-rest)
+        [v3 Documentation](https://jikan.docs.apiary.io/) - [Wrappers/SDKs](https://github.com/jikan-me/jikan#wrappers) - [Report an issue](https://github.com/jikan-me/jikan-rest/issues/new) - [Host your own server](https://github.com/jikan-me/jikan-rest)
         EOF,
     ],
 ];
