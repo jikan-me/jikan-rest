@@ -12,6 +12,8 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 
 
 ## Installation
+
+### Manual installation
 Please read the [manual installation guide](https://github.com/jikan-me/jikan-rest/wiki).
 For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
@@ -21,10 +23,9 @@ If you don't want to install it manually, you can use the [docker image](https:/
 ## Public REST API
 If you don't want to host your instance, there's a public API available.
 
-- **[REST DOCUMENTATION](http://docs.api.jikan.moe/)**
-- **[Apps/Projects using JikanREST](https://jikan.moe/showcase)*
+- *[Apps/Projects using the REST API](https://jikan.moe/showcase)*
 
-## Documentation
+### Documentation
 Please view the [documentation](https://docs.api.jikan.moe/).
 For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
