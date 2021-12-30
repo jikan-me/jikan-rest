@@ -28,7 +28,7 @@ If you don't want to host your instance, there's a public API available.
 Please view the [documentation](https://docs.api.jikan.moe/).
 For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
-### Wrappers
+## Wrappers
 
 | Language   | Wrappers |
 |------------|----------|
@@ -54,18 +54,18 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
 
 ---
-# Backers
+## Backers
 
 A huge thank you to all our Patrons! 🙏 This project wouldn't be running without your support.
 
 We have a free [REST API service](https://jikan.moe), if you wish to support us you can [become a Patron!](https://patreon.com/jikan)
 
-## Sugoi (すごい) Patrons
+### Sugoi (すごい) Patrons
 
 - [Jared Allard (jaredallard)](https://github.com/jaredallard)
 - [hugonun (hug_onun)](https://twitter.com/hug_onun)
 
-## Patrons
+### Patrons
 
 - Aaron Treinish
 - Cesar Irad Mendoza
