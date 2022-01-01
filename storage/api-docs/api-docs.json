@@ -2126,7 +2126,7 @@
         "/userbyid": {
             "get": {
                 "tags": [
-                    "user"
+                    "users"
                 ],
                 "operationId": "getUserById",
                 "responses": {
@@ -2477,6 +2477,16 @@
                     "users"
                 ],
                 "operationId": "getUserProfile",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user profile",
@@ -2500,6 +2510,16 @@
                     "users"
                 ],
                 "operationId": "getUserStatistics",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user statistics",
@@ -2523,6 +2543,16 @@
                     "users"
                 ],
                 "operationId": "getUserFavorites",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user favorites",
@@ -2546,6 +2576,16 @@
                     "users"
                 ],
                 "operationId": "getUserUpdates",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user updates",
@@ -2569,6 +2609,16 @@
                     "users"
                 ],
                 "operationId": "getUserAbout",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user about in raw HTML",
@@ -2592,6 +2642,16 @@
                     "users"
                 ],
                 "operationId": "getUserHistory",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user history (past 30 days)",
@@ -2615,6 +2675,16 @@
                     "users"
                 ],
                 "operationId": "getUserFriends",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user friends",
@@ -2632,12 +2702,84 @@
                 }
             }
         },
+        "/users/{username}/animelist": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getUserAnimelist",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns user anime list",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/users/{username}/mangalist": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getUserMangaList",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns user manga list",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/users/{username}/reviews": {
             "get": {
                 "tags": [
                     "users"
                 ],
                 "operationId": "getUserReviews",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user reviews",
@@ -2728,6 +2870,16 @@
                     "users"
                 ],
                 "operationId": "getUserRecommendations",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Recent Anime Recommendations",
@@ -2751,6 +2903,16 @@
                     "users"
                 ],
                 "operationId": "getUserClubs",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns user clubs",

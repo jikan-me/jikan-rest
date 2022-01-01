@@ -603,7 +603,7 @@ class SearchController extends Controller
      *  @OA\Get(
      *     path="/userbyid",
      *     operationId="getUserById",
-     *     tags={"user"},
+     *     tags={"users"},
      *
      *     @OA\Response(
      *         response="200",

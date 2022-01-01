@@ -40,6 +40,13 @@ class UserController extends Controller
      *     operationId="getUserProfile",
      *     tags={"users"},
      *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user profile",
@@ -115,6 +122,13 @@ class UserController extends Controller
      *     path="/users/{username}/statistics",
      *     operationId="getUserStatistics",
      *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -194,6 +208,13 @@ class UserController extends Controller
      *     operationId="getUserFavorites",
      *     tags={"users"},
      *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user favorites",
@@ -270,6 +291,13 @@ class UserController extends Controller
      *     path="/users/{username}/userupdates",
      *     operationId="getUserUpdates",
      *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -348,6 +376,13 @@ class UserController extends Controller
      *     operationId="getUserAbout",
      *     tags={"users"},
      *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user about in raw HTML",
@@ -425,6 +460,13 @@ class UserController extends Controller
      *     operationId="getUserHistory",
      *     tags={"users"},
      *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user history (past 30 days)",
@@ -475,6 +517,13 @@ class UserController extends Controller
      *     path="/users/{username}/friends",
      *     operationId="getUserFriends",
      *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -560,7 +609,32 @@ class UserController extends Controller
         );
     }
 
-
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/animelist",
+     *     operationId="getUserAnimelist",
+     *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user anime list",
+     *         @OA\JsonContent(
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     *
+     */
     public function animelist(Request $request, string $username, ?string $status = null)
     {
         if (!is_null($status)) {
@@ -610,6 +684,32 @@ class UserController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/mangalist",
+     *     operationId="getUserMangaList",
+     *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user manga list",
+     *         @OA\JsonContent(
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     *
+     */
     public function mangalist(Request $request, string $username, ?string $status = null)
     {
         if (!is_null($status)) {
@@ -665,6 +765,13 @@ class UserController extends Controller
      *     path="/users/{username}/reviews",
      *     operationId="getUserReviews",
      *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -767,6 +874,13 @@ class UserController extends Controller
      *     operationId="getUserRecommendations",
      *     tags={"users"},
      *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Recent Anime Recommendations",
@@ -812,6 +926,13 @@ class UserController extends Controller
      *     path="/users/{username}/clubs",
      *     operationId="getUserClubs",
      *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",

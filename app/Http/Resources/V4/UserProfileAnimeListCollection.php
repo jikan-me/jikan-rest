@@ -10,7 +10,7 @@ class UserProfileAnimeListCollection extends ResourceCollection
 
     /**
      * The resource that this resource collects.
-
+     *
      */
     public $collects = 'App\Http\Resources\V4\UserProfileAnimeListResource';
 
