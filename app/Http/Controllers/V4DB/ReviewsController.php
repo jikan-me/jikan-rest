@@ -16,7 +16,7 @@ class ReviewsController extends Controller
     /**
      *  @OA\Get(
      *     path="/reviews/anime",
-     *     operationId="getAnimeReviews",
+     *     operationId="getRecentAnimeReviews",
      *     tags={"reviews"},
      *
      *     @OA\Response(
@@ -95,7 +95,7 @@ class ReviewsController extends Controller
     /**
      *  @OA\Get(
      *     path="/reviews/manga",
-     *     operationId="getMangaReviews",
+     *     operationId="getRecentMangaReviews",
      *     tags={"reviews"},
      *
      *     @OA\Response(

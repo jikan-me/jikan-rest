@@ -1556,7 +1556,7 @@
                 "tags": [
                     "reviews"
                 ],
-                "operationId": "getAnimeReviews",
+                "operationId": "getRecentAnimeReviews",
                 "responses": {
                     "200": {
                         "description": "Returns recent anime reviews",
@@ -1619,7 +1619,7 @@
                 "tags": [
                     "reviews"
                 ],
-                "operationId": "getMangaReviews",
+                "operationId": "getRecentMangaReviews",
                 "responses": {
                     "200": {
                         "description": "Returns recent manga reviews",
