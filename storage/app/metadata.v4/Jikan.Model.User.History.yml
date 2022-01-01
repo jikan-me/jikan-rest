@@ -2,4 +2,4 @@ Jikan\Model\User\History:
   exclusion_policy: NONE
   properties:
     malUrl:
-      serialized_name: anime
+      serialized_name: entry

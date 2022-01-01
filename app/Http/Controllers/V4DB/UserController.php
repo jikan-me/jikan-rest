@@ -467,6 +467,13 @@ class UserController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
+     *     @OA\Parameter(
+     *       name="type",
+     *       in="path",
+     *       required=false,
+     *       @OA\Schema(type="string",enum={"anime", "manga"})
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user history (past 30 days)",
@@ -482,7 +489,10 @@ class UserController extends Controller
      */
     public function history(Request $request, string $username, ?string $type = null)
     {
-        $type = strtolower($type);
+        if (!is_null($type)) {
+            $type = strtolower($type);
+        }
+
         if (!is_null($type) && !\in_array($type, ['anime', 'manga'])) {
             return HttpResponse::badRequest($request);
         }
