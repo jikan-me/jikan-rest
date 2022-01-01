@@ -7,3 +7,6 @@ Homestead.yaml
 composer.phar
 composer.lock
 .php_cs.cache
+.env
+/storage/app/indexer
+/storage/app/failovers.json

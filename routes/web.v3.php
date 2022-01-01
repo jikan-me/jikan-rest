@@ -1,10 +1,9 @@
 <?php
 
-
 $router->get('/', function () use ($router) {
     return response()->json([
         'Author' => '@irfanDahir',
-        'Discord' => 'https://discord.gg/4tvCr36',
+        'Discord' => 'http://discord.jikan.moe',
         'Version' => JIKAN_REST_API_VERSION,
         'JikanPHP' => JIKAN_PARSER_VERSION,
         'Website' => 'https://jikan.moe',

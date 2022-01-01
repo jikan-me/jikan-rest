@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Request;
 use Jikan\Request\User\UserAnimeListRequest;
 use Jikan\Request\User\UserMangaListRequest;
-use \voku\helper\AntiXSS;
 use Jikan\Helper\Constants as JikanConstants;
 
 class UserListQueryBuilder
@@ -82,186 +82,170 @@ class UserListQueryBuilder
         'nya' => JikanConstants::USER_MANGA_LIST_NOT_YET_PUBLISHED,
     ];
 
-    public static function create($request)
+    public static function create(Request $request, $parser)
     {
-        $xss = new AntiXSS();
+        $query = $request->get('search') ?? null;
+        $search = $request->get('q') ?? null;
+        $page = $request->get('page') ?? null;
+        $sort = $request->get('sort') ?? null;
+        $orderBy = $request->get('order_by') ?? null;
+        $orderBy2 = $request->get('order_by2') ?? null;
 
-        // Search
-        if (isset($_GET['search'])) {
-            $request->setTitle(
-                $xss->xss_clean($_GET['search'])
-            );
+        // anime only
+        $airedFrom = $request->get('aired_from') ?? null;
+        $airedTo = $request->get('aired_to') ?? null;
+        $producer = $request->get('producer') ?? null;
+        $season = $request->get('season') ?? null;
+        $year = $request->get('year') ?? null;
+        $airingStatus = $request->get('airing_status') ?? null;
+
+        // manga only
+        $publishedFrom = $request->get('published_from') ?? null;
+        $publishedTo = $request->get('published_to') ?? null;
+        $magazine = $request->get('magazine') ?? null;
+        $publishingStatus = $request->get('publishing_status') ?? null;
+
+
+        // search
+        if ($search !== null) {
+            $parser->setTitle($search);
+        }
+        // bc: alias
+        if ($query !== null) {
+            $parser->setTitle($query);
         }
 
-        // Search Alias
-        if (isset($_GET['q'])) {
-            $request->setTitle(
-                $xss->xss_clean($_GET['q'])
-            );
+        // page
+        if ($page !== null) {
+            $parser->setPage((int) $page);
         }
 
-        // Page
-        if (isset($_GET['page'])) {
-            $page = (int) $_GET['page'];
-            $request->setPage($page);
+        // sort
+        if ($sort !== null && array_key_exists($sort, self::VALID_SORT)) {
+            $sort = self::VALID_SORT[$sort];
         }
 
-        // Sort
-        $sort = null;
-        if (isset($_GET['sort'])) {
-            $sort = $xss->xss_clean($_GET['sort']);
+        // animelist only queries
+        if ($parser instanceof UserAnimeListRequest) {
 
-            if (array_key_exists($sort, self::VALID_SORT)) {
-                $sort = self::VALID_SORT[$sort];
-            }
-        }
+            // order by
+            if ($orderBy !== null && array_key_exists($orderBy, self::VALID_ANIME_ORDER_BY)) {
+                $orderBy = self::VALID_ANIME_ORDER_BY[$orderBy];
 
-        if ($request instanceof UserAnimeListRequest) {
-            // Order By
-            if (isset($_GET['order_by'])) {
-                $orderby = $xss->xss_clean($_GET['order_by']);
-
-                if (array_key_exists($orderby, self::VALID_ANIME_ORDER_BY)) {
-                    $orderby = self::VALID_ANIME_ORDER_BY[$orderby];
-
-                    $request->setOrderBy($orderby, $sort);
-                }
+                $parser->setOrderBy($orderBy, $sort);
             }
 
-            // Order By 2
-            if (isset($_GET['order_by2'])) {
-                $orderby = $xss->xss_clean($_GET['order_by2']);
+            // order by 2
+            if ($orderBy2 !== null && array_key_exists($orderBy2, self::VALID_ANIME_ORDER_BY)) {
+                $orderBy2 = self::VALID_ANIME_ORDER_BY[$orderBy2];
 
-                if (array_key_exists($orderby, self::VALID_ANIME_ORDER_BY)) {
-                    $orderby = self::VALID_ANIME_ORDER_BY[$orderby];
-
-                    $request->setOrderBy2($orderby, $sort);
-                }
+                $parser->setOrderBy2($orderBy2, $sort);
             }
 
-            // Aired From
-            if (isset($_GET['aired_from'])) {
-                $airedFrom = $xss->xss_clean($_GET['aired_from']);
-                if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $airedFrom)) {
-                    $airedFrom = explode("-", $airedFrom);
-                    $request->setAiredFrom(
-                        (int) $airedFrom[2],
-                        (int) $airedFrom[1],
-                        (int) $airedFrom[0]
-                    );
-                }
+            // aired from
+            if ($airedFrom !== null && preg_match("~[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}~", $airedFrom)) {
+                $airedFrom = explode("-", $airedFrom);
+
+                $parser->setAiredFrom(
+                    (int) $airedFrom[0],
+                    (int) $airedFrom[1],
+                    (int) $airedFrom[2]
+                );
             }
 
-            // Aired To
-            if (isset($_GET['aired_to'])) {
-                $airedTo = $xss->xss_clean($_GET['aired_to']);
-                if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $airedTo)) {
+            // aired to
+            if ($airedTo !== null) {
+                if (preg_match("~[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}~", $airedTo)) {
                     $airedTo = explode("-", $airedTo);
-                    $request->setAiredTo(
-                        (int) $airedTo[2],
+
+                    $parser->setAiredTo(
+                        (int) $airedTo[0],
                         (int) $airedTo[1],
-                        (int) $airedTo[0]
+                        (int) $airedTo[2]
                     );
                 }
             }
 
-            // Producer
-            if (isset($_GET['producer'])) {
-                $producer = (int) $_GET['producer'];
-                $request->setProducer($producer);
+            // producer
+            if ($producer !== null) {
+                $parser->setProducer((int) $producer);
             }
 
-            // Season
-            if (isset($_GET['season'])) {
-                $season = $xss->xss_clean($_GET['season']);
-                if (\in_array($season, self::VALID_SEASONS)) {
-                    $request->setSeason($season);
-                }
+            // season
+            if ($season !== null && in_array($season, self::VALID_SEASONS)) {
+                $parser->setSeason($season);
             }
 
-            // Year
-            if (isset($_GET['year'])) {
-                $year = (int) $_GET['year'];
-                $request->setSeasonYear($year);
+            // year
+            if ($year !== null) {
+                $parser->setSeasonYear($year);
             }
 
-            // Airing Status
-            if (isset($_GET['airing_status'])) {
-                $airingStatus = $xss->xss_clean($_GET['airing_status']);
+            // airing status
+            if ($airingStatus !== null && array_key_exists($airingStatus, self::VALID_AIRING_STATUS)) {
+                $airingStatus = self::VALID_AIRING_STATUS[$airingStatus];
 
-                if (array_key_exists($airingStatus, self::VALID_AIRING_STATUS)) {
-                    $airingStatus = self::VALID_AIRING_STATUS[$airingStatus];
-                    $request->setAiringStatus($airingStatus);
-                }
+                $parser->setAiringStatus($airingStatus);
             }
+
         }
 
-        if ($request instanceof UserMangaListRequest) {
-            // Order By
-            if (isset($_GET['order_by'])) {
-                $orderby = $xss->xss_clean($_GET['order_by']);
+        if ($parser instanceof UserMangaListRequest) {
+            // order by
+            if ($orderBy !== null && array_key_exists($orderBy, self::VALID_MANGA_ORDER_BY)) {
+                $orderBy = self::VALID_MANGA_ORDER_BY[$orderBy];
 
-                if (array_key_exists($orderby, self::VALID_MANGA_ORDER_BY)) {
-                    $orderby = self::VALID_MANGA_ORDER_BY[$orderby];
-
-                    $request->setOrderBy($orderby, $sort);
-                }
+                $parser->setOrderBy($orderBy, $sort);
             }
 
-            // Order By 2
-            if (isset($_GET['order_by2'])) {
-                $orderby = $xss->xss_clean($_GET['order_by2']);
+            // order by 2
+            if ($orderBy2 !== null && array_key_exists($orderBy2, self::VALID_MANGA_ORDER_BY)) {
+                $orderBy2 = self::VALID_MANGA_ORDER_BY[$orderBy2];
 
-                if (array_key_exists($orderby, self::VALID_MANGA_ORDER_BY)) {
-                    $orderby = self::VALID_MANGA_ORDER_BY[$orderby];
-
-                    $request->setOrderBy2($orderby, $sort);
-                }
+                $parser->setOrderBy2($orderBy2, $sort);
             }
 
-            // Published From
-            if (isset($_GET['published_from'])) {
-                $publishedFrom = $xss->xss_clean($_GET['published_from']);
-                if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $publishedFrom)) {
+            // published from
+            if ($publishedFrom !== null) {
+                if (preg_match("~[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}~", $publishedFrom)) {
                     $publishedFrom = explode("-", $publishedFrom);
-                    $request->setPublishedFrom(
-                        (int) $publishedFrom[2],
+
+                    $parser->setPublishedFrom(
+                        (int) $publishedFrom[0],
                         (int) $publishedFrom[1],
-                        (int) $publishedFrom[0]
+                        (int) $publishedFrom[2]
                     );
                 }
             }
 
-            // Published To
-            if (isset($_GET['published_to'])) {
-                $publishedTo = $xss->xss_clean($_GET['published_to']);
-                if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $publishedTo)) {
+            // published to
+            if ($publishedTo !== null) {
+                if (preg_match("~[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}~", $publishedTo)) {
                     $publishedTo = explode("-", $publishedTo);
-                    $request->setPublishedTo(
-                        (int) $publishedTo[2],
+
+                    $parser->setPublishedTo(
+                        (int) $publishedTo[0],
                         (int) $publishedTo[1],
-                        (int) $publishedTo[0]
+                        (int) $publishedTo[2]
                     );
                 }
             }
 
-            // Magazine
-            if (isset($_GET['magazine'])) {
-                $magazine = (int) $_GET['magazine'];
-                $request->setMagazine($magazine);
+
+            // magazine
+            if ($magazine !== null) {
+                $parser->setMagazine((int) $magazine);
             }
 
-            // Publishing Status
-            if (isset($_GET['publishing_status'])) {
-                $publishingStatus = $xss->xss_clean($_GET['publishing_status']);
+            // airing status
+            if ($publishingStatus !== null && array_key_exists($publishingStatus, self::VALID_PUBLISHING_STATUS)) {
+                $publishingStatus = self::VALID_PUBLISHING_STATUS[$publishingStatus];
 
-                if (array_key_exists($publishingStatus, self::VALID_PUBLISHING_STATUS)) {
-                    $publishingStatus = self::VALID_PUBLISHING_STATUS[$publishingStatus];
-                    $request->setPublishingStatus($publishingStatus);
-                }
+                $parser->setPublishingStatus($publishingStatus);
             }
+
         }
 
-        return $request;
+        return $parser;
     }
 }

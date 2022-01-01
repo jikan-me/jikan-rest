@@ -11,9 +11,8 @@ require_once __DIR__.'/../vendor/autoload.php';
 /*
     Defines
 */
-defined('BLACKLIST_PATH') or define('BLACKLIST_PATH', __DIR__.'/../storage/app/blacklist.json');
 defined('JIKAN_PARSER_VERSION') or define('JIKAN_PARSER_VERSION', Versions::getVersion('jikan-me/jikan'));
-defined('JIKAN_REST_API_VERSION') or define('JIKAN_REST_API_VERSION', '3.4');
+defined('JIKAN_REST_API_VERSION') or define('JIKAN_REST_API_VERSION', '3.4.3');
 
 
 /*
@@ -69,8 +68,6 @@ $app->singleton(
 */
 
 $app->routeMiddleware([
-    'blacklist' => App\Http\Middleware\Blacklist::class,
-    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
     'meta' => App\Http\Middleware\Meta::class,
     'jikan-response' => App\Http\Middleware\JikanResponseHandler::class,
     'throttle' => App\Http\Middleware\Throttle::class,
@@ -103,11 +100,6 @@ $jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
 $app->instance('JikanParser', $jikan);
 
 
-/**
- * Load Blacklist into Redis
- */
-//\App\Http\Middleware\Blacklist::loadList(); causing issues on high load todo: add it as a one time init
-
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
@@ -120,8 +112,6 @@ $app->instance('JikanParser', $jikan);
 */
 
 $commonMiddleware = [
-    'blacklist',
-    'slave-auth',
     'meta',
     'etag',
     'microcaching',
@@ -162,8 +152,8 @@ $app->router->group(
             return response()->json([
                 'NOTICE' => 'Append an API version for API requests. Please check the documentation for the latest and supported versions.',
                 'Author' => '@irfanDahir',
-                'Discord' => 'https://discord.gg/4tvCr36',
-                'Version' => '3.4',
+                'Discord' => 'http://discord.jikan.moe',
+                'Version' => JIKAN_REST_API_VERSION,
                 'JikanPHP' => JIKAN_PARSER_VERSION,
                 'Website' => 'https://jikan.moe',
                 'Docs' => 'https://jikan.docs.apiary.io',

@@ -2,16 +2,12 @@
 
 namespace App\Console;
 
-use App\Console\Commands\BlacklistAdd;
-use App\Console\Commands\BlacklistFlush;
-use App\Console\Commands\BlacklistRemove;
 use App\Console\Commands\ClearQueuedJobs;
 use App\Console\Commands\CacheRemove;
 use App\Console\Commands\ModifyCacheDriver;
 use App\Console\Commands\ModifyCacheMethod;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
-use r\Queries\Writing\Delete;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,9 +21,6 @@ class Kernel extends ConsoleKernel
         ModifyCacheDriver::class,
         ClearQueuedJobs::class,
         CacheRemove::class,
-        BlacklistAdd::class,
-        BlacklistRemove::class,
-        BlacklistFlush::class
     ];
 
     /**
