@@ -1,17 +1,23 @@
-![Jikan](http://i.imgur.com/ctoJ3Jp.png)
-# Jikan - Unofficial MyAnimeList.net REST API
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^7.2.5-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](https://discordapp.com/invite/4tvCr36)
+![Jikan](https://i.imgur.com/oBhfbIk.png)
+# Jikan REST API v4 - Unofficial MyAnimeList.net REST API
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^8.0-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](https://discordapp.com/invite/4tvCr36)
 
-Jikan is a REST API for [MyAnimeList.net](https://myanimelist.net). It scrapes the website to satisfy the need for some API functionality - that MyAnimeList lacks.
+Jikan is a REST API for [MyAnimeList.net](https://myanimelist.net). It scrapes the website to satisfy the need for API functionality that MyAnimeList.net lacks.
 
 The raison d'être of Jikan is to assist developers easily get the data they need for their apps and projects without having to depend on unstable APIs, or sidetracking their projects to develop parsers.
 
 The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And that's what this API saves you of. ;)
 
-**Notice**: Jikan does not support authenticated requests. You can not update your lists. Use the official MyAnimeList API for this.
+**Notice**: Jikan REST API does not support authenticated requests. You can not update your lists. Use the official MyAnimeList API for this!
 
 
 ## Installation
+
+### NOTICE: v3
+This is Jikan REST API **v4** - which has been merged into master branch. If you're looking for deploying a v3 build, view the v3 branch for installation instructions:
+https://github.com/jikan-me/jikan-rest/tree/v3
+
+⚠ v3 is now maintaince-only and will stop receiving updates once it's discontinued from the public API.
 
 ### Manual installation
 Please read the [manual installation guide](https://github.com/jikan-me/jikan-rest/wiki).
