@@ -2650,6 +2650,18 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "anime",
+                                "manga"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -5832,65 +5844,25 @@
                     "data": {
                         "type": "array",
                         "items": {
-                            "type": "object",
-                            "anyOf": [
-                                {
-                                    "$ref": "#/components/schemas/history anime"
-                                },
-                                {
-                                    "$ref": "#/components/schemas/history manga"
-                                }
-                            ]
+                            "type": "object"
                         }
                     }
                 },
                 "type": "object"
             },
-            "history anime": {
-                "properties": {
-                    "mal_id": {
-                        "description": "MyAnimeList ID",
-                        "type": "integer"
-                    },
-                    "username": {
-                        "description": "MyAnimeList Username",
-                        "type": "string"
-                    },
-                    "url": {
-                        "description": "MyAnimeList URL",
-                        "type": "string"
-                    },
-                    "anime": {
-                        "$ref": "#/components/schemas/mal_url"
-                    },
-                    "increment": {
-                        "description": "Number of episodes watched",
-                        "type": "integer"
-                    }
-                },
-                "type": "object"
-            },
-            "history manga": {
+            "history": {
                 "description": "Transform the resource into an array.",
                 "properties": {
-                    "mal_id": {
-                        "description": "MyAnimeList ID",
-                        "type": "integer"
-                    },
-                    "username": {
-                        "description": "MyAnimeList Username",
-                        "type": "string"
-                    },
-                    "url": {
-                        "description": "MyAnimeList URL",
-                        "type": "string"
-                    },
-                    "manga": {
+                    "entry": {
                         "$ref": "#/components/schemas/mal_url"
                     },
                     "increment": {
-                        "description": "Number of chapters read",
+                        "description": "Number of episodes/chapters watched/read",
                         "type": "integer"
+                    },
+                    "date": {
+                        "description": "Date ISO8601",
+                        "type": "string"
                     }
                 },
                 "type": "object"

@@ -21,71 +21,28 @@ class ProfileHistoryResource extends JsonResource
      *          type="array",
      *          @OA\Items(
      *              type="object",
-     *              anyOf={
-     *              @OA\Schema(ref="#/components/schemas/history anime"),
-     *              @OA\Schema(ref="#/components/schemas/history manga"),
-     *              }
+     *              @OA\Schema(ref="#/components/schemas/history"),
      *          ),
      *      ),
      *  ),
      * @OA\Schema(
-     *     schema="history anime",
+     *     schema="history",
      *     type="object",
-     *      @OA\Property(
-     *          property="mal_id",
-     *          type="integer",
-     *          description="MyAnimeList ID"
-     *      ),
-     *      @OA\Property(
-     *          property="username",
-     *          type="string",
-     *          description="MyAnimeList Username"
-     *      ),
-     *      @OA\Property(
-     *          property="url",
-     *          type="string",
-     *          description="MyAnimeList URL"
-     *      ),
      *       @OA\Property(
-     *           property="anime",
+     *           property="entry",
      *           type="object",
-     *           description="Anime Meta",
+     *           description="Entry Meta",
      *           ref="#/components/schemas/mal_url"
      *       ),
      *      @OA\Property(
      *          property="increment",
      *          type="integer",
-     *          description="Number of episodes watched"
-     *      ),
-     * ),
-     * @OA\Schema(
-     *     schema="history manga",
-     *     type="object",
-     *      @OA\Property(
-     *          property="mal_id",
-     *          type="integer",
-     *          description="MyAnimeList ID"
+     *          description="Number of episodes/chapters watched/read"
      *      ),
      *      @OA\Property(
-     *          property="username",
+     *          property="date",
      *          type="string",
-     *          description="MyAnimeList Username"
-     *      ),
-     *      @OA\Property(
-     *          property="url",
-     *          type="string",
-     *          description="MyAnimeList URL"
-     *      ),
-     *       @OA\Property(
-     *           property="manga",
-     *           type="object",
-     *           description="Manga Meta",
-     *           ref="#/components/schemas/mal_url"
-     *       ),
-     *      @OA\Property(
-     *          property="increment",
-     *          type="integer",
-     *          description="Number of chapters read"
+     *          description="Date ISO8601"
      *      ),
      * ),
      */
