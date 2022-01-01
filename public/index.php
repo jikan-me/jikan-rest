@@ -29,7 +29,7 @@ ob_start("ob_gzhandler");
 if (!env('APP_DEBUG')) {
     header("Content-Type: application/json");
     header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: *");
+    header("Access-Control-Allow-Methods: GET");
 }
 
 $app->run();

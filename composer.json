@@ -5,27 +5,37 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.4",
-        "laravel/lumen-framework": "5.8.*",
-        "vlucas/phpdotenv": "^3.3",
-        "danielmewes/php-rql": "dev-master",
-        "illuminate/redis": "^5.5",
-        "predis/predis": "^1.1",
-        "divineomega/cachetphp": "^0.2.0",
-        "jms/serializer": "^1.13",
-        "symfony/yaml": "^4.1",
-        "fabpot/goutte": "3.2.3",
-        "jikan-me/jikan": "^2.0",
+        "php": "^7.4|^8.0",
         "ext-json": "*",
-        "ocramius/package-versions": "^1.4",
-        "flipbox/lumen-generator": "^5.6"
+        "ext-mongodb": "*",
+        "danielmewes/php-rql": "dev-master",
+        "darkaonline/swagger-lume": "8.*",
+        "divineomega/cachetphp": "^0.2.0",
+        "fabpot/goutte": "^4.0",
+        "flipbox/lumen-generator": "^8",
+        "illuminate/redis": "^8",
+        "jenssegers/mongodb": "^3.8",
+        "jikan-me/jikan": "3.0.0.x-dev",
+        "jms/serializer": "^3.0",
+        "laravel/legacy-factories": "^1.1",
+        "laravel/lumen-framework": "^8.0",
+        "league/flysystem": "^1.0",
+        "ocramius/package-versions": "^2.5",
+        "predis/predis": "^1.1",
+        "sentry/sentry-laravel": "^2.8",
+        "symfony/yaml": "^4.1",
+        "vlucas/phpdotenv": "^5",
+        "zircote/swagger-php": "3.*"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "phpunit/phpunit": "~7.0",
-        "mockery/mockery": "~0.9"
+        "mockery/mockery": "^1.3.1",
+        "phpunit/phpunit": "^8.5"
     },
     "autoload": {
+        "classmap": [
+            "database/seeds",
+            "database/factories"
+        ],
         "psr-4": {
             "App\\": "app/"
         }
@@ -39,14 +49,13 @@
     "scripts": {
         "post-root-package-install": [
             "php -r \"copy('.env.dist', '.env');\""
-        ],
-        "server:run": [
-            "php -S localhost:8000 -t public"
         ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
         "optimize-autoloader": true
     }
 }

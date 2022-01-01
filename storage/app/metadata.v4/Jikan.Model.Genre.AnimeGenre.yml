@@ -1,0 +1,5 @@
+Jikan\Model\Genre\AnimeGenre:
+  exclusion_policy: NONE
+  properties:
+    malUrl:
+      serialized_name: meta

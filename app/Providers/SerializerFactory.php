@@ -4,75 +4,43 @@ namespace App\Providers;
 
 use Jikan\Model\Common\DateRange;
 use Jikan\Model\Common\MalUrl;
+use JMS\Serializer\GraphNavigatorInterface;
 use JMS\Serializer\Handler\HandlerRegistry;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
 
 class SerializerFactory
 {
-    public static function createV2(): Serializer
+    public static function createV4(): Serializer
     {
         $serializer = (new SerializerBuilder())
-            ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v2')
+            ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v4')
             ->configureHandlers(
                 function (HandlerRegistry $registry) {
                     $registry->registerHandler(
-                        'serialization',
-                        MalUrl::class,
-                        'json',
-                        \Closure::fromCallable('self::convertMalUrlv2')
-                    );
-
-                    $registry->registerHandler(
-                        'serialization',
-                        DateRange::class,
-                        'json',
-                        \Closure::fromCallable('self::convertDateRange')
-                    );
-
-                    $registry->registerHandler(
-                        'serialization',
-                        \DateTimeImmutable::class,
-                        'json',
-                        \Closure::fromCallable('self::convertDateTimeImmutable')
-                    );
-                }
-            )
-            ->build();
-        $serializer->setSerializationContextFactory(new SerializationContextFactory());
-        return $serializer;
-    }
-
-    public static function createV3(): Serializer
-    {
-        $serializer = (new SerializerBuilder())
-            ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v3')
-            ->configureHandlers(
-                function (HandlerRegistry $registry) {
-                    $registry->registerHandler(
-                        'serialization',
+                        GraphNavigatorInterface::DIRECTION_SERIALIZATION,
                         MalUrl::class,
                         'json',
                         \Closure::fromCallable('self::convertMalUrl')
                     );
 
                     $registry->registerHandler(
-                        'serialization',
+                        GraphNavigatorInterface::DIRECTION_SERIALIZATION,
                         DateRange::class,
                         'json',
                         \Closure::fromCallable('self::convertDateRange')
                     );
 
                     $registry->registerHandler(
-                        'serialization',
+                        GraphNavigatorInterface::DIRECTION_SERIALIZATION,
                         \DateTimeImmutable::class,
                         'json',
                         \Closure::fromCallable('self::convertDateTimeImmutable')
                     );
                 }
             )
+            ->setSerializationContextFactory(new SerializationContextFactory())
             ->build();
-        $serializer->setSerializationContextFactory(new SerializationContextFactory());
 
         return $serializer;
     }

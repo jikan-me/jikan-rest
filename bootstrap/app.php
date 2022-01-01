@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\SourceHeartbeatMonitor;
+use App\Providers\SerializerFactory;
 use PackageVersions\Versions;
 
 require_once __DIR__.'/../vendor/autoload.php';
@@ -12,8 +14,6 @@ require_once __DIR__.'/../vendor/autoload.php';
     Defines
 */
 defined('JIKAN_PARSER_VERSION') or define('JIKAN_PARSER_VERSION', Versions::getVersion('jikan-me/jikan'));
-defined('JIKAN_REST_API_VERSION') or define('JIKAN_REST_API_VERSION', '3.4.3');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -31,8 +31,13 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
+$app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
+
+
 $app->withFacades();
 $app->withEloquent();
+
+$app->configure('swagger-lume');
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +60,6 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -67,12 +71,22 @@ $app->singleton(
 |
 */
 
+$globalMiddleware = [];
+
+if (env('INSIGHTS', false)) {
+    $globalMiddleware[] = \App\Http\Middleware\Insights::class;
+}
+
+$app->middleware($globalMiddleware);
+
 $app->routeMiddleware([
-    'meta' => App\Http\Middleware\Meta::class,
-    'jikan-response' => App\Http\Middleware\JikanResponseHandler::class,
-    'throttle' => App\Http\Middleware\Throttle::class,
-    'etag' => \App\Http\Middleware\EtagMiddleware::class,
-    'microcaching' => \App\Http\Middleware\MicroCaching::class
+//    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
+//    'meta' => App\Http\Middleware\Meta::class,
+//    'cache-resolver' => App\Http\Middleware\CacheResolver::class,
+//    'throttle' => App\Http\Middleware\Throttle::class,
+//    'etag' => \App\Http\Middleware\EtagMiddleware::class,
+    'microcaching' => \App\Http\Middleware\MicroCaching::class,
+    'source-health-monitor' => SourceHeartbeatMonitor::class,
 ]);
 
 /*
@@ -86,18 +100,45 @@ $app->routeMiddleware([
 |
 */
 
+if (env('CACHING')) {
+    $app->configure('cache');
+    $app->register(Illuminate\Redis\RedisServiceProvider::class);
+}
+
 $app->configure('database');
 $app->configure('queue');
-$app->configure('cache');
+$app->configure('controller-to-table-mapping');
+$app->configure('controller');
 
-$app->register(Illuminate\Redis\RedisServiceProvider::class);
+$app->register(\SwaggerLume\ServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+$app->register(\App\Providers\SourceHeartbeatProvider::class);
+$app->register(Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
 
-$guzzleClient = new \GuzzleHttp\Client();
-$app->instance('GuzzleClient', $guzzleClient);
+if (env('REPORTING') && env('REPORTING_DRIVER') === 'sentry') {
+    $app->register(\Sentry\Laravel\ServiceProvider::class);
+    // Sentry Performance Monitoring (optional)
+    $app->register(\Sentry\Laravel\Tracing\ServiceProvider::class);
+}
 
-$jikan = new \Jikan\MyAnimeList\MalClient(app('GuzzleClient'));
+// Guzzle removed as of lumen 8.x
+//$guzzleClient = new \GuzzleHttp\Client([
+//    'timeout' => env('SOURCE_TIMEOUT', 5),
+//    'connect_timeout' => env('SOURCE_CONNECT_TIMEOUT', 5)
+//]);
+//$app->instance('GuzzleClient', $guzzleClient);
+
+$httpClient = \Symfony\Component\HttpClient\HttpClient::create(
+    [
+        'timeout' => env('SOURCE_TIMEOUT', 1)
+    ]
+);
+$app->instance('HttpClient', $httpClient);
+
+$jikan = new \Jikan\MyAnimeList\MalClient(app('HttpClient'));
 $app->instance('JikanParser', $jikan);
+
+$app->instance('SerializerV4', SerializerFactory::createV4());
 
 
 /*
@@ -112,54 +153,51 @@ $app->instance('JikanParser', $jikan);
 */
 
 $commonMiddleware = [
-    'meta',
-    'etag',
+//    'slave-auth',
+//    'meta',
+//    'etag',
+//    'database-resolver',
+//    'cache-resolver',
+//    'throttle'
+    'source-health-monitor',
     'microcaching',
-    'jikan-response',
-    'throttle'
 ];
 
-/*$app->router->group(
+
+$app->router->group(
     [
         'prefix' => 'v4',
-        'namespace' => 'App\Http\Controllers\V4',
+        'namespace' => env('SOURCE') === 'local' ? 'App\Http\Controllers\V4DB' : 'App\Http\Controllers\V4',
         'middleware' => $commonMiddleware
     ],
     function ($router) {
         require __DIR__.'/../routes/web.v4.php';
-    }
-);*/
-
-$app->router->group(
-    [
-        'prefix' => 'v3',
-        'namespace' => 'App\Http\Controllers\V3',
-        'middleware' => $commonMiddleware
-    ],
-    function ($router) {
-        require __DIR__.'/../routes/web.v3.php';
     }
 );
 
 $app->router->group(
     [
         'prefix' => '/',
-        'namespace' => 'App\Http\Controllers\V3',
-        'middleware' => $commonMiddleware
     ],
     function ($router) {
         $router->get('/', function () {
             return response()->json([
-                'NOTICE' => 'Append an API version for API requests. Please check the documentation for the latest and supported versions.',
-                'Author' => '@irfanDahir',
-                'Discord' => 'http://discord.jikan.moe',
-                'Version' => JIKAN_REST_API_VERSION,
-                'JikanPHP' => JIKAN_PARSER_VERSION,
-                'Website' => 'https://jikan.moe',
-                'Docs' => 'https://jikan.docs.apiary.io',
-                'GitHub' => 'https://github.com/jikan-me/jikan',
-                'PRODUCTION_API_URL' => 'https://api.jikan.moe/v3/',
-                'STATUS_URL' => 'https://status.jikan.moe'
+                'author_url' => 'https://github.com/irfan-dahir',
+                'discord_url' => 'http://discord.jikan.moe',
+                'version' => env('APP_VERSION'),
+                'parser_version' => JIKAN_PARSER_VERSION,
+                'website_url' => 'https://jikan.moe',
+                'documentation_url' => 'https://docs.api.jikan.moe/',
+                'github_url' => 'https://github.com/jikan-me/jikan-rest',
+                'parser_github_url' => 'https://github.com/jikan-me/jikan',
+                'production_api_url' => 'https://api.jikan.moe/v4/',
+                'status_url' => 'https://status.jikan.moe',
+                'myanimelist_heartbeat' => [
+                    'status' => \App\Providers\SourceHeartbeatProvider::getHeartbeatStatus(),
+                    'score' => \App\Providers\SourceHeartbeatProvider::getHeartbeatScore(),
+                    'down' => \App\Providers\SourceHeartbeatProvider::isFailoverEnabled(),
+                    'last_downtime' => \App\Providers\SourceHeartbeatProvider::getLastDowntime()
+                ]
             ]);
         });
     }
@@ -175,7 +213,7 @@ $app->router->group(
                 ->json([
                     'status' => 400,
                     'type' => 'HttpException',
-                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported versions.',
+                    'message' => 'This version is discontinued. Please check the documentation for supported version(s).',
                     'error' => null
                 ], 400);
         });
@@ -192,7 +230,24 @@ $app->router->group(
                 ->json([
                     'status' => 400,
                     'type' => 'HttpException',
-                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported versions.',
+                    'message' => 'This version is discontinued. Please check the documentation for supported version(s).',
+                    'error' => null
+                ], 400);
+        });
+    }
+);
+
+$app->router->group(
+    [
+        'prefix' => 'v3',
+    ],
+    function ($router) {
+        $router->get('/', function () {
+            return response()
+                ->json([
+                    'status' => 400,
+                    'type' => 'HttpException',
+                    'message' => 'This version is discontinued. Please check the documentation for supported version(s).',
                     'error' => null
                 ], 400);
         });

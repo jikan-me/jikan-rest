@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\Request;
+use Jikan\Helper\Constants;
 use Jikan\Model\Anime\Anime;
 use Jikan\Request\Search\AnimeSearchRequest;
+use Jikan\Request\Search\CharacterSearchRequest;
 use Jikan\Request\Search\MangaSearchRequest;
 use Jikan\Request\Search\PersonSearchRequest;
+use Jikan\Request\Search\UserSearchRequest;
+use \voku\helper\AntiXSS;
 use Jikan\Helper\Constants as JikanConstants;
 
 class SearchQueryBuilder
@@ -89,79 +92,87 @@ class SearchQueryBuilder
         'desc' => JikanConstants::SEARCH_SORT_DESCENDING,
     ];
 
-    public static function create(Request $request, $parserRequest)
+    private const VALID_GENDER = [
+        'any' => JikanConstants::SEARCH_USER_GENDER_ANY,
+        'male' => JikanConstants::SEARCH_USER_GENDER_MALE,
+        'female' => JikanConstants::SEARCH_USER_GENDER_FEMALE,
+        'nonbinary' => JikanConstants::SEARCH_USER_GENDER_NONBINARY
+    ];
+
+    public static function create($request)
     {
-        $query = $request->get('q');
-        $page = $request->get('page');
-        $letter = $request->get('letter');
-        $subtype = $request->get('type');
-        $score = $request->get('score');
-        $status = $request->get('status');
-        $startDate = $request->get('start_date');
-        $endDate = $request->get('end_date');
-        $genres = $request->get('genre');
-        $genreExclude = $request->get('genre_exclude');
-        $sort = $request->get('sort');
-        $orderBy = $request->get('order_by');
-        $magazine = $request->get('magazine');
-        $producer = $request->get('producer');
-        $rated = $request->get('rated');
+        $xss = new AntiXSS();
 
         // Query
-        if ($query !== null) {
-            $parserRequest->setQuery($query);
+        if (isset($_GET['q'])) {
+            $request->setQuery(
+                $xss->xss_clean($_GET['q'])
+            );
         }
 
         // Page
-        if ($page !== null) {
-            $parserRequest->setPage((int)$page);
+        if (isset($_GET['page'])) {
+            $page = (int) $_GET['page'];
+            $request->setPage($page);
         }
 
-        // Starts with glyph
-        if (isset($_GET['letter'])) {
-            $parserRequest->setStartsWithChar('');
+        if (
+            $request instanceof AnimeSearchRequest
+            || $request instanceof MangaSearchRequest
+            || $request instanceof PersonSearchRequest
+            || $request instanceof CharacterSearchRequest
+        ) {
 
-            if (!empty($_GET['letter'])) {
-                $letter =
-                    // https://stackoverflow.com/questions/1972100/getting-the-first-character-of-a-string-with-str0#comment27161857_1972111
-                    mb_substr($letter, 0, 1, 'utf-8');
+            // Starts with glyph
+            if (isset($_GET['letter'])) {
+                $letter = $xss->xss_clean($_GET['letter']);
 
-                $parserRequest->setStartsWithChar($letter);
+                $request->setStartsWithChar('');
+
+                if (!empty($_GET['letter'])) {
+                    $letter =
+                        // https://stackoverflow.com/questions/1972100/getting-the-first-character-of-a-string-with-str0#comment27161857_1972111
+                        mb_substr($letter, 0, 1, 'utf-8');
+
+                    $request->setStartsWithChar($letter);
+                }
             }
         }
 
+
         // Anime & Manga
-        if ($parserRequest instanceof AnimeSearchRequest || $parserRequest instanceof MangaSearchRequest) {
+        if ($request instanceof AnimeSearchRequest || $request instanceof MangaSearchRequest) {
             // Type
-            if ($subtype !== null) {
-                $subtype = strtolower($subtype);
+            if (isset($_GET['type'])) {
+                $subtype = strtolower($xss->xss_clean($_GET['type']));
                 if (array_key_exists($subtype, self::VALID_SUB_TYPES)) {
-                    $parserRequest->setType(self::VALID_SUB_TYPES[$subtype]);
+                    $request->setType(self::VALID_SUB_TYPES[$subtype]);
                 }
             }
 
             // Score
-            if ($score !== null) {
-                $score = (float) $score;
+            if (isset($_GET['score'])) {
+                $score = (float) $xss->xss_clean($_GET['score']);
 
                 if ($score >= 0.0 && $score <= 10.0) {
-                    $parserRequest->setScore($score);
+                    $request->setScore($score);
                 }
             }
 
             // Status
-            if ($status !== null) {
-                $status = strtolower($status);
+            if (isset($_GET['status'])) {
+                $status = strtolower($xss->xss_clean($_GET['status']));
                 if (array_key_exists($status, self::VALID_STATUS)) {
-                    $parserRequest->setStatus(self::VALID_STATUS[$status]);
+                    $request->setStatus(self::VALID_STATUS[$status]);
                 }
             }
 
             // Start Date
-            if ($startDate) {
+            if (isset($_GET['start_date'])) {
+                $startDate = $xss->xss_clean($_GET['start_date']);
                 if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $startDate)) {
                     $startDate = explode("-", $startDate);
-                    $parserRequest->setStartDate(
+                    $request->setStartDate(
                         (int) $startDate[2],
                         (int) $startDate[1],
                         (int) $startDate[0]
@@ -170,10 +181,11 @@ class SearchQueryBuilder
             }
 
             // End Date
-            if ($endDate) {
+            if (isset($_GET['end_date'])) {
+                $endDate = $xss->xss_clean($_GET['end_date']);
                 if (preg_match("~[0-9]{4}-[0-9]{2}-[0-9]{2}~", $endDate)) {
                     $endDate = explode("-", $endDate);
-                    $parserRequest->setEndDate(
+                    $request->setEndDate(
                         (int) $endDate[2],
                         (int) $endDate[1],
                         (int) $endDate[0]
@@ -181,91 +193,125 @@ class SearchQueryBuilder
                 }
             }
 
-            // Genre
-            if ($genres !== null && \is_string($genres) && strpos($genres, ',')) {
-                $genres = explode(',', $genres);
+            // GenreAnime
+            if (isset($_GET['genre']) && \is_string($_GET['genre']) && strpos($_GET['genre'], ',')) {
+                $_GET['genre'] = explode(',', $_GET['genre']);
             }
 
-            if ($genres !== null) {
-                if (\is_array($genres)) {
-                    foreach ($genres as $genre) {
+            if (isset($_GET['genre'])) {
+                if (\is_array($_GET['genre'])) {
+                    foreach ($_GET['genre'] as $genre) {
                         $genre = (int) $genre;
 
                         if ($genre >= self::VALID_MIN_GENRE && $genre <= self::VALID_MAX_GENRE) {
-                            $parserRequest->setGenre($genre);
+                            $request->setGenre($genre);
                         }
                     }
                 }
 
-                if (!\is_array($genres)) {
-                    $genres = (int) $genres;
+                if (!\is_array($_GET['genre'])) {
+                    $genre = (int) $_GET['genre'];
 
-                    if ($genres >= self::VALID_MIN_GENRE && $genres <= self::VALID_MAX_GENRE) {
-                        $parserRequest->setGenre($genres);
+                    if ($genre >= self::VALID_MIN_GENRE && $genre <= self::VALID_MAX_GENRE) {
+                        $request->setGenre($genre);
                     }
                 }
             }
 
             // Exclude genre passed for $_GET['genre']. Defaulted to false
-            if ($genreExclude) {
-                $parserRequest->setGenreExclude(
-                    ((int) $genreExclude == 1) ? true : false
+            if (isset($_GET['genre_exclude'])) {
+                $request->setGenreExclude(
+                    (int) $_GET['genre_exclude'] === 1
                 );
             }
 
             // Sort
-            if ($sort !== null) {
+            if (isset($_GET['sort'])) {
+                $order = $xss->xss_clean($_GET['sort']);
 
-                if (array_key_exists($sort, self::VALID_SORT)) {
-                    $parserRequest->setSort(self::VALID_SORT[$sort]);
+                if (array_key_exists($order, self::VALID_SORT)) {
+                    $request->setSort(self::VALID_SORT[$order]);
                 }
             }
         }
 
         // Anime
-        if ($parserRequest instanceof AnimeSearchRequest) {
+        if ($request instanceof AnimeSearchRequest) {
             // Rating/Rated
-            if ($rated !== null) {
-                $rated = strtolower($rated);
+            if (isset($_GET['rated'])) {
+                $rated = strtolower($xss->xss_clean($_GET['rated']));
                 if (array_key_exists($rated, self::VALID_RATING)) {
-                    $parserRequest->setRated(self::VALID_RATING[$rated]);
+                    $request->setRated(self::VALID_RATING[$rated]);
                 }
             }
 
             // Producer
-            if ($producer !== null) {
-                $producer = (int) $producer;
+            if (isset($_GET['producer'])) {
+                $producer = (int) $_GET['producer'];
 
-                $parserRequest->setProducer($producer);
+                $request->setProducer($producer);
             }
 
             // Order By
-            if ($orderBy) {
+            if (isset($_GET['order_by'])) {
+                $order = $xss->xss_clean($_GET['order_by']);
 
-                if (array_key_exists($orderBy, self::VALID_ANIME_ORDER_BY)) {
-                    $parserRequest->setOrderBy(self::VALID_ANIME_ORDER_BY[$orderBy]);
+                if (array_key_exists($order, self::VALID_ANIME_ORDER_BY)) {
+                    $request->setOrderBy(self::VALID_ANIME_ORDER_BY[$order]);
                 }
             }
         }
 
         // Manga
-        if ($parserRequest instanceof MangaSearchRequest) {
+        if ($request instanceof MangaSearchRequest) {
             // Magazine
-            if ($magazine !== null) {
-                $producer = (int) $magazine;
+            if (isset($_GET['magazine'])) {
+                $producer = (int) $_GET['magazine'];
 
-                $parserRequest->setMagazine($magazine);
+                $request->setMagazine($producer);
             }
 
             // Order By
-            if ($orderBy !== null) {
+            if (isset($_GET['order_by'])) {
+                $order = $xss->xss_clean($_GET['order_by']);
 
-                if (array_key_exists($orderBy, self::VALID_MANGA_ORDER_BY)) {
-                    $parserRequest->setOrderBy(self::VALID_MANGA_ORDER_BY[$orderBy]);
+                if (array_key_exists($order, self::VALID_MANGA_ORDER_BY)) {
+                    $request->setOrderBy(self::VALID_MANGA_ORDER_BY[$order]);
                 }
             }
         }
 
-        return $parserRequest;
+        // Users
+        if ($request instanceof UserSearchRequest) {
+            // Gender
+            if (isset($_GET['gender'])) {
+                $gender = $xss->xss_clean($_GET['gender']);
+
+                if (array_key_exists($gender, self::VALID_GENDER)) {
+                    $request->setGender(self::VALID_GENDER[$gender]);
+                }
+            }
+
+            // Location
+            if (isset($_GET['location'])) {
+                $location = $xss->xss_clean($_GET['location']);
+
+                $request->setLocation($location);
+            }
+
+            // Max Age
+            if (isset($_GET['max-age'])) {
+                $maxAge = (int) $_GET['max-age'];
+                $request->setMaxAge($maxAge);
+            }
+
+            // Min Age
+            if (isset($_GET['min-age'])) {
+                $maxAge = (int) $_GET['min-age'];
+                $request->setMaxAge($maxAge);
+            }
+        }
+
+        return $request;
     }
 }

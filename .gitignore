@@ -1,12 +1,11 @@
 /vendor
-/vendor.v4
 /.idea
 Homestead.json
 Homestead.yaml
-.env.v4
+.env
 composer.phar
 composer.lock
 .php_cs.cache
-.env
+.env.v4
 /storage/app/indexer
 /storage/app/failovers.json

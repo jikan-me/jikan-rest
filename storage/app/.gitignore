@@ -1,0 +1,3 @@
+!.gitignore
+failovers.json
+source_failover.lock

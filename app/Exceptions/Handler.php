@@ -2,10 +2,11 @@
 
 namespace App\Exceptions;
 
+use App\Events\SourceHeartbeatEvent;
 use App\Http\HttpHelper;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use Jikan\Exception\ParserException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Predis\Connection\ConnectionException;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\HttpClient\Exception\TimeoutException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\Cache;
 
@@ -38,24 +40,26 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * @param Exception $e
+     * @param \Throwable $e
      * @throws Exception
      */
-    public function report(Exception $e)
+    public function report(\Throwable $e)
     {
         parent::report($e);
     }
 
     /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param \Throwable $e
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, \Throwable $e)
     {
         $githubReport = GithubReport::make($e, $request);
+
+        if (app()->bound('sentry') && $this->shouldReport($e)) {
+            app('sentry')->captureException($e);
+        }
 
         // ConnectionException from Redis server
         if ($e instanceof ConnectionException) {
@@ -77,6 +81,18 @@ class Handler extends ExceptionHandler
                 ], 500);
         }
 
+        if ($e instanceof ConnectException) {
+            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
+
+            return response()
+                ->json([
+                    'status' => $e->getCode(),
+                    'type' => 'BadResponseException',
+                    'message' => 'Jikan failed to connect to MyAnimeList. MyAnimeList may be down/unavailable or refuses to connect',
+                    'error' => $e->getMessage()
+                ], 503);
+        }
+
         // ParserException from Jikan PHP API
         if ($e instanceof ParserException) {
             $githubReport->setRepo(env('GITHUB_API', 'jikan-me/jikan'));
@@ -95,7 +111,7 @@ class Handler extends ExceptionHandler
         if ($e instanceof BadResponseException || $e instanceof ClientException) {
             switch ($e->getCode()) {
                 case 404:
-                    $this->set404Cache($request, $e);
+//                    $this->set404Cache($request, $e);
 
                     return response()
                         ->json([
@@ -112,15 +128,20 @@ class Handler extends ExceptionHandler
                             'message' => 'Jikan is being rate limited by MyAnimeList',
                             'error' => $e->getMessage()
                         ], $e->getCode());
+                case 403:
                 case 500:
+                case 501:
                 case 502:
                 case 503:
                 case 504:
+                    // Dispatch Bad source health event to prompt database fallback if enabled
+                    event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
+
                     return response()
                         ->json([
                             'status' => $e->getCode(),
                             'type' => 'BadResponseException',
-                            'message' => 'Jikan could not connect to MyAnimeList',
+                            'message' => 'Jikan failed to connect to MyAnimeList. MyAnimeList may be down/unavailable or refuses to connect',
                             'error' => $e->getMessage()
                         ], 503);
                 default:
@@ -145,6 +166,16 @@ class Handler extends ExceptionHandler
                 ], 400);
         }
 
+        if ($e instanceof TimeoutException) {
+            return response()
+                ->json([
+                    'status' => 408,
+                    'type' => 'TimeoutException',
+                    'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds)',
+                    'error' => $e->getMessage()
+                ], 408);
+        }
+
         if ($e instanceof Exception) {
             return response()
                 ->json([
@@ -158,8 +189,16 @@ class Handler extends ExceptionHandler
         }
     }
 
+    /**
+     * @param Request $request
+     * @param BadResponseException $e
+     */
     private function set404Cache(Request $request, BadResponseException $e)
     {
+        if (!env('CACHING') || env('MICROCACHING')) {
+            return;
+        }
+
         $fingerprint = "request:404:".sha1(env('APP_URL') . $request->getRequestUri());
 
         if (Cache::has($fingerprint)) {

@@ -19,7 +19,7 @@ class HttpHelper
     public static function requestType(Request $request): string
     {
         $requestType = $request->segments()[1];
-        if (!\in_array($request->segments()[0], ['v1', 'v2', 'v3'])) {
+        if (!\in_array($request->segments()[0], ['v1', 'v2', 'v3', 'v4'])) {
             $requestType = $request->segments()[0];
         }
 
@@ -54,7 +54,7 @@ class HttpHelper
             foreach ($related as $relation => $items) {
                 $data['related'][] = [
                     'relation' => $relation,
-                    'items' => $items
+                    'entry' => $items
                 ];
             }
         }
@@ -75,7 +75,7 @@ class HttpHelper
             foreach ($related as $relation => $items) {
                 $data['related'][] = [
                     'relation' => $relation,
-                    'items' => $items
+                    'entry' => $items
                 ];
             }
         }
@@ -83,12 +83,11 @@ class HttpHelper
         return $data;
     }
 
-    public static function requestControllerName(Request $request) : string
+    public static function getRouteName(Request $request) : string
     {
         $route = explode('\\', $request->route()[1]['uses']);
-        $route = end($route);
 
-        return explode('@', $route)[0];
+        return end($route);
     }
 
     public static function getRequestUriHash(Request $request) : string
@@ -96,4 +95,9 @@ class HttpHelper
         return sha1($request->getRequestUri());
     }
 
+    public static function getRouteTable($request) : string
+    {
+        $routeName = HttpHelper::getRouteName($request);
+        return config("controller.{$routeName}.table_name");
+    }
 }
