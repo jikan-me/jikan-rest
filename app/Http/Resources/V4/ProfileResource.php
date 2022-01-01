@@ -17,58 +17,50 @@ class ProfileResource extends JsonResource
      *     schema="user profile",
      *     type="object",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *
-     *              @OA\Property(
-     *                  property="mal_id",
-     *                  type="integer",
-     *                  description="MyAnimeList ID"
-     *              ),
-     *              @OA\Property(
-     *                  property="username",
-     *                  type="string",
-     *                  description="MyAnimeList Username"
-     *              ),
-     *              @OA\Property(
-     *                  property="url",
-     *                  type="string",
-     *                  description="MyAnimeList URL"
-     *              ),
-     *               @OA\Property(
-     *                   property="images",
-     *                   type="object",
-     *                   ref="#/components/schemas/user images"
-     *               ),
-     *              @OA\Property(
-     *                  property="last_online",
-     *                  type="string",
-     *                  description="Last Online Date ISO8601"
-     *              ),
-     *              @OA\Property(
-     *                  property="gender",
-     *                  type="string",
-     *                  description="User Gender"
-     *              ),
-     *              @OA\Property(
-     *                  property="birthday",
-     *                  type="string",
-     *                  description="Birthday Date ISO8601"
-     *              ),
-     *              @OA\Property(
-     *                  property="location",
-     *                  type="string",
-     *                  description="Location"
-     *              ),
-     *              @OA\Property(
-     *                  property="joined",
-     *                  type="string",
-     *                  description="Joined Date ISO8601"
-     *              ),
-     *          ),
+     *      @OA\Property(
+     *          property="mal_id",
+     *          type="integer",
+     *          description="MyAnimeList ID"
+     *      ),
+     *      @OA\Property(
+     *          property="username",
+     *          type="string",
+     *          description="MyAnimeList Username"
+     *      ),
+     *      @OA\Property(
+     *          property="url",
+     *          type="string",
+     *          description="MyAnimeList URL"
+     *      ),
+     *       @OA\Property(
+     *           property="images",
+     *           type="object",
+     *           ref="#/components/schemas/user images"
+     *       ),
+     *      @OA\Property(
+     *          property="last_online",
+     *          type="string",
+     *          description="Last Online Date ISO8601"
+     *      ),
+     *      @OA\Property(
+     *          property="gender",
+     *          type="string",
+     *          description="User Gender"
+     *      ),
+     *      @OA\Property(
+     *          property="birthday",
+     *          type="string",
+     *          description="Birthday Date ISO8601"
+     *      ),
+     *      @OA\Property(
+     *          property="location",
+     *          type="string",
+     *          description="Location"
+     *      ),
+     *      @OA\Property(
+     *          property="joined",
+     *          type="string",
+     *          description="Joined Date ISO8601"
      *      ),
      *  ),
      * @OA\Schema(

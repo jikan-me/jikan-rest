@@ -5989,48 +5989,40 @@
             },
             "user profile": {
                 "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "mal_id": {
-                                    "description": "MyAnimeList ID",
-                                    "type": "integer"
-                                },
-                                "username": {
-                                    "description": "MyAnimeList Username",
-                                    "type": "string"
-                                },
-                                "url": {
-                                    "description": "MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "images": {
-                                    "$ref": "#/components/schemas/user images"
-                                },
-                                "last_online": {
-                                    "description": "Last Online Date ISO8601",
-                                    "type": "string"
-                                },
-                                "gender": {
-                                    "description": "User Gender",
-                                    "type": "string"
-                                },
-                                "birthday": {
-                                    "description": "Birthday Date ISO8601",
-                                    "type": "string"
-                                },
-                                "location": {
-                                    "description": "Location",
-                                    "type": "string"
-                                },
-                                "joined": {
-                                    "description": "Joined Date ISO8601",
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "username": {
+                        "description": "MyAnimeList Username",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/user images"
+                    },
+                    "last_online": {
+                        "description": "Last Online Date ISO8601",
+                        "type": "string"
+                    },
+                    "gender": {
+                        "description": "User Gender",
+                        "type": "string"
+                    },
+                    "birthday": {
+                        "description": "Birthday Date ISO8601",
+                        "type": "string"
+                    },
+                    "location": {
+                        "description": "Location",
+                        "type": "string"
+                    },
+                    "joined": {
+                        "description": "Joined Date ISO8601",
+                        "type": "string"
                     }
                 },
                 "type": "object"
