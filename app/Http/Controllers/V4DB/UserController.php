@@ -770,7 +770,7 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns Recent Anime Recommendations",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/recommendations")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -816,7 +816,7 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user clubs",
-     *         @OA\JsonContent()
+     *         @OA\JsonContent(ref="#/components/schemas/user clubs")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -847,6 +847,11 @@ class UserController extends Controller
      *                          property="name",
      *                          type="string",
      *                          description="Club Name"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="url",
+     *                          type="string",
+     *                          description="Club URL"
      *                      ),
      *                  ),
      *              ),

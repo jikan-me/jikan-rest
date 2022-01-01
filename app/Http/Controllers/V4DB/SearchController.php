@@ -618,26 +618,6 @@ class SearchController extends Controller
      *     ),
      * ),
      *
-     *  @OA\Schema(
-     *      schema="user by id",
-     *      description="User Meta By ID",
-     *
-     *      @OA\Property(
-     *           property="data",
-     *           type="object",
-     *
-     *           @OA\Property(
-     *               property="url",
-     *               type="string",
-     *               description="MyAnimeList URL"
-     *           ),
-     *           @OA\Property(
-     *               property="username",
-     *               type="string",
-     *               description="MyAnimeList Username"
-     *           ),
-     *      ),
-     *  ),
      *
      */
     public function userById(Request $request, int $id)

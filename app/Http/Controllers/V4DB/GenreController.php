@@ -84,7 +84,7 @@ class GenreController extends Controller
     /**
      *  @OA\Get(
      *     path="/genres/manga",
-     *     operationId="getAnimeGenres",
+     *     operationId="getMangaGenres",
      *     tags={"genres"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),

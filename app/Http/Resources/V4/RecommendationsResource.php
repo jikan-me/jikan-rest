@@ -14,48 +14,54 @@ class RecommendationsResource extends JsonResource
      *
      *  @OA\Schema(
      *      schema="recommendations",
-     *      description="Recommendations Resource",
+     *      description="Recommendations",
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="array",
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
      *
-     *          @OA\Items(
-     *              type="object",
-     *              @OA\Property(
-     *                  property="mal_id",
-     *                  type="integer",
-     *                  description="Recommended MyAnimeList ID"
-     *              ),
-     *              @OA\Property(
-     *                  property="url",
-     *                  type="string",
-     *                  description="Recommended MyAnimeList URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="image_url",
-     *                  type="string",
-     *                  description="Recommended MyAnimeList Image URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="recommendation_url",
-     *                  type="string",
-     *                  description="Recommendation MyAnimeList URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="title",
-     *                  type="string",
-     *                  description="Recommended Entry Title"
-     *              ),
-     *              @OA\Property(
-     *                  property="recommendation_count",
-     *                  type="integer",
-     *                  description="Number of users who have recommended this entry"
+     *                  @OA\Items(
+     *                      type="object",
+     *
+     *                      @OA\Property(
+     *                          property="mal_id",
+     *                          type="String",
+     *                          description="MAL IDs of recommendations is both of the MAL ID's with a `-` delimiter",
+     *                      ),
+     *
+     *                      @OA\Property (
+     *                          property="entry",
+     *                          type="array",
+     *                          description="Array of 2 entries that are being recommended to each other",
+     *
+     *                          @OA\Items(
+     *                              type="object",
+     *                              anyOf={
+     *                                  @OA\Schema(ref="#/components/schemas/anime meta"),
+     *                                  @OA\Schema(ref="#/components/schemas/manga meta"),
+     *                              }
+     *                          ),
+     *                      ),
+     *
+     *                      @OA\Property (
+     *                          property="content",
+     *                          type="string",
+     *                          description="Recommendation context provided by the user",
+     *                      ),
+     *
+     *                      @OA\Property (
+     *                          property="user",
+     *                          type="object",
+     *                          ref="#/components/schemas/user by id",
+     *                      ),
+     *                  ),
      *              ),
      *          ),
-     *     ),
+     *     }
      *  ),
-     *
      *
      *
      * @OA\Schema(
@@ -68,33 +74,18 @@ class RecommendationsResource extends JsonResource
      *
      *          @OA\Items(
      *              type="object",
-     *
-     *              @OA\Property(
+
+     *              @OA\Property (
      *                  property="entry",
-     *                  type="object",
+     *                  type="array",
+     *                  description="Array of 2 entries that are being recommended to each other",
      *
-     *                  @OA\Property(
-     *                      property="mal_id",
-     *                      type="integer",
-     *                      description="Recommended MyAnimeList ID"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="url",
-     *                      type="string",
-     *                      description="Recommended MyAnimeList URL"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="images",
+     *                  @OA\Items(
      *                      type="object",
-     *                      description="Recommended MyAnimeList Image URL",
-     *                      @OA\Schema(
-     *                          ref="#/components/schemas/anime images"
-     *                      ),
-     *                  ),
-     *                  @OA\Property(
-     *                      property="title",
-     *                      type="string",
-     *                      description="Recommended Entry Title"
+     *                      anyOf={
+     *                          @OA\Schema(ref="#/components/schemas/anime meta"),
+     *                          @OA\Schema(ref="#/components/schemas/manga meta"),
+     *                      }
      *                  ),
      *              ),
      *              @OA\Property(

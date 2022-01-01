@@ -202,9 +202,9 @@ return [
         // 'SWAGGER_LUME_CONST_HOST' => env('SWAGGER_LUME_CONST_HOST', 'http://my-default-host.com'),
         'API_DESCRIPTION' => <<<EOF
         [Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.
+        It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.
         
         # Information
-        It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.
 
         ⚡ Jikan is powered by it's awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)
 
@@ -264,18 +264,18 @@ return [
 
         ```json
          {
-             'status': 404,
-             'type': 'BadResponseException',
-             'message': 'Resource does not exist',
-             'error': 'Something Happened',
-             'report_url': 'https://github.com...'
+             "status": 404,
+             "type": "BadResponseException",
+             "message": "Resource does not exist",
+             "error": "Something Happened",
+             "report_url": "https://github.com..."
           }
         ```
 
         | Property | Remarks |
         | ---- | ---- |
         | `status` | Returned HTTP Status Code |
-        | `type` | `Exception` generated from the API |
+        | `type` | Thrown Exception |
         | `message` | Human-readable error message |
         | `error` | Error response and trace from the API |
         | `report_url` | Clicking this would redirect you to a generated GitHub issue. ℹ It's only returned on a parser error. |
