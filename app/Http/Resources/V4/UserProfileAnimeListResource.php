@@ -72,7 +72,9 @@ class UserProfileAnimeListResource extends JsonResource
                 ],
                 'studios' => $this['studios'],
                 'licensors' => $this['licensors'],
-            ]
+            ],
+            'genres' => $this['genres'],
+            'demographics' => $this['demographics']
         ];
     }
 }

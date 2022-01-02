@@ -73,7 +73,9 @@ class UserProfileMangaListResource extends JsonResource
                     'string' => (string) $dateRange
                 ],
                 'magazines' => $this['magazines'],
-            ]
+            ],
+            'genres' => $this['genres'],
+            'demographics' => $this['demographics']
         ];
     }
 }
