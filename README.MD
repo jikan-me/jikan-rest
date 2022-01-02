@@ -69,10 +69,10 @@ This is specifically for Ubuntu, but other distributions should work similarly.
 ### 02. Installation
 
 1. `git clone https://github.com/jikan-me/jikan-rest.git`
-2. Switch to v3 branch `git checkout v3`
 3. `cd jikan-rest`
-4. `cp .env.dist .env`
-5. `composer install` (Make sure Jikan's directory has write permissions)
+4. Switch to v3 branch `git checkout v3`
+5. `cp .env.dist .env`
+6. `composer install` (Make sure Jikan's directory has write permissions)
 
 ### 03. Configuration
 
