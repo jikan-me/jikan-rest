@@ -85,6 +85,8 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         $magazine = $request->get('magazines');
         $minScore = $request->get('min_score');
         $maxScore = $request->get('max_score');
+        $startDate = $request->get('start_date');
+        $endDate = $request->get('end_date');
 
         if (!empty($query) && is_null($letter)) {
 
@@ -109,6 +111,38 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
         if (empty($query) && is_null($orderBy)) {
             $results = $results
                 ->orderBy('mal_id');
+        }
+
+        if (!is_null($startDate)) {
+
+            $startDate = explode('-', $startDate);
+
+            $startDate = (new \DateTime())
+                ->setDate(
+                    $startDate[0] ?? date('Y'),
+                    $startDate[1] ?? 1,
+                    $startDate[2] ?? 1
+                )
+                ->format(\DateTimeInterface::ISO8601);
+
+            $results = $results
+                ->where('published.from', '>=', $startDate);
+        }
+
+        if (!is_null($endDate)) {
+
+            $endDate = explode('-', $endDate);
+
+            $endDate = (new \DateTime())
+                ->setDate(
+                    $endDate[0] ?? date('Y'),
+                    $endDate[1] ?? 1,
+                    $endDate[2] ?? 1
+                )
+                ->format(\DateTimeInterface::ISO8601);
+
+            $results = $results
+                ->where('published.to', '<=', $endDate);
         }
 
         if (!is_null($type)) {
