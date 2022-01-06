@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Jikan\Exception\BadResponseException;
@@ -17,6 +18,7 @@ use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Predis\Connection\ConnectionException;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpClient\Exception\TimeoutException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Support\Facades\Cache;
 
@@ -51,7 +53,7 @@ class Handler extends ExceptionHandler
     /**
      * @param Request $request
      * @param \Throwable $e
-     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @return JsonResponse|Response
      */
     public function render($request, \Throwable $e)
     {
@@ -88,7 +90,7 @@ class Handler extends ExceptionHandler
                 ->json([
                     'status' => $e->getCode(),
                     'type' => 'BadResponseException',
-                    'message' => 'Jikan failed to connect to MyAnimeList. MyAnimeList may be down/unavailable or refuses to connect',
+                    'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond.',
                     'error' => $e->getMessage()
                 ], 503);
         }
@@ -141,7 +143,7 @@ class Handler extends ExceptionHandler
                         ->json([
                             'status' => $e->getCode(),
                             'type' => 'BadResponseException',
-                            'message' => 'Jikan failed to connect to MyAnimeList. MyAnimeList may be down/unavailable or refuses to connect',
+                            'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond.',
                             'error' => $e->getMessage()
                         ], 503);
                 default:
@@ -177,6 +179,19 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof Exception) {
+            if ($e->getMessage() === "Undefined index: url") {
+                event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
+
+                return response()
+                    ->json([
+                        'status' => $e->getCode(),
+                        'type' => 'BadResponseException',
+                        'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Retry the request!',
+                        'error' => $e->getMessage()
+                    ], 503);
+            }
+
+
             return response()
                 ->json([
                     'status' => 500,
