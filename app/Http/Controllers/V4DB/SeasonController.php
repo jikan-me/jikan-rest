@@ -7,7 +7,9 @@ use App\Http\HttpResponse;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\ResultsResource;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Seasonal\SeasonalRequest;
 use Jikan\Request\SeasonList\SeasonListRequest;
@@ -22,14 +24,8 @@ class SeasonController extends Controller
         'Fall'
     ];
 
-    const MAX_RESULTS_PER_PAGE = 25;
-
-    private $request;
-    private $season;
-    private $year;
-
     /**
-     *  @OA\Get(
+     * @OA\Get(
      *     path="/seasons/{year}/{season}",
      *     operationId="getSeason",
      *     tags={"seasons"},
@@ -46,12 +42,13 @@ class SeasonController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
+     * @throws Exception
      */
     public function main(Request $request, ?int $year = null, ?string $season = null)
     {
-        $this->request = $request;
-        $page = $this->request->get('page') ?? 1;
-        $limit = $this->request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+        $maxResultsPerPage = env('MAX_RESULTS_PER_PAGE', 30);
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? $maxResultsPerPage;
 
         if (!empty($limit)) {
             $limit = (int) $limit;
@@ -60,32 +57,32 @@ class SeasonController extends Controller
                 $limit = 1;
             }
 
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
+            if ($limit > $maxResultsPerPage) {
+                $limit = $maxResultsPerPage;
             }
         }
 
         if (!is_null($season)) {
-            $this->season = ucfirst(
+            $season = ucfirst(
                 strtolower($season)
             );
         }
 
         if (!is_null($year)) {
-            $this->year = (int) $year;
+            $year = (int) $year;
         }
 
-        if (!is_null($this->season)
-        && !\in_array($this->season, self::VALID_SEASONS)) {
-            return HttpResponse::badRequest($this->request);
+        if (!is_null($season)
+        && !\in_array($season, self::VALID_SEASONS)) {
+            return HttpResponse::badRequest($request);
         }
 
         if (is_null($season) && is_null($year)) {
-            list($this->season, $this->year) = $this->getSeasonStr();
+            list($season, $year) = $this->getSeasonStr();
         }
 
         $results = Anime::query()
-            ->where('premiered', "{$this->season} $this->year")
+            ->where('premiered', "{$season} $year")
             ->orderBy('members', 'desc')
             ->paginate(
                 $limit,
@@ -93,8 +90,14 @@ class SeasonController extends Controller
                 null,
                 $page);
 
-        return new AnimeCollection(
+        $response = (new AnimeCollection(
             $results
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
         );
     }
 
@@ -172,7 +175,7 @@ class SeasonController extends Controller
     }
 
     /**
-     *  @OA\Get(
+     * @OA\Get(
      *     path="/seasons/upcoming",
      *     operationId="getSeasonUpcoming",
      *     tags={"seasons"},
@@ -189,28 +192,63 @@ class SeasonController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
+     * @throws Exception
      */
     public function later(Request $request)
     {
-        $this->request = $request;
+        $maxResultsPerPage = env('MAX_RESULTS_PER_PAGE', 30);
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? $maxResultsPerPage;
 
-        $nextYear =   (new \DateTime(null, new \DateTimeZone('Asia/Tokyo')))
-            ->modify('+1 year')
-            ->format('Y');
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > $maxResultsPerPage) {
+                $limit = $maxResultsPerPage;
+            }
+        }
+
+
+        //        $nextYear =   (new \DateTime(null, new \DateTimeZone('Asia/Tokyo')))
+//            ->modify('+1 year')
+//            ->format('Y');
 
         $results = Anime::query()
             ->where('status', 'Not yet aired')
-            ->where('premiered', 'like', "%{$nextYear}%")
-            ->orderBy('members', 'desc')
-            ->get();
+//            ->where('premiered', 'like', "%{$nextYear}%")
+            ->orderBy('members', 'desc');
 
-        $this->season = 'Later';
+        $season = 'Later';
 
-        return new AnimeCollection(
+
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        $response = (new AnimeCollection(
             $results
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
         );
     }
 
+
+    /**
+     * @return array
+     * @throws Exception
+     */
     private function getSeasonStr() : array
     {
         $date = new \DateTime(null, new \DateTimeZone('Asia/Tokyo'));
@@ -227,7 +265,7 @@ class SeasonController extends Controller
                 return ['Summer', $year];
             case \in_array($month, range(10, 12)):
                 return ['Fall', $year];
-            default: throw new \Exception('Could not generate seasonal string');
+            default: throw new Exception('Could not generate seasonal string');
         }
     }
 }
