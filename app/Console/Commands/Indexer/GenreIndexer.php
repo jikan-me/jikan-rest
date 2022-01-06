@@ -65,10 +65,7 @@ class GenreIndexer extends Command
         $itemCount = count($results['genres']);
         echo "Parsed {$itemCount} anime genres\n";
         foreach ($results['genres'] as $i => $item) {
-            $item['count'] = $item['count'];
-
             $result = DB::table('genres_anime')
-//                ->where('mal_id', $item['mal_id'])
                 ->updateOrInsert(
                     [
                         'mal_id' => $item['mal_id']
@@ -87,7 +84,6 @@ class GenreIndexer extends Command
         echo "Parsed {$itemCount} anime explicit_genres\n";
         foreach ($results['explicit_genres'] as $i => $item) {
             $result = DB::table('explicit_genres_anime')
-//                ->where('mal_id', $item['mal_id'])
                 ->updateOrInsert(
                     [
                         'mal_id' => $item['mal_id']
@@ -106,7 +102,6 @@ class GenreIndexer extends Command
         echo "Parsed {$itemCount} anime themes\n";
         foreach ($results['themes'] as $i => $item) {
             $result = DB::table('themes_anime')
-//                ->where('mal_id', $item['mal_id'])
                 ->updateOrInsert(
                     [
                         'mal_id' => $item['mal_id']
@@ -125,7 +120,6 @@ class GenreIndexer extends Command
         echo "Parsed {$itemCount} anime demographics\n";
         foreach ($results['demographics'] as $i => $item) {
             $result = DB::table('demographics_anime')
-//                ->where('mal_id', $item['mal_id'])
                 ->updateOrInsert(
                     [
                         'mal_id' => $item['mal_id']
@@ -162,7 +156,6 @@ class GenreIndexer extends Command
         echo "Parsed {$itemCount} manga genres\n";
         foreach ($results['genres'] as $i => $item) {
             $result = DB::table('genres_manga')
-//                ->where('mal_id', $item['mal_id'])
                 ->updateOrInsert(
                     [
                         'mal_id' => $item['mal_id']
@@ -181,7 +174,6 @@ class GenreIndexer extends Command
         echo "Parsed {$itemCount} manga explicit_genres\n";
         foreach ($results['explicit_genres'] as $i => $item) {
             $result = DB::table('explicit_genres_manga')
-//                ->where('mal_id', $item['mal_id'])
                 ->updateOrInsert(
                     [
                         'mal_id' => $item['mal_id']
@@ -200,7 +192,6 @@ class GenreIndexer extends Command
         echo "Parsed {$itemCount} manga themes\n";
         foreach ($results['themes'] as $i => $item) {
             $result = DB::table('themes_manga')
-//                ->where('mal_id', $item['mal_id'])
                 ->updateOrInsert(
                     [
                         'mal_id' => $item['mal_id']
@@ -219,7 +210,6 @@ class GenreIndexer extends Command
         echo "Parsed {$itemCount} manga demographics\n";
         foreach ($results['demographics'] as $i => $item) {
             $result = DB::table('demographics_manga')
-//                ->where('mal_id', $item['mal_id'])
                 ->updateOrInsert(
                     [
                         'mal_id' => $item['mal_id']

@@ -26,7 +26,7 @@ class CommonIndexer extends Command
      *
      * @var string
      */
-    protected $description = 'Index common endpoints: Producers, Magazines, Anime & Manga Genres';
+    protected $description = 'Index common endpoint metadata: Producers, Magazines';
 
     /**
      * Create a new command instance.
@@ -70,8 +70,17 @@ class CommonIndexer extends Command
         echo "Parsed {$itemCount} producers\n";
         foreach ($results as $i => $item) {
             $result = DB::table('producers')
-                ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:producers:'.sha1($item['mal_id'].$item['name'])]+$item);
+                ->updateOrInsert(
+                    [
+                        'mal_id' => $item['mal_id']
+                    ],
+                    [
+                        'mal_id' => $item['mal_id'],
+                        'name' => $item['name'],
+                        'url' => $item['url'],
+                        'count' => $item['count']
+                    ]
+                );
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
@@ -97,89 +106,17 @@ class CommonIndexer extends Command
         echo "Parsed {$itemCount} magazines\n";
         foreach ($results as $i => $item) {
             $result = DB::table('magazines')
-                ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:magazines:'.sha1($item['mal_id'].$item['name'])]+$item);
-            echo "Indexing {$i}/{$itemCount} \r";
-        }
-
-        /**
-         * Anime Genres
-         */
-        echo "Indexing Anime Genres...\n";
-        $results = \json_decode(
-            app('SerializerV4')->serialize(
-                app('JikanParser')
-                    ->getAnimeGenres(new AnimeGenresRequest()),
-                'json'
-            ),
-            true
-        );
-
-        if (HttpHelper::hasError($results)) {
-            echo "FAILED: {$results->original['error']}\n";
-            return;
-        }
-
-        $itemCount = count($results['genres']);
-        echo "Parsed {$itemCount} anime genres\n";
-        foreach ($results['genres'] as $i => $item) {
-            $result = DB::table('genres_anime')
-                ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:anime_genres:'.sha1($item['mal_id'].$item['name'])]+$item);
-            echo "Indexing {$i}/{$itemCount} \r";
-        }
-
-        $itemCount = count($results['explicit_genres']);
-        echo "Parsed {$itemCount} anime explicit_genres\n";
-        foreach ($results['explicit_genres'] as $i => $item) {
-            $result = DB::table('explicit_genres_anime')
-                ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:anime_explicit_genres:'.sha1($item['mal_id'].$item['name'])]+$item);
-            echo "Indexing {$i}/{$itemCount} \r";
-        }
-
-        $itemCount = count($results['themes']);
-        echo "Parsed {$itemCount} anime themes\n";
-        foreach ($results['themes'] as $i => $item) {
-            $result = DB::table('themes_anime')
-                ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:anime_themes:'.sha1($item['mal_id'].$item['name'])]+$item);
-            echo "Indexing {$i}/{$itemCount} \r";
-        }
-
-        $itemCount = count($results['demographics']);
-        echo "Parsed {$itemCount} anime demographics\n";
-        foreach ($results['demographics'] as $i => $item) {
-            $result = DB::table('demographics_anime')
-                ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:anime_demographics:'.sha1($item['mal_id'].$item['name'])]+$item);
-            echo "Indexing {$i}/{$itemCount} \r";
-        }
-
-        /**
-         * Manga Genres
-         */
-        echo "Indexing Manga Genres...\n";
-        $results = \json_decode(
-            app('SerializerV4')->serialize(
-                app('JikanParser')
-                    ->getMangaGenres(new MangaGenresRequest()),
-                'json'
-            ),
-            true
-        )['genres'];
-
-        if (HttpHelper::hasError($results)) {
-            echo "FAILED: {$results->original['error']}\n";
-            return;
-        }
-
-        $itemCount = count($results);
-        echo "Parsed {$itemCount} manga genres\n";
-        foreach ($results as $i => $item) {
-            $result = DB::table('genres_manga')
-                ->where('mal_id', $item['mal_id'])
-                ->updateOrInsert(['request_hash'=>'request:manga_genres:'.sha1($item['mal_id'].$item['name'])]+$item);
+                ->updateOrInsert(
+                    [
+                        'mal_id' => $item['mal_id']
+                    ],
+                    [
+                        'mal_id' => $item['mal_id'],
+                        'name' => $item['name'],
+                        'url' => $item['url'],
+                        'count' => $item['count']
+                    ]
+                );
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
