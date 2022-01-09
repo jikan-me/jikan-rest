@@ -236,7 +236,10 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 $genre = (int) $genre;
 
                 $results = $results
-                    ->where('genres.mal_id', $genre);
+                    ->where('genres.mal_id', $genre)
+                    ->orWhere('demographics.mal_id', $genre)
+                    ->orWhere('themes.mal_id', $genre)
+                    ->orWhere('explicit_genres.mal_id', $genre);
             }
         }
 
