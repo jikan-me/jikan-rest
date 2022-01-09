@@ -176,11 +176,6 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
                 ->where('status', $status);
         }
 
-        if (!is_null($sfw)) {
-            $results = $results
-                ->where('type', '!=', 'Doujinshi');
-        }
-
         if (!is_null($magazine)) {
 
             $magazine = (int) $magazine;
@@ -205,6 +200,11 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
                     ->orWhere('themes.mal_id', $genre)
                     ->orWhere('explicit_genres.mal_id', $genre);
             }
+        }
+
+        if (!is_null($sfw)) {
+            $results = $results
+                ->where('type', '!=', 'Doujinshi');
         }
 
         if (!is_null($orderBy)) {

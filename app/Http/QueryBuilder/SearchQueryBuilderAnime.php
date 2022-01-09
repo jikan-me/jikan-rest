@@ -210,11 +210,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 ->where('rating', $rating);
         }
 
-        if (!is_null($sfw)) {
-            $results = $results
-                ->where('rating', '!=', self::MAP_RATING['rx']);
-        }
-
         if (!is_null($producer)) {
 
             $producer = (int) $producer;
@@ -241,6 +236,11 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                     ->orWhere('themes.mal_id', $genre)
                     ->orWhere('explicit_genres.mal_id', $genre);
             }
+        }
+
+        if (!is_null($sfw)) {
+            $results = $results
+                ->where('rating', '!=', self::MAP_RATING['rx']);
         }
 
         if (!is_null($orderBy)) {
