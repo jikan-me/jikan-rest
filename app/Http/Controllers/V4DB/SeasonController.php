@@ -42,6 +42,24 @@ class SeasonController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
+     *
+     * @OA\Get(
+     *     path="/seasons/now",
+     *     operationId="getSeasonNow",
+     *     tags={"seasons"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns current seasonal anime",
+     *          @OA\JsonContent(
+     *               ref="#/components/schemas/anime search"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
      * @throws Exception
      */
     public function main(Request $request, ?int $year = null, ?string $season = null)
@@ -104,7 +122,7 @@ class SeasonController extends Controller
     /**
      *  @OA\Get(
      *     path="/seasons",
-     *     operationId="getSeasons",
+     *     operationId="getSeasonsList",
      *     tags={"seasons"},
      *
      *     @OA\Response(

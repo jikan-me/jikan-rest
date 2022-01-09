@@ -1755,6 +1755,22 @@
                         }
                     },
                     {
+                        "name": "min_score",
+                        "in": "query",
+                        "description": "Set a minimum score for results.",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "max_score",
+                        "in": "query",
+                        "description": "Set a maximum score for results",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
                         "name": "status",
                         "in": "query",
                         "schema": {
@@ -1780,6 +1796,14 @@
                         "name": "genres",
                         "in": "query",
                         "description": "Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "genres_exclude",
+                        "in": "query",
+                        "description": "Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
                         "schema": {
                             "type": "string"
                         }
@@ -1867,6 +1891,22 @@
                         }
                     },
                     {
+                        "name": "min_score",
+                        "in": "query",
+                        "description": "Set a minimum score for results.",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "max_score",
+                        "in": "query",
+                        "description": "Set a maximum score for results",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
                         "name": "status",
                         "in": "query",
                         "schema": {
@@ -1885,6 +1925,14 @@
                         "name": "genres",
                         "in": "query",
                         "description": "Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "genres_exclude",
+                        "in": "query",
+                        "description": "Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
                         "schema": {
                             "type": "string"
                         }
@@ -2243,12 +2291,35 @@
                 }
             }
         },
+        "/seasons/now": {
+            "get": {
+                "tags": [
+                    "seasons"
+                ],
+                "operationId": "getSeasonNow",
+                "responses": {
+                    "200": {
+                        "description": "Returns current seasonal anime",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime search"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/seasons": {
             "get": {
                 "tags": [
                     "seasons"
                 ],
-                "operationId": "getSeasons",
+                "operationId": "getSeasonsList",
                 "responses": {
                     "200": {
                         "description": "Returns available list of seasons",

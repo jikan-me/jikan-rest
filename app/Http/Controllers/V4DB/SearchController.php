@@ -85,9 +85,23 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/anime search query type")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="score",
+     *       in="query",
+     *       @OA\Schema(type="number")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="min_score",
+     *       description="Set a minimum score for results.",
+     *       in="query",
+     *       @OA\Schema(type="number")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="max_score",
+     *       description="Set a maximum score for results",
      *       in="query",
      *       @OA\Schema(type="number")
      *     ),
@@ -115,6 +129,13 @@ class SearchController extends Controller
      *       name="genres",
      *       in="query",
      *       description="Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="genres_exclude",
+     *       in="query",
+     *       description="Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
      *       @OA\Schema(type="string")
      *     ),
      * 
@@ -219,6 +240,20 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(type="number")
      *     ),
+     *
+     *     @OA\Parameter(
+     *       name="min_score",
+     *       description="Set a minimum score for results.",
+     *       in="query",
+     *       @OA\Schema(type="number")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="max_score",
+     *       description="Set a maximum score for results",
+     *       in="query",
+     *       @OA\Schema(type="number")
+     *     ),
      * 
      *     @OA\Parameter(
      *       name="status",
@@ -237,6 +272,13 @@ class SearchController extends Controller
      *       name="genres",
      *       in="query",
      *       description="Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="genres_exclude",
+     *       in="query",
+     *       description="Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
      *       @OA\Schema(type="string")
      *     ),
      * 
