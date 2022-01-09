@@ -106,6 +106,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $rating = self::mapRating($request->get('rating'));
         $sfw = $request->get('sfw');
         $genres = $request->get('genres');
+        $genresExclude = $request->get('genres_exclude');
         $orderBy = self::mapOrderBy($request->get('order_by'));
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
@@ -231,10 +232,35 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 $genre = (int) $genre;
 
                 $results = $results
-                    ->where('genres.mal_id', $genre)
-                    ->orWhere('demographics.mal_id', $genre)
-                    ->orWhere('themes.mal_id', $genre)
-                    ->orWhere('explicit_genres.mal_id', $genre);
+                    ->where(function($query) use ($genre) {
+                        $query
+                            ->where('genres.mal_id', $genre)
+                            ->orWhere('demographics.mal_id', $genre)
+                            ->orWhere('themes.mal_id', $genre)
+                            ->orWhere('explicit_genres.mal_id', $genre);
+                    });
+            }
+        }
+
+        if (!is_null($genresExclude)) {
+            $genresExclude = explode(',', $genresExclude);
+
+            foreach ($genresExclude as $genreExclude) {
+                if (empty($genreExclude)) {
+                    continue;
+                }
+
+                $genreExclude = (int) $genreExclude;
+
+                $results = $results
+                    ->where(function($query) use ($genreExclude) {
+                        $query
+                            ->where('genres.mal_id', '!=', $genreExclude)
+                            ->where('demographics.mal_id', '!=', $genreExclude)
+                            ->where('themes.mal_id', '!=', $genreExclude)
+                            ->where('explicit_genres.mal_id', '!=', $genreExclude);
+                    });
+;
             }
         }
 
