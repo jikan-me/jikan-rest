@@ -107,13 +107,13 @@ class SourceHeartbeatListener
 
     private function getRecentFails()
     {
-        $fails = [];
-
         try {
             $failsJson = Storage::get('failovers.json');
             $fails = json_decode($failsJson, true);
         } catch (\Exception $e) {
         }
+
+        $fails = $fails ?? [];
 
         // remove any fails greater than SOURCE_BAD_HEALTH_RANGE
         foreach ($fails as $fail) {
