@@ -2932,12 +2932,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "78185d869860a8a768a3865d58bf8b0b92a90ad3"
+                "reference": "44fc28cbe20ebc96f0ce5a72db359ea3bcf61722"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/78185d869860a8a768a3865d58bf8b0b92a90ad3",
-                "reference": "78185d869860a8a768a3865d58bf8b0b92a90ad3",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/44fc28cbe20ebc96f0ce5a72db359ea3bcf61722",
+                "reference": "44fc28cbe20ebc96f0ce5a72db359ea3bcf61722",
                 "shasum": ""
             },
             "require": {
@@ -2986,7 +2986,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2022-01-26T15:35:19+00:00"
+            "time": "2022-01-26T16:36:05+00:00"
         },
         {
             "name": "jms/metadata",
