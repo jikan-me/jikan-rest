@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  * Class BrownoutMiddleware
  * @package App\Http\Middleware
  *
- *
+ * Brownout will occur for the first 15 minutes of every other hour
  */
 class BrownoutMiddleware
 {
