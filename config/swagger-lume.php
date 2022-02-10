@@ -219,7 +219,7 @@ return [
 
         ## JSON Notes
         - Any property (except arrays or objects) whose value does not exist or is undetermined, will be `null`.
-        - Any array or object property whose value does not exist or is undetermined, will be `null`.
+        - Any array or object property whose value does not exist or is undetermined, will be empty.
         - Any `score` property whose value does not exist or is undetermined, will be `0`.
         - All dates and timestamps are returned in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format and in UTC timezone
 
