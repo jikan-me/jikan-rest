@@ -119,17 +119,6 @@ $commonMiddleware = [
     'throttle'
 ];
 
-/*$app->router->group(
-    [
-        'prefix' => 'v4',
-        'namespace' => 'App\Http\Controllers\V4',
-        'middleware' => $commonMiddleware
-    ],
-    function ($router) {
-        require __DIR__.'/../routes/web.v4.php';
-    }
-);*/
-
 $app->router->group(
     [
         'prefix' => 'v3',
@@ -149,7 +138,19 @@ $app->router->group(
     ],
     function ($router) {
         $router->get('/', function () {
-            return response()->json([
+            $body = [];
+            $headers = [];
+
+            if (env('APP_DEPRECATION')) {
+                $body['API_DEPRECATION'] = env('APP_DEPRECATION');
+                $body['API_DEPRECATION_DATE'] = env('APP_DEPRECATION_DATE');
+                $body['API_DEPRECATION_INFO'] = env('APP_DEPRECATION_INFO');
+                $headers['X-API-Deprecation'] = env('APP_DEPRECATION');
+                $headers['X-API-Deprecation-Date'] = env('APP_DEPRECATION_DATE');
+                $headers['X-API-Deprecation-Info'] = env('APP_DEPRECATION_INFO');
+            }
+
+            $body += [
                 'NOTICE' => 'Append an API version for API requests. Please check the documentation for the latest and supported versions.',
                 'Author' => '@irfanDahir',
                 'Discord' => 'http://discord.jikan.moe',
@@ -160,7 +161,11 @@ $app->router->group(
                 'GitHub' => 'https://github.com/jikan-me/jikan',
                 'PRODUCTION_API_URL' => 'https://api.jikan.moe/v3/',
                 'STATUS_URL' => 'https://status.jikan.moe'
-            ]);
+            ];
+
+            return response()
+                ->json($body)
+                ->withHeaders($headers);
         });
     }
 );
@@ -175,7 +180,7 @@ $app->router->group(
                 ->json([
                     'status' => 400,
                     'type' => 'HttpException',
-                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported versions.',
+                    'message' => 'This version is discontinued. Please check the documentation for the latest and supported versions.',
                     'error' => null
                 ], 400);
         });
@@ -192,7 +197,7 @@ $app->router->group(
                 ->json([
                     'status' => 400,
                     'type' => 'HttpException',
-                    'message' => 'This version is depreciated. Please check the documentation for the latest and supported versions.',
+                    'message' => 'This version is discontinued. Please check the documentation for the latest and supported versions.',
                     'error' => null
                 ], 400);
         });

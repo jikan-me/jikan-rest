@@ -150,6 +150,18 @@ class JikanResponseHandler
             MicroCaching::setMicroCache($this->fingerprint, $response);
         }
 
+        $headers = [
+            'X-Request-Hash' => $this->fingerprint,
+            'X-Request-Cached' => $this->requestCached,
+            'X-Request-Cache-Ttl' => (int) $this->requestCacheExpiry - time()
+        ];
+
+        if (env('APP_DEPRECATION')) {
+            $headers['X-API-Deprecation'] = env('APP_DEPRECATION');
+            $headers['X-API-Deprecation-Date'] = env('APP_DEPRECATION_DATE');
+            $headers['X-API-Deprecation-Info'] = env('APP_DEPRECATION_INFO');
+        }
+
         // Build and return response
         return response()
             ->json(
@@ -158,11 +170,7 @@ class JikanResponseHandler
             ->setEtag(
                 md5($cache)
             )
-            ->withHeaders([
-                'X-Request-Hash' => $this->fingerprint,
-                'X-Request-Cached' => $this->requestCached,
-                'X-Request-Cache-Ttl' => (int) $this->requestCacheExpiry - time()
-            ])
+            ->withHeaders($headers)
             ->setExpires((new \DateTime())->setTimestamp($this->requestCacheExpiry));
     }
 
@@ -176,20 +184,10 @@ class JikanResponseHandler
             'request_cache_expiry' => (int) $this->requestCacheExpiry - time()
         ];
 
-        switch ($version) {
-            case 2:
-                $meta = array_merge([
-                    'DEPRECIATION_NOTICE' => 'THIS VERSION WILL BE DEPRECIATED ON JULY 01st, 2019.',
-                ], $meta);
-                break;
-            case 4:
-                // remove cache data from JSON response as it's sent as headers
-                unset($meta['request_cached'], $meta['request_cache_expiry']);
-                $meta = array_merge([
-                    'DEVELOPMENT_NOTICE' => 'THIS VERSION IS IN TESTING. DO NOT USE FOR PRODUCTION.',
-                    'MIGRATION' => 'https://github.com/jikan-me/jikan-rest/blob/master/MIGRATION.MD',
-                ], $meta);
-                break;
+        if (env('APP_DEPRECATION')) {
+            $meta['API_DEPRECATION'] = env('APP_DEPRECATION');
+            $meta['API_DEPRECATION_DATE'] = env('APP_DEPRECATION_DATE');
+            $meta['API_DEPRECATION_INFO'] = env('APP_DEPRECATION_INFO');
         }
 
         return $meta;
