@@ -1,7 +1,20 @@
 <?php
 
 $router->get('/', function () use ($router) {
-    return response()->json([
+    $body = [];
+    $headers = [];
+
+    if (env('APP_DEPRECATION')) {
+        $body['API_DEPRECATION'] = env('APP_DEPRECATION');
+        $body['API_DEPRECATION_DATE'] = env('APP_DEPRECATION_DATE');
+        $body['API_DEPRECATION_INFO'] = env('APP_DEPRECATION_INFO');
+        $headers['X-API-Deprecation'] = env('APP_DEPRECATION');
+        $headers['X-API-Deprecation-Date'] = env('APP_DEPRECATION_DATE');
+        $headers['X-API-Deprecation-Info'] = env('APP_DEPRECATION_INFO');
+    }
+
+    $body += [
+        'NOTICE' => 'Please migrate to v4: https://docs.api.jikan.moe/',
         'Author' => '@irfanDahir',
         'Discord' => 'http://discord.jikan.moe',
         'Version' => JIKAN_REST_API_VERSION,
@@ -11,7 +24,11 @@ $router->get('/', function () use ($router) {
         'GitHub' => 'https://github.com/jikan-me/jikan',
         'PRODUCTION_API_URL' => 'https://api.jikan.moe/v3/',
         'STATUS_URL' => 'https://status.jikan.moe'
-    ]);
+    ];
+
+    return response()
+        ->json($body)
+        ->withHeaders($headers);
 });
 
 $router->group(

@@ -72,7 +72,8 @@ $app->routeMiddleware([
     'jikan-response' => App\Http\Middleware\JikanResponseHandler::class,
     'throttle' => App\Http\Middleware\Throttle::class,
     'etag' => \App\Http\Middleware\EtagMiddleware::class,
-    'microcaching' => \App\Http\Middleware\MicroCaching::class
+    'microcaching' => \App\Http\Middleware\MicroCaching::class,
+    'brownout' => \App\Http\Middleware\BrownoutMiddleware::class
 ]);
 
 /*
@@ -116,8 +117,12 @@ $commonMiddleware = [
     'etag',
     'microcaching',
     'jikan-response',
-    'throttle'
+    'throttle',
 ];
+
+if (env('APP_BROWNOUT')) {
+    $commonMiddleware[] = 'brownout';
+}
 
 $app->router->group(
     [
