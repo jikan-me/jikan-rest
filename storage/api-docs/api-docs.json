@@ -2790,6 +2790,7 @@
                 "tags": [
                     "users"
                 ],
+                "description": "Anime lists will be discontinued from May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
                 "operationId": "getUserAnimelist",
                 "parameters": [
                     {
@@ -2813,7 +2814,8 @@
                     "400": {
                         "description": "Error: Bad request. When required parameters were not supplied."
                     }
-                }
+                },
+                "deprecated": true
             }
         },
         "/users/{username}/mangalist": {
@@ -2821,6 +2823,7 @@
                 "tags": [
                     "users"
                 ],
+                "description": "Manga lists will be discontinued from May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
                 "operationId": "getUserMangaList",
                 "parameters": [
                     {
@@ -2844,7 +2847,8 @@
                     "400": {
                         "description": "Error: Bad request. When required parameters were not supplied."
                     }
-                }
+                },
+                "deprecated": true
             }
         },
         "/users/{username}/reviews": {

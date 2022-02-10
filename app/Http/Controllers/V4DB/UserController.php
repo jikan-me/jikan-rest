@@ -624,6 +624,8 @@ class UserController extends Controller
      *     path="/users/{username}/animelist",
      *     operationId="getUserAnimelist",
      *     tags={"users"},
+     *     deprecated=true,
+     *     description="Anime lists will be discontinued from May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
      *
      *     @OA\Parameter(
      *       name="username",
@@ -699,6 +701,9 @@ class UserController extends Controller
      *     path="/users/{username}/mangalist",
      *     operationId="getUserMangaList",
      *     tags={"users"},
+     *     deprecated=true,
+     *     description="Manga lists will be discontinued from May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+
      *
      *     @OA\Parameter(
      *       name="username",
