@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fde059e93f03a4dc4b493760d161927",
+    "content-hash": "3513f6973c7f01655deee150d5b1b15a",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -2333,16 +2333,16 @@
         },
         {
             "name": "jikan-me/jikan",
-            "version": "v2.18.1",
+            "version": "v2.19.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "67d1e68f9aa9b9aa0eaedf6e094a481bb7812fab"
+                "reference": "74df76272051083312ad98f10d1d9c224ee21336"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/67d1e68f9aa9b9aa0eaedf6e094a481bb7812fab",
-                "reference": "67d1e68f9aa9b9aa0eaedf6e094a481bb7812fab",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/74df76272051083312ad98f10d1d9c224ee21336",
+                "reference": "74df76272051083312ad98f10d1d9c224ee21336",
                 "shasum": ""
             },
             "require": {
@@ -2383,7 +2383,7 @@
             "description": "Jikan is an unofficial MyAnimeList API",
             "support": {
                 "issues": "https://github.com/jikan-me/jikan/issues",
-                "source": "https://github.com/jikan-me/jikan/tree/v2.18.1"
+                "source": "https://github.com/jikan-me/jikan/tree/v2.19.1"
             },
             "funding": [
                 {
@@ -2391,7 +2391,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-09-18T14:39:04+00:00"
+            "time": "2022-01-26T16:44:04+00:00"
         },
         {
             "name": "jms/metadata",
@@ -7548,9 +7548,9 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1",
+        "php": ">=7.4",
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
