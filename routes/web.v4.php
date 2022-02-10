@@ -314,13 +314,15 @@ $router->group(
                     'uses' => 'UserController@friends'
                 ]);
 
-                $router->get('/animelist[/{status:[A-Za-z]+}]', [
-                    'uses' => 'UserController@animelist'
-                ]);
+                if (env('DISABLE_USER_LISTS') === false) {
+                    $router->get('/animelist[/{status:[A-Za-z]+}]', [
+                        'uses' => 'UserController@animelist'
+                    ]);
 
-                $router->get('/mangalist[/{status:[A-Za-z]+}]', [
-                    'uses' => 'UserController@mangalist'
-                ]);
+                    $router->get('/mangalist[/{status:[A-Za-z]+}]', [
+                        'uses' => 'UserController@mangalist'
+                    ]);
+                }
 
                 $router->get('/recommendations', [
                     'uses' => 'UserController@recommendations'
