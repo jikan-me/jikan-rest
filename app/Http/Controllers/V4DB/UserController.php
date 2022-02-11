@@ -456,7 +456,7 @@ class UserController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/users/{username}/history/{type}",
+     *     path="/users/{username}/history",
      *     operationId="getUserHistory",
      *     tags={"users"},
      *
@@ -469,7 +469,7 @@ class UserController extends Controller
      *
      *     @OA\Parameter(
      *       name="type",
-     *       in="path",
+     *       in="query",
      *       required=false,
      *       @OA\Schema(type="string",enum={"anime", "manga"})
      *     ),
@@ -489,8 +489,14 @@ class UserController extends Controller
      */
     public function history(Request $request, string $username, ?string $type = null)
     {
+        $filter = $request->get('filter') ?? null;
+
         if (!is_null($type)) {
             $type = strtolower($type);
+        }
+
+        if (!is_null($filter) && is_null($type)) {
+            $type = strtolower($filter);
         }
 
         if (!is_null($type) && !\in_array($type, ['anime', 'manga'])) {
