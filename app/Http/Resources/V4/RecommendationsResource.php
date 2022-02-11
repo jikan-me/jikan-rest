@@ -39,7 +39,7 @@ class RecommendationsResource extends JsonResource
      *
      *                          @OA\Items(
      *                              type="object",
-     *                              anyOf={
+     *                              oneOf={
      *                                  @OA\Schema(ref="#/components/schemas/anime_meta"),
      *                                  @OA\Schema(ref="#/components/schemas/manga_meta"),
      *                              }
