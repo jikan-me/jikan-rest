@@ -391,6 +391,10 @@ $router->group(
     }
 );
 
+$router->get('/clubs', [
+    'uses' => 'SearchController@clubs'
+]);
+
 $router->group(
     [
         'prefix' => 'clubs'
