@@ -41,7 +41,7 @@ class ScheduleController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/schedules",
+     *     path="/schedules/{filter}",
      *     operationId="getSchedules",
      *     tags={"schedules"},
      *

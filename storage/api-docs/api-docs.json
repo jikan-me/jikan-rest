@@ -227,7 +227,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/anime news"
+                                    "$ref": "#/components/schemas/anime_news"
                                 }
                             }
                         }
@@ -238,7 +238,7 @@
                 }
             }
         },
-        "/anime/{id}/forum": {
+        "/anime/{id}/forum/{filter}": {
             "get": {
                 "tags": [
                     "anime"
@@ -254,7 +254,7 @@
                         }
                     },
                     {
-                        "name": "topic",
+                        "name": "filter",
                         "in": "query",
                         "description": "Filter topics",
                         "required": false,
@@ -1462,6 +1462,16 @@
                     "people"
                 ],
                 "operationId": "getPersonAnime",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns person's anime staff positions",
@@ -1485,6 +1495,16 @@
                     "people"
                 ],
                 "operationId": "getPersonVoices",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns person's voice acting roles",
@@ -1508,6 +1528,16 @@
                     "people"
                 ],
                 "operationId": "getPersonManga",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns person's published manga works",
@@ -1893,7 +1923,7 @@
                 }
             }
         },
-        "/schedules": {
+        "/schedules/{filter}": {
             "get": {
                 "tags": [
                     "schedules"
@@ -2490,6 +2520,24 @@
                     "seasons"
                 ],
                 "operationId": "getSeason",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "season",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns seasonal anime",
@@ -3389,7 +3437,7 @@
                     }
                 ]
             },
-            "anime news": {
+            "anime_news": {
                 "description": "Anime News Resource",
                 "allOf": [
                     {
@@ -3894,7 +3942,7 @@
                     "created"
                 ]
             },
-            "magazines query orderby": {
+            "magazines_query_orderby": {
                 "description": "Order by magazine data",
                 "type": "string",
                 "enum": [
@@ -3955,7 +4003,7 @@
                     "favorites"
                 ]
             },
-            "producers query orderby": {
+            "producers_query_orderby": {
                 "description": "Order by producers data",
                 "type": "string",
                 "enum": [
@@ -6310,7 +6358,7 @@
                 },
                 "type": "object"
             },
-            "users temp": {
+            "users_temp": {
                 "description": "Transform the resource into an array.",
                 "properties": {
                     "data": {

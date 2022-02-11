@@ -500,7 +500,7 @@ class AnimeController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/anime/{id}/forum",
+     *     path="/anime/{id}/forum/{filter}",
      *     operationId="getAnimeForum",
      *     tags={"anime"},
      * 
@@ -512,7 +512,7 @@ class AnimeController extends Controller
      *     ),
      * 
      *      @OA\Parameter(
-     *          name="topic",
+     *          name="filter",
      *          in="query",
      *          required=false,
      *          description="Filter topics",
