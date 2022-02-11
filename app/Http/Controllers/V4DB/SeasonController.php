@@ -30,6 +30,20 @@ class SeasonController extends Controller
      *     operationId="getSeason",
      *     tags={"seasons"},
      *
+     *     @OA\Parameter(
+     *       name="year",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="season",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns seasonal anime",

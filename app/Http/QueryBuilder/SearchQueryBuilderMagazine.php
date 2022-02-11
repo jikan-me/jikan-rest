@@ -12,7 +12,7 @@ use Jenssegers\Mongodb\Eloquent\Builder;
  * @package App\Http\QueryBuilder
  *
  *  @OA\Schema(
- *    schema="magazines query orderby",
+ *    schema="magazines_query_orderby",
  *    description="Order by magazine data",
  *    type="string",
  *    enum={"mal_id", "name", "count"}

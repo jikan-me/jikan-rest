@@ -38,7 +38,7 @@ class ProducerCollection extends ResourceCollection
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/producers query orderby")
+     *       @OA\Schema(ref="#/components/schemas/producers_query_orderby")
      *     ),
      *
      *     @OA\Parameter(

@@ -112,6 +112,13 @@ class PersonController extends Controller
      *     operationId="getPersonAnime",
      *     tags={"people"},
      *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's anime staff positions",
@@ -187,6 +194,13 @@ class PersonController extends Controller
      *     operationId="getPersonVoices",
      *     tags={"people"},
      *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's voice acting roles",
@@ -261,6 +275,13 @@ class PersonController extends Controller
      *     path="/people/{id}/manga",
      *     operationId="getPersonManga",
      *     tags={"people"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",

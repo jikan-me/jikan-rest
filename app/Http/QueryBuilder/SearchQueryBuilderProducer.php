@@ -11,7 +11,7 @@ use Jenssegers\Mongodb\Eloquent\Builder;
  * @package App\Http\QueryBuilder
  *
  *  @OA\Schema(
- *    schema="producers query orderby",
+ *    schema="producers_query_orderby",
  *    description="Order by producers data",
  *    type="string",
  *    enum={"mal_id", "name", "count"}

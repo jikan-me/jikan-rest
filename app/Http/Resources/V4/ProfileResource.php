@@ -64,7 +64,7 @@ class ProfileResource extends JsonResource
      *      ),
      *  ),
      * @OA\Schema(
-     *     schema="users temp",
+     *     schema="users_temp",
      *     type="object",
      *
      *     @OA\Property(

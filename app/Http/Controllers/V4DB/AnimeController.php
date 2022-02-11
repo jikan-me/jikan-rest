@@ -449,7 +449,7 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns a list of news articles related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime news"
+     *              ref="#/components/schemas/anime_news"
      *         )
      *     ),
      *     @OA\Response(
@@ -459,7 +459,7 @@ class AnimeController extends Controller
      * )
      *
      *  @OA\Schema(
-     *      schema="anime news",
+     *      schema="anime_news",
      *      description="Anime News Resource",
      *
      *      allOf={

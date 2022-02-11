@@ -38,7 +38,7 @@ class MagazineCollection extends ResourceCollection
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/magazines query orderby")
+     *       @OA\Schema(ref="#/components/schemas/magazines_query_orderby")
      *     ),
      *
      *     @OA\Parameter(
