@@ -212,7 +212,7 @@ return [
 
         | Duration | Requests |
         |----|----|
-        | Daily | **Unlimited** |
+        | Monthly | **Unlimited** |
         | Per Minute | 60 requests |
         | Per Second | 3 requests |
 
