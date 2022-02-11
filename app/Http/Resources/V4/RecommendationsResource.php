@@ -28,7 +28,7 @@ class RecommendationsResource extends JsonResource
      *
      *                      @OA\Property(
      *                          property="mal_id",
-     *                          type="String",
+     *                          type="string",
      *                          description="MAL IDs of recommendations is both of the MAL ID's with a `-` delimiter",
      *                      ),
      *
@@ -39,7 +39,7 @@ class RecommendationsResource extends JsonResource
      *
      *                          @OA\Items(
      *                              type="object",
-     *                              oneOf={
+     *                              anyOf={
      *                                  @OA\Schema(ref="#/components/schemas/anime_meta"),
      *                                  @OA\Schema(ref="#/components/schemas/manga_meta"),
      *                              }

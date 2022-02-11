@@ -6703,14 +6703,14 @@
                                     "properties": {
                                         "mal_id": {
                                             "description": "MAL IDs of recommendations is both of the MAL ID's with a `-` delimiter",
-                                            "type": "String"
+                                            "type": "string"
                                         },
                                         "entry": {
                                             "description": "Array of 2 entries that are being recommended to each other",
                                             "type": "array",
                                             "items": {
                                                 "type": "object",
-                                                "oneOf": [
+                                                "anyOf": [
                                                     {
                                                         "$ref": "#/components/schemas/anime_meta"
                                                     },
