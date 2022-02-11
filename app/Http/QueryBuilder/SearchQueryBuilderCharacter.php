@@ -21,7 +21,7 @@ class SearchQueryBuilderCharacter implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="characters search query orderby",
+     *   schema="characters_search_query_orderby",
      *   description="Available Character order_by properties",
      *   type="string",
      *   enum={"mal_id", "name", "favorites"}

@@ -15,7 +15,7 @@ class PersonCollection extends ResourceCollection
      * @var string
      *
      *  @OA\Schema(
-     *      schema="people search",
+     *      schema="people_search",
      *      description="People Search",
      *
      *      allOf={

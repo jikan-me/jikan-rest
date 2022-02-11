@@ -15,7 +15,7 @@ class CharacterCollection extends ResourceCollection
      * @var string
      *
      *  @OA\Schema(
-     *      schema="characters search",
+     *      schema="characters_search",
      *      description="Characters Search Resource",
      *
      *      allOf={

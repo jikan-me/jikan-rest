@@ -8,7 +8,7 @@ class AnimeEpisodeResource extends JsonResource
 {
     /**
      *  @OA\Schema(
-     *      schema="anime episode",
+     *      schema="anime_episode",
      *      description="Anime Episode Resource",
      *
      *     @OA\Property(

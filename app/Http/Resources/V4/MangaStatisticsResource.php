@@ -13,7 +13,7 @@ class MangaStatisticsResource extends JsonResource
      * @return array
      *
      *  @OA\Schema(
-     *      schema="manga statistics",
+     *      schema="manga_statistics",
      *      description="Manga Statistics Resource",
      *
      *     @OA\Property(

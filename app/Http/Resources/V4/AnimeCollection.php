@@ -15,7 +15,7 @@ class AnimeCollection extends ResourceCollection
      * @var string
      *
      *  @OA\Schema(
-     *      schema="anime search",
+     *      schema="anime_search",
      *      description="Anime Collection Resource",
      *
      *      allOf={

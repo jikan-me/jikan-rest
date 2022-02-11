@@ -21,7 +21,7 @@ class SearchQueryBuilderClub implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="club search query type",
+     *   schema="club_search_query_type",
      *   description="Club Search Query Type",
      *   type="string",
      *   enum={"public","private","secret"}
@@ -35,7 +35,7 @@ class SearchQueryBuilderClub implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="club search query category",
+     *   schema="club_search_query_category",
      *   description="Club Search Query Category",
      *   type="string",
      *   enum={
@@ -62,7 +62,7 @@ class SearchQueryBuilderClub implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="club search query orderby",
+     *   schema="club_search_query_orderby",
      *   description="Club Search Query OrderBy",
      *   type="string",
      *   enum={"mal_id","title","members_count","pictures_count","created"}

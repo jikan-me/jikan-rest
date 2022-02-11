@@ -23,7 +23,7 @@ class MangaResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="images",
-     *          ref="#/components/schemas/manga images"
+     *          ref="#/components/schemas/manga_images"
      *      ),
      *      @OA\Property(
      *          property="title",

@@ -9,7 +9,7 @@ class ClubRelationsResource extends JsonResource
 
     /**
      *  @OA\Schema(
-     *      schema="club relations",
+     *      schema="club_relations",
      *      description="Club Relations",
      *
      *     @OA\Property(

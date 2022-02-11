@@ -28,7 +28,7 @@ class WatchController extends Controller
      *         response="200",
      *         description="Returns Recently Added Episodes",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/watch episodes"
+     *               ref="#/components/schemas/watch_episodes"
      *          )
      *     ),
      *     @OA\Response(
@@ -38,7 +38,7 @@ class WatchController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="watch episodes",
+     *      schema="watch_episodes",
      *      description="Watch Episodes",
      *
      *      allOf={
@@ -54,7 +54,7 @@ class WatchController extends Controller
      *                       @OA\Property(
      *                           property="entry",
      *                           type="object",
-     *                           ref="#/components/schemas/anime meta"
+     *                           ref="#/components/schemas/anime_meta"
      *                       ),
      *                      @OA\Property(
      *                          property="episodes",
@@ -132,7 +132,7 @@ class WatchController extends Controller
      *         response="200",
      *         description="Returns Popular Episodes",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/watch episodes"
+     *               ref="#/components/schemas/watch_episodes"
      *          )
      *     ),
      *     @OA\Response(
@@ -178,7 +178,7 @@ class WatchController extends Controller
      *         response="200",
      *         description="Returns Recently Added Promotional Videos",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/watch promos"
+     *               ref="#/components/schemas/watch_promos"
      *          )
      *     ),
      *     @OA\Response(
@@ -188,7 +188,7 @@ class WatchController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="watch promos",
+     *      schema="watch_promos",
      *      description="Watch Promos",
      *
      *      allOf={
@@ -213,7 +213,7 @@ class WatchController extends Controller
      *                               @OA\Property(
      *                                   property="entry",
      *                                   type="object",
-     *                                   ref="#/components/schemas/anime meta"
+     *                                   ref="#/components/schemas/anime_meta"
      *                               ),
      *                              @OA\Property(
      *                                  property="trailer",
@@ -269,7 +269,7 @@ class WatchController extends Controller
      *         response="200",
      *         description="Returns Popular Promotional Videos",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/watch promos"
+     *               ref="#/components/schemas/watch_promos"
      *          )
      *     ),
      *     @OA\Response(

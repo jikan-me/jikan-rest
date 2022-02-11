@@ -51,7 +51,7 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user profile",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user profile"
+     *              ref="#/components/schemas/user_profile"
      *         )
      *     ),
      *     @OA\Response(
@@ -134,7 +134,7 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user statistics",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user statistics"
+     *              ref="#/components/schemas/user_statistics"
      *         )
      *     ),
      *     @OA\Response(
@@ -219,7 +219,7 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user favorites",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user favorites"
+     *              ref="#/components/schemas/user_favorites"
      *         )
      *     ),
      *     @OA\Response(
@@ -303,7 +303,7 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user updates",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user updates"
+     *              ref="#/components/schemas/user_updates"
      *         )
      *     ),
      *     @OA\Response(
@@ -387,7 +387,7 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user about in raw HTML",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user about"
+     *              ref="#/components/schemas/user_about"
      *         )
      *     ),
      *     @OA\Response(
@@ -478,7 +478,7 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user history (past 30 days)",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user history"
+     *              ref="#/components/schemas/user_history"
      *         )
      *     ),
      *     @OA\Response(
@@ -539,7 +539,7 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user friends",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user friends"
+     *              ref="#/components/schemas/user_friends"
      *         )
      *     ),
      *     @OA\Response(
@@ -549,7 +549,7 @@ class UserController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="user friends",
+     *      schema="user_friends",
      *      description="User Friends",
      *
      *      allOf={
@@ -569,7 +569,7 @@ class UserController extends Controller
      *                              @OA\Property(
      *                                  property="user",
      *                                  type="object",
-     *                                  ref="#/components/schemas/user meta"
+     *                                  ref="#/components/schemas/user_meta"
      *                              ),
      *                          ),
      *                          @OA\Schema (
@@ -804,38 +804,38 @@ class UserController extends Controller
      *                                   anyOf={
      *                                       @OA\Schema(
      *                                          allOf={
-     *                                              @OA\Schema(ref="#/components/schemas/anime review"),
+     *                                              @OA\Schema(ref="#/components/schemas/anime_review"),
      *                                              @OA\Schema(
      *                                                 @OA\Property(
      *                                                     property="anime",
      *                                                     type="object",
-     *                                                     ref="#/components/schemas/anime meta",
+     *                                                     ref="#/components/schemas/anime_meta",
      *                                                 ),
      *                                             ),
      *                                              @OA\Schema(
      *                                                 @OA\Property(
      *                                                     property="user",
      *                                                     type="object",
-     *                                                     ref="#/components/schemas/user meta",
+     *                                                     ref="#/components/schemas/user_meta",
      *                                                 ),
      *                                             ),
      *                                          },
      *                                       ),
      *                                       @OA\Schema(
      *                                          allOf={
-     *                                              @OA\Schema(ref="#/components/schemas/manga review"),
+     *                                              @OA\Schema(ref="#/components/schemas/manga_review"),
      *                                              @OA\Schema(
      *                                                 @OA\Property(
      *                                                     property="manga",
      *                                                     type="object",
-     *                                                     ref="#/components/schemas/manga meta",
+     *                                                     ref="#/components/schemas/manga_meta",
      *                                                 ),
      *                                             ),
      *                                              @OA\Schema(
      *                                                 @OA\Property(
      *                                                     property="user",
      *                                                     type="object",
-     *                                                     ref="#/components/schemas/user meta",
+     *                                                     ref="#/components/schemas/user_meta",
      *                                                 ),
      *                                             ),
      *                                          },
@@ -951,7 +951,7 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user clubs",
-     *         @OA\JsonContent(ref="#/components/schemas/user clubs")
+     *         @OA\JsonContent(ref="#/components/schemas/user_clubs")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -960,7 +960,7 @@ class UserController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="user clubs",
+     *      schema="user_clubs",
      *      description="User Clubs",
      *
      *      allOf={

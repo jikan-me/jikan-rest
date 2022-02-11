@@ -36,7 +36,7 @@ class GenreCollection extends ResourceCollection
      *  ),
      *
      *  @OA\Schema(
-     *    schema="genre query filter",
+     *    schema="genre_query_filter",
      *    description="Filter genres by type",
      *    type="string",
      *    enum={"genres","explicit_genres", "themes", "demographics"}

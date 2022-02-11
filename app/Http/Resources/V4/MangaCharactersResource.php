@@ -13,7 +13,7 @@ class MangaCharactersResource extends JsonResource
      * @return array
      *
      *  @OA\Schema(
-     *      schema="manga characters",
+     *      schema="manga_characters",
      *      description="Manga Characters Resource",
      *
      *     @OA\Property(
@@ -25,7 +25,7 @@ class MangaCharactersResource extends JsonResource
      *               @OA\Property(
      *                   property="character",
      *                   type="object",
-     *                   ref="#/components/schemas/character meta",
+     *                   ref="#/components/schemas/character_meta",
      *               ),
      *               @OA\Property(
      *                   property="role",

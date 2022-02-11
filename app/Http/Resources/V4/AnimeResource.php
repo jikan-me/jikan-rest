@@ -23,11 +23,11 @@ class AnimeResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="images",
-     *          ref="#/components/schemas/anime images"
+     *          ref="#/components/schemas/anime_images"
      *      ),
      *      @OA\Property(
      *          property="trailer",
-     *          ref="#/components/schemas/trailer base"
+     *          ref="#/components/schemas/trailer_base"
      *      ),
      *      @OA\Property(
      *          property="title",

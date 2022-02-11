@@ -9,7 +9,7 @@ class ReviewsResource extends JsonResource
     /**
      *
      * @OA\Schema(
-     *     schema="manga review",
+     *     schema="manga_review",
      *     type="object",
      *     @OA\Property(
      *         property="mal_id",
@@ -79,7 +79,7 @@ class ReviewsResource extends JsonResource
      *  ),
      *
      * @OA\Schema(
-     *     schema="anime review",
+     *     schema="anime_review",
      *     type="object",
      *     @OA\Property(
      *         property="mal_id",
@@ -155,7 +155,7 @@ class ReviewsResource extends JsonResource
      *
      *
      *  @OA\Schema(
-     *      schema="anime reviews",
+     *      schema="anime_reviews",
      *      description="Anime Reviews Resource",
      *
      *      allOf={
@@ -169,12 +169,12 @@ class ReviewsResource extends JsonResource
      *                      type="object",
      *
      *                      allOf={
-     *                          @OA\Schema(ref="#/components/schemas/anime review"),
+     *                          @OA\Schema(ref="#/components/schemas/anime_review"),
      *                          @OA\Schema(
      *                              @OA\Property(
      *                                  property="user",
      *                                  type="object",
-     *                                  ref="#/components/schemas/user meta"
+     *                                  ref="#/components/schemas/user_meta"
      *                              ),
      *                          ),
      *                      },
@@ -186,7 +186,7 @@ class ReviewsResource extends JsonResource
      *
      *
      *  @OA\Schema(
-     *      schema="manga reviews",
+     *      schema="manga_reviews",
      *      description="Manga Reviews Resource",
      *
      *
@@ -201,12 +201,12 @@ class ReviewsResource extends JsonResource
      *                      type="object",
      *
      *                      allOf={
-     *                          @OA\Schema(ref="#/components/schemas/manga review"),
+     *                          @OA\Schema(ref="#/components/schemas/manga_review"),
      *                          @OA\Schema(
      *                              @OA\Property(
      *                                  property="user",
      *                                  type="object",
-     *                                  ref="#/components/schemas/user meta"
+     *                                  ref="#/components/schemas/user_meta"
      *                              ),
      *                          ),
      *                      },

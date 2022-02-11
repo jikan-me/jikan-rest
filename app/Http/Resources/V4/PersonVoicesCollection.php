@@ -12,7 +12,7 @@ class PersonVoicesCollection extends ResourceCollection
      * The resource that this resource collects.
      *
      *  @OA\Schema(
-     *      schema="person voice acting roles",
+     *      schema="person_voice_acting_roles",
      *      description="Person's voice acting roles",
      *
      *     @OA\Property(
@@ -31,13 +31,13 @@ class PersonVoicesCollection extends ResourceCollection
      *                  property="anime",
      *                  type="object",
      *                  description="The anime in which the person is voice acting in",
-     *                  ref="#/components/schemas/anime meta"
+     *                  ref="#/components/schemas/anime_meta"
      *              ),
      *              @OA\Property(
      *                  property="character",
      *                  type="object",
      *                  description="The character the person is voice acting for",
-     *                  ref="#/components/schemas/character meta"
+     *                  ref="#/components/schemas/character_meta"
      *              ),
      *          ),
      *     ),

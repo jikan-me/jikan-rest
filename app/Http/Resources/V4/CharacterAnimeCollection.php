@@ -12,7 +12,7 @@ class CharacterAnimeCollection extends ResourceCollection
      * The resource that this resource collects.
      *
      *  @OA\Schema(
-     *      schema="character anime",
+     *      schema="character_anime",
      *      description="Character casted in anime",
      *
      *     @OA\Property(
@@ -30,7 +30,7 @@ class CharacterAnimeCollection extends ResourceCollection
      *              @OA\Property(
      *                  property="anime",
      *                  type="object",
-     *                  ref="#/components/schemas/anime meta"
+     *                  ref="#/components/schemas/anime_meta"
      *              ),
      *          ),
      *     ),

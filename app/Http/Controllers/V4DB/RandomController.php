@@ -209,7 +209,7 @@ class RandomController extends Controller
      *         @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
-     *                  ref="#/components/schemas/user profile"
+     *                  ref="#/components/schemas/user_profile"
      *              )
      *         )
      *     ),

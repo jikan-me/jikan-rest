@@ -12,7 +12,7 @@ class ProfileAboutResource extends JsonResource
      * @return array
      *
      * @OA\Schema(
-     *     schema="user about",
+     *     schema="user_about",
      *     type="object",
      *
      *     @OA\Property(

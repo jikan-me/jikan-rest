@@ -12,7 +12,7 @@ class PersonAnimeCollection extends ResourceCollection
      * The resource that this resource collects.
      *
      *  @OA\Schema(
-     *      schema="person anime",
+     *      schema="person_anime",
      *      description="Person anime staff positions",
      *
      *     @OA\Property(
@@ -30,7 +30,7 @@ class PersonAnimeCollection extends ResourceCollection
      *              @OA\Property(
      *                  property="anime",
      *                  type="object",
-     *                  ref="#/components/schemas/anime meta"
+     *                  ref="#/components/schemas/anime_meta"
      *              ),
      *          ),
      *     ),

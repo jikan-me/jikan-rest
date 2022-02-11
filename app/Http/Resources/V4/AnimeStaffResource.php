@@ -9,7 +9,7 @@ class AnimeStaffResource extends JsonResource
 
     /**
      *  @OA\Schema(
-     *      schema="anime staff",
+     *      schema="anime_staff",
      *      description="Anime Staff Resource",
      *
      *     @OA\Property(
@@ -37,7 +37,7 @@ class AnimeStaffResource extends JsonResource
      *                  @OA\Property(
      *                      property="images",
      *                      type="string",
-     *                      ref="#/components/schemas/people images"
+     *                      ref="#/components/schemas/people_images"
      *                  ),
      *                  @OA\Property(
      *                      property="name",

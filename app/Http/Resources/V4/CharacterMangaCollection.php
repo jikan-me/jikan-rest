@@ -12,7 +12,7 @@ class CharacterMangaCollection extends ResourceCollection
      * The resource that this resource collects.
      *
      *  @OA\Schema(
-     *      schema="character manga",
+     *      schema="character_manga",
      *      description="Character casted in manga",
      *
      *     @OA\Property(
@@ -30,7 +30,7 @@ class CharacterMangaCollection extends ResourceCollection
      *              @OA\Property(
      *                  property="manga",
      *                  type="object",
-     *                  ref="#/components/schemas/manga meta"
+     *                  ref="#/components/schemas/manga_meta"
      *              ),
      *          ),
      *     ),

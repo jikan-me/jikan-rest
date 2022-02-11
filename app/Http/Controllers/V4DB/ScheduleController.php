@@ -46,7 +46,7 @@ class ScheduleController extends Controller
      *     tags={"schedules"},
      *
      *      @OA\Parameter(
-     *          name="topic",
+     *          name="filter",
      *          in="path",
      *          required=false,
      *          description="Filter by day",

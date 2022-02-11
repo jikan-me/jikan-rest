@@ -37,7 +37,7 @@ class TopController extends Controller
      *         response="200",
      *         description="Returns top anime",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/anime search"
+     *               ref="#/components/schemas/anime_search"
      *          )
      *     ),
      *     @OA\Response(
@@ -91,7 +91,7 @@ class TopController extends Controller
      *         response="200",
      *         description="Returns top manga",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/manga search"
+     *               ref="#/components/schemas/manga_search"
      *          )
      *     ),
      *     @OA\Response(
@@ -145,7 +145,7 @@ class TopController extends Controller
      *         response="200",
      *         description="Returns top people",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/people search"
+     *               ref="#/components/schemas/people_search"
      *          )
      *     ),
      *     @OA\Response(
@@ -199,7 +199,7 @@ class TopController extends Controller
      *         response="200",
      *         description="Returns top characters",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/characters search"
+     *               ref="#/components/schemas/characters_search"
      *          )
      *     ),
      *     @OA\Response(
@@ -266,38 +266,38 @@ class TopController extends Controller
      *                                   anyOf={
      *                                       @OA\Schema(
      *                                          allOf={
-     *                                              @OA\Schema(ref="#/components/schemas/anime review"),
+     *                                              @OA\Schema(ref="#/components/schemas/anime_review"),
      *                                              @OA\Schema(
      *                                                 @OA\Property(
      *                                                     property="anime",
      *                                                     type="object",
-     *                                                     ref="#/components/schemas/anime meta",
+     *                                                     ref="#/components/schemas/anime_meta",
      *                                                 ),
      *                                             ),
      *                                              @OA\Schema(
      *                                                 @OA\Property(
      *                                                     property="user",
      *                                                     type="object",
-     *                                                     ref="#/components/schemas/user meta",
+     *                                                     ref="#/components/schemas/user_meta",
      *                                                 ),
      *                                             ),
      *                                          },
      *                                       ),
      *                                       @OA\Schema(
      *                                          allOf={
-     *                                              @OA\Schema(ref="#/components/schemas/manga review"),
+     *                                              @OA\Schema(ref="#/components/schemas/manga_review"),
      *                                              @OA\Schema(
      *                                                 @OA\Property(
      *                                                     property="manga",
      *                                                     type="object",
-     *                                                     ref="#/components/schemas/manga meta",
+     *                                                     ref="#/components/schemas/manga_meta",
      *                                                 ),
      *                                             ),
      *                                              @OA\Schema(
      *                                                 @OA\Property(
      *                                                     property="user",
      *                                                     type="object",
-     *                                                     ref="#/components/schemas/user meta",
+     *                                                     ref="#/components/schemas/user_meta",
      *                                                 ),
      *                                             ),
      *                                          },
@@ -317,7 +317,7 @@ class TopController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="reviews collection",
+     *      schema="reviews_collection",
      *      description="Anime & Manga Reviews Resource",
      *
      *     @OA\Property(
@@ -327,8 +327,8 @@ class TopController extends Controller
      *          @OA\Items(
      *              type="object",
      *              anyOf = {
-     *                  @OA\Schema(ref="#/components/schemas/anime review"),
-     *                  @OA\Schema(ref="#/components/schemas/manga review"),
+     *                  @OA\Schema(ref="#/components/schemas/anime_review"),
+     *                  @OA\Schema(ref="#/components/schemas/manga_review"),
      *              },
      *          ),
      *     ),

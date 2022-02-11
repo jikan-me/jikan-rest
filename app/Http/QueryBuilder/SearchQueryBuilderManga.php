@@ -14,7 +14,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="manga search query type",
+     *   schema="manga_search_query_type",
      *   description="Available Manga types",
      *   type="string",
      *   enum={"manga","novel", "lightnovel", "oneshot","doujin","manhwa","manhua"}
@@ -32,7 +32,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="manga search query status",
+     *   schema="manga_search_query_status",
      *   description="Available Manga statuses",
      *   type="string",
      *   enum={"publishing","complete","hiatus","discontinued","upcoming"}
@@ -48,7 +48,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="manga search query orderby",
+     *   schema="manga_search_query_orderby",
      *   description="Available Manga order_by properties",
      *   type="string",
      *   enum={"mal_id", "title", "start_date", "end_date", "chapters", "volumes", "score", "scored_by", "rank", "popularity", "members", "favorites"}

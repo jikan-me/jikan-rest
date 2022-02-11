@@ -113,10 +113,17 @@ class CharacterController extends Controller
      *     operationId="getCharacterAnime",
      *     tags={"characters"},
      *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime that character is in",
-     *         @OA\JsonContent(ref="#/components/schemas/character anime")
+     *         @OA\JsonContent(ref="#/components/schemas/character_anime")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -186,10 +193,17 @@ class CharacterController extends Controller
      *     operationId="getCharacterManga",
      *     tags={"characters"},
      *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga that character is in",
-     *         @OA\JsonContent(ref="#/components/schemas/character manga")
+     *         @OA\JsonContent(ref="#/components/schemas/character_manga")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -257,10 +271,17 @@ class CharacterController extends Controller
      *     operationId="getCharacterVoiceActors",
      *     tags={"characters"},
      *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns the character's voice actors",
-     *         @OA\JsonContent(ref="#/components/schemas/character voice actors")
+     *         @OA\JsonContent(ref="#/components/schemas/character_voice_actors")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -339,7 +360,7 @@ class CharacterController extends Controller
      *         response="200",
      *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/pictures"
+     *              ref="#/components/schemas/character_pictures"
      *         )
      *     ),
      *
@@ -350,7 +371,7 @@ class CharacterController extends Controller
      * )
      * 
      *  @OA\Schema(
-     *      schema="character pictures",
+     *      schema="character_pictures",
      *      description="Character Pictures",
      *      @OA\Property(
      *          property="data",

@@ -21,7 +21,7 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="people search query orderby",
+     *   schema="people_search_query_orderby",
      *   description="Available People order_by properties",
      *   type="string",
      *   enum={"mal_id", "name", "birthday", "favorites"}

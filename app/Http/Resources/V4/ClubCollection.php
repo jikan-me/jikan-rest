@@ -23,7 +23,7 @@ class ClubCollection extends ResourceCollection
      * @return array
      *
      *  @OA\Schema(
-     *      schema="clubs search",
+     *      schema="clubs_search",
      *      description="Clubs Search Resource",
      *
      *      allOf={

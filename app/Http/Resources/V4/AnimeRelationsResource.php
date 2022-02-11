@@ -9,7 +9,7 @@ class AnimeRelationsResource extends JsonResource
 
     /**
      *  @OA\Schema(
-     *      schema="anime relations",
+     *      schema="anime_relations",
      *      description="Anime Relations",
      *
      *     @OA\Property(

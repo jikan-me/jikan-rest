@@ -12,7 +12,7 @@ class ProfileStatisticsResource extends JsonResource
      * @return array
      *
      * @OA\Schema(
-     *     schema="user statistics",
+     *     schema="user_statistics",
      *     type="object",
      *
      *     @OA\Property(

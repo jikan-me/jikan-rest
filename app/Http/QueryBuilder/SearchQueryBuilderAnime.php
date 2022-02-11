@@ -21,7 +21,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="anime search query type",
+     *   schema="anime_search_query_type",
      *   description="Available Anime types",
      *   type="string",
      *   enum={"tv","movie","ova","special","ona","music"}
@@ -38,7 +38,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="anime search query status",
+     *   schema="anime_search_query_status",
      *   description="Available Anime statuses",
      *   type="string",
      *   enum={"airing","complete","upcoming"}
@@ -52,7 +52,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="anime search query rating",
+     *   schema="anime_search_query_rating",
      *   description="Available Anime audience ratings<br><br><b>Ratings</b><br><ul><li>G - All Ages</li><li>PG - Children</li><li>PG-13 - Teens 13 or older</li><li>R - 17+ (violence & profanity)</li><li>R+ - Mild Nudity</li><li>Rx - Hentai</li></ul>",
      *   type="string",
      *   enum={"g","pg","pg13","r17","r","rx"}
@@ -69,7 +69,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 
     /**
      * @OA\Schema(
-     *   schema="anime search query orderby",
+     *   schema="anime_search_query_orderby",
      *   description="Available Anime order_by properties",
      *   type="string",
      *   enum={"mal_id", "title", "type", "rating", "start_date", "end_date", "episodes", "score", "scored_by", "rank", "popularity", "members", "favorites" }

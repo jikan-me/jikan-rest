@@ -8,7 +8,7 @@ class AnimeCharactersResource extends JsonResource
 {
     /**
      *  @OA\Schema(
-     *      schema="anime characters",
+     *      schema="anime_characters",
      *      description="Anime Characters Resource",
      *
      *     @OA\Property(
@@ -36,7 +36,7 @@ class AnimeCharactersResource extends JsonResource
      *                  @OA\Property(
      *                      property="images",
      *                      type="object",
-     *                      ref="#/components/schemas/character images"
+     *                      ref="#/components/schemas/character_images"
      *                  ),
      *                  @OA\Property(
      *                      property="name",
@@ -71,7 +71,7 @@ class AnimeCharactersResource extends JsonResource
      *                          @OA\Property(
      *                              property="images",
      *                              type="object",
-     *                              ref="#/components/schemas/people images"
+     *                              ref="#/components/schemas/people_images"
      *                          ),
      *                          @OA\Property(
      *                              property="name",

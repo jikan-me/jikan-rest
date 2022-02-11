@@ -12,7 +12,7 @@ class CharacterSeiyuuCollection extends ResourceCollection
      * The resource that this resource collects.
      *
      *  @OA\Schema(
-     *      schema="character voice actors",
+     *      schema="character_voice_actors",
      *      description="Character voice actors",
      *
      *     @OA\Property(
@@ -30,7 +30,7 @@ class CharacterSeiyuuCollection extends ResourceCollection
      *              @OA\Property(
      *                  property="person",
      *                  type="object",
-     *                  ref="#/components/schemas/person meta"
+     *                  ref="#/components/schemas/person_meta"
      *              ),
      *          ),
      *     ),

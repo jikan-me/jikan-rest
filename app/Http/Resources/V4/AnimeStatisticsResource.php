@@ -13,7 +13,7 @@ class AnimeStatisticsResource extends JsonResource
      * @return array
      *
      *  @OA\Schema(
-     *      schema="anime statistics",
+     *      schema="anime_statistics",
      *      description="Anime Statistics Resource",
      *
      *     @OA\Property(

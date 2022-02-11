@@ -13,7 +13,7 @@ class AnimeVideosResource extends JsonResource
      * @return array
      *
      *  @OA\Schema(
-     *      schema="anime videos",
+     *      schema="anime_videos",
      *      description="Anime Videos Resource",
      *
      *     @OA\Property(
@@ -66,7 +66,7 @@ class AnimeVideosResource extends JsonResource
      *                   @OA\Property(
      *                       property="images",
      *                       type="object",
-     *                       ref="#/components/schemas/common images"
+     *                       ref="#/components/schemas/common_images"
      *                   ),
      *               ),
      *          ),

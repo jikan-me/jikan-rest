@@ -58,7 +58,7 @@ class SearchController extends Controller
      *  ),
      * 
      * @OA\Schema(
-     *   schema="search query sort",
+     *   schema="search_query_sort",
      *   description="Characters Search Query Sort",
      *   type="string",
      *   enum={"desc","asc"}
@@ -83,7 +83,7 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/anime search query type")
+     *       @OA\Schema(ref="#/components/schemas/anime_search_query_type")
      *     ),
      *
      *     @OA\Parameter(
@@ -109,13 +109,13 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="status",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/anime search query status")
+     *       @OA\Schema(ref="#/components/schemas/anime_search_query_status")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="rating",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/anime search query rating")
+     *       @OA\Schema(ref="#/components/schemas/anime_search_query_rating")
      *     ),
      * 
      *     @OA\Parameter(
@@ -142,13 +142,13 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/anime search query orderby")
+     *       @OA\Schema(ref="#/components/schemas/anime_search_query_orderby")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      * 
      *     @OA\Parameter(
@@ -169,7 +169,7 @@ class SearchController extends Controller
      *         response="200",
      *         description="Returns search results for anime",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime search"
+     *              ref="#/components/schemas/anime_search"
      *         )
      *     ),
      *     @OA\Response(
@@ -232,7 +232,7 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/manga search query type")
+     *       @OA\Schema(ref="#/components/schemas/manga_search_query_type")
      *     ),
      * 
      *     @OA\Parameter(
@@ -258,7 +258,7 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="status",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/manga search query status")
+     *       @OA\Schema(ref="#/components/schemas/manga_search_query_status")
      *     ),
      *
      *     @OA\Parameter(
@@ -285,13 +285,13 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/manga search query orderby")
+     *       @OA\Schema(ref="#/components/schemas/manga_search_query_orderby")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
      *     @OA\Parameter(
@@ -312,7 +312,7 @@ class SearchController extends Controller
      *         response="200",
      *         description="Returns search results for manga",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/manga search"
+     *              ref="#/components/schemas/manga_search"
      *         )
      *     ),
      *     @OA\Response(
@@ -375,13 +375,13 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/people search query orderby")
+     *       @OA\Schema(ref="#/components/schemas/people_search_query_orderby")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
      *     @OA\Parameter(
@@ -394,7 +394,7 @@ class SearchController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for people",
-     *         @OA\JsonContent(ref="#/components/schemas/people search")
+     *         @OA\JsonContent(ref="#/components/schemas/people_search")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -455,13 +455,13 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/characters search query orderby")
+     *       @OA\Schema(ref="#/components/schemas/characters_search_query_orderby")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
      *     @OA\Parameter(
@@ -475,7 +475,7 @@ class SearchController extends Controller
      *         response="200",
      *         description="Returns search results for characters",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/characters search"
+     *              ref="#/components/schemas/characters_search"
      *         )
      *     ),
      *     @OA\Response(
@@ -537,7 +537,7 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="gender",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/users search query gender")
+     *       @OA\Schema(ref="#/components/schemas/users_search_query_gender")
      *     ),
      * 
      *     @OA\Parameter(
@@ -562,7 +562,7 @@ class SearchController extends Controller
      *         response="200",
      *         description="Returns search results for users",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/users search"
+     *               ref="#/components/schemas/users_search"
      *          )
      *     ),
      *     @OA\Response(
@@ -572,7 +572,7 @@ class SearchController extends Controller
      * ),
      *
      *  @OA\Schema(
-     *      schema="users search",
+     *      schema="users_search",
      *      description="User Results",
      *
      *      allOf={
@@ -596,7 +596,7 @@ class SearchController extends Controller
      *                                description="MyAnimeList Username"
      *                            ),
      *                            @OA\Property(
-     *                               ref="#/components/schemas/user images"
+     *                               ref="#/components/schemas/user_images"
      *                            ),
      *                            @OA\Property(
      *                                property="last_online",
@@ -651,7 +651,7 @@ class SearchController extends Controller
      *         response="200",
      *         description="Returns username by ID search",
      *          @OA\JsonContent(
-     *               ref="#/components/schemas/user by id"
+     *               ref="#/components/schemas/user_by_id"
      *          )
      *     ),
      *     @OA\Response(
@@ -707,25 +707,25 @@ class SearchController extends Controller
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/club search query type")
+     *       @OA\Schema(ref="#/components/schemas/club_search_query_type")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="category",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/club search query category")
+     *       @OA\Schema(ref="#/components/schemas/club_search_query_category")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/club search query orderby")
+     *       @OA\Schema(ref="#/components/schemas/club_search_query_orderby")
      *     ),
      * 
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
      *     @OA\Parameter(
@@ -739,7 +739,7 @@ class SearchController extends Controller
      *         response="200",
      *         description="Returns search results for clubs",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/clubs search"
+     *              ref="#/components/schemas/clubs_search"
      *         )
      *     ),
      *     @OA\Response(

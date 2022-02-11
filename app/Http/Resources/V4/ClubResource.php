@@ -38,7 +38,7 @@ class ClubResource extends JsonResource
      *          @OA\Property(
      *              property="images",
      *              type="object",
-     *              ref="#/components/schemas/common images",
+     *              ref="#/components/schemas/common_images",
      *          ),
      *          @OA\Property(
      *              property="members",

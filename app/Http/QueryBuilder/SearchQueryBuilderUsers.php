@@ -16,7 +16,7 @@ class SearchQueryBuilderUsers
 
     /**
      * @OA\Schema(
-     *   schema="users search query gender",
+     *   schema="users_search_query_gender",
      *   description="Users Search Query Gender",
      *   type="string",
      *   enum={"any","male","female","nonbinary"}

@@ -14,7 +14,7 @@ class ProfileResource extends JsonResource
      *
      *
      * @OA\Schema(
-     *     schema="user profile",
+     *     schema="user_profile",
      *     type="object",
      *
      *      @OA\Property(
@@ -35,7 +35,7 @@ class ProfileResource extends JsonResource
      *       @OA\Property(
      *           property="images",
      *           type="object",
-     *           ref="#/components/schemas/user images"
+     *           ref="#/components/schemas/user_images"
      *       ),
      *      @OA\Property(
      *          property="last_online",

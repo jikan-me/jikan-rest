@@ -23,7 +23,7 @@ class CharacterResource extends JsonResource
      *      ),
      *      @OA\Property(
      *          property="images",
-     *          ref="#/components/schemas/character images"
+     *          ref="#/components/schemas/character_images"
      *      ),
      *
      *      @OA\Property(

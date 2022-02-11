@@ -40,8 +40,8 @@ class RecommendationsResource extends JsonResource
      *                          @OA\Items(
      *                              type="object",
      *                              anyOf={
-     *                                  @OA\Schema(ref="#/components/schemas/anime meta"),
-     *                                  @OA\Schema(ref="#/components/schemas/manga meta"),
+     *                                  @OA\Schema(ref="#/components/schemas/anime_meta"),
+     *                                  @OA\Schema(ref="#/components/schemas/manga_meta"),
      *                              }
      *                          ),
      *                      ),
@@ -55,7 +55,7 @@ class RecommendationsResource extends JsonResource
      *                      @OA\Property (
      *                          property="user",
      *                          type="object",
-     *                          ref="#/components/schemas/user by id",
+     *                          ref="#/components/schemas/user_by_id",
      *                      ),
      *                  ),
      *              ),
@@ -65,7 +65,7 @@ class RecommendationsResource extends JsonResource
      *
      *
      * @OA\Schema(
-     *      schema="entry recommendations",
+     *      schema="entry_recommendations",
      *      description="Entry Recommendations Resource",
      *
      *     @OA\Property(
@@ -83,8 +83,8 @@ class RecommendationsResource extends JsonResource
      *                  @OA\Items(
      *                      type="object",
      *                      anyOf={
-     *                          @OA\Schema(ref="#/components/schemas/anime meta"),
-     *                          @OA\Schema(ref="#/components/schemas/manga meta"),
+     *                          @OA\Schema(ref="#/components/schemas/anime_meta"),
+     *                          @OA\Schema(ref="#/components/schemas/manga_meta"),
      *                      }
      *                  ),
      *              ),

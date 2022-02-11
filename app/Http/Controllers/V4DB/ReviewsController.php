@@ -34,19 +34,19 @@ class ReviewsController extends Controller
      *
      *                               @OA\Items(
      *                                   allOf={
-     *                                       @OA\Schema(ref="#/components/schemas/anime review"),
+     *                                       @OA\Schema(ref="#/components/schemas/anime_review"),
      *                                       @OA\Schema(
      *                                          @OA\Property(
      *                                              property="anime",
      *                                              type="object",
-     *                                              ref="#/components/schemas/anime meta",
+     *                                              ref="#/components/schemas/anime_meta",
      *                                          ),
      *                                      ),
      *                                       @OA\Schema(
      *                                          @OA\Property(
      *                                              property="user",
      *                                              type="object",
-     *                                              ref="#/components/schemas/user meta",
+     *                                              ref="#/components/schemas/user_meta",
      *                                          ),
      *                                      ),
      *                                   }
@@ -113,19 +113,19 @@ class ReviewsController extends Controller
      *
      *                               @OA\Items(
      *                                   allOf={
-     *                                       @OA\Schema(ref="#/components/schemas/manga review"),
+     *                                       @OA\Schema(ref="#/components/schemas/manga_review"),
      *                                       @OA\Schema(
      *                                          @OA\Property(
      *                                              property="manga",
      *                                              type="object",
-     *                                              ref="#/components/schemas/manga meta",
+     *                                              ref="#/components/schemas/manga_meta",
      *                                          ),
      *                                      ),
      *                                       @OA\Schema(
      *                                          @OA\Property(
      *                                              property="user",
      *                                              type="object",
-     *                                              ref="#/components/schemas/user meta",
+     *                                              ref="#/components/schemas/user_meta",
      *                                          ),
      *                                      ),
      *                                   }

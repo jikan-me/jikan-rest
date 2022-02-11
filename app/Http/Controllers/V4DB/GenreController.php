@@ -29,7 +29,7 @@ class GenreController extends Controller
      *     @OA\Parameter(
      *       name="filter",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/genre query filter")
+     *       @OA\Schema(ref="#/components/schemas/genre_query_filter")
      *     ),
 
      *     @OA\Response(
@@ -93,7 +93,7 @@ class GenreController extends Controller
      *     @OA\Parameter(
      *       name="filter",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/genre query filter")
+     *       @OA\Schema(ref="#/components/schemas/genre_query_filter")
      *     ),
 
      *     @OA\Response(

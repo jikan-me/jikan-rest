@@ -9,7 +9,7 @@ class ExternalLinksResource extends JsonResource
 
     /**
      *  @OA\Schema(
-     *      schema="external links",
+     *      schema="external_links",
      *      description="External links",
      *
      *      @OA\Property(

@@ -44,7 +44,7 @@ class MagazineCollection extends ResourceCollection
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/search query sort")
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
      *     @OA\Parameter(

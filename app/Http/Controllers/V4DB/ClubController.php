@@ -125,7 +125,7 @@ class ClubController extends Controller
      *              allOf={
      *                  @OA\Schema(ref="#/components/schemas/pagination"),
      *                  @OA\Schema(
-     *                      ref="#/components/schemas/club member"
+     *                      ref="#/components/schemas/club_member"
      *                  )
      *              }
      *         )
@@ -137,7 +137,7 @@ class ClubController extends Controller
      * ),
      *
      * @OA\Schema(
-     *      schema="club member",
+     *      schema="club_member",
      *      description="Club Member",
      *      @OA\Property(
      *          property="data",
@@ -208,7 +208,7 @@ class ClubController extends Controller
      *         response="200",
      *         description="Returns Club Staff",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/club staff"
+     *              ref="#/components/schemas/club_staff"
      *         )
      *     ),
      *     @OA\Response(
@@ -293,7 +293,7 @@ class ClubController extends Controller
      *         response="200",
      *         description="Returns Club Relations",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/club relations"
+     *              ref="#/components/schemas/club_relations"
      *         )
      *     ),
      *     @OA\Response(

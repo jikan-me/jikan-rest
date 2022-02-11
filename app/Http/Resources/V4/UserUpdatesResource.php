@@ -13,7 +13,7 @@ class UserUpdatesResource extends JsonResource
      * @return array
      *
      *  @OA\Schema(
-     *      schema="anime userupdates",
+     *      schema="anime_userupdates",
      *      description="Anime User Updates Resource",
      *
      *      allOf={
@@ -28,7 +28,7 @@ class UserUpdatesResource extends JsonResource
      *                      @OA\Property(
      *                          property="user",
      *                          type="object",
-     *                          ref="#/components/schemas/user meta"
+     *                          ref="#/components/schemas/user_meta"
      *                      ),
      *                      @OA\Property(
      *                          property="score",
@@ -62,7 +62,7 @@ class UserUpdatesResource extends JsonResource
      *  ),
      *
      *  @OA\Schema(
-     *      schema="manga userupdates",
+     *      schema="manga_userupdates",
      *      description="Manga User Updates Resource",
      *
      *      allOf={
@@ -76,7 +76,7 @@ class UserUpdatesResource extends JsonResource
      *                   @OA\Property(
      *                       property="user",
      *                       type="object",
-     *                       ref="#/components/schemas/user meta"
+     *                       ref="#/components/schemas/user_meta"
      *                   ),
      *                   @OA\Property(
      *                       property="score",

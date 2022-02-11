@@ -15,7 +15,7 @@ class MangaCollection extends ResourceCollection
      * @var string
      *
      *  @OA\Schema(
-     *      schema="manga search",
+     *      schema="manga_search",
      *      description="Manga Search Resource",
      * 
      *      allOf={

@@ -12,7 +12,7 @@ class ProfileLastUpdatesResource extends JsonResource
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable|mixed
      *
      * @OA\Schema(
-     *     schema="user updates",
+     *     schema="user_updates",
      *     type="object",
      *
      *     @OA\Property(
@@ -32,7 +32,7 @@ class ProfileLastUpdatesResource extends JsonResource
      *                          @OA\Property (
      *                               property="entry",
      *                               type="object",
-     *                               ref="#/components/schemas/anime meta",
+     *                               ref="#/components/schemas/anime_meta",
      *                          ),
      *                      ),
      *                      @OA\Schema (
@@ -74,7 +74,7 @@ class ProfileLastUpdatesResource extends JsonResource
      *                          @OA\Property (
      *                               property="entry",
      *                               type="object",
-     *                               ref="#/components/schemas/manga meta",
+     *                               ref="#/components/schemas/manga_meta",
      *                          ),
      *                      ),
      *                      @OA\Schema (

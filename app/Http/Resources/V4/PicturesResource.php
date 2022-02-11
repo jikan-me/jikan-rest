@@ -24,14 +24,14 @@ class PicturesResource extends JsonResource
      *              type="object",
      *              @OA\Property(
      *                  property="images",
-     *                  ref="#/components/schemas/anime images"
+     *                  ref="#/components/schemas/anime_images"
      *              ),
      *          ),
      *     ),
      *  ),
      *
      *  @OA\Schema(
-     *      schema="pictures variants",
+     *      schema="pictures_variants",
      *      description="Pictures Resource",
      *
      *     @OA\Property(
@@ -42,7 +42,7 @@ class PicturesResource extends JsonResource
      *              type="object",
      *              @OA\Property(
      *                  property="images",
-     *                  ref="#/components/schemas/common images"
+     *                  ref="#/components/schemas/common_images"
      *              ),
      *          ),
      *     ),

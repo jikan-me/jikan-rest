@@ -38,7 +38,7 @@ class PersonController extends Controller
      *         response="200",
      *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/pictures variants"
+     *              ref="#/components/schemas/pictures_variants"
      *         )
      *     ),
      *
@@ -115,7 +115,7 @@ class PersonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's anime staff positions",
-     *         @OA\JsonContent(ref="#/components/schemas/person anime")
+     *         @OA\JsonContent(ref="#/components/schemas/person_anime")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -190,7 +190,7 @@ class PersonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's voice acting roles",
-     *         @OA\JsonContent(ref="#/components/schemas/person voice acting roles")
+     *         @OA\JsonContent(ref="#/components/schemas/person_voice_acting_roles")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -265,7 +265,7 @@ class PersonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's published manga works",
-     *         @OA\JsonContent(ref="#/components/schemas/person manga")
+     *         @OA\JsonContent(ref="#/components/schemas/person_manga")
      *     ),
      *     @OA\Response(
      *         response="400",
@@ -348,7 +348,7 @@ class PersonController extends Controller
      *         response="200",
      *         description="Returns a list of pictures of the person",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/person pictures"
+     *              ref="#/components/schemas/person_pictures"
      *         )
      *     ),
      *     @OA\Response(
@@ -358,7 +358,7 @@ class PersonController extends Controller
      * )
      *
      *  @OA\Schema(
-     *      schema="person pictures",
+     *      schema="person_pictures",
      *      description="Character Pictures",
      *      @OA\Property(
      *          property="data",

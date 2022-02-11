@@ -9,7 +9,7 @@ class AnimeThemesResource extends JsonResource
 
     /**
      *  @OA\Schema(
-     *      schema="anime themes",
+     *      schema="anime_themes",
      *      description="Anime Opening and Ending Themes",
      *
      *      @OA\Property(

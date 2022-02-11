@@ -13,7 +13,7 @@ class ProfileHistoryResource extends JsonResource
      * @return array
      *
      * @OA\Schema(
-     *     schema="user history",
+     *     schema="user_history",
      *     type="object",
      *
      *     @OA\Property(
