@@ -500,7 +500,7 @@ class AnimeController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/anime/{id}/forum/{filter}",
+     *     path="/anime/{id}/forum",
      *     operationId="getAnimeForum",
      *     tags={"anime"},
      * 
@@ -543,6 +543,11 @@ class AnimeController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $topic = $request->get('topic');
+
+            if ($request->get('filter') != null) {
+                $topic = $request->get('filter');
+            }
+
             $anime = ['topics' => $this->jikan->getAnimeForum(new AnimeForumRequest($id, $topic))];
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 

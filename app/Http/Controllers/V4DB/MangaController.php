@@ -265,6 +265,14 @@ class MangaController extends Controller
      *       @OA\Schema(type="integer")
      *     ),
      *
+     *      @OA\Parameter(
+     *          name="filter",
+     *          in="query",
+     *          required=false,
+     *          description="Filter topics",
+     *          @OA\Schema(type="string",enum={"all", "episode", "other"})
+     *      ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of manga forum topics",
@@ -289,7 +297,12 @@ class MangaController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $topic = $request->get('topic');
-            $manga = ['topics' => $this->jikan->getMangaForum(new MangaForumRequest($id))];
+
+            if ($request->get('filter') != null) {
+                $topic = $request->get('filter');
+            }
+
+            $manga = ['topics' => $this->jikan->getMangaForum(new MangaForumRequest($id, $topic))];
             $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
 
             $results = $this->updateCache($request, $results, $response);
