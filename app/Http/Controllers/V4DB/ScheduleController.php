@@ -41,13 +41,13 @@ class ScheduleController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/schedules/{filter}",
+     *     path="/schedules",
      *     operationId="getSchedules",
      *     tags={"schedules"},
      *
      *      @OA\Parameter(
      *          name="filter",
-     *          in="path",
+     *          in="query",
      *          required=false,
      *          description="Filter by day",
      *          @OA\Schema(type="string",enum={"monday", "tuesday", "wednesday", "thursday", "friday", "unknown", "other"})
@@ -93,9 +93,14 @@ class ScheduleController extends Controller
 
         $page = $this->request->get('page') ?? 1;
         $limit = $this->request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
+        $filter = $this->request->get('filter') ?? null;
 
         if (!is_null($day)) {
             $this->day = strtolower($day);
+        }
+
+        if (!is_null($filter) && is_null($day)) {
+            $this->day = strtolower($filter);
         }
 
         if (null !== $this->day
@@ -108,11 +113,11 @@ class ScheduleController extends Controller
             ->where('type', 'TV')
             ->where('status', 'Currently Airing');
 
-        if ($this->day !== null && in_array($day, self::VALID_DAYS)) {
+        if (\in_array($this->day, self::VALID_DAYS)) {
             $this->day = ucfirst($this->day);
 
             $results
-                ->where('broadcast', 'like', "{$day}%");
+                ->where('broadcast', 'like', "{$this->day}%");
         }
 
         if ($this->day === 'unknown') {
