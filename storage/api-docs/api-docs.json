@@ -238,7 +238,7 @@
                 }
             }
         },
-        "/anime/{id}/forum/{filter}": {
+        "/anime/{id}/forum": {
             "get": {
                 "tags": [
                     "anime"
@@ -1139,6 +1139,20 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filter topics",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "all",
+                                "episode",
+                                "other"
+                            ]
                         }
                     }
                 ],
