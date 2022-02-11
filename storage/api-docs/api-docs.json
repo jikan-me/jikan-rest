@@ -1923,7 +1923,7 @@
                 }
             }
         },
-        "/schedules/{filter}": {
+        "/schedules": {
             "get": {
                 "tags": [
                     "schedules"
@@ -1932,7 +1932,7 @@
                 "parameters": [
                     {
                         "name": "filter",
-                        "in": "path",
+                        "in": "query",
                         "description": "Filter by day",
                         "required": false,
                         "schema": {
@@ -2971,7 +2971,7 @@
                 }
             }
         },
-        "/users/{username}/history/{type}": {
+        "/users/{username}/history": {
             "get": {
                 "tags": [
                     "users"
@@ -2988,7 +2988,7 @@
                     },
                     {
                         "name": "type",
-                        "in": "path",
+                        "in": "query",
                         "required": false,
                         "schema": {
                             "type": "string",
