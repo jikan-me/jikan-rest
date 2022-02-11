@@ -7010,47 +7010,51 @@
                 "description": "Manga User Updates Resource",
                 "allOf": [
                     {
-                        "$ref": "#/components/schemas/pagination"
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/user_meta"
+                                        },
+                                        "score": {
+                                            "description": "User Score",
+                                            "type": "integer"
+                                        },
+                                        "status": {
+                                            "description": "User list status",
+                                            "type": "string"
+                                        },
+                                        "volumes_read": {
+                                            "description": "Number of volumes read",
+                                            "type": "integer"
+                                        },
+                                        "volumes_total": {
+                                            "description": "Total number of volumes",
+                                            "type": "integer"
+                                        },
+                                        "chapters_read": {
+                                            "description": "Number of chapters read",
+                                            "type": "integer"
+                                        },
+                                        "chapters_total": {
+                                            "description": "Total number of chapters",
+                                            "type": "integer"
+                                        },
+                                        "date": {
+                                            "description": "Last updated date ISO8601",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "type": "object"
                     },
                     {
-                        "property": "data",
-                        "type": "array",
-                        "items": {
-                            "properties": {
-                                "user": {
-                                    "$ref": "#/components/schemas/user_meta"
-                                },
-                                "score": {
-                                    "description": "User Score",
-                                    "type": "integer"
-                                },
-                                "status": {
-                                    "description": "User list status",
-                                    "type": "string"
-                                },
-                                "volumes_read": {
-                                    "description": "Number of volumes read",
-                                    "type": "integer"
-                                },
-                                "volumes_total": {
-                                    "description": "Total number of volumes",
-                                    "type": "integer"
-                                },
-                                "chapters_read": {
-                                    "description": "Number of chapters read",
-                                    "type": "integer"
-                                },
-                                "chapters_total": {
-                                    "description": "Total number of chapters",
-                                    "type": "integer"
-                                },
-                                "date": {
-                                    "description": "Last updated date ISO8601",
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
-                        }
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             }

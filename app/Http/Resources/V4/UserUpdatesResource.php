@@ -67,53 +67,55 @@ class UserUpdatesResource extends JsonResource
      *
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
-     *          @OA\Property(
-     *               property="data",
-     *               type="array",
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
      *
-     *               @OA\Items(
-     *                   type="object",
-     *                   @OA\Property(
-     *                       property="user",
+     *                   @OA\Items(
      *                       type="object",
-     *                       ref="#/components/schemas/user_meta"
+     *                       @OA\Property(
+     *                           property="user",
+     *                           type="object",
+     *                           ref="#/components/schemas/user_meta"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="score",
+     *                           type="integer",
+     *                           description="User Score"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="status",
+     *                           type="string",
+     *                           description="User list status"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="volumes_read",
+     *                           type="integer",
+     *                           description="Number of volumes read"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="volumes_total",
+     *                           type="integer",
+     *                           description="Total number of volumes"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="chapters_read",
+     *                           type="integer",
+     *                           description="Number of chapters read"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="chapters_total",
+     *                           type="integer",
+     *                           description="Total number of chapters"
+     *                       ),
+     *                       @OA\Property(
+     *                           property="date",
+     *                           type="string",
+     *                           description="Last updated date ISO8601"
+     *                       ),
      *                   ),
-     *                   @OA\Property(
-     *                       property="score",
-     *                       type="integer",
-     *                       description="User Score"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="status",
-     *                       type="string",
-     *                       description="User list status"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="volumes_read",
-     *                       type="integer",
-     *                       description="Number of volumes read"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="volumes_total",
-     *                       type="integer",
-     *                       description="Total number of volumes"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="chapters_read",
-     *                       type="integer",
-     *                       description="Number of chapters read"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="chapters_total",
-     *                       type="integer",
-     *                       description="Total number of chapters"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="date",
-     *                       type="string",
-     *                       description="Last updated date ISO8601"
-     *                   ),
-     *               ),
+     *              ),
      *          ),
      *     },
      *  )
