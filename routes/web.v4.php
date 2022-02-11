@@ -94,6 +94,10 @@ $router->group(
         $router->get('/themes', [
             'uses' => 'AnimeController@themes'
         ]);
+
+        $router->get('/external', [
+            'uses' => 'AnimeController@external'
+        ]);
     }
 );
 
@@ -148,6 +152,10 @@ $router->group(
 
         $router->get('/relations', [
             'uses' => 'MangaController@relations'
+        ]);
+
+        $router->get('/external', [
+            'uses' => 'MangaController@external'
         ]);
     }
 );

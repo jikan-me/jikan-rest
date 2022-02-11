@@ -7,6 +7,7 @@ use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\Resources\V4\AnimeCharactersResource;
 use App\Http\Resources\V4\AnimeForumResource;
+use App\Http\Resources\V4\ExternalLinksResource;
 use App\Http\Resources\V4\MangaRelationsResource;
 use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\ReviewsResource;
@@ -22,6 +23,7 @@ use App\Http\Resources\V4\NewsResource;
 use App\Http\Resources\V4\PicturesResource;
 use App\Manga;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\Anime\AnimeForumRequest;
@@ -646,6 +648,86 @@ class MangaController extends Controller
 
 
         $response = (new MangaRelationsResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/manga/{id}/external",
+     *     operationId="getMangaExternal",
+     *     tags={"manga"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns manga external links",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/external links"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function external(Request $request, int $id)
+    {
+        $results = Manga::query()
+            ->where('mal_id', $id)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Manga::scrape($id);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Manga::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Manga::query()
+                    ->where('mal_id', $id)
+                    ->update($response);
+            }
+
+            $results = Manga::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new ExternalLinksResource(
             $results->first()
         ))->response();
 

@@ -10,6 +10,7 @@ use App\Http\Resources\V4\AnimeCharactersResource;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\AnimeEpisodeResource;
 use App\Http\Resources\V4\AnimeEpisodesResource;
+use App\Http\Resources\V4\ExternalLinksResource;
 use App\Http\Resources\V4\AnimeForumResource;
 use App\Http\Resources\V4\AnimeRelationsCollection;
 use App\Http\Resources\V4\AnimeRelationsResource;
@@ -28,6 +29,7 @@ use App\Http\Resources\V4\CommonResource;
 use App\Http\Resources\V4\ForumResource;
 use App\Http\Resources\V4\NewsResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\Anime\AnimeEpisodeRequest;
@@ -1076,6 +1078,87 @@ class AnimeController extends Controller
 
 
         $response = (new AnimeThemesResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/external",
+     *     operationId="getAnimeExternal",
+     *     tags={"anime"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime external links",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/external links"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function external(Request $request, int $id)
+    {
+        $results = Anime::query()
+            ->where('mal_id', $id)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Anime::scrape($id);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Anime::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Anime::query()
+                    ->where('mal_id', $id)
+                    ->update($response);
+            }
+
+            $results = Anime::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+
+        $response = (new ExternalLinksResource(
             $results->first()
         ))->response();
 
