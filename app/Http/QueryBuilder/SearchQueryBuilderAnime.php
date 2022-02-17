@@ -15,11 +15,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 {
 
     /**
-     *
-     */
-    const MAX_RESULTS_PER_PAGE = 25;
-
-    /**
      * @OA\Schema(
      *   schema="anime_search_query_type",
      *   description="Available Anime types",
@@ -285,7 +280,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
     public static function paginate(Request $request, Builder $results)
     {
         $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+        $limit = $request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
 
         $limit = (int) $limit;
 
@@ -293,8 +288,8 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
             $limit = 1;
         }
 
-        if ($limit > self::MAX_RESULTS_PER_PAGE) {
-            $limit = self::MAX_RESULTS_PER_PAGE;
+        if ($limit > env('MAX_RESULTS_PER_PAGE', 25)) {
+            $limit = env('MAX_RESULTS_PER_PAGE', 25);
         }
 
         if ($page <= 0) {

@@ -15,11 +15,6 @@ class SearchQueryBuilderCharacter implements SearchQueryBuilderInterface
 {
 
     /**
-     *
-     */
-    const MAX_RESULTS_PER_PAGE = 25;
-
-    /**
      * @OA\Schema(
      *   schema="characters_search_query_orderby",
      *   description="Available Character order_by properties",

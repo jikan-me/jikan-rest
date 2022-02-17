@@ -10,8 +10,6 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 class SearchQueryBuilderManga implements SearchQueryBuilderInterface
 {
 
-    const MAX_RESULTS_PER_PAGE = 25;
-
     /**
      * @OA\Schema(
      *   schema="manga_search_query_type",
@@ -244,7 +242,7 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
     public static function paginate(Request $request, Builder $results)
     {
         $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+        $limit = $request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
 
         $limit = (int) $limit;
 
@@ -252,8 +250,8 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
             $limit = 1;
         }
 
-        if ($limit > self::MAX_RESULTS_PER_PAGE) {
-            $limit = self::MAX_RESULTS_PER_PAGE;
+        if ($limit > env('MAX_RESULTS_PER_PAGE', 25)) {
+            $limit = env('MAX_RESULTS_PER_PAGE', 25);
         }
 
         if ($page <= 0) {

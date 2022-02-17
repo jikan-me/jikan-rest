@@ -14,10 +14,6 @@ use Jenssegers\Mongodb\Eloquent\Builder;
 class SearchQueryBuilderClub implements SearchQueryBuilderInterface
 {
 
-    /**
-     *
-     */
-    const MAX_RESULTS_PER_PAGE = 25;
 
     /**
      * @OA\Schema(

@@ -15,11 +15,6 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
 {
 
     /**
-     *
-     */
-    const MAX_RESULTS_PER_PAGE = 25;
-
-    /**
      * @OA\Schema(
      *   schema="people_search_query_orderby",
      *   description="Available People order_by properties",

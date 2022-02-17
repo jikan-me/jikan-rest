@@ -11,9 +11,6 @@ use Jikan\Request\Search\UserSearchRequest;
 
 class SearchQueryBuilderUsers
 {
-
-    const MAX_RESULTS_PER_PAGE = 25;
-
     /**
      * @OA\Schema(
      *   schema="users_search_query_gender",
@@ -52,7 +49,7 @@ class SearchQueryBuilderUsers
     public static function paginate(Request $request, Builder $results)
     {
         $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+        $limit = $request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
 
         $limit = (int) $limit;
 
@@ -60,8 +57,8 @@ class SearchQueryBuilderUsers
             $limit = 1;
         }
 
-        if ($limit > self::MAX_RESULTS_PER_PAGE) {
-            $limit = self::MAX_RESULTS_PER_PAGE;
+        if ($limit > env('MAX_RESULTS_PER_PAGE', 25)) {
+            $limit = env('MAX_RESULTS_PER_PAGE', 25);
         }
 
         if ($page <= 0) {

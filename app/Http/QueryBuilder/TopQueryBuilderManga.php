@@ -17,11 +17,6 @@
         /**
          *
          */
-        const MAX_RESULTS_PER_PAGE = 25;
-    
-        /**
-         *
-         */
         const MAP_TYPES = [
             'manga' => 'Manga',
             'novels' => 'Novel',

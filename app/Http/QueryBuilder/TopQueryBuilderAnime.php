@@ -17,11 +17,6 @@ class TopQueryBuilderAnime implements SearchQueryBuilderInterface
     /**
      *
      */
-    const MAX_RESULTS_PER_PAGE = 25;
-
-    /**
-     *
-     */
     const MAP_TYPES = [
         'tv' => 'TV',
         'movie' => 'Movie',
