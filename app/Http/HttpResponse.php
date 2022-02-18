@@ -28,7 +28,7 @@ class HttpResponse
                 'status' => 400,
                 'type' => 'BadRequestException',
                 'message' => 'Invalid or incomplete request. Make sure your request is correct. https://docs.api.jikan.moe/',
-                'error' => null
+                'error' => '400 on ' . $request->getUri()
             ]),
             400
         );
