@@ -4646,6 +4646,10 @@
                         "description": "Name",
                         "type": "string"
                     },
+                    "name_kanji": {
+                        "description": "Name",
+                        "type": "string"
+                    },
                     "nicknames": {
                         "description": "Other Names",
                         "type": "array",
