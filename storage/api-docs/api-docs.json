@@ -5098,8 +5098,8 @@
                         "description": "Relation type",
                         "type": "string"
                     },
-                    "items": {
-                        "description": "Related items",
+                    "entry": {
+                        "description": "Related entries",
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/mal_url"
