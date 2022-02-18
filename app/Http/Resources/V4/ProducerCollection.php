@@ -54,15 +54,19 @@ class ProducerCollection extends ResourceCollection
      *       @OA\Schema(type="string")
      *     ),
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
      *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/producer"),
-     *          }
-     *     ),
+     *                   @OA\Items(
+     *                          ref="#/components/schemas/producer"
+     *                   )
+     *              ),
+     *          )
+     *      }
      *  ),
      */
     private $pagination;

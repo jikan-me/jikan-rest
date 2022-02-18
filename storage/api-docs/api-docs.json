@@ -6066,20 +6066,22 @@
             },
             "producers": {
                 "description": "Producer Collection Resource",
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/producer"
+                "allOf": [
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/producer"
+                                }
                             }
-                        ]
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
-                },
-                "type": "object"
+                ]
             },
             "producer": {
                 "description": "Producer Resource",
