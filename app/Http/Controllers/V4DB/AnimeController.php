@@ -962,8 +962,16 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime relations",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/relation"
-     *         )
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *
+     *                   @OA\Items(
+     *                          ref="#/components/schemas/relation"
+     *                   ),
+     *              ),
+     *         ),
+     *     ),
      *     ),
      *     @OA\Response(
      *         response="400",

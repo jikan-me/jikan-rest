@@ -544,13 +544,18 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/relation"
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/relation"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Error: Bad request. When required parameters were not supplied."
                     }
                 }
             }
@@ -7049,6 +7054,11 @@
                         "$ref": "#/components/schemas/pagination"
                     }
                 ]
+            }
+        },
+        "responses": {
+            "400": {
+                "description": "Error: Bad request. When required parameters were not supplied."
             }
         },
         "parameters": {
