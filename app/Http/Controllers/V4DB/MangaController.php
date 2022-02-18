@@ -677,15 +677,13 @@ class MangaController extends Controller
      *         response="200",
      *         description="Returns manga relations",
      *         @OA\JsonContent(
-     *              @OA\Schema(
-     *                  @OA\Property(
-     *                       property="data",
-     *                       type="array",
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
      *
-     *                       @OA\Items(
-     *                              ref="#/components/schemas/relation"
-     *                       ),
-     *                  ),
+     *                   @OA\Items(
+     *                          ref="#/components/schemas/relation"
+     *                   ),
      *              ),
      *         ),
      *     ),
