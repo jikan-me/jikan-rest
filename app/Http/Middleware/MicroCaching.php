@@ -65,16 +65,24 @@ class MicroCaching
         }
 
         // set cache
-        app('redis')->set(
-            $fingerprint,
-            json_encode(
-                $next($request)->getData()
-            )
-        );
+        $response = $next($request);
 
-        app('redis')->expire($fingerprint, env('MICROCACHING_EXPIRE', 5));
+        try {
+            app('redis')->set(
+                $fingerprint,
+                json_encode(
+                    $next($request)->getData()
+                )
+            );
 
-        return $next($request);
+            app('redis')->expire($fingerprint, env('MICROCACHING_EXPIRE', 5));
+
+        } catch (\Exception $e) {
+            // ->getData() is a BadMethodCallException if HTTP status is not 200
+            // so ignore it
+        }
+
+        return $response;
     }
 
 }
