@@ -15,7 +15,7 @@ use Monolog\Logger;
 class SourceHeartbeatListener
 {
 
-    private $logger;
+    private Logger $logger;
 
     /**
      * Create the event listener.
@@ -76,6 +76,7 @@ class SourceHeartbeatListener
     {
         // create lock file
         Storage::put('source_failover.lock', '');
+        Storage::put('source_failover_last_downtime', time());
 
         if (env('APP_DEBUG', false)) {
             $this->logger->debug('Failover ENABLED');
@@ -91,7 +92,7 @@ class SourceHeartbeatListener
         Storage::delete('failovers.json');
     }
 
-    private function attemptDisableFailover()
+    private function attemptDisableFailover(): bool
     {
         $score = $this->getSuccessfulRequestsScore();
 
@@ -108,7 +109,7 @@ class SourceHeartbeatListener
         return false;
     }
 
-    private function getLastFailoverLockTimestamp()
+    private function getLastFailoverLockTimestamp(): int
     {
         try {
             return Storage::lastModified('source_failover.lock');

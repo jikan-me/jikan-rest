@@ -30,7 +30,7 @@ class SourceHeartbeatProvider extends ServiceProvider
     public static function getLastDowntime() : int
     {
         try {
-            return Storage::lastModified('source_failover.lock');
+            return Storage::lastModified('source_failover_last_downtime');
         } catch (\Exception $e) {
             return 0;
         }
@@ -67,9 +67,7 @@ class SourceHeartbeatProvider extends ServiceProvider
             }
         }
 
-        $scored = $score / max($totalFails, 1);
-
-        return $scored;
+        return $score / max($totalFails, 1);
     }
 
     public static function getHeartbeatStatus() : string

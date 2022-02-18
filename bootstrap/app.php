@@ -80,11 +80,9 @@ if (env('INSIGHTS', false)) {
 $app->middleware($globalMiddleware);
 
 $app->routeMiddleware([
-//    'slave-auth' => App\Http\Middleware\SlaveAuthentication::class,
 //    'meta' => App\Http\Middleware\Meta::class,
 //    'cache-resolver' => App\Http\Middleware\CacheResolver::class,
 //    'throttle' => App\Http\Middleware\Throttle::class,
-//    'etag' => \App\Http\Middleware\EtagMiddleware::class,
     'microcaching' => \App\Http\Middleware\MicroCaching::class,
     'source-health-monitor' => SourceHeartbeatMonitor::class,
 ]);
@@ -153,11 +151,6 @@ $app->instance('SerializerV4', SerializerFactory::createV4());
 */
 
 $commonMiddleware = [
-//    'slave-auth',
-//    'meta',
-//    'etag',
-//    'database-resolver',
-//    'cache-resolver',
 //    'throttle'
     'source-health-monitor',
     'microcaching',
