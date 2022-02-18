@@ -25,9 +25,13 @@ class CharacterResource extends JsonResource
      *          property="images",
      *          ref="#/components/schemas/character_images"
      *      ),
-     *
      *      @OA\Property(
      *          property="name",
+     *          type="string",
+     *          description="Name"
+     *      ),
+     *      @OA\Property(
+     *          property="name_kanji",
      *          type="string",
      *          description="Name"
      *      ),
@@ -125,6 +129,7 @@ class CharacterResource extends JsonResource
             'url' => $this->url,
             'images' => $this->images,
             'name' => $this->name,
+            'name_kanji' => $this->name_kanji,
             'nicknames' => $this->nicknames,
             'favorites' => $this->favorites,
             'about' => $this->about
