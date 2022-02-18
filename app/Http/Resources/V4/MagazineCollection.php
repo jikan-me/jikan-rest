@@ -54,15 +54,20 @@ class MagazineCollection extends ResourceCollection
      *       @OA\Schema(type="string")
      *     ),
      *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                   property="data",
+     *                   type="array",
      *
-     *          allOf={
-     *              @OA\Schema(ref="#/components/schemas/pagination"),
-     *              @OA\Schema(ref="#/components/schemas/magazine"),
-     *          }
-     *     ),
+     *                   @OA\Items(
+     *                          ref="#/components/schemas/magazine"
+     *                   )
+     *              ),
+     *          )
+     *      }
+     *
      *  ),
      */
     private $pagination;

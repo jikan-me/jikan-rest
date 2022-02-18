@@ -20,10 +20,7 @@ class ClubRelationsResource extends JsonResource
      *              property="anime",
      *              type="array",
      *              @OA\Items(
-     *                  type="object",
-     *                  @OA\Property(
-     *                      ref="#/components/schemas/mal_url"
-     *                  )
+     *                  ref="#/components/schemas/mal_url"
      *              ),
      *          ),
      *
@@ -31,10 +28,7 @@ class ClubRelationsResource extends JsonResource
      *              property="manga",
      *              type="array",
      *              @OA\Items(
-     *                  type="object",
-     *                  @OA\Property(
-     *                      ref="#/components/schemas/mal_url"
-     *                  )
+     *                  ref="#/components/schemas/mal_url"
      *              ),
      *          ),
      *
@@ -42,10 +36,7 @@ class ClubRelationsResource extends JsonResource
      *              property="characters",
      *              type="array",
      *              @OA\Items(
-     *                  type="object",
-     *                  @OA\Property(
-     *                      ref="#/components/schemas/mal_url"
-     *                  )
+     *                  ref="#/components/schemas/mal_url"
      *              ),
      *          ),
      *     )

@@ -1392,9 +1392,7 @@
                         "description": "Returns manga relations",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/relation"
-                                }
+                                "schema": {}
                             }
                         }
                     },
@@ -4765,34 +4763,19 @@
                             "anime": {
                                 "type": "array",
                                 "items": {
-                                    "properties": {
-                                        "": {
-                                            "$ref": "#/components/schemas/mal_url"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/mal_url"
                                 }
                             },
                             "manga": {
                                 "type": "array",
                                 "items": {
-                                    "properties": {
-                                        "": {
-                                            "$ref": "#/components/schemas/mal_url"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/mal_url"
                                 }
                             },
                             "characters": {
                                 "type": "array",
                                 "items": {
-                                    "properties": {
-                                        "": {
-                                            "$ref": "#/components/schemas/mal_url"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/mal_url"
                                 }
                             }
                         },
@@ -5544,20 +5527,22 @@
             },
             "magazines": {
                 "description": "Magazine Collection Resource",
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/pagination"
-                            },
-                            {
-                                "$ref": "#/components/schemas/magazine"
+                "allOf": [
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/magazine"
+                                }
                             }
-                        ]
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
-                },
-                "type": "object"
+                ]
             },
             "magazine": {
                 "description": "Magazine Resource",

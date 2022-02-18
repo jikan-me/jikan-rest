@@ -253,6 +253,7 @@ class CommonResource extends JsonResource
      *      type="array",
      *      description="Related resources",
      *
+     *
      *     @OA\Items(
      *          type="object",
      *          @OA\Property(
