@@ -15,13 +15,13 @@ class SourceHeartbeatEvent extends Event
     public const BAD_HEALTH = 1;
     public const GOOD_HEALTH = 0;
 
-    public $health;
-    public $status;
+    public int $health;
+    public int $status;
 
     /**
      * SourceHeartbeatEvent constructor.
-     * @param int $health
-     * @param int $status
+     * @param int|null $health
+     * @param int|null $status
      */
     public function __construct(?int $health, ?int $status)
     {

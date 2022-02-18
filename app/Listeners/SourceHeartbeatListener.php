@@ -29,7 +29,10 @@ class SourceHeartbeatListener
 
         if (SourceHeartbeatProvider::isFailoverEnabled()) {
             $lastFailoverLockTimestamp = $this->getLastFailoverLockTimestamp();
-            $this->logger->debug('Failover is RUNNING');
+
+            if (env('APP_DEBUG', false)) {
+                $this->logger->debug('Failover is RUNNING');
+            }
 
             // Disable failover if it has expired
             if (time() > ($lastFailoverLockTimestamp + env('SOURCE_BAD_HEALTH_RECHECK'))) {
@@ -48,7 +51,10 @@ class SourceHeartbeatListener
     public function handle(SourceHeartbeatEvent $event)
     {
         $eventCount = $this->insertFail($event);
-        $this->logger->debug('Event count: '.$eventCount);
+
+        if (env('APP_DEBUG', false)) {
+            $this->logger->debug('Event count: '.$eventCount);
+        }
 
         if ($this->getSuccessfulRequestsScore() <= 0.25) {
             $this->enableFailover();
@@ -70,7 +76,10 @@ class SourceHeartbeatListener
     {
         // create lock file
         Storage::put('source_failover.lock', '');
-        $this->logger->debug('Failover ENABLED');
+
+        if (env('APP_DEBUG', false)) {
+            $this->logger->debug('Failover ENABLED');
+        }
     }
 
     private function disableFailover()
@@ -88,8 +97,11 @@ class SourceHeartbeatListener
 
         if ($score >= env('SOURCE_GOOD_HEALTH_SCORE', 0.9)) {
             $this->disableFailover();
-            $this->logger->debug('Failover disabled; Score: '.$score);
-            $this->logger->debug('Failover DISABLED');
+            if (env('APP_DEBUG', false)) {
+                $this->logger->debug('Failover disabled; Score: '.$score);
+                $this->logger->debug('Failover DISABLED');
+            }
+
             return true;
         }
 
@@ -149,7 +161,10 @@ class SourceHeartbeatListener
         }
 
         $scored = $score / max($totalFails, 1);
-        $this->logger->debug('Failover successful requests score: '.$scored);
+
+        if(env('APP_DEBUG', false)) {
+            $this->logger->debug('Failover successful requests score: '.$scored);
+        }
 
         return $scored;
     }
