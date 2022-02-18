@@ -5088,23 +5088,20 @@
             },
             "relation": {
                 "description": "Related resources",
-                "type": "array",
-                "items": {
-                    "properties": {
-                        "relation": {
-                            "description": "Relation type",
-                            "type": "string"
-                        },
-                        "items": {
-                            "description": "Related items",
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/mal_url"
-                            }
-                        }
+                "properties": {
+                    "relation": {
+                        "description": "Relation type",
+                        "type": "string"
                     },
-                    "type": "object"
-                }
+                    "items": {
+                        "description": "Related items",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    }
+                },
+                "type": "object"
             },
             "pagination": {
                 "properties": {

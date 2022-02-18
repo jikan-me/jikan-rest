@@ -250,28 +250,24 @@ class CommonResource extends JsonResource
      *
      *  @OA\Schema(
      *      schema="relation",
-     *      type="array",
+     *      type="object",
      *      description="Related resources",
      *
+     *      @OA\Property(
+     *          property="relation",
+     *          type="string",
+     *          description="Relation type"
+     *      ),
+     *      @OA\Property(
+     *          property="items",
+     *          type="array",
+     *          description="Related items",
      *
-     *     @OA\Items(
-     *          type="object",
-     *          @OA\Property(
-     *              property="relation",
-     *              type="string",
-     *              description="Relation type"
+     *          @OA\Items(
+     *              type="object",
+     *              ref="#/components/schemas/mal_url"
      *          ),
-     *          @OA\Property(
-     *              property="items",
-     *              type="array",
-     *              description="Related items",
-     *
-     *              @OA\Items(
-     *                  type="object",
-     *                  ref="#/components/schemas/mal_url"
-     *              ),
-     *          ),
-     *     ),
+     *      ),
      *  ),
      *
      * @OA\Schema(
