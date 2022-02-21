@@ -9,9 +9,12 @@ use Jikan\Helper\Parser;
 use Jikan\Jikan;
 use Jikan\Model\Common\YoutubeMeta;
 use Jikan\Request\Anime\AnimeRequest;
+use Laravel\Scout\Searchable;
 
 class Anime extends Model
 {
+
+    use Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -119,7 +122,7 @@ class Anime extends Model
         ];
     }
 
-    public static function scrape(int $id)
+    public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getAnime(new AnimeRequest($id));
 
@@ -130,5 +133,80 @@ class Anime extends Model
                 true
             )
         );
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs(): string
+    {
+        return 'anime_index';
+    }
+
+    /**
+     * Get the value used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKey(): mixed
+    {
+        return $this->mal_id;
+    }
+
+    /**
+     * Get the key name used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKeyName(): mixed
+    {
+        return 'mal_id';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        return [
+            'mal_id' => $this->mal_id,
+            'url' => $this->url,
+            'images' => $this->images,
+            'trailer' => $this->trailer,
+            'title' => $this->title,
+            'title_english' => $this->title_english,
+            'title_japanese' => $this->title_japanese,
+            'title_synonyms' => $this->title_synonyms,
+            'type' => $this->type,
+            'source' => $this->source,
+            'episodes' => $this->episodes,
+            'status' => $this->status,
+            'airing' => $this->airing,
+            'aired' => $this->aired,
+            'duration' => $this->duration,
+            'rating' => $this->rating,
+            'score' => $this->score,
+            'scored_by' => $this->scored_by,
+            'rank' => $this->rank,
+            'popularity' => $this->popularity,
+            'members' => $this->members,
+            'favorites' => $this->favorites,
+            'synopsis' => $this->synopsis,
+            'background' => $this->background,
+            'season' => $this->season,
+            'year' => $this->year,
+            'broadcast' => $this->broadcast,
+            'producers' => $this->producers,
+            'licensors' => $this->licensors,
+            'studios' => $this->studios,
+            'genres' => $this->genres,
+            'explicit_genres' => $this->explicit_genres,
+            'themes' => $this->themes,
+            'demographics' => $this->demographics,
+        ];
     }
 }

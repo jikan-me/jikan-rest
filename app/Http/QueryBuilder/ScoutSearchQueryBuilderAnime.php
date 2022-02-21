@@ -2,6 +2,7 @@
 
 namespace App\Http\QueryBuilder;
 
+use App\Anime;
 use App\Http\HttpHelper;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
@@ -11,7 +12,7 @@ use Jenssegers\Mongodb\Eloquent\Builder;
  * Class SearchQueryBuilderAnime
  * @package App\Http\QueryBuilder
  */
-class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
+class ScoutSearchQueryBuilderAnime
 {
 
     /**
@@ -91,7 +92,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
      * @param Builder $results
      * @return Builder
      */
-    public static function query(Request $request, Builder $results) : Builder
+    public static function query(Request $request) : \Laravel\Scout\Builder
     {
         $requestType = HttpHelper::requestType($request);
         $query = $request->get('q');
@@ -112,47 +113,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $endDate = $request->get('end_date');
 
         if (!empty($query) && is_null($letter)) {
-
-//            $results = $results
-//                ->where('title', 'like', "%{$query}%")
-//                ->orWhere('title_english', 'like', "%{$query}%")
-//                ->orWhere('title_japanese', 'like', "%{$query}%")
-//                ->orWhere('title_synonyms', 'like', "%{$query}%");
-
-            // needs elastic search
-//            $results = $results
-//                ->aggregate([
-//                    [
-//                        '$match' => [
-//                            '$text' => [ '$search' => $query ]
-//                        ]
-//                    ],
-//                    [
-//                        '$sort' => [
-//                            'score' => [
-//                                '$meta' => 'textScore'
-//                            ]
-//                        ]
-//                    ]
-//                ]);
-
-
-            $results = $results
-                ->whereRaw([
-                    '$text' => [
-                        '$search' => $query
-                    ],
-                ],[
-                    'score' => [
-                        '$meta' => 'textScore'
-                    ]
-                ])
-                ->orderBy('score', ['$meta' => 'textScore']);
-//                ->orWhere('title', 'like', "%{$query}%")
-//                ->orWhere('title_english', 'like', "%{$query}%")
-//                ->orWhere('title_japanese', 'like', "%{$query}%")
-//                ->orWhere('title_synonyms', 'like', "%{$query}%");
-            ;
+            $results = Anime::search($query);
         }
 
         if (!is_null($letter)) {
@@ -282,7 +243,7 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                             ->where('themes.mal_id', '!=', $genreExclude)
                             ->where('explicit_genres.mal_id', '!=', $genreExclude);
                     });
-;
+                ;
             }
         }
 
