@@ -112,14 +112,7 @@ class ScoutSearchQueryBuilderAnime
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
 
-        if (!empty($query) && is_null($letter)) {
-            $results = Anime::search($query);
-        }
-
-        if (!is_null($letter)) {
-            $results = $results
-                ->where('title', 'like', "{$letter}%");
-        }
+        $results = Anime::search($query);
 
         if (empty($query) && is_null($orderBy)) {
             $results = $results
@@ -257,7 +250,7 @@ class ScoutSearchQueryBuilderAnime
                 ->orderBy($orderBy, $sort ?? 'asc');
         }
 
-        return $results;
+        return $results->get();
     }
 
     /**

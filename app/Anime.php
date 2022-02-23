@@ -170,7 +170,7 @@ class Anime extends Model
      *
      * @return array
      */
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         return [
             'mal_id' => $this->mal_id,

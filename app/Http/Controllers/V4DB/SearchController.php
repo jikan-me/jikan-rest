@@ -202,15 +202,10 @@ class SearchController extends Controller
         );
 
         $results = $results
-            ->paginate($page);
-
-//        $results = $results
-//            ->paginate(
-//                $limit,
-//                ['*'],
-//                null,
-//                $page
-//            );
+            ->paginate(
+                $limit,
+                $page
+            );
 
         return new AnimeCollection(
             $results
