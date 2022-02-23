@@ -113,19 +113,24 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
 
         if (!empty($query) && is_null($letter)) {
 
-            $results = $results
-                ->where('title', 'like', "%{$query}%")
-                ->orWhere('title_english', 'like', "%{$query}%")
-                ->orWhere('title_japanese', 'like', "%{$query}%")
-                ->orWhere('title_synonyms', 'like', "%{$query}%");
-
-            // needs elastic search
 //            $results = $results
-//                ->whereRaw([
-//                    '$text' => [
-//                        '$search' => $query
-//                    ]
-//                ]);
+//                ->where('title', 'like', "%{$query}%")
+//                ->orWhere('title_english', 'like', "%{$query}%")
+//                ->orWhere('title_japanese', 'like', "%{$query}%")
+//                ->orWhere('title_synonyms', 'like', "%{$query}%");
+
+            // @todo replace with elasticsearch or meilisearch
+            $results = $results
+                ->whereRaw([
+                    '$text' => [
+                        '$search' => $query
+                    ],
+                ], [
+                    'score' => [
+                        '$meta' => 'textScore'
+                    ]
+                ])
+                ->orderBy('score', ['$meta' => 'textScore']);
         }
 
         if (!is_null($letter)) {
