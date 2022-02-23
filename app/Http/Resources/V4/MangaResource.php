@@ -193,7 +193,8 @@ class MangaResource extends JsonResource
             'status' => $this->status,
             'publishing' => $this->publishing,
             'published' => $this->published,
-            'scored' => $this->score,
+            'score' => $this->score,
+            'scored' => $this->score, // @todo remove in 4.1
             'scored_by' => $this->scored_by,
             'rank' => $this->rank,
             'popularity' => $this->popularity,
