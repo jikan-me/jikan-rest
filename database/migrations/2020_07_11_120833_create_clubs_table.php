@@ -21,6 +21,13 @@ class CreateClubsTable extends Migration
             $table->index('category');
             $table->date('created')->index();
             $table->index('access');
+
+            $table->index(
+                [
+                    'name' => 'text'
+                ],
+                'search'
+            );
         });
     }
 

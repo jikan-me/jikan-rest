@@ -17,6 +17,13 @@ class CreateProducersTable extends Migration
             $table->unique(['mal_id' => 1], 'mal_id');
             $table->index('count', 'count');
             $table->index('name', 'name');
+
+            $table->index(
+                [
+                    'name' => 'text'
+                ],
+                'search'
+            );
         });
     }
 

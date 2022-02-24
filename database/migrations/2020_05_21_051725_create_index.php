@@ -43,6 +43,18 @@ class CreateIndex extends Migration
      */
     public function down()
     {
+        $mappings = config('controller');
+        $mapped = [];
 
+        foreach ($mappings as $controller) {
+            $table = $controller['table_name'];
+            if (in_array($table, $mapped) || in_array($table, self::IGNORE) || Schema::hasTable($table)) {
+                continue;
+            }
+
+            Schema::dropIfExists($table);
+
+            $mapped[] = $table;
+        }
     }
 }
