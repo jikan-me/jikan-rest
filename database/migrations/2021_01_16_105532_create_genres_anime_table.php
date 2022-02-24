@@ -15,18 +15,26 @@ class CreateGenresAnimeTable extends Migration
     {
         Schema::create('genres_anime', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
 
         Schema::create('demographics_anime', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
 
         Schema::create('explicit_genres_anime', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
 
         Schema::create('themes_anime', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
     }
 

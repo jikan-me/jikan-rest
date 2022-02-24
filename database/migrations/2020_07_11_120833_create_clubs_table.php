@@ -16,12 +16,11 @@ class CreateClubsTable extends Migration
         Schema::create('clubs', function (Blueprint $table) {
             $table->unique(['request_hash' => 1], 'request_hash');
             $table->unique(['mal_id' => 1], 'mal_id');
-            $table->index('title');
-            $table->index('members_count');
-            $table->index('pictures_count');
+            $table->index('name');
+            $table->index('members', 'members');
             $table->index('category');
-            $table->date('created');
-            $table->index('type');
+            $table->date('created')->index();
+            $table->index('access');
         });
     }
 

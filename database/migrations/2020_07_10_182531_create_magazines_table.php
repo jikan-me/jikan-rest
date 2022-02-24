@@ -16,8 +16,8 @@ class CreateMagazinesTable extends Migration
     {
         Schema::create('magazines', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
-            $table->index('count');
-            $table->timestamps();
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
     }
 

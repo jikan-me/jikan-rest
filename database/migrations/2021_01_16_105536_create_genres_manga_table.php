@@ -15,18 +15,26 @@ class CreateGenresMangaTable extends Migration
     {
         Schema::create('genres_manga', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
 
         Schema::create('explicit_genres_manga', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
 
         Schema::create('demographics_manga', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
 
         Schema::create('themes_manga', function (Blueprint $table) {
             $table->unique(['mal_id' => 1], 'mal_id');
+            $table->index('count', 'count');
+            $table->index('name', 'name');
         });
     }
 

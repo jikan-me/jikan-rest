@@ -16,37 +16,34 @@ class CreatePeopleTable extends Migration
         Schema::create('people', function (Blueprint $table) {
             $table->unique(['request_hash' => 1], 'request_hash');
             $table->unique(['mal_id' => 1], 'mal_id');
-            $table->string('url');
-            $table->string('images');
-            $table->string('website_url');
-            $table->index('name');
-            $table->string('given_name')->index()->nullable();
-            $table->string('family_name')->index()->nullable();
-            $table->index('alternate_names');
-            $table->date('birthday')->index();
-            $table->integer('member_favorites')->index('member_favorites');
-            $table->string('about')->nullable();
-            $table->index('voice_acting_roles');
-            $table->index('anime_staff_positions');
-            $table->index('published_manga');
-            $table->index([
-                'name' => 'text',
-                'given_name' => 'text',
-                'family_name' => 'text',
-                'alternate_names' => 'text',
-            ],
-                'people_search_index',
+
+            $table->date('birthday')->index('birthday');
+            $table->index('member_favorites', 'member_favorites');
+
+            $table->index('name', 'name');
+            $table->string('given_name')->index('name')->nullable();
+            $table->string('family_name')->index('family_name')->nullable();
+            $table->index('alternate_names', 'alternate_names');
+
+            $table->index(
+                [
+                    'name' => 'text',
+                    'given_name' => 'text',
+                    'family_name' => 'text'
+                ],
+                'search',
                 null,
                 [
                     'weights' => [
                         'name' => 50,
-                        'given_name' => 10,
-                        'family_name' => 10,
-                        'alternate_names' => 1
+                        'given_name' => 5,
+                        'family_name' => 5,
                     ],
-                    'name' => 'people_search_index'
+                    'name' => 'search'
                 ]
             );
+
+            $table->timestamps();
         });
     }
 

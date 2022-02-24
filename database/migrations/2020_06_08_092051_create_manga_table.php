@@ -16,46 +16,53 @@ class CreateMangaTable extends Migration
         Schema::create('manga', function (Blueprint $table) {
             $table->unique(['request_hash' => 1], 'request_hash');
             $table->unique(['mal_id' => 1], 'mal_id');
-            $table->string('url');
-            $table->string('images');
-            $table->index('title');
-            $table->index('title_english');
-            $table->index('title_japanese');
-            $table->enum('type', ['Manga', 'Novel', 'Light Novel', 'One-shot', 'Doujinshi', 'Manhwa', 'Manhua', 'OEL']);
-            $table->integer('chapters')->index('chapters');
-            $table->integer('volumes')->index('volumes');
-            $table->string('status')->index();
-            $table->boolean('publishing');
-            $table->float('score')->index('score');
-            $table->float('scored_by')->index('scored_by');
-            $table->integer('rank')->index('rank');
-            $table->integer('popularity')->index('popularity');
+
+            $table->index('published', 'published');
+            $table->index(['published.from' => 1], 'published.from');
+            $table->index(['published.to' => 1], 'published.to');
+            $table->index('publishing', 'publishing');
+            $table->index('demographics.mal_id', 'demographics.mal_id');
+            $table->index('explicit_genres.mal_id', 'explicit_genres.mal_id');
+            $table->index('genres.mal_id', 'genres.mal_id');
+            $table->index('authors.mal_id', 'authors.mal_id');
+            $table->index('serializations.mal_id', 'serializations.mal_id');
+            $table->index('themes.mal_id', 'themes.mal_id');
+
+            $table->index('chapters', 'chapters');
+            $table->index('volumes', 'volumes');
+            $table->index('favorites', 'favorites');
             $table->integer('members')->index('members');
             $table->integer('favorites')->index('favorites');
-            $table->string('synopsis')->nullable();
-            $table->string('background')->nullable();
-            $table->index('genres.mal_id');
-            $table->index('serializations.mal_id');
-            $table->index(['published.from' => 1], 'start_date');
-            $table->index(['published.to' => 1], 'end_date');
-            $table->index([
-                'title' => 'text',
-                'title_japanese' => 'text',
-                'title_english' => 'text',
-                'title_synonyms' => 'text',
-            ],
-                'manga_search_index',
+            $table->integer('popularity')->index('popularity');
+            $table->integer('rank')->index('rank')->nullable();
+            $table->float('score')->index('score');
+            $table->integer('scored_by')->index('scored_by');
+            $table->index('status', 'status');
+            $table->index('type', 'type');
+
+            $table->index('title', 'title');
+            $table->index('title_english', 'title_english');
+            $table->index('title_japanese', 'title_japanese');
+            $table->index('title_synonyms', 'title_synonyms');
+
+
+            $table->index(
+                [
+                    'title' => 'text',
+                    'title_japanese' => 'text'
+                ],
+                'search',
                 null,
                 [
                     'weights' => [
                         'title' => 50,
-                        'title_japanese' => 10,
-                        'title_english' => 10,
-                        'title_synonyms' => 1
+                        'title_japanese' => 5
                     ],
-                    'name' => 'manga_search_index'
+                    'name' => 'search'
                 ]
             );
+
+            $table->timestamps();
         });
     }
 
