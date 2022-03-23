@@ -2463,7 +2463,7 @@
                 }
             }
         },
-        "/userbyid": {
+        "/users/userbyid": {
             "get": {
                 "tags": [
                     "users"
@@ -3444,18 +3444,22 @@
                                             "type": "string"
                                         },
                                         "title_japanese": {
+                                            "nullable": true,
                                             "description": "Title Japanese",
                                             "type": "string"
                                         },
                                         "title_romanji": {
+                                            "nullable": true,
                                             "description": "title_romanji",
                                             "type": "string"
                                         },
                                         "duration": {
+                                            "nullable": true,
                                             "description": "Episode duration in seconds",
                                             "type": "integer"
                                         },
                                         "aired": {
+                                            "nullable": true,
                                             "description": "Aired Date ISO8601",
                                             "type": "string"
                                         },
@@ -3468,6 +3472,7 @@
                                             "type": "boolean"
                                         },
                                         "forum_url": {
+                                            "nullable": true,
                                             "description": "Episode discussion forum URL",
                                             "type": "string"
                                         }
@@ -3502,10 +3507,12 @@
                         "items": {
                             "properties": {
                                 "image_url": {
+                                    "nullable": true,
                                     "description": "Default JPG Image Size URL",
                                     "type": "string"
                                 },
                                 "large_image_url": {
+                                    "nullable": true,
                                     "description": "Large JPG Image Size URL",
                                     "type": "string"
                                 }
@@ -3522,21 +3529,7 @@
                     "data": {
                         "type": "array",
                         "items": {
-                            "properties": {
-                                "username": {
-                                    "description": "MyAnimeList Username",
-                                    "type": "string"
-                                },
-                                "url": {
-                                    "description": "MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "image_url": {
-                                    "description": "MyAnimeList Image URL",
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
+                            "$ref": "#/components/schemas/user_images"
                         }
                     }
                 },
@@ -3559,17 +3552,7 @@
                     "data": {
                         "type": "array",
                         "items": {
-                            "properties": {
-                                "image_url": {
-                                    "description": "Default JPG Image Size URL",
-                                    "type": "string"
-                                },
-                                "large_image_url": {
-                                    "description": "Large JPG Image Size URL",
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
+                            "$ref": "#/components/schemas/manga_images"
                         }
                     }
                 },
@@ -3581,17 +3564,7 @@
                     "data": {
                         "type": "array",
                         "items": {
-                            "properties": {
-                                "image_url": {
-                                    "description": "Default JPG Image Size URL",
-                                    "type": "string"
-                                },
-                                "large_image_url": {
-                                    "description": "Large JPG Image Size URL",
-                                    "type": "string"
-                                }
-                            },
-                            "type": "object"
+                            "$ref": "#/components/schemas/people_images"
                         }
                     }
                 },
@@ -4172,18 +4145,22 @@
                                 "type": "string"
                             },
                             "title_japanese": {
+                                "nullable": true,
                                 "description": "Title Japanese",
                                 "type": "string"
                             },
                             "title_romanji": {
+                                "nullable": true,
                                 "description": "title_romanji",
                                 "type": "string"
                             },
                             "duration": {
+                                "nullable": true,
                                 "description": "Episode duration in seconds",
                                 "type": "integer"
                             },
                             "aired": {
+                                "nullable": true,
                                 "description": "Aired Date ISO8601",
                                 "type": "string"
                             },
@@ -4196,6 +4173,7 @@
                                 "type": "boolean"
                             },
                             "synopsis": {
+                                "nullable": true,
                                 "description": "Episode Synopsis",
                                 "type": "string"
                             }
@@ -4251,10 +4229,12 @@
                         "type": "string"
                     },
                     "title_english": {
+                        "nullable": true,
                         "description": "English Title",
                         "type": "string"
                     },
                     "title_japanese": {
+                        "nullable": true,
                         "description": "Japanese Title",
                         "type": "string"
                     },
@@ -4266,6 +4246,7 @@
                         }
                     },
                     "type": {
+                        "nullable": true,
                         "description": "Anime Type",
                         "type": "string",
                         "enum": [
@@ -4278,14 +4259,17 @@
                         ]
                     },
                     "source": {
+                        "nullable": true,
                         "description": "Original Material/Source adapted from",
                         "type": "string"
                     },
                     "episodes": {
+                        "nullable": true,
                         "description": "Episode count",
                         "type": "integer"
                     },
                     "status": {
+                        "nullable": true,
                         "description": "Airing status",
                         "type": "string",
                         "enum": [
@@ -4302,10 +4286,12 @@
                         "$ref": "#/components/schemas/daterange"
                     },
                     "duration": {
+                        "nullable": true,
                         "description": "Parsed raw duration",
                         "type": "string"
                     },
                     "rating": {
+                        "nullable": true,
                         "description": "Anime audience rating",
                         "type": "string",
                         "enum": [
@@ -4318,39 +4304,48 @@
                         ]
                     },
                     "score": {
+                        "nullable": true,
                         "description": "Score",
                         "type": "number",
                         "format": "float"
                     },
                     "scored_by": {
+                        "nullable": true,
                         "description": "Number of users",
                         "type": "integer"
                     },
                     "rank": {
+                        "nullable": true,
                         "description": "Ranking",
                         "type": "integer"
                     },
                     "popularity": {
+                        "nullable": true,
                         "description": "Popularity",
                         "type": "integer"
                     },
                     "members": {
+                        "nullable": true,
                         "description": "Number of users who have added this entry to their list",
                         "type": "integer"
                     },
                     "favorites": {
+                        "nullable": true,
                         "description": "Number of users who have favorited this entry",
                         "type": "integer"
                     },
                     "synopsis": {
+                        "nullable": true,
                         "description": "Synopsis",
                         "type": "string"
                     },
                     "background": {
+                        "nullable": true,
                         "description": "Background",
                         "type": "string"
                     },
                     "season": {
+                        "nullable": true,
                         "description": "Season",
                         "type": "string",
                         "enum": [
@@ -4361,6 +4356,7 @@
                         ]
                     },
                     "year": {
+                        "nullable": true,
                         "description": "Year",
                         "type": "integer"
                     },
@@ -4666,6 +4662,7 @@
                         "type": "string"
                     },
                     "name_kanji": {
+                        "nullable": true,
                         "description": "Name",
                         "type": "string"
                     },
@@ -4681,74 +4678,9 @@
                         "type": "integer"
                     },
                     "about": {
-                        "description": "Synopsis",
+                        "nullable": true,
+                        "description": "Biography",
                         "type": "string"
-                    },
-                    "animeography": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "allOf": [
-                                {
-                                    "properties": {
-                                        "image_url": {
-                                            "type": "string"
-                                        },
-                                        "role": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                {
-                                    "$ref": "#/components/schemas/mal_url"
-                                }
-                            ]
-                        }
-                    },
-                    "mangaography": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "allOf": [
-                                {
-                                    "properties": {
-                                        "image_url": {
-                                            "type": "string"
-                                        },
-                                        "role": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                {
-                                    "$ref": "#/components/schemas/mal_url"
-                                }
-                            ]
-                        }
-                    },
-                    "voice_actors": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "allOf": [
-                                {
-                                    "properties": {
-                                        "image_url": {
-                                            "type": "string"
-                                        },
-                                        "language": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                {
-                                    "$ref": "#/components/schemas/mal_url"
-                                }
-                            ]
-                        }
                     }
                 },
                 "type": "object"
@@ -4921,14 +4853,17 @@
                 "description": "Youtube Details",
                 "properties": {
                     "youtube_id": {
+                        "nullable": true,
                         "description": "YouTube ID",
                         "type": "string"
                     },
                     "url": {
+                        "nullable": true,
                         "description": "YouTube URL",
                         "type": "string"
                     },
                     "embed_url": {
+                        "nullable": true,
                         "description": "Parsed Embed URL",
                         "type": "string"
                     }
@@ -4941,22 +4876,27 @@
                     "images": {
                         "properties": {
                             "default_image_url": {
+                                "nullable": true,
                                 "description": "Default Image Size URL (120x90)",
                                 "type": "string"
                             },
                             "small_image_url": {
+                                "nullable": true,
                                 "description": "Small Image Size URL (640x480)",
                                 "type": "string"
                             },
                             "medium_image_url": {
+                                "nullable": true,
                                 "description": "Medium Image Size URL (320x180)",
                                 "type": "string"
                             },
                             "large_image_url": {
+                                "nullable": true,
                                 "description": "Large Image Size URL (480x360)",
                                 "type": "string"
                             },
                             "maximum_image_url": {
+                                "nullable": true,
                                 "description": "Maximum Image Size URL (1280x720)",
                                 "type": "string"
                             }
@@ -4970,10 +4910,12 @@
                 "description": "Date range",
                 "properties": {
                     "from": {
+                        "nullable": true,
                         "description": "Date ISO8601",
                         "type": "string"
                     },
                     "to": {
+                        "nullable": true,
                         "description": "Date ISO8601",
                         "type": "string"
                     },
@@ -4984,15 +4926,18 @@
                                 "description": "Date Prop From",
                                 "properties": {
                                     "day": {
+                                        "nullable": true,
                                         "description": "Day",
                                         "type": "integer"
                                     },
                                     "month": {
+                                        "nullable": true,
                                         "description": "Month",
                                         "type": "integer"
                                     },
                                     "year": {
-                                        "description": "year",
+                                        "nullable": true,
+                                        "description": "Year",
                                         "type": "integer"
                                     }
                                 },
@@ -5002,21 +4947,25 @@
                                 "description": "Date Prop To",
                                 "properties": {
                                     "day": {
+                                        "nullable": true,
                                         "description": "Day",
                                         "type": "integer"
                                     },
                                     "month": {
+                                        "nullable": true,
                                         "description": "Month",
                                         "type": "integer"
                                     },
                                     "year": {
-                                        "description": "year",
+                                        "nullable": true,
+                                        "description": "Year",
                                         "type": "integer"
                                     }
                                 },
                                 "type": "object"
                             },
                             "string": {
+                                "nullable": true,
                                 "description": "Raw parsed string",
                                 "type": "string"
                             }
@@ -5030,18 +4979,22 @@
                 "description": "Broadcast Details",
                 "properties": {
                     "day": {
+                        "nullable": true,
                         "description": "Day of the week",
                         "type": "string"
                     },
                     "time": {
+                        "nullable": true,
                         "description": "Time in 24 hour format",
                         "type": "string"
                     },
                     "timezone": {
+                        "nullable": true,
                         "description": "Timezone (Tz Database format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)",
                         "type": "string"
                     },
                     "string": {
+                        "nullable": true,
                         "description": "Raw parsed broadcast string",
                         "type": "string"
                     }
@@ -5188,7 +5141,8 @@
                         "description": "Available images in JPG",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL JPG (225x335)",
+                                "nullable": true,
+                                "description": "Image URL JPG",
                                 "type": "string"
                             }
                         },
@@ -5198,7 +5152,8 @@
                         "description": "Available images in WEBP",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL WEBP (225x335)",
+                                "nullable": true,
+                                "description": "Image URL WEBP",
                                 "type": "string"
                             }
                         },
@@ -5293,15 +5248,18 @@
                         "description": "Available images in JPG",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL JPG (225x335)",
+                                "nullable": true,
+                                "description": "Image URL JPG",
                                 "type": "string"
                             },
                             "small_image_url": {
-                                "description": "Small Image URL JPG (50x74)",
+                                "nullable": true,
+                                "description": "Small Image URL JPG",
                                 "type": "string"
                             },
                             "large_image_url": {
-                                "description": "Image URL JPG (300x446)",
+                                "nullable": true,
+                                "description": "Image URL JPG",
                                 "type": "string"
                             }
                         },
@@ -5311,15 +5269,18 @@
                         "description": "Available images in WEBP",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL WEBP (225x335)",
+                                "nullable": true,
+                                "description": "Image URL WEBP",
                                 "type": "string"
                             },
                             "small_image_url": {
-                                "description": "Small Image URL WEBP (50x74)",
+                                "nullable": true,
+                                "description": "Small Image URL WEBP",
                                 "type": "string"
                             },
                             "large_image_url": {
-                                "description": "Image URL WEBP (300x446)",
+                                "nullable": true,
+                                "description": "Image URL WEBP",
                                 "type": "string"
                             }
                         },
@@ -5334,15 +5295,18 @@
                         "description": "Available images in JPG",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL JPG (225x335)",
+                                "nullable": true,
+                                "description": "Image URL JPG",
                                 "type": "string"
                             },
                             "small_image_url": {
-                                "description": "Small Image URL JPG (50x74)",
+                                "nullable": true,
+                                "description": "Small Image URL JPG",
                                 "type": "string"
                             },
                             "large_image_url": {
-                                "description": "Image URL JPG (300x446)",
+                                "nullable": true,
+                                "description": "Image URL JPG",
                                 "type": "string"
                             }
                         },
@@ -5352,15 +5316,18 @@
                         "description": "Available images in WEBP",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL WEBP (225x335)",
+                                "nullable": true,
+                                "description": "Image URL WEBP",
                                 "type": "string"
                             },
                             "small_image_url": {
-                                "description": "Small Image URL WEBP (50x74)",
+                                "nullable": true,
+                                "description": "Small Image URL WEBP",
                                 "type": "string"
                             },
                             "large_image_url": {
-                                "description": "Image URL WEBP (300x446)",
+                                "nullable": true,
+                                "description": "Image URL WEBP",
                                 "type": "string"
                             }
                         },
@@ -5375,11 +5342,13 @@
                         "description": "Available images in JPG",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL JPG (225x335)",
+                                "nullable": true,
+                                "description": "Image URL JPG",
                                 "type": "string"
                             },
                             "small_image_url": {
-                                "description": "Small Image URL JPG (50x74)",
+                                "nullable": true,
+                                "description": "Small Image URL JPG",
                                 "type": "string"
                             }
                         },
@@ -5389,11 +5358,13 @@
                         "description": "Available images in WEBP",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL WEBP (225x335)",
+                                "nullable": true,
+                                "description": "Image URL WEBP",
                                 "type": "string"
                             },
                             "small_image_url": {
-                                "description": "Small Image URL WEBP (50x74)",
+                                "nullable": true,
+                                "description": "Small Image URL WEBP",
                                 "type": "string"
                             }
                         },
@@ -5408,7 +5379,8 @@
                         "description": "Available images in JPG",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL JPG (225x335)",
+                                "nullable": true,
+                                "description": "Image URL JPG",
                                 "type": "string"
                             }
                         },
@@ -5423,7 +5395,8 @@
                         "description": "Available images in JPG",
                         "properties": {
                             "image_url": {
-                                "description": "Image URL JPG (225x335)",
+                                "nullable": true,
+                                "description": "Image URL JPG",
                                 "type": "string"
                             }
                         },
@@ -5503,6 +5476,7 @@
                                             "type": "string"
                                         },
                                         "date": {
+                                            "nullable": true,
                                             "description": "Last comment date posted ISO8601",
                                             "type": "string"
                                         }
@@ -5664,10 +5638,12 @@
                         "type": "string"
                     },
                     "title_english": {
+                        "nullable": true,
                         "description": "English Title",
                         "type": "string"
                     },
                     "title_japanese": {
+                        "nullable": true,
                         "description": "Japanese Title",
                         "type": "string"
                     },
@@ -5679,6 +5655,7 @@
                         }
                     },
                     "type": {
+                        "nullable": true,
                         "description": "Manga Type",
                         "type": "string",
                         "enum": [
@@ -5692,10 +5669,12 @@
                         ]
                     },
                     "chapters": {
+                        "nullable": true,
                         "description": "Chapter count",
                         "type": "integer"
                     },
-                    "volumnes": {
+                    "volumes": {
+                        "nullable": true,
                         "description": "Volume count",
                         "type": "integer"
                     },
@@ -5727,26 +5706,32 @@
                         "type": "integer"
                     },
                     "rank": {
+                        "nullable": true,
                         "description": "Ranking",
                         "type": "integer"
                     },
                     "popularity": {
+                        "nullable": true,
                         "description": "Popularity",
                         "type": "integer"
                     },
                     "members": {
+                        "nullable": true,
                         "description": "Number of users who have added this entry to their list",
                         "type": "integer"
                     },
                     "favorites": {
+                        "nullable": true,
                         "description": "Number of users who have favorited this entry",
                         "type": "integer"
                     },
                     "synopsis": {
+                        "nullable": true,
                         "description": "Synopsis",
                         "type": "string"
                     },
                     "background": {
+                        "nullable": true,
                         "description": "Background",
                         "type": "string"
                     },
@@ -5851,6 +5836,7 @@
                     "data": {
                         "properties": {
                             "moreinfo": {
+                                "nullable": true,
                                 "description": "Additional information on the entry",
                                 "type": "string"
                             }
@@ -5989,6 +5975,7 @@
                         "type": "string"
                     },
                     "website_url": {
+                        "nullable": true,
                         "description": "Person's website URL",
                         "type": "string"
                     },
@@ -6000,10 +5987,12 @@
                         "type": "string"
                     },
                     "given_name": {
+                        "nullable": true,
                         "description": "Given Name",
                         "type": "string"
                     },
                     "family_name": {
+                        "nullable": true,
                         "description": "Family Name",
                         "type": "string"
                     },
@@ -6015,6 +6004,7 @@
                         }
                     },
                     "birthday": {
+                        "nullable": true,
                         "description": "Birthday Date ISO8601",
                         "type": "string"
                     },
@@ -6023,6 +6013,7 @@
                         "type": "integer"
                     },
                     "about": {
+                        "nullable": true,
                         "description": "Biography",
                         "type": "string"
                     }
@@ -6135,6 +6126,7 @@
                         "items": {
                             "properties": {
                                 "about": {
+                                    "nullable": true,
                                     "description": "User About. NOTE: About information is customizable by users through BBCode on MyAnimeList. This means users can add multimedia content, different text sizes, etc. Due to this freeform, Jikan returns parsed HTML. Validate on your end!",
                                     "type": "string"
                                 }
@@ -6283,15 +6275,18 @@
                                         {
                                             "properties": {
                                                 "score": {
+                                                    "nullable": true,
                                                     "type": "integer"
                                                 },
                                                 "status": {
                                                     "type": "string"
                                                 },
                                                 "episodes_seen": {
+                                                    "nullable": true,
                                                     "type": "integer"
                                                 },
                                                 "episodes_total": {
+                                                    "nullable": true,
                                                     "type": "integer"
                                                 },
                                                 "date": {
@@ -6321,21 +6316,26 @@
                                         {
                                             "properties": {
                                                 "score": {
+                                                    "nullable": true,
                                                     "type": "integer"
                                                 },
                                                 "status": {
                                                     "type": "string"
                                                 },
                                                 "chapters_read": {
+                                                    "nullable": true,
                                                     "type": "integer"
                                                 },
                                                 "chapters_total": {
+                                                    "nullable": true,
                                                     "type": "integer"
                                                 },
                                                 "volumes_read": {
+                                                    "nullable": true,
                                                     "type": "integer"
                                                 },
                                                 "volumes_total": {
+                                                    "nullable": true,
                                                     "type": "integer"
                                                 },
                                                 "date": {
@@ -6357,6 +6357,7 @@
             "user_profile": {
                 "properties": {
                     "mal_id": {
+                        "nullable": true,
                         "description": "MyAnimeList ID",
                         "type": "integer"
                     },
@@ -6372,22 +6373,27 @@
                         "$ref": "#/components/schemas/user_images"
                     },
                     "last_online": {
+                        "nullable": true,
                         "description": "Last Online Date ISO8601",
                         "type": "string"
                     },
                     "gender": {
+                        "nullable": true,
                         "description": "User Gender",
                         "type": "string"
                     },
                     "birthday": {
+                        "nullable": true,
                         "description": "Birthday Date ISO8601",
                         "type": "string"
                     },
                     "location": {
+                        "nullable": true,
                         "description": "Location",
                         "type": "string"
                     },
                     "joined": {
+                        "nullable": true,
                         "description": "Joined Date ISO8601",
                         "type": "string"
                     }
@@ -6997,6 +7003,7 @@
                                             "$ref": "#/components/schemas/user_meta"
                                         },
                                         "score": {
+                                            "nullable": true,
                                             "description": "User Score",
                                             "type": "integer"
                                         },
@@ -7005,10 +7012,12 @@
                                             "type": "string"
                                         },
                                         "episodes_seen": {
+                                            "nullable": true,
                                             "description": "Number of episodes seen",
                                             "type": "integer"
                                         },
                                         "episodes_total": {
+                                            "nullable": true,
                                             "description": "Total number of episodes",
                                             "type": "integer"
                                         },

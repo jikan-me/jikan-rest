@@ -33,12 +33,14 @@ class MangaResource extends JsonResource
      *      @OA\Property(
      *          property="title_english",
      *          type="string",
-     *          description="English Title"
+     *          description="English Title",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="title_japanese",
      *          type="string",
-     *          description="Japanese Title"
+     *          description="Japanese Title",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="title_synonyms",
@@ -52,17 +54,20 @@ class MangaResource extends JsonResource
      *          property="type",
      *          type="string",
      *          enum={"Manga", "Novel", "One-shot", "Doujinshi", "Manhua", "Manhwa", "OEL"},
-     *          description="Manga Type"
+     *          description="Manga Type",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="chapters",
      *          type="integer",
-     *          description="Chapter count"
+     *          description="Chapter count",
+     *          nullable=true
      *      ),
      *      @OA\Property(
-     *          property="volumnes",
+     *          property="volumes",
      *          type="integer",
-     *          description="Volume count"
+     *          description="Volume count",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="status",
@@ -93,32 +98,38 @@ class MangaResource extends JsonResource
      *      @OA\Property(
      *          property="rank",
      *          type="integer",
-     *          description="Ranking"
+     *          description="Ranking",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="popularity",
      *          type="integer",
-     *          description="Popularity"
+     *          description="Popularity",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="members",
      *          type="integer",
-     *          description="Number of users who have added this entry to their list"
+     *          description="Number of users who have added this entry to their list",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="favorites",
      *          type="integer",
-     *          description="Number of users who have favorited this entry"
+     *          description="Number of users who have favorited this entry",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="synopsis",
      *          type="string",
-     *          description="Synopsis"
+     *          description="Synopsis",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="background",
      *          type="string",
-     *          description="Background"
+     *          description="Background",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="authors",

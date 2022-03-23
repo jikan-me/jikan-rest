@@ -302,22 +302,26 @@ class AnimeController extends Controller
      *                   @OA\Property(
      *                       property="title_japanese",
      *                       type="string",
-     *                       description="Title Japanese"
+     *                       description="Title Japanese",
+     *                       nullable=true
      *                   ),
      *                   @OA\Property(
      *                       property="title_romanji",
      *                       type="string",
-     *                       description="title_romanji"
+     *                       description="title_romanji",
+     *                       nullable=true
      *                   ),
      *                   @OA\Property(
      *                       property="duration",
      *                       type="integer",
-     *                       description="Episode duration in seconds"
+     *                       description="Episode duration in seconds",
+     *                       nullable=true
      *                   ),
      *                   @OA\Property(
      *                       property="aired",
      *                       type="string",
-     *                       description="Aired Date ISO8601"
+     *                       description="Aired Date ISO8601",
+     *                       nullable=true
      *                   ),
      *                   @OA\Property(
      *                       property="filler",
@@ -332,7 +336,8 @@ class AnimeController extends Controller
      *                   @OA\Property(
      *                       property="forum_url",
      *                       type="string",
-     *                       description="Episode discussion forum URL"
+     *                       description="Episode discussion forum URL",
+     *                       nullable=true
      *                   ),
      *               ),
      *          ),

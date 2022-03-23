@@ -33,7 +33,8 @@ class UserUpdatesResource extends JsonResource
      *                      @OA\Property(
      *                          property="score",
      *                          type="integer",
-     *                          description="User Score"
+     *                          description="User Score",
+     *                          nullable=true
      *                      ),
      *                      @OA\Property(
      *                          property="status",
@@ -43,12 +44,14 @@ class UserUpdatesResource extends JsonResource
      *                      @OA\Property(
      *                          property="episodes_seen",
      *                          type="integer",
-     *                          description="Number of episodes seen"
+     *                          description="Number of episodes seen",
+     *                          nullable=true
      *                      ),
      *                      @OA\Property(
      *                          property="episodes_total",
      *                          type="integer",
-     *                          description="Total number of episodes"
+     *                          description="Total number of episodes",
+     *                          nullable=true
      *                      ),
      *                      @OA\Property(
      *                          property="date",

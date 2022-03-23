@@ -23,7 +23,8 @@ class MoreInfoResource extends JsonResource
      *          @OA\Property(
      *              property="moreinfo",
      *              type="string",
-     *              description="Additional information on the entry"
+     *              description="Additional information on the entry",
+     *              nullable=true
      *          ),
      *     ),
      *  )

@@ -381,12 +381,14 @@ class CharacterController extends Controller
      *              @OA\Property(
      *                  property="image_url",
      *                  type="string",
-     *                  description="Default JPG Image Size URL"
+     *                  description="Default JPG Image Size URL",
+     *                  nullable=true
      *              ),
      *              @OA\Property(
      *                  property="large_image_url",
      *                  type="string",
-     *                  description="Large JPG Image Size URL"
+     *                  description="Large JPG Image Size URL",
+     *                  nullable=true
      *              ),
      *          )
      *      )

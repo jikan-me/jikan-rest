@@ -643,7 +643,7 @@ class SearchController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/userbyid",
+     *     path="/users/userbyid",
      *     operationId="getUserById",
      *     tags={"users"},
      *

@@ -20,7 +20,8 @@ class ProfileResource extends JsonResource
      *      @OA\Property(
      *          property="mal_id",
      *          type="integer",
-     *          description="MyAnimeList ID"
+     *          description="MyAnimeList ID",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="username",
@@ -40,27 +41,32 @@ class ProfileResource extends JsonResource
      *      @OA\Property(
      *          property="last_online",
      *          type="string",
-     *          description="Last Online Date ISO8601"
+     *          description="Last Online Date ISO8601",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="gender",
      *          type="string",
-     *          description="User Gender"
+     *          description="User Gender",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="birthday",
      *          type="string",
-     *          description="Birthday Date ISO8601"
+     *          description="Birthday Date ISO8601",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="location",
      *          type="string",
-     *          description="Location"
+     *          description="Location",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="joined",
      *          type="string",
-     *          description="Joined Date ISO8601"
+     *          description="Joined Date ISO8601",
+     *          nullable=true
      *      ),
      *  ),
      * @OA\Schema(

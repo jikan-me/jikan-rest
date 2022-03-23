@@ -26,17 +26,20 @@ class CommonResource extends JsonResource
      *      @OA\Property(
      *          property="youtube_id",
      *          type="string",
-     *          description="YouTube ID"
+     *          description="YouTube ID",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="url",
      *          type="string",
-     *          description="YouTube URL"
+     *          description="YouTube URL",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="embed_url",
      *          type="string",
-     *          description="Parsed Embed URL"
+     *          description="Parsed Embed URL",
+     *          nullable=true
      *      ),
      *  ),
      * 
@@ -51,27 +54,32 @@ class CommonResource extends JsonResource
      *          @OA\Property(
      *              property="default_image_url",
      *              type="string",
-     *              description="Default Image Size URL (120x90)"
+     *              description="Default Image Size URL (120x90)",
+     *              nullable=true
      *          ),
      *          @OA\Property(
      *              property="small_image_url",
      *              type="string",
-     *              description="Small Image Size URL (640x480)"
+     *              description="Small Image Size URL (640x480)",
+     *              nullable=true
      *          ),
      *          @OA\Property(
      *              property="medium_image_url",
      *              type="string",
-     *              description="Medium Image Size URL (320x180)"
+     *              description="Medium Image Size URL (320x180)",
+     *              nullable=true
      *          ),
      *          @OA\Property(
      *              property="large_image_url",
      *              type="string",
-     *              description="Large Image Size URL (480x360)"
+     *              description="Large Image Size URL (480x360)",
+     *              nullable=true
      *          ),
      *          @OA\Property(
      *              property="maximum_image_url",
      *              type="string",
-     *              description="Maximum Image Size URL (1280x720)"
+     *              description="Maximum Image Size URL (1280x720)",
+     *              nullable=true
      *          ),
      *     ),
      *  ),
@@ -84,12 +92,14 @@ class CommonResource extends JsonResource
      *      @OA\Property(
      *          property="from",
      *          type="string",
-     *          description="Date ISO8601"
+     *          description="Date ISO8601",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="to",
      *          type="string",
-     *          description="Date ISO8601"
+     *          description="Date ISO8601",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="prop",
@@ -102,17 +112,20 @@ class CommonResource extends JsonResource
      *              @OA\Property(
      *                  property="day",
      *                  type="integer",
-     *                  description="Day"
+     *                  description="Day",
+     *                  nullable=true
      *              ),
      *              @OA\Property(
      *                  property="month",
      *                  type="integer",
-     *                  description="Month"
+     *                  description="Month",
+     *                  nullable=true
      *              ),
      *              @OA\Property(
      *                  property="year",
      *                  type="integer",
-     *                  description="year"
+     *                  description="Year",
+     *                  nullable=true
      *              ),
      *          ),
      *          @OA\Property(
@@ -122,23 +135,27 @@ class CommonResource extends JsonResource
      *              @OA\Property(
      *                  property="day",
      *                  type="integer",
-     *                  description="Day"
+     *                  description="Day",
+     *                  nullable=true
      *              ),
      *              @OA\Property(
      *                  property="month",
      *                  type="integer",
-     *                  description="Month"
+     *                  description="Month",
+     *                  nullable=true
      *              ),
      *              @OA\Property(
      *                  property="year",
      *                  type="integer",
-     *                  description="year"
+     *                  description="Year",
+     *                  nullable=true
      *              ),
      *          ),
      *          @OA\Property(
      *              property="string",
      *              type="string",
-     *              description="Raw parsed string"
+     *              description="Raw parsed string",
+     *              nullable=true
      *          ),
      *      ),
      *  ),
@@ -151,22 +168,26 @@ class CommonResource extends JsonResource
      *      @OA\Property(
      *          property="day",
      *          type="string",
-     *          description="Day of the week"
+     *          description="Day of the week",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="time",
      *          type="string",
-     *          description="Time in 24 hour format"
+     *          description="Time in 24 hour format",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="timezone",
      *          type="string",
-     *          description="Timezone (Tz Database format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)"
+     *          description="Timezone (Tz Database format https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="string",
      *          type="string",
-     *          description="Raw parsed broadcast string"
+     *          description="Raw parsed broadcast string",
+     *          nullable=true
      *      ),
      *  ),
      *
@@ -341,7 +362,8 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL JPG (225x335)",
+     *             description="Image URL JPG",
+     *             nullable=true
      *         ),
      *     ),
      *     @OA\Property(
@@ -351,7 +373,8 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL WEBP (225x335)",
+     *             description="Image URL WEBP",
+     *             nullable=true
      *         ),
      *     ),
      * ),
@@ -466,17 +489,20 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL JPG (225x335)",
+     *             description="Image URL JPG",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="small_image_url",
      *             type="string",
-     *             description="Small Image URL JPG (50x74)",
+     *             description="Small Image URL JPG",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="large_image_url",
      *             type="string",
-     *             description="Image URL JPG (300x446)",
+     *             description="Image URL JPG",
+     *             nullable=true
      *         ),
      *     ),
      *     @OA\Property(
@@ -486,17 +512,20 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL WEBP (225x335)",
+     *             description="Image URL WEBP",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="small_image_url",
      *             type="string",
-     *             description="Small Image URL WEBP (50x74)",
+     *             description="Small Image URL WEBP",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="large_image_url",
      *             type="string",
-     *             description="Image URL WEBP (300x446)",
+     *             description="Image URL WEBP",
+     *             nullable=true
      *         ),
      *     ),
      * ),
@@ -511,17 +540,20 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL JPG (225x335)",
+     *             description="Image URL JPG",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="small_image_url",
      *             type="string",
-     *             description="Small Image URL JPG (50x74)",
+     *             description="Small Image URL JPG",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="large_image_url",
      *             type="string",
-     *             description="Image URL JPG (300x446)",
+     *             description="Image URL JPG",
+     *             nullable=true
      *         ),
      *     ),
      *     @OA\Property(
@@ -531,17 +563,20 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL WEBP (225x335)",
+     *             description="Image URL WEBP",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="small_image_url",
      *             type="string",
-     *             description="Small Image URL WEBP (50x74)",
+     *             description="Small Image URL WEBP",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="large_image_url",
      *             type="string",
-     *             description="Image URL WEBP (300x446)",
+     *             description="Image URL WEBP",
+     *             nullable=true
      *         ),
      *     ),
      * ),
@@ -556,12 +591,14 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL JPG (225x335)",
+     *             description="Image URL JPG",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="small_image_url",
      *             type="string",
-     *             description="Small Image URL JPG (50x74)",
+     *             description="Small Image URL JPG",
+     *             nullable=true
      *         ),
      *     ),
      *     @OA\Property(
@@ -571,12 +608,14 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL WEBP (225x335)",
+     *             description="Image URL WEBP",
+     *             nullable=true
      *         ),
      *         @OA\Property(
      *             property="small_image_url",
      *             type="string",
-     *             description="Small Image URL WEBP (50x74)",
+     *             description="Small Image URL WEBP",
+     *             nullable=true
      *         ),
      *     ),
      * ),
@@ -591,7 +630,8 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL JPG (225x335)",
+     *             description="Image URL JPG",
+     *             nullable=true
      *         ),
      *     ),
      * ),
@@ -606,7 +646,8 @@ class CommonResource extends JsonResource
      *         @OA\Property(
      *             property="image_url",
      *             type="string",
-     *             description="Image URL JPG (225x335)",
+     *             description="Image URL JPG",
+     *             nullable=true
      *         ),
      *     ),
      * ),

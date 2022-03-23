@@ -386,16 +386,8 @@ class PersonController extends Controller
      *          type="array",
      *
      *          @OA\Items(
-     *              @OA\Property(
-     *                  property="image_url",
-     *                  type="string",
-     *                  description="Default JPG Image Size URL"
-     *              ),
-     *              @OA\Property(
-     *                  property="large_image_url",
-     *                  type="string",
-     *                  description="Large JPG Image Size URL"
-     *              ),
+     *              type="object",
+     *              ref="#/components/schemas/people_images"
      *          )
      *      )
      *  )

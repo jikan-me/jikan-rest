@@ -37,12 +37,14 @@ class AnimeResource extends JsonResource
      *      @OA\Property(
      *          property="title_english",
      *          type="string",
-     *          description="English Title"
+     *          description="English Title",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="title_japanese",
      *          type="string",
-     *          description="Japanese Title"
+     *          description="Japanese Title",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="title_synonyms",
@@ -56,23 +58,27 @@ class AnimeResource extends JsonResource
      *          property="type",
      *          type="string",
      *          enum={"TV","OVA","Movie","Special","ONA","Music"},
-     *          description="Anime Type"
+     *          description="Anime Type",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="source",
      *          type="string",
-     *          description="Original Material/Source adapted from"
+     *          description="Original Material/Source adapted from",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="episodes",
      *          type="integer",
-     *          description="Episode count"
+     *          description="Episode count",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="status",
      *          type="string",
      *          enum={"Finished Airing", "Currently Airing", "Not yet aired"},
-     *          description="Airing status"
+     *          description="Airing status",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="airing",
@@ -86,65 +92,77 @@ class AnimeResource extends JsonResource
      *      @OA\Property(
      *          property="duration",
      *          type="string",
-     *          description="Parsed raw duration"
+     *          description="Parsed raw duration",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="rating",
      *          type="string",
      *          enum={"G - All Ages", "PG - Children", "PG-13 - Teens 13 or older", "R - 17+ (violence & profanity)", "R+ - Mild Nudity", "Rx - Hentai" },
-     *          description="Anime audience rating"
+     *          description="Anime audience rating",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="score",
      *          type="number",
      *          format="float",
-     *          description="Score"
+     *          description="Score",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="scored_by",
      *          type="integer",
-     *          description="Number of users"
+     *          description="Number of users",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="rank",
      *          type="integer",
-     *          description="Ranking"
+     *          description="Ranking",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="popularity",
      *          type="integer",
-     *          description="Popularity"
+     *          description="Popularity",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="members",
      *          type="integer",
-     *          description="Number of users who have added this entry to their list"
+     *          description="Number of users who have added this entry to their list",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="favorites",
      *          type="integer",
-     *          description="Number of users who have favorited this entry"
+     *          description="Number of users who have favorited this entry",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="synopsis",
      *          type="string",
-     *          description="Synopsis"
+     *          description="Synopsis",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="background",
      *          type="string",
-     *          description="Background"
+     *          description="Background",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="season",
      *          type="string",
      *          enum={"Summer", "Winter", "Spring", "Fall"},
-     *          description="Season"
+     *          description="Season",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="year",
      *          type="integer",
-     *          description="Year"
+     *          description="Year",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="broadcast",

@@ -79,7 +79,8 @@ class ForumResource extends JsonResource
      *                  @OA\Property(
      *                      property="date",
      *                      type="string",
-     *                      description="Last comment date posted ISO8601"
+     *                      description="Last comment date posted ISO8601",
+     *                      nullable=true
      *                  ),
      *              ),
      *          ),

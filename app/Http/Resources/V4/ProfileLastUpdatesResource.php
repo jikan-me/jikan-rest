@@ -38,7 +38,8 @@ class ProfileLastUpdatesResource extends JsonResource
      *                      @OA\Schema (
      *                          @OA\Property (
      *                              property="score",
-     *                              type="integer"
+     *                              type="integer",
+     *                              nullable=true
      *                          ),
      *                          @OA\Property (
      *                              property="status",
@@ -46,11 +47,13 @@ class ProfileLastUpdatesResource extends JsonResource
      *                          ),
      *                          @OA\Property (
      *                              property="episodes_seen",
-     *                              type="integer"
+     *                              type="integer",
+     *                              nullable=true
      *                          ),
      *                          @OA\Property (
      *                              property="episodes_total",
-     *                              type="integer"
+     *                              type="integer",
+     *                              nullable=true
      *                          ),
      *                          @OA\Property (
      *                              property="date",
@@ -80,7 +83,8 @@ class ProfileLastUpdatesResource extends JsonResource
      *                      @OA\Schema (
      *                          @OA\Property (
      *                              property="score",
-     *                              type="integer"
+     *                              type="integer",
+     *                              nullable=true
      *                          ),
      *                          @OA\Property (
      *                              property="status",
@@ -88,19 +92,23 @@ class ProfileLastUpdatesResource extends JsonResource
      *                          ),
      *                          @OA\Property (
      *                              property="chapters_read",
-     *                              type="integer"
+     *                              type="integer",
+     *                              nullable=true
      *                          ),
      *                          @OA\Property (
      *                              property="chapters_total",
-     *                              type="integer"
+     *                              type="integer",
+     *                              nullable=true
      *                          ),
      *                          @OA\Property (
      *                              property="volumes_read",
-     *                              type="integer"
+     *                              type="integer",
+     *                              nullable=true
      *                          ),
      *                          @OA\Property (
      *                              property="volumes_total",
-     *                              type="integer"
+     *                              type="integer",
+     *                              nullable=true
      *                          ),
      *                          @OA\Property (
      *                              property="date",

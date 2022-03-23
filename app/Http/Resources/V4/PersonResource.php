@@ -25,7 +25,8 @@ class PersonResource extends JsonResource
      *      @OA\Property(
      *          property="website_url",
      *          type="string",
-     *          description="Person's website URL"
+     *          description="Person's website URL",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="images",
@@ -40,12 +41,14 @@ class PersonResource extends JsonResource
      *      @OA\Property(
      *          property="given_name",
      *          type="string",
-     *          description="Given Name"
+     *          description="Given Name",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="family_name",
      *          type="string",
-     *          description="Family Name"
+     *          description="Family Name",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="alternate_names",
@@ -58,7 +61,8 @@ class PersonResource extends JsonResource
      *      @OA\Property(
      *          property="birthday",
      *          type="string",
-     *          description="Birthday Date ISO8601"
+     *          description="Birthday Date ISO8601",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="favorites",
@@ -68,7 +72,8 @@ class PersonResource extends JsonResource
      *      @OA\Property(
      *          property="about",
      *          type="string",
-     *          description="Biography"
+     *          description="Biography",
+     *          nullable=true
      *      ),
      *  )
      */

@@ -144,21 +144,7 @@ class ClubController extends Controller
      *          type="array",
      *           @OA\Items(
      *               type="object",
-     *               @OA\Property(
-     *                   property="username",
-     *                   type="string",
-     *                   description="MyAnimeList Username"
-     *               ),
-     *               @OA\Property(
-     *                   property="url",
-     *                   type="string",
-     *                   description="MyAnimeList URL"
-     *               ),
-     *               @OA\Property(
-     *                   property="image_url",
-     *                   type="string",
-     *                   description="MyAnimeList Image URL"
-     *               ),
+     *               ref="#/components/schemas/user_images"
      *           ),
      *      ),
      * ),

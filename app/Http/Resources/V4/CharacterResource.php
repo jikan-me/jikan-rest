@@ -33,7 +33,8 @@ class CharacterResource extends JsonResource
      *      @OA\Property(
      *          property="name_kanji",
      *          type="string",
-     *          description="Name"
+     *          description="Name",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="nicknames",
@@ -51,67 +52,8 @@ class CharacterResource extends JsonResource
      *      @OA\Property(
      *          property="about",
      *          type="string",
-     *          description="Synopsis"
-     *      ),
-     *      @OA\Property(
-     *          property="animeography",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              allOf={
-     *                  @OA\Schema(ref="#/components/schemas/mal_url"),
-     *                  @OA\Schema(
-     *                      @OA\Property(
-     *                          property="image_url",
-     *                          type="string",
-     *                      ),
-     *                      @OA\Property(
-     *                          property="role",
-     *                          type="string",
-     *                      ),
-     *                  ),
-     *              },
-     *          ),
-     *      ),
-     *      @OA\Property(
-     *          property="mangaography",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              allOf={
-     *                  @OA\Schema(ref="#/components/schemas/mal_url"),
-     *                  @OA\Schema(
-     *                      @OA\Property(
-     *                          property="image_url",
-     *                          type="string",
-     *                      ),
-     *                      @OA\Property(
-     *                          property="role",
-     *                          type="string",
-     *                      ),
-     *                  ),
-     *              },
-     *          ),
-     *      ),
-     *      @OA\Property(
-     *          property="voice_actors",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              allOf={
-     *                  @OA\Schema(ref="#/components/schemas/mal_url"),
-     *                  @OA\Schema(
-     *                      @OA\Property(
-     *                          property="image_url",
-     *                          type="string",
-     *                      ),
-     *                      @OA\Property(
-     *                          property="language",
-     *                          type="string",
-     *                      ),
-     *                  ),
-     *              },
-     *          ),
+     *          description="Biography",
+     *          nullable=true
      *      ),
      *  )
      */
