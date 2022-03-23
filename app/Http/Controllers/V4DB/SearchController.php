@@ -159,7 +159,7 @@ class SearchController extends Controller
      *     ),
      * 
      *     @OA\Parameter(
-     *       name="producer",
+     *       name="producers",
      *       in="query",
      *       description="Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
      *       @OA\Schema(type="string")
@@ -302,9 +302,9 @@ class SearchController extends Controller
      *     ),
      *
      *     @OA\Parameter(
-     *       name="magazine",
+     *       name="magazines",
      *       in="query",
-     *       description="Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *       description="Filter by magazine(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
      *       @OA\Schema(type="string")
      *     ),
      *

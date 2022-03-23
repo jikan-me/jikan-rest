@@ -105,7 +105,8 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $orderBy = self::mapOrderBy($request->get('order_by'));
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
-        $producer = $request->get('producers');
+        $producer = $request->get('producer'); //bc
+        $producers = $request->get('producers');
         $minScore = $request->get('min_score');
         $maxScore = $request->get('max_score');
         $startDate = $request->get('start_date');
@@ -211,14 +212,22 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 ->where('rating', $rating);
         }
 
-        if (!is_null($producer)) {
+        if (!is_null($producer)) $producers = $producer; // bc
+        if (!is_null($producers)) {
+            $producers = explode(',', $producers);
 
-            $producer = (int) $producer;
+            foreach ($producers as $producer) {
+                if (empty($producer)) {
+                    continue;
+                }
 
-            $results = $results
-                ->where('producers.mal_id', $producer)
-                ->orWhere('licensors.mal_id', $producer)
-                ->orWhere('studios.mal_id', $producer);
+                $producer = (int) $producer;
+
+                $results = $results
+                    ->orWhere('producers.mal_id', $producer)
+                    ->orWhere('licensors.mal_id', $producer)
+                    ->orWhere('studios.mal_id', $producer);
+            }
         }
 
         if (!is_null($genres)) {
@@ -232,13 +241,10 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 $genre = (int) $genre;
 
                 $results = $results
-                    ->where(function($query) use ($genre) {
-                        $query
-                            ->where('genres.mal_id', $genre)
-                            ->orWhere('demographics.mal_id', $genre)
-                            ->orWhere('themes.mal_id', $genre)
-                            ->orWhere('explicit_genres.mal_id', $genre);
-                    });
+                    ->orWhere('genres.mal_id', $genre)
+                    ->orWhere('demographics.mal_id', $genre)
+                    ->orWhere('themes.mal_id', $genre)
+                    ->orWhere('explicit_genres.mal_id', $genre);
             }
         }
 
@@ -253,14 +259,10 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 $genreExclude = (int) $genreExclude;
 
                 $results = $results
-                    ->where(function($query) use ($genreExclude) {
-                        $query
-                            ->where('genres.mal_id', '!=', $genreExclude)
-                            ->where('demographics.mal_id', '!=', $genreExclude)
-                            ->where('themes.mal_id', '!=', $genreExclude)
-                            ->where('explicit_genres.mal_id', '!=', $genreExclude);
-                    });
-;
+                    ->where('genres.mal_id', '!=', $genreExclude)
+                    ->where('demographics.mal_id', '!=', $genreExclude)
+                    ->where('themes.mal_id', '!=', $genreExclude)
+                    ->where('explicit_genres.mal_id', '!=', $genreExclude);
             }
         }
 
