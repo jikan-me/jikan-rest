@@ -2698,6 +2698,9 @@
                                 "favorite"
                             ]
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -2745,6 +2748,9 @@
                                 "favorite"
                             ]
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -2770,6 +2776,11 @@
                     "top"
                 ],
                 "operationId": "getTopPeople",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns top people",
@@ -2793,6 +2804,11 @@
                     "top"
                 ],
                 "operationId": "getTopCharacters",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns top characters",
@@ -2816,6 +2832,11 @@
                     "top"
                 ],
                 "operationId": "getTopReviews",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns top reviews",

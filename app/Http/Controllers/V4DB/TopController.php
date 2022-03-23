@@ -34,10 +34,10 @@ class TopController extends Controller
      *     tags={"top"},
      *
      *     @OA\Parameter(
-     *       name="type",
-     *       in="query",
-     *       required=false,
-     *       @OA\Schema(ref="#/components/schemas/anime_search_query_type")
+     *          name="type",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(ref="#/components/schemas/anime_search_query_type")
      *     ),
      *
      *      @OA\Parameter(
@@ -46,6 +46,8 @@ class TopController extends Controller
      *          required=false,
      *          @OA\Schema(type="string",enum={"airing", "upcoming", "bypopularity", "favorite"})
      *      ),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
@@ -115,6 +117,8 @@ class TopController extends Controller
      *          @OA\Schema(type="string",enum={"publishing", "upcoming", "bypopularity", "favorite"})
      *      ),
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns top manga",
@@ -168,6 +172,8 @@ class TopController extends Controller
      *     path="/top/people",
      *     operationId="getTopPeople",
      *     tags={"top"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
@@ -223,6 +229,8 @@ class TopController extends Controller
      *     operationId="getTopCharacters",
      *     tags={"top"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns top characters",
@@ -276,6 +284,8 @@ class TopController extends Controller
      *     path="/top/reviews",
      *     operationId="getTopReviews",
      *     tags={"top"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
