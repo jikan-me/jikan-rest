@@ -30,7 +30,7 @@
          *
          */
         const MAP_FILTER = [
-            'upcoming', 'bypopularity', 'favorites'
+            'publishing', 'upcoming', 'bypopularity', 'favorite'
         ];
     
         /**

@@ -30,7 +30,7 @@ class TopQueryBuilderAnime implements SearchQueryBuilderInterface
      *
      */
     const MAP_FILTER = [
-        'airing', 'upcoming', 'bypopularity', 'favorites'
+        'airing', 'upcoming', 'bypopularity', 'favorite'
     ];
 
 

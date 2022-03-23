@@ -33,6 +33,20 @@ class TopController extends Controller
      *     operationId="getTopAnime",
      *     tags={"top"},
      *
+     *     @OA\Parameter(
+     *       name="type",
+     *       in="query",
+     *       required=false,
+     *       @OA\Schema(ref="#/components/schemas/anime_search_query_type")
+     *     ),
+     *
+     *      @OA\Parameter(
+     *          name="filter",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(type="string",enum={"airing", "upcoming", "bypopularity", "favorite"})
+     *      ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns top anime",
@@ -86,6 +100,20 @@ class TopController extends Controller
      *     path="/top/manga",
      *     operationId="getTopManga",
      *     tags={"top"},
+     *
+     *     @OA\Parameter(
+     *       name="type",
+     *       in="query",
+     *       required=false,
+     *       @OA\Schema(ref="#/components/schemas/manga_search_query_type")
+     *     ),
+     *
+     *      @OA\Parameter(
+     *          name="filter",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(type="string",enum={"publishing", "upcoming", "bypopularity", "favorite"})
+     *      ),
      *
      *     @OA\Response(
      *         response="200",

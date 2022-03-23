@@ -2676,6 +2676,30 @@
                     "top"
                 ],
                 "operationId": "getTopAnime",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/components/schemas/anime_search_query_type"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "airing",
+                                "upcoming",
+                                "bypopularity",
+                                "favorite"
+                            ]
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns top anime",
@@ -2699,6 +2723,30 @@
                     "top"
                 ],
                 "operationId": "getTopManga",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/components/schemas/manga_search_query_type"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "publishing",
+                                "upcoming",
+                                "bypopularity",
+                                "favorite"
+                            ]
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns top manga",
