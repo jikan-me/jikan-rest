@@ -20,6 +20,8 @@ class MagazineController extends Controller
      *     operationId="getMagazines",
      *     tags={"magazines"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns magazines collection",

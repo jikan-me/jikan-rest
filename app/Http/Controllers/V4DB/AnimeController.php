@@ -55,7 +55,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}",
      *     operationId="getAnimeById",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -67,7 +67,7 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime resource",
      *         @OA\JsonContent(
-     *              @OA\Property( 
+     *              @OA\Property(
      *                  property="data",
      *                  ref="#/components/schemas/anime"
      *              )
@@ -441,7 +441,6 @@ class AnimeController extends Controller
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
-     *
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *
@@ -838,14 +837,14 @@ class AnimeController extends Controller
      *     operationId="getAnimeUserUpdates",
      *     tags={"anime"},
      * 
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     * 
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",

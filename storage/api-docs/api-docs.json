@@ -458,15 +458,15 @@
                 "operationId": "getAnimeUserUpdates",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -1015,6 +1015,11 @@
                     "magazines"
                 ],
                 "operationId": "getMagazines",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns magazines collection",
@@ -1112,6 +1117,9 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -1324,6 +1332,9 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -1357,6 +1368,9 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -1621,6 +1635,11 @@
                     "producers"
                 ],
                 "operationId": "getProducers",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns producers collection",
@@ -2104,7 +2123,7 @@
                         }
                     },
                     {
-                        "name": "producer",
+                        "name": "producers",
                         "in": "query",
                         "description": "Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
                         "schema": {
@@ -2233,9 +2252,9 @@
                         }
                     },
                     {
-                        "name": "magazine",
+                        "name": "magazines",
                         "in": "query",
-                        "description": "Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+                        "description": "Filter by magazine(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
                         "schema": {
                             "type": "string"
                         }

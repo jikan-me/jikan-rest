@@ -201,6 +201,8 @@ class MangaController extends Controller
      *       @OA\Schema(type="integer")
      *     ),
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of manga news topics",
@@ -565,6 +567,8 @@ class MangaController extends Controller
      *       @OA\Schema(type="integer")
      *     ),
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga user updates",
@@ -618,6 +622,8 @@ class MangaController extends Controller
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",

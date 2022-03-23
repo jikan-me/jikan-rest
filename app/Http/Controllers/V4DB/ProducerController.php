@@ -21,6 +21,8 @@ class ProducerController extends Controller
      *     operationId="getProducers",
      *     tags={"producers"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns producers collection",
