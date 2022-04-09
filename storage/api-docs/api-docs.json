@@ -1993,6 +1993,32 @@
                                 "other"
                             ]
                         }
+                    },
+                    {
+                        "name": "kids",
+                        "in": "query",
+                        "description": "When supplied, it will filter entries with the `Kids` Genre Demographic. When supplied as `kids=true`, it will return only Kid entries and when supplied as `kids=false`, it will filter out any Kid entries. Defaults to `false`.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "sfw",
+                        "in": "query",
+                        "description": "'Safe For Work'. When supplied, it will filter entries with the `Hentai` Genre. When supplied as `sfw=true`, it will return only SFW entries and when supplied as `sfw=false`, it will filter out any Hentai entries. Defaults to `false`.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -3684,7 +3710,7 @@
                         "type": "object"
                     },
                     {
-                        "$ref": "#/components/schemas/pagination"
+                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
@@ -4192,7 +4218,7 @@
                         "type": "object"
                     },
                     {
-                        "$ref": "#/components/schemas/pagination"
+                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
@@ -4687,7 +4713,7 @@
                         "type": "object"
                     },
                     {
-                        "$ref": "#/components/schemas/pagination"
+                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
@@ -5162,6 +5188,36 @@
                             },
                             "has_next_page": {
                                 "type": "boolean"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "pagination_plus": {
+                "properties": {
+                    "pagination": {
+                        "properties": {
+                            "last_visible_page": {
+                                "type": "integer"
+                            },
+                            "has_next_page": {
+                                "type": "boolean"
+                            },
+                            "items": {
+                                "properties": {
+                                    "count": {
+                                        "type": "integer"
+                                    },
+                                    "total": {
+                                        "type": "integer"
+                                    },
+                                    "per_page": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
                             }
                         },
                         "type": "object"
@@ -5684,7 +5740,7 @@
                         "type": "object"
                     },
                     {
-                        "$ref": "#/components/schemas/pagination"
+                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
@@ -6007,7 +6063,7 @@
                         "type": "object"
                     },
                     {
-                        "$ref": "#/components/schemas/pagination"
+                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
