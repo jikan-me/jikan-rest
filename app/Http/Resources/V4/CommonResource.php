@@ -310,6 +310,43 @@ class CommonResource extends JsonResource
      *      ),
      *  ),
      *
+     * @OA\Schema(
+     *     schema="pagination_plus",
+     *     type="object",
+     *
+     *     @OA\Property(
+     *          property="pagination",
+     *          type="object",
+     *
+     *          @OA\Property(
+     *               property="last_visible_page",
+     *               type="integer"
+     *           ),
+     *          @OA\Property(
+     *               property="has_next_page",
+     *               type="boolean"
+     *          ),
+     *
+     *          @OA\Property (
+     *              property="items",
+     *              type="object",
+     *
+     *              @OA\Property (
+     *                  property="count",
+     *                  type="integer"
+     *              ),
+     *              @OA\Property (
+     *                  property="total",
+     *                  type="integer"
+     *              ),
+     *              @OA\Property (
+     *                  property="per_page",
+     *                  type="integer"
+     *              ),
+     *          )
+     *      ),
+     *  ),
+     *
      *
      * @OA\Schema(
      *     schema="user_meta",
