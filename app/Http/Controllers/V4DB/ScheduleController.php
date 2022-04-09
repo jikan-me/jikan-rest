@@ -10,6 +10,7 @@ use App\Http\Resources\V4\CommonResource;
 use App\Http\Resources\V4\ScheduleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Jikan\Helper\Constants;
 use Jikan\Request\Schedule\ScheduleRequest;
 
 class ScheduleController extends Controller
@@ -53,6 +54,22 @@ class ScheduleController extends Controller
      *          @OA\Schema(type="string",enum={"monday", "tuesday", "wednesday", "thursday", "friday", "unknown", "other"})
      *      ),
      *
+     *      @OA\Parameter(
+     *          name="kids",
+     *          in="query",
+     *          required=false,
+     *          description="When supplied, it will filter entries with the `Kids` Genre Demographic. When supplied as `kids=true`, it will return only Kid entries and when supplied as `kids=false`, it will filter out any Kid entries. Defaults to `false`.",
+     *          @OA\Schema(type="string",enum={"true", "false"})
+     *      ),
+     *
+     *      @OA\Parameter(
+     *          name="sfw",
+     *          in="query",
+     *          required=false,
+     *          description="'Safe For Work'. When supplied, it will filter entries with the `Hentai` Genre. When supplied as `sfw=true`, it will return only SFW entries and when supplied as `sfw=false`, it will filter out any Hentai entries. Defaults to `false`.",
+     *          @OA\Schema(type="string",enum={"true", "false"})
+     *      ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns weekly schedule",
@@ -71,7 +88,7 @@ class ScheduleController extends Controller
      *      description="Anime resources currently airing",
      *
      *      allOf={
-     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(ref="#/components/schemas/pagination_plus"),
      *          @OA\Schema(
      *              @OA\Property(
      *                   property="data",
@@ -87,6 +104,12 @@ class ScheduleController extends Controller
      *      }
      *  )
      */
+    /*
+     * all have status as currently airing
+     * all have premiered but they're not necesarily the current season or year
+     * all have aired date but they're not necessarily the current date/season
+     *
+     */
     public function main(Request $request, ?string $day = null)
     {
         $this->request = $request;
@@ -94,6 +117,8 @@ class ScheduleController extends Controller
         $page = $this->request->get('page') ?? 1;
         $limit = $this->request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
         $filter = $this->request->get('filter') ?? null;
+        $kids = $this->request->get('kids') ?? false;
+        $sfw = $this->request->get('sfw') ?? false;
 
         if (!is_null($day)) {
             $this->day = strtolower($day);
@@ -111,7 +136,26 @@ class ScheduleController extends Controller
         $results = Anime::query()
             ->orderBy('members')
             ->where('type', 'TV')
-            ->where('status', 'Currently Airing');
+            ->where('status', 'Currently Airing')
+        ;
+
+        if ($kids) {
+            $results = $results
+                ->orWhere('demographics.mal_id', '!=', Constants::GENRE_ANIME_KIDS);
+        }
+
+        if ($sfw) {
+            $results = $results
+                ->orWhere('demographics.mal_id', '!=', Constants::GENRE_ANIME_HENTAI);
+        }
+
+//        if (is_null($sfw)) {
+//            $results = $results
+//                ->orWhere('genres.mal_id', '!=', Constants::GENRE_ANIME_HENTAI)
+//                ->orWhere('genres.mal_id', '!=', Constants::GENRE_ANIME_BOYS_LOVE)
+//                ->orWhere('genres.mal_id', '!=', Constants::GENRE_ANIME_GIRLS_LOVE)
+//                ;
+//        }
 
         if (\in_array($this->day, self::VALID_DAYS)) {
             $this->day = ucfirst($this->day);
