@@ -19,7 +19,7 @@ class PersonCollection extends ResourceCollection
      *      description="People Search",
      *
      *      allOf={
-     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(ref="#/components/schemas/pagination_plus"),
      *          @OA\Schema(
      *              @OA\Property(
      *                   property="data",

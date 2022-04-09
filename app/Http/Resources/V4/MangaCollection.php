@@ -19,7 +19,7 @@ class MangaCollection extends ResourceCollection
      *      description="Manga Search Resource",
      * 
      *      allOf={
-     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(ref="#/components/schemas/pagination_plus"),
      *          @OA\Schema(
      *              @OA\Property(
      *                   property="data",
@@ -43,7 +43,13 @@ class MangaCollection extends ResourceCollection
     {
         $this->pagination = [
             'last_visible_page' => $resource->lastPage(),
-            'has_next_page' => $resource->hasMorePages()
+            'has_next_page' => $resource->hasMorePages(),
+            'current_page' => $resource->currentPage(),
+            'items' => [
+                'count' => $resource->count(),
+                'total' => $resource->total(),
+                'per_page' => $resource->perPage(),
+            ],
         ];
 
         $this->collection = $resource->getCollection();
