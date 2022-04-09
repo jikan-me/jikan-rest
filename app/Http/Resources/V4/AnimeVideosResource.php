@@ -21,7 +21,7 @@ class AnimeVideosResource extends JsonResource
      *          type="object",
      *
      *          @OA\Property(
-     *               property="promos",
+     *               property="promo",
      *               type="array",
      *               @OA\Items(
      *                   type="object",

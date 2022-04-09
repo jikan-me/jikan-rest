@@ -4603,7 +4603,7 @@
                 "properties": {
                     "data": {
                         "properties": {
-                            "promos": {
+                            "promo": {
                                 "type": "array",
                                 "items": {
                                     "properties": {
@@ -4944,7 +4944,7 @@
                 "properties": {
                     "images": {
                         "properties": {
-                            "default_image_url": {
+                            "image_url": {
                                 "nullable": true,
                                 "description": "Default Image Size URL (120x90)",
                                 "type": "string"
