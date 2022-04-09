@@ -38,7 +38,7 @@ class PersonController extends Controller
      *         response="200",
      *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/pictures_variants"
+     *              ref="#/components/schemas/person"
      *         )
      *     ),
      *

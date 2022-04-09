@@ -1486,7 +1486,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/pictures_variants"
+                                    "$ref": "#/components/schemas/person"
                                 }
                             }
                         }
@@ -6840,31 +6840,29 @@
                 "description": "Entry Recommendations Resource",
                 "properties": {
                     "data": {
+                        "properties": {
+                            "url": {
+                                "description": "Recommendation MyAnimeList URL",
+                                "type": "string"
+                            },
+                            "votes": {
+                                "description": "Number of users who have recommended this entry",
+                                "type": "integer"
+                            }
+                        },
                         "type": "array",
                         "items": {
                             "properties": {
                                 "entry": {
-                                    "description": "Array of 2 entries that are being recommended to each other",
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "anyOf": [
-                                            {
-                                                "$ref": "#/components/schemas/anime_meta"
-                                            },
-                                            {
-                                                "$ref": "#/components/schemas/manga_meta"
-                                            }
-                                        ]
-                                    }
-                                },
-                                "url": {
-                                    "description": "Recommendation MyAnimeList URL",
-                                    "type": "string"
-                                },
-                                "votes": {
-                                    "description": "Number of users who have recommended this entry",
-                                    "type": "integer"
+                                    "type": "object",
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/anime_meta"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/manga_meta"
+                                        }
+                                    ]
                                 }
                             },
                             "type": "object"

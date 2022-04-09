@@ -77,15 +77,11 @@ class RecommendationsResource extends JsonResource
 
      *              @OA\Property (
      *                  property="entry",
-     *                  type="array",
-     *                  description="Array of 2 entries that are being recommended to each other",
-     *
-     *                  @OA\Items(
-     *                      type="object",
-     *                      anyOf={
-     *                          @OA\Schema(ref="#/components/schemas/anime_meta"),
-     *                          @OA\Schema(ref="#/components/schemas/manga_meta"),
-     *                      }
+     *                  type="object",
+     *                   oneOf={
+     *                       @OA\Schema(ref="#/components/schemas/anime_meta"),
+     *                       @OA\Schema(ref="#/components/schemas/manga_meta"),
+     *                   }
      *                  ),
      *              ),
      *              @OA\Property(
