@@ -70,25 +70,4 @@ class MagazineController extends Controller
             $results
         );
     }
-
-    public function resource(Request $request, int $id)
-    {
-        $page = $request->get('page') ?? 1;
-
-        $results = Manga::query()
-            ->where('serializations.mal_id', $id)
-            ->orderBy('title');
-
-        $results = $results
-            ->paginate(
-                self::MAX_RESULTS_PER_PAGE,
-                ['*'],
-                null,
-                $page
-            );
-
-        return new MangaCollection(
-            $results
-        );
-    }
 }

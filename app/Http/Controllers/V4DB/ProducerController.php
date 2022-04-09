@@ -71,28 +71,4 @@ class ProducerController extends Controller
             $results
         );
     }
-
-    public function resource(Request $request, int $id)
-    {
-        $this->request = $request;
-        $page = $this->request->get('page') ?? 1;
-
-        $results = Anime::query()
-            ->where('producers.mal_id', $id)
-            ->orWhere('licensors.mal_id', $id)
-            ->orWhere('studios.mal_id', $id)
-            ->orderBy('title');
-
-        $results = $results
-            ->paginate(
-                self::MAX_RESULTS_PER_PAGE,
-                ['*'],
-                null,
-                $page
-            );
-
-        return new AnimeCollection(
-            $results
-        );
-    }
 }
