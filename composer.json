@@ -10,7 +10,7 @@
         "ext-mongodb": "*",
         "danielmewes/php-rql": "dev-master",
         "darkaonline/swagger-lume": "8.*",
-        "divineomega/cachetphp": "^0.2.0",
+        "elasticsearch/elasticsearch": "^8.1",
         "fabpot/goutte": "^4.0",
         "flipbox/lumen-generator": "^8",
         "illuminate/redis": "^8",
