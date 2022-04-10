@@ -81,23 +81,36 @@ class TopQueryBuilderAnime implements SearchQueryBuilderInterface
                 ->whereNotNull('rank')
                 ->where('rank', '>', 0)
                 ->orderBy('rank', 'asc');
+
+            return $results;
         }
 
         if (!is_null($filterType) && $filterType === 'upcoming') {
             $results = $results
                 ->where('status', 'Not yet aired')
                 ->orderBy('members', 'desc');
+
+            return $results;
         }
 
         if (!is_null($filterType) && $filterType === 'bypopularity') {
             $results = $results
                 ->orderBy('members', 'desc');
+
+            return $results;
         }
 
         if (!is_null($filterType) && $filterType === 'favorite') {
             $results = $results
                 ->orderBy('favorites', 'desc');
+
+            return $results;
         }
+
+        $results = $results
+            ->whereNotNull('rank')
+            ->where('rank', '>', 0)
+            ->orderBy('rank', 'asc');
 
         return $results;
     }
