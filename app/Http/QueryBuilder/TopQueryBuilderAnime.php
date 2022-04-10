@@ -59,11 +59,15 @@ class TopQueryBuilderAnime implements SearchQueryBuilderInterface
         $animeType = self::mapType($request->get('type'));
         $filterType = self::mapFilter($request->get('filter'));
 
+        // MAL formula:
+        // Top All Anime sorted by rank
+        // Top Airing sorted by rank
+        // Top TV, Movie, OVA, ONA, Specials ordered by rank
+        // Top Upcoming ordered by members
+        // Most popular ordered by members
+        // Most favorites ordered by most favorites
+
         $results = $results
-            ->whereNotNull('rank')
-            ->where('rank', '>', 0)
-            ->orderBy('rank', 'asc')
-            ->where('status', '!=', 'Not yet aired')
             ->where('rating', '!=', 'Rx - Hentai');
 
         if (!is_null($animeType)) {
@@ -73,12 +77,16 @@ class TopQueryBuilderAnime implements SearchQueryBuilderInterface
 
         if (!is_null($filterType) && $filterType === 'airing') {
             $results = $results
-                ->where('airing', true);
+                ->where('airing', true)
+                ->whereNotNull('rank')
+                ->where('rank', '>', 0)
+                ->orderBy('rank', 'asc');
         }
 
         if (!is_null($filterType) && $filterType === 'upcoming') {
             $results = $results
-                ->where('status', 'Not yet aired');
+                ->where('status', 'Not yet aired')
+                ->orderBy('members', 'desc');
         }
 
         if (!is_null($filterType) && $filterType === 'bypopularity') {
