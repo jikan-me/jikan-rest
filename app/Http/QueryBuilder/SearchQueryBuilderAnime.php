@@ -224,9 +224,12 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 $producer = (int) $producer;
 
                 $results = $results
-                    ->orWhere('producers.mal_id', $producer)
-                    ->orWhere('licensors.mal_id', $producer)
-                    ->orWhere('studios.mal_id', $producer);
+                    ->where(function ($query) use ($producer) {
+                        return $query
+                            ->orWhere('producers.mal_id', $producer)
+                            ->orWhere('licensors.mal_id', $producer)
+                            ->orWhere('studios.mal_id', $producer);
+                    });
             }
         }
 
@@ -241,10 +244,13 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 $genre = (int) $genre;
 
                 $results = $results
-                    ->orWhere('genres.mal_id', $genre)
-                    ->orWhere('demographics.mal_id', $genre)
-                    ->orWhere('themes.mal_id', $genre)
-                    ->orWhere('explicit_genres.mal_id', $genre);
+                    ->where(function ($query) use ($genre) {
+                        return $query
+                            ->orWhere('genres.mal_id', $genre)
+                            ->orWhere('demographics.mal_id', $genre)
+                            ->orWhere('themes.mal_id', $genre)
+                            ->orWhere('explicit_genres.mal_id', $genre);
+                    });
             }
         }
 
@@ -259,10 +265,14 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                 $genreExclude = (int) $genreExclude;
 
                 $results = $results
-                    ->where('genres.mal_id', '!=', $genreExclude)
-                    ->where('demographics.mal_id', '!=', $genreExclude)
-                    ->where('themes.mal_id', '!=', $genreExclude)
-                    ->where('explicit_genres.mal_id', '!=', $genreExclude);
+                    ->where(function ($query) use ($genreExclude) {
+                        return $query
+                            ->where('genres.mal_id', '!=', $genreExclude)
+                            ->where('demographics.mal_id', '!=', $genreExclude)
+                            ->where('themes.mal_id', '!=', $genreExclude)
+                            ->where('explicit_genres.mal_id', '!=', $genreExclude);
+                    });
+
             }
         }
 
