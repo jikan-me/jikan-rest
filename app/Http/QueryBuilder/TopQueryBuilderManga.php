@@ -44,9 +44,6 @@
             $filterType = self::mapFilter($request->get('filter'));
     
             $results = $results
-                ->whereNotNull('rank')
-                ->where('rank', '>', 0)
-                ->orderBy('rank', 'asc')
                 ->where('type', '!=', 'Doujinshi');
     
             if (!is_null($mangaType)) {
@@ -56,12 +53,15 @@
     
             if (!is_null($filterType) && $filterType === 'publishing') {
                 $results = $results
-                    ->where('publishing', true);
+                    ->where('publishing', true)
+                    ->whereNotNull('rank')
+                    ->where('rank', '>', 0)
+                    ->orderBy('rank', 'asc');
             }
     
             if (!is_null($filterType) && $filterType === 'bypopularity') {
                 $results = $results
-                    ->orderBy('popularity', 'desc');
+                    ->orderBy('members', 'desc');
             }
     
             if (!is_null($filterType) && $filterType === 'favorite') {

@@ -272,7 +272,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
                             ->where('themes.mal_id', '!=', $genreExclude)
                             ->where('explicit_genres.mal_id', '!=', $genreExclude);
                     });
-
             }
         }
 

@@ -208,10 +208,13 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
                 $genre = (int) $genre;
 
                 $results = $results
-                    ->orWhere('genres.mal_id', $genre)
-                    ->orWhere('demographics.mal_id', $genre)
-                    ->orWhere('themes.mal_id', $genre)
-                    ->orWhere('explicit_genres.mal_id', $genre);
+                    ->where(function ($query) use ($genre) {
+                        return $query
+                            ->orWhere('genres.mal_id', $genre)
+                            ->orWhere('demographics.mal_id', $genre)
+                            ->orWhere('themes.mal_id', $genre)
+                            ->orWhere('explicit_genres.mal_id', $genre);
+                    });
             }
         }
 
@@ -226,10 +229,13 @@ class SearchQueryBuilderManga implements SearchQueryBuilderInterface
                 $genreExclude = (int) $genreExclude;
 
                 $results = $results
-                    ->where('genres.mal_id', '!=', $genreExclude)
-                    ->where('demographics.mal_id', '!=', $genreExclude)
-                    ->where('themes.mal_id', '!=', $genreExclude)
-                    ->where('explicit_genres.mal_id', '!=', $genreExclude);
+                    ->where(function ($query) use ($genreExclude) {
+                        return $query
+                            ->where('genres.mal_id', '!=', $genreExclude)
+                            ->where('demographics.mal_id', '!=', $genreExclude)
+                            ->where('themes.mal_id', '!=', $genreExclude)
+                            ->where('explicit_genres.mal_id', '!=', $genreExclude);
+                    });
             }
         }
 
