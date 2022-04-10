@@ -23,8 +23,9 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/anime', [
-    'uses' => 'SearchController@anime'
+    'uses' => env('ELASTICSEARCH', false) ? 'ElasticSearchController@anime' : 'SearchController@anime'
 ]);
+
 
 $router->group(
     [

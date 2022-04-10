@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55e468117b87175f71fe77f3db671e9e",
+    "content-hash": "1168ceaafba4b640016a4f14164f3d07",
     "packages": [
         {
             "name": "brick/math",
@@ -198,97 +198,6 @@
                 }
             ],
             "time": "2022-02-21T13:15:14+00:00"
-        },
-        {
-            "name": "cviebrock/laravel-elasticsearch",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jikan-me/laravel-elasticsearch.git",
-                "reference": "c06032c816760c63f046f636f5e487db2d368215"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/laravel-elasticsearch/zipball/c06032c816760c63f046f636f5e487db2d368215",
-                "reference": "c06032c816760c63f046f636f5e487db2d368215",
-                "shasum": ""
-            },
-            "require": {
-                "elasticsearch/elasticsearch": "^8.1",
-                "ext-json": "*",
-                "guzzlehttp/psr7": "^1.7",
-                "illuminate/contracts": "^7.0|^8.0|^9.0",
-                "illuminate/support": "^7.0|^8.0|^9.0",
-                "php": "^7.3|^8.0",
-                "psr/http-message": "^1.0"
-            },
-            "require-dev": {
-                "limedeck/phpunit-detailed-printer": "^6.0",
-                "mockery/mockery": "^1.4.3",
-                "orchestra/testbench": "^6.5|^7.0",
-                "phpunit/phpunit": "^9.4"
-            },
-            "suggest": {
-                "aws/aws-sdk-php": "Required to connect to an Elasticsearch host on AWS (^3.80)"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Cviebrock\\LaravelElasticsearch\\ServiceProvider"
-                    ],
-                    "aliases": {
-                        "Elasticsearch": "Cviebrock\\LaravelElasticsearch\\Facade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Cviebrock\\LaravelElasticsearch\\": "src"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Cviebrock\\LaravelElasticsearch\\Tests\\": "tests"
-                }
-            },
-            "scripts": {
-                "fresh": [
-                    "rm -rf vendor composer.lock",
-                    "composer install"
-                ],
-                "tests": [
-                    "php vendor/bin/phpunit"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Colin Viebrock",
-                    "email": "colin@viebrock.ca"
-                }
-            ],
-            "description": "An easy way to use the official PHP ElasticSearch client in your Laravel applications.",
-            "homepage": "https://github.com/cviebrock/laravel-elasticsearch",
-            "keywords": [
-                "client",
-                "elasticsearch",
-                "laravel",
-                "search"
-            ],
-            "support": {
-                "source": "https://github.com/jikan-me/laravel-elasticsearch/tree/master"
-            },
-            "funding": [
-                {
-                    "type": "github",
-                    "url": "https://github.com/cviebrock"
-                }
-            ],
-            "time": "2022-04-10T02:10:18+00:00"
         },
         {
             "name": "danielmewes/php-rql",
@@ -10502,8 +10411,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "danielmewes/php-rql": 20,
-        "jikan-me/jikan": 20,
-        "cviebrock/laravel-elasticsearch": 20
+        "jikan-me/jikan": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
