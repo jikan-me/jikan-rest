@@ -78,7 +78,7 @@ resume-name = "default"
 resume-strategy = 1
 
 # exclude documents whose namespace matches the following pattern
-namespace-exclude-regex = '^mydb\.ignorecollection$'
+#namespace-exclude-regex = '^mydb\.ignorecollection$'
 
 # turn on indexing of GridFS file content
 index-files = true
