@@ -32,20 +32,45 @@ class ElasticSearchController extends Controller
             ->setBasicAuthentication(env('ELASTICSEARCH_USER', 'elastic'), env('ELASTICSEARCH_PASS', ''))
             ->build();
 
+//        $response = $client->search([
+//            'index' => 'jikan.anime',
+//            'body' => [
+//                'query' => [
+//                    'multi_match' => [
+//                        'query' => $q,
+//                        'fields' => ['title^3', 'title_english^2', 'title_japanese', 'title_synonyms']
+//                    ]
+//                ]
+//            ]
+//        ]);
+
         $response = $client->search([
             'index' => 'jikan.anime',
             'body' => [
                 'query' => [
                     'multi_match' => [
                         'query' => $q,
-                        'fields' => ['title^3', 'title_english', 'title_japanese', 'title_synonyms']
+                        'type' => 'most_fields',
+                        'fields' => ['title^3', 'title_english^2', 'title_japanese', 'title_synonyms'],
+
                     ]
                 ]
             ]
         ]);
 
-        var_dump($response['hits']['hits']);
-        die;
+
+
+        $arr = [];
+        foreach ($response['hits']['hits'] as $result) {
+            $arr[] = [
+                'title' => $result['_source']['title'],
+                'title_english' => $result['_source']['title_english'],
+                'title_japanese' => $result['_source']['title_japanese'],
+                'title_synonyms' => implode(", ", $result['_source']['title_synonyms']),
+            ];
+        }
+
+        return response()->json($arr);
     }
 
 }
