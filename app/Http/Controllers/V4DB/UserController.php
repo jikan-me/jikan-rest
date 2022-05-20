@@ -795,6 +795,8 @@ class UserController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
+     *      @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user reviews",
@@ -903,6 +905,8 @@ class UserController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
+     *      @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Recent Anime Recommendations",
@@ -955,6 +959,8 @@ class UserController extends Controller
      *       required=true,
      *       @OA\Schema(type="string")
      *     ),
+     *
+     *      @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",

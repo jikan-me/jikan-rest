@@ -46,6 +46,8 @@ class ScheduleController extends Controller
      *     operationId="getSchedules",
      *     tags={"schedules"},
      *
+     *      @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *      @OA\Parameter(
      *          name="filter",
      *          in="query",

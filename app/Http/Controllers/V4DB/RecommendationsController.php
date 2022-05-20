@@ -21,6 +21,8 @@ class RecommendationsController extends Controller
      *     operationId="getRecentAnimeRecommendations",
      *     tags={"recommendations"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns recent anime recommendations",
@@ -69,6 +71,8 @@ class RecommendationsController extends Controller
      *     path="/recommendations/manga",
      *     operationId="getRecentMangaRecommendations",
      *     tags={"recommendations"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",

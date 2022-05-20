@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Jikan API",
-        "description": "[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.\r\nIt scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.\r\n\r\n# Information\r\n\r\n⚡ Jikan is powered by it's awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)\r\n\r\n## Rate Limiting\r\n\r\n| Duration | Requests |\r\n|----|----|\r\n| Monthly | **Unlimited** |\r\n| Per Minute | 60 requests |\r\n| Per Second | 3 requests |\r\n\r\n\r\n## JSON Notes\r\n- Any property (except arrays or objects) whose value does not exist or is undetermined, will be `null`.\r\n- Any array or object property whose value does not exist or is undetermined, will be empty.\r\n- Any `score` property whose value does not exist or is undetermined, will be `0`.\r\n- All dates and timestamps are returned in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format and in UTC timezone\r\n\r\n## Caching\r\nBy **CACHING**, we refer to the data parsed from MyAnimeList which is stored temporarily on our servers to provide better API performance.\r\n\r\nAll requests, by default are cached for **24 hours** except the following endpoints which have their own unique cache **Time To Live**.\r\n\r\n| Request | TTL |\r\n| ---- | ---- |\r\n| All (Default) | 24 hours |\r\n| User Anime/Manga List | 5 minutes |\r\n\r\n\r\nThe following response headers will detail cache information.\r\n\r\n| Header | Remarks |\r\n| ---- | ---- |\r\n| `Expires` | Expiry unix timestamp |\r\n\r\n\r\n## Allowed HTTP(s) requests\r\n\r\n**Jikan REST API does not provide authenticated requests for MyAnimeList.** This means you can not use it to update your anime/manga list.\r\nOnly GET requests are supported which return READ-ONLY data.\r\n\r\n## HTTP Responses\r\n\r\n| HTTP Status | Remarks |\r\n| ---- | ---- |\r\n| `200 - OK` | The request was successful |\r\n| `304 - Not Modified` | You have the latest data (Cache Validation response) |\r\n| `400 - Bad Request` | You've made an invalid request. Recheck documentation |\r\n| `404 - Not Found` | The resource was not found or MyAnimeList responded with a `404` |\r\n| `405 - Method Not Allowed` | Requested Method is not supported for resource. Only `GET` requests are allowed |\r\n| `429 - Too Many Request` | You are being rate limited by Jikan or MyAnimeList is rate-limiting our servers (specified in the error response) |\r\n| `500 - Internal Server Error` | Something is not working on our end. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |\r\n| `503 - Service Unavailable` | The service has broke. |\r\n\r\n\r\n## JSON Error Response\r\n\r\n```json\r\n {\r\n     \"status\": 404,\r\n     \"type\": \"BadResponseException\",\r\n     \"message\": \"Resource does not exist\",\r\n     \"error\": \"Something Happened\",\r\n     \"report_url\": \"https://github.com...\"\r\n  }\r\n```\r\n\r\n| Property | Remarks |\r\n| ---- | ---- |\r\n| `status` | Returned HTTP Status Code |\r\n| `type` | Thrown Exception |\r\n| `message` | Human-readable error message |\r\n| `error` | Error response and trace from the API |\r\n| `report_url` | Clicking this would redirect you to a generated GitHub issue. ℹ It's only returned on a parser error. |\r\n\r\n\r\n## Cache Validation\r\n\r\n- All requests return a `ETag` header which is an MD5 hash of the response\r\n- You can use this hash to verify if there's new or updated content by suppliying it as the value for the `If-None-Match` in your next request header\r\n- You will get a HTTP `304 - Not Modified` response if the content has not changed\r\n- If the content has changed, you'll get a HTTP `200 - OK` response with the updated JSON response\r\n\r\n![Cache Validation](https://i.imgur.com/925ozVn.png 'Cache Validation')\r\n\r\n## Disclaimer\r\n\r\n- Jikan is not affiliated with MyAnimeList.net.\r\n- Jikan is a free, open-source API. Please use it responsibly.\r\n\r\n----\r\n\r\nBy using the API, you are agreeing to Jikan's [terms of use](https://jikan.moe/terms) policy.\r\n\r\n[v3 Documentation](https://jikan.docs.apiary.io/) - [Wrappers/SDKs](https://github.com/jikan-me/jikan#wrappers) - [Report an issue](https://github.com/jikan-me/jikan-rest/issues/new) - [Host your own server](https://github.com/jikan-me/jikan-rest)",
+        "description": "[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.\r\nIt scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.\r\n\r\n# Information\r\n\r\n⚡ Jikan is powered by it's awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)\r\n\r\n## Rate Limiting\r\n\r\n| Duration | Requests |\r\n|----|----|\r\n| Monthly | **Unlimited** |\r\n| Per Minute | 60 requests |\r\n| Per Second | 3 requests |\r\n\r\n\r\n## JSON Notes\r\n- Any property (except arrays or objects) whose value does not exist or is undetermined, will be `null`.\r\n- Any array or object property whose value does not exist or is undetermined, will be empty.\r\n- Any `score` property whose value does not exist or is undetermined, will be `0`.\r\n- All dates and timestamps are returned in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format and in UTC timezone\r\n\r\n## Caching\r\nBy **CACHING**, we refer to the data parsed from MyAnimeList which is stored temporarily on our servers to provide better API performance.\r\n\r\nAll requests, by default are cached for **24 hours** except the following endpoints which have their own unique cache **Time To Live**. \r\n\r\n| Request | TTL |\r\n| ---- | ---- |\r\n| All (Default) | 24 hours |\r\n\r\n\r\nThe following response headers will detail cache information.\r\n\r\n| Header | Remarks |\r\n| ---- | ---- |\r\n| `Expires` | Cache expiry date |\r\n| `Last-Modified` | Cache set date |\r\n| `X-Request-Fingerprint` | Unique request fingerprint |\r\n\r\n\r\nNote: Caching headers will only be available on single resource requests and their child endpoints. e.g `/anime/1`, `/anime/1/relations`. \r\nThey won't be available on pages which perform queries, like /anime, or /top/anime, etc.\r\n\r\n## Allowed HTTP(s) requests\r\n\r\n**Jikan REST API does not provide authenticated requests for MyAnimeList.** This means you can not use it to update your anime/manga list.\r\nOnly GET requests are supported which return READ-ONLY data.\r\n\r\n## HTTP Responses\r\n\r\n| HTTP Status | Remarks |\r\n| ---- | ---- |\r\n| `200 - OK` | The request was successful |\r\n| `304 - Not Modified` | You have the latest data (Cache Validation response) |\r\n| `400 - Bad Request` | You've made an invalid request. Recheck documentation |\r\n| `404 - Not Found` | The resource was not found or MyAnimeList responded with a `404` |\r\n| `405 - Method Not Allowed` | Requested Method is not supported for resource. Only `GET` requests are allowed |\r\n| `429 - Too Many Request` | You are being rate limited by Jikan or MyAnimeList is rate-limiting our servers (specified in the error response) |\r\n| `500 - Internal Server Error` | Something is not working on our end. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |\r\n| `503 - Service Unavailable` | The service has broke. |\r\n\r\n\r\n## JSON Error Response\r\n\r\n```json\r\n {\r\n     \"status\": 404,\r\n     \"type\": \"BadResponseException\",\r\n     \"message\": \"Resource does not exist\",\r\n     \"error\": \"Something Happened\",\r\n     \"report_url\": \"https://github.com...\"\r\n  }\r\n```\r\n\r\n| Property | Remarks |\r\n| ---- | ---- |\r\n| `status` | Returned HTTP Status Code |\r\n| `type` | Thrown Exception |\r\n| `message` | Human-readable error message |\r\n| `error` | Error response and trace from the API |\r\n| `report_url` | Clicking this would redirect you to a generated GitHub issue. ℹ It's only returned on a parser error. |\r\n\r\n\r\n## Cache Validation\r\n\r\n- All requests return a `ETag` header which is an MD5 hash of the response\r\n- You can use this hash to verify if there's new or updated content by suppliying it as the value for the `If-None-Match` in your next request header\r\n- You will get a HTTP `304 - Not Modified` response if the content has not changed\r\n- If the content has changed, you'll get a HTTP `200 - OK` response with the updated JSON response\r\n\r\n![Cache Validation](https://i.imgur.com/925ozVn.png 'Cache Validation')\r\n\r\n## Disclaimer\r\n\r\n- Jikan is not affiliated with MyAnimeList.net.\r\n- Jikan is a free, open-source API. Please use it responsibly.\r\n\r\n----\r\n\r\nBy using the API, you are agreeing to Jikan's [terms of use](https://jikan.moe/terms) policy.\r\n\r\n[v3 Documentation](https://jikan.docs.apiary.io/) - [Wrappers/SDKs](https://github.com/jikan-me/jikan#wrappers) - [Report an issue](https://github.com/jikan-me/jikan-rest/issues/new) - [Host your own server](https://github.com/jikan-me/jikan-rest)",
         "termsOfService": "https://jikan.moe/terms",
         "contact": {
             "name": "API Support (Discord)",
@@ -941,12 +941,6 @@
                 "operationId": "getAnimeGenres",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    },
-                    {
                         "name": "filter",
                         "in": "query",
                         "schema": {
@@ -978,12 +972,6 @@
                 ],
                 "operationId": "getMangaGenres",
                 "parameters": [
-                    {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    },
                     {
                         "name": "filter",
                         "in": "query",
@@ -1803,6 +1791,11 @@
                     "recommendations"
                 ],
                 "operationId": "getRecentAnimeRecommendations",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns recent anime recommendations",
@@ -1826,6 +1819,11 @@
                     "recommendations"
                 ],
                 "operationId": "getRecentMangaRecommendations",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns recent manga recommendations",
@@ -1849,54 +1847,17 @@
                     "reviews"
                 ],
                 "operationId": "getRecentAnimeReviews",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns recent anime reviews",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "properties": {
-                                                        "data": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "allOf": [
-                                                                    {
-                                                                        "properties": {
-                                                                            "user": {
-                                                                                "$ref": "#/components/schemas/user_meta"
-                                                                            }
-                                                                        },
-                                                                        "type": "object"
-                                                                    },
-                                                                    {
-                                                                        "properties": {
-                                                                            "anime": {
-                                                                                "$ref": "#/components/schemas/anime_meta"
-                                                                            }
-                                                                        },
-                                                                        "type": "object"
-                                                                    },
-                                                                    {
-                                                                        "$ref": "#/components/schemas/anime_review"
-                                                                    }
-                                                                ]
-                                                            }
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                },
-                                                {
-                                                    "$ref": "#/components/schemas/pagination"
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {}
                             }
                         }
                     },
@@ -1912,54 +1873,17 @@
                     "reviews"
                 ],
                 "operationId": "getRecentMangaReviews",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns recent manga reviews",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "properties": {
-                                                        "data": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "allOf": [
-                                                                    {
-                                                                        "properties": {
-                                                                            "user": {
-                                                                                "$ref": "#/components/schemas/user_meta"
-                                                                            }
-                                                                        },
-                                                                        "type": "object"
-                                                                    },
-                                                                    {
-                                                                        "properties": {
-                                                                            "manga": {
-                                                                                "$ref": "#/components/schemas/manga_meta"
-                                                                            }
-                                                                        },
-                                                                        "type": "object"
-                                                                    },
-                                                                    {
-                                                                        "$ref": "#/components/schemas/manga_review"
-                                                                    }
-                                                                ]
-                                                            }
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                },
-                                                {
-                                                    "$ref": "#/components/schemas/pagination"
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {}
                             }
                         }
                     },
@@ -1976,6 +1900,9 @@
                 ],
                 "operationId": "getSchedules",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
                     {
                         "name": "filter",
                         "in": "query",
@@ -2643,6 +2570,9 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -2668,6 +2598,11 @@
                     "seasons"
                 ],
                 "operationId": "getSeasonNow",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns current seasonal anime",
@@ -2714,6 +2649,11 @@
                     "seasons"
                 ],
                 "operationId": "getSeasonUpcoming",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns upcoming season's anime",
@@ -2762,6 +2702,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     }
                 ],
                 "responses": {
@@ -2812,6 +2755,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     }
                 ],
                 "responses": {
@@ -2840,6 +2786,9 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     }
                 ],
                 "responses": {
@@ -2868,6 +2817,9 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     }
                 ],
                 "responses": {
@@ -3308,6 +3260,9 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -3408,6 +3363,9 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -3441,6 +3399,9 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -3466,6 +3427,11 @@
                     "watch"
                 ],
                 "operationId": "getWatchRecentEpisodes",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Recently Added Episodes",
@@ -3489,6 +3455,11 @@
                     "watch"
                 ],
                 "operationId": "getWatchPopularEpisodes",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Popular Episodes",
@@ -3535,6 +3506,11 @@
                     "watch"
                 ],
                 "operationId": "getWatchPopularPromos",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Popular Promotional Videos",

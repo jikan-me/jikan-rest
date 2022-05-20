@@ -19,42 +19,40 @@ class ReviewsController extends Controller
      *     operationId="getRecentAnimeReviews",
      *     tags={"reviews"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns recent anime reviews",
      *         @OA\JsonContent(
-     *              @OA\Property(
-     *                  property="data",
-     *                  allOf={
-     *                      @OA\Schema(ref="#/components/schemas/pagination"),
-     *                      @OA\Schema(
-     *                          @OA\Property(
-     *                               property="data",
-     *                               type="array",
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                       property="data",
+     *                       type="array",
      *
-     *                               @OA\Items(
-     *                                   allOf={
-     *                                       @OA\Schema(ref="#/components/schemas/anime_review"),
-     *                                       @OA\Schema(
-     *                                          @OA\Property(
-     *                                              property="anime",
-     *                                              type="object",
-     *                                              ref="#/components/schemas/anime_meta",
-     *                                          ),
-     *                                      ),
-     *                                       @OA\Schema(
-     *                                          @OA\Property(
-     *                                              property="user",
-     *                                              type="object",
-     *                                              ref="#/components/schemas/user_meta",
-     *                                          ),
-     *                                      ),
-     *                                   }
-     *                               )
-     *                          ),
-     *                      )
-     *                  }
-     *              )
+     *                       @OA\Items(
+     *                           allOf={
+     *                               @OA\Schema(ref="#/components/schemas/anime_review"),
+     *                               @OA\Schema(
+     *                                  @OA\Property(
+     *                                      property="anime",
+     *                                      type="object",
+     *                                      ref="#/components/schemas/anime_meta",
+     *                                  ),
+     *                              ),
+     *                               @OA\Schema(
+     *                                  @OA\Property(
+     *                                      property="user",
+     *                                      type="object",
+     *                                      ref="#/components/schemas/user_meta",
+     *                                  ),
+     *                              ),
+     *                           }
+     *                       )
+     *                  ),
+     *              ),
      *         )
      *     ),
      *     @OA\Response(
@@ -98,43 +96,41 @@ class ReviewsController extends Controller
      *     operationId="getRecentMangaReviews",
      *     tags={"reviews"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns recent manga reviews",
      *         @OA\JsonContent(
-     *              @OA\Property(
-     *                  property="data",
-     *                  allOf={
-     *                      @OA\Schema(ref="#/components/schemas/pagination"),
-     *                      @OA\Schema(
-     *                          @OA\Property(
-     *                               property="data",
-     *                               type="array",
      *
-     *                               @OA\Items(
-     *                                   allOf={
-     *                                       @OA\Schema(ref="#/components/schemas/manga_review"),
-     *                                       @OA\Schema(
-     *                                          @OA\Property(
-     *                                              property="manga",
-     *                                              type="object",
-     *                                              ref="#/components/schemas/manga_meta",
-     *                                          ),
-     *                                      ),
-     *                                       @OA\Schema(
-     *                                          @OA\Property(
-     *                                              property="user",
-     *                                              type="object",
-     *                                              ref="#/components/schemas/user_meta",
-     *                                          ),
-     *                                      ),
-     *                                   }
-     *                               )
-     *                          ),
-     *                      )
-     *                  }
-     *              )
-     *         )
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                       property="data",
+     *                       type="array",
+     *
+     *                       @OA\Items(
+     *                           allOf={
+     *                               @OA\Schema(ref="#/components/schemas/manga_review"),
+     *                               @OA\Schema(
+     *                                  @OA\Property(
+     *                                      property="anime",
+     *                                      type="object",
+     *                                      ref="#/components/schemas/manga_meta",
+     *                                  ),
+     *                              ),
+     *                               @OA\Schema(
+     *                                  @OA\Property(
+     *                                      property="user",
+     *                                      type="object",
+     *                                      ref="#/components/schemas/user_meta",
+     *                                  ),
+     *                              ),
+     *                           }
+     *                       )
+     *                  ),
+     *              ),
+     *         ),
      *     ),
      *     @OA\Response(
      *         response="400",
