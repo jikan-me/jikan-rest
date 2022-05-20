@@ -2019,6 +2019,9 @@
                                 "false"
                             ]
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     }
                 ],
                 "responses": {
@@ -2155,6 +2158,22 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -2281,6 +2300,22 @@
                         "name": "magazines",
                         "in": "query",
                         "description": "Filter by magazine(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
                         "schema": {
                             "type": "string"
                         }

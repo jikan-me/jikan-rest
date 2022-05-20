@@ -70,6 +70,8 @@ class ScheduleController extends Controller
      *          @OA\Schema(type="string",enum={"true", "false"})
      *      ),
      *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns weekly schedule",
