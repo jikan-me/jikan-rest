@@ -318,7 +318,7 @@ $router->group(
                     'uses' => 'UserController@history'
                 ]);
 
-                $router->get('/friends[/{page:[0-9]+}]', [
+                $router->get('/friends', [
                     'uses' => 'UserController@friends'
                 ]);
 
