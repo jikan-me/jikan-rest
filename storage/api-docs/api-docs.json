@@ -3206,6 +3206,9 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
                     }
                 ],
                 "responses": {
@@ -3230,7 +3233,7 @@
                 "tags": [
                     "users"
                 ],
-                "description": "Anime lists will be discontinued from May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+                "description": "User Anime lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
                 "operationId": "getUserAnimelist",
                 "parameters": [
                     {
@@ -3263,7 +3266,7 @@
                 "tags": [
                     "users"
                 ],
-                "description": "Manga lists will be discontinued from May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+                "description": "User Manga lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
                 "operationId": "getUserMangaList",
                 "parameters": [
                     {

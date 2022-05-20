@@ -541,6 +541,8 @@ class UserController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user friends",
@@ -631,7 +633,7 @@ class UserController extends Controller
      *     operationId="getUserAnimelist",
      *     tags={"users"},
      *     deprecated=true,
-     *     description="Anime lists will be discontinued from May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+     *     description="User Anime lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
      *
      *     @OA\Parameter(
      *       name="username",
@@ -708,7 +710,7 @@ class UserController extends Controller
      *     operationId="getUserMangaList",
      *     tags={"users"},
      *     deprecated=true,
-     *     description="Manga lists will be discontinued from May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+     *     description="User Manga lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
      *
      *     @OA\Parameter(
      *       name="username",
