@@ -55,7 +55,7 @@ class UserProfileAnimeListResource extends JsonResource
             'watching_status' => $this['watching_status'],
             'score' => $this['score'],
             'episodes_watched' => $this['watched_episodes'],
-            'tags' => $this['tags'],
+            'tags' => (string) $this['tags'],
             'is_rewatching' => $this['is_rewatching'],
             'watch_start_date' => $this['watch_start_date'],
             'watch_end_date' => $this['watch_end_date'],
