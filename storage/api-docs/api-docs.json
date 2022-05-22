@@ -21,6 +21,44 @@
         }
     ],
     "paths": {
+        "/anime/{id}/full": {
+            "get": {
+                "tags": [
+                    "anime"
+                ],
+                "operationId": "getAnimeFullById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns complete anime resource data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/anime_full"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/anime/{id}": {
             "get": {
                 "tags": [
@@ -626,6 +664,39 @@
                 }
             }
         },
+        "/characters/{id}/full": {
+            "get": {
+                "tags": [
+                    "characters"
+                ],
+                "operationId": "getCharacterFullById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns complete character resource data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/character_full"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/characters/{id}": {
             "get": {
                 "tags": [
@@ -1015,6 +1086,39 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/magazines"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/manga/{id}/full": {
+            "get": {
+                "tags": [
+                    "manga"
+                ],
+                "operationId": "getMangaFullById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns complete anime resource data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/manga_full"
                                 }
                             }
                         }
@@ -1442,6 +1546,39 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/external_links"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/people/{id}/full": {
+            "get": {
+                "tags": [
+                    "people"
+                ],
+                "operationId": "getPersonFullById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns complete character resource data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/person_full"
                                 }
                             }
                         }
@@ -2934,6 +3071,39 @@
                 }
             }
         },
+        "/users/{username}/full": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getUserFullProfile",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns complete user resource data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/user_profile_full"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/users/{username}": {
             "get": {
                 "tags": [
@@ -4292,6 +4462,256 @@
                 },
                 "type": "object"
             },
+            "anime_full": {
+                "description": "Full anime Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/anime_images"
+                    },
+                    "trailer": {
+                        "$ref": "#/components/schemas/trailer_base"
+                    },
+                    "title": {
+                        "description": "Title",
+                        "type": "string"
+                    },
+                    "title_english": {
+                        "nullable": true,
+                        "description": "English Title",
+                        "type": "string"
+                    },
+                    "title_japanese": {
+                        "nullable": true,
+                        "description": "Japanese Title",
+                        "type": "string"
+                    },
+                    "title_synonyms": {
+                        "description": "Other Titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "type": {
+                        "nullable": true,
+                        "description": "Anime Type",
+                        "type": "string",
+                        "enum": [
+                            "TV",
+                            "OVA",
+                            "Movie",
+                            "Special",
+                            "ONA",
+                            "Music"
+                        ]
+                    },
+                    "source": {
+                        "nullable": true,
+                        "description": "Original Material/Source adapted from",
+                        "type": "string"
+                    },
+                    "episodes": {
+                        "nullable": true,
+                        "description": "Episode count",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "nullable": true,
+                        "description": "Airing status",
+                        "type": "string",
+                        "enum": [
+                            "Finished Airing",
+                            "Currently Airing",
+                            "Not yet aired"
+                        ]
+                    },
+                    "airing": {
+                        "description": "Airing boolean",
+                        "type": "boolean"
+                    },
+                    "aired": {
+                        "$ref": "#/components/schemas/daterange"
+                    },
+                    "duration": {
+                        "nullable": true,
+                        "description": "Parsed raw duration",
+                        "type": "string"
+                    },
+                    "rating": {
+                        "nullable": true,
+                        "description": "Anime audience rating",
+                        "type": "string",
+                        "enum": [
+                            "G - All Ages",
+                            "PG - Children",
+                            "PG-13 - Teens 13 or older",
+                            "R - 17+ (violence & profanity)",
+                            "R+ - Mild Nudity",
+                            "Rx - Hentai"
+                        ]
+                    },
+                    "score": {
+                        "nullable": true,
+                        "description": "Score",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "scored_by": {
+                        "nullable": true,
+                        "description": "Number of users",
+                        "type": "integer"
+                    },
+                    "rank": {
+                        "nullable": true,
+                        "description": "Ranking",
+                        "type": "integer"
+                    },
+                    "popularity": {
+                        "nullable": true,
+                        "description": "Popularity",
+                        "type": "integer"
+                    },
+                    "members": {
+                        "nullable": true,
+                        "description": "Number of users who have added this entry to their list",
+                        "type": "integer"
+                    },
+                    "favorites": {
+                        "nullable": true,
+                        "description": "Number of users who have favorited this entry",
+                        "type": "integer"
+                    },
+                    "synopsis": {
+                        "nullable": true,
+                        "description": "Synopsis",
+                        "type": "string"
+                    },
+                    "background": {
+                        "nullable": true,
+                        "description": "Background",
+                        "type": "string"
+                    },
+                    "season": {
+                        "nullable": true,
+                        "description": "Season",
+                        "type": "string",
+                        "enum": [
+                            "Summer",
+                            "Winter",
+                            "Spring",
+                            "Fall"
+                        ]
+                    },
+                    "year": {
+                        "nullable": true,
+                        "description": "Year",
+                        "type": "integer"
+                    },
+                    "broadcast": {
+                        "$ref": "#/components/schemas/broadcast"
+                    },
+                    "producers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "licensors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "studios": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "genres": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "explicit_genres": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "themes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "demographics": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "relations": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "relation": {
+                                    "description": "Relation type",
+                                    "type": "string"
+                                },
+                                "entry": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/mal_url"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "theme": {
+                        "properties": {
+                            "openings": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "endings": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "external": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "anime_relations": {
                 "description": "Anime Relations",
                 "properties": {
@@ -4730,6 +5150,93 @@
                         "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
+            },
+            "character_full": {
+                "description": "Character Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/character_images"
+                    },
+                    "name": {
+                        "description": "Name",
+                        "type": "string"
+                    },
+                    "name_kanji": {
+                        "nullable": true,
+                        "description": "Name",
+                        "type": "string"
+                    },
+                    "nicknames": {
+                        "description": "Other Names",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "favorites": {
+                        "description": "Number of users who have favorited this entry",
+                        "type": "integer"
+                    },
+                    "about": {
+                        "nullable": true,
+                        "description": "Biography",
+                        "type": "string"
+                    },
+                    "anime": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "role": {
+                                    "description": "Character's Role",
+                                    "type": "string"
+                                },
+                                "anime": {
+                                    "$ref": "#/components/schemas/anime_meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "manga": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "role": {
+                                    "description": "Character's Role",
+                                    "type": "string"
+                                },
+                                "manga": {
+                                    "$ref": "#/components/schemas/manga_meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "voices": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "language": {
+                                    "description": "Character's Role",
+                                    "type": "string"
+                                },
+                                "person": {
+                                    "$ref": "#/components/schemas/person_meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
             },
             "character_manga": {
                 "description": "Character casted in manga",
@@ -5758,6 +6265,193 @@
                     }
                 ]
             },
+            "manga_full": {
+                "description": "Manga Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/manga_images"
+                    },
+                    "title": {
+                        "description": "Title",
+                        "type": "string"
+                    },
+                    "title_english": {
+                        "nullable": true,
+                        "description": "English Title",
+                        "type": "string"
+                    },
+                    "title_japanese": {
+                        "nullable": true,
+                        "description": "Japanese Title",
+                        "type": "string"
+                    },
+                    "title_synonyms": {
+                        "description": "Other Titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "type": {
+                        "nullable": true,
+                        "description": "Manga Type",
+                        "type": "string",
+                        "enum": [
+                            "Manga",
+                            "Novel",
+                            "One-shot",
+                            "Doujinshi",
+                            "Manhua",
+                            "Manhwa",
+                            "OEL"
+                        ]
+                    },
+                    "chapters": {
+                        "nullable": true,
+                        "description": "Chapter count",
+                        "type": "integer"
+                    },
+                    "volumes": {
+                        "nullable": true,
+                        "description": "Volume count",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "description": "Publishing status",
+                        "type": "string",
+                        "enum": [
+                            "Finished",
+                            "Publishing",
+                            "On Hiatus",
+                            "Discontinued",
+                            "Not yet published"
+                        ]
+                    },
+                    "publishing": {
+                        "description": "Publishing boolean",
+                        "type": "boolean"
+                    },
+                    "published": {
+                        "$ref": "#/components/schemas/daterange"
+                    },
+                    "score": {
+                        "description": "Score",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "scored_by": {
+                        "description": "Number of users",
+                        "type": "integer"
+                    },
+                    "rank": {
+                        "nullable": true,
+                        "description": "Ranking",
+                        "type": "integer"
+                    },
+                    "popularity": {
+                        "nullable": true,
+                        "description": "Popularity",
+                        "type": "integer"
+                    },
+                    "members": {
+                        "nullable": true,
+                        "description": "Number of users who have added this entry to their list",
+                        "type": "integer"
+                    },
+                    "favorites": {
+                        "nullable": true,
+                        "description": "Number of users who have favorited this entry",
+                        "type": "integer"
+                    },
+                    "synopsis": {
+                        "nullable": true,
+                        "description": "Synopsis",
+                        "type": "string"
+                    },
+                    "background": {
+                        "nullable": true,
+                        "description": "Background",
+                        "type": "string"
+                    },
+                    "authors": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "serializations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "genres": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "explicit_genres": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "themes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "demographics": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/mal_url"
+                        }
+                    },
+                    "relations": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "relation": {
+                                    "description": "Relation type",
+                                    "type": "string"
+                                },
+                                "entry": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/mal_url"
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "external": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "manga": {
                 "description": "Manga Resource",
                 "properties": {
@@ -6081,6 +6775,111 @@
                     }
                 ]
             },
+            "person_full": {
+                "description": "Person Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "website_url": {
+                        "nullable": true,
+                        "description": "Person's website URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/people_images"
+                    },
+                    "name": {
+                        "description": "Name",
+                        "type": "string"
+                    },
+                    "given_name": {
+                        "nullable": true,
+                        "description": "Given Name",
+                        "type": "string"
+                    },
+                    "family_name": {
+                        "nullable": true,
+                        "description": "Family Name",
+                        "type": "string"
+                    },
+                    "alternate_names": {
+                        "description": "Other Names",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "birthday": {
+                        "nullable": true,
+                        "description": "Birthday Date ISO8601",
+                        "type": "string"
+                    },
+                    "favorites": {
+                        "description": "Number of users who have favorited this entry",
+                        "type": "integer"
+                    },
+                    "about": {
+                        "nullable": true,
+                        "description": "Biography",
+                        "type": "string"
+                    },
+                    "anime": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "position": {
+                                    "description": "Person's position",
+                                    "type": "string"
+                                },
+                                "anime": {
+                                    "$ref": "#/components/schemas/anime_meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "manga": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "position": {
+                                    "description": "Person's position",
+                                    "type": "string"
+                                },
+                                "manga": {
+                                    "$ref": "#/components/schemas/manga_meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "voices": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "role": {
+                                    "description": "Person's Character's role in the anime",
+                                    "type": "string"
+                                },
+                                "anime": {
+                                    "$ref": "#/components/schemas/anime_meta"
+                                },
+                                "character": {
+                                    "$ref": "#/components/schemas/character_meta"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "person_manga": {
                 "description": "Person's mangaography",
                 "properties": {
@@ -6358,6 +7157,158 @@
                                     },
                                     "type": "object"
                                 }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "user_profile_full": {
+                "description": "Transform the resource into an array.",
+                "properties": {
+                    "mal_id": {
+                        "nullable": true,
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "username": {
+                        "description": "MyAnimeList Username",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/user_images"
+                    },
+                    "last_online": {
+                        "nullable": true,
+                        "description": "Last Online Date ISO8601",
+                        "type": "string"
+                    },
+                    "gender": {
+                        "nullable": true,
+                        "description": "User Gender",
+                        "type": "string"
+                    },
+                    "birthday": {
+                        "nullable": true,
+                        "description": "Birthday Date ISO8601",
+                        "type": "string"
+                    },
+                    "location": {
+                        "nullable": true,
+                        "description": "Location",
+                        "type": "string"
+                    },
+                    "joined": {
+                        "nullable": true,
+                        "description": "Joined Date ISO8601",
+                        "type": "string"
+                    },
+                    "statistics": {
+                        "properties": {
+                            "anime": {
+                                "description": "Anime Statistics",
+                                "properties": {
+                                    "days_watched": {
+                                        "description": "Number of days spent watching Anime",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "mean_score": {
+                                        "description": "Mean Score",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "watching": {
+                                        "description": "Anime Watching",
+                                        "type": "integer"
+                                    },
+                                    "completed": {
+                                        "description": "Anime Completed",
+                                        "type": "integer"
+                                    },
+                                    "on_hold": {
+                                        "description": "Anime On-Hold",
+                                        "type": "integer"
+                                    },
+                                    "dropped": {
+                                        "description": "Anime Dropped",
+                                        "type": "integer"
+                                    },
+                                    "plan_to_watch": {
+                                        "description": "Anime Planned to Watch",
+                                        "type": "integer"
+                                    },
+                                    "total_entries": {
+                                        "description": "Total Anime entries on User list",
+                                        "type": "integer"
+                                    },
+                                    "rewatched": {
+                                        "description": "Anime re-watched",
+                                        "type": "integer"
+                                    },
+                                    "episodes_watched": {
+                                        "description": "Number of Anime Episodes Watched",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "manga": {
+                                "description": "Manga Statistics",
+                                "properties": {
+                                    "days_read": {
+                                        "description": "Number of days spent reading Manga",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "mean_score": {
+                                        "description": "Mean Score",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "reading": {
+                                        "description": "Manga Reading",
+                                        "type": "integer"
+                                    },
+                                    "completed": {
+                                        "description": "Manga Completed",
+                                        "type": "integer"
+                                    },
+                                    "on_hold": {
+                                        "description": "Manga On-Hold",
+                                        "type": "integer"
+                                    },
+                                    "dropped": {
+                                        "description": "Manga Dropped",
+                                        "type": "integer"
+                                    },
+                                    "plan_to_read": {
+                                        "description": "Manga Planned to Read",
+                                        "type": "integer"
+                                    },
+                                    "total_entries": {
+                                        "description": "Total Manga entries on User list",
+                                        "type": "integer"
+                                    },
+                                    "reread": {
+                                        "description": "Manga re-read",
+                                        "type": "integer"
+                                    },
+                                    "chapters_read": {
+                                        "description": "Number of Manga Chapters Read",
+                                        "type": "integer"
+                                    },
+                                    "volumes_read": {
+                                        "description": "Number of Manga Volumes Read",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
                             }
                         },
                         "type": "object"

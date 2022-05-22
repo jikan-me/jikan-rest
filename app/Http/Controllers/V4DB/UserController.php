@@ -36,6 +36,89 @@ class UserController extends Controller
 
     /**
      *  @OA\Get(
+     *     path="/users/{username}/full",
+     *     operationId="getUserFullProfile",
+     *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns complete user resource data",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/user_profile_full"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
+    public function full(Request $request, string $username)
+    {
+        $username = strtolower($username);
+
+        $results = Profile::query()
+            ->where('internal_username', $username)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Profile::scrape($username);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint,
+                    'internal_username' => $username
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Profile::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Profile::query()
+                    ->where('internal_username', $username)
+                    ->update($response);
+            }
+
+            $results = Profile::query()
+                ->where('internal_username', $username)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new \App\Http\Resources\V4\ProfileFullResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
      *     path="/users/{username}",
      *     operationId="getUserProfile",
      *     tags={"users"},

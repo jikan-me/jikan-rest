@@ -52,6 +52,93 @@ class AnimeController extends Controller
 {
     /**
      *  @OA\Get(
+     *     path="/anime/{id}/full",
+     *     operationId="getAnimeFullById",
+     *     tags={"anime"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns complete anime resource data",
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="data",
+     *                  ref="#/components/schemas/anime_full"
+     *              )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function full(Request $request, int $id)
+    {
+        $results = Anime::query()
+            ->where('mal_id', $id)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Anime::scrape($id);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Anime::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Anime::query()
+                    ->where('mal_id', $id)
+                    ->update($response);
+            }
+
+            $results = Anime::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new \App\Http\Resources\V4\AnimeFullResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
      *     path="/anime/{id}",
      *     operationId="getAnimeById",
      *     tags={"anime"},
