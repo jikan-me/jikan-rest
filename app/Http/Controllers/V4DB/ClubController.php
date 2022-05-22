@@ -160,7 +160,7 @@ class ClubController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $anime = ['results' => $this->jikan->getClubUsers(new UserListRequest($id, $page))];
+            $anime = $this->jikan->getClubUsers(new UserListRequest($id, $page));
             $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
 
             $results = $this->updateCache($request, $results, $response);
