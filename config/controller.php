@@ -211,23 +211,23 @@ return [
      */
     'UserController@recentlyOnline' => [
         'table_name' => 'users_recently_online',
-        'ttl' => env('CACHE_USERS_RECENTLY_ONLINE')
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
     'UserController@profile' => [
         'table_name' => 'users',
-        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+        'ttl' => env('CACHE_USER_EXPIRE')
     ],
     'UserController@statistics' => [
         'table_name' => 'users',
-        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+        'ttl' => env('CACHE_USER_EXPIRE')
     ],
     'UserController@favorites' => [
         'table_name' => 'users',
-        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+        'ttl' => env('CACHE_USER_EXPIRE')
     ],
     'UserController@about' => [
         'table_name' => 'users',
-        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+        'ttl' => env('CACHE_USER_EXPIRE')
     ],
     'UserController@history' => [
         'table_name' => 'users_history',
