@@ -22,7 +22,6 @@
         "league/flysystem": "^3.0",
         "laravel/scout": "^9.4",
         "ocramius/package-versions": "^2.5",
-        "php-http/guzzle6-adapter": "^2.0",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "^2.8",
         "symfony/yaml": "^4.1",
