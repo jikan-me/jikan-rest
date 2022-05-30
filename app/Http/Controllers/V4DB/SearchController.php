@@ -9,6 +9,7 @@ use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\Middleware\Throttle;
 use App\Http\QueryBuilder\SearchQueryBuilderAnime;
+use App\Http\QueryBuilder\ScoutSearchQueryBuilderAnime;
 use App\Http\QueryBuilder\SearchQueryBuilderCharacter;
 use App\Http\QueryBuilder\SearchQueryBuilderClub;
 use App\Http\QueryBuilder\SearchQueryBuilderManga;
@@ -196,16 +197,13 @@ class SearchController extends Controller
             }
         }
 
-        $results = SearchQueryBuilderAnime::query(
-            $request,
-            Anime::query()
+        $results = ScoutSearchQueryBuilderAnime::query(
+            $request
         );
 
         $results = $results
             ->paginate(
                 $limit,
-                ['*'],
-                null,
                 $page
             );
 

@@ -9,9 +9,13 @@ use Jikan\Helper\Parser;
 use Jikan\Jikan;
 use Jikan\Model\Common\YoutubeMeta;
 use Jikan\Request\Anime\AnimeRequest;
+use Laravel\Scout\Builder;
+use Typesense\LaravelTypesense\Interfaces\TypesenseDocument;
+use Laravel\Scout\Searchable;
 
-class Anime extends Model
+class Anime extends Model implements TypesenseDocument
 {
+    use JikanSearchable;
 
     /**
      * The attributes that are mass assignable.
@@ -130,5 +134,118 @@ class Anime extends Model
                 true
             )
         );
+    }
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs(): string
+    {
+        return 'anime_index';
+    }
+
+    /**
+     * Get the value used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKey(): mixed
+    {
+        return $this->mal_id;
+    }
+
+    /**
+     * Get the key name used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKeyName(): mixed
+    {
+        return 'mal_id';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $serializer = app('SerializerV4');
+        $result =  [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'start_date' => $this->aired['from'] ? Parser::parseDate($this->aired['from'])->getTimestamp() : 0,
+            'end_date' => $this->aired['to'] ? Parser::parseDate($this->aired['to'])->getTimestamp() : 0,
+            'url' => $this->url,
+            'images' => $this->images,
+            'trailer' => $this->trailer,
+            'title' => $this->title,
+            'title_english' => $this->title_english,
+            'title_japanese' => $this->title_japanese,
+            'title_synonyms' => $this->title_synonyms,
+            'type' => $this->type,
+            'source' => $this->source,
+            'episodes' => $this->episodes,
+            'status' => $this->status,
+            'airing' => $this->airing,
+            'duration' => $this->duration,
+            'rating' => $this->rating,
+            'score' => $this->score,
+            'scored_by' => $this->scored_by,
+            'rank' => $this->rank,
+            'popularity' => $this->popularity,
+            'members' => $this->members,
+            'favorites' => $this->favorites,
+            'synopsis' => $this->synopsis,
+            'background' => $this->background,
+            'season' => $this->season,
+            'year' => $this->year,
+            'broadcast' => $this->broadcast,
+            'producers' => $serializer->serialize($this->producers, 'json'),
+            'licensors' => $serializer->serialize($this->licensors, 'json'),
+            'studios' => $serializer->serialize($this->studios, 'json'),
+            'genres' => $serializer->serialize($this->genres, 'json'),
+            'explicit_genres' => $serializer->serialize($this->explicit_genres, 'json'),
+            'themes' => $serializer->serialize($this->themes, 'json'),
+            'demographics' => $serializer->serialize($this->demographics, 'json'),
+        ];
+
+        return $result;
+    }
+
+    /**
+     * The fields to be queried against. See https://typesense.org/docs/0.21.0/api/documents.html#search.
+     *
+     * @return array
+     */
+    public function typesenseQueryBy(): array
+    {
+        return [
+            'title',
+            'title_english',
+            'title_japanese',
+            'title_synonyms'
+        ];
+    }
+
+    /**
+     * The Typesense schema to be created.
+     *
+     * @return array
+     */
+    public function getCollectionSchema(): array
+    {
+        return [
+            'name' => $this->searchableAs(),
+            'fields' => [
+                [
+                    'name' => '.*',
+                    'type' => 'auto',
+                ]
+            ]
+        ];
     }
 }

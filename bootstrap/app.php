@@ -35,9 +35,14 @@ $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 
 
 $app->withFacades();
+
+$app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config');
+$app->instance('path.storage', app()->basePath() . DIRECTORY_SEPARATOR . 'storage');
+
 $app->withEloquent();
 
 $app->configure('swagger-lume');
+$app->configure('scout');
 
 /*
 |--------------------------------------------------------------------------
@@ -137,6 +142,8 @@ $jikan = new \Jikan\MyAnimeList\MalClient(app('HttpClient'));
 $app->instance('JikanParser', $jikan);
 
 $app->instance('SerializerV4', SerializerFactory::createV4());
+$app->register(Laravel\Scout\ScoutServiceProvider::class);
+$app->register(Typesense\LaravelTypesense\TypesenseServiceProvider::class);
 
 
 /*

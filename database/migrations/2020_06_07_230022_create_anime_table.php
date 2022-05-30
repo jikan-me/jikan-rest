@@ -31,7 +31,6 @@ class CreateAnimeTable extends Migration
             $table->index('themes.mal_id', 'themes.mal_id');
 
             $table->index('episodes', 'episodes');
-            $table->index('favorites', 'favorites');
             $table->integer('members')->index('members');
             $table->integer('favorites')->index('favorites');
             $table->integer('popularity')->index('popularity');
