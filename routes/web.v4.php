@@ -35,6 +35,10 @@ $router->group(
             'uses' => 'AnimeController@main'
         ]);
 
+        $router->get('/full', [
+            'uses' => 'AnimeController@full'
+        ]);
+
         $router->get('/characters', [
             'uses' => 'AnimeController@characters'
         ]);
@@ -114,6 +118,10 @@ $router->group(
             'uses' => 'MangaController@main'
         ]);
 
+        $router->get('/full', [
+            'uses' => 'MangaController@full'
+        ]);
+
         $router->get('/characters', [
             'uses' => 'MangaController@characters'
         ]);
@@ -173,6 +181,10 @@ $router->group(
             'uses' => 'CharacterController@main'
         ]);
 
+        $router->get('/full', [
+            'uses' => 'CharacterController@full'
+        ]);
+
         $router->get('/anime', [
             'uses' => 'CharacterController@anime'
         ]);
@@ -201,6 +213,10 @@ $router->group(
     function () use ($router) {
         $router->get('/', [
             'uses' => 'PersonController@main'
+        ]);
+
+        $router->get('/full', [
+            'uses' => 'PersonController@full'
         ]);
 
         $router->get('/anime', [
@@ -298,6 +314,10 @@ $router->group(
                     'uses' => 'UserController@profile'
                 ]);
 
+                $router->get('/full', [
+                    'uses' => 'UserController@full'
+                ]);
+
                 $router->get('/statistics', [
                     'uses' => 'UserController@statistics'
                 ]);
@@ -318,7 +338,7 @@ $router->group(
                     'uses' => 'UserController@history'
                 ]);
 
-                $router->get('/friends[/{page:[0-9]+}]', [
+                $router->get('/friends', [
                     'uses' => 'UserController@friends'
                 ]);
 

@@ -46,6 +46,8 @@ class ScheduleController extends Controller
      *     operationId="getSchedules",
      *     tags={"schedules"},
      *
+     *      @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *      @OA\Parameter(
      *          name="filter",
      *          in="query",
@@ -69,6 +71,8 @@ class ScheduleController extends Controller
      *          description="'Safe For Work'. When supplied, it will filter entries with the `Hentai` Genre. When supplied as `sfw=true`, it will return only SFW entries and when supplied as `sfw=false`, it will filter out any Hentai entries. Defaults to `false`.",
      *          @OA\Schema(type="string",enum={"true", "false"})
      *      ),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",

@@ -226,20 +226,24 @@ return [
         ## Caching
         By **CACHING**, we refer to the data parsed from MyAnimeList which is stored temporarily on our servers to provide better API performance.
 
-        All requests, by default are cached for **24 hours** except the following endpoints which have their own unique cache **Time To Live**.
+        All requests, by default are cached for **24 hours** except the following endpoints which have their own unique cache **Time To Live**. 
 
         | Request | TTL |
         | ---- | ---- |
         | All (Default) | 24 hours |
-        | User Anime/Manga List | 5 minutes |
 
 
         The following response headers will detail cache information.
-
+        
         | Header | Remarks |
         | ---- | ---- |
-        | `Expires` | Expiry unix timestamp |
+        | `Expires` | Cache expiry date |
+        | `Last-Modified` | Cache set date |
+        | `X-Request-Fingerprint` | Unique request fingerprint |
+        
 
+        Note: Caching headers will only be available on single resource requests and their child endpoints. e.g `/anime/1`, `/anime/1/relations`. 
+        They won't be available on pages which perform queries, like /anime, or /top/anime, etc.
 
         ## Allowed HTTP(s) requests
 

@@ -41,6 +41,21 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
         $sort = self::mapSort($request->get('sort'));
         $letter = $request->get('letter');
 
+        if (!is_null($letter)) {
+            $results = $results
+                ->where('name', 'like', "{$letter}%");
+        }
+
+        if (empty($query) && is_null($orderBy)) {
+            $results = $results
+                ->orderBy('mal_id');
+        }
+
+        if (!is_null($orderBy)) {
+            $results = $results
+                ->orderBy($orderBy, $sort ?? 'asc');
+        }
+
         if (!empty($query) && is_null($letter)) {
 
 //            $results = $results
@@ -60,21 +75,6 @@ class SearchQueryBuilderPeople implements SearchQueryBuilderInterface
                     ]
                 ])
                 ->orderBy('score', ['$meta' => 'textScore']);
-        }
-
-        if (!is_null($letter)) {
-            $results = $results
-                ->where('name', 'like', "{$letter}%");
-        }
-
-        if (empty($query) && is_null($orderBy)) {
-            $results = $results
-                ->orderBy('mal_id');
-        }
-
-        if (!is_null($orderBy)) {
-            $results = $results
-                ->orderBy($orderBy, $sort ?? 'asc');
         }
 
         return $results;

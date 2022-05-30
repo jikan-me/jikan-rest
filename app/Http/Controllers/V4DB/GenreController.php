@@ -23,9 +23,6 @@ class GenreController extends Controller
      *     operationId="getAnimeGenres",
      *     tags={"genres"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="filter",
      *       in="query",
@@ -86,9 +83,6 @@ class GenreController extends Controller
      *     path="/genres/manga",
      *     operationId="getMangaGenres",
      *     tags={"genres"},
-     *
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Parameter(
      *       name="filter",

@@ -57,7 +57,7 @@ class UserProfileMangaListResource extends JsonResource
             'score' => $this['score'],
             'chapters_read' => $this['read_chapters'],
             'volumes_read' => $this['read_volumes'],
-            'tags' => $this['tags'],
+            'tags' => (string) $this['tags'],
             'is_rereading' => $this['is_rereading'],
             'read_start_date' => $this['read_start_date'],
             'read_end_date' => $this['read_end_date'],

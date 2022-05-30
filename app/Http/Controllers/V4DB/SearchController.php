@@ -158,11 +158,25 @@ class SearchController extends Controller
      *       description="Return entries starting with the given letter",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="producers",
      *       in="query",
      *       description="Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="start_date",
+     *       in="query",
+     *       description="Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="start_date",
+     *       in="query",
+     *       description="Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -303,6 +317,20 @@ class SearchController extends Controller
      *       name="magazines",
      *       in="query",
      *       description="Filter by magazine(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="start_date",
+     *       in="query",
+     *       description="Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="start_date",
+     *       in="query",
+     *       description="Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
      *       @OA\Schema(type="string")
      *     ),
      *

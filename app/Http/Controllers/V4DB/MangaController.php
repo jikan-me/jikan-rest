@@ -51,6 +51,92 @@ class MangaController extends Controller
 {
     /**
      *  @OA\Get(
+     *     path="/manga/{id}/full",
+     *     operationId="getMangaFullById",
+     *     tags={"manga"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns complete anime resource data",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/manga_full"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function full(Request $request, int $id)
+    {
+        $results = Manga::query()
+            ->where('mal_id', $id)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Manga::scrape($id);
+
+            if (HttpHelper::hasError($response)) {
+                return HttpResponse::notFound($request);
+            }
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Manga::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Manga::query()
+                    ->where('mal_id', $id)
+                    ->update($response);
+            }
+
+            $results = Manga::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new \App\Http\Resources\V4\MangaFullResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
      *     path="/manga/{id}",
      *     operationId="getMangaById",
      *     tags={"manga"},

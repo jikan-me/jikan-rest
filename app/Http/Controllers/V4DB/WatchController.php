@@ -24,6 +24,8 @@ class WatchController extends Controller
      *     operationId="getWatchRecentEpisodes",
      *     tags={"watch"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Recently Added Episodes",
@@ -127,6 +129,8 @@ class WatchController extends Controller
      *     path="/watch/episodes/popular",
      *     operationId="getWatchPopularEpisodes",
      *     tags={"watch"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",
@@ -264,6 +268,8 @@ class WatchController extends Controller
      *     path="/watch/promos/popular",
      *     operationId="getWatchPopularPromos",
      *     tags={"watch"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",

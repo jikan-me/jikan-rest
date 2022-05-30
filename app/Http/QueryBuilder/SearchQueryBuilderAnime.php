@@ -112,27 +112,6 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         $startDate = $request->get('start_date');
         $endDate = $request->get('end_date');
 
-        if (!empty($query) && is_null($letter)) {
-
-//            $results = $results
-//                ->where('title', 'like', "%{$query}%")
-//                ->orWhere('title_english', 'like', "%{$query}%")
-//                ->orWhere('title_japanese', 'like', "%{$query}%")
-//                ->orWhere('title_synonyms', 'like', "%{$query}%");
-
-            // @todo replace with elasticsearch or meilisearch
-            $results = $results
-                ->whereRaw([
-                    '$text' => [
-                        '$search' => $query
-                    ],
-                ], [
-                    'score' => [
-                        '$meta' => 'textScore'
-                    ]
-                ])
-                ->orderBy('score', ['$meta' => 'textScore']);
-        }
 
         if (!is_null($letter)) {
             $results = $results
@@ -283,6 +262,28 @@ class SearchQueryBuilderAnime implements SearchQueryBuilderInterface
         if (!is_null($orderBy)) {
             $results = $results
                 ->orderBy($orderBy, $sort ?? 'asc');
+        }
+
+        if (!empty($query) && is_null($letter)) {
+
+//            $results = $results
+//                ->where('title', 'like', "%{$query}%")
+//                ->orWhere('title_english', 'like', "%{$query}%")
+//                ->orWhere('title_japanese', 'like', "%{$query}%")
+//                ->orWhere('title_synonyms', 'like', "%{$query}%");
+
+            // @todo replace with elasticsearch or meilisearch
+            $results = $results
+                ->whereRaw([
+                    '$text' => [
+                        '$search' => $query
+                    ],
+                ], [
+                    'score' => [
+                        '$meta' => 'textScore'
+                    ]
+                ])
+                ->orderBy('score', ['$meta' => 'textScore']);
         }
 
         return $results;

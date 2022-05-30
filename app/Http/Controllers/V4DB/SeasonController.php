@@ -44,6 +44,8 @@ class SeasonController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
+     *      @OA\Parameter(ref="#/components/parameters/page"),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns seasonal anime",
@@ -61,6 +63,8 @@ class SeasonController extends Controller
      *     path="/seasons/now",
      *     operationId="getSeasonNow",
      *     tags={"seasons"},
+     *
+     *      @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
@@ -211,6 +215,8 @@ class SeasonController extends Controller
      *     path="/seasons/upcoming",
      *     operationId="getSeasonUpcoming",
      *     tags={"seasons"},
+     *
+     *      @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",

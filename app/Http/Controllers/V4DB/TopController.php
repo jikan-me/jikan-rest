@@ -48,6 +48,7 @@ class TopController extends Controller
      *      ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",
@@ -118,6 +119,7 @@ class TopController extends Controller
      *      ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",
@@ -174,6 +176,7 @@ class TopController extends Controller
      *     tags={"top"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",
@@ -230,6 +233,7 @@ class TopController extends Controller
      *     tags={"top"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",
