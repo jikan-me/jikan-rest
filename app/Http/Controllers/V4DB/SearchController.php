@@ -173,7 +173,7 @@ class SearchController extends Controller
      *     ),
      *
      *     @OA\Parameter(
-     *       name="start_date",
+     *       name="end_date",
      *       in="query",
      *       description="Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
      *       @OA\Schema(type="string")
@@ -330,7 +330,7 @@ class SearchController extends Controller
      *     ),
      *
      *     @OA\Parameter(
-     *       name="start_date",
+     *       name="end_date",
      *       in="query",
      *       description="Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
      *       @OA\Schema(type="string")
