@@ -21,7 +21,7 @@ class CreatePeopleTable extends Migration
             $table->index('member_favorites', 'member_favorites');
 
             $table->index('name', 'name');
-            $table->string('given_name')->index('name')->nullable();
+            $table->string('given_name')->index('given_name')->nullable();
             $table->string('family_name')->index('family_name')->nullable();
             $table->index('alternate_names', 'alternate_names');
 
