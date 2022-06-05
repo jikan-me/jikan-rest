@@ -179,9 +179,7 @@ class Anime extends Model implements TypesenseDocument
             'mal_id' => (string) $this->mal_id,
             'start_date' => $this->aired['from'] ? Parser::parseDate($this->aired['from'])->getTimestamp() : 0,
             'end_date' => $this->aired['to'] ? Parser::parseDate($this->aired['to'])->getTimestamp() : 0,
-            'url' => $this->url,
             'images' => $this->images,
-            'trailer' => $this->trailer,
             'title' => $this->title,
             'title_english' => $this->title_english,
             'title_japanese' => $this->title_japanese,
@@ -191,10 +189,8 @@ class Anime extends Model implements TypesenseDocument
             'episodes' => $this->episodes,
             'status' => $this->status,
             'airing' => $this->airing,
-            'duration' => $this->duration,
             'rating' => $this->rating,
             'score' => $this->score,
-            'scored_by' => $this->scored_by,
             'rank' => $this->rank,
             'popularity' => $this->popularity,
             'members' => $this->members,
@@ -203,17 +199,16 @@ class Anime extends Model implements TypesenseDocument
             'background' => $this->background,
             'season' => $this->season,
             'year' => $this->year,
-            'broadcast' => $this->broadcast,
-            'producers' => $serializer->serialize($this->producers, 'json'),
-            'licensors' => $serializer->serialize($this->licensors, 'json'),
-            'studios' => $serializer->serialize($this->studios, 'json'),
-            'genres' => $serializer->serialize($this->genres, 'json'),
-            'explicit_genres' => $serializer->serialize($this->explicit_genres, 'json'),
-            'themes' => $serializer->serialize($this->themes, 'json'),
-            'demographics' => $serializer->serialize($this->demographics, 'json'),
         ];
 
-        return $result;
+        // todo: test this with artisan::tinker
+        return array_merge($result,
+            // this will add nested fields in the format of "producers.0.mal_id=123" and etc
+            $this->toTypeSenseCompatibleNestedField("producers"),
+            $this->toTypeSenseCompatibleNestedField("studios"),
+            $this->toTypeSenseCompatibleNestedField("genres"),
+            $this->toTypeSenseCompatibleNestedField("explicit_genres")
+        );
     }
 
     /**

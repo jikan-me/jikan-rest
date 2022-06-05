@@ -117,6 +117,7 @@ $app->register(\SwaggerLume\ServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(\App\Providers\SourceHeartbeatProvider::class);
 $app->register(Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
+$app->register(\App\Providers\AppServiceProvider::class);
 
 if (env('REPORTING') && env('REPORTING_DRIVER') === 'sentry') {
     $app->register(\Sentry\Laravel\ServiceProvider::class);

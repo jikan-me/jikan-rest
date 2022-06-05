@@ -119,6 +119,11 @@ class ScoutSearchQueryBuilderAnime
                 ->orderBy('mal_id');
         }
 
+        if (!is_null($letter)) {
+            $results = $results
+                ->where('title', 'like', "{$letter}%");
+        }
+
         if (!is_null($startDate)) {
 
             $startDate = explode('-', $startDate);
@@ -208,8 +213,8 @@ class ScoutSearchQueryBuilderAnime
                 $genre = (int) $genre;
 
                 $results = $results
-                    ->where(function($query) use ($genre) {
-                        $query
+                    ->where(function ($query) use ($genre) {
+                        return $query
                             ->where('genres.mal_id', $genre)
                             ->orWhere('demographics.mal_id', $genre)
                             ->orWhere('themes.mal_id', $genre)

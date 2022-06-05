@@ -2,20 +2,13 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
 use App\Character;
 use App\Club;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\Middleware\Throttle;
-use App\Http\QueryBuilder\SearchQueryBuilderAnime;
-use App\Http\QueryBuilder\ScoutSearchQueryBuilderAnime;
 use App\Http\QueryBuilder\SearchQueryBuilderCharacter;
 use App\Http\QueryBuilder\SearchQueryBuilderClub;
 use App\Http\QueryBuilder\SearchQueryBuilderManga;
 use App\Http\QueryBuilder\SearchQueryBuilderPeople;
 use App\Http\QueryBuilder\SearchQueryBuilderUsers;
-use App\Http\Resources\V4\AnimeCharactersResource;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\CharacterCollection;
 use App\Http\Resources\V4\ClubCollection;
@@ -25,26 +18,36 @@ use App\Http\Resources\V4\ResultsResource;
 use App\Http\SearchQueryBuilder;
 use App\Manga;
 use App\Person;
+use App\Providers\SearchQueryBuilderProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Jikan;
 use Jikan\MyAnimeList\MalClient;
-use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
-use Jikan\Request\Search\AnimeSearchRequest;
-use Jikan\Request\Search\MangaSearchRequest;
-use Jikan\Request\Search\CharacterSearchRequest;
-use Jikan\Request\Search\PersonSearchRequest;
-use Jikan\Helper\Constants as JikanConstants;
-use Jikan\Request\Search\UserSearchRequest;
 use Jikan\Request\User\UsernameByIdRequest;
-use JMS\Serializer\Serializer;
-use MongoDB\BSON\UTCDateTime;
-use phpDocumentor\Reflection\Types\Object_;
 
 class SearchController extends Controller
 {
     private $request;
     const MAX_RESULTS_PER_PAGE = 25;
+    private SearchQueryBuilderProvider $searchQueryBuilderProvider;
+
+    public function __construct(Request $request, MalClient $jikan, SearchQueryBuilderProvider $searchQueryBuilderProvider)
+    {
+        parent::__construct($request, $jikan);
+        $this->searchQueryBuilderProvider = $searchQueryBuilderProvider;
+    }
+
+    private function getQueryBuilder(string $name, Request $request): \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder
+    {
+        $queryBuilder = $this->searchQueryBuilderProvider->getQueryBuilder($name);
+        return $queryBuilder->query($request);
+    }
+
+    private function getPaginator(string $name, Request $request, \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder $results): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        $queryBuilder = $this->searchQueryBuilderProvider->getQueryBuilder($name);
+        return $queryBuilder->paginateBuilder($request, $results);
+    }
 
     /**
      *  @OA\Parameter(
@@ -211,18 +214,11 @@ class SearchController extends Controller
             }
         }
 
-        $results = ScoutSearchQueryBuilderAnime::query(
-            $request
-        );
-
-        $results = $results
-            ->paginate(
-                $limit,
-                $page
-            );
+        $results = $this->getQueryBuilder("anime", $request);
+        $paginator = $this->getPaginator("anime", $request, $results);
 
         return new AnimeCollection(
-            $results
+            $paginator
         );
     }
 
@@ -365,21 +361,11 @@ class SearchController extends Controller
             }
         }
 
-        $results = SearchQueryBuilderManga::query(
-            $request,
-            Manga::query()
-        );
-
-        $results = $results
-            ->paginate(
-                $limit,
-                ['*'],
-                null,
-                $page
-            );
+        $results = $this->getQueryBuilder("manga", $request);
+        $paginator = $this->getPaginator("manga", $request, $results);
 
         return new MangaCollection(
-            $results
+            $paginator
         );
     }
 
