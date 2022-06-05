@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\QueryBuilder\AnimeSearchQueryBuilder;
+use App\Http\QueryBuilder\MangaSearchQueryBuilder;
 use Illuminate\Support\ServiceProvider;
-use Jenssegers\Mongodb\Eloquent\Builder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,13 +13,22 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-//        //
-//		$this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
-//		$this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
-        Builder::macro('getName', function() {
-            return 'mongodb';
+        $this->app->singleton(AnimeSearchQueryBuilder::class, function($app) {
+            $searchIndexesEnabled = $app["config"]->get("scout.driver") != "null";
+            return new AnimeSearchQueryBuilder($searchIndexesEnabled);
+        });
+
+        $this->app->singleton(MangaSearchQueryBuilder::class, function($app) {
+            $searchIndexesEnabled = $app["config"]->get("scout.driver") != "null";
+            return new MangaSearchQueryBuilder($searchIndexesEnabled);
+        });
+
+        $this->app->tag([AnimeSearchQueryBuilder::class, MangaSearchQueryBuilder::class], "searchQueryBuilders");
+
+        $this->app->singleton(SearchQueryBuilderProvider::class, function($app) {
+            return new SearchQueryBuilderProvider($app->tagged("searchQueryBuilders"));
         });
     }
 }

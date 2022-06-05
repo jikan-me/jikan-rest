@@ -14,10 +14,10 @@ class MangaCollection extends ResourceCollection
      *
      * @var string
      *
-     *  @OA\Schema(
+     * @OA\Schema(
      *      schema="manga_search",
      *      description="Manga Search Resource",
-     * 
+     *
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination_plus"),
      *          @OA\Schema(
@@ -39,7 +39,7 @@ class MangaCollection extends ResourceCollection
 
     private $pagination;
 
-    public function __construct(LengthAwarePaginator $resource)
+    public function __construct($resource)
     {
         $this->pagination = [
             'last_visible_page' => $resource->lastPage(),
@@ -74,7 +74,7 @@ class MangaCollection extends ResourceCollection
     public function withResponse($request, $response)
     {
         $jsonResponse = json_decode($response->getContent(), true);
-        unset($jsonResponse['links'],$jsonResponse['meta']);
+        unset($jsonResponse['links'], $jsonResponse['meta']);
         $response->setContent(json_encode($jsonResponse));
     }
 }

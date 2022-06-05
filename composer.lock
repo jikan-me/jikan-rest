@@ -3914,16 +3914,16 @@
         },
         {
             "name": "jikan-me/jikan",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "1e72498a6b8bfa6fc9f83f6da1e6ace5d1ccc702"
+                "reference": "b37a90d0066de4d144007ac72bbf9c85f0caa937"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/1e72498a6b8bfa6fc9f83f6da1e6ace5d1ccc702",
-                "reference": "1e72498a6b8bfa6fc9f83f6da1e6ace5d1ccc702",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/b37a90d0066de4d144007ac72bbf9c85f0caa937",
+                "reference": "b37a90d0066de4d144007ac72bbf9c85f0caa937",
                 "shasum": ""
             },
             "require": {
@@ -3938,6 +3938,7 @@
                 "jakub-onderka/php-parallel-lint": "^1.0",
                 "jikan-me/jikan-fixtures": "dev-master",
                 "php-vcr/php-vcr": "^1.6",
+                "php-vcr/phpunit-testlistener-vcr": "^3.1",
                 "phpro/grumphp": "^1.7.0",
                 "phpunit/phpunit": "~9.0",
                 "squizlabs/php_codesniffer": "^3.3"
@@ -3963,7 +3964,7 @@
             "description": "Jikan is an unofficial MyAnimeList API",
             "support": {
                 "issues": "https://github.com/jikan-me/jikan/issues",
-                "source": "https://github.com/jikan-me/jikan/tree/v3.0.0"
+                "source": "https://github.com/jikan-me/jikan/tree/v3.0.1"
             },
             "funding": [
                 {
@@ -3971,7 +3972,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2022-05-24T20:17:26+00:00"
+            "time": "2022-06-05T12:35:33+00:00"
         },
         {
             "name": "jms/metadata",

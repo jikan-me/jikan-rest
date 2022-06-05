@@ -8,7 +8,35 @@ trait JikanSearchable
 {
     use Searchable;
 
-    public function queryScoutModelsByIds(Builder $builder, array $ids)
+    private function flattenArrayWithKeys($array): array {
+        $result = array();
+        foreach($array as $key=>$value) {
+            if(is_array($value)) {
+                $result = $result + $this->flattenArrayWithKeys($value, $key . '.');
+            }
+            else {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
+    }
+
+    protected function toTypeSenseCompatibleNestedField(string $fieldName): array {
+        $field = $this->{$fieldName};
+        if (!is_array($field) && !is_object($field)) {
+            return $field;
+        }
+
+        return $this->flattenArrayWithKeys($field);
+    }
+
+    protected function getMalIdsOfField(mixed $field): array {
+        return array_map(function($elem) {
+            return $elem->mal_id;
+        }, $field);
+    }
+
+    public function queryScoutModelsByIds(Builder $builder, array $ids): Builder
     {
         $query = static::usesSoftDelete()
             ? $this->withTrashed() : $this->newQuery();
