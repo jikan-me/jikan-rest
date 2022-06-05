@@ -30,7 +30,6 @@ class CreateMangaTable extends Migration
 
             $table->index('chapters', 'chapters');
             $table->index('volumes', 'volumes');
-            $table->index('favorites', 'favorites');
             $table->integer('members')->index('members');
             $table->integer('favorites')->index('favorites');
             $table->integer('popularity')->index('popularity');
