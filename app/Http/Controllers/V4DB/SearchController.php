@@ -671,16 +671,26 @@ class SearchController extends Controller
 
     /**
      *  @OA\Get(
-     *     path="/users/userbyid",
+     *     path="/users/userbyid/{id}",
      *     operationId="getUserById",
      *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns username by ID search",
-     *          @OA\JsonContent(
-     *               ref="#/components/schemas/user_by_id"
-     *          )
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/user_by_id"
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",

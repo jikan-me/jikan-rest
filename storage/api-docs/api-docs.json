@@ -229,7 +229,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/anime_episode"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/anime_episode"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -686,7 +691,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/character_full"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/character_full"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -719,7 +729,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/character"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/character"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -884,7 +899,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/club"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/club"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1114,11 +1134,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns complete anime resource data",
+                        "description": "Returns complete manga resource data",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/manga_full"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/manga_full"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1151,7 +1176,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/manga"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/manga"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1578,7 +1608,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/person_full"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/person_full"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1611,7 +1646,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/person"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/person"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -2588,19 +2628,34 @@
                 }
             }
         },
-        "/users/userbyid": {
+        "/users/userbyid/{id}": {
             "get": {
                 "tags": [
                     "users"
                 ],
                 "operationId": "getUserById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns username by ID search",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/user_by_id"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/user_by_id"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -3093,7 +3148,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/user_profile_full"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/user_profile_full"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -3126,7 +3186,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/user_profile"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/user_profile"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -4409,55 +4474,50 @@
             "anime_episode": {
                 "description": "Anime Episode Resource",
                 "properties": {
-                    "data": {
-                        "properties": {
-                            "mal_id": {
-                                "description": "MyAnimeList ID",
-                                "type": "integer"
-                            },
-                            "url": {
-                                "description": "MyAnimeList URL",
-                                "type": "string"
-                            },
-                            "title": {
-                                "description": "Title",
-                                "type": "string"
-                            },
-                            "title_japanese": {
-                                "nullable": true,
-                                "description": "Title Japanese",
-                                "type": "string"
-                            },
-                            "title_romanji": {
-                                "nullable": true,
-                                "description": "title_romanji",
-                                "type": "string"
-                            },
-                            "duration": {
-                                "nullable": true,
-                                "description": "Episode duration in seconds",
-                                "type": "integer"
-                            },
-                            "aired": {
-                                "nullable": true,
-                                "description": "Aired Date ISO8601",
-                                "type": "string"
-                            },
-                            "filler": {
-                                "description": "Filler episode",
-                                "type": "boolean"
-                            },
-                            "recap": {
-                                "description": "Recap episode",
-                                "type": "boolean"
-                            },
-                            "synopsis": {
-                                "nullable": true,
-                                "description": "Episode Synopsis",
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "title": {
+                        "description": "Title",
+                        "type": "string"
+                    },
+                    "title_japanese": {
+                        "nullable": true,
+                        "description": "Title Japanese",
+                        "type": "string"
+                    },
+                    "title_romanji": {
+                        "nullable": true,
+                        "description": "title_romanji",
+                        "type": "string"
+                    },
+                    "duration": {
+                        "nullable": true,
+                        "description": "Episode duration in seconds",
+                        "type": "integer"
+                    },
+                    "aired": {
+                        "nullable": true,
+                        "description": "Aired Date ISO8601",
+                        "type": "string"
+                    },
+                    "filler": {
+                        "description": "Filler episode",
+                        "type": "boolean"
+                    },
+                    "recap": {
+                        "description": "Recap episode",
+                        "type": "boolean"
+                    },
+                    "synopsis": {
+                        "nullable": true,
+                        "description": "Episode Synopsis",
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -5373,60 +5433,55 @@
             "club": {
                 "description": "Club Resource",
                 "properties": {
-                    "data": {
-                        "properties": {
-                            "mal_id": {
-                                "description": "MyAnimeList ID",
-                                "type": "integer"
-                            },
-                            "name": {
-                                "description": "Club name",
-                                "type": "string"
-                            },
-                            "url": {
-                                "description": "Club URL",
-                                "type": "string"
-                            },
-                            "images": {
-                                "$ref": "#/components/schemas/common_images"
-                            },
-                            "members": {
-                                "description": "Number of club members",
-                                "type": "integer"
-                            },
-                            "category": {
-                                "description": "Club Category",
-                                "type": "string",
-                                "enum": [
-                                    "actors & artists",
-                                    "anime",
-                                    "characters",
-                                    "cities & neighborhoods",
-                                    "companies",
-                                    "conventions",
-                                    "games",
-                                    "japan",
-                                    "manga",
-                                    "music",
-                                    "others",
-                                    "schools"
-                                ]
-                            },
-                            "created": {
-                                "description": "Date Created ISO8601",
-                                "type": "string"
-                            },
-                            "access": {
-                                "description": "Club access",
-                                "type": "string",
-                                "enum": [
-                                    "public",
-                                    "private",
-                                    "secret"
-                                ]
-                            }
-                        },
-                        "type": "object"
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Club name",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "Club URL",
+                        "type": "string"
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/common_images"
+                    },
+                    "members": {
+                        "description": "Number of club members",
+                        "type": "integer"
+                    },
+                    "category": {
+                        "description": "Club Category",
+                        "type": "string",
+                        "enum": [
+                            "actors & artists",
+                            "anime",
+                            "characters",
+                            "cities & neighborhoods",
+                            "companies",
+                            "conventions",
+                            "games",
+                            "japan",
+                            "manga",
+                            "music",
+                            "others",
+                            "schools"
+                        ]
+                    },
+                    "created": {
+                        "description": "Date Created ISO8601",
+                        "type": "string"
+                    },
+                    "access": {
+                        "description": "Club access",
+                        "type": "string",
+                        "enum": [
+                            "public",
+                            "private",
+                            "secret"
+                        ]
                     }
                 },
                 "type": "object"
@@ -5765,18 +5820,13 @@
             "user_by_id": {
                 "description": "User Meta By ID",
                 "properties": {
-                    "data": {
-                        "properties": {
-                            "url": {
-                                "description": "MyAnimeList URL",
-                                "type": "string"
-                            },
-                            "username": {
-                                "description": "MyAnimeList Username",
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    },
+                    "username": {
+                        "description": "MyAnimeList Username",
+                        "type": "string"
                     }
                 },
                 "type": "object"

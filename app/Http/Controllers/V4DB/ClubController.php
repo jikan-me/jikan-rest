@@ -35,7 +35,10 @@ class ClubController extends Controller
      *         response="200",
      *         description="Returns Club Resource",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/club"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/club"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
