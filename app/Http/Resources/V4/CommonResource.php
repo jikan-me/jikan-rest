@@ -373,19 +373,14 @@ class CommonResource extends JsonResource
      *      description="User Meta By ID",
      *
      *      @OA\Property(
-     *           property="data",
-     *           type="object",
-     *
-     *           @OA\Property(
-     *               property="url",
-     *               type="string",
-     *               description="MyAnimeList URL"
-     *           ),
-     *           @OA\Property(
-     *               property="username",
-     *               type="string",
-     *               description="MyAnimeList Username"
-     *           ),
+     *          property="url",
+     *          type="string",
+     *          description="MyAnimeList URL"
+     *      ),
+     *      @OA\Property(
+     *          property="username",
+     *          type="string",
+     *          description="MyAnimeList Username"
      *      ),
      *  ),
      *

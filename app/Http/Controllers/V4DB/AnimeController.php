@@ -154,10 +154,10 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns anime resource",
      *         @OA\JsonContent(
-     *              @OA\Property(
-     *                  property="data",
-     *                  ref="#/components/schemas/anime"
-     *              )
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/anime"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -484,7 +484,10 @@ class AnimeController extends Controller
      *         response="200",
      *         description="Returns a single anime episode resource",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/anime_episode"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/anime_episode"
+     *             )
      *         )
      *     ),
      *     @OA\Response(

@@ -51,7 +51,10 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns complete user resource data",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user_profile_full"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/user_profile_full"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -134,7 +137,10 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user profile",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user_profile"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/user_profile"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
