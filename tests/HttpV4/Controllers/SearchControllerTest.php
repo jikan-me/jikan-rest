@@ -4,24 +4,122 @@ class SearchControllerTest extends TestCase
 {
     public function testAnimeSearch()
     {
-        $this->get('/v4/search/anime?order_by=id&sort=asc')
+        $this->get('/v4/anime?order_by=id&sort=asc')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'results' => [
+                'pagination' => [
+                    'last_visible_page',
+                    'has_next_page',
+                    'items' => [
+                        'count',
+                        'total',
+                        'per_page',
+                    ]
+                ],
+                'data' => [
                     [
                         'mal_id',
                         'url',
-                        'image_url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                        ],
+                        'trailer' => [
+                            'youtube_id',
+                            'url',
+                            'embed_url',
+                            'images' => [
+                                'image_url',
+                                'small_image_url',
+                                'medium_image_url',
+                                'large_image_url',
+                                'maximum_image_url',
+                            ]
+                        ],
                         'title',
-                        'airing',
-                        'synopsis',
+                        'title_english',
+                        'title_japanese',
+                        'title_synonyms',
                         'type',
+                        'source',
                         'episodes',
+                        'status',
+                        'airing',
+                        'aired' => [
+                            'from',
+                            'to',
+                            'prop' => [
+                                'from' => [
+                                    'day',
+                                    'month',
+                                    'year'
+                                ],
+                                'to' => [
+                                    'day',
+                                    'month',
+                                    'year'
+                                ]
+                            ],
+                            'string'
+                        ],
+                        'duration',
+                        'rating',
                         'score',
-                        'start_date',
-                        'end_date',
+                        'scored_by',
+                        'rank',
+                        'popularity',
                         'members',
-                        'rated'
+                        'favorites',
+                        'synopsis',
+                        'background',
+                        'season',
+                        'year',
+                        'broadcast' => [
+                            'day',
+                            'time',
+                            'timezone',
+                            'string'
+                        ],
+                        'producers' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'licensors' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'studios' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'genres' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
                     ]
                 ]
             ])
@@ -30,24 +128,92 @@ class SearchControllerTest extends TestCase
 
     public function testMangaSearch()
     {
-        $this->get('/v4/search/manga?order_by=id&sort=asc')
+        $this->get('/v4/manga?order_by=id&sort=asc')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'results' => [
+                'pagination' => [
+                    'last_visible_page',
+                    'has_next_page',
+                    'items' => [
+                        'count',
+                        'total',
+                        'per_page',
+                    ]
+                ],
+                'data' => [
                     [
                         'mal_id',
                         'url',
-                        'image_url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                        ],
                         'title',
-                        'publishing',
-                        'synopsis',
+                        'title_english',
+                        'title_japanese',
+                        'title_synonyms',
                         'type',
                         'chapters',
                         'volumes',
+                        'status',
+                        'publishing',
+                        'published' => [
+                            'from',
+                            'to',
+                            'prop' => [
+                                'from' => [
+                                    'day',
+                                    'month',
+                                    'year'
+                                ],
+                                'to' => [
+                                    'day',
+                                    'month',
+                                    'year'
+                                ]
+                            ],
+                            'string'
+                        ],
                         'score',
-                        'start_date',
-                        'end_date',
+                        'scored_by',
+                        'rank',
+                        'popularity',
                         'members',
+                        'favorites',
+                        'synopsis',
+                        'background',
+                        'authors' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'serializations' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'genres' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ]
                     ]
                 ]
             ])
@@ -56,16 +222,35 @@ class SearchControllerTest extends TestCase
 
     public function testPeopleSearch()
     {
-        $this->get('/v4/search/people?q=Sawano')
+        $this->get('/v4/people?q=Sawano')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'results' => [
+                'pagination' => [
+                    'last_visible_page',
+                    'has_next_page',
+                    'items' => [
+                        'count',
+                        'total',
+                        'per_page',
+                    ]
+                ],
+                'data' => [
                     [
                         'mal_id',
                         'url',
-                        'image_url',
+                        'website_url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                            ],
+                        ],
                         'name',
-                        'alternative_names',
+                        'given_name',
+                        'family_name',
+                        'alternate_names',
+                        'birthday',
+                        'favorites',
+                        'about',
                     ]
                 ]
             ])
@@ -74,28 +259,36 @@ class SearchControllerTest extends TestCase
 
     public function testCharacterSearch()
     {
-        $this->get('/v4/search/character?q=Okabe,%20Rintarou')
+        $this->get('/v4/characters?q=Okabe,%20Rintarou')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'results' => [
+                'pagination' => [
+                    'last_visible_page',
+                    'has_next_page',
+                    'items' => [
+                        'count',
+                        'total',
+                        'per_page',
+                    ]
+                ],
+                'data' => [
                     [
                         'mal_id',
                         'url',
-                        'image_url',
-                        'name',
-                        'alternative_names',
-                        'anime' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name', // todo should be `title`
-                                'url'
-                            ]
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                            ],
+                            'webp' => [
+                                'image_url',
+                            ],
                         ],
-                        'manga' => [],
+                        'name',
+                        'nicknames',
+                        'favorites',
+                        'about',
                     ]
                 ],
-                'last_page'
             ])
         ;
     }
