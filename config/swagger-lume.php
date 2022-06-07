@@ -200,7 +200,7 @@ return [
      */
     'constants' => [
         // 'SWAGGER_LUME_CONST_HOST' => env('SWAGGER_LUME_CONST_HOST', 'http://my-default-host.com'),
-        'API_DESCRIPTION' => <<<EOF
+        'API_DESCRIPTION' => str_replace("\r\n", "\n", <<<EOF
         [Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.
         It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.
         
@@ -304,6 +304,6 @@ return [
         By using the API, you are agreeing to Jikan's [terms of use](https://jikan.moe/terms) policy.
 
         [v3 Documentation](https://jikan.docs.apiary.io/) - [Wrappers/SDKs](https://github.com/jikan-me/jikan#wrappers) - [Report an issue](https://github.com/jikan-me/jikan-rest/issues/new) - [Host your own server](https://github.com/jikan-me/jikan-rest)
-        EOF,
+        EOF),
     ],
 ];

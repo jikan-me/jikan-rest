@@ -99,9 +99,8 @@ class ScheduleController extends Controller
      *                   type="array",
      *
      *                   @OA\Items(
-     *                       allOf={
-     *                           @OA\Schema(ref="#/components/schemas/anime"),
-     *                       }
+     *                       type="object",
+     *                       ref="#/components/schemas/anime",
      *                   )
      *              ),
      *          )
