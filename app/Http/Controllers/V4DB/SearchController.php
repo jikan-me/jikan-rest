@@ -607,31 +607,29 @@ class SearchController extends Controller
      *           @OA\Schema(ref="#/components/schemas/pagination"),
      *           @OA\Schema(
      *              @OA\Property(
-     *                   property="data",
-     *                   type="array",
+     *                  property="data",
+     *                  type="array",
      *
-     *                    @OA\Items(
-     *                        type="object",
-     *                        @OA\Schema(
-     *                            @OA\Property(
-     *                                property="url",
-     *                                type="string",
-     *                                description="MyAnimeList URL"
-     *                            ),
-     *                            @OA\Property(
-     *                                property="username",
-     *                                type="string",
-     *                                description="MyAnimeList Username"
-     *                            ),
-     *                            @OA\Property(
-     *                               ref="#/components/schemas/user_images"
-     *                            ),
-     *                            @OA\Property(
-     *                                property="last_online",
-     *                                type="string",
-     *                                description="Last Online Date ISO8601"
-     *                            ),
-     *                        ),
+     *                  @OA\Items(
+     *                      type="object",
+     *                      @OA\Property(
+     *                          property="url",
+     *                          type="string",
+     *                          description="MyAnimeList URL"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="username",
+     *                          type="string",
+     *                          description="MyAnimeList Username"
+     *                      ),
+     *                      @OA\Property(
+     *                         ref="#/components/schemas/user_images"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="last_online",
+     *                          type="string",
+     *                          description="Last Online Date ISO8601"
+     *                      ),
      *                  ),
      *              ),
      *          ),
