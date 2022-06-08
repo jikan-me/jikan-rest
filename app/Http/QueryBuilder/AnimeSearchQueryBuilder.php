@@ -73,33 +73,46 @@ class AnimeSearchQueryBuilder extends MediaSearchQueryBuilder
         'type' => 'type',
     ];
 
-    protected function buildQuery(array $requestParameters, \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder
+    protected function buildQuery(array $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $builder = parent::buildQuery($requestParameters, $results);
         extract($requestParameters);
 
         if (!is_null($rating)) {
-            $builder = $builder->where('rating', $rating);
+            $builder = $builder->where('rating', $this->mapRating($rating));
         }
 
-        if (!is_null($producer)) {
-            $producer = (int)$producer;
+        if (!is_null($producer)) $producers = $producer;
 
-            $builder = $builder
-                ->where('producers.mal_id', $producer)
-                ->orWhere('licensors.mal_id', $producer)
-                ->orWhere('studios.mal_id', $producer);
+        if (!is_null($producers)) {
+            $producers = explode(',', $producers);
+
+            foreach ($producers as $producer) {
+                if (empty($producer)) {
+                    continue;
+                }
+
+                $producer = (int)$producer;
+
+                // todo: this might be wrong, because the filtering like this should only happen in mongodb maybe?
+                // https://laravel.com/docs/9.x/scout#customizing-the-eloquent-results-query
+                $results = $results
+                    ->query(fn($query) => $query
+                        ->orWhere('producers.mal_id', $producer)
+                        ->orWhere('licensors.mal_id', $producer)
+                        ->orWhere('studios.mal_id', $producer));
+            }
         }
 
         return $builder;
     }
 
-    protected function filterByStartDate(\Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $startDate): \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder
+    protected function filterByStartDate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $startDate): \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder
     {
         return $builder->where('aired.from', '>=', $startDate);
     }
 
-    protected function filterByEndDate(\Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $endDate): \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder
+    protected function filterByEndDate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $endDate): \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder
     {
         return $builder->where('aired.to', '<=', $endDate);
     }
@@ -133,5 +146,12 @@ class AnimeSearchQueryBuilder extends MediaSearchQueryBuilder
     public function getIdentifier(): string
     {
         return "anime";
+    }
+
+    protected function mapRating(?string $rating = null): ?string
+    {
+        $rating = strtolower($rating);
+
+        return self::MAP_RATING[$rating] ?? null;
     }
 }

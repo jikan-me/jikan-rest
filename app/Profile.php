@@ -5,7 +5,7 @@ namespace App;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jikan\Request\User\UserProfileRequest;
 
-class Profile extends Model
+class Profile extends JikanApiSearchableModel
 {
 
     /**
@@ -42,5 +42,26 @@ class Profile extends Model
                 ->serialize($data, 'json'),
             true
         );
+    }
+
+    /**
+     * Converts the model to an index-able data array.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'username' => $this->username
+        ];
+    }
+
+    public function typesenseQueryBy(): array
+    {
+        return [
+            "username"
+        ];
     }
 }

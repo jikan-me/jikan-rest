@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use Jikan\Helper\Parser;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Searchable;
 
@@ -8,35 +9,28 @@ trait JikanSearchable
 {
     use Searchable;
 
-    private function flattenArrayWithKeys($array): array {
-        $result = array();
-        foreach($array as $key=>$value) {
-            if(is_array($value)) {
-                $result = $result + $this->flattenArrayWithKeys($value, $key . '.');
-            }
-            else {
-                $result[$key] = $value;
-            }
-        }
-        return $result;
-    }
-
     protected function toTypeSenseCompatibleNestedField(string $fieldName): array {
         $field = $this->{$fieldName};
+
         if (!is_array($field) && !is_object($field)) {
             return $field;
         }
 
-        return $this->flattenArrayWithKeys($field);
+        return collect($field)->to2dArrayWithDottedKeys($field, $fieldName.'.');
     }
 
     protected function getMalIdsOfField(mixed $field): array {
         return array_map(function($elem) {
-            return $elem->mal_id;
+            return $elem["mal_id"];
         }, $field);
     }
 
-    public function queryScoutModelsByIds(Builder $builder, array $ids): Builder
+    protected function convertToTimestamp(?string $datetime): int
+    {
+        return $datetime ? Parser::parseDate($datetime)->getTimestamp() : 0;
+    }
+
+    public function queryScoutModelsByIds(Builder $builder, array $ids): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $query = static::usesSoftDelete()
             ? $this->withTrashed() : $this->newQuery();
@@ -50,7 +44,7 @@ trait JikanSearchable
             'whereIn';
 
         return $query->{$whereIn}(
-            $this->getScoutKeyName(), array_map(function($v) { return (int)$v; }, $ids)
+            $this->getScoutKeyName(), array_map(fn ($v) => (int)$v, $ids)
         );
     }
 }

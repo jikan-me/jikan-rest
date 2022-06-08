@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Scout\Searchable;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Typesense\Documents;
 
 abstract class SearchQueryBuilder implements SearchQueryBuilderService
 {
@@ -13,6 +14,8 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
     protected array $parameterNames = [];
     protected string $displayNameFieldName = "name";
     protected bool $searchIndexesEnabled;
+
+    private $modelClassTraitsCache = null;
 
     public function __construct(bool $searchIndexesEnabled)
     {
@@ -47,18 +50,29 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
 
     /**
      * @throws \Exception
+     * @throws \Http\Client\Exception
      */
-    private function getQueryBuilder($requestParameters): \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder
+    private function getQueryBuilder($requestParameters): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $modelClass = $this->getModelClass();
-        $traits = class_uses_recursive($modelClass);
 
         if (!in_array(Model::class, class_parents($modelClass))) {
             throw new \Exception("Programming error: The getModelClass method should return a class which 
             inherits from \Jenssegers\Mongodb\Eloquent\Model.");
         }
 
-        if ($this->isSearchIndexUsed()) {
+        if ($this->isSearchIndexUsed() && !empty($requestParameters['q'])) {
+            if (env('SCOUT_DRIVER') == 'typesense')
+            {
+                // if search index is typesense, let's enable exhaustive search
+                // which will make Typesense consider all variations of prefixes and typo corrections of the words
+                // in the query exhaustively, without stopping early when enough results are found.
+                return $modelClass::search($requestParameters["q"], function(Documents $documents, string $query, array $options) {
+                    $options['exhaustive_search'] = true;
+
+                    return $documents->search($options);
+                });
+            }
             return $modelClass::search($requestParameters["q"]);
         }
 
@@ -68,7 +82,10 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
     public function isSearchIndexUsed(): bool
     {
         $modelClass = $this->getModelClass();
-        $traits = class_uses_recursive($modelClass);
+        if (is_null($this->modelClassTraitsCache)) {
+            $this->modelClassTraitsCache = class_uses_recursive($modelClass);
+        }
+        $traits = $this->modelClassTraitsCache;
         return in_array(Searchable::class, $traits) && $this->searchIndexesEnabled;
     }
 
@@ -82,54 +99,63 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
 
     protected abstract function getModelClass(): object|string;
 
-    protected abstract function buildQuery(array $requestParameters, \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder $results): \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder;
+    protected abstract function buildQuery(array $requestParameters, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder;
 
     protected abstract function getOrderByFieldMap(): array;
 
     /**
      * @throws \Exception
+     * @throws \Http\Client\Exception
      */
-    public function query(Request $request): \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder
+    public function query(Request $request): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $requestParameters = $this->getSanitizedParametersFromRequest($request);
-        extract($requestParameters);
+
         $results = $this->getQueryBuilder($requestParameters);
 
-        if (!is_null($letter)) {
-            $results = $results
-                ->where($this->displayNameFieldName, 'like', "{$letter}%");
-        }
+        // if search index is enabled, this way we only do the full-text search on the index, and filter further in mongodb.
+        // the $results variable can be a Builder from the Mongodb Eloquent or from Scout. Both of them have a query
+        // method which will result in a Mongodb Eloquent Builder.
+        return $results->query(function(\Illuminate\Database\Eloquent\Builder $query) use($requestParameters) {
+            $letter = $requestParameters['letter'];
+            $q = $requestParameters['q'];
 
-        if (!is_null($order_by)) {
-            $results = $results
-                ->orderBy($order_by, $sort ?? 'asc');
-        }
+            if (!is_null($letter)) {
+                $query = $query
+                    ->where($this->displayNameFieldName, 'like', "{$letter}%");
+            }
 
-        if (empty($q)) {
-            $results = $results
-                ->orderBy('mal_id');
-        }
+            if (empty($q)) {
+                $query = $query
+                    ->orderBy('mal_id');
+            }
 
-        // if search index is disabled, use mongo's full text-search
-        if (empty($q) && is_null($letter) && !$this->isSearchIndexUsed()) {
-            $results = $results
-                ->whereRaw([
-                    '$text' => [
-                        '$search' => $query
-                    ],
-                ], [
-                    'score' => [
-                        '$meta' => 'textScore'
-                    ]
-                ])
-                ->orderBy('score', ['$meta' => 'textScore']);
-        }
+            // if search index is disabled, use mongo's full text-search
+            if (!empty($q) && is_null($letter) && !$this->isSearchIndexUsed()) {
+                /** @noinspection PhpParamsInspection */
+                $query = $query
+                    ->whereRaw([
+                        '$text' => [
+                            '$search' => $q
+                        ],
+                    ], [
+                        'score' => [
+                            '$meta' => 'textScore'
+                        ]
+                    ])
+                    ->orderBy('score', ['$meta' => 'textScore']);
+            }
 
-        return $this->buildQuery($requestParameters, $results);
+            // The ->filter() call is a local model scope function, which applies filters based on the query string
+            // parameters. This way we can simplify the code base and avoid a bunch of
+            // "if ($this->request->get("asd")) { }" lines in controllers.
+            $queryFilteredByQueryStringParams = $query->filter($requestParameters);
+            return $this->buildQuery($requestParameters, $queryFilteredByQueryStringParams);
+        });
     }
 
     #[ArrayShape(['per_page' => "int", 'total' => "int", 'current_page' => "int", 'last_page' => "int", 'data' => "array"])]
-    public function paginate(Request $request, \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder $results): array
+    public function paginate(Request $request, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): array
     {
         $paginated = $this->paginateBuilder($request, $results);
 
@@ -169,9 +195,9 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         return compact("page", "limit");
     }
 
-    public function paginateBuilder(Request $request, \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder $results): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function paginateBuilder(Request $request, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        extract($this->getPaginateParameters($request));
+        ['limit' => $limit, 'page' => $page] = $this->getPaginateParameters($request);
 
         if ($this->isSearchIndexUsed()) {
             $paginated = $results

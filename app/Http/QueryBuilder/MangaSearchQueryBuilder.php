@@ -58,10 +58,11 @@ class MangaSearchQueryBuilder extends MediaSearchQueryBuilder
         'end_date' => 'published.to',
     ];
 
-    protected function buildQuery(array $requestParameters, \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder
+    protected function buildQuery(array $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $builder = parent::buildQuery($requestParameters, $results);
-        extract($requestParameters);
+        $magazine = $requestParameters['magazine'];
+        $magazines = $requestParameters['magazines'];
 
         if (!is_null($magazine)) $magazines = $magazine;
 
@@ -83,12 +84,12 @@ class MangaSearchQueryBuilder extends MediaSearchQueryBuilder
         return $builder;
     }
 
-    protected function filterByStartDate(\Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $startDate): \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder
+    protected function filterByStartDate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $startDate): \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder
     {
         return $builder->where('published.from', '>=', $startDate);
     }
 
-    protected function filterByEndDate(\Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $endDate): \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder
+    protected function filterByEndDate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $endDate): \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder
     {
         return $builder->where('published.to', '<=', $endDate);
     }
