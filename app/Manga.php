@@ -11,8 +11,11 @@ use Jikan\Model\Common\YoutubeMeta;
 use Jikan\Request\Anime\AnimeRequest;
 use Jikan\Request\Manga\MangaRequest;
 
-class Manga extends Model
+class Manga extends JikanApiSearchableModel
 {
+    // note that here we skip "score", "min_score", "max_score", "rating" and others because they need special logic
+    // to set the correct filtering on the ORM.
+    protected array $filters = ["order_by", "status", "type"];
 
     /**
      * The attributes that are mass assignable.
@@ -59,5 +62,54 @@ class Manga extends Model
                 true
             )
         );
+    }
+
+    /**
+     * Converts the model to an index-able data array.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'start_date' => $this->convertToTimestamp($this->published['from']),
+            'end_date' => $this->convertToTimestamp($this->published['to']),
+            'title' => $this->title,
+            'title_english' => $this->title_english,
+            'title_japanese' => $this->title_japanese,
+            'title_synonyms' => $this->title_synonyms,
+            'type' => $this->type,
+            'chapters' => $this->chapters,
+            'volumes' => $this->volumes,
+            'status' => $this->status,
+            'publishing' => $this->publishing,
+            'score' => $this->score,
+            'rank' => $this->rank,
+            'popularity' => $this->popularity,
+            'members' => $this->members,
+            'favorites' => $this->favorites,
+            'synopsis' => $this->synopsis,
+            'season' => $this->season,
+            'magazines' => $this->getMalIdsOfField($this->magazines),
+            'genres' => $this->getMalIdsOfField($this->genres),
+            'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres)
+        ];
+    }
+
+    public function getThemesAttribute(): array
+    {
+        return [];
+    }
+
+    public function typesenseQueryBy(): array
+    {
+        return [
+            'title',
+            'title_english',
+            'title_japanese',
+            'title_synonyms'
+        ];
     }
 }

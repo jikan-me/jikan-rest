@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V4DB;
 
 use App\Character;
 use App\Club;
+use App\Http\Controllers\V4DB\Traits\JikanApiQueryBuilder;
 use App\Http\QueryBuilder\SearchQueryBuilderCharacter;
 use App\Http\QueryBuilder\SearchQueryBuilderClub;
 use App\Http\QueryBuilder\SearchQueryBuilderManga;
@@ -27,6 +28,7 @@ use Jikan\Request\User\UsernameByIdRequest;
 
 class SearchController extends Controller
 {
+    use JikanApiQueryBuilder;
     private $request;
     const MAX_RESULTS_PER_PAGE = 25;
     private SearchQueryBuilderProvider $searchQueryBuilderProvider;
@@ -35,18 +37,6 @@ class SearchController extends Controller
     {
         parent::__construct($request, $jikan);
         $this->searchQueryBuilderProvider = $searchQueryBuilderProvider;
-    }
-
-    private function getQueryBuilder(string $name, Request $request): \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder
-    {
-        $queryBuilder = $this->searchQueryBuilderProvider->getQueryBuilder($name);
-        return $queryBuilder->query($request);
-    }
-
-    private function getPaginator(string $name, Request $request, \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder $results): \Illuminate\Contracts\Pagination\LengthAwarePaginator
-    {
-        $queryBuilder = $this->searchQueryBuilderProvider->getQueryBuilder($name);
-        return $queryBuilder->paginateBuilder($request, $results);
     }
 
     /**
@@ -198,28 +188,7 @@ class SearchController extends Controller
      */
     public function anime(Request $request)
     {
-        $this->request = $request;
-        $page = $this->request->get('page') ?? 1;
-        $limit = $this->request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = $this->getQueryBuilder("anime", $request);
-        $paginator = $this->getPaginator("anime", $request, $results);
-
-        return new AnimeCollection(
-            $paginator
-        );
+        return $this->preparePaginatedResponse(AnimeCollection::class, "anime", $request);
     }
 
     /**
@@ -345,28 +314,7 @@ class SearchController extends Controller
      */
     public function manga(Request $request)
     {
-        $this->request = $request;
-        $page = $this->request->get('page') ?? 1;
-        $limit = $this->request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = $this->getQueryBuilder("manga", $request);
-        $paginator = $this->getPaginator("manga", $request, $results);
-
-        return new MangaCollection(
-            $paginator
-        );
+        return $this->preparePaginatedResponse(MangaCollection::class, "manga", $request);
     }
 
     /**
@@ -772,37 +720,6 @@ class SearchController extends Controller
      */
     public function clubs(Request $request)
     {
-        $this->request = $request;
-        $page = $this->request->get('page') ?? 1;
-        $limit = $this->request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = SearchQueryBuilderClub::query(
-            $request,
-            Club::query()
-        );
-
-        $results = $results
-            ->paginate(
-                $limit,
-                ['*'],
-                null,
-                $page
-            );
-
-        return new ClubCollection(
-            $results
-        );
+        return $this->preparePaginatedResponse(ClubCollection::class, "club", $request);
     }
 }

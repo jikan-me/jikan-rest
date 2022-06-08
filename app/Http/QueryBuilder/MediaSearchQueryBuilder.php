@@ -2,11 +2,13 @@
 
 namespace App\Http\QueryBuilder;
 
+use App\Http\QueryBuilder\Traits\StatusResolver;
+use App\Http\QueryBuilder\Traits\TypeResolver;
 use App\IsoDateFormatter;
 
 abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
 {
-    use IsoDateFormatter;
+    use IsoDateFormatter, StatusResolver, TypeResolver;
 
     private array $mediaParameterNames = ["score", "sfw", "genres", "genres_exclude", "min_score", "max_score",
         "start_date", "end_date", "status"];
@@ -21,28 +23,6 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         'members' => 'members',
         'favorites' => 'favorites'
     ];
-
-    /**
-     * @param string|null $status
-     * @return string|null
-     */
-    public function mapStatus(?string $status = null): ?string
-    {
-        $status = strtolower($status);
-
-        return $this->getStatusMap()[$status] ?? null;
-    }
-
-    /**
-     * @param string|null $type
-     * @return string|null
-     */
-    public function mapType(?string $type = null): ?string
-    {
-        $type = strtolower($type);
-
-        return $this->getTypeMap()[$type] ?? null;
-    }
 
     protected function getParameterNames(): array
     {
@@ -64,7 +44,7 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         return $parameters;
     }
 
-    private function filterByGenre(\Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder $builder, int $genre, $exclude = false): \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder
+    private function filterByGenre(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $builder, int $genre, $exclude = false): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $builder->where(function ($query) use ($genre, $exclude) {
             $operator = $exclude ? '!=' : null;
@@ -76,7 +56,7 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         });
     }
 
-    private function filterByGenres(\Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder $builder, string $genres, $exclude = false): \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder
+    private function filterByGenres(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $builder, string $genres, $exclude = false): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $genres = explode(',', $genres);
         foreach ($genres as $genre) {
@@ -92,7 +72,7 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         return $builder;
     }
 
-    protected function buildQuery(array $requestParameters, \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Jenssegers\Mongodb\Eloquent\Builder
+    protected function buildQuery(array $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $builder = $results;
         extract($requestParameters);
@@ -103,11 +83,6 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
 
         if (!is_null($end_date)) {
             $builder = $this->filterByEndDate($builder, $this->formatIsoDateTime($end_date));
-        }
-
-        if (!is_null($type)) {
-            $builder = $builder
-                ->where('type', $type);
         }
 
         if ($score !== 0) {
@@ -152,13 +127,9 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         return self::ORDER_BY;
     }
 
-    protected abstract function filterByStartDate(\Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $startDate): \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder;
+    protected abstract function filterByStartDate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $startDate): \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder;
 
-    protected abstract function filterByEndDate(\Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $endDate): \Jenssegers\Mongodb\Eloquent\Builder|\Laravel\Scout\Builder;
-
-    protected abstract function getStatusMap(): array;
-
-    protected abstract function getTypeMap(): array;
+    protected abstract function filterByEndDate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, string $endDate): \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder;
 
     protected abstract function getAdultRating(): string;
 }

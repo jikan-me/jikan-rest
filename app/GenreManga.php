@@ -9,7 +9,7 @@ use Jikan\Request\Genre\AnimeGenresRequest;
  * Class Magazine
  * @package App
  */
-class GenreManga extends Model
+class GenreManga extends JikanApiSearchableModel
 {
 
     /**
@@ -49,5 +49,22 @@ class GenreManga extends Model
                 ->serialize($data, 'json'),
             true
         );
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'name' => $this->name,
+            'count' => $this->count
+        ];
+    }
+
+    public function typesenseQueryBy(): array
+    {
+        return [
+            'name'
+        ];
     }
 }

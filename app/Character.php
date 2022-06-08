@@ -2,17 +2,12 @@
 
 namespace App;
 
-use App\Http\HttpHelper;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Helper\Media;
-use Jikan\Helper\Parser;
 use Jikan\Jikan;
-use Jikan\Model\Common\YoutubeMeta;
-use Jikan\Request\Anime\AnimeRequest;
 use Jikan\Request\Character\CharacterRequest;
 
-class Character extends Model
+class Character extends JikanApiSearchableModel
 {
+    protected array $filters = ["order_by"];
 
     /**
      * The attributes that are mass assignable.
@@ -59,5 +54,24 @@ class Character extends Model
                 ->serialize($data, 'json'),
             true
         );
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'name' => $this->name,
+            'name_kanji' => $this->name_kanji,
+            'member_favorites' => $this->member_favorites
+        ];
+    }
+
+    public function typesenseQueryBy(): array
+    {
+        return [
+            'name',
+            'name_kanji'
+        ];
     }
 }

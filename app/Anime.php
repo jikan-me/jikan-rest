@@ -3,20 +3,14 @@
 namespace App;
 
 use App\Http\HttpHelper;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Helper\Media;
-use Jikan\Helper\Parser;
 use Jikan\Jikan;
-use Jikan\Model\Common\YoutubeMeta;
 use Jikan\Request\Anime\AnimeRequest;
-use Laravel\Scout\Builder;
-use Typesense\LaravelTypesense\Interfaces\TypesenseDocument;
-use Laravel\Scout\Searchable;
 
-class Anime extends Model implements TypesenseDocument
+class Anime extends JikanApiSearchableModel
 {
-    use JikanSearchable;
-
+    // note that here we skip "score", "min_score", "max_score", "rating" and others because they need special logic
+    // to set the correct filtering on the ORM.
+    protected array $filters = ["order_by", "status", "type"];
     /**
      * The attributes that are mass assignable.
      *
@@ -137,16 +131,6 @@ class Anime extends Model implements TypesenseDocument
     }
 
     /**
-     * Get the name of the index associated with the model.
-     *
-     * @return string
-     */
-    public function searchableAs(): string
-    {
-        return 'anime_index';
-    }
-
-    /**
      * Get the value used to index the model.
      *
      * @return mixed
@@ -167,19 +151,17 @@ class Anime extends Model implements TypesenseDocument
     }
 
     /**
-     * Get the indexable data array for the model.
+     * Converts the model to an index-able data array.
      *
      * @return array
      */
     public function toSearchableArray(): array
     {
-        $serializer = app('SerializerV4');
-        $result =  [
+        return [
             'id' => (string) $this->mal_id,
             'mal_id' => (string) $this->mal_id,
-            'start_date' => $this->aired['from'] ? Parser::parseDate($this->aired['from'])->getTimestamp() : 0,
-            'end_date' => $this->aired['to'] ? Parser::parseDate($this->aired['to'])->getTimestamp() : 0,
-            'images' => $this->images,
+            'start_date' => $this->convertToTimestamp($this->aired['from']),
+            'end_date' => $this->convertToTimestamp($this->aired['to']),
             'title' => $this->title,
             'title_english' => $this->title_english,
             'title_japanese' => $this->title_japanese,
@@ -196,19 +178,14 @@ class Anime extends Model implements TypesenseDocument
             'members' => $this->members,
             'favorites' => $this->favorites,
             'synopsis' => $this->synopsis,
-            'background' => $this->background,
             'season' => $this->season,
             'year' => $this->year,
+            'producers' => $this->getMalIdsOfField($this->producers),
+            'studios' => $this->getMalIdsOfField($this->studios),
+            'licensors' => $this->getMalIdsOfField($this->licensors),
+            'genres' => $this->getMalIdsOfField($this->genres),
+            'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres)
         ];
-
-        // todo: test this with artisan::tinker
-        return array_merge($result,
-            // this will add nested fields in the format of "producers.0.mal_id=123" and etc
-            $this->toTypeSenseCompatibleNestedField("producers"),
-            $this->toTypeSenseCompatibleNestedField("studios"),
-            $this->toTypeSenseCompatibleNestedField("genres"),
-            $this->toTypeSenseCompatibleNestedField("explicit_genres")
-        );
     }
 
     /**
@@ -223,24 +200,6 @@ class Anime extends Model implements TypesenseDocument
             'title_english',
             'title_japanese',
             'title_synonyms'
-        ];
-    }
-
-    /**
-     * The Typesense schema to be created.
-     *
-     * @return array
-     */
-    public function getCollectionSchema(): array
-    {
-        return [
-            'name' => $this->searchableAs(),
-            'fields' => [
-                [
-                    'name' => '.*',
-                    'type' => 'auto',
-                ]
-            ]
         ];
     }
 }
