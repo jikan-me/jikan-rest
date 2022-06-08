@@ -161,11 +161,11 @@ class Handler extends ExceptionHandler
         if ($e instanceof HttpException) {
             return response()
                 ->json([
-                    'status' => 400,
+                    'status' => $e->getStatusCode(),
                     'type' => 'HttpException',
-                    'message' => 'Invalid or incomplete request. Please double check the request documentation',
+                    'message' => Response::$statusTexts[$e->getStatusCode()],
                     'error' => null
-                ], 400);
+                ], $e->getStatusCode());
         }
 
         if ($e instanceof TimeoutException) {
