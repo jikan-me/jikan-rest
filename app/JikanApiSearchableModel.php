@@ -41,4 +41,14 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
     {
         return strtolower($this->table) . '_index';
     }
+
+    /**
+     * Get the value used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKey(): mixed
+    {
+        return $this->mal_id;
+    }
 }
