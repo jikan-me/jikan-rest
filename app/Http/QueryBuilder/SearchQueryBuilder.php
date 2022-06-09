@@ -2,7 +2,9 @@
 
 namespace App\Http\QueryBuilder;
 
+use App\Http\QueryBuilder\Traits\PaginationParameterResolver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Scout\Searchable;
 use Jenssegers\Mongodb\Eloquent\Model;
@@ -10,19 +12,21 @@ use Typesense\Documents;
 
 abstract class SearchQueryBuilder implements SearchQueryBuilderService
 {
+    use PaginationParameterResolver;
+
     protected array $commonParameterNames = ["q", "order_by", "sort", "letter"];
     protected array $parameterNames = [];
     protected string $displayNameFieldName = "name";
     protected bool $searchIndexesEnabled;
 
-    private $modelClassTraitsCache = null;
+    private ?array $modelClassTraitsCache = null;
 
     public function __construct(bool $searchIndexesEnabled)
     {
         $this->searchIndexesEnabled = $searchIndexesEnabled;
     }
 
-    protected function getParametersFromRequest(Request $request): array
+    protected function getParametersFromRequest(Request $request): Collection
     {
         $paramNames = $this->getParameterNames();
         $parameters = [];
@@ -35,7 +39,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
             $parameters["q"] = "";
         }
 
-        return $parameters;
+        return collect($parameters);
     }
 
     protected function getParameterNames(): array
@@ -43,7 +47,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         return array_merge($this->commonParameterNames, $this->parameterNames);
     }
 
-    protected function getSanitizedParametersFromRequest(Request $request): array
+    protected function getSanitizedParametersFromRequest(Request $request): Collection
     {
         return $this->sanitizeParameters($this->getParametersFromRequest($request));
     }
@@ -52,7 +56,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
      * @throws \Exception
      * @throws \Http\Client\Exception
      */
-    private function getQueryBuilder($requestParameters): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    private function getQueryBuilder(Collection $requestParameters): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $modelClass = $this->getModelClass();
 
@@ -61,7 +65,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
             inherits from \Jenssegers\Mongodb\Eloquent\Model.");
         }
 
-        if ($this->isSearchIndexUsed() && !empty($requestParameters['q'])) {
+        if ($this->isSearchIndexUsed() && !empty($requestParameters->get("q"))) {
             if (env('SCOUT_DRIVER') == 'typesense')
             {
                 // if search index is typesense, let's enable exhaustive search
@@ -73,9 +77,11 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
                     return $documents->search($options);
                 });
             }
-            return $modelClass::search($requestParameters["q"]);
+            return $modelClass::search($requestParameters->get("q"));
         }
 
+        // If "q" is not set, OR search indexes are disabled, we just get a query builder for the model.
+        // This way we can have a single place where we get the query builder from.
         return $modelClass::query();
     }
 
@@ -89,17 +95,17 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         return in_array(Searchable::class, $traits) && $this->searchIndexesEnabled;
     }
 
-    protected function sanitizeParameters($parameters): array
+    protected function sanitizeParameters(Collection $parameters): Collection
     {
-        $parameters["sort"] = $this->mapSort($parameters["sort"]);
-        $parameters["order_by"] = $this->mapOrderBy($parameters["order_by"]);
+        $parameters["sort"] = $this->mapSort($parameters->get("sort"));
+        $parameters["order_by"] = $this->mapOrderBy($parameters->get("order_by"));
 
         return $parameters;
     }
 
     protected abstract function getModelClass(): object|string;
 
-    protected abstract function buildQuery(array $requestParameters, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder;
+    protected abstract function buildQuery(Collection $requestParameters, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder;
 
     protected abstract function getOrderByFieldMap(): array;
 
@@ -171,28 +177,6 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
             'last_page' => $paginated->lastPage(),
             'data' => $items
         ];
-    }
-
-    private function getPaginateParameters(Request $request): array
-    {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
-
-        $limit = (int)$limit;
-
-        if ($limit <= 0) {
-            $limit = 1;
-        }
-
-        if ($limit > env('MAX_RESULTS_PER_PAGE', 25)) {
-            $limit = env('MAX_RESULTS_PER_PAGE', 25);
-        }
-
-        if ($page <= 0) {
-            $page = 1;
-        }
-
-        return compact("page", "limit");
     }
 
     public function paginateBuilder(Request $request, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): \Illuminate\Contracts\Pagination\LengthAwarePaginator

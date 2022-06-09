@@ -9,7 +9,8 @@ trait JikanSearchable
 {
     use Searchable;
 
-    protected function toTypeSenseCompatibleNestedField(string $fieldName): array {
+    protected function toTypeSenseCompatibleNestedField(string $fieldName): array
+    {
         $field = $this->{$fieldName};
 
         if (!is_array($field) && !is_object($field)) {
@@ -19,7 +20,8 @@ trait JikanSearchable
         return collect($field)->to2dArrayWithDottedKeys($field, $fieldName.'.');
     }
 
-    protected function getMalIdsOfField(mixed $field): array {
+    protected function getMalIdsOfField(mixed $field): array
+    {
         return array_map(function($elem) {
             return $elem["mal_id"];
         }, $field);

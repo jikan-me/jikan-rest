@@ -3,6 +3,7 @@
 namespace App\Http\QueryBuilder;
 
 use App\Manga;
+use Illuminate\Support\Collection;
 
 class MangaSearchQueryBuilder extends MediaSearchQueryBuilder
 {
@@ -58,11 +59,11 @@ class MangaSearchQueryBuilder extends MediaSearchQueryBuilder
         'end_date' => 'published.to',
     ];
 
-    protected function buildQuery(array $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    protected function buildQuery(Collection $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $builder = parent::buildQuery($requestParameters, $results);
-        $magazine = $requestParameters['magazine'];
-        $magazines = $requestParameters['magazines'];
+        $magazine = $requestParameters->get("magazine");
+        $magazines = $requestParameters->get("magazines");
 
         if (!is_null($magazine)) $magazines = $magazine;
 
@@ -120,7 +121,7 @@ class MangaSearchQueryBuilder extends MediaSearchQueryBuilder
         return array_merge($map, self::ORDER_BY);
     }
 
-    function getIdentifier(): string
+    public function getIdentifier(): string
     {
         return "manga";
     }
