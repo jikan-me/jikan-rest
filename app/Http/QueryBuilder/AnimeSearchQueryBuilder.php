@@ -3,6 +3,7 @@
 namespace App\Http\QueryBuilder;
 
 use App\Anime;
+use Illuminate\Support\Collection;
 
 class AnimeSearchQueryBuilder extends MediaSearchQueryBuilder
 {
@@ -73,10 +74,12 @@ class AnimeSearchQueryBuilder extends MediaSearchQueryBuilder
         'type' => 'type',
     ];
 
-    protected function buildQuery(array $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    protected function buildQuery(Collection $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $builder = parent::buildQuery($requestParameters, $results);
-        extract($requestParameters);
+        $rating = $requestParameters->get("rating");
+        $producer = $requestParameters->get("producer");
+        $producers = $requestParameters->get("producers");
 
         if (!is_null($rating)) {
             $builder = $builder->where('rating', $this->mapRating($rating));
@@ -94,8 +97,6 @@ class AnimeSearchQueryBuilder extends MediaSearchQueryBuilder
 
                 $producer = (int)$producer;
 
-                // todo: this might be wrong, because the filtering like this should only happen in mongodb maybe?
-                // https://laravel.com/docs/9.x/scout#customizing-the-eloquent-results-query
                 $results = $results
                     ->query(fn($query) => $query
                         ->orWhere('producers.mal_id', $producer)

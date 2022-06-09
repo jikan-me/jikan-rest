@@ -2,6 +2,7 @@
 
 namespace App\Http\QueryBuilder;
 
+use Illuminate\Support\Collection;
 use App\Http\QueryBuilder\Traits\StatusResolver;
 use App\Http\QueryBuilder\Traits\TypeResolver;
 use App\IsoDateFormatter;
@@ -30,16 +31,16 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         return array_merge($parameterNames, $this->mediaParameterNames);
     }
 
-    protected function sanitizeParameters($parameters): array
+    protected function sanitizeParameters(Collection $parameters): Collection
     {
         $parameters = parent::sanitizeParameters($parameters);
 
-        if (!array_key_exists("score", $parameters) || empty($parameters["score"])) {
+        if (!$parameters->offsetExists("score")) {
             $parameters["score"] = 0;
         }
 
-        $parameters["status"] = $this->mapStatus($parameters["status"]);
-        $parameters["type"] = $this->mapType($parameters["type"]);
+        $parameters["status"] = $this->mapStatus($parameters->get("status"));
+        $parameters["type"] = $this->mapType($parameters->get("type"));
 
         return $parameters;
     }
@@ -72,10 +73,19 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         return $builder;
     }
 
-    protected function buildQuery(array $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    protected function buildQuery(Collection $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $builder = $results;
-        extract($requestParameters);
+        $start_date = $requestParameters->get("start_date");
+        $end_date = $requestParameters->get("end_date");
+        $score = $requestParameters->get("score");
+        $min_score = $requestParameters->get("min_score");
+        $max_score = $requestParameters->get("max_score");
+        $genres = $requestParameters->get("genres");
+        $genresExclude = $requestParameters->get("genres_exclude");
+        $sfw = $requestParameters->get("sfw");
+        $type = $requestParameters->get("type");
+        $status = $requestParameters->get("status");
 
         if (!is_null($start_date)) {
             $builder = $this->filterByStartDate($builder, $this->formatIsoDateTime($start_date));
@@ -83,6 +93,16 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
 
         if (!is_null($end_date)) {
             $builder = $this->filterByEndDate($builder, $this->formatIsoDateTime($end_date));
+        }
+
+        if (!is_null($type)) {
+            $builder = $builder
+                ->where('type', $type);
+        }
+
+        if (!is_null($status)) {
+            $builder = $builder
+                ->where('status', $status);
         }
 
         if ($score !== 0) {
@@ -116,7 +136,7 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
 
         if (!is_null($sfw)) {
             $builder = $builder
-                ->where('type', '!=', $this->getAdultRating());
+                ->where('rating', '!=', $this->getAdultRating());
         }
 
         return $builder;

@@ -9,13 +9,13 @@ trait JikanApiQueryBuilder
 {
     private SearchQueryBuilderProvider $searchQueryBuilderProvider;
 
-    private function getQueryBuilder(string $name, Request $request): \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder
+    protected function getQueryBuilder(string $name, Request $request): \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder
     {
         $queryBuilder = $this->searchQueryBuilderProvider->getQueryBuilder($name);
         return $queryBuilder->query($request);
     }
 
-    private function getPaginator(string $name, Request $request, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    protected function getPaginator(string $name, Request $request, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $queryBuilder = $this->searchQueryBuilderProvider->getQueryBuilder($name);
         return $queryBuilder->paginateBuilder($request, $results);
@@ -27,7 +27,7 @@ trait JikanApiQueryBuilder
      * @param \Illuminate\Http\Request $request
      * @return T
      */
-    private function preparePaginatedResponse(string|object $resourceCollectionClass, string $resourceTypeName, Request $request)
+    protected function preparePaginatedResponse(string|object $resourceCollectionClass, string $resourceTypeName, Request $request)
     {
         $results = $this->getQueryBuilder($resourceTypeName, $request);
         $paginator = $this->getPaginator($resourceTypeName, $request, $results);

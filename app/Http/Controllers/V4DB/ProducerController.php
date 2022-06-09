@@ -2,19 +2,11 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
-use App\Http\QueryBuilder\SearchQueryBuilderProducer;
-use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\ProducerCollection;
-use App\Producer;
 use Illuminate\Http\Request;
 
-class ProducerController extends Controller
+class ProducerController extends ControllerWithQueryBuilderProvider
 {
-
-    private $request;
-    const MAX_RESULTS_PER_PAGE = 100;
-
     /**
      *  @OA\Get(
      *     path="/producers",
@@ -39,36 +31,6 @@ class ProducerController extends Controller
      */
     public function main(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = SearchQueryBuilderProducer::query(
-            $request,
-            Producer::query()
-        );
-
-        $results = $results
-            ->paginate(
-                $limit,
-                ['*'],
-                null,
-                $page
-            );
-
-        return new ProducerCollection(
-            $results
-        );
+        return $this->preparePaginatedResponse(ProducerCollection::class, "producer", $request);
     }
 }

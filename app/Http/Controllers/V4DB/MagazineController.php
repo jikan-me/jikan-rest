@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Http\QueryBuilder\SearchQueryBuilderMagazine;
 use App\Http\Resources\V4\MagazineCollection;
-use App\Http\Resources\V4\MangaCollection;
-use App\Magazine;
-use App\Manga;
 use Illuminate\Http\Request;
 
-class MagazineController extends Controller
+class MagazineController extends ControllerWithQueryBuilderProvider
 {
-
-    const MAX_RESULTS_PER_PAGE = 25;
-
     /**
      *  @OA\Get(
      *     path="/magazines",
@@ -35,39 +28,15 @@ class MagazineController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
+     *  @OA\Schema(
+     *    schema="magazines_query_orderby",
+     *    description="Order by magazine data",
+     *    type="string",
+     *    enum={"mal_id", "name", "count"}
+     *  )
      */
     public function main(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = SearchQueryBuilderMagazine::query(
-            $request,
-            Magazine::query()
-        );
-
-        $results = $results
-            ->paginate(
-                $limit,
-                ['*'],
-                null,
-                $page
-            );
-
-        return new MagazineCollection(
-            $results
-        );
+        return $this->preparePaginatedResponse(MagazineCollection::class, "magazine", $request);
     }
 }

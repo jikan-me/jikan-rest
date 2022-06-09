@@ -3,6 +3,7 @@ namespace App\Http\QueryBuilder;
 
 use App\Club;
 use App\Http\QueryBuilder\Traits\TypeResolver;
+use Illuminate\Support\Collection;
 
 class ClubSearchQueryBuilder extends SearchQueryBuilder
 {
@@ -69,7 +70,7 @@ class ClubSearchQueryBuilder extends SearchQueryBuilder
         return Club::class;
     }
 
-    protected function sanitizeParameters($parameters): array
+    protected function sanitizeParameters($parameters): Collection
     {
         $parameters = parent::sanitizeParameters($parameters);
         $parameters["category"] = $this->mapCategory($parameters["category"]);
@@ -78,7 +79,7 @@ class ClubSearchQueryBuilder extends SearchQueryBuilder
         return $parameters;
     }
 
-    protected function buildQuery(array $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    protected function buildQuery(Collection $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $results;
     }
@@ -88,7 +89,7 @@ class ClubSearchQueryBuilder extends SearchQueryBuilder
         return self::ORDER_BY;
     }
 
-    function getIdentifier(): string
+    public function getIdentifier(): string
     {
         return "club";
     }

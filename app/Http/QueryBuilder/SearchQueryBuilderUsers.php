@@ -3,6 +3,7 @@
 namespace App\Http\QueryBuilder;
 
 use App\Http\HttpHelper;
+use App\Http\QueryBuilder\Traits\PaginationParameterResolver;
 use Illuminate\Http\Request;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jikan\Helper\Constants as JikanConstants;
@@ -11,6 +12,8 @@ use Jikan\Request\Search\UserSearchRequest;
 
 class SearchQueryBuilderUsers
 {
+    use PaginationParameterResolver;
+
     /**
      * @OA\Schema(
      *   schema="users_search_query_gender",
@@ -46,24 +49,9 @@ class SearchQueryBuilderUsers
 
     }
 
-    public static function paginate(Request $request, Builder $results)
+    public function paginate(Request $request, Builder $results)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
-
-        $limit = (int) $limit;
-
-        if ($limit <= 0) {
-            $limit = 1;
-        }
-
-        if ($limit > env('MAX_RESULTS_PER_PAGE', 25)) {
-            $limit = env('MAX_RESULTS_PER_PAGE', 25);
-        }
-
-        if ($page <= 0) {
-            $page = 1;
-        }
+        ["page" => $page, "limit" => $limit] = $this->getPaginateParameters($request);
 
         $paginated = $results
             ->paginate(
