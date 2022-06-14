@@ -4682,10 +4682,10 @@
                         "description": "Season",
                         "type": "string",
                         "enum": [
-                            "Summer",
-                            "Winter",
-                            "Spring",
-                            "Fall"
+                            "summer",
+                            "winter",
+                            "spring",
+                            "fall"
                         ]
                     },
                     "year": {
@@ -4956,10 +4956,10 @@
                         "description": "Season",
                         "type": "string",
                         "enum": [
-                            "Summer",
-                            "Winter",
-                            "Spring",
-                            "Fall"
+                            "summer",
+                            "winter",
+                            "spring",
+                            "fall"
                         ]
                     },
                     "year": {
