@@ -8,57 +8,28 @@ class ClubControllerTest extends TestCase
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
                 'mal_id',
+                'name',
                 'url',
-                'images',
-                'title',
-                'members_count',
-                'pictures_count',
+                'images' => [
+                    'jpg' => [
+                        'image_url',
+                    ],
+                ],
+                'members',
                 'category',
                 'created',
-                'type',
-                'staff' => [
-                    [
-                        'mal_id',
-                        'type',
-                        'name',
-                        'url',
-                    ]
-                ],
-                'anime' => [
-                    [
-                        'mal_id',
-                        'type',
-                        'name',
-                        'url',
-                    ]
-                ],
-                'manga' => [
-                    [
-                        'mal_id',
-                        'type',
-                        'name',
-                        'url',
-                    ]
-                ],
-                'characters' => [
-                    [
-                        'mal_id',
-                        'type',
-                        'name',
-                        'url',
-                    ]
-                ],
+                'access',
             ]]);
     }
 
     public function testMembers()
     {
-        $this->get('/v4/club/1/members')
+        $this->get('/v4/clubs/1/members')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -76,7 +47,7 @@ class ClubControllerTest extends TestCase
                 ]
             ]);
 
-        $this->get('/v4/club/1/members/1000')
+        $this->get('/v4/clubs/1000000/members')
             ->seeStatusCode(404);
     }
 

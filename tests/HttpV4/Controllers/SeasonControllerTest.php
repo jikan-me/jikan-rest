@@ -8,8 +8,10 @@ class SeasonControllerTest extends TestCase
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'data' => [
-                    'year',
-                    'seasons'
+                    [
+                        'year',
+                        'seasons'
+                    ]
                 ]
             ]);
 

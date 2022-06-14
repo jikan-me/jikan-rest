@@ -60,7 +60,7 @@ class PersonControllerTest extends TestCase
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
                 [
-                    'position',
+                    'role',
                     'manga' => [
                         'mal_id',
                         'url',
@@ -82,9 +82,9 @@ class PersonControllerTest extends TestCase
             ]]);
     }
 
-    public function testSeiyuu()
+    public function testVoices()
     {
-        $this->get('/v4/people/1/seiyuu')
+        $this->get('/v4/people/1/voices')
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
                 [
@@ -132,8 +132,9 @@ class PersonControllerTest extends TestCase
             ->seeJsonStructure([
                 'data' => [
                     [
-                        'large',
-                        'small',
+                        'jpg' => [
+                            'image_url'
+                        ]
                     ]
                 ]
             ]);

@@ -26,7 +26,7 @@ class AnimeControllerV4Test extends TestCase
                     'url',
                     'embed_url',
                     'images' => [
-                        'default_image_url',
+                        'image_url',
                         'small_image_url',
                         'medium_image_url',
                         'large_image_url',
@@ -154,7 +154,7 @@ class AnimeControllerV4Test extends TestCase
 
     public function testStaff()
     {
-        $this->get('/v4/anime/1/characters')
+        $this->get('/v4/anime/1/staff')
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
                 [
@@ -179,7 +179,7 @@ class AnimeControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -201,7 +201,7 @@ class AnimeControllerV4Test extends TestCase
             ->seeJson([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -232,17 +232,19 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/21/episodes/1')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'mal_id',
-                'url',
-                'title',
-                'title_japanese',
-                'title_romanji',
-                'duration',
-                'aired',
-                'aired',
-                'filler',
-                'recap',
-                'synopsis'
+                'data' => [
+                    'mal_id',
+                    'url',
+                    'title',
+                    'title_japanese',
+                    'title_romanji',
+                    'duration',
+                    'aired',
+                    'aired',
+                    'filler',
+                    'recap',
+                    'synopsis',
+                ]
             ]);
     }
 
@@ -253,7 +255,7 @@ class AnimeControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -261,7 +263,7 @@ class AnimeControllerV4Test extends TestCase
                         'url',
                         'title',
                         'date',
-                        'author_name',
+                        'author_username',
                         'author_url',
                         'forum_url',
                         'images' => [
@@ -281,10 +283,18 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/1/pictures')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'images' => [
+                'data' => [
                     [
-                        'large_image_url',
-                        'small_image_url',
+                        'jpg' => [
+                            'image_url',
+                            'large_image_url',
+                            'small_image_url',
+                        ],
+                        'webp' => [
+                            'image_url',
+                            'large_image_url',
+                            'small_image_url',
+                        ]
                     ]
                 ]
             ]);
@@ -295,16 +305,15 @@ class AnimeControllerV4Test extends TestCase
         $this->get('/v4/anime/1/videos')
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
-                'promos' => [
+                'promo' => [
                     [
                         'title',
-                        'image_url',
                         'trailer' => [
                             'youtube_id',
                             'url',
                             'embed_url',
                             'images' => [
-                                'default_image_url',
+                                'image_url',
                                 'small_image_url',
                                 'medium_image_url',
                                 'large_image_url',
@@ -319,7 +328,11 @@ class AnimeControllerV4Test extends TestCase
                         'title',
                         'episode',
                         'url',
-                        'image_url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                            ],
+                        ],
                     ]
                 ]
             ]]);
@@ -357,12 +370,12 @@ class AnimeControllerV4Test extends TestCase
                         'url',
                         'title',
                         'date',
-                        'author_name',
+                        'author_username',
                         'author_url',
                         'comments',
                         'last_comment' => [
                             'url',
-                            'author_name',
+                            'author_username',
                             'author_url',
                             'date'
                         ]
@@ -387,7 +400,7 @@ class AnimeControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -426,7 +439,7 @@ class AnimeControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => []
             ]);
@@ -470,7 +483,7 @@ class AnimeControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -526,10 +539,8 @@ class AnimeControllerV4Test extends TestCase
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'data' => [
-                    [
-                        'openings',
-                        'endings',
-                    ]
+                    'openings',
+                    'endings',
                 ]
             ]);
     }

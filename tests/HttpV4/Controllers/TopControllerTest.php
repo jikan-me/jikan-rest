@@ -7,18 +7,110 @@ class TopControllerTest extends TestCase
         $this->get('/v4/top/anime')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'top' => [
+                'data' => [
                     [
                         'mal_id',
-                        'rank',
-                        'title',
                         'url',
-                        'image_url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                        ],
+                        'trailer' => [
+                            'youtube_id',
+                            'url',
+                            'embed_url',
+                            'images' => [
+                                'image_url',
+                                'small_image_url',
+                                'medium_image_url',
+                                'large_image_url',
+                                'maximum_image_url',
+                            ]
+                        ],
+                        'title',
+                        'title_english',
+                        'title_japanese',
+                        'title_synonyms',
                         'type',
-                        'start_date',
-                        'end_date',
-                        'members',
+                        'source',
+                        'episodes',
+                        'status',
+                        'airing',
+                        'aired' => [
+                            'from',
+                            'to',
+                            'prop' => [
+                                'from' => [
+                                    'day',
+                                    'month',
+                                    'year'
+                                ],
+                                'to' => [
+                                    'day',
+                                    'month',
+                                    'year'
+                                ]
+                            ],
+                            'string'
+                        ],
+                        'duration',
+                        'rating',
                         'score',
+                        'scored_by',
+                        'rank',
+                        'popularity',
+                        'members',
+                        'favorites',
+                        'synopsis',
+                        'background',
+                        'season',
+                        'year',
+                        'broadcast' => [
+                            'day',
+                            'time',
+                            'timezone',
+                            'string'
+                        ],
+                        'producers' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'licensors' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'studios' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'genres' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
                     ]
                 ]
             ]);
@@ -29,19 +121,80 @@ class TopControllerTest extends TestCase
         $this->get('/v4/top/manga')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'top' => [
+                'data' => [
                     [
                         'mal_id',
-                        'rank',
-                        'title',
                         'url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                            'webp' => [
+                                'image_url',
+                                'small_image_url',
+                                'large_image_url'
+                            ],
+                        ],
+                        'title',
+                        'title_english',
+                        'title_japanese',
+                        'title_synonyms',
                         'type',
+                        'chapters',
                         'volumes',
-                        'start_date',
-                        'end_date',
-                        'members',
+                        'status',
+                        'publishing',
+                        'published' => [
+                            'from',
+                            'to',
+                            'prop' => [
+                                'from' => [
+                                    'day',
+                                    'month',
+                                    'year'
+                                ],
+                                'to' => [
+                                    'day',
+                                    'month',
+                                    'year'
+                                ]
+                            ],
+                            'string'
+                        ],
                         'score',
-                        'image_url',
+                        'scored_by',
+                        'rank',
+                        'popularity',
+                        'members',
+                        'favorites',
+                        'synopsis',
+                        'background',
+                        'authors' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'serializations' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ],
+                        'genres' => [
+                            [
+                                'mal_id',
+                                'type',
+                                'name',
+                                'url'
+                            ]
+                        ]
                     ]
                 ]
             ]);
@@ -52,16 +205,23 @@ class TopControllerTest extends TestCase
         $this->get('/v4/top/people')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'top' => [
+                'data' => [
                     [
                         'mal_id',
-                        'rank',
-                        'title', // todo should be `name`
                         'url',
-                        'name_kanji',
-                        'favorites',
-                        'image_url',
+                        'website_url',
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                            ],
+                        ],
+                        'name',
+                        'given_name',
+                        'family_name',
+                        'alternate_names',
                         'birthday',
+                        'favorites',
+                        'about',
                     ]
                 ]
             ]);
@@ -72,32 +232,22 @@ class TopControllerTest extends TestCase
         $this->get('/v4/top/characters')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'top' => [
+                'data' => [
                     [
                         'mal_id',
-                        'rank',
-                        'title', // todo should be `name`
                         'url',
-                        'name_kanji',
-
-                        'animeography' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
+                        'images' => [
+                            'jpg' => [
+                                'image_url',
+                            ],
+                            'webp' => [
+                                'image_url',
+                            ],
                         ],
-                        'mangaography' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
-                        ],
+                        'name',
+                        'nicknames',
                         'favorites',
-                        'image_url',
+                        'about',
                     ]
                 ]
             ]);
