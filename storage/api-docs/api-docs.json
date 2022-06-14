@@ -3257,7 +3257,12 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/user_favorites"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/user_favorites"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -7136,89 +7141,78 @@
             },
             "user_favorites": {
                 "properties": {
-                    "data": {
-                        "description": "Favorite entries",
-                        "properties": {
-                            "anime": {
-                                "description": "Favorite Anime",
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "allOf": [
-                                        {
-                                            "properties": {
-                                                "type": {
-                                                    "type": "string"
-                                                },
-                                                "start_year": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/anime_meta"
-                                        }
-                                    ]
-                                }
-                            },
-                            "manga": {
-                                "description": "Favorite Manga",
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "allOf": [
-                                        {
-                                            "properties": {
-                                                "type": {
-                                                    "type": "string"
-                                                },
-                                                "start_year": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/manga_meta"
-                                        }
-                                    ]
-                                }
-                            },
-                            "characters": {
-                                "description": "Favorite Characters",
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "allOf": [
-                                        {
-                                            "properties": {
-                                                "": {
-                                                    "$ref": "#/components/schemas/mal_url_2"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/character_meta"
-                                        }
-                                    ]
-                                }
-                            },
-                            "people": {
-                                "description": "Favorite People",
-                                "type": "array",
-                                "items": {
+                    "anime": {
+                        "description": "Favorite Anime",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "allOf": [
+                                {
                                     "properties": {
-                                        "": {
-                                            "$ref": "#/components/schemas/character_meta"
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "start_year": {
+                                            "type": "integer"
                                         }
                                     },
                                     "type": "object"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/anime_meta"
                                 }
-                            }
-                        },
-                        "type": "object"
+                            ]
+                        }
+                    },
+                    "manga": {
+                        "description": "Favorite Manga",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "allOf": [
+                                {
+                                    "properties": {
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "start_year": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/manga_meta"
+                                }
+                            ]
+                        }
+                    },
+                    "characters": {
+                        "description": "Favorite Characters",
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "allOf": [
+                                {
+                                    "$ref": "#/components/schemas/character_meta"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/mal_url_2"
+                                }
+                            ]
+                        }
+                    },
+                    "people": {
+                        "description": "Favorite People",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "": {
+                                    "$ref": "#/components/schemas/character_meta"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
