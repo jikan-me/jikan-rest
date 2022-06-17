@@ -3,16 +3,20 @@
 namespace App\Providers;
 
 use App\Http\QueryBuilder\SearchQueryBuilderService;
+use Illuminate\Support\Facades\Log;
 
 class SearchQueryBuilderProvider
 {
     private array $searchQueryBuilders = [];
 
-    public function __construct(array $searchQueryBuilders)
+    public function __construct(\IteratorAggregate $searchQueryBuilders)
     {
-        foreach($searchQueryBuilders as $searchQueryBuilder)
-        {
-            $this->searchQueryBuilders[$searchQueryBuilder->getIdentifier()] = $searchQueryBuilder;
+        try {
+            foreach ($searchQueryBuilders->getIterator() as $searchQueryBuilder) {
+                $this->searchQueryBuilders[$searchQueryBuilder->getIdentifier()] = $searchQueryBuilder;
+            }
+        } catch (\Exception $e) {
+            Log::error($e);
         }
     }
 

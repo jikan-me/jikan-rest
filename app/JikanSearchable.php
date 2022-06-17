@@ -22,6 +22,9 @@ trait JikanSearchable
 
     protected function getMalIdsOfField(mixed $field): array
     {
+        if (is_null($field)) {
+            return [];
+        }
         return array_map(function($elem) {
             return $elem["mal_id"];
         }, $field);

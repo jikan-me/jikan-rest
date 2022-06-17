@@ -9,7 +9,11 @@ class TopMangaQueryBuilder extends MangaSearchQueryBuilder
 {
     use TopQueryFilterResolver;
 
-    protected array $filterMap = ['publishing', 'upcoming', 'bypopularity', 'favorite'];
+    public function __construct(bool $searchIndexesEnabled)
+    {
+        parent::__construct($searchIndexesEnabled);
+        $this->filterMap = ['publishing', 'upcoming', 'bypopularity', 'favorite'];
+    }
 
     protected function buildQuery(Collection $requestParameters, \Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $results): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
