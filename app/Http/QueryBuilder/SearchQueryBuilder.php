@@ -61,7 +61,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         $modelClass = $this->getModelClass();
 
         if (!in_array(Model::class, class_parents($modelClass))) {
-            throw new \Exception("Programming error: The getModelClass method should return a class which 
+            throw new \Exception("Programming error: The getModelClass method should return a class which
             inherits from \Jenssegers\Mongodb\Eloquent\Model.");
         }
 
@@ -95,6 +95,11 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         return in_array(Searchable::class, $traits) && $this->searchIndexesEnabled;
     }
 
+    public function isScoutBuilder(mixed $results): bool
+    {
+        return $results instanceof \Laravel\Scout\Builder;
+    }
+
     protected function sanitizeParameters(Collection $parameters): Collection
     {
         $parameters["sort"] = $this->mapSort($parameters->get("sort"));
@@ -122,7 +127,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         // if search index is enabled, this way we only do the full-text search on the index, and filter further in mongodb.
         // the $results variable can be a Builder from the Mongodb Eloquent or from Scout. Both of them have a query
         // method which will result in a Mongodb Eloquent Builder.
-        return $results->query(function(\Illuminate\Database\Eloquent\Builder $query) use($requestParameters) {
+        return $this->isScoutBuilder($results) ? $results->query(function(\Illuminate\Database\Eloquent\Builder $query) use($requestParameters) {
             $letter = $requestParameters->get('letter');
             $q = $requestParameters->get('q');
 
@@ -157,7 +162,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
             // "if ($this->request->get("asd")) { }" lines in controllers.
             $queryFilteredByQueryStringParams = $query->filter($requestParameters);
             return $this->buildQuery($requestParameters, $queryFilteredByQueryStringParams);
-        });
+        }) : $results;
     }
 
     #[ArrayShape(['per_page' => "int", 'total' => "int", 'current_page' => "int", 'last_page' => "int", 'data' => "array"])]
@@ -183,7 +188,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
     {
         ['limit' => $limit, 'page' => $page] = $this->getPaginateParameters($request);
 
-        if ($this->isSearchIndexUsed()) {
+        if ($this->isSearchIndexUsed() && $this->isScoutBuilder($results)) {
             $paginated = $results
                 ->paginate(
                     $limit,
