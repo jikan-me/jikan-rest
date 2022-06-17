@@ -131,16 +131,6 @@ class Anime extends JikanApiSearchableModel
     }
 
     /**
-     * Get the key name used to index the model.
-     *
-     * @return mixed
-     */
-    public function getScoutKeyName(): mixed
-    {
-        return 'mal_id';
-    }
-
-    /**
      * Converts the model to an index-able data array.
      *
      * @return array

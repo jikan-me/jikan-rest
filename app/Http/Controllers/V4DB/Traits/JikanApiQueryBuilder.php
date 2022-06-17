@@ -24,6 +24,7 @@ trait JikanApiQueryBuilder
     /**
      * @template T
      * @param T $resourceCollectionClass
+     * @param string $resourceTypeName
      * @param \Illuminate\Http\Request $request
      * @return T
      */
