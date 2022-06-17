@@ -98,8 +98,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -185,8 +184,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -1088,8 +1086,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -1168,8 +1165,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -1249,8 +1245,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
