@@ -125,8 +125,8 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         $results = $this->getQueryBuilder($requestParameters);
 
         // if search index is enabled, this way we only do the full-text search on the index, and filter further in mongodb.
-        // the $results variable can be a Builder from the Mongodb Eloquent or from Scout. Both of them have a query
-        // method which will result in a Mongodb Eloquent Builder.
+        // the $results variable can be a Builder from the Mongodb Eloquent or from Scout. Only Laravel\Scout\Builder
+        // has a query method which will result in a Mongodb Eloquent Builder.
         return $this->isScoutBuilder($results) ? $results->query(function(\Illuminate\Database\Eloquent\Builder $query) use($requestParameters) {
             $letter = $requestParameters->get('letter');
             $q = $requestParameters->get('q');
