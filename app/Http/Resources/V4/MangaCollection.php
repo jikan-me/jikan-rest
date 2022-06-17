@@ -26,9 +26,8 @@ class MangaCollection extends ResourceCollection
      *                   type="array",
      *
      *                   @OA\Items(
-     *                       allOf={
-     *                           @OA\Schema(ref="#/components/schemas/manga"),
-     *                       }
+     *                       type="object",
+     *                       ref="#/components/schemas/manga",
      *                   )
      *              ),
      *          )

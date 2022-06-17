@@ -16,90 +16,79 @@ class ProfileFavoritesResource extends JsonResource
      *     schema="user_favorites",
      *     type="object",
      *
+     *     @OA\Property (
+     *         property="anime",
+     *         type="array",
+     *         description="Favorite Anime",
+     *
+     *         @OA\Items (
+     *             type="object",
+     *
+     *             allOf={
+     *                 @OA\Schema (ref="#/components/schemas/anime_meta"),
+     *                 @OA\Schema (
+     *                     @OA\Property (
+     *                         property="type",
+     *                         type="string"
+     *                     ),
+     *                     @OA\Property (
+     *                         property="start_year",
+     *                         type="integer"
+     *                     ),
+     *                 ),
+     *             },
+     *         ),
+     *     ),
      *     @OA\Property(
-     *          property="data",
-     *          type="object",
-     *          description="Favorite entries",
+     *         property="manga",
+     *         type="array",
+     *         description="Favorite Manga",
      *
-     *          @OA\Property (
-     *              property="anime",
-     *              type="array",
-     *              description="Favorite Anime",
+     *         @OA\Items (
+     *             type="object",
+     *             allOf={
+     *                 @OA\Schema (ref="#/components/schemas/manga_meta"),
+     *                 @OA\Schema (
+     *                     @OA\Property (
+     *                         property="type",
+     *                         type="string"
      *
-     *              @OA\Items (
+     *                     ),
+     *                     @OA\Property (
+     *                         property="start_year",
+     *                         type="integer"
+     *
+     *                     ),
+     *                 ),
+     *             },
+     *         ),
+     *     ),
+     *     @OA\Property(
+     *         property="characters",
+     *         type="array",
+     *         description="Favorite Characters",
+     *         @OA\Items (
+     *             type="object",
+     *             allOf={
+     *                 @OA\Schema (ref="#/components/schemas/character_meta"),
+     *                 @OA\Schema (ref="#/components/schemas/mal_url_2"),
+     *             },
+     *         ),
+     *     ),
+     *     @OA\Property(
+     *         property="people",
+     *         type="array",
+     *         description="Favorite People",
+     *         @OA\Items (
+     *             type="object",
+     *
+     *             @OA\Property (
      *                  type="object",
-     *
-     *                  allOf={
-     *                      @OA\Schema (ref="#/components/schemas/anime_meta"),
-     *                      @OA\Schema (
-     *                          @OA\Property (
-     *                              property="type",
-     *                              type="string"
-     *                          ),
-     *                          @OA\Property (
-     *                              property="start_year",
-     *                              type="integer"
-     *                          ),
-     *                      ),
-     *                  },
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="manga",
-     *              type="array",
-     *              description="Favorite Manga",
-     *
-     *              @OA\Items (
-     *                  type="object",
-     *                  allOf={
-     *                      @OA\Schema (ref="#/components/schemas/manga_meta"),
-     *                      @OA\Schema (
-     *                          @OA\Property (
-     *                              property="type",
-     *                              type="string"
-     *
-     *                          ),
-     *                          @OA\Property (
-     *                              property="start_year",
-     *                              type="integer"
-     *
-     *                          ),
-     *                      ),
-     *                  },
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="characters",
-     *              type="array",
-     *              description="Favorite Characters",
-     *              @OA\Items (
-     *                  type="object",
-     *                  allOf={
-     *                      @OA\Schema (ref="#/components/schemas/character_meta"),
-     *                      @OA\Schema (
-     *                          @OA\Property (
-     *                               type="object",
-     *                               ref="#/components/schemas/mal_url_2",
-     *                          ),
-     *                      ),
-     *                  },
-     *              ),
-     *          ),
-     *          @OA\Property(
-     *              property="people",
-     *              type="array",
-     *              description="Favorite People",
-     *              @OA\Items (
-     *                  type="object",
-     *
-     *                  @OA\Property (
-     *                       type="object",
-     *                       ref="#/components/schemas/character_meta",
-     *                  ),
-     *              ),
-     *          ),
-     *      ),
-     *  ),
+     *                  ref="#/components/schemas/character_meta",
+     *             ),
+     *         ),
+     *     ),
+     * ),
      */
     public function toArray($request)
     {

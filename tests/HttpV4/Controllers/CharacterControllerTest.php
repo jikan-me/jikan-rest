@@ -80,9 +80,9 @@ class CharacterControllerTest extends TestCase
             ]]);
     }
 
-    public function testSeiyuu()
+    public function testVoices()
     {
-        $this->get('/v4/characters/1/seiyuu')
+        $this->get('/v4/characters/1/voices')
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
                 [
@@ -108,8 +108,9 @@ class CharacterControllerTest extends TestCase
             ->seeJsonStructure([
                 'data' => [
                     [
-                        'image_url',
-                        'large_image_url',
+                        'jpg' => [
+                            'image_url',
+                        ]
                     ]
                 ]
             ]);
@@ -117,7 +118,7 @@ class CharacterControllerTest extends TestCase
 
     public function test404()
     {
-        $this->get('/v4/character/1000000')
+        $this->get('/v4/characters/1000000')
             ->seeStatusCode(404);
     }
 }

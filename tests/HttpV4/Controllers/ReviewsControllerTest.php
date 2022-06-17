@@ -10,7 +10,7 @@ class ReviewsControllerTest extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -30,23 +30,21 @@ class ReviewsControllerTest extends TestCase
                             'enjoyment',
                         ],
                         'entry' => [
-                            [
-                                'mal_id',
-                                'url',
-                                'images' => [
-                                    'jpg' => [
-                                        'image_url',
-                                        'small_image_url',
-                                        'large_image_url'
-                                    ],
-                                    'webp' => [
-                                        'image_url',
-                                        'small_image_url',
-                                        'large_image_url'
-                                    ],
+                            'mal_id',
+                            'url',
+                            'images' => [
+                                'jpg' => [
+                                    'image_url',
+                                    'small_image_url',
+                                    'large_image_url'
                                 ],
-                                'title'
-                            ]
+                                'webp' => [
+                                    'image_url',
+                                    'small_image_url',
+                                    'large_image_url'
+                                ],
+                            ],
+                            'title'
                         ],
                         'user' => [
                             'username',
@@ -72,7 +70,7 @@ class ReviewsControllerTest extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -91,23 +89,21 @@ class ReviewsControllerTest extends TestCase
                             'enjoyment',
                         ],
                         'entry' => [
-                            [
-                                'mal_id',
-                                'url',
-                                'images' => [
-                                    'jpg' => [
-                                        'image_url',
-                                        'small_image_url',
-                                        'large_image_url'
-                                    ],
-                                    'webp' => [
-                                        'image_url',
-                                        'small_image_url',
-                                        'large_image_url'
-                                    ],
+                            'mal_id',
+                            'url',
+                            'images' => [
+                                'jpg' => [
+                                    'image_url',
+                                    'small_image_url',
+                                    'large_image_url'
                                 ],
-                                'title'
-                            ]
+                                'webp' => [
+                                    'image_url',
+                                    'small_image_url',
+                                    'large_image_url'
+                                ],
+                            ],
+                            'title'
                         ],
                         'user' => [
                             'username',

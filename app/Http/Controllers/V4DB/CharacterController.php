@@ -39,7 +39,10 @@ class CharacterController extends Controller
      *         response="200",
      *         description="Returns complete character resource data",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/character_full"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/character_full"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -122,7 +125,10 @@ class CharacterController extends Controller
      *         response="200",
      *         description="Returns character resource",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/character"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/character"
+     *             )
      *         )
      *     ),
      *     @OA\Response(

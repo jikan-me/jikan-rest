@@ -154,7 +154,7 @@ class AnimeFullResource extends JsonResource
      *      @OA\Property(
      *          property="season",
      *          type="string",
-     *          enum={"Summer", "Winter", "Spring", "Fall"},
+     *          enum={"summer", "winter", "spring", "fall"},
      *          description="Season",
      *          nullable=true
      *      ),

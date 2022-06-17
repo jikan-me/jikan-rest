@@ -129,12 +129,6 @@ class UserControllerTest extends TestCase
                             ],
                         ],
                         'name',
-                        'entry' => [
-                            'mal_id',
-                            'title',
-                            'type',
-                            'url'
-                        ]
                     ]
                 ],
                 'people' => [
@@ -190,7 +184,7 @@ class UserControllerTest extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -216,131 +210,6 @@ class UserControllerTest extends TestCase
             ->seeStatusCode(404);
     }
 
-    public function testUserAnimeList()
-    {
-        $this->get('/v4/users/nekomata1037/animelist?order_by=last_updated&sort=descending')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'data' => [
-                    [
-                        'watching_status',
-                        'score',
-                        'episodes_watched',
-                        'tags',
-                        'is_rewatching',
-                        'watch_start_date',
-                        'watch_end_date',
-                        'days',
-                        'storage',
-                        'priority',
-                        'anime' => [
-                            'mal_id',
-                            'title',
-                            'url',
-                            'images' => [
-                                'jpg' => [
-                                    'image_url',
-                                    'small_image_url',
-                                    'large_image_url'
-                                ],
-                                'webp' => [
-                                    'image_url',
-                                    'small_image_url',
-                                    'large_image_url'
-                                ],
-                            ],
-                        ],
-                        'type',
-                        'season',
-                        'year',
-                        'episodes',
-                        'rating',
-                        'airing',
-                        'aired' => [
-                            'from',
-                            'to',
-                            'prop' => [
-                                'from' => [
-                                    'day',
-                                    'month',
-                                    'year'
-                                ],
-                                'to' => [
-                                    'day',
-                                    'month',
-                                    'year'
-                                ]
-                            ],
-                            'string'
-                        ],
-                        'studios',
-                        'licensors'
-                    ]
-                ]
-            ]);
-    }
-
-    public function testUserMangaList()
-    {
-        $this->get('/v4/users/purplepinapples/mangalist?order_by=last_updated&sort=descending')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'data' => [
-                    [
-                        'reading_status',
-                        'score',
-                        'chapters_read',
-                        'tags',
-                        'is_rereading',
-                        'read_start_date',
-                        'read_end_date',
-                        'days',
-                        'retail',
-                        'priority',
-                        'manga' => [
-                            'mal_id',
-                            'title',
-                            'url',
-                            'images' => [
-                                'jpg' => [
-                                    'image_url',
-                                    'small_image_url',
-                                    'large_image_url'
-                                ],
-                                'webp' => [
-                                    'image_url',
-                                    'small_image_url',
-                                    'large_image_url'
-                                ],
-                            ],
-                        ],
-                        'type',
-                        'chapters',
-                        'volumes',
-                        'publishing',
-                        'published' => [
-                            'from',
-                            'to',
-                            'prop' => [
-                                'from' => [
-                                    'day',
-                                    'month',
-                                    'year'
-                                ],
-                                'to' => [
-                                    'day',
-                                    'month',
-                                    'year'
-                                ]
-                            ],
-                            'string'
-                        ],
-                        'magazines'
-                    ]
-                ]
-            ]);
-    }
-
     public function testUserRecommendations()
     {
         $this->get('/v4/users/xinil/recommendations')
@@ -348,7 +217,7 @@ class UserControllerTest extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -384,7 +253,7 @@ class UserControllerTest extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                 ]
@@ -398,7 +267,7 @@ class UserControllerTest extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -409,23 +278,21 @@ class UserControllerTest extends TestCase
                         'date',
                         'review',
                         'entry' => [
-                            [
-                                'mal_id',
-                                'url',
-                                'images' => [
-                                    'jpg' => [
-                                        'image_url',
-                                        'small_image_url',
-                                        'large_image_url'
-                                    ],
-                                    'webp' => [
-                                        'image_url',
-                                        'small_image_url',
-                                        'large_image_url'
-                                    ],
+                            'mal_id',
+                            'url',
+                            'images' => [
+                                'jpg' => [
+                                    'image_url',
+                                    'small_image_url',
+                                    'large_image_url'
                                 ],
-                                'title'
-                            ]
+                                'webp' => [
+                                    'image_url',
+                                    'small_image_url',
+                                    'large_image_url'
+                                ],
+                            ],
+                            'title'
                         ],
                     ]
                 ]
@@ -448,7 +315,7 @@ class UserControllerTest extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [

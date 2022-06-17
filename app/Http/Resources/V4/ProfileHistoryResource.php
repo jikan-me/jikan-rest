@@ -21,7 +21,7 @@ class ProfileHistoryResource extends JsonResource
      *          type="array",
      *          @OA\Items(
      *              type="object",
-     *              @OA\Schema(ref="#/components/schemas/history"),
+     *              ref="#/components/schemas/history",
      *          ),
      *      ),
      *  ),

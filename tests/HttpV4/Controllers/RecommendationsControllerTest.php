@@ -10,7 +10,7 @@ class RecommendationsControllerTest extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [

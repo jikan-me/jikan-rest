@@ -38,7 +38,10 @@ class PersonController extends Controller
      *         response="200",
      *         description="Returns complete character resource data",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/person_full"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/person_full"
+     *             )
      *         )
      *     ),
      *
@@ -122,7 +125,10 @@ class PersonController extends Controller
      *         response="200",
      *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/person"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/person"
+     *             )
      *         )
      *     ),
      *

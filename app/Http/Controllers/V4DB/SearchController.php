@@ -143,7 +143,7 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     ),
      *
      *     @OA\Parameter(
-     *       name="start_date",
+     *       name="end_date",
      *       in="query",
      *       description="Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
      *       @OA\Schema(type="string")
@@ -269,7 +269,7 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     ),
      *
      *     @OA\Parameter(
-     *       name="start_date",
+     *       name="end_date",
      *       in="query",
      *       description="Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
      *       @OA\Schema(type="string")
@@ -455,31 +455,29 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *           @OA\Schema(ref="#/components/schemas/pagination"),
      *           @OA\Schema(
      *              @OA\Property(
-     *                   property="data",
-     *                   type="array",
+     *                  property="data",
+     *                  type="array",
      *
-     *                    @OA\Items(
-     *                        type="object",
-     *                        @OA\Schema(
-     *                            @OA\Property(
-     *                                property="url",
-     *                                type="string",
-     *                                description="MyAnimeList URL"
-     *                            ),
-     *                            @OA\Property(
-     *                                property="username",
-     *                                type="string",
-     *                                description="MyAnimeList Username"
-     *                            ),
-     *                            @OA\Property(
-     *                               ref="#/components/schemas/user_images"
-     *                            ),
-     *                            @OA\Property(
-     *                                property="last_online",
-     *                                type="string",
-     *                                description="Last Online Date ISO8601"
-     *                            ),
-     *                        ),
+     *                  @OA\Items(
+     *                      type="object",
+     *                      @OA\Property(
+     *                          property="url",
+     *                          type="string",
+     *                          description="MyAnimeList URL"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="username",
+     *                          type="string",
+     *                          description="MyAnimeList Username"
+     *                      ),
+     *                      @OA\Property(
+     *                         ref="#/components/schemas/user_images"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="last_online",
+     *                          type="string",
+     *                          description="Last Online Date ISO8601"
+     *                      ),
      *                  ),
      *              ),
      *          ),
@@ -519,16 +517,26 @@ class SearchController extends ControllerWithQueryBuilderProvider
 
     /**
      *  @OA\Get(
-     *     path="/users/userbyid",
+     *     path="/users/userbyid/{id}",
      *     operationId="getUserById",
      *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns username by ID search",
-     *          @OA\JsonContent(
-     *               ref="#/components/schemas/user_by_id"
-     *          )
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/user_by_id"
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response="400",

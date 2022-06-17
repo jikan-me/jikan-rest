@@ -6,7 +6,7 @@ class MangaControllerV4Test extends TestCase
     {
         $this->get('/v4/manga/1')
             ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->seeJsonStructure(['data' => [
                 'mal_id',
                 'url',
                 'images' => [
@@ -79,7 +79,7 @@ class MangaControllerV4Test extends TestCase
                         'url'
                     ]
                 ]
-            ]);
+            ]]);
     }
 
     public function testCharacters()
@@ -115,7 +115,7 @@ class MangaControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -123,7 +123,7 @@ class MangaControllerV4Test extends TestCase
                         'url',
                         'title',
                         'date',
-                        'author_name',
+                        'author_username',
                         'author_url',
                         'forum_url',
                         'images' => [
@@ -143,10 +143,18 @@ class MangaControllerV4Test extends TestCase
         $this->get('/v4/manga/1/pictures')
             ->seeStatusCode(200)
             ->seeJsonStructure([
-                'images' => [
+                'data' => [
                     [
-                        'large_image_url',
-                        'small_image_url',
+                        'jpg' => [
+                            'image_url',
+                            'large_image_url',
+                            'small_image_url',
+                        ],
+                        'webp' => [
+                            'image_url',
+                            'large_image_url',
+                            'small_image_url',
+                        ],
                     ]
                 ]
             ]);
@@ -184,12 +192,12 @@ class MangaControllerV4Test extends TestCase
                         'url',
                         'title',
                         'date',
-                        'author_name',
+                        'author_username',
                         'author_url',
                         'comments',
                         'last_comment' => [
                             'url',
-                            'author_name',
+                            'author_username',
                             'author_url',
                             'date'
                         ]
@@ -214,7 +222,7 @@ class MangaControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [
@@ -252,7 +260,7 @@ class MangaControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => []
             ]);
@@ -296,7 +304,7 @@ class MangaControllerV4Test extends TestCase
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
-                    'hast_next_page',
+                    'has_next_page',
                 ],
                 'data' => [
                     [

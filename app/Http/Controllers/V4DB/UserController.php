@@ -2,13 +2,8 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
-use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\QueryBuilder\UserListQueryBuilder;
-use App\Http\Resources\V4\AnimeCharactersResource;
-use App\Http\Resources\V4\CommonResource;
-use App\Http\Resources\V4\ProfileFriendsResource;
 use App\Http\Resources\V4\ProfileHistoryResource;
 use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\UserProfileAnimeListCollection;
@@ -16,17 +11,14 @@ use App\Http\Resources\V4\UserProfileAnimeListResource;
 use App\Http\Resources\V4\UserProfileMangaListCollection;
 use App\Http\Resources\V4\UserProfileMangaListResource;
 use App\Profile;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\User\RecentlyOnlineUsersRequest;
 use Jikan\Request\User\UserAnimeListRequest;
 use Jikan\Request\User\UserClubsRequest;
-use Jikan\Request\User\UserMangaListRequest;
-use Jikan\Request\User\UserProfileRequest;
 use Jikan\Request\User\UserFriendsRequest;
 use Jikan\Request\User\UserHistoryRequest;
+use Jikan\Request\User\UserMangaListRequest;
 use Jikan\Request\User\UserRecommendationsRequest;
 use Jikan\Request\User\UserReviewsRequest;
 use MongoDB\BSON\UTCDateTime;
@@ -51,7 +43,10 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns complete user resource data",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user_profile_full"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/user_profile_full"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -134,7 +129,10 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user profile",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user_profile"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/user_profile"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
@@ -302,8 +300,11 @@ class UserController extends Controller
      *         response="200",
      *         description="Returns user favorites",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/user_favorites"
-     *         )
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/user_favorites"
+     *             ),
+     *         ),
      *     ),
      *     @OA\Response(
      *         response="400",

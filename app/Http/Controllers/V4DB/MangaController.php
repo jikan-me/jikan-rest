@@ -64,9 +64,12 @@ class MangaController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns complete anime resource data",
+     *         description="Returns complete manga resource data",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/manga_full"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/manga_full"
+     *             )
      *         )
      *     ),
      *
@@ -151,7 +154,10 @@ class MangaController extends Controller
      *         response="200",
      *         description="Returns pictures related to the entry",
      *         @OA\JsonContent(
-     *              ref="#/components/schemas/manga"
+     *             @OA\Property(
+     *                 property="data",
+     *                 ref="#/components/schemas/manga"
+     *             )
      *         )
      *     ),
      *
