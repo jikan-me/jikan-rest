@@ -123,8 +123,8 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         // the $results variable can be a Builder from the Mongodb Eloquent or from Scout. Both of them have a query
         // method which will result in a Mongodb Eloquent Builder.
         return $results->query(function(\Illuminate\Database\Eloquent\Builder $query) use($requestParameters) {
-            $letter = $requestParameters['letter'];
-            $q = $requestParameters['q'];
+            $letter = $requestParameters->get('letter');
+            $q = $requestParameters->get('q');
 
             if (!is_null($letter)) {
                 $query = $query
