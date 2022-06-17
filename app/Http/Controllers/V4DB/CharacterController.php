@@ -76,8 +76,7 @@ class CharacterController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Character::query()
-                    ->insert($response);
+                Character::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -160,8 +159,7 @@ class CharacterController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Character::query()
-                    ->insert($response);
+                Character::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -239,8 +237,7 @@ class CharacterController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Character::query()
-                    ->insert($response);
+                Character::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -318,8 +315,7 @@ class CharacterController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Character::query()
-                    ->insert($response);
+                Character::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -396,8 +392,7 @@ class CharacterController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Character::query()
-                    ->insert($response);
+                Character::create($response);
             }
 
             if ($this->isExpired($request, $results)) {

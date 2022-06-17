@@ -104,8 +104,7 @@ class MangaController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Manga::query()
-                    ->insert($response);
+                Manga::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -190,8 +189,7 @@ class MangaController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Manga::query()
-                    ->insert($response);
+                Manga::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -801,8 +799,7 @@ class MangaController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Manga::query()
-                    ->insert($response);
+                Manga::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -882,8 +879,7 @@ class MangaController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Manga::query()
-                    ->insert($response);
+                Manga::create($response);
             }
 
             if ($this->isExpired($request, $results)) {

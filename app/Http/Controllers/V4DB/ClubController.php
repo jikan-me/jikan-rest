@@ -72,8 +72,7 @@ class ClubController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Club::query()
-                    ->insert($response);
+                Club::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -231,8 +230,7 @@ class ClubController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Club::query()
-                    ->insert($response);
+                Club::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -316,8 +314,7 @@ class ClubController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Club::query()
-                    ->insert($response);
+                Club::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
