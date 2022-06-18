@@ -9,9 +9,9 @@ trait IsoDateFormatter
         $dt = explode('-', $d);
         return (new \DateTime())
             ->setDate(
-                $start_date[0] ?? date('Y'),
-                $start_date[1] ?? 1,
-                $start_date[2] ?? 1
+                $dt[0] ?? date('Y'),
+                $dt[1] ?? 1,
+                $dt[2] ?? 1
             )
             ->format(\DateTimeInterface::ISO8601);
     }
