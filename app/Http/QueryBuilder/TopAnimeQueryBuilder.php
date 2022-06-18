@@ -3,15 +3,16 @@
 namespace App\Http\QueryBuilder;
 
 use App\Http\QueryBuilder\Traits\TopQueryFilterResolver;
+use App\Services\ScoutSearchService;
 use Illuminate\Support\Collection;
 
 class TopAnimeQueryBuilder extends AnimeSearchQueryBuilder
 {
     use TopQueryFilterResolver;
 
-    public function __construct(bool $searchIndexesEnabled)
+    public function __construct(bool $searchIndexesEnabled, ScoutSearchService $scoutSearchService)
     {
-        parent::__construct($searchIndexesEnabled);
+        parent::__construct($searchIndexesEnabled, $scoutSearchService);
         $this->filterMap = ['airing', 'upcoming', 'bypopularity', 'favorite'];
     }
 

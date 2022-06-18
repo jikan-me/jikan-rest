@@ -112,4 +112,24 @@ class Manga extends JikanApiSearchableModel
             'title_synonyms'
         ];
     }
+
+    public function getTypeSenseQueryByWeights(): string|null
+    {
+        // this way title_synonyms will rank lower in search results
+        return "1,1,1,2";
+    }
+
+    /**
+     * Returns which fields the search index should sort on when searching
+     * @return array|null
+     */
+    public function getSearchIndexSortBy(): array|null
+    {
+        return [
+            [
+                "field" => "popularity",
+                "direction" => "asc"
+            ]
+        ];
+    }
 }

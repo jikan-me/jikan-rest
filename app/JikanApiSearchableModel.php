@@ -61,4 +61,23 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
     {
         return 'mal_id';
     }
+
+    /**
+     * Returns what weights to use on query_by fields.
+     * https://typesense.org/docs/0.23.0/api/documents.html#search-parameters
+     * @return string|null
+     */
+    public function getTypeSenseQueryByWeights(): string|null
+    {
+        return null;
+    }
+
+    /**
+     * Returns which fields the search index should sort on when searching
+     * @return array|null
+     */
+    public function getSearchIndexSortBy(): array|null
+    {
+        return null;
+    }
 }
