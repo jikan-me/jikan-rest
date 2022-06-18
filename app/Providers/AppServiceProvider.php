@@ -15,6 +15,10 @@ use App\Http\QueryBuilder\TopMangaQueryBuilder;
 use App\Macros\To2dArrayWithDottedKeys;
 use App\Magazine;
 use App\Producer;
+use App\Services\DefaultScoutSearchService;
+use App\Services\ElasticScoutSearchService;
+use App\Services\ScoutSearchService;
+use App\Services\TypeSenseScoutSearchService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
 
@@ -38,6 +42,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(ScoutSearchService::class, function($app) {
+            $scoutDriver = $this->getSearchIndexDriver($app);
+            return match ($scoutDriver) {
+                "typesense" => new TypeSenseScoutSearchService(),
+                "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine" => new ElasticScoutSearchService(),
+                default => new DefaultScoutSearchService()
+            };
+        });
+
         $queryBuilders = [
             AnimeSearchQueryBuilder::class,
             MangaSearchQueryBuilder::class,
@@ -86,7 +99,8 @@ class AppServiceProvider extends ServiceProvider
                 return new SimpleSearchQueryBuilder(
                     $simpleQueryBuilder["identifier"],
                     $simpleQueryBuilder["modelClass"],
-                    $searchIndexesEnabled
+                    $searchIndexesEnabled,
+                    $app->make(ScoutSearchService::class)
                 );
             });
         }
@@ -121,12 +135,17 @@ class AppServiceProvider extends ServiceProvider
     {
         return function($app) use($queryBuilderClass) {
             $searchIndexesEnabled = $this->getSearchIndexesEnabledConfig($app);
-            return new $queryBuilderClass($searchIndexesEnabled);
+            return new $queryBuilderClass($searchIndexesEnabled, $app->make(ScoutSearchService::class));
         };
     }
 
     private function getSearchIndexesEnabledConfig($app): bool
     {
-        return $app["config"]->get("scout.driver") != "null";
+        return $this->getSearchIndexDriver($app) != "null";
+    }
+
+    private function getSearchIndexDriver($app): string
+    {
+        return $app["config"]->get("scout.driver");
     }
 }

@@ -6,6 +6,7 @@ use App\GenreAnime;
 use App\GenreManga;
 use App\Magazine;
 use App\Producer;
+use App\Services\ScoutSearchService;
 use Illuminate\Support\Collection;
 
 class SimpleSearchQueryBuilder extends SearchQueryBuilder
@@ -17,12 +18,13 @@ class SimpleSearchQueryBuilder extends SearchQueryBuilder
         'mal_id', 'name', 'count'
     ];
 
-    public function __construct(string $identifier, string|object $modelClass, bool $searchIndexesEnabled)
+    public function __construct(string $identifier, string|object $modelClass, bool $searchIndexesEnabled,
+                                ScoutSearchService $scoutSearchService)
     {
         if (!in_array($modelClass, [GenreAnime::class, GenreManga::class, Producer::class, Magazine::class])) {
             throw new \InvalidArgumentException("Not supported model class has been provided.");
         }
-        parent::__construct($searchIndexesEnabled);
+        parent::__construct($searchIndexesEnabled, $scoutSearchService);
         $this->modelClass = $modelClass;
         $this->identifier = $identifier;
     }

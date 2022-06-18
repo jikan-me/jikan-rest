@@ -3,12 +3,12 @@
 namespace App\Http\QueryBuilder;
 
 use App\Http\QueryBuilder\Traits\PaginationParameterResolver;
+use App\Services\ScoutSearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Scout\Searchable;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Typesense\Documents;
 
 abstract class SearchQueryBuilder implements SearchQueryBuilderService
 {
@@ -18,12 +18,14 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
     protected array $parameterNames = [];
     protected string $displayNameFieldName = "name";
     protected bool $searchIndexesEnabled;
+    private ScoutSearchService $scoutSearchService;
 
     private ?array $modelClassTraitsCache = null;
 
-    public function __construct(bool $searchIndexesEnabled)
+    public function __construct(bool $searchIndexesEnabled, ScoutSearchService $scoutSearchService)
     {
         $this->searchIndexesEnabled = $searchIndexesEnabled;
+        $this->scoutSearchService = $scoutSearchService;
     }
 
     protected function getParametersFromRequest(Request $request): Collection
@@ -65,24 +67,17 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
             inherits from \Jenssegers\Mongodb\Eloquent\Model.");
         }
 
-        if ($this->isSearchIndexUsed() && !empty($requestParameters->get("q"))) {
-            if (env('SCOUT_DRIVER') == 'typesense')
-            {
-                // if search index is typesense, let's enable exhaustive search
-                // which will make Typesense consider all variations of prefixes and typo corrections of the words
-                // in the query exhaustively, without stopping early when enough results are found.
-                return $modelClass::search($requestParameters["q"], function(Documents $documents, string $query, array $options) {
-                    $options['exhaustive_search'] = true;
+        $q = $requestParameters->get("q");
 
-                    return $documents->search($options);
-                });
-            }
-            return $modelClass::search($requestParameters->get("q"));
+        if ($this->isSearchIndexUsed() && !empty($q)) {
+            $builder = $this->scoutSearchService->search($modelClass, $q);
+        } else {
+            // If "q" is not set, OR search indexes are disabled, we just get a query builder for the model.
+            // This way we can have a single place where we get the query builder from.
+            $builder = $modelClass::query();
         }
 
-        // If "q" is not set, OR search indexes are disabled, we just get a query builder for the model.
-        // This way we can have a single place where we get the query builder from.
-        return $modelClass::query();
+        return $builder;
     }
 
     public function isSearchIndexUsed(): bool
@@ -127,7 +122,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         // if search index is enabled, this way we only do the full-text search on the index, and filter further in mongodb.
         // the $results variable can be a Builder from the Mongodb Eloquent or from Scout. Only Laravel\Scout\Builder
         // has a query method which will result in a Mongodb Eloquent Builder.
-        return $this->isScoutBuilder($results) ? $results->query(function(\Illuminate\Database\Eloquent\Builder $query) use($requestParameters) {
+        return $this->isScoutBuilder($results) ? $results->query(function (\Illuminate\Database\Eloquent\Builder $query) use ($requestParameters) {
             $letter = $requestParameters->get('letter');
             $q = $requestParameters->get('q');
 
