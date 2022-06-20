@@ -3,19 +3,14 @@
 namespace App;
 
 use App\Http\HttpHelper;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Helper\Media;
-use Jikan\Helper\Parser;
 use Jikan\Jikan;
-use Jikan\Model\Common\YoutubeMeta;
-use Jikan\Request\Anime\AnimeRequest;
 use Jikan\Request\Manga\MangaRequest;
 
 class Manga extends JikanApiSearchableModel
 {
     // note that here we skip "score", "min_score", "max_score", "rating" and others because they need special logic
     // to set the correct filtering on the ORM.
-    protected array $filters = ["order_by", "status", "type"];
+    protected array $filters = ["order_by", "status", "type", "sort"];
 
     /**
      * The attributes that are mass assignable.

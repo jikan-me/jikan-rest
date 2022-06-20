@@ -10,7 +10,7 @@ class Anime extends JikanApiSearchableModel
 {
     // note that here we skip "score", "min_score", "max_score", "rating" and others because they need special logic
     // to set the correct filtering on the ORM.
-    protected array $filters = ["order_by", "status", "type"];
+    protected array $filters = ["order_by", "status", "type", "sort"];
     /**
      * The attributes that are mass assignable.
      *
@@ -143,7 +143,7 @@ class Anime extends JikanApiSearchableModel
             'start_date' => $this->convertToTimestamp($this->aired['from']),
             'end_date' => $this->convertToTimestamp($this->aired['to']),
             'title' => $this->title,
-            'title_english' => $this->title_english,
+            'title_english' => $this->title_english ?? "",
             'title_japanese' => $this->title_japanese,
             'title_synonyms' => $this->title_synonyms,
             'type' => $this->type,
@@ -178,8 +178,31 @@ class Anime extends JikanApiSearchableModel
         return [
             'title',
             'title_english',
-            'title_japanese',
-            'title_synonyms'
+            'title_japanese'
+        ];
+    }
+
+    public function getTypeSenseQueryByWeights(): string|null
+    {
+        // this way title_synonyms will rank lower in search results
+        return "1,2,1";
+    }
+
+    /**
+     * Returns which fields the search index should sort on when searching
+     * @return array|null
+     */
+    public function getSearchIndexSortBy(): array|null
+    {
+        return [
+            [
+                "field" => "popularity",
+                "direction" => "asc"
+            ],
+            [
+                "field" => "_text_match",
+                "direction" => "desc"
+            ]
         ];
     }
 }
