@@ -80,6 +80,15 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         return $builder;
     }
 
+    private function buildQueryInternal(Collection $requestParameters, mixed $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        // The ->filter() call is a local model scope function, which applies filters based on the query string
+        // parameters. This way we can simplify the code base and avoid a bunch of
+        // "if ($this->request->get("asd")) { }" lines in controllers.
+        $queryFilteredByQueryStringParams = $query->filter($requestParameters);
+        return $this->buildQuery($requestParameters, $queryFilteredByQueryStringParams);
+    }
+
     public function isSearchIndexUsed(): bool
     {
         $modelClass = $this->getModelClass();
@@ -152,12 +161,8 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
                     ->orderBy('score', ['$meta' => 'textScore']);
             }
 
-            // The ->filter() call is a local model scope function, which applies filters based on the query string
-            // parameters. This way we can simplify the code base and avoid a bunch of
-            // "if ($this->request->get("asd")) { }" lines in controllers.
-            $queryFilteredByQueryStringParams = $query->filter($requestParameters);
-            return $this->buildQuery($requestParameters, $queryFilteredByQueryStringParams);
-        }) : $results;
+            return $this->buildQueryInternal($requestParameters, $query);
+        }) : $this->buildQueryInternal($requestParameters, $results);
     }
 
     #[ArrayShape(['per_page' => "int", 'total' => "int", 'current_page' => "int", 'last_page' => "int", 'data' => "array"])]
