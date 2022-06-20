@@ -11,13 +11,14 @@ trait FilterQueryString
 
     private array $availableFilters = [
         'default' => WhereClause::class,
-        'order_by' => OrderbyClause::class
+        'order_by' => OrderbyClause::class,
+        'sort' => OrderbyClause::class
     ];
 
     /** @noinspection PhpUnused */
-    public function scopeFilter(Builder $query, Collection $queryParameters, ...$filters)
+    public function scopeFilter(Builder $query, Collection $queryParameters)
     {
-        $filters = collect($this->getFilters($queryParameters, $filters))->map(function ($values, $filter) {
+        $filters = $this->getFilters($queryParameters)->map(function ($values, $filter) {
             return $this->resolve($filter, $values);
         })->toArray();
 
@@ -40,17 +41,18 @@ trait FilterQueryString
         return $filters;
     }
 
-    private function getFilters(Collection $queryParameters, array $filters): Collection
+    private function getFilters(Collection $queryParameters): Collection
     {
-        $filter = function ($key) use($filters) {
+        $filter = function ($key) {
 
-            $filters = $filters ?: $this->filters ?: [];
+            $filters = $this->filters ?: [];
 
             // if model class sets the "unguardFilters" variable to true, then we skip the filter validation
             return !($this->unguardFilters != true) || in_array($key, $filters);
         };
 
-        $result = $queryParameters->filter($filter) ?? Collection::empty();
+        $result = collect(array_filter($queryParameters->all(), $filter, ARRAY_FILTER_USE_KEY))
+                    ->filter(fn ($v, $k) => !is_null($v)) ?? Collection::empty();
 
         return $this->_normalizeOrderBy($result);
     }

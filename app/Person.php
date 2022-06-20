@@ -70,7 +70,7 @@ class Person extends JikanApiSearchableModel
             'name' => $this->name,
             'given_name' => $this->given_name,
             'family_name' => $this->family_name,
-            'alternative_names' => $this->alternative_names
+            'alternate_names' => $this->alternate_names
         ];
     }
 
@@ -80,7 +80,7 @@ class Person extends JikanApiSearchableModel
             "name",
             "given_name",
             "family_name",
-            "alternative_names"
+            "alternate_names"
         ];
     }
 }
