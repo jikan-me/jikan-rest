@@ -207,7 +207,7 @@ class UserControllerTest extends TestCase
             ]);
 
         $this->get('/v4/users/nekomata1037/friends?page=200')
-            ->seeStatusCode(404);
+            ->seeStatusCode(200);
     }
 
     public function testUserRecommendations()
@@ -299,7 +299,7 @@ class UserControllerTest extends TestCase
             ]);
 
         $this->get('/v4/users/xinil/reviews?page=200')
-            ->seeStatusCode(404);
+            ->seeStatusCode(200);
     }
 
     public function testUserPrivateList()
