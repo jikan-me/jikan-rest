@@ -151,7 +151,7 @@ $app->instance('SerializerV4', SerializerFactory::createV4());
 $app->register(Laravel\Scout\ScoutServiceProvider::class);
 
 // we support TypeSense and ElasticSearch as search indexes.
-if (env("SCOUT_DRIVER") === "typsense") {
+if (env("SCOUT_DRIVER") === "typesense") {
     // in this case the TYPESENSE_HOST env var should be set too
     $app->register(Typesense\LaravelTypesense\TypesenseServiceProvider::class);
 }
