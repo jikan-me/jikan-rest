@@ -178,14 +178,15 @@ class Anime extends JikanApiSearchableModel
         return [
             'title',
             'title_english',
-            'title_japanese'
+            'title_japanese',
+            'title_synonyms'
         ];
     }
 
     public function getTypeSenseQueryByWeights(): string|null
     {
         // this way title_synonyms will rank lower in search results
-        return "2,1,2";
+        return "3,2,3,1";
     }
 
     /**
@@ -195,6 +196,10 @@ class Anime extends JikanApiSearchableModel
     public function getSearchIndexSortBy(): array|null
     {
         return [
+            [
+                "field" => "popularity",
+                "direction" => "asc"
+            ],
             [
                 "field" => "_text_match",
                 "direction" => "desc"
