@@ -82,6 +82,34 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
 
     private function buildQueryInternal(Collection $requestParameters, mixed $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
+        $letter = $requestParameters->get('letter');
+        $q = $requestParameters->get('q');
+
+        if (!is_null($letter)) {
+            $query = $query
+                ->where($this->displayNameFieldName, 'like', "{$letter}%");
+        }
+
+        if (empty($q)) {
+            $query = $query
+                ->orderBy('mal_id');
+        }
+
+        // if search index is disabled, use mongo's full text-search
+        if (!empty($q) && is_null($letter) && !$this->isSearchIndexUsed()) {
+            $query = $query
+                ->whereRaw([
+                    '$text' => [
+                        '$search' => $q
+                    ],
+                ], [
+                    'score' => [
+                        '$meta' => 'textScore'
+                    ]
+                ])
+                ->orderBy('score', ['$meta' => 'textScore']);
+        }
+
         // The ->filter() call is a local model scope function, which applies filters based on the query string
         // parameters. This way we can simplify the code base and avoid a bunch of
         // "if ($this->request->get("asd")) { }" lines in controllers.
@@ -132,35 +160,6 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         // the $results variable can be a Builder from the Mongodb Eloquent or from Scout. Only Laravel\Scout\Builder
         // has a query method which will result in a Mongodb Eloquent Builder.
         return $this->isScoutBuilder($results) ? $results->query(function (\Illuminate\Database\Eloquent\Builder $query) use ($requestParameters) {
-            $letter = $requestParameters->get('letter');
-            $q = $requestParameters->get('q');
-
-            if (!is_null($letter)) {
-                $query = $query
-                    ->where($this->displayNameFieldName, 'like', "{$letter}%");
-            }
-
-            if (empty($q)) {
-                $query = $query
-                    ->orderBy('mal_id');
-            }
-
-            // if search index is disabled, use mongo's full text-search
-            if (!empty($q) && is_null($letter) && !$this->isSearchIndexUsed()) {
-                /** @noinspection PhpParamsInspection */
-                $query = $query
-                    ->whereRaw([
-                        '$text' => [
-                            '$search' => $q
-                        ],
-                    ], [
-                        'score' => [
-                            '$meta' => 'textScore'
-                        ]
-                    ])
-                    ->orderBy('score', ['$meta' => 'textScore']);
-            }
-
             return $this->buildQueryInternal($requestParameters, $query);
         }) : $this->buildQueryInternal($requestParameters, $results);
     }
