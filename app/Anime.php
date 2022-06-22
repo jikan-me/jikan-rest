@@ -197,13 +197,13 @@ class Anime extends JikanApiSearchableModel
     {
         return [
             [
+                "field" => "_text_match",
+                "direction" => "desc"
+            ],
+            [
                 "field" => "popularity",
                 "direction" => "asc"
             ],
-            [
-                "field" => "_text_match",
-                "direction" => "desc"
-            ]
         ];
     }
 }
