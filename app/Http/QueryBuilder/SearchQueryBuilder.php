@@ -190,10 +190,10 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
 
         if ($this->isSearchIndexUsed() && $this->isScoutBuilder($results)) {
             $paginated = $results
+                ->take($limit)
                 ->paginate(
                     $limit,
-                    null,
-                    null,
+                    "page",
                     $page
                 );
         } else {

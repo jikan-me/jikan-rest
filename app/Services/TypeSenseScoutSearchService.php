@@ -7,6 +7,16 @@ use Typesense\Documents;
 
 class TypeSenseScoutSearchService implements ScoutSearchService
 {
+    private int $maxItemsPerPage;
+
+    public function __construct()
+    {
+        $this->maxItemsPerPage = (int) env('MAX_RESULTS_PER_PAGE', 25);
+        if ($this->maxItemsPerPage > 250) {
+            $this->maxItemsPerPage = 250;
+        }
+    }
+
     /**
      * Executes a search operation via Laravel Scout on the provided model class.
      * @param object|string $modelClass
@@ -22,6 +32,11 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             // which will make Typesense consider all variations of prefixes and typo corrections of the words
             // in the query exhaustively, without stopping early when enough results are found.
             $options['exhaustive_search'] = true;
+
+            if (array_key_exists('per_page', $options) && $options['per_page'] > 250) {
+                $options['per_page'] = min($this->maxItemsPerPage, 250);
+            }
+
             $modelInstance = new $modelClass;
             // get the weights of the query_by fields, if they are provided by the model.
             if ($modelInstance instanceof JikanApiSearchableModel) {
