@@ -27,7 +27,7 @@ class SearchQueryBuilderProvider
     {
         if (!array_key_exists($name, $this->searchQueryBuilders))
         {
-            throw new \InvalidArgumentException("Invalid argument: name.");
+            throw new \InvalidArgumentException("Invalid argument: $name.");
         }
 
         return $this->searchQueryBuilders[$name];
