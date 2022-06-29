@@ -28,6 +28,7 @@ use App\Http\Resources\V4\AnimeVideosResource;
 use App\Http\Resources\V4\CommonResource;
 use App\Http\Resources\V4\ForumResource;
 use App\Http\Resources\V4\NewsResource;
+use App\Jobs\UpdateResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
@@ -98,11 +99,11 @@ class AnimeController extends Controller
             if ($results->isEmpty()) {
                 $meta = [
                     'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
+                    'updated_at' => new UTCDateTime(),
                     'request_hash' => $this->fingerprint
                 ];
             }
-            $meta['modifiedAt'] = new UTCDateTime();
+            $meta['updated_at'] = new UTCDateTime();
 
             $response = $meta + $response;
 
@@ -172,56 +173,42 @@ class AnimeController extends Controller
             ->where('mal_id', $id)
             ->get();
 
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
+        if ($results->isEmpty()) {
             $response = Anime::scrape($id);
 
             if (HttpHelper::hasError($response)) {
                 return HttpResponse::notFound($request);
             }
 
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Anime::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
+            Anime::query()
+                ->insert(
+                    [
+                        'created_at' => new UTCDateTime(),
+                        'updated_at' => new UTCDateTime(),
+                        'request_hash' => $this->fingerprint
+                    ] + $response
+                );
         }
 
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
+        if ($this->isExpired($request, $results)) {
+            dispatch(new UpdateResource(
+                Anime::class, $id, $this->fingerprint
+            ));
         }
 
-        $response = (new \App\Http\Resources\V4\AnimeResource(
-            $results->first()
-        ))->response();
+        $results = Anime::query()
+            ->where('mal_id', $id)
+            ->get();
 
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $results->isEmpty()
+            ? HttpResponse::notFound($request)
+            : $this->prepareResponse(
+                (new \App\Http\Resources\V4\AnimeResource(
+                    $results->first()
+                ))->response(),
+                $results,
+                $request
+            );
     }
 
     /**
@@ -229,7 +216,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/characters",
      *     operationId="getAnimeCharacters",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -289,7 +276,7 @@ class AnimeController extends Controller
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *     @OA\Response(
      *          response="200",
      *          description="Returns anime staff resource",
@@ -465,14 +452,14 @@ class AnimeController extends Controller
      *     path="/anime/{id}/episodes/{episode}",
      *     operationId="getAnimeEpisodeById",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="episode",
      *       in="path",
@@ -529,7 +516,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/news",
      *     operationId="getAnimeNews",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -597,14 +584,14 @@ class AnimeController extends Controller
      *     path="/anime/{id}/forum",
      *     operationId="getAnimeForum",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *      @OA\Parameter(
      *          name="filter",
      *          in="query",
@@ -664,7 +651,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/videos",
      *     operationId="getAnimeVideos",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -717,7 +704,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/pictures",
      *     operationId="getAnimePictures",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -738,7 +725,7 @@ class AnimeController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
-     * 
+     *
      */
     public function pictures(Request $request, int $id)
     {
@@ -772,7 +759,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/statistics",
      *     operationId="getAnimeStatistics",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -825,7 +812,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/moreinfo",
      *     operationId="getAnimeMoreInfo",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -878,7 +865,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/recommendations",
      *     operationId="getAnimeRecommendations",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -931,7 +918,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/userupdates",
      *     operationId="getAnimeUserUpdates",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQueueIndex extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateQueueIndex extends Migration
      */
     public function up()
     {
-        Schema::create(env('QUEUE_TABLE', 'jobs'), function (Blueprint $table) {
-            $table->index(['queue', 'reserved_at']);
+        Schema::create('jobs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('queue');
+            $table->string('queue')->index();
             $table->longText('payload');
-            $table->tinyInteger('attempts')->unsigned();
+            $table->unsignedTinyInteger('attempts');
             $table->unsignedInteger('reserved_at')->nullable();
             $table->unsignedInteger('available_at');
             $table->unsignedInteger('created_at');
@@ -32,6 +31,6 @@ class CreateQueueIndex extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(env('QUEUE_TABLE', 'jobs'));
+        Schema::dropIfExists('jobs');
     }
-}
+};

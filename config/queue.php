@@ -36,34 +36,41 @@ return [
 
         'database' => [
             'driver' => 'mongodb',
-            'connection' => 'mongodb',
-            'dsn'=> "mongodb+srv://".env('DB_USERNAME', 'jikan').":".env('DB_PASSWORD', '')."@".env('MONGODB_DSN', ''),
+            'dsn'=> "mongodb://".env('DB_USERNAME', 'admin').":".env('DB_PASSWORD', '')."@".env('DB_HOST', 'localhost').":".env('DB_PORT', 27017)."/".env('DB_ADMIN', 'admin'),
+            'database' => env('DB_DATABASE', 'jikan'),
             'table' => env('QUEUE_TABLE', 'jobs'),
-            'queue' => 'low',
+            'queue' => 'default',
 //            'retry_after' => 60,
+            'after_commit' => false,
         ],
 
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',
             'queue' => 'default',
-            'retry_after' => 60,
+            'retry_after' => 90,
+            'block_for' => 0,
+            'after_commit' => false,
         ],
 
         'sqs' => [
             'driver' => 'sqs',
-            'key' => 'your-public-key',
-            'secret' => 'your-secret-key',
-            'queue' => 'your-queue-url',
-            'region' => 'us-east-1',
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'prefix' => env('SQS_PREFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
+            'queue' => env('SQS_QUEUE', 'default'),
+            'suffix' => env('SQS_SUFFIX'),
+            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'after_commit' => false,
         ],
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => env('QUEUE_REDIS_CONNECTION', 'default'),
-            'queue' => 'low',
-            'retry_after' => 60,
-//            'block_for' => 5,
+            'connection' => 'default',
+            'queue' => env('REDIS_QUEUE', 'default'),
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
         ],
 
     ],
@@ -80,9 +87,9 @@ return [
     */
 
     'failed' => [
-        'driver' => env('QUEUE_CONNECTION', 'mongodb'),
-        'database' => env('DB_DATABASE', 'jikan'),
-        'table' => env('QUEUE_FAILED_TABLE', 'failed_jobs'),
+        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
+        'database' => env('DB_CONNECTION', 'mongodb'),
+        'table' => 'jobs_failed',
     ],
 
 ];

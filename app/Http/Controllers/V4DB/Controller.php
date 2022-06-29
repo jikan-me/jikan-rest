@@ -83,7 +83,7 @@ class Controller extends BaseController
         $this->fingerprint = HttpHelper::resolveRequestFingerprint($request);
     }
 
-    protected  function isExpired($request, $results) : bool
+    protected function isExpired($request, $results) : bool
     {
         $lastModified = $this->getLastModified($results);
 
@@ -118,11 +118,11 @@ class Controller extends BaseController
     protected function getLastModified($results) : ?int
     {
         if (is_array($results->first())) {
-            return (int) $results->first()['modifiedAt']->toDateTime()->format('U');
+            return (int) $results->first()['updated_at']->toDateTime()->format('U');
         }
 
         if (is_object($results->first())) {
-            return (int) $results->first()->modifiedAt->toDateTime()->format('U');
+            return (int) $results->first()->updated_at->toDateTime()->format('U');
         }
 
         return null;
@@ -168,13 +168,13 @@ class Controller extends BaseController
         if ($results->isEmpty()) {
             $meta = [
                 'createdAt' => new UTCDateTime(),
-                'modifiedAt' => new UTCDateTime(),
+                'updated_at' => new UTCDateTime(),
                 'request_hash' => $this->fingerprint
             ];
         }
 
         // Update `modifiedAt` meta
-        $meta['modifiedAt'] = new UTCDateTime();
+        $meta['updated_at'] = new UTCDateTime();
         // join meta data with response
         $response = $meta + $response;
 
