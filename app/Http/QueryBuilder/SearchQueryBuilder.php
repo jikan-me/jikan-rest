@@ -188,8 +188,16 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         ['limit' => $limit, 'page' => $page] = $this->getPaginateParameters($request);
 
         if ($this->isSearchIndexUsed() && $this->isScoutBuilder($results)) {
-            $paginated = $results
-                ->take($limit)
+            /**
+             * @var \Laravel\Scout\Builder
+             */
+            $scoutBuilder = $results;
+            // We want to influence the "getTotalCount" method of Scout's builder, so the pagination won't fail.
+            // In that method the "$limit" member variable is being check whether it's null or it has value.
+            // If it's set to a number then the result set will be limited which we do the pagination on.
+            // If it's set to null, then the pagination will be done on the whole result set.
+            $scoutBuilder->limit = null;
+            $paginated = $scoutBuilder
                 ->paginate(
                     $limit,
                     "page",
