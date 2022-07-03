@@ -56,7 +56,7 @@ class SearchController extends Controller
      *    in="query",
      *    @OA\Schema(type="integer")
      *  ),
-     * 
+     *
      * @OA\Schema(
      *   schema="search_query_sort",
      *   description="Characters Search Query Sort",
@@ -70,16 +70,16 @@ class SearchController extends Controller
      *     path="/anime",
      *     operationId="getAnimeSearch",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     * 
+     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
@@ -105,19 +105,19 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(type="number")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="status",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/anime_search_query_status")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="rating",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/anime_search_query_rating")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="sfw",
      *       in="query",
@@ -138,19 +138,19 @@ class SearchController extends Controller
      *       description="Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/anime_search_query_orderby")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="letter",
      *       in="query",
@@ -233,22 +233,22 @@ class SearchController extends Controller
      *     path="/manga",
      *     operationId="getMangaSearch",
      *     tags={"manga"},
-     * 
+     *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     * 
+     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/manga_search_query_type")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="score",
      *       in="query",
@@ -268,7 +268,7 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(type="number")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="status",
      *       in="query",
@@ -295,13 +295,13 @@ class SearchController extends Controller
      *       description="Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/manga_search_query_orderby")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
@@ -393,19 +393,19 @@ class SearchController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     * 
+     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/people_search_query_orderby")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
@@ -418,7 +418,7 @@ class SearchController extends Controller
      *       description="Return entries starting with the given letter",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for people",
@@ -473,19 +473,19 @@ class SearchController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     * 
+     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/characters_search_query_orderby")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
@@ -498,7 +498,7 @@ class SearchController extends Controller
      *       description="Return entries starting with the given letter",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for characters",
@@ -552,7 +552,7 @@ class SearchController extends Controller
      *     path="/users",
      *     operationId="getUsersSearch",
      *     tags={"users"},
-     * 
+     *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
@@ -561,31 +561,31 @@ class SearchController extends Controller
      *       in="query",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="gender",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/users_search_query_gender")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="location",
      *       in="query",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="maxAge",
      *       in="query",
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="minAge",
      *       in="query",
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for users",
@@ -623,7 +623,9 @@ class SearchController extends Controller
      *                          description="MyAnimeList Username"
      *                      ),
      *                      @OA\Property(
-     *                         ref="#/components/schemas/user_images"
+     *                          property="images",
+     *                          type="object",
+     *                          ref="#/components/schemas/user_images"
      *                      ),
      *                      @OA\Property(
      *                          property="last_online",
@@ -733,31 +735,31 @@ class SearchController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     * 
+     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/club_search_query_type")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="category",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/club_search_query_category")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
      *       @OA\Schema(ref="#/components/schemas/club_search_query_orderby")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
@@ -770,7 +772,7 @@ class SearchController extends Controller
      *       description="Return entries starting with the given letter",
      *       @OA\Schema(type="string")
      *     ),
-     * 
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for clubs",
