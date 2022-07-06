@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V4DB;
 
 use App\Http\HttpResponse;
 use App\Http\QueryBuilder\UserListQueryBuilder;
+use App\Http\Resources\V4\ExternalLinksResource;
 use App\Http\Resources\V4\ProfileHistoryResource;
 use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\UserProfileAnimeListCollection;
@@ -23,6 +24,9 @@ use Jikan\Request\User\UserRecommendationsRequest;
 use Jikan\Request\User\UserReviewsRequest;
 use MongoDB\BSON\UTCDateTime;
 
+/**
+ *
+ */
 class UserController extends Controller
 {
 
@@ -1119,6 +1123,96 @@ class UserController extends Controller
         );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/{username}/external",
+     *     operationId="getUserExternal",
+     *     tags={"users"},
+     *
+     *     @OA\Parameter(
+     *       name="username",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns user's external links",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/external_links"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
+    public function external(Request $request, string $username)
+    {
+        $username = strtolower($username);
+
+        $results = Profile::query()
+            ->where('internal_username', $username)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Profile::scrape($username);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint,
+                    'internal_username' => $username
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Profile::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Profile::query()
+                    ->where('internal_username', $username)
+                    ->update($response);
+            }
+
+            $results = Profile::query()
+                ->where('internal_username', $username)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+        $response = (new ExternalLinksResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Jikan\Exception\BadResponseException
+     * @throws \Jikan\Exception\ParserException
+     */
     public function recentlyOnline(Request $request)
     {
         $results = DB::table($this->getRouteTable($request))
@@ -1146,6 +1240,10 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * @param string|null $status
+     * @return int
+     */
     private function listStatusToId(?string $status) : int
     {
         if (is_null($status)) {

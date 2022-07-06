@@ -23,6 +23,7 @@ use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\ReviewsResource;
 use App\Http\Resources\V4\AnimeStaffResource;
 use App\Http\Resources\V4\AnimeStatisticsResource;
+use App\Http\Resources\V4\StreamingLinksResource;
 use App\Http\Resources\V4\UserUpdatesResource;
 use App\Http\Resources\V4\AnimeVideosResource;
 use App\Http\Resources\V4\CommonResource;
@@ -229,7 +230,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/characters",
      *     operationId="getAnimeCharacters",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -289,7 +290,7 @@ class AnimeController extends Controller
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *     @OA\Response(
      *          response="200",
      *          description="Returns anime staff resource",
@@ -465,14 +466,14 @@ class AnimeController extends Controller
      *     path="/anime/{id}/episodes/{episode}",
      *     operationId="getAnimeEpisodeById",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *     @OA\Parameter(
      *       name="episode",
      *       in="path",
@@ -529,7 +530,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/news",
      *     operationId="getAnimeNews",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -597,14 +598,14 @@ class AnimeController extends Controller
      *     path="/anime/{id}/forum",
      *     operationId="getAnimeForum",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
      *       required=true,
      *       @OA\Schema(type="integer")
      *     ),
-     * 
+     *
      *      @OA\Parameter(
      *          name="filter",
      *          in="query",
@@ -664,7 +665,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/videos",
      *     operationId="getAnimeVideos",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -717,7 +718,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/pictures",
      *     operationId="getAnimePictures",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -738,7 +739,7 @@ class AnimeController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
-     * 
+     *
      */
     public function pictures(Request $request, int $id)
     {
@@ -772,7 +773,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/statistics",
      *     operationId="getAnimeStatistics",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -825,7 +826,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/moreinfo",
      *     operationId="getAnimeMoreInfo",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -878,7 +879,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/recommendations",
      *     operationId="getAnimeRecommendations",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -931,7 +932,7 @@ class AnimeController extends Controller
      *     path="/anime/{id}/userupdates",
      *     operationId="getAnimeUserUpdates",
      *     tags={"anime"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -1279,6 +1280,87 @@ class AnimeController extends Controller
 
 
         $response = (new ExternalLinksResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/streaming",
+     *     operationId="getAnimeStreaming",
+     *     tags={"anime"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns anime streaming links",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/external_links"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function streaming(Request $request, int $id)
+    {
+        $results = Anime::query()
+            ->where('mal_id', $id)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $response = Anime::scrape($id);
+
+            if ($results->isEmpty()) {
+                $meta = [
+                    'createdAt' => new UTCDateTime(),
+                    'modifiedAt' => new UTCDateTime(),
+                    'request_hash' => $this->fingerprint
+                ];
+            }
+            $meta['modifiedAt'] = new UTCDateTime();
+
+            $response = $meta + $response;
+
+            if ($results->isEmpty()) {
+                Anime::query()
+                    ->insert($response);
+            }
+
+            if ($this->isExpired($request, $results)) {
+                Anime::query()
+                    ->where('mal_id', $id)
+                    ->update($response);
+            }
+
+            $results = Anime::query()
+                ->where('mal_id', $id)
+                ->get();
+        }
+
+        if ($results->isEmpty()) {
+            return HttpResponse::notFound($request);
+        }
+
+
+        $response = (new StreamingLinksResource(
             $results->first()
         ))->response();
 
