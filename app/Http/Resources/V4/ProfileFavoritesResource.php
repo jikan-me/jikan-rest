@@ -80,12 +80,7 @@ class ProfileFavoritesResource extends JsonResource
      *         type="array",
      *         description="Favorite People",
      *         @OA\Items (
-     *             type="object",
-     *
-     *             @OA\Property (
-     *                  type="object",
-     *                  ref="#/components/schemas/character_meta",
-     *             ),
+     *             ref="#/components/schemas/character_meta",
      *         ),
      *     ),
      * ),
