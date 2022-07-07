@@ -25,7 +25,8 @@ use Jikan\Request\User\UserReviewsRequest;
 use MongoDB\BSON\UTCDateTime;
 
 /**
- *
+ * Class Controller
+ * @package App\Http\Controllers\V4DB
  */
 class UserController extends Controller
 {
