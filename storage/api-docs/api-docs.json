@@ -669,6 +669,39 @@
                 }
             }
         },
+        "/anime/{id}/streaming": {
+            "get": {
+                "tags": [
+                    "anime"
+                ],
+                "operationId": "getAnimeStreaming",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns anime streaming links",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/external_links"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/characters/{id}/full": {
             "get": {
                 "tags": [
@@ -3661,6 +3694,39 @@
                 }
             }
         },
+        "/users/{username}/external": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "operationId": "getUserExternal",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns user's external links",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/external_links"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/watch/episodes": {
             "get": {
                 "tags": [
@@ -4557,26 +4623,41 @@
                     "trailer": {
                         "$ref": "#/components/schemas/trailer_base"
                     },
+                    "approved": {
+                        "description": "Whether the entry is pending approval on MAL or not",
+                        "type": "boolean"
+                    },
+                    "titles": {
+                        "description": "All titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "title": {
                         "description": "Title",
-                        "type": "string"
+                        "type": "string",
+                        "deprecated": true
                     },
                     "title_english": {
                         "description": "English Title",
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "deprecated": true
                     },
                     "title_japanese": {
                         "description": "Japanese Title",
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "deprecated": true
                     },
                     "title_synonyms": {
                         "description": "Other Titles",
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "deprecated": true
                     },
                     "type": {
                         "description": "Anime Type",
@@ -4786,6 +4867,20 @@
                             },
                             "type": "object"
                         }
+                    },
+                    "streaming": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -4831,26 +4926,41 @@
                     "trailer": {
                         "$ref": "#/components/schemas/trailer_base"
                     },
+                    "approved": {
+                        "description": "Whether the entry is pending approval on MAL or not",
+                        "type": "boolean"
+                    },
+                    "titles": {
+                        "description": "All titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "title": {
                         "description": "Title",
-                        "type": "string"
+                        "type": "string",
+                        "deprecated": true
                     },
                     "title_english": {
                         "description": "English Title",
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "deprecated": true
                     },
                     "title_japanese": {
                         "description": "Japanese Title",
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "deprecated": true
                     },
                     "title_synonyms": {
                         "description": "Other Titles",
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "deprecated": true
                     },
                     "type": {
                         "description": "Anime Type",
@@ -6343,26 +6453,41 @@
                     "images": {
                         "$ref": "#/components/schemas/manga_images"
                     },
+                    "approved": {
+                        "description": "Whether the entry is pending approval on MAL or not",
+                        "type": "boolean"
+                    },
+                    "titles": {
+                        "description": "All Titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "title": {
                         "description": "Title",
-                        "type": "string"
+                        "type": "string",
+                        "deprecated": true
                     },
                     "title_english": {
                         "description": "English Title",
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "deprecated": true
                     },
                     "title_japanese": {
                         "description": "Japanese Title",
                         "type": "string",
-                        "nullable": true
+                        "nullable": true,
+                        "deprecated": true
                     },
                     "title_synonyms": {
                         "description": "Other Titles",
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "deprecated": true
                     },
                     "type": {
                         "description": "Manga Type",
@@ -6530,26 +6655,33 @@
                     "images": {
                         "$ref": "#/components/schemas/manga_images"
                     },
-                    "title": {
-                        "description": "Title",
-                        "type": "string"
+                    "approved": {
+                        "description": "Whether the entry is pending approval on MAL or not",
+                        "type": "boolean"
                     },
-                    "title_english": {
-                        "description": "English Title",
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "title_japanese": {
-                        "description": "Japanese Title",
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "title_synonyms": {
-                        "description": "Other Titles",
+                    "titles": {
+                        "description": "All Titles",
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
+                    },
+                    "title": {
+                        "description": "Title",
+                        "type": "string",
+                        "deprecated": true
+                    },
+                    "title_english": {
+                        "description": "English Title",
+                        "type": "string",
+                        "nullable": true,
+                        "deprecated": true
+                    },
+                    "title_japanese": {
+                        "description": "Japanese Title",
+                        "type": "string",
+                        "nullable": true,
+                        "deprecated": true
                     },
                     "type": {
                         "description": "Manga Type",
@@ -7360,6 +7492,20 @@
                             }
                         },
                         "type": "object"
+                    },
+                    "external": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
                     }
                 },
                 "type": "object"
@@ -8125,6 +8271,26 @@
                         "$ref": "#/components/schemas/pagination"
                     }
                 ]
+            },
+            "streaming_links": {
+                "description": "Streaming links",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
             },
             "anime_userupdates": {
                 "description": "Anime User Updates Resource",
