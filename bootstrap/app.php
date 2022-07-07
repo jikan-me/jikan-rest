@@ -117,6 +117,11 @@ if (env('REPORTING') && env('REPORTING_DRIVER') === 'sentry') {
     $app->register(\Sentry\Laravel\ServiceProvider::class);
     // Sentry Performance Monitoring (optional)
     $app->register(\Sentry\Laravel\Tracing\ServiceProvider::class);
+
+    \Sentry\configureScope(function (\Sentry\State\Scope $scope): void {
+        $scope->setTag('rest.jikan.version', env('APP_VERSION'));
+        $scope->setTag('parser.jikan.version', JIKAN_PARSER_VERSION);
+    });
 }
 
 // Guzzle removed as of lumen 8.x
