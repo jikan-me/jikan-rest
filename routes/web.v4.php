@@ -102,6 +102,10 @@ $router->group(
         $router->get('/external', [
             'uses' => 'AnimeController@external'
         ]);
+
+        $router->get('/streaming', [
+            'uses' => 'AnimeController@streaming'
+        ]);
     }
 );
 
@@ -362,6 +366,10 @@ $router->group(
 
                 $router->get('/clubs', [
                     'uses' => 'UserController@clubs'
+                ]);
+
+                $router->get('/external', [
+                    'uses' => 'UserController@external'
                 ]);
             }
         );
