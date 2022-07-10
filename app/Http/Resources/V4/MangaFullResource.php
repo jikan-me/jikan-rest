@@ -26,21 +26,37 @@ class MangaFullResource extends JsonResource
      *          ref="#/components/schemas/manga_images"
      *      ),
      *      @OA\Property(
+     *          property="approved",
+     *          type="boolean",
+     *          description="Whether the entry is pending approval on MAL or not"
+     *      ),
+     *      @OA\Property(
+     *          property="titles",
+     *          type="array",
+     *          description="All Titles",
+     *          @OA\Items(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Property(
      *          property="title",
      *          type="string",
-     *          description="Title"
+     *          description="Title",
+     *          deprecated=true
      *      ),
      *      @OA\Property(
      *          property="title_english",
      *          type="string",
      *          description="English Title",
-     *          nullable=true
+     *          nullable=true,
+     *          deprecated=true
      *      ),
      *      @OA\Property(
      *          property="title_japanese",
      *          type="string",
      *          description="Japanese Title",
-     *          nullable=true
+     *          nullable=true,
+     *          deprecated=true
      *      ),
      *      @OA\Property(
      *          property="title_synonyms",
@@ -48,7 +64,8 @@ class MangaFullResource extends JsonResource
      *          description="Other Titles",
      *          @OA\Items(
      *              type="string"
-     *          )
+     *          ),
+     *          deprecated=true
      *      ),
      *      @OA\Property(
      *          property="type",
@@ -234,6 +251,8 @@ class MangaFullResource extends JsonResource
             'mal_id' => $this->mal_id,
             'url' => $this->url,
             'images' => $this->images,
+            'approved' => $this->approved ?? true,
+            'titles' => $this->titles ?? [],
             'title' => $this->title,
             'title_english' => $this->title_english,
             'title_japanese' => $this->title_japanese,
