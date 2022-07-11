@@ -14,6 +14,7 @@ use App\Http\QueryBuilder\TopAnimeQueryBuilder;
 use App\Http\QueryBuilder\TopMangaQueryBuilder;
 use App\Macros\To2dArrayWithDottedKeys;
 use App\Magazine;
+use App\Mixins\ScoutBuilderMixin;
 use App\Producer;
 use App\Services\DefaultScoutSearchService;
 use App\Services\ElasticScoutSearchService;
@@ -21,6 +22,7 @@ use App\Services\ScoutSearchService;
 use App\Services\TypeSenseScoutSearchService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -122,6 +124,8 @@ class AppServiceProvider extends ServiceProvider
         Collection::make($this->collectionMacros())
             ->reject(fn ($class, $macro) => Collection::hasMacro($macro))
             ->each(fn ($class, $macro) => Collection::macro($macro, app($class)()));
+
+        ScoutBuilder::mixin(new ScoutBuilderMixin());
     }
 
     private function collectionMacros(): array

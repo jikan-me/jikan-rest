@@ -12,6 +12,7 @@ trait PaginationParameterResolver
         $limit = $request->get('limit') ?? env('MAX_RESULTS_PER_PAGE', 25);
 
         $limit = (int)$limit;
+        $page = (int)$page;
 
         if ($limit <= 0) {
             $limit = 1;

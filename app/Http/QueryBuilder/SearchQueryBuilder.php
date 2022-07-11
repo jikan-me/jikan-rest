@@ -196,9 +196,8 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
             // In that method the "$limit" member variable is being check whether it's null or it has value.
             // If it's set to a number then the result set will be limited which we do the pagination on.
             // If it's set to null, then the pagination will be done on the whole result set.
-            $scoutBuilder->limit = null;
             $paginated = $scoutBuilder
-                ->paginate(
+                ->jikanPaginate(
                     $limit,
                     "page",
                     $page
