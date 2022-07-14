@@ -112,10 +112,13 @@ $app->configure('database');
 $app->configure('queue');
 $app->configure('controller-to-table-mapping');
 $app->configure('controller');
+$app->configure('roadrunner');
 
+$app->register(\pushrbx\LumenRoadRunner\ServiceProvider::class);
 $app->register(\SwaggerLume\ServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(\App\Providers\SourceHeartbeatProvider::class);
+$app->register(\App\Providers\EventServiceProvider::class);
 $app->register(Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
 $app->register(\App\Providers\AppServiceProvider::class);
 
@@ -153,7 +156,7 @@ $app->register(Laravel\Scout\ScoutServiceProvider::class);
 // we support TypeSense and ElasticSearch as search indexes.
 if (env("SCOUT_DRIVER") === "typesense") {
     // in this case the TYPESENSE_HOST env var should be set too
-    $app->register(Typesense\LaravelTypesense\TypesenseServiceProvider::class);
+    $app->register(\Typesense\LaravelTypesense\TypesenseServiceProvider::class);
 }
 if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
     // in this case the ELASTICSEARCH_HOST env var should be set too

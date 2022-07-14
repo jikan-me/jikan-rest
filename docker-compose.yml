@@ -1,0 +1,90 @@
+# For now this is just for local development. This is not production ready.
+version: '3.8'
+volumes:
+  mongo-data: {}
+  redis-data: {}
+  tmp-data: {}
+  typesense-data: {}
+
+services:
+  jikan_rest: &jikan_rest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "${APP_UID:-10001}:${APP_GID:-10001}"
+    environment:
+      PS1: '\[\033[1;32m\]\[\033[1;36m\][\u@\h] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
+      HOME: /tmp
+      APP_DEBUG: 'true'
+      APP_ENV: local
+      REDIS_HOST: redis
+      REDIS_PASSWORD: redis_password
+      DB_CONNECTION: mongodb
+      DB_HOST: mongodb
+      DB_DATABASE: jikan
+      DB_PORT: 27017
+      DB_ADMIN: jikan
+      DB_USERNAME: jikan_user
+      DB_PASSWORD: forge
+    volumes:
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - tmp-data:/tmp:rw
+      - .:/app:rw
+    depends_on:
+      mongodb: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      typesense: {condition: service_healthy}
+
+  web:
+    <<: *jikan_rest
+    command: rr serve -c .rr.local.unix.yaml
+    ports:
+      - '8080:8080/tcp'
+      - '8443:8443/tcp'
+    healthcheck:
+      test: [ 'CMD-SHELL', 'wget --spider -q "http://127.0.0.1:8082/health?plugin=http&plugin=rpc"' ]
+      interval: 2s
+      timeout: 2s
+  # todo: integrate this in a worker class and configure road runner to allocate it when the web container starts
+  queue:
+    <<: *jikan_rest
+    command: php /app/artisan queue:work --memory=256 --sleep=1
+
+  cron:
+    <<: *jikan_rest
+    command: supercronic /etc/supercronic/laravel # it runs artisan schedule:run
+
+  mongodb:
+    image: mongo:focal
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - '27017/tcp'
+    command: --wiredTigerCacheSizeGB 1
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongodb://localhost:27017 --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass redis_password
+    volumes:
+      - redis-data:/data:rw
+    ports:
+      - '6379/tcp'
+    healthcheck:
+      test: [ 'CMD', 'redis-cli', 'ping' ]
+      interval: 500ms
+      timeout: 1s
+
+  typesense:
+    image: typesense/typesense:0.23.1
+    command: -data-dir /data --api-key "typesenseapikeycomeshere"
+    restart: no
+    volumes:
+      - typesense-data:/data
+    ports:
+      - "8108/tcp"

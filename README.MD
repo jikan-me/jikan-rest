@@ -25,7 +25,16 @@ Please read the [manual installation guide](https://github.com/jikan-me/jikan-re
 For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
 ### 🐳 Docker Installation
-If you don't want to install it manually, you can use the [docker image](https://github.com/jikan-me/jikan-docker)
+We distribute the app as a container image so you can just run it:
+```bash
+docker run -d --name=jikan-rest -p 8080:8080 -p 8443:8443 -v ./.env:/app/.env jikan-rest:latest rr serve -c .rr.local.unix.yaml
+```
+
+Additionally, there is a `Dockerfile` in the repo which you can use to build the container image and startup the app in a container:
+```bash
+docker build -t jikan-rest:nightly .
+docker run -d --name=jikan-rest -p 8080:8080 -p 8443:8443 -v ./.env:/app/.env jikan-rest:nightly rr serve -c .rr.local.unix.yaml
+```
 
 ## Public REST API
 If you don't want to host your instance, there's a public API available.
