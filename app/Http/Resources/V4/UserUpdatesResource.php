@@ -85,7 +85,8 @@ class UserUpdatesResource extends JsonResource
      *                       @OA\Property(
      *                           property="score",
      *                           type="integer",
-     *                           description="User Score"
+     *                           description="User Score",
+     *                           nullable=true
      *                       ),
      *                       @OA\Property(
      *                           property="status",
