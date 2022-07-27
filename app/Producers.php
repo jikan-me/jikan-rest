@@ -3,13 +3,9 @@
 namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Request\Producer\ProducersRequest;
+use Jikan\Request\Producer\ProducerRequest;
 
-/**
- * Class Magazine
- * @package App
- */
-class Producer extends Model
+class Producers extends Model
 {
 
     /**
@@ -18,7 +14,7 @@ class Producer extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'name', 'url', 'count'
+        'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'external', 'count'
     ];
 
     /**
@@ -28,27 +24,26 @@ class Producer extends Model
      */
     protected $table = 'producers';
 
-
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
     protected $hidden = [
-        '_id', 'expiresAt'
+        '_id', 'request_hash', 'expiresAt'
     ];
 
-    /**
-     * @return array
-     */
-    public static function scrape() : array
+    public static function scrape(int $id)
     {
-        $data = app('JikanParser')->getProducers(new ProducersRequest());
+        $data = app('JikanParser')->getProducer(new ProducerRequest($id));
 
-        return json_decode(
+        $data = json_decode(
             app('SerializerV4')
                 ->serialize($data, 'json'),
             true
         );
+        unset($data['results'], $data['has_next_page'], $data['last_visible_page']);
+
+        return $data;
     }
 }

@@ -14,14 +14,14 @@ use Jenssegers\Mongodb\Eloquent\Builder;
  *    schema="producers_query_orderby",
  *    description="Order by producers data",
  *    type="string",
- *    enum={"mal_id", "name", "count"}
+ *    enum={"mal_id", "name", "count", "favorites", "established"}
  *  )
  */
 class SearchQueryBuilderProducer implements SearchQueryBuilderInterface
 {
 
     const ORDER_BY = [
-        'mal_id', 'name', 'count'
+        'mal_id', 'name', 'count', 'favorites', 'established'
     ];
 
     public static function query(Request $request, Builder $results) : Builder
