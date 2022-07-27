@@ -24,7 +24,7 @@ class ProducerCollection extends ResourceCollection
      *
      *  @OA\Schema(
      *      schema="producers",
-     *      description="Producer Collection Resource",
+     *      description="Producers Collection Resource",
      *
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),

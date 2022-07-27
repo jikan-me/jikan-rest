@@ -190,11 +190,7 @@ return [
      * Producers
      */
     'ProducerController@main' => [
-        'table_name' => 'common',
-        'ttl' => env('CACHE_PRODUCERS_EXPIRE')
-    ],
-    'ProducerController@resource' => [
-        'table_name' => 'common',
+        'table_name' => 'producers',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
 
@@ -334,6 +330,10 @@ return [
         'ttl' => env('CACHE_SEARCH_EXPIRE')
     ],
     'SearchController@userById' => [
+        'table_name' => 'common',
+        'ttl' => env('CACHE_SEARCH_EXPIRE')
+    ],
+    'SearchController@producers' => [
         'table_name' => 'common',
         'ttl' => env('CACHE_SEARCH_EXPIRE')
     ],

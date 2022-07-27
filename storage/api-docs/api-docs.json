@@ -1895,56 +1895,105 @@
                 }
             }
         },
-        "/producers": {
+        "/producers/{id}": {
             "get": {
                 "tags": [
                     "producers"
                 ],
-                "operationId": "getProducers",
+                "operationId": "getProducerById",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    },
-                    {
-                        "name": "q",
-                        "in": "query",
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "order_by",
-                        "in": "query",
-                        "schema": {
-                            "$ref": "#/components/schemas/producers_query_orderby"
-                        }
-                    },
-                    {
-                        "name": "sort",
-                        "in": "query",
-                        "schema": {
-                            "$ref": "#/components/schemas/search_query_sort"
-                        }
-                    },
-                    {
-                        "name": "letter",
-                        "in": "query",
-                        "description": "Return entries starting with the given letter",
-                        "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns producers collection",
+                        "description": "Returns producer resource",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/producers"
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/producer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/producers/{id}/full": {
+            "get": {
+                "tags": [
+                    "producers"
+                ],
+                "operationId": "getProducerFullById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns producer resource",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/producer_full"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/producers/{id}/external": {
+            "get": {
+                "tags": [
+                    "producers"
+                ],
+                "operationId": "getProducerExternal",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns producer's external links",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/external_links"
                                 }
                             }
                         }
@@ -2863,6 +2912,66 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/clubs_search"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/producers": {
+            "get": {
+                "tags": [
+                    "producers"
+                ],
+                "operationId": "getProducers",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/producers_query_orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search_query_sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "description": "Return entries starting with the given letter",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns producers collection",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/producers"
                                 }
                             }
                         }
@@ -4596,7 +4705,9 @@
                 "enum": [
                     "mal_id",
                     "name",
-                    "count"
+                    "count",
+                    "favorites",
+                    "established"
                 ]
             },
             "users_search_query_gender": {
@@ -7381,7 +7492,7 @@
                 "type": "object"
             },
             "producers": {
-                "description": "Producer Collection Resource",
+                "description": "Producers Collection Resource",
                 "allOf": [
                     {
                         "properties": {
@@ -7399,24 +7510,100 @@
                     }
                 ]
             },
-            "producer": {
-                "description": "Producer Resource",
+            "producer_full": {
+                "description": "Producers Resource",
                 "properties": {
                     "mal_id": {
                         "description": "MyAnimeList ID",
                         "type": "integer"
                     },
-                    "name": {
-                        "description": "Producer Name",
+                    "url": {
+                        "description": "MyAnimeList URL",
                         "type": "string"
+                    },
+                    "titles": {
+                        "description": "All titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/common_images"
+                    },
+                    "favorites": {
+                        "description": "Producers's member favorites count",
+                        "type": "integer"
+                    },
+                    "count": {
+                        "description": "Producers's anime count",
+                        "type": "integer"
+                    },
+                    "established": {
+                        "description": "Established Date ISO8601",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "about": {
+                        "description": "About the Producer",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "external": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "producer": {
+                "description": "Producers Resource",
+                "properties": {
+                    "mal_id": {
+                        "description": "MyAnimeList ID",
+                        "type": "integer"
                     },
                     "url": {
                         "description": "MyAnimeList URL",
                         "type": "string"
                     },
-                    "count": {
-                        "description": "Producer's anime count",
+                    "titles": {
+                        "description": "All titles",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "images": {
+                        "$ref": "#/components/schemas/common_images"
+                    },
+                    "favorites": {
+                        "description": "Producers's member favorites count",
                         "type": "integer"
+                    },
+                    "count": {
+                        "description": "Producers's anime count",
+                        "type": "integer"
+                    },
+                    "established": {
+                        "description": "Established Date ISO8601",
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "about": {
+                        "description": "About the Producer",
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"

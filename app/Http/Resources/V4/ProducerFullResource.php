@@ -4,7 +4,7 @@ namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProducerResource extends JsonResource
+class ProducerFullResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -13,7 +13,7 @@ class ProducerResource extends JsonResource
      * @return array
      *
      *  @OA\Schema(
-     *      schema="producer",
+     *      schema="producer_full",
      *      description="Producers Resource",
      *      @OA\Property(
      *          property="mal_id",
@@ -60,6 +60,24 @@ class ProducerResource extends JsonResource
      *         description="About the Producer",
      *         nullable=true
      *     ),
+     *
+     *      @OA\Property(
+     *          property="external",
+     *          type="array",
+     *
+     *          @OA\Items(
+     *              type="object",
+     *
+     *              @OA\Property(
+     *                   property="name",
+     *                   type="string",
+     *              ),
+     *              @OA\Property(
+     *                   property="url",
+     *                   type="string",
+     *              ),
+     *          ),
+     *      ),
      *  ),
      */
     public function toArray($request)
@@ -72,7 +90,8 @@ class ProducerResource extends JsonResource
             'favorites' => $this->favorites ?? null,
             'established' => $this->established ?? null,
             'about' => $this->about ?? null,
-            'count' => $this->count ?? null
+            'count' => $this->count ?? null,
+            'external' => $this->external_links ?? null
         ];
     }
 }
