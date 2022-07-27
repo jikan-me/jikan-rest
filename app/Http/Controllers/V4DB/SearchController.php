@@ -875,8 +875,8 @@ class SearchController extends Controller
      */
     public function producers(Request $request)
     {
-        $page = $this->request->get('page') ?? 1;
-        $limit = $this->request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
 
         if (!empty($limit)) {
             $limit = (int) $limit;
