@@ -3,10 +3,7 @@
 namespace App\Exceptions;
 
 use App\Events\SourceHeartbeatEvent;
-use App\Http\HttpHelper;
 use Exception;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -16,11 +13,9 @@ use Jikan\Exception\BadResponseException;
 use Jikan\Exception\ParserException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Predis\Connection\ConnectionException;
-use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpClient\Exception\TimeoutException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * Class Handler
@@ -42,6 +37,13 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * @var string[]
+     */
+    protected array $acceptableForReportingDriver = [
+        ParserException::class
+    ];
+
+    /**
      * @param \Throwable $e
      * @throws Exception
      */
@@ -55,13 +57,10 @@ class Handler extends ExceptionHandler
      * @param \Throwable $e
      * @return JsonResponse|Response
      */
-    public function render($request, \Throwable $e)
+    public function render($request, \Throwable $e): JsonResponse|Response
     {
         $githubReport = GithubReport::make($e, $request);
-
-        if (app()->bound('sentry') && $this->shouldReport($e)) {
-            app('sentry')->captureException($e);
-        }
+        $this->reportToSentry($e);
 
         // ConnectionException from Redis server
         if ($e instanceof ConnectionException) {
@@ -83,18 +82,6 @@ class Handler extends ExceptionHandler
                 ], 500);
         }
 
-        if ($e instanceof ConnectException) {
-            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
-
-            return response()
-                ->json([
-                    'status' => $e->getCode(),
-                    'type' => 'BadResponseException',
-                    'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond.',
-                    'error' => $e->getMessage()
-                ], 503);
-        }
-
         // ParserException from Jikan PHP API
         if ($e instanceof ParserException) {
             $githubReport->setRepo(env('GITHUB_API', 'jikan-me/jikan'));
@@ -108,9 +95,9 @@ class Handler extends ExceptionHandler
                     ], 500);
         }
 
-        // BadResponseException from Guzzle dep via Jikan PHP API
+        // BadResponseException from Jikan PHP API
         // This is basically the response MyAnimeList returns to Jikan
-        if ($e instanceof BadResponseException || $e instanceof ClientException) {
+        if ($e instanceof BadResponseException) {
             switch ($e->getCode()) {
                 case 404:
 //                    $this->set404Cache($request, $e);
@@ -157,6 +144,28 @@ class Handler extends ExceptionHandler
             }
         }
 
+        if ($e instanceof TimeoutException) {
+            return response()
+                ->json([
+                    'status' => 408,
+                    'type' => 'TimeoutException',
+                    'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds)',
+                    'error' => $e->getMessage()
+                ], 408);
+        }
+
+        if ($e instanceof Exception && $e->getMessage() === "Undefined index: url") {
+            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
+
+            return response()
+                ->json([
+                    'status' => $e->getCode(),
+                    'type' => 'BadResponseException',
+                    'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Retry the request!',
+                    'error' => $e->getMessage()
+                ], 503);
+        }
+
         // Bad REST API requests
         if ($e instanceof HttpException) {
             return response()
@@ -168,71 +177,32 @@ class Handler extends ExceptionHandler
                 ], $e->getStatusCode());
         }
 
-        if ($e instanceof TimeoutException) {
-            return response()
-                ->json([
-                    'status' => 408,
-                    'type' => 'TimeoutException',
-                    'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds)',
-                    'error' => $e->getMessage()
-                ], 408);
-        }
-
-        if ($e instanceof Exception) {
-            if ($e->getMessage() === "Undefined index: url") {
-                event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
-
-                return response()
-                    ->json([
-                        'status' => $e->getCode(),
-                        'type' => 'BadResponseException',
-                        'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Retry the request!',
-                        'error' => $e->getMessage()
-                    ], 503);
-            }
-
-
-            return response()
-                ->json([
-                    'status' => 500,
-                    'type' => "Exception",
-                    'message' => 'Unhandled Exception. Please follow report_url to generate an issue on GitHub',
-                    'trace' => "{$e->getFile()} at line {$e->getLine()}",
-                    'error' => $e->getMessage(),
-                    'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
-                ], 500);
-        }
+        return response()
+            ->json([
+                'status' => 500,
+                'type' => "Exception",
+                'message' => 'Unhandled Exception. Please follow report_url to generate an issue on GitHub',
+                'trace' => "{$e->getFile()} at line {$e->getLine()}",
+                'error' => $e->getMessage(),
+                'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
+            ], 500);
     }
 
+
     /**
-     * @param Request $request
-     * @param BadResponseException $e
+     * @param Exception|\Throwable $e
+     * @return void
      */
-    private function set404Cache(Request $request, BadResponseException $e)
+    private function reportToSentry(\Exception|\Throwable $e): void
     {
-        if (!env('CACHING') || env('MICROCACHING')) {
+        if (!app()->bound('sentry')) {
             return;
         }
 
-        $fingerprint = "request:404:".sha1(env('APP_URL') . $request->getRequestUri());
-
-        if (Cache::has($fingerprint)) {
-            return;
+        foreach ($this->acceptableForReportingDriver as $type) {
+            if ($e instanceof $type) {
+                app('sentry')->captureException($e);
+            }
         }
-
-        $routeController = HttpHelper::requestControllerName($request);
-        $cacheTtl = env('CACHE_DEFAULT_EXPIRE', 86400);
-
-        if (\in_array($routeController, [
-            'AnimeController',
-            'MangaController',
-            'CharacterController',
-            'PersonController'
-        ])) {
-            $cacheTtl = env('CACHE_404_EXPIRE', 604800);
-        }
-
-
-        Cache::put($fingerprint, $e->getMessage(), $cacheTtl);
     }
 }

@@ -6774,6 +6774,7 @@
                         "enum": [
                             "Manga",
                             "Novel",
+                            "Light Novel",
                             "One-shot",
                             "Doujinshi",
                             "Manhua",
@@ -6813,11 +6814,13 @@
                     "score": {
                         "description": "Score",
                         "type": "number",
-                        "format": "float"
+                        "format": "float",
+                        "nullable": true
                     },
                     "scored_by": {
                         "description": "Number of users",
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "rank": {
                         "description": "Ranking",
@@ -6968,6 +6971,7 @@
                         "enum": [
                             "Manga",
                             "Novel",
+                            "Light Novel",
                             "One-shot",
                             "Doujinshi",
                             "Manhua",
@@ -7007,11 +7011,13 @@
                     "score": {
                         "description": "Score",
                         "type": "number",
-                        "format": "float"
+                        "format": "float",
+                        "nullable": true
                     },
                     "scored_by": {
                         "description": "Number of users",
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "rank": {
                         "description": "Ranking",
@@ -8708,7 +8714,8 @@
                                         },
                                         "score": {
                                             "description": "User Score",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "status": {
                                             "description": "User list status",
