@@ -5292,6 +5292,34 @@
                                     },
                                     "type": "object"
                                 }
+                            },
+                            "music_videos": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "title": {
+                                            "description": "Title",
+                                            "type": "string"
+                                        },
+                                        "video": {
+                                            "$ref": "#/components/schemas/trailer"
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "title": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "author": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         },
                         "type": "object"
