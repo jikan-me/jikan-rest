@@ -41,6 +41,10 @@ return [
         'table_name' => 'anime_videos',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')
     ],
+    'AnimeController@videosEpisodes' => [
+        'table_name' => 'anime_videos_episodes',
+        'ttl' => env('CACHE_DEFAULT_EXPIRE')
+    ],
     'AnimeController@pictures' => [
         'table_name' => 'anime_pictures',
         'ttl' => env('CACHE_DEFAULT_EXPIRE')

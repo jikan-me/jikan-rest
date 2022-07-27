@@ -67,6 +67,10 @@ $router->group(
             'uses' => 'AnimeController@videos'
         ]);
 
+        $router->get('/videos/episodes', [
+            'uses' => 'AnimeController@videosEpisodes'
+        ]);
+
         $router->get('/pictures', [
             'uses' => 'AnimeController@pictures'
         ]);
