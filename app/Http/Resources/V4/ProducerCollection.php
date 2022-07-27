@@ -26,34 +26,6 @@ class ProducerCollection extends ResourceCollection
      *      schema="producers",
      *      description="Producer Collection Resource",
      *
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
-     *     @OA\Parameter(
-     *       name="q",
-     *       in="query",
-     *       @OA\Schema(type="string")
-     *     ),
-     *
-     *     @OA\Parameter(
-     *       name="order_by",
-     *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/producers_query_orderby")
-     *     ),
-     *
-     *     @OA\Parameter(
-     *       name="sort",
-     *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
-     *     ),
-     *
-     *     @OA\Parameter(
-     *       name="letter",
-     *       in="query",
-     *       description="Return entries starting with the given letter",
-     *       @OA\Schema(type="string")
-     *     ),
-     *
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(

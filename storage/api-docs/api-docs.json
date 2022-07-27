@@ -1166,6 +1166,38 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/magazines_query_orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search_query_sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "description": "Return entries starting with the given letter",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -1875,6 +1907,35 @@
                     },
                     {
                         "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/producers_query_orderby"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/search_query_sort"
+                        }
+                    },
+                    {
+                        "name": "letter",
+                        "in": "query",
+                        "description": "Return entries starting with the given letter",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
