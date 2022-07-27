@@ -361,6 +361,42 @@
                 }
             }
         },
+        "/anime/{id}/videos/episodes": {
+            "get": {
+                "tags": [
+                    "anime"
+                ],
+                "operationId": "getAnimeVideosEpisodes",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns episode videos related to the entry",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime_videos_episodes"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/anime/{id}/pictures": {
             "get": {
                 "tags": [
@@ -3911,6 +3947,46 @@
                     },
                     {
                         "$ref": "#/components/schemas/news"
+                    }
+                ]
+            },
+            "anime_videos_episodes": {
+                "description": "Anime Videos Episodes Resource",
+                "allOf": [
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "mal_id": {
+                                            "description": "MyAnimeList ID or Episode Number",
+                                            "type": "integer"
+                                        },
+                                        "title": {
+                                            "description": "Episode Title",
+                                            "type": "string"
+                                        },
+                                        "episode": {
+                                            "description": "Episode Subtitle",
+                                            "type": "string"
+                                        },
+                                        "url": {
+                                            "description": "Episode Page URL",
+                                            "type": "string"
+                                        },
+                                        "images": {
+                                            "$ref": "#/components/schemas/common_images"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },

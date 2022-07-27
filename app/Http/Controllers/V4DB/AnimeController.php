@@ -731,7 +731,7 @@ class AnimeController extends Controller
      *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns videos related to the entry",
+     *         description="Returns episode videos related to the entry",
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_videos_episodes"
      *         )
@@ -740,6 +740,7 @@ class AnimeController extends Controller
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
+     *  ),
      *
      *
      *  @OA\Schema(
@@ -749,48 +750,46 @@ class AnimeController extends Controller
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
-     *          @OA\Property(
-     *               property="data",
-     *               type="array",
-     *               @OA\Items(
-     *                   type="object",
-     *                   @OA\Property(
-     *                       property="mal_id",
-     *                       type="integer",
-     *                       description="MyAnimeList ID or Episode Number"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="title",
-     *                       type="string",
-     *                       description="Episode Title"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="episode",
-     *                       type="string",
-     *                       description="Episode Subtitle"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="url",
-     *                       type="string",
-     *                       description="Episode Page URL",
-     *                   ),
-     *                   @OA\Property(
-     *                       property="images",
-     *                       ref="#/components/schemas/common_images"
-     *                   ),
+     *               @OA\Property(
+     *                    property="data",
+     *                    type="array",
+     *                    @OA\Items(
+     *                        type="object",
+     *                        @OA\Property(
+     *                            property="mal_id",
+     *                            type="integer",
+     *                            description="MyAnimeList ID or Episode Number"
+     *                        ),
+     *                        @OA\Property(
+     *                            property="title",
+     *                            type="string",
+     *                            description="Episode Title"
+     *                        ),
+     *                        @OA\Property(
+     *                            property="episode",
+     *                            type="string",
+     *                            description="Episode Subtitle"
+     *                        ),
+     *                        @OA\Property(
+     *                            property="url",
+     *                            type="string",
+     *                            description="Episode Page URL",
+     *                        ),
+     *                        @OA\Property(
+     *                            property="images",
+     *                            ref="#/components/schemas/common_images"
+     *                        ),
+     *                    ),
      *               ),
-     *          ),
      *          ),
      *      }
      *  )
-     * )
      */
     public function videosEpisodes(Request $request, int $id)
     {
         $results = DB::table($this->getRouteTable($request))
             ->where('request_hash', $this->fingerprint)
             ->get();
-
 
         if (
             $results->isEmpty()
