@@ -22,6 +22,7 @@ class ProducerController extends Controller
      *     tags={"producers"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",
