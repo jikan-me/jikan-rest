@@ -104,7 +104,7 @@ class ProducersIndexer extends Command
 
         echo "{$count} entries available\n";
         for ($i = $index; $i <= ($count - 1); $i++) {
-            $id = $this->ids[$i]->mal_id;
+            $id = $this->ids[$i];
 
             $url = env('APP_URL') . "/v4/producers/{$id}";
 
@@ -144,7 +144,7 @@ class ProducersIndexer extends Command
     {
         $this->info("Scraping Producer MAL IDs from https://myanimelist.net/anime/producer...\n");
 
-        $this->ids = \json_decode(
+        $producers = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
                     ->getProducers(new ProducersRequest()),
@@ -152,6 +152,10 @@ class ProducersIndexer extends Command
             ),
             true
         )['producers'];
+
+        foreach ($producers as $producer) {
+            $this->ids[] = $producer->mal_id;
+        }
 
         Storage::put('indexer/producers_mal_id.json', json_encode($this->ids));
 
