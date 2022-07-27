@@ -154,7 +154,7 @@ class ProducersIndexer extends Command
         )['producers'];
 
         foreach ($producers as $producer) {
-            $this->ids[] = $producer->mal_id;
+            $this->ids[] = $producer['mal_id'];
         }
 
         Storage::put('indexer/producers_mal_id.json', json_encode($this->ids));
