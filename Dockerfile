@@ -1,19 +1,20 @@
 FROM spiralscout/roadrunner:2.10.6 as roadrunner
 FROM composer:2.3.9 as composer
 FROM mlocati/php-extension-installer:1.5.29 as php-ext-installer
-FROM php:8.0-bullseye as runtime
+FROM php:8.1-bullseye as runtime
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/
 ENV COMPOSER_HOME="/tmp/composer"
-RUN install-php-extensions gd exif intl bz2 gettext mongodb-stable redis curl mbstring redis opcache sockets pcntl
+RUN install-php-extensions gd exif intl bz2 gettext mongodb-stable redis opcache sockets pcntl
 
 RUN	set -ex \
     && apt-get update && apt-get install -y --no-install-recommends \
 	openssl \
 	git \
 	dos2unix \
-	unzip; \
-	# install supercronic (for laravel task scheduling), project page: <https://github.com/aptible/supercronic>
+	unzip \
+  wget \
+  # install supercronic (for laravel task scheduling), project page: <https://github.com/aptible/supercronic>
 	&& wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64" \
 	   -O /usr/bin/supercronic \
 	&& chmod +x /usr/bin/supercronic \
