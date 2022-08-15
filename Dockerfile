@@ -55,5 +55,5 @@ RUN set -ex \
     && chmod -R a+w storage/ \
     && chown -R jikanapi:jikanapi /app
 
-# unset default image entrypoint
+# unset default image entrypoint.
 ENTRYPOINT []
