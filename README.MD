@@ -27,14 +27,33 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 ### 🐳 Docker Installation
 We distribute the app as a container image so you can just run it:
 ```bash
-docker run -d --name=jikan-rest -p 8080:8080 -p 8443:8443 -v ./.env:/app/.env jikan-rest:latest rr serve -c .rr.local.unix.yaml
+docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikan-rest:latest
 ```
 
 Additionally, there is a `Dockerfile` in the repo which you can use to build the container image and startup the app in a container:
 ```bash
 docker build -t jikan-rest:nightly .
-docker run -d --name=jikan-rest -p 8080:8080 -p 8443:8443 -v ./.env:/app/.env jikan-rest:nightly rr serve -c .rr.local.unix.yaml
+docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikan-rest:nightly
 ```
+
+#### Note for Podman
+
+If you build the container image yourself with podman, the resulting image format will be OCI by default.
+To make the health checks work in that situation you need to run the container the following way:
+```bash
+podman run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env --health-start-period=5s --health-cmd="curl --fail http://localhost:2114/health?plugin=http || exit 1" jikan-rest:nightly
+```
+
+#### Configuration of the docker container
+
+You can change the settings of Jikan through setting environment variables via the `-e` command line argument option for the `docker run` command.
+These environment variables are the same as the options found in the `.env` file.
+There are additional configuration options:
+
+| Name                   | Description                                                               |
+|------------------------|---------------------------------------------------------------------------|
+ | RR_MAX_WORKER_MEMORY   | (Number) Configures the available memory in megabytes for the php scripts |
+ | RR_MAX_REQUEST_SIZE_MB | (Number) Configures the max allowed request body size in megabytes        |
 
 ## Public REST API
 If you don't want to host your instance, there's a public API available.
