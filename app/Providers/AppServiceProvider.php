@@ -175,6 +175,7 @@ class AppServiceProvider extends ServiceProvider
             TopAnimeQueryBuilder::class,
             TopMangaQueryBuilder::class
         ];
+
         if (env("SCOUT_DRIVER") === "typesense") {
             $services[] = Typesense::class;
         }

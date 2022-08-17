@@ -1,7 +1,8 @@
-Production usage guide: https://roadrunner.dev/docs/beep-beep-production
+# Production usage guide: https://roadrunner.dev/docs/beep-beep-production
 
 # Hint: RR will replace any config options using reference to environment variables,
 # eg.: `option_key: ${ENVIRONMENT_VARIABLE_NAME}`.
+# Please note that this config is used within the docker container.
 
 # RR configuration version
 version: "2.7"
@@ -51,7 +52,7 @@ logs:
   # Logging level can be "panic", "error", "warning", "info", "debug".
   #
   # Default: "debug"
-  level: debug
+  level: info
 
   # Encoding format can be "console" or "json" (last is preferred for production usage).
   #
@@ -64,6 +65,11 @@ http:
   #
   # This option is required.
   address: 0.0.0.0:8080
+
+  # HTTP access logs
+  #
+  # Default: false
+  access_logs: true
 
   # Maximal incoming request size in megabytes. Zero means no limit.
   #
@@ -100,7 +106,7 @@ http:
     # Path to the directory with static assets.
     #
     # This option is required.
-    dir: "/app/public"
+    dir: "./public"
 
     # File extensions to forbid.
     #
@@ -149,28 +155,6 @@ http:
       # Default: 0s
       exec_ttl: 60s
 
-  # SSL (Secure Sockets Layer) settings (docs: https://roadrunner.dev/docs/http-https).
-  ssl:
-    # Host and port to listen on (eg.: `127.0.0.1:443`).
-    #
-    # Default: ":443"
-    address: 0.0.0.0:8443
-
-    # Automatic redirect from http:// to https:// schema.
-    #
-    # Default: false
-    redirect: false
-
-    # Path to the cert file. This option is required for SSL working.
-    #
-    # This option is required.
-    cert: /etc/ssl/certs/selfsigned.crt
-
-    # Path to the cert key file.
-    #
-    # This option is required.
-    key: /etc/ssl/private/selfsigned.key
-
   # HTTP/2 settings.
   http2:
     # HTTP/2 over non-encrypted TCP connection using H2C.
@@ -200,13 +184,19 @@ status:
   # "rpc" are active (connected) plugins.
   #
   # This option is required.
-  address: 127.0.0.1:8082
+  address: 127.0.0.1:2114
 
   # Response status code if a requested plugin not ready to handle requests
   # Valid for both /health and /ready endpoints
   #
   # Default: 503
   unavailable_status_code: 503
+
+service:
+  laravel_queue_worker_1:
+    command: "php /app/artisan queue:work --queue=high,low"
+    process_num: 1
+    restart_sec: 5
 
 # RoadRunner internal container configuration (docs: https://github.com/spiral/endure).
 endure:

@@ -21,9 +21,9 @@ server:
   # Worker starting command, with any required arguments.
   #
   # This option is required.
-  command: "php ./vendor/bin/rr-worker start"
+  command: "php -dxdebug.start_with_request=trigger -dxdebug.mode=debug -dxdebug.client_port=9000 -dxdebug.client_host=127.0.0.1 -didekey=PHPSTORM ./vendor/bin/rr-worker start"
   env:
-    - scout_driver: typesense
+    - XDEBUG_SESSION: "1"
 
   ## Environment variables for the worker processes.
   ##
@@ -104,6 +104,7 @@ http:
 
   # Workers pool settings.
   pool:
+    debug: true
     # How many worker processes will be started. Zero (or nothing) means the number of logical CPUs.
     #
     # Default: 0
@@ -138,28 +139,6 @@ http:
       # Default: 0s
       exec_ttl: 60s
 
-  # SSL (Secure Sockets Layer) settings (docs: https://roadrunner.dev/docs/http-https).
-#  ssl:
-#    # Host and port to listen on (eg.: `127.0.0.1:443`).
-#    #
-#    # Default: ":443"
-#    address: 0.0.0.0:8443
-#
-#    # Automatic redirect from http:// to https:// schema.
-#    #
-#    # Default: false
-#    redirect: false
-#
-#    # Path to the cert file. This option is required for SSL working.
-#    #
-#    # This option is required.
-#    cert: /etc/ssl/certs/selfsigned.crt
-#
-#    # Path to the cert key file.
-#    #
-#    # This option is required.
-#    key: /etc/ssl/private/selfsigned.key
-
   # HTTP/2 settings.
   http2:
     # HTTP/2 over non-encrypted TCP connection using H2C.
@@ -189,7 +168,7 @@ status:
   # "rpc" are active (connected) plugins.
   #
   # This option is required.
-  address: 127.0.0.1:8082
+  address: 127.0.0.1:2114
 
   # Response status code if a requested plugin not ready to handle requests
   # Valid for both /health and /ready endpoints

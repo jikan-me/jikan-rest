@@ -55,5 +55,10 @@ RUN set -ex \
     && chmod -R a+w storage/ \
     && chown -R jikanapi:jikanapi /app
 
+EXPOSE 8080
+EXPOSE 2114
+
+HEALTHCHECK CMD curl --fail http://localhost:2114/health?plugin=http || exit 1
+
 # unset default image entrypoint.
-ENTRYPOINT []
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

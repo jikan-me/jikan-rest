@@ -41,8 +41,7 @@ return [
 
         Events\BeforeRequestHandlingEvent::class => [
             ...Defaults::beforeRequestHandling(),
-            Listeners\InjectStatsIntoRequestListener::class,
-            \App\Listeners\PsrWorkerBeforeRequestHandlingListener::class
+            Listeners\InjectStatsIntoRequestListener::class
         ],
 
         Events\AfterRequestHandlingEvent::class => [
@@ -82,7 +81,7 @@ return [
 
     'warm' => [
         ...Defaults::servicesToWarm(),
-        ...\App\Providers\AppServiceProvider::servicesToWarm(),
+        ...\App\Providers\AppServiceProvider::servicesToWarm()
     ],
 
     'clear' => [
