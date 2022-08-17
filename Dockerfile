@@ -53,7 +53,9 @@ RUN set -ex \
     && composer dump-autoload -n --optimize \
     && chmod -R 777 ${COMPOSER_HOME}/cache \
     && chmod -R a+w storage/ \
-    && chown -R jikanapi:jikanapi /app
+    && chown -R jikanapi:jikanapi /app \
+    && chmod +x docker-entrypoint.php \
+    && chmod +x docker-entrypoint.sh
 
 EXPOSE 8080
 EXPOSE 2114

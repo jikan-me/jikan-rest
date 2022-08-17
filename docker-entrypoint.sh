@@ -1,10 +1,15 @@
 #!/bin/bash
 set -eo pipefail
 
+status=0
 if [[ $# -eq 0 ]] ; then
-  exec php /app/docker-entrypoint.php
+  php /app/docker-entrypoint.php
+  status=$?
 else
-  exec php /app/docker-entrypoint.php "$@"
+  php /app/docker-entrypoint.php "$@"
+  status=$?
 fi
+
+[[ $status -ne 0 ]] && exit $status
 
 exec rr serve -c .rr.yaml
