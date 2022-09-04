@@ -38,18 +38,12 @@ services:
 
   web:
     <<: *jikan_rest
-    command: rr serve -c .rr.local.unix.yaml
     ports:
       - '8080:8080/tcp'
-      - '8443:8443/tcp'
     healthcheck:
-      test: [ 'CMD-SHELL', 'wget --spider -q "http://127.0.0.1:8082/health?plugin=http&plugin=rpc"' ]
+      test: [ 'CMD-SHELL', 'wget --spider -q "http://127.0.0.1:2114/health?plugin=http"' ]
       interval: 2s
       timeout: 2s
-  # todo: integrate this in a worker class and configure road runner to allocate it when the web container starts
-  queue:
-    <<: *jikan_rest
-    command: php /app/artisan queue:work --memory=256 --sleep=1
 
   cron:
     <<: *jikan_rest

@@ -203,6 +203,8 @@ service:
     command: "php /app/artisan queue:work --queue=high,low"
     process_num: 1
     restart_sec: 5
+  supercronic:
+    command: "supercronic /etc/supercronic/laravel"
 
 # RoadRunner internal container configuration (docs: https://github.com/spiral/endure).
 endure:
