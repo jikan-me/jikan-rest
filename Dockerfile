@@ -1,11 +1,4 @@
-FROM spiralscout/roadrunner:2.10.6 as roadrunner
-FROM composer:2.3.9 as composer
-FROM mlocati/php-extension-installer:1.5.29 as php-ext-installer
-FROM php:8.1-bullseye as runtime
-COPY --from=composer /usr/bin/composer /usr/bin/composer
-COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/
-ENV COMPOSER_HOME="/tmp/composer"
-RUN install-php-extensions gd exif intl bz2 gettext mongodb-stable redis opcache sockets pcntl
+FROM jikanme/jikan-rest-php:8.1
 
 RUN	set -ex \
     && apt-get update && apt-get install -y --no-install-recommends \
@@ -32,15 +25,17 @@ RUN	set -ex \
 	&& chown -R jikanapi:jikanapi /app /var/run/rr \
 	&& chmod -R 777 /var/run/rr
 
-# install roadrunner
-COPY --from=roadrunner /usr/bin/rr /usr/bin/rr
-
 USER jikanapi:jikanapi
 
 WORKDIR /app
 
 # copy composer (json|lock) files for dependencies layer caching
 COPY --chown=jikanapi:jikanapi ./composer.* /app/
+
+# check if GITHUB_PERSONAL_TOKEN is set and configure it for composer
+# it is recommended to set this for the build, otherwise the build might fail because of github's rate limits
+RUN if [ -z ${GITHUB_PERSONAL_TOKEN+x} ]; then echo "** GITHUB_PERSONAL_TOKEN is not set. This build may fail due to github rate limits."; \
+    else composer config github-oath.github.com "$GITHUB_PERSONAL_TOKEN"; fi
 
 # install composer dependencies (autoloader MUST be generated later!)
 RUN composer install -n --no-dev --no-cache --no-ansi --no-autoloader --no-scripts --prefer-dist
