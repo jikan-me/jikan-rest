@@ -6,7 +6,7 @@ docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikanme/jikan-r
 - Container listens on port `8080` for http requests
 - By mounting your .env file on the container via `-v ./.env:/app/.env` command line option for `docker run` you can configure Jikan API.
 
-> **Important**: You need to either mount a `.env` file on the container or specify the configuration through environment variables to make Jikan API work. Jikan API needs a MongoDB and optionally a search engine. In high load environments additionally a `redis` server is required too. The configuration should point to the correct address of these services.
+> **Important**: You need to either mount a `.env` file on the container or specify the configuration through environment variables to make Jikan API work in the container. Jikan API needs a MongoDB and optionally a search engine. In high load environments additionally a `redis` server is required too. The configuration should point to the correct address of these services.
 
 > **Tip**: If you run the container on a non-default network, you can use the container names in the configuration to specify the address of services like MongoDB and TypeSense/ElasticSearch. However this is not a concern if you use `docker-compose`.
 
@@ -15,6 +15,15 @@ There is also a `Dockerfile` in the repo which you can use to build the containe
 docker build -t jikan-rest:nightly .
 docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikan-rest:nightly
 ```
+
+### Docker compose usage
+
+```
+docker-compose up
+```
+Docker compose will use the `.env` file from the folder where you execute it from to load configurations for the services. If you don't have a `.env` file yet in the folder, copy the `.env.dist` file, and set the passwords.
+
+> **Please note**: The syntax rules of docker compose for `.env` applies here: https://docs.docker.com/compose/env-file/#syntax-rules
 
 #### Note for Podman
 
@@ -51,6 +60,9 @@ You can read more about additional configuration options on the [Configuration W
 
 - Jikan uses RoadRunner as an application server within the container.
 - Both `wget` and `curl` exists in the container image.
+- The script in `docker-entrypoint.php` sets safe defaults. Because of this by default the app won't behave the same way as the publicly available version of the app at [https://api.jikan.moe/v4](https://api.jikan.moe/v4). The default settings:
+  - No redis caching
+  - No search index usage (inaccurate search results)
 - Via Roadrunner multiple processes are running in the container, and their logs are aggregated and forwarded to `stdout`.
   - These processes are:
     - the php processes ingesting the http requests

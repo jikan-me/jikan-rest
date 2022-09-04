@@ -18,14 +18,14 @@ services:
       APP_DEBUG: 'true'
       APP_ENV: local
       REDIS_HOST: redis
-      REDIS_PASSWORD: redis_password
+      REDIS_PASSWORD: "${REDIS_PASSWORD:-null}"
       DB_CONNECTION: mongodb
       DB_HOST: mongodb
       DB_DATABASE: jikan
       DB_PORT: 27017
       DB_ADMIN: jikan
-      DB_USERNAME: jikan_user
-      DB_PASSWORD: forge
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
     volumes:
       - /etc/passwd:/etc/passwd:ro
       - /etc/group:/etc/group:ro
@@ -56,6 +56,9 @@ services:
     ports:
       - '27017/tcp'
     command: --wiredTigerCacheSizeGB 1
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${DB_USERNAME:-root}"
+      MONGO_INITDB_ROOT_PASSWORD: "${DB_PASSWORD}"
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo mongodb://localhost:27017 --quiet
       interval: 30s
@@ -64,7 +67,10 @@ services:
 
   redis:
     image: redis:7-alpine
-    command: redis-server --requirepass redis_password
+    command:
+      - /bin/sh
+      - -c
+      - redis-server --requirepass "$${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
     volumes:
       - redis-data:/data:rw
     ports:
@@ -76,7 +82,10 @@ services:
 
   typesense:
     image: typesense/typesense:0.23.1
-    command: -data-dir /data --api-key "typesenseapikeycomeshere"
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - /opt/typesense-server --data-dir /data --api-key "$${TYPESENSE_API_KEY:?TYPESENSE_API_KEY variable is not set}"
     restart: no
     volumes:
       - typesense-data:/data
