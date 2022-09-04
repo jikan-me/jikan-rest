@@ -44,4 +44,5 @@ if ($current_env["SCOUT_DRIVER"] === "typesense" && empty($current_env["TYPESENS
 $rrConfig = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(".rr.yaml"));
 $rrConfig["http"]["pool"]["supervisor"]["max_worker_memory"] = (int) env("RR_MAX_WORKER_MEMORY", 128);
 $rrConfig["http"]["max_request_size"] = (int) env("RR_MAX_REQUEST_SIZE_MB", 256);
+$rrConfig["service"]["laravel_queue_worker_1"]["process_num"] = (int) env("JIKAN_QUEUE_WORKER_PROCESS_NUM", 1);
 file_put_contents(".rr.yaml", \Symfony\Component\Yaml\Yaml::dump($rrConfig, 8));
