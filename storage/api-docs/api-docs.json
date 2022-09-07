@@ -4882,7 +4882,7 @@
                         "description": "All titles",
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/title"
                         }
                     },
                     "title": {
@@ -5185,7 +5185,7 @@
                         "description": "All titles",
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/title"
                         }
                     },
                     "title": {
@@ -6508,6 +6508,19 @@
                 },
                 "type": "object"
             },
+            "title": {
+                "properties": {
+                    "type": {
+                        "description": "Title type",
+                        "type": "string"
+                    },
+                    "title": {
+                        "description": "Title value",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "external_links": {
                 "description": "External links",
                 "properties": {
@@ -6740,7 +6753,7 @@
                         "description": "All Titles",
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/title"
                         }
                     },
                     "title": {
@@ -6945,7 +6958,7 @@
                         "description": "All Titles",
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/title"
                         }
                     },
                     "title": {
@@ -7531,7 +7544,7 @@
                         "description": "All titles",
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/title"
                         }
                     },
                     "images": {
@@ -7587,7 +7600,7 @@
                         "description": "All titles",
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/title"
                         }
                     },
                     "images": {
