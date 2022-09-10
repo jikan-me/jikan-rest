@@ -48,11 +48,12 @@ VAR2=value2
 ```
 There are additional configuration options:
 
-| Name                           | Description                                                                                                               |
-|--------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| RR_MAX_WORKER_MEMORY           | (Number) Configures the available memory in megabytes for the php scripts                                                 |
-| RR_MAX_REQUEST_SIZE_MB         | (Number) Configures the max allowed request body size in megabytes                                                        |
- | JIKAN_QUEUE_WORKER_PROCESS_NUM | (Number) Configures the number of running queue worker processes. (You want to increase this if you experience huge load) |
+| Name                                 | Description                                                                                                                                                                                         |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| RR_MAX_WORKER_MEMORY                 | (Number) Configures the available memory in megabytes for the php scripts                                                                                                                           |
+| RR_MAX_REQUEST_SIZE_MB               | (Number) Configures the max allowed request body size in megabytes                                                                                                                                  |
+ | JIKAN_QUEUE_WORKER_PROCESS_NUM       | (Number) Configures the number of running queue worker processes. (You want to increase this if you experience huge load)                                                                           |
+ | JIKAN_ENABLE_PERIODICAL_FULL_INDEXER | (Bool) Configures whether to run the anime/manga indexer every week, which would crawl all anime/manga at first then it would just grab the latest anime/manga entries from MAL. Defaults to false. |
 
 You can read more about additional configuration options on the [Configuration Wiki page](https://github.com/jikan-me/jikan-rest/wiki/Configuration).
 

@@ -1,4 +1,5 @@
 .dockerignore
+docker/*
 Makefile
 docker*.yml
 Dockerfile

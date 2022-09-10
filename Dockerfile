@@ -1,5 +1,5 @@
 FROM jikanme/jikan-rest-php:8.1
-
+ARG GITHUB_PERSONAL_TOKEN
 RUN	set -ex \
     && apt-get update && apt-get install -y --no-install-recommends \
 	openssl \
@@ -22,7 +22,7 @@ RUN	set -ex \
 	# create unpriviliged user
 	&& adduser --disabled-password --shell "/sbin/nologin" --home "/nonexistent" --no-create-home --uid "10001" --gecos "" "jikanapi" \
 	&& mkdir /app /var/run/rr \
-	&& chown -R jikanapi:jikanapi /app /var/run/rr \
+	&& chown -R jikanapi:jikanapi /app /var/run/rr /etc/supercronic/laravel \
 	&& chmod -R 777 /var/run/rr
 
 USER jikanapi:jikanapi
@@ -34,8 +34,8 @@ COPY --chown=jikanapi:jikanapi ./composer.* /app/
 
 # check if GITHUB_PERSONAL_TOKEN is set and configure it for composer
 # it is recommended to set this for the build, otherwise the build might fail because of github's rate limits
-RUN if [ -z ${GITHUB_PERSONAL_TOKEN+x} ]; then echo "** GITHUB_PERSONAL_TOKEN is not set. This build may fail due to github rate limits."; \
-    else composer config github-oath.github.com "$GITHUB_PERSONAL_TOKEN"; fi
+RUN if [ -z "$GITHUB_PERSONAL_TOKEN" ]; then echo "** GITHUB_PERSONAL_TOKEN is not set. This build may fail due to github rate limits."; \
+    else composer config github-oauth.github.com "$GITHUB_PERSONAL_TOKEN"; fi
 
 # install composer dependencies (autoloader MUST be generated later!)
 RUN composer install -n --no-dev --no-cache --no-ansi --no-autoloader --no-scripts --prefer-dist
