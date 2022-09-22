@@ -35,8 +35,9 @@ class MangaFullResource extends JsonResource
      *          type="array",
      *          description="All Titles",
      *          @OA\Items(
-     *              type="string"
-     *          )
+     *              type="object",
+     *              ref="#/components/schemas/title",
+     *          ),
      *      ),
      *      @OA\Property(
      *          property="title",
