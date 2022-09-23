@@ -5,11 +5,13 @@ namespace App\Console;
 use App\Console\Commands\ClearQueuedJobs;
 use App\Console\Commands\CacheRemove;
 use App\Console\Commands\Indexer\AnimeIndexer;
+use App\Console\Commands\Indexer\AnimeSweepIndexer;
 use App\Console\Commands\Indexer\AnimeScheduleIndexer;
 use App\Console\Commands\Indexer\CommonIndexer;
 use App\Console\Commands\Indexer\CurrentSeasonIndexer;
 use App\Console\Commands\Indexer\GenreIndexer;
 use App\Console\Commands\Indexer\MangaIndexer;
+use App\Console\Commands\Indexer\MangaSweepIndexer;
 use App\Console\Commands\Indexer\ProducersIndexer;
 use App\Console\Commands\ManageMicrocaching;
 use App\Console\Commands\ModifyCacheDriver;
@@ -36,7 +38,9 @@ class Kernel extends ConsoleKernel
         AnimeIndexer::class,
         MangaIndexer::class,
         GenreIndexer::class,
-        ProducersIndexer::class
+        ProducersIndexer::class,
+        AnimeSweepIndexer::class,
+        MangaSweepIndexer::class,
     ];
 
     /**
