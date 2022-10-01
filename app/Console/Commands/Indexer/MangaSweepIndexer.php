@@ -82,7 +82,7 @@ class MangaSweepIndexer extends Command
             true
         );
 
-        $ids = $ids['sfw'] + $ids['nsfw']; // merge
+        $ids = array_merge($ids['sfw'], $ids['nsfw']);
         Storage::put('indexer/manga_mal_id_sweep.json', json_encode($ids));
 
         return json_decode(Storage::get('indexer/manga_mal_id_sweep.json'));

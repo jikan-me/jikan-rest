@@ -61,9 +61,12 @@ class AnimeSweepIndexer extends Command
 
         foreach ($results as $result) {
             if (!array_key_exists($result['mal_id'], $malIds)) {
+                echo "Removing https://myanimelist.net/anime/".$result['mal_id']."\n";
                 $remove[] = $result['_id'];
             }
         }
+
+        echo "\n\n".count($remove);
 
         echo "Delete removed MAL IDs\n";
         DB::table('anime')->whereIn('_id', $remove)->delete();
@@ -82,7 +85,7 @@ class AnimeSweepIndexer extends Command
             true
         );
 
-        $ids = $ids['sfw'] + $ids['nsfw']; // merge
+        $ids = array_merge($ids['sfw'], $ids['nsfw']);
         Storage::put('indexer/anime_mal_id_sweep.json', json_encode($ids));
 
         return json_decode(Storage::get('indexer/anime_mal_id_sweep.json'));
