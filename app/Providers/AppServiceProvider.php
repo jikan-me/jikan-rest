@@ -15,7 +15,7 @@ use App\Http\QueryBuilder\TopMangaQueryBuilder;
 use App\Macros\To2dArrayWithDottedKeys;
 use App\Magazine;
 use App\Mixins\ScoutBuilderMixin;
-use App\Producer;
+use App\Producers;
 use App\Services\DefaultScoutSearchService;
 use App\Services\ElasticScoutSearchService;
 use App\Services\ScoutSearchService;
@@ -26,6 +26,8 @@ use Laravel\Scout\Builder as ScoutBuilder;
 
 class AppServiceProvider extends ServiceProvider
 {
+    private \ReflectionClass $simpleSearchQueryBuilderClassReflection;
+
     /**
      * @throws \ReflectionException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerMacros();
+        $this->simpleSearchQueryBuilderClassReflection = new \ReflectionClass(SimpleSearchQueryBuilder::class);
     }
 
     /**
@@ -82,9 +85,10 @@ class AppServiceProvider extends ServiceProvider
                 "modelClass" => GenreManga::class
             ],
             [
-                "name" => "Producer",
-                "identifier" => "producer",
-                "modelClass" => Producer::class
+                "name" => "Producers",
+                "identifier" => "producers",
+                "modelClass" => Producers::class,
+                "orderByFields" => "mal_id", "name", "count", "favorites", "established"
             ],
             [
                 "name" => "Magazine",
@@ -93,17 +97,23 @@ class AppServiceProvider extends ServiceProvider
             ]
         ];
 
+
         foreach ($simpleQueryBuilders as $simpleQueryBuilder) {
             $abstractName = SimpleSearchQueryBuilder::class . $simpleQueryBuilder["name"];
             $simpleQueryBuilderAbstracts[] = $abstractName;
             $this->app->singleton($abstractName, function($app) use($simpleQueryBuilder) {
                 $searchIndexesEnabled = $this->getSearchIndexesEnabledConfig($app);
-                return new SimpleSearchQueryBuilder(
+
+                $ctorArgs = [
                     $simpleQueryBuilder["identifier"],
                     $simpleQueryBuilder["modelClass"],
                     $searchIndexesEnabled,
                     $app->make(ScoutSearchService::class)
-                );
+                ];
+                if (array_key_exists("orderByFields", $simpleQueryBuilder)) {
+                    $ctorArgs[] = $simpleQueryBuilder["orderByFields"];
+                }
+                return $this->simpleSearchQueryBuilderClassReflection->newInstanceArgs($ctorArgs);
             });
         }
 
