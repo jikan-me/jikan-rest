@@ -39,15 +39,6 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    public function boot(): void
-    {
-        $this->registerMacros();
-    }
-
-    /**
      * Register any application services.
      *
      * @throws \ReflectionException
