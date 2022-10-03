@@ -80,4 +80,9 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
     {
         return null;
     }
+
+    protected function simplifyStringForSearch($val): string
+    {
+        return preg_replace("/[^[:alnum:][:space:]]/u", ' ', $val) ?? "";
+    }
 }
