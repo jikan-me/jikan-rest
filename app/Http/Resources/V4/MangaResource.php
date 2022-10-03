@@ -35,8 +35,9 @@ class MangaResource extends JsonResource
      *          type="array",
      *          description="All Titles",
      *          @OA\Items(
-     *              type="string"
-     *          )
+     *              type="object",
+     *              ref="#/components/schemas/title",
+     *          ),
      *      ),
      *      @OA\Property(
      *          property="title",
@@ -61,7 +62,7 @@ class MangaResource extends JsonResource
      *      @OA\Property(
      *          property="type",
      *          type="string",
-     *          enum={"Manga", "Novel", "One-shot", "Doujinshi", "Manhua", "Manhwa", "OEL"},
+     *          enum={"Manga", "Novel", "Light Novel", "One-shot", "Doujinshi", "Manhua", "Manhwa", "OEL"},
      *          description="Manga Type",
      *          nullable=true
      *      ),
@@ -96,12 +97,14 @@ class MangaResource extends JsonResource
      *          property="score",
      *          type="number",
      *          format="float",
-     *          description="Score"
+     *          description="Score",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="scored_by",
      *          type="integer",
-     *          description="Number of users"
+     *          description="Number of users",
+     *          nullable=true
      *      ),
      *      @OA\Property(
      *          property="rank",

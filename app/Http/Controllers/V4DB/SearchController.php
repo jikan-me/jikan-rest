@@ -8,6 +8,7 @@ use App\Http\Resources\V4\CharacterCollection;
 use App\Http\Resources\V4\ClubCollection;
 use App\Http\Resources\V4\MangaCollection;
 use App\Http\Resources\V4\PersonCollection;
+use App\Http\Resources\V4\ProducerCollection;
 use App\Http\Resources\V4\ResultsResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -637,5 +638,58 @@ class SearchController extends ControllerWithQueryBuilderProvider
     public function clubs(Request $request)
     {
         return $this->preparePaginatedResponse(ClubCollection::class, "club", $request);
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/producers",
+     *     operationId="getProducers",
+     *     tags={"producers"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
+     *     @OA\Parameter(
+     *       name="q",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="order_by",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/producers_query_orderby")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="sort",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="letter",
+     *       in="query",
+     *       description="Return entries starting with the given letter",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns producers collection",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/producers"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function producers(Request $request)
+    {
+        return $this->preparePaginatedResponse(ProducerCollection::class, "producer", $request);
     }
 }

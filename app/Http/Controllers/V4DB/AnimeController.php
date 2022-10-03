@@ -34,6 +34,7 @@ use Jikan\Request\Anime\AnimeRecommendationsRequest;
 use Jikan\Request\Anime\AnimeRequest;
 use Jikan\Request\Anime\AnimeReviewsRequest;
 use Jikan\Request\Anime\AnimeStatsRequest;
+use Jikan\Request\Anime\AnimeVideosEpisodesRequest;
 use Jikan\Request\Anime\AnimeVideosRequest;
 use Laravel\Lumen\Http\ResponseFactory;
 use MongoDB\BSON\UTCDateTime;
@@ -691,6 +692,105 @@ class AnimeController extends Controller
         }
 
         $response = (new AnimeVideosResource(
+            $results->first()
+        ))->response();
+
+        return $this->prepareResponse(
+            $response,
+            $results,
+            $request
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/anime/{id}/videos/episodes",
+     *     operationId="getAnimeVideosEpisodes",
+     *     tags={"anime"},
+     *
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns episode videos related to the entry",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/anime_videos_episodes"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     *  ),
+     *
+     *
+     *  @OA\Schema(
+     *      schema="anime_videos_episodes",
+     *      description="Anime Videos Episodes Resource",
+     *
+     *      allOf={
+     *          @OA\Schema(ref="#/components/schemas/pagination"),
+     *          @OA\Schema(
+     *               @OA\Property(
+     *                    property="data",
+     *                    type="array",
+     *                    @OA\Items(
+     *                        type="object",
+     *                        @OA\Property(
+     *                            property="mal_id",
+     *                            type="integer",
+     *                            description="MyAnimeList ID or Episode Number"
+     *                        ),
+     *                        @OA\Property(
+     *                            property="title",
+     *                            type="string",
+     *                            description="Episode Title"
+     *                        ),
+     *                        @OA\Property(
+     *                            property="episode",
+     *                            type="string",
+     *                            description="Episode Subtitle"
+     *                        ),
+     *                        @OA\Property(
+     *                            property="url",
+     *                            type="string",
+     *                            description="Episode Page URL",
+     *                        ),
+     *                        @OA\Property(
+     *                            property="images",
+     *                            ref="#/components/schemas/common_images"
+     *                        ),
+     *                    ),
+     *               ),
+     *          ),
+     *      }
+     *  )
+     */
+    public function videosEpisodes(Request $request, int $id)
+    {
+        $results = DB::table($this->getRouteTable($request))
+            ->where('request_hash', $this->fingerprint)
+            ->get();
+
+        if (
+            $results->isEmpty()
+            || $this->isExpired($request, $results)
+        ) {
+            $page = $request->get('page') ?? 1;
+            $anime = $this->jikan->getAnimeVideosEpisodes(new AnimeVideosEpisodesRequest($id, $page));
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+
+            $results = $this->updateCache($request, $results, $response);
+        }
+
+        $response = (new AnimeEpisodesResource(
             $results->first()
         ))->response();
 
