@@ -14,16 +14,30 @@ use App\Http\QueryBuilder\TopAnimeQueryBuilder;
 use App\Http\QueryBuilder\TopMangaQueryBuilder;
 use App\Macros\To2dArrayWithDottedKeys;
 use App\Magazine;
-use App\Producer;
+use App\Mixins\ScoutBuilderMixin;
+use App\Producers;
 use App\Services\DefaultScoutSearchService;
 use App\Services\ElasticScoutSearchService;
 use App\Services\ScoutSearchService;
 use App\Services\TypeSenseScoutSearchService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 class AppServiceProvider extends ServiceProvider
 {
+    private \ReflectionClass $simpleSearchQueryBuilderClassReflection;
+
+    /**
+     * @throws \ReflectionException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function boot(): void
+    {
+        $this->registerMacros();
+        $this->simpleSearchQueryBuilderClassReflection = new \ReflectionClass(SimpleSearchQueryBuilder::class);
+    }
+
     /**
      * @throws \ReflectionException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
@@ -80,9 +94,10 @@ class AppServiceProvider extends ServiceProvider
                 "modelClass" => GenreManga::class
             ],
             [
-                "name" => "Producer",
-                "identifier" => "producer",
-                "modelClass" => Producer::class
+                "name" => "Producers",
+                "identifier" => "producers",
+                "modelClass" => Producers::class,
+                "orderByFields" => "mal_id", "name", "count", "favorites", "established"
             ],
             [
                 "name" => "Magazine",
@@ -96,12 +111,17 @@ class AppServiceProvider extends ServiceProvider
             $simpleQueryBuilderAbstracts[] = $abstractName;
             $this->app->singleton($abstractName, function($app) use($simpleQueryBuilder) {
                 $searchIndexesEnabled = $this->getSearchIndexesEnabledConfig($app);
-                return new SimpleSearchQueryBuilder(
+
+                $ctorArgs = [
                     $simpleQueryBuilder["identifier"],
                     $simpleQueryBuilder["modelClass"],
                     $searchIndexesEnabled,
                     $app->make(ScoutSearchService::class)
-                );
+                ];
+                if (array_key_exists("orderByFields", $simpleQueryBuilder)) {
+                    $ctorArgs[] = $simpleQueryBuilder["orderByFields"];
+                }
+                return $this->simpleSearchQueryBuilderClassReflection->newInstanceArgs($ctorArgs);
             });
         }
 
@@ -122,6 +142,8 @@ class AppServiceProvider extends ServiceProvider
         Collection::make($this->collectionMacros())
             ->reject(fn ($class, $macro) => Collection::hasMacro($macro))
             ->each(fn ($class, $macro) => Collection::macro($macro, app($class)()));
+
+        ScoutBuilder::mixin(new ScoutBuilderMixin());
     }
 
     private function collectionMacros(): array

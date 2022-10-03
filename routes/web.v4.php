@@ -67,6 +67,10 @@ $router->group(
             'uses' => 'AnimeController@videos'
         ]);
 
+        $router->get('/videos/episodes', [
+            'uses' => 'AnimeController@videosEpisodes'
+        ]);
+
         $router->get('/pictures', [
             'uses' => 'AnimeController@pictures'
         ]);
@@ -101,6 +105,10 @@ $router->group(
 
         $router->get('/external', [
             'uses' => 'AnimeController@external'
+        ]);
+
+        $router->get('/streaming', [
+            'uses' => 'AnimeController@streaming'
         ]);
     }
 );
@@ -271,7 +279,34 @@ $router->group(
     ],
     function() use ($router) {
         $router->get('/', [
-            'uses' => 'ProducerController@main',
+            'uses' => 'SearchController@producers',
+        ]);
+
+        $router->get('/{id:[0-9]+}', [
+            'uses' => 'ProducerController@main'
+        ]);
+    }
+);
+
+$router->get('/producers', [
+    'uses' => 'SearchController@producers'
+]);
+
+$router->group(
+    [
+        'prefix' => 'producers/{id:[0-9]+}'
+    ],
+    function () use ($router) {
+        $router->get('/', [
+            'uses' => 'ProducerController@main'
+        ]);
+
+        $router->get('/full', [
+            'uses' => 'ProducerController@full'
+        ]);
+
+        $router->get('/external', [
+            'uses' => 'ProducerController@external'
         ]);
     }
 );
@@ -362,6 +397,10 @@ $router->group(
 
                 $router->get('/clubs', [
                     'uses' => 'UserController@clubs'
+                ]);
+
+                $router->get('/external', [
+                    'uses' => 'UserController@external'
                 ]);
             }
         );

@@ -12,7 +12,7 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
     use IsoDateFormatter, StatusResolver, TypeResolver;
 
     private array $mediaParameterNames = ["score", "sfw", "genres", "genres_exclude", "min_score", "max_score",
-        "start_date", "end_date", "status"];
+        "start_date", "end_date", "status", "type"];
 
     const ORDER_BY = [
         'mal_id' => 'mal_id',

@@ -15,54 +15,54 @@ class GithubReport
     /**
      * @var string
      */
-    private $name;
+    private string $name;
     /**
      * @var string
      */
-    private $code;
+    private string $code;
     /**
      * @var string
      */
-    private $error;
+    private string $error;
 
     /**
      * @var string
      */
-    private $requestUri;
+    private string $requestUri;
     /**
      * @var string
      */
-    private $requestMethod;
+    private string $requestMethod;
 
     /**
      * @var string
      */
-    private $repo;
+    private string $repo;
 
     /**
      * @var string
      */
-    private $trace;
+    private string $trace;
 
     /**
      * @var string
      */
-    private $jikanVersion;
+    private string $jikanVersion;
 
     /**
      * @var string
      */
-    private $redisRunning;
+    private string $redisRunning;
 
     /**
      * @var string
      */
-    private $instanceType;
+    private string $instanceType;
 
     /**
-     * @var
+     * @var string
      */
-    private $phpVersion;
+    private string $phpVersion;
 
     /**
      * @param \Exception $exception

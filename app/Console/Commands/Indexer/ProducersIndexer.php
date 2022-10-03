@@ -2,24 +2,24 @@
 
 namespace App\Console\Commands\Indexer;
 
-use App\Exceptions\Console\CommandAlreadyRunningException;
 use App\Exceptions\Console\FileNotFoundException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Jikan\Request\Producer\ProducersRequest;
 
 
 /**
- * Class AnimeIndexer
+ * Class ProducersIndexer
  * @package App\Console\Commands\Indexer
  */
-class AnimeIndexer extends Command
+class ProducersIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
      * @var string
      */
-    protected $signature = 'indexer:anime
+    protected $signature = 'indexer:producers
                             {--failed : Run only entries that failed to index last time}
                             {--resume : Resume from the last position}
                             {--reverse : Start from the end of the array}
@@ -31,7 +31,7 @@ class AnimeIndexer extends Command
      *
      * @var string
      */
-    protected $description = 'Index all anime';
+    protected $description = 'Index all producers';
 
     /**
      * @var array
@@ -66,9 +66,9 @@ class AnimeIndexer extends Command
         $index = (int)$index;
         $delay = (int)$delay;
 
-        $this->info("Info: AnimeIndexer uses seanbreckenridge/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
+        $this->info("Info: ProducersIndexer scrapes available MAL IDs and updates/indexes them\n\n");
 
-        if ($failed && Storage::exists('indexer/indexer_anime.save')) {
+        if ($failed && Storage::exists('indexer/indexer_producers.save')) {
             $this->ids = $this->loadFailedMalIds();
         }
 
@@ -82,8 +82,8 @@ class AnimeIndexer extends Command
         }
 
         // Resume
-        if ($resume && Storage::exists('indexer/indexer_anime.save')) {
-            $index = (int)Storage::get('indexer/indexer_anime.save');
+        if ($resume && Storage::exists('indexer/indexer_producers.save')) {
+            $index = (int)Storage::get('indexer/indexer_producers.save');
 
             $this->info("Resuming from index: {$index}");
         }
@@ -95,7 +95,7 @@ class AnimeIndexer extends Command
         }
 
         // initialize and index
-        Storage::put('indexer/indexer_anime.save', 0);
+        Storage::put('indexer/indexer_producers.save', 0);
 
         echo "Loading MAL IDs\n";
         $count = count($this->ids);
@@ -106,7 +106,7 @@ class AnimeIndexer extends Command
         for ($i = $index; $i <= ($count - 1); $i++) {
             $id = $this->ids[$i];
 
-            $url = env('APP_URL') . "/v4/anime/{$id}";
+            $url = env('APP_URL') . "/v4/producers/{$id}";
 
             echo "Indexing/Updating " . ($i + 1) . "/{$count} {$url} [MAL ID: {$id}] \n";
 
@@ -116,21 +116,21 @@ class AnimeIndexer extends Command
                 if (isset($response['error']) && $response['status'] != 404) {
                     echo "[SKIPPED] Failed to fetch {$url} - {$response['error']}\n";
                     $failedIds[] = $id;
-                    Storage::put('indexer/indexer_anime.failed', json_encode($failedIds));
+                    Storage::put('indexer/indexer_producers.failed', json_encode($failedIds));
                 }
 
                 sleep($delay);
             } catch (\Exception $e) {
                 echo "[SKIPPED] Failed to fetch {$url}\n";
                 $failedIds[] = $id;
-                Storage::put('indexer/indexer_anime.failed', json_encode($failedIds));
+                Storage::put('indexer/indexer_producers.failed', json_encode($failedIds));
             }
 
             $success[] = $id;
-            Storage::put('indexer/indexer_anime.save', $i);
+            Storage::put('indexer/indexer_producers.save', $i);
         }
 
-        Storage::delete('indexer/indexer_anime.save');
+        Storage::delete('indexer/indexer_producers.save');
 
         echo "---------\nIndexing complete\n";
         echo count($success) . " entries indexed or updated\n";
@@ -139,21 +139,27 @@ class AnimeIndexer extends Command
 
     /**
      * @return array
-     * @url https://github.com/seanbreckenridge/mal-id-cache
      */
     private function fetchMalIds() : array
     {
-        $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/seanbreckenridge/mal-id-cache/master/cache/anime_cache.json...\n");
+        $this->info("Scraping Producer MAL IDs from https://myanimelist.net/anime/producer...\n");
 
-        $ids = json_decode(
-            file_get_contents('https://raw.githubusercontent.com/seanbreckenridge/mal-id-cache/master/cache/anime_cache.json'),
+        $producers = \json_decode(
+            app('SerializerV4')->serialize(
+                app('JikanParser')
+                    ->getProducers(new ProducersRequest()),
+                'json'
+            ),
             true
-        );
+        )['producers'];
 
-        $ids = array_merge($ids['sfw'], $ids['nsfw']);
-        Storage::put('indexer/anime_mal_id.json', json_encode($this->ids));
+        foreach ($producers as $producer) {
+            $this->ids[] = $producer['mal_id'];
+        }
 
-        return json_decode(Storage::get('indexer/anime_mal_id.json'));
+        Storage::put('indexer/producers_mal_id.json', json_encode($this->ids));
+
+        return json_decode(Storage::get('indexer/producers_mal_id.json'));
     }
 
     /**
@@ -162,11 +168,11 @@ class AnimeIndexer extends Command
      */
     private function loadFailedMalIds() : array
     {
-        if (!Storage::exists('indexer/indexer_anime.failed')) {
-            throw new FileNotFoundException('"indexer/indexer_anime.failed" does not exist');
+        if (!Storage::exists('indexer/indexer_producers.failed')) {
+            throw new FileNotFoundException('"indexer/indexer_producers.failed" does not exist');
         }
 
-        return json_decode(Storage::get('indexer/indexer_anime.failed'));
+        return json_decode(Storage::get('indexer/indexer_producers.failed'));
     }
 
 }

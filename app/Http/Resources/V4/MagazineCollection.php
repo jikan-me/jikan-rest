@@ -26,34 +26,6 @@ class MagazineCollection extends ResourceCollection
      *      schema="magazines",
      *      description="Magazine Collection Resource",
      *
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
-     *     @OA\Parameter(
-     *       name="q",
-     *       in="query",
-     *       @OA\Schema(type="string")
-     *     ),
-     *
-     *     @OA\Parameter(
-     *       name="order_by",
-     *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/magazines_query_orderby")
-     *     ),
-     *
-     *     @OA\Parameter(
-     *       name="sort",
-     *       in="query",
-     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
-     *     ),
-     *
-     *     @OA\Parameter(
-     *       name="letter",
-     *       in="query",
-     *       description="Return entries starting with the given letter",
-     *       @OA\Schema(type="string")
-     *     ),
-     *
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
@@ -76,7 +48,13 @@ class MagazineCollection extends ResourceCollection
     {
         $this->pagination = [
             'last_visible_page' => $resource->lastPage(),
-            'has_next_page' => $resource->hasMorePages()
+            'has_next_page' => $resource->hasMorePages(),
+            'current_page' => $resource->currentPage(),
+            'items' => [
+                'count' => $resource->count(),
+                'total' => $resource->total(),
+                'per_page' => $resource->perPage(),
+            ],
         ];
 
         $this->collection = $resource->getCollection();

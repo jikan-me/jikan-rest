@@ -14,6 +14,32 @@ class MagazineController extends ControllerWithQueryBuilderProvider
      *     tags={"magazines"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
+     *     @OA\Parameter(
+     *       name="q",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="order_by",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/magazines_query_orderby")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="sort",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="letter",
+     *       in="query",
+     *       description="Return entries starting with the given letter",
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -35,7 +61,7 @@ class MagazineController extends ControllerWithQueryBuilderProvider
      *    enum={"mal_id", "name", "count"}
      *  )
      */
-    public function main(Request $request)
+    public function main(Request $request): MagazineCollection
     {
         return $this->preparePaginatedResponse(MagazineCollection::class, "magazine", $request);
     }
