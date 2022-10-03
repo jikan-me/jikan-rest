@@ -18,7 +18,7 @@ class Manga extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'images', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
+        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'titles', 'images', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
         'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related', 'genres', 'explicit_genres', 'themes', 'demographics', 'authors', 'serializations',
     ];
 
@@ -72,8 +72,11 @@ class Manga extends JikanApiSearchableModel
             'start_date' => $this->convertToTimestamp($this->published['from']),
             'end_date' => $this->convertToTimestamp($this->published['to']),
             'title' => $this->title,
-            'title_english' => $this->title_english,
+            'title_transformed' => preg_replace("/[^[:alnum:][:space:]]/u", ' ', $this->title) ?? "",
+            'title_english' => $this->title_english ?? "",
+            'title_english_transformed' => preg_replace("/[^[:alnum:][:space:]]/u", ' ', $this->title_english) ?? "",
             'title_japanese' => $this->title_japanese,
+            'title_japanese_transformed' => preg_replace("/[^[:alnum:][:space:]]/u", ' ', $this->title_japanese) ?? "",
             'title_synonyms' => $this->title_synonyms,
             'type' => $this->type,
             'chapters' => $this->chapters,
@@ -102,16 +105,17 @@ class Manga extends JikanApiSearchableModel
     {
         return [
             'title',
+            'title_transformed',
             'title_english',
+            'title_english_transformed',
             'title_japanese',
-            'title_synonyms'
+            'title_japanese_transformed',
         ];
     }
 
     public function getTypeSenseQueryByWeights(): string|null
     {
-        // this way title_synonyms will rank lower in search results
-        return "1,1,1,2";
+        return "2,2,1,1,2,2";
     }
 
     /**
@@ -122,9 +126,13 @@ class Manga extends JikanApiSearchableModel
     {
         return [
             [
-                "field" => "popularity",
-                "direction" => "asc"
-            ]
+                "field" => "_text_match",
+                "direction" => "desc"
+            ],
+            [
+                "field" => "members",
+                "direction" => "desc"
+            ],
         ];
     }
 }

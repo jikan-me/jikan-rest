@@ -17,7 +17,7 @@ class Anime extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id','url','title','title_english','title_japanese','title_synonyms', 'images', 'type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres', 'explicit_genres', 'themes', 'demographics', 'opening_themes','ending_themes'
+        'mal_id','url','title','title_english','title_japanese','title_synonyms', 'titles', 'images', 'type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres', 'explicit_genres', 'themes', 'demographics', 'opening_themes','ending_themes'
     ];
 
     /**
@@ -143,8 +143,11 @@ class Anime extends JikanApiSearchableModel
             'start_date' => $this->convertToTimestamp($this->aired['from']),
             'end_date' => $this->convertToTimestamp($this->aired['to']),
             'title' => $this->title,
+            'title_transformed' => preg_replace("/[^[:alnum:][:space:]]/u", ' ', $this->title) ?? "",
             'title_english' => $this->title_english ?? "",
+            'title_english_transformed' => preg_replace("/[^[:alnum:][:space:]]/u", ' ', $this->title_english) ?? "",
             'title_japanese' => $this->title_japanese,
+            'title_japanese_transformed' => preg_replace("/[^[:alnum:][:space:]]/u", ' ', $this->title_japanese) ?? "",
             'title_synonyms' => $this->title_synonyms,
             'type' => $this->type,
             'source' => $this->source,
@@ -177,16 +180,17 @@ class Anime extends JikanApiSearchableModel
     {
         return [
             'title',
+            'title_transformed',
             'title_english',
+            'title_english_transformed',
             'title_japanese',
-            'title_synonyms'
+            'title_japanese_transformed',
         ];
     }
 
     public function getTypeSenseQueryByWeights(): string|null
     {
-        // this way title_synonyms will rank lower in search results
-        return "3,2,3,1";
+        return "2,2,1,1,2,2";
     }
 
     /**
@@ -201,8 +205,8 @@ class Anime extends JikanApiSearchableModel
                 "direction" => "desc"
             ],
             [
-                "field" => "popularity",
-                "direction" => "asc"
+                "field" => "members",
+                "direction" => "desc"
             ],
         ];
     }
