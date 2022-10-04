@@ -11,9 +11,6 @@ use Illuminate\Http\Request;
 
 class MagazineController extends Controller
 {
-
-    const MAX_RESULTS_PER_PAGE = 25;
-
     /**
      *  @OA\Get(
      *     path="/magazines",
@@ -21,6 +18,32 @@ class MagazineController extends Controller
      *     tags={"magazines"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
+     *     @OA\Parameter(
+     *       name="q",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="order_by",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/magazines_query_orderby")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="sort",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="letter",
+     *       in="query",
+     *       description="Return entries starting with the given letter",
+     *       @OA\Schema(type="string")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",
@@ -36,21 +59,21 @@ class MagazineController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request)
+    public function main(Request $request): MagazineCollection
     {
+        $maxResultsPerPage = (int) env('MAX_RESULTS_PER_PAGE', 25);
+
         $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+        $limit = $request->get('limit') ?? $maxResultsPerPage;
 
-        if (!empty($limit)) {
-            $limit = (int) $limit;
+        $limit = (int) $limit;
 
-            if ($limit <= 0) {
-                $limit = 1;
-            }
+        if ($limit <= 0) {
+            $limit = 1;
+        }
 
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
+        if ($limit > $maxResultsPerPage) {
+            $limit = $maxResultsPerPage;
         }
 
         $results = SearchQueryBuilderMagazine::query(

@@ -19,7 +19,7 @@ class MangaIndexer extends Command
      *`
      * @var string
      */
-    protected $signature = 'indexer:manga 
+    protected $signature = 'indexer:manga
                             {--failed : Run only entries that failed to index last time}
                             {--resume : Resume from the last position}
                             {--reverse : Start from the end of the array}
@@ -150,7 +150,7 @@ class MangaIndexer extends Command
             true
         );
 
-        $this->ids = $ids['sfw'] + $ids['nsfw']; // merge
+        $ids = array_merge($ids['sfw'], $ids['nsfw']);
         Storage::put('indexer/manga_mal_id.json', json_encode($this->ids));
 
         return json_decode(Storage::get('indexer/manga_mal_id.json'));

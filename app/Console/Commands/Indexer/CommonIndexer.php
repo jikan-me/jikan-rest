@@ -49,42 +49,6 @@ class CommonIndexer extends Command
         echo "Note: If an entry already exists, it will be updated instead.\n\n";
 
         /**
-         * Producers
-         */
-        echo "Indexing Producers...\n";
-        $results = \json_decode(
-            app('SerializerV4')->serialize(
-                app('JikanParser')
-                    ->getProducers(new ProducersRequest()),
-                'json'
-            ),
-            true
-        )['producers'];
-
-        if (HttpHelper::hasError($results)) {
-            echo "FAILED: {$results->original['error']}\n";
-            return;
-        }
-
-        $itemCount = count($results);
-        echo "Parsed {$itemCount} producers\n";
-        foreach ($results as $i => $item) {
-            $result = DB::table('producers')
-                ->updateOrInsert(
-                    [
-                        'mal_id' => $item['mal_id']
-                    ],
-                    [
-                        'mal_id' => $item['mal_id'],
-                        'name' => $item['name'],
-                        'url' => $item['url'],
-                        'count' => $item['count']
-                    ]
-                );
-            echo "Indexing {$i}/{$itemCount} \r";
-        }
-
-        /**
          * Magazines
          */
         echo "Indexing Magazines...\n";

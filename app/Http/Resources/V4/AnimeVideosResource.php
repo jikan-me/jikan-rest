@@ -70,6 +70,38 @@ class AnimeVideosResource extends JsonResource
      *                   ),
      *               ),
      *          ),
+     *          @OA\Property(
+     *               property="music_videos",
+     *               type="array",
+     *               @OA\Items(
+     *                   type="object",
+     *
+     *                   @OA\Property(
+     *                       property="title",
+     *                       type="string",
+     *                       description="Title"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="video",
+     *                       ref="#/components/schemas/trailer"
+     *                   ),
+     *                  @OA\Property (
+     *                      type="object",
+     *                      property="meta",
+     *
+     *                      @OA\Property (
+     *                          property="title",
+     *                          type="string",
+     *                          nullable=true
+     *                      ),
+     *                      @OA\Property (
+     *                          property="author",
+     *                          type="string",
+     *                          nullable=true
+     *                      ),
+     *                  ),
+     *              ),
+     *          ),
      *     ),
      *  )
      */
@@ -77,7 +109,8 @@ class AnimeVideosResource extends JsonResource
     {
         return [
             'promo' => $this['promo'],
-            'episodes' => $this['episodes']
+            'episodes' => $this['episodes'],
+            'music_videos' => $this['music_videos'],
         ];
     }
 }

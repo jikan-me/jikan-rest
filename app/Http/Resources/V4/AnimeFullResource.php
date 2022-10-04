@@ -39,8 +39,9 @@ class AnimeFullResource extends JsonResource
      *          type="array",
      *          description="All titles",
      *          @OA\Items(
-     *              type="string"
-     *          )
+     *              type="object",
+     *              ref="#/components/schemas/title",
+     *          ),
      *      ),
      *      @OA\Property(
      *          property="title",

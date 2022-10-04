@@ -13,6 +13,7 @@ use App\Http\QueryBuilder\SearchQueryBuilderCharacter;
 use App\Http\QueryBuilder\SearchQueryBuilderClub;
 use App\Http\QueryBuilder\SearchQueryBuilderManga;
 use App\Http\QueryBuilder\SearchQueryBuilderPeople;
+use App\Http\QueryBuilder\SearchQueryBuilderProducer;
 use App\Http\QueryBuilder\SearchQueryBuilderUsers;
 use App\Http\Resources\V4\AnimeCharactersResource;
 use App\Http\Resources\V4\AnimeCollection;
@@ -20,10 +21,12 @@ use App\Http\Resources\V4\CharacterCollection;
 use App\Http\Resources\V4\ClubCollection;
 use App\Http\Resources\V4\MangaCollection;
 use App\Http\Resources\V4\PersonCollection;
+use App\Http\Resources\V4\ProducerCollection;
 use App\Http\Resources\V4\ResultsResource;
 use App\Http\SearchQueryBuilder;
 use App\Manga;
 use App\Person;
+use App\Producers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Jikan;
@@ -818,6 +821,89 @@ class SearchController extends Controller
             );
 
         return new ClubCollection(
+            $results
+        );
+    }
+
+    /**
+     *  @OA\Get(
+     *     path="/producers",
+     *     operationId="getProducers",
+     *     tags={"producers"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
+     *     @OA\Parameter(
+     *       name="q",
+     *       in="query",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="order_by",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/producers_query_orderby")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="sort",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/search_query_sort")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="letter",
+     *       in="query",
+     *       description="Return entries starting with the given letter",
+     *       @OA\Schema(type="string")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns producers collection",
+     *         @OA\JsonContent(
+     *              ref="#/components/schemas/producers"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * )
+     */
+    public function producers(Request $request)
+    {
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
+
+        if (!empty($limit)) {
+            $limit = (int) $limit;
+
+            if ($limit <= 0) {
+                $limit = 1;
+            }
+
+            if ($limit > self::MAX_RESULTS_PER_PAGE) {
+                $limit = self::MAX_RESULTS_PER_PAGE;
+            }
+        }
+
+        $results = SearchQueryBuilderProducer::query(
+            $request,
+            Producers::query()
+        );
+
+        $results = $results
+            ->paginate(
+                $limit,
+                ['*'],
+                null,
+                $page
+            );
+
+        return new ProducerCollection(
             $results
         );
     }
