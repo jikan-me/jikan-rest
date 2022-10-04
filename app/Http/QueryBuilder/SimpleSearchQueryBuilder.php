@@ -43,7 +43,7 @@ class SimpleSearchQueryBuilder extends SearchQueryBuilder
 
     protected function getOrderByFieldMap(): array
     {
-        return $this->orderByFields;
+        return array_combine($this->orderByFields, $this->orderByFields);
     }
 
     public function getIdentifier(): string

@@ -84,13 +84,14 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
     {
         $letter = $requestParameters->get('letter');
         $q = $requestParameters->get('q');
+        $order_by = $requestParameters->get('order_by');
 
         if (!is_null($letter)) {
             $query = $query
                 ->where($this->displayNameFieldName, 'like', "{$letter}%");
         }
 
-        if (empty($q)) {
+        if (empty($q) && empty($order_by)) {
             $query = $query
                 ->orderBy('mal_id');
         }
@@ -233,7 +234,8 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
     public function mapOrderBy(?string $orderBy): ?string
     {
         $orderBy = strtolower($orderBy);
+        $orderByFieldMap = collect($this->getOrderByFieldMap());
 
-        return $this->getOrderByFieldMap()[$orderBy] ?? null;
+        return $orderByFieldMap->get($orderBy, null);
     }
 }

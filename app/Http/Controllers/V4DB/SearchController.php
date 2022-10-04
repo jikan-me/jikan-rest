@@ -690,6 +690,6 @@ class SearchController extends ControllerWithQueryBuilderProvider
      */
     public function producers(Request $request)
     {
-        return $this->preparePaginatedResponse(ProducerCollection::class, "producer", $request);
+        return $this->preparePaginatedResponse(ProducerCollection::class, "producers", $request);
     }
 }

@@ -31,7 +31,7 @@ trait FilterQueryString
     private function _normalizeOrderBy(Collection $filters): Collection
     {
         // fixme: this can be done more elegantly, for now this is here as a quick hack.
-        if ($filters->offsetExists("sort")  && $filters->offsetExists("order_by")) {
+        if ($filters->offsetExists("sort") && $filters->offsetExists("order_by")) {
             // we put the order by field and the sort direction in one array element.
             // the OrderByClause class will explode the string by the comma and set the correct field.
             $filters["order_by"] = $filters["order_by"] . "," . $filters["sort"];

@@ -88,7 +88,7 @@ class AppServiceProvider extends ServiceProvider
                 "name" => "Producers",
                 "identifier" => "producers",
                 "modelClass" => Producers::class,
-                "orderByFields" => ["mal_id", "name", "count", "favorites", "established"]
+                "orderByFields" => ["mal_id", "count", "favorites", "established"]
             ],
             [
                 "name" => "Magazine",
