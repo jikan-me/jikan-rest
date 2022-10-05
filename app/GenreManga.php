@@ -11,6 +11,7 @@ use Jikan\Request\Genre\AnimeGenresRequest;
  */
 class GenreManga extends JikanApiSearchableModel
 {
+    protected array $filters = ["order_by", "sort"];
 
     /**
      * The attributes that are mass assignable.

@@ -11,6 +11,7 @@ use Jikan\Request\Magazine\MagazinesRequest;
  */
 class Magazine extends JikanApiSearchableModel
 {
+    protected array $filters = ["order_by", "sort"];
 
     /**
      * The attributes that are mass assignable.
