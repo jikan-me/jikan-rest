@@ -20,7 +20,6 @@ class PsrWorkerErrorListener
 
     public function handle(LoopErrorOccurredEvent $event): void
     {
-        $this->logger->info("error logging...");
         try {
             $this->exceptionHandler->report($event->exception());
         } catch (\Exception $e) {
