@@ -1,5 +1,7 @@
-FROM jikanme/jikan-rest-php:8.1
+ARG BASE_IMAGE_VERSION="8.1"
+FROM jikanme/jikan-rest-php:${BASE_IMAGE_VERSION}
 ARG GITHUB_PERSONAL_TOKEN
+LABEL org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
 RUN	set -ex \
     && apt-get update && apt-get install -y --no-install-recommends \
 	openssl \
