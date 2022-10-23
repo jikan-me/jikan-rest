@@ -200,7 +200,7 @@ status:
 
 service:
   laravel_queue_worker_1:
-    command: "php /app/artisan queue:work --queue=high,low"
+    command: "php /app/artisan queue:work --queue=high,default"
     process_num: 1
     restart_sec: 5
   supercronic:
