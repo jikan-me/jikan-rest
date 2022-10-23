@@ -50,9 +50,9 @@ class GithubReport
     private string $jikanVersion;
 
     /**
-     * @var string
+     * @var string|bool
      */
-    private string $redisRunning;
+    private string|bool $redisRunning;
 
     /**
      * @var string
@@ -67,7 +67,8 @@ class GithubReport
     /**
      * @param \Exception $exception
      * @param Request $request
-     * @return string
+     * @param string|null $repo
+     * @return GithubReport
      */
     public static function make(\Throwable $exception, Request $request, ?string $repo = null) : self
     {
@@ -82,6 +83,7 @@ class GithubReport
         $report->jikanVersion = Versions::getVersion('jikan-me/jikan');
         $report->phpVersion = PHP_VERSION;
 
+        $report->redisRunning = false;
         if (env('CACHING') && env('CACHE_DRIVER') === 'redis') {
             try {
                 $report->redisRunning = trim(app('redis')->ping()) === 'PONG' ? "Connected" : "Disconnected";

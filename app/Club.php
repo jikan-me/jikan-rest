@@ -2,13 +2,11 @@
 
 namespace App;
 
-use App\Http\HttpHelper;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Request\Anime\AnimeRequest;
 use Jikan\Request\Club\ClubRequest;
 
-class Club extends Model
+class Club extends JikanApiSearchableModel
 {
+    protected array $filters = ["order_by", "sort"];
 
     /**
      * The attributes that are mass assignable.
@@ -51,5 +49,22 @@ class Club extends Model
                 ->serialize($data, 'json'),
             true
         );
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'title' => $this->title,
+            'category' => $this->category,
+            'created' => $this->convertToTimestamp($this->created),
+            'type' => $this->type
+        ];
+    }
+
+    public function typesenseQueryBy(): array
+    {
+        return ['title'];
     }
 }

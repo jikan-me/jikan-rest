@@ -4,16 +4,12 @@ namespace App\Http\Controllers\V4DB;
 
 use App\Anime;
 use App\Http\HttpResponse;
-use App\Http\QueryBuilder\SearchQueryBuilderAnime;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\ResultsResource;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
-use Jikan\Request\Seasonal\SeasonalRequest;
 use Jikan\Request\SeasonList\SeasonListRequest;
-use Jikan\Request\Watch\PopularPromotionalVideosRequest;
 
 class SeasonController extends Controller
 {

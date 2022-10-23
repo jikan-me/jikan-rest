@@ -79,8 +79,7 @@ class PersonController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Person::query()
-                    ->insert($response);
+                Person::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -167,8 +166,7 @@ class PersonController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Person::query()
-                    ->insert($response);
+                Person::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -249,8 +247,7 @@ class PersonController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Person::query()
-                    ->insert($response);
+                Person::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -331,8 +328,7 @@ class PersonController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Person::query()
-                    ->insert($response);
+                Person::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -413,8 +409,7 @@ class PersonController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Person::query()
-                    ->insert($response);
+                Person::create($response);
             }
 
             if ($this->isExpired($request, $results)) {

@@ -3,34 +3,24 @@
 namespace App\Http\Controllers\V4DB;
 
 use App\Anime;
-use App\DatabaseHandler;
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\Resources\V4\AnimeCharactersResource;
-use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\AnimeEpisodeResource;
-use App\Http\Resources\V4\AnimeEpisodesResource;
 use App\Http\Resources\V4\ExternalLinksResource;
-use App\Http\Resources\V4\AnimeForumResource;
-use App\Http\Resources\V4\AnimeRelationsCollection;
 use App\Http\Resources\V4\AnimeRelationsResource;
 use App\Http\Resources\V4\AnimeThemesResource;
 use App\Http\Resources\V4\MoreInfoResource;
-use App\Http\Resources\V4\AnimeNewsResource;
 use App\Http\Resources\V4\PicturesResource;
 use App\Http\Resources\V4\RecommendationsResource;
 use App\Http\Resources\V4\ResultsResource;
-use App\Http\Resources\V4\ReviewsResource;
 use App\Http\Resources\V4\AnimeStaffResource;
 use App\Http\Resources\V4\AnimeStatisticsResource;
 use App\Http\Resources\V4\StreamingLinksResource;
 use App\Http\Resources\V4\UserUpdatesResource;
 use App\Http\Resources\V4\AnimeVideosResource;
-use App\Http\Resources\V4\CommonResource;
 use App\Http\Resources\V4\ForumResource;
-use App\Http\Resources\V4\NewsResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\Anime\AnimeEpisodeRequest;
@@ -109,8 +99,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -196,8 +185,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -1198,8 +1186,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -1278,8 +1265,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {
@@ -1359,8 +1345,7 @@ class AnimeController extends Controller
             $response = $meta + $response;
 
             if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
+                Anime::create($response);
             }
 
             if ($this->isExpired($request, $results)) {

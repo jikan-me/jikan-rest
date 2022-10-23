@@ -2,18 +2,13 @@
 
 namespace App;
 
-use App\Http\HttpHelper;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Helper\Media;
-use Jikan\Helper\Parser;
 use Jikan\Jikan;
-use Jikan\Model\Common\YoutubeMeta;
-use Jikan\Request\Anime\AnimeRequest;
-use Jikan\Request\Character\CharacterRequest;
 use Jikan\Request\Person\PersonRequest;
+use function Symfony\Component\Translation\t;
 
-class Person extends Model
+class Person extends JikanApiSearchableModel
 {
+    protected array $filters = ["order_by", "sort"];
 
     /**
      * The attributes that are mass assignable.
@@ -61,5 +56,32 @@ class Person extends Model
                 ->serialize($data, 'json'),
             true
         );
+    }
+
+    /**
+     * Converts the model to an index-able data array.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'name' => $this->name,
+            'given_name' => $this->given_name,
+            'family_name' => $this->family_name,
+            'alternate_names' => $this->alternate_names
+        ];
+    }
+
+    public function typesenseQueryBy(): array
+    {
+        return [
+            "name",
+            "given_name",
+            "family_name",
+            "alternate_names"
+        ];
     }
 }

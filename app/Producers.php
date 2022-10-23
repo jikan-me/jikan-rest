@@ -5,8 +5,9 @@ namespace App;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jikan\Request\Producer\ProducerRequest;
 
-class Producers extends Model
+class Producers extends JikanApiSearchableModel
 {
+    protected array $filters = ["order_by", "sort"];
 
     /**
      * The attributes that are mass assignable.
@@ -45,5 +46,23 @@ class Producers extends Model
         unset($data['results'], $data['has_next_page'], $data['last_visible_page']);
 
         return $data;
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'url' => !is_null($this->url) ? collect(explode('/', $this->url))->last() : '',
+            'titles' => !is_null($this->titles) ? $this->titles : ['']
+        ];
+    }
+
+    public function typesenseQueryBy(): array
+    {
+        return [
+            'url',
+            'titles'
+        ];
     }
 }
