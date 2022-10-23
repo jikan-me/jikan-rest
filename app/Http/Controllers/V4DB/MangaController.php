@@ -25,6 +25,7 @@ use App\Manga;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
+use Jikan\Helper\Constants;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\Anime\AnimeForumRequest;
 use Jikan\Request\Anime\AnimeMoreInfoRequest;
@@ -46,6 +47,7 @@ use Jikan\Request\Manga\MangaReviewsRequest;
 use Jikan\Request\Manga\MangaStatsRequest;
 use MongoDB\BSON\UTCDateTime;
 use mysql_xdevapi\Result;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class MangaController extends Controller
 {
@@ -442,7 +444,7 @@ class MangaController extends Controller
      *     @OA\Property(
      *         property="data",
      *         type="array",
-     * 
+     *
      *         @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/manga_images"
@@ -731,9 +733,27 @@ class MangaController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $manga = $this->jikan->getMangaReviews(new MangaReviewsRequest($id, $page));
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
+            $sort = $request->get('sort') ?? Constants::REVIEWS_SORT_MOST_VOTED;
 
+            if (!in_array($sort, [Constants::REVIEWS_SORT_MOST_VOTED, Constants::REVIEWS_SORT_NEWEST, Constants::REVIEWS_SORT_OLDEST])) {
+                throw new BadRequestException('Invalid sort for reviews. Please refer to the documentation: https://docs.api.jikan.moe/');
+            }
+
+            $spoilers = $request->get('spoilers') ?? false;
+            $preliminary = $request->get('preliminary') ?? false;
+
+            $manga = $this->jikan
+                ->getMangaReviews(
+                    new MangaReviewsRequest(
+                        $id,
+                        $page,
+                        $sort,
+                        $spoilers,
+                        $preliminary
+                    )
+                );
+
+            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
             $results = $this->updateCache($request, $results, $response);
         }
 
