@@ -7,7 +7,6 @@ on:
 jobs:
   release-app-image:
     runs-on: ubuntu-latest
-    needs: Release base container image
     name: Release App container image
     steps:
       - name: Check if base container image exists
