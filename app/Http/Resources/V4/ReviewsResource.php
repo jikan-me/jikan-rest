@@ -19,17 +19,57 @@ class ReviewsResource extends JsonResource
      *     @OA\Property(
      *         property="url",
      *         type="string",
-     *         description="MyAnimeList URL"
+     *         description="MyAnimeList review URL"
      *     ),
      *     @OA\Property(
      *         property="type",
      *         type="string",
-     *         description="Entry Type"
+     *         description="Entry type"
      *     ),
      *     @OA\Property(
-     *         property="votes",
-     *         type="integer",
-     *         description="Number of user votes on the Review"
+     *         property="reactions",
+     *         type="object",
+     *         description="User reaction count on the review",
+     *         @OA\Property(
+     *             property="overall",
+     *             type="integer",
+     *             description="Overall reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="nice",
+     *             type="integer",
+     *             description="Nice reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="love_it",
+     *             type="integer",
+     *             description="Love it reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="funny",
+     *             type="integer",
+     *             description="Funny reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="confusing",
+     *             type="integer",
+     *             description="Confusing reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="informative",
+     *             type="integer",
+     *             description="Informative reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="well_written",
+     *             type="integer",
+     *             description="Well written reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="creative",
+     *             type="integer",
+     *             description="Creative reaction count"
+     *         )
      *     ),
      *     @OA\Property(
      *         property="date",
@@ -37,44 +77,30 @@ class ReviewsResource extends JsonResource
      *         description="Review created date ISO8601"
      *     ),
      *     @OA\Property(
-     *         property="chapters_read",
-     *         type="integer",
-     *         description="Number of chapters read by the reviewer"
-     *     ),
-     *     @OA\Property(
      *         property="review",
      *         type="string",
      *         description="Review content"
      *     ),
      *     @OA\Property(
-     *         property="scores",
-     *         type="object",
-     *         description="Review Scores breakdown",
-     *         @OA\Property(
-     *             property="overall",
-     *             type="integer",
-     *             description="Overall Score"
-     *         ),
-     *         @OA\Property(
-     *             property="story",
-     *             type="integer",
-     *             description="Story Score"
-     *         ),
-     *         @OA\Property(
-     *             property="art",
-     *             type="integer",
-     *             description="Art Score"
-     *         ),
-     *         @OA\Property(
-     *             property="character",
-     *             type="integer",
-     *             description="Character Score"
-     *         ),
-     *         @OA\Property(
-     *             property="enjoyment",
-     *             type="integer",
-     *             description="Enjoyment Score"
-     *         ),
+     *         property="score",
+     *         type="integer",
+     *         description="Number of user votes on the Review"
+     *     ),
+     *     @OA\Property (
+     *         property="tags",
+     *         type="array",
+     *         description="Review tags",
+     *         @OA\Items(type="string"),
+     *     ),
+     *     @OA\Property (
+     *         property="is_spoiler",
+     *         type="bool",
+     *         description="The review contains spoiler"
+     *     ),
+     *     @OA\Property (
+     *         property="is_preliminary",
+     *         type="bool",
+     *         description="The review was made before the entry was completed"
      *     ),
      *  ),
      *
@@ -89,17 +115,57 @@ class ReviewsResource extends JsonResource
      *     @OA\Property(
      *         property="url",
      *         type="string",
-     *         description="MyAnimeList URL"
+     *         description="MyAnimeList review URL"
      *     ),
      *     @OA\Property(
      *         property="type",
      *         type="string",
-     *         description="Entry Type"
+     *         description="Entry type"
      *     ),
      *     @OA\Property(
-     *         property="votes",
-     *         type="integer",
-     *         description="Number of user votes on the Review"
+     *         property="reactions",
+     *         type="object",
+     *         description="User reaction count on the review",
+     *         @OA\Property(
+     *             property="overall",
+     *             type="integer",
+     *             description="Overall reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="nice",
+     *             type="integer",
+     *             description="Nice reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="love_it",
+     *             type="integer",
+     *             description="Love it reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="funny",
+     *             type="integer",
+     *             description="Funny reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="confusing",
+     *             type="integer",
+     *             description="Confusing reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="informative",
+     *             type="integer",
+     *             description="Informative reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="well_written",
+     *             type="integer",
+     *             description="Well written reaction count"
+     *         ),
+     *         @OA\Property(
+     *             property="creative",
+     *             type="integer",
+     *             description="Creative reaction count"
+     *         )
      *     ),
      *     @OA\Property(
      *         property="date",
@@ -112,44 +178,30 @@ class ReviewsResource extends JsonResource
      *         description="Review content"
      *     ),
      *     @OA\Property(
+     *         property="score",
+     *         type="integer",
+     *         description="Number of user votes on the Review"
+     *     ),
+     *     @OA\Property (
+     *         property="tags",
+     *         type="array",
+     *         description="Review tags",
+     *         @OA\Items(type="string"),
+     *     ),
+     *     @OA\Property (
+     *         property="is_spoiler",
+     *         type="bool",
+     *         description="The review contains spoiler"
+     *     ),
+     *     @OA\Property (
+     *         property="is_preliminary",
+     *         type="bool",
+     *         description="The review was made before the entry was completed"
+     *     ),
+     *     @OA\Property(
      *         property="episodes_watched",
      *         type="integer",
      *         description="Number of episodes watched"
-     *     ),
-     *     @OA\Property(
-     *         property="scores",
-     *         type="object",
-     *         description="Review Scores breakdown",
-     *         @OA\Property(
-     *             property="overall",
-     *             type="integer",
-     *             description="Overall Score"
-     *         ),
-     *         @OA\Property(
-     *             property="story",
-     *             type="integer",
-     *             description="Story Score"
-     *         ),
-     *         @OA\Property(
-     *             property="animation",
-     *             type="integer",
-     *             description="Animation Score"
-     *         ),
-     *         @OA\Property(
-     *             property="sound",
-     *             type="integer",
-     *             description="Sound Score"
-     *         ),
-     *         @OA\Property(
-     *             property="character",
-     *             type="integer",
-     *             description="Character Score"
-     *         ),
-     *         @OA\Property(
-     *             property="enjoyment",
-     *             type="integer",
-     *             description="Enjoyment Score"
-     *         ),
      *     ),
      *  ),
      *

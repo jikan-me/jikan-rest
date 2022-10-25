@@ -4199,6 +4199,15 @@
                 },
                 "type": "object"
             },
+            "magazines_query_orderby": {
+                "description": "Order by magazine data",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "count"
+                ]
+            },
             "manga_news": {
                 "description": "Manga News Resource",
                 "allOf": [
@@ -4321,6 +4330,16 @@
                     {
                         "$ref": "#/components/schemas/pagination"
                     }
+                ]
+            },
+            "producers_query_orderby": {
+                "description": "Producers Search Query Order By",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "count",
+                    "favorites",
+                    "established"
                 ]
             },
             "seasons": {
@@ -4638,15 +4657,6 @@
                     "created"
                 ]
             },
-            "magazines_query_orderby": {
-                "description": "Order by magazine data",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "name",
-                    "count"
-                ]
-            },
             "manga_search_query_type": {
                 "description": "Available Manga types",
                 "type": "string",
@@ -4697,17 +4707,6 @@
                     "name",
                     "birthday",
                     "favorites"
-                ]
-            },
-            "producers_query_orderby": {
-                "description": "Order by producers data",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "name",
-                    "count",
-                    "favorites",
-                    "established"
                 ]
             },
             "users_search_query_gender": {
@@ -8467,54 +8466,77 @@
                         "type": "integer"
                     },
                     "url": {
-                        "description": "MyAnimeList URL",
+                        "description": "MyAnimeList review URL",
                         "type": "string"
                     },
                     "type": {
-                        "description": "Entry Type",
+                        "description": "Entry type",
                         "type": "string"
                     },
-                    "votes": {
-                        "description": "Number of user votes on the Review",
-                        "type": "integer"
+                    "reactions": {
+                        "description": "User reaction count on the review",
+                        "properties": {
+                            "overall": {
+                                "description": "Overall reaction count",
+                                "type": "integer"
+                            },
+                            "nice": {
+                                "description": "Nice reaction count",
+                                "type": "integer"
+                            },
+                            "love_it": {
+                                "description": "Love it reaction count",
+                                "type": "integer"
+                            },
+                            "funny": {
+                                "description": "Funny reaction count",
+                                "type": "integer"
+                            },
+                            "confusing": {
+                                "description": "Confusing reaction count",
+                                "type": "integer"
+                            },
+                            "informative": {
+                                "description": "Informative reaction count",
+                                "type": "integer"
+                            },
+                            "well_written": {
+                                "description": "Well written reaction count",
+                                "type": "integer"
+                            },
+                            "creative": {
+                                "description": "Creative reaction count",
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
                     },
                     "date": {
                         "description": "Review created date ISO8601",
                         "type": "string"
                     },
-                    "chapters_read": {
-                        "description": "Number of chapters read by the reviewer",
-                        "type": "integer"
-                    },
                     "review": {
                         "description": "Review content",
                         "type": "string"
                     },
-                    "scores": {
-                        "description": "Review Scores breakdown",
-                        "properties": {
-                            "overall": {
-                                "description": "Overall Score",
-                                "type": "integer"
-                            },
-                            "story": {
-                                "description": "Story Score",
-                                "type": "integer"
-                            },
-                            "art": {
-                                "description": "Art Score",
-                                "type": "integer"
-                            },
-                            "character": {
-                                "description": "Character Score",
-                                "type": "integer"
-                            },
-                            "enjoyment": {
-                                "description": "Enjoyment Score",
-                                "type": "integer"
-                            }
-                        },
-                        "type": "object"
+                    "score": {
+                        "description": "Number of user votes on the Review",
+                        "type": "integer"
+                    },
+                    "tags": {
+                        "description": "Review tags",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "is_spoiler": {
+                        "description": "The review contains spoiler",
+                        "type": "bool"
+                    },
+                    "is_preliminary": {
+                        "description": "The review was made before the entry was completed",
+                        "type": "bool"
                     }
                 },
                 "type": "object"
@@ -8526,16 +8548,50 @@
                         "type": "integer"
                     },
                     "url": {
-                        "description": "MyAnimeList URL",
+                        "description": "MyAnimeList review URL",
                         "type": "string"
                     },
                     "type": {
-                        "description": "Entry Type",
+                        "description": "Entry type",
                         "type": "string"
                     },
-                    "votes": {
-                        "description": "Number of user votes on the Review",
-                        "type": "integer"
+                    "reactions": {
+                        "description": "User reaction count on the review",
+                        "properties": {
+                            "overall": {
+                                "description": "Overall reaction count",
+                                "type": "integer"
+                            },
+                            "nice": {
+                                "description": "Nice reaction count",
+                                "type": "integer"
+                            },
+                            "love_it": {
+                                "description": "Love it reaction count",
+                                "type": "integer"
+                            },
+                            "funny": {
+                                "description": "Funny reaction count",
+                                "type": "integer"
+                            },
+                            "confusing": {
+                                "description": "Confusing reaction count",
+                                "type": "integer"
+                            },
+                            "informative": {
+                                "description": "Informative reaction count",
+                                "type": "integer"
+                            },
+                            "well_written": {
+                                "description": "Well written reaction count",
+                                "type": "integer"
+                            },
+                            "creative": {
+                                "description": "Creative reaction count",
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
                     },
                     "date": {
                         "description": "Review created date ISO8601",
@@ -8545,39 +8601,28 @@
                         "description": "Review content",
                         "type": "string"
                     },
+                    "score": {
+                        "description": "Number of user votes on the Review",
+                        "type": "integer"
+                    },
+                    "tags": {
+                        "description": "Review tags",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "is_spoiler": {
+                        "description": "The review contains spoiler",
+                        "type": "bool"
+                    },
+                    "is_preliminary": {
+                        "description": "The review was made before the entry was completed",
+                        "type": "bool"
+                    },
                     "episodes_watched": {
                         "description": "Number of episodes watched",
                         "type": "integer"
-                    },
-                    "scores": {
-                        "description": "Review Scores breakdown",
-                        "properties": {
-                            "overall": {
-                                "description": "Overall Score",
-                                "type": "integer"
-                            },
-                            "story": {
-                                "description": "Story Score",
-                                "type": "integer"
-                            },
-                            "animation": {
-                                "description": "Animation Score",
-                                "type": "integer"
-                            },
-                            "sound": {
-                                "description": "Sound Score",
-                                "type": "integer"
-                            },
-                            "character": {
-                                "description": "Character Score",
-                                "type": "integer"
-                            },
-                            "enjoyment": {
-                                "description": "Enjoyment Score",
-                                "type": "integer"
-                            }
-                        },
-                        "type": "object"
                     }
                 },
                 "type": "object"
