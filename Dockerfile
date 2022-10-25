@@ -1,4 +1,4 @@
-ARG BASE_IMAGE_VERSION="8.1"
+ARG BASE_IMAGE_VERSION="latest"
 FROM jikanme/jikan-rest-php:${BASE_IMAGE_VERSION}
 ARG GITHUB_PERSONAL_TOKEN
 LABEL org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
