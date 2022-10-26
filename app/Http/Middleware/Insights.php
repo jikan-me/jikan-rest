@@ -45,7 +45,7 @@ class Insights
             ->insert([
                 'timestamp' => time(),
                 'url' => $request->getRequestUri(),
-                'type' =>
+                'type' => ""
             ]);
     }
 
