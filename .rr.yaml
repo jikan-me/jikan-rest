@@ -1,0 +1,214 @@
+# Production usage guide: https://roadrunner.dev/docs/beep-beep-production
+
+# Hint: RR will replace any config options using reference to environment variables,
+# eg.: `option_key: ${ENVIRONMENT_VARIABLE_NAME}`.
+# Please note that this config is used within the docker container.
+
+# RR configuration version
+version: "2.7"
+
+# Remote Procedures Calling (docs: https://roadrunner.dev/docs/beep-beep-rpc)
+# Is used for connecting to RoadRunner server from your PHP workers.
+rpc:
+  # TCP address:port for listening.
+  #
+  # Default: "tcp://127.0.0.1:6001"
+  listen: tcp://127.0.0.1:6001
+
+# Application server settings (docs: https://roadrunner.dev/docs/php-worker)
+server:
+  # Worker starting command, with any required arguments.
+  #
+  # This option is required.
+  command: "php ./vendor/bin/rr-worker start --relay-dsn unix:///var/run/rr/rr-relay.sock"
+
+  ## Environment variables for the worker processes.
+  ##
+  ## Default: <empty map>
+  #env:
+  #  - SOME_KEY: "SOME_VALUE"
+  #  - SOME_KEY2: "SOME_VALUE2"
+
+  # Worker relay can be: "pipes", TCP (eg.: tcp://127.0.0.1:6001), or socket (eg.: unix:///var/run/rr-relay.sock).
+  #
+  # Default: "pipes"
+  relay: "unix:///var/run/rr/rr-relay.sock"
+
+  # Timeout for relay connection establishing (only for socket and TCP port relay).
+  #
+  # Default: 60s
+  relay_timeout: 60s
+
+# Logging settings (docs: https://roadrunner.dev/docs/beep-beep-logging)
+logs:
+  # Logging mode can be "development" or "production". Do not forget to change this value for production environment.
+  #
+  # Development mode (which makes DPanicLevel logs panic), uses a console encoder, writes to standard error, and
+  # disables sampling. Stacktraces are automatically included on logs of WarnLevel and above.
+  #
+  # Default: "development"
+  mode: production
+
+  # Logging level can be "panic", "error", "warning", "info", "debug".
+  #
+  # Default: "debug"
+  level: info
+
+  # Encoding format can be "console" or "json" (last is preferred for production usage).
+  #
+  # Default: "console"
+  encoding: json
+
+  # we want to use docker's log drivers, so push logs to stdout
+  output: stdout
+  # we to use docker's log drivers, so push error logs to stdout
+  # this way it is possible for example to pipe logs to journald or to AWS Cloudwatch
+  err_output: stdout
+
+# HTTP plugin settings.
+http:
+  # Host and port to listen on (eg.: `127.0.0.1:8080`).
+  #
+  # This option is required.
+  address: 0.0.0.0:8080
+
+  # HTTP access logs
+  #
+  # Default: false
+  access_logs: true
+
+  # Maximal incoming request size in megabytes. Zero means no limit.
+  #
+  # Default: 0
+  max_request_size: 256
+
+  # Middlewares for the http plugin, order is important. Allowed values is: "headers", "gzip".
+  #
+  # Default value: []
+  middleware: ["static", "headers", "gzip"]
+
+  # File uploading settings.
+  uploads:
+    # Directory for file uploads. Empty value means to use $TEMP based on your OS.
+    #
+    # Default: ""
+    dir: "/tmp"
+
+    # Deny files with the following extensions to upload.
+    #
+    # Default: [".php", ".exe", ".bat"]
+    forbid: [".php", ".exe", ".bat", ".sh"]
+
+  # Settings for "headers" middleware (docs: https://roadrunner.dev/docs/http-headers).
+  headers:
+    # Automatically add headers to every response.
+    #
+    # Default: <empty map>
+    response:
+      X-Powered-By: "RoadRunner"
+
+  # Settings for serving static content (docs: https://roadrunner.dev/docs/http-static).
+  static:
+    # Path to the directory with static assets.
+    #
+    # This option is required.
+    dir: "./public"
+
+    # File extensions to forbid.
+    #
+    # Default: []
+    forbid: [".htaccess", ".php"]
+
+    # Automatically add headers to every response.
+    #
+    # Default: <empty map>
+    response:
+      X-Powered-By: "RoadRunner"
+
+  # Workers pool settings.
+  pool:
+    # How many worker processes will be started. Zero (or nothing) means the number of logical CPUs.
+    #
+    # Default: 0
+    num_workers: 0
+
+    # Maximal count of worker executions. Zero (or nothing) means no limit.
+    #
+    # Default: 0
+    max_jobs: 64
+
+    # Timeout for worker allocation. Zero means no limit.
+    #
+    # Default: 60s
+    allocate_timeout: 10s
+
+    # Timeout for worker destroying before process killing. Zero means no limit.
+    #
+    # Default: 60s
+    destroy_timeout: 10s
+
+    # Supervisor is used to control http workers (previous name was "limit", docs:
+    # https://roadrunner.dev/docs/php-limit). "Soft" limits will not interrupt current request processing. "Hard"
+    # limit on the contrary - interrupts the execution of the request.
+    supervisor:
+      # Maximal worker memory usage in megabytes (soft limit). Zero means no limit.
+      #
+      # Default: 0
+      max_worker_memory: 128
+
+      # Maximal job lifetime (hard limit). Zero means no limit.
+      #
+      # Default: 0s
+      exec_ttl: 60s
+
+  # HTTP/2 settings.
+  http2:
+    # HTTP/2 over non-encrypted TCP connection using H2C.
+    #
+    # Default: false
+    h2c: false
+
+    # Maximal concurrent streams count.
+    #
+    # Default: 128
+    max_concurrent_streams: 128
+
+## Application metrics in Prometheus format (docs: https://roadrunner.dev/docs/beep-beep-metrics). Drop this section
+## for this feature disabling.
+#metrics:
+#  # Prometheus client address (path /metrics added automatically).
+#  #
+#  # Default: "127.0.0.1:2112"
+#  address: 127.0.0.1:8081
+
+# Health check endpoint (docs: https://roadrunner.dev/docs/beep-beep-health). If response code is 200 - it means at
+# least one worker ready to serve requests. 500 - there are no workers ready to service requests.
+# Drop this section for this feature disabling.
+status:
+  # Host and port to listen on (eg.: `127.0.0.1:2114`). Use the following URL: http://127.0.0.1:2114/health?plugin=http
+  # Multiple plugins must be separated using "&" - http://127.0.0.1:2114/health?plugin=http&plugin=rpc where "http" and
+  # "rpc" are active (connected) plugins.
+  #
+  # This option is required.
+  address: 127.0.0.1:2114
+
+  # Response status code if a requested plugin not ready to handle requests
+  # Valid for both /health and /ready endpoints
+  #
+  # Default: 503
+  unavailable_status_code: 503
+
+service:
+  laravel_queue_worker_1:
+    command: "php /app/artisan queue:work --queue=high,default"
+    process_num: 1
+    restart_sec: 5
+  supercronic:
+    command: "supercronic /etc/supercronic/laravel"
+
+# RoadRunner internal container configuration (docs: https://github.com/spiral/endure).
+endure:
+  # Logging level. Possible values: "debug", "info", "warning", "error", "panic", "fatal".
+  #
+  # Default: "error"
+  log_level: error

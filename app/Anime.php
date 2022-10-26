@@ -89,24 +89,26 @@ class Anime extends JikanApiSearchableModel
 
     public function getBroadcastAttribute()
     {
-        $broadcastStr = $this->attributes['broadcast'];
+        if (array_key_exists("broadcast", $this->attributes)) {
+            $broadcastStr = $this->attributes['broadcast'];
 
-        if (!preg_match('~(.*) at (.*) \(~', $broadcastStr, $matches)) {
-            return [
-                'day' => null,
-                'time' => null,
-                'timezone' => null,
-                'string' => $broadcastStr
-            ];
-        }
+            if (!preg_match('~(.*) at (.*) \(~', $broadcastStr, $matches)) {
+                return [
+                    'day' => null,
+                    'time' => null,
+                    'timezone' => null,
+                    'string' => $broadcastStr
+                ];
+            }
 
-        if (preg_match('~(.*) at (.*) \(~', $broadcastStr, $matches)) {
-            return [
-                'day' => $matches[1],
-                'time' => $matches[2],
-                'timezone' => 'Asia/Tokyo',
-                'string' => $broadcastStr
-            ];
+            if (preg_match('~(.*) at (.*) \(~', $broadcastStr, $matches)) {
+                return [
+                    'day' => $matches[1],
+                    'time' => $matches[2],
+                    'timezone' => 'Asia/Tokyo',
+                    'string' => $broadcastStr
+                ];
+            }
         }
 
         return [

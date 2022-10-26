@@ -4,6 +4,12 @@
     "keywords": ["framework", "laravel", "lumen"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+      {
+        "type": "vcs",
+        "url": "https://github.com/pushrbx/lumen-roadrunner"
+      }
+    ],
     "require": {
         "php": "^8.0",
         "ext-json": "*",
@@ -22,8 +28,10 @@
         "laravel/scout": "^9.4",
         "league/flysystem": "^3.0",
         "matchish/laravel-scout-elasticsearch": "^6.0",
+        "mirazmac/dotenvwriter": "^0.1.0",
         "ocramius/package-versions": "^2.5",
         "predis/predis": "^1.1",
+        "pushrbx/lumen-roadrunner": "dev-master",
         "sentry/sentry-laravel": "^2.8",
         "symfony/yaml": "^4.1",
         "typesense/laravel-scout-typesense-driver": "^5.0",
