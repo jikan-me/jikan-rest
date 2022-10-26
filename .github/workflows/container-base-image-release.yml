@@ -20,7 +20,7 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
 
-        - name: Read metadata
+      - name: Read metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
