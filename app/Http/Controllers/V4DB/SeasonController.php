@@ -55,7 +55,7 @@ class SeasonController extends Controller
      *       description="Available Anime types",
      *       type="string",
      *       enum={"tv","movie","ova","special","ona","music"}
-     *     )
+     *     ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *
@@ -240,7 +240,9 @@ class SeasonController extends Controller
      *     operationId="getSeasonUpcoming",
      *     tags={"seasons"},
      *
-     *      @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Schema(ref="#/components/schemas/season_query_type"),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
