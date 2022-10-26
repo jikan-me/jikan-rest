@@ -23,6 +23,7 @@ use App\Services\TypeSenseScoutSearchService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
+use Typesense\LaravelTypesense\Typesense;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -160,5 +161,29 @@ class AppServiceProvider extends ServiceProvider
     private function getSearchIndexDriver($app): string
     {
         return $app["config"]->get("scout.driver");
+    }
+
+    public static function servicesToWarm(): array
+    {
+        $services = [
+            ScoutSearchService::class,
+            AnimeSearchQueryBuilder::class,
+            MangaSearchQueryBuilder::class,
+            ClubSearchQueryBuilder::class,
+            CharacterSearchQueryBuilder::class,
+            PeopleSearchQueryBuilder::class,
+            TopAnimeQueryBuilder::class,
+            TopMangaQueryBuilder::class
+        ];
+
+        if (env("SCOUT_DRIVER") === "typesense") {
+            $services[] = Typesense::class;
+        }
+
+        if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
+            $services[] = \Elastic\Elasticsearch\Client::class;
+        }
+
+        return $services;
     }
 }
