@@ -50,11 +50,11 @@ class SeasonController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
-     *     @OA\Schema(
-     *       schema="season_query_type",
-     *       description="Available Anime types",
-     *       type="string",
-     *       enum={"tv","movie","ova","special","ona","music"}
+     *     @OA\Parameter(
+     *       name="filter",
+     *       description="Entry types",
+     *       in="query",
+     *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
      *     ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
@@ -98,7 +98,7 @@ class SeasonController extends Controller
         $maxResultsPerPage = env('MAX_RESULTS_PER_PAGE', 30);
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? $maxResultsPerPage;
-        $type = $request->get('type');
+        $type = $request->get('filter');
 
         if (!empty($limit)) {
             $limit = (int) $limit;
@@ -240,7 +240,12 @@ class SeasonController extends Controller
      *     operationId="getSeasonUpcoming",
      *     tags={"seasons"},
      *
-     *     @OA\Schema(ref="#/components/schemas/season_query_type"),
+     *     @OA\Parameter(
+     *       name="filter",
+     *       description="Entry types",
+     *       in="query",
+     *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
+     *     ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *
@@ -263,7 +268,7 @@ class SeasonController extends Controller
         $maxResultsPerPage = env('MAX_RESULTS_PER_PAGE', 30);
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? $maxResultsPerPage;
-        $type = $request->get('type');
+        $type = $request->get('filter');
 
 
         if (!empty($limit)) {
