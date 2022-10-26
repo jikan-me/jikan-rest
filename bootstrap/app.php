@@ -35,9 +35,14 @@ $app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 
 
 $app->withFacades();
+
+$app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config');
+$app->instance('path.storage', app()->basePath() . DIRECTORY_SEPARATOR . 'storage');
+
 $app->withEloquent();
 
 $app->configure('swagger-lume');
+$app->configure('scout');
 
 /*
 |--------------------------------------------------------------------------
@@ -112,6 +117,7 @@ $app->register(\SwaggerLume\ServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(\App\Providers\SourceHeartbeatProvider::class);
 $app->register(Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
+$app->register(\App\Providers\AppServiceProvider::class);
 
 if (env('REPORTING') && env('REPORTING_DRIVER') === 'sentry') {
     $app->register(\Sentry\Laravel\ServiceProvider::class);
@@ -142,6 +148,17 @@ $jikan = new \Jikan\MyAnimeList\MalClient(app('HttpClient'));
 $app->instance('JikanParser', $jikan);
 
 $app->instance('SerializerV4', SerializerFactory::createV4());
+$app->register(Laravel\Scout\ScoutServiceProvider::class);
+
+// we support TypeSense and ElasticSearch as search indexes.
+if (env("SCOUT_DRIVER") === "typesense") {
+    // in this case the TYPESENSE_HOST env var should be set too
+    $app->register(Typesense\LaravelTypesense\TypesenseServiceProvider::class);
+}
+if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
+    // in this case the ELASTICSEARCH_HOST env var should be set too
+    $app->register(\Matchish\ScoutElasticSearch\ElasticSearchServiceProvider::class);
+}
 
 
 /*

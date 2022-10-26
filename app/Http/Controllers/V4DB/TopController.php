@@ -23,9 +23,8 @@ use Jikan\Request\Reviews\RecentReviewsRequest;
 use Jikan\Request\Top\TopPeopleRequest;
 use MongoDB\BSON\UTCDateTime;
 
-class TopController extends Controller
+class TopController extends ControllerWithQueryBuilderProvider
 {
-    const MAX_RESULTS_PER_PAGE = 25;
 
     /**
      *  @OA\Get(
@@ -65,37 +64,7 @@ class TopController extends Controller
      */
     public function anime(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = TopQueryBuilderAnime::query(
-            $request,
-            Anime::query()
-        );
-
-        $results = $results
-            ->paginate(
-                $limit,
-                ['*'],
-                null,
-                $page
-            );
-
-        return new AnimeCollection(
-            $results
-        );
+        return $this->preparePaginatedResponse(AnimeCollection::class, "top_anime", $request);
     }
 
     /**
@@ -136,37 +105,7 @@ class TopController extends Controller
      */
     public function manga(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = TopQueryBuilderManga::query(
-            $request,
-            Manga::query()
-        );
-
-        $results = $results
-            ->paginate(
-                $limit,
-                ['*'],
-                null,
-                $page
-            );
-
-        return new MangaCollection(
-            $results
-        );
+        return $this->preparePaginatedResponse(MangaCollection::class, "top_manga", $request);
     }
 
     /**
@@ -193,33 +132,12 @@ class TopController extends Controller
      */
     public function people(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = Person::query()
+        $results = $this->getQueryBuilder("people", $request)
             ->whereNotNull('member_favorites')
             ->where('member_favorites', '>', 0)
             ->orderBy('member_favorites', 'desc');
 
-        $results = $results
-            ->paginate(
-                $limit,
-                ['*'],
-                null,
-                $page
-            );
+        $results = $this->getPaginator("people", $request, $results);
 
         return new PersonCollection(
             $results
@@ -250,33 +168,12 @@ class TopController extends Controller
      */
     public function characters(Request $request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? self::MAX_RESULTS_PER_PAGE;
-
-        if (!empty($limit)) {
-            $limit = (int) $limit;
-
-            if ($limit <= 0) {
-                $limit = 1;
-            }
-
-            if ($limit > self::MAX_RESULTS_PER_PAGE) {
-                $limit = self::MAX_RESULTS_PER_PAGE;
-            }
-        }
-
-        $results = Character::query()
+        $results = $this->getQueryBuilder("character", $request)
             ->whereNotNull('member_favorites')
             ->where('member_favorites', '>', 0)
             ->orderBy('member_favorites', 'desc');
 
-        $results = $results
-            ->paginate(
-                $limit,
-                ['*'],
-                null,
-                $page
-            );
+        $results = $this->getPaginator("character", $request, $results);
 
         return new CharacterCollection(
             $results

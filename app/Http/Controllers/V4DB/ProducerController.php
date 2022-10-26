@@ -14,12 +14,8 @@ use Illuminate\Http\Request;
 use Jikan\Model\Producer\Producer;
 use MongoDB\BSON\UTCDateTime;
 
-class ProducerController extends Controller
+class ProducerController extends ControllerWithQueryBuilderProvider
 {
-
-    private $request;
-    const MAX_RESULTS_PER_PAGE = 100;
-
     /**
      *  @OA\Get(
      *     path="/producers/{id}",

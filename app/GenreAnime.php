@@ -9,8 +9,9 @@ use Jikan\Request\Genre\AnimeGenresRequest;
  * Class Magazine
  * @package App
  */
-class GenreAnime extends Model
+class GenreAnime extends JikanApiSearchableModel
 {
+    protected array $filters = ["order_by", "sort"];
 
     /**
      * The attributes that are mass assignable.
@@ -50,5 +51,22 @@ class GenreAnime extends Model
                 ->serialize($data, 'json'),
             true
         );
+    }
+
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => (string) $this->mal_id,
+            'mal_id' => (string) $this->mal_id,
+            'name' => $this->name,
+            'count' => $this->count
+        ];
+    }
+
+    public function typesenseQueryBy(): array
+    {
+        return [
+            'name'
+        ];
     }
 }
