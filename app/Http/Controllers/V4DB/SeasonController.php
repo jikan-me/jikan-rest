@@ -4,15 +4,25 @@ namespace App\Http\Controllers\V4DB;
 
 use App\Anime;
 use App\Http\HttpResponse;
+use App\Http\QueryBuilder\AnimeSearchQueryBuilder;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\ResultsResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Jikan\Helper\Constants;
+use Jikan\Model\Common\DateRange;
 use Jikan\Request\SeasonList\SeasonListRequest;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
+/**
+ *
+ */
 class SeasonController extends Controller
 {
+    /**
+     *
+     */
     private const VALID_SEASONS = [
         'Summer',
         'Spring',
@@ -40,7 +50,14 @@ class SeasonController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
-     *      @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Schema(
+     *       schema="season_query_type",
+     *       description="Available Anime types",
+     *       type="string",
+     *       enum={"tv","movie","ova","special","ona","music"}
+     *     )
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
      *
      *     @OA\Response(
      *         response="200",
@@ -81,6 +98,7 @@ class SeasonController extends Controller
         $maxResultsPerPage = env('MAX_RESULTS_PER_PAGE', 30);
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? $maxResultsPerPage;
+        $type = $request->get('type');
 
         if (!empty($limit)) {
             $limit = (int) $limit;
@@ -113,14 +131,24 @@ class SeasonController extends Controller
             list($season, $year) = $this->getSeasonStr();
         }
 
+        $range = $this->getSeasonRange($year, $season);
+
         $results = Anime::query()
-            ->where('premiered', "{$season} $year")
+            ->whereBetween('aired.from', [$range['from'], $range['to']]);
+
+        if (array_key_exists(strtolower($type), AnimeSearchQueryBuilder::MAP_TYPES)) {
+            $results = $results
+                ->where('type', AnimeSearchQueryBuilder::MAP_TYPES[$type]);
+        }
+
+        $results = $results
             ->orderBy('members', 'desc')
             ->paginate(
                 $limit,
                 ['*'],
                 null,
-                $page);
+                $page
+            );
 
         $response = (new AnimeCollection(
             $results
@@ -233,6 +261,8 @@ class SeasonController extends Controller
         $maxResultsPerPage = env('MAX_RESULTS_PER_PAGE', 30);
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? $maxResultsPerPage;
+        $type = $request->get('type');
+
 
         if (!empty($limit)) {
             $limit = (int) $limit;
@@ -246,20 +276,17 @@ class SeasonController extends Controller
             }
         }
 
-
-        //        $nextYear =   (new \DateTime(null, new \DateTimeZone('Asia/Tokyo')))
-//            ->modify('+1 year')
-//            ->format('Y');
-
         $results = Anime::query()
-            ->where('status', 'Not yet aired')
-//            ->where('premiered', 'like', "%{$nextYear}%")
-            ->orderBy('members', 'desc');
+            ->where('status', 'Not yet aired');
+
+        if (array_key_exists(strtolower($type), AnimeSearchQueryBuilder::MAP_TYPES)) {
+            $results = $results
+                ->where('type', AnimeSearchQueryBuilder::MAP_TYPES[$type]);
+        }
 
         $season = 'Later';
-
-
         $results = $results
+            ->orderBy('members', 'desc')
             ->paginate(
                 $limit,
                 ['*'],
@@ -301,5 +328,38 @@ class SeasonController extends Controller
                 return ['Fall', $year];
             default: throw new Exception('Could not generate seasonal string');
         }
+    }
+
+    /**
+     * @param int $year
+     * @param string $season
+     * @return string[]
+     */
+    private function getSeasonRange(int $year, string $season) : array
+    {
+        switch ($season) {
+            case 'Winter':
+                $monthStart = 1;
+                $monthEnd = 3;
+                break;
+            case 'Spring':
+                $monthStart = 4;
+                $monthEnd = 6;
+                break;
+            case 'Summer':
+                $monthStart = 7;
+                $monthEnd = 9;
+                break;
+            case 'Fall':
+                $monthStart = 10;
+                $monthEnd = 12;
+                break;
+            default: throw new BadRequestException('Invalid season supplied');
+        }
+
+        return [
+            'from' => (new \DateTime())->setDate($year, $monthStart, 1)->format(\DateTimeInterface::ATOM),
+            'to' => (new \DateTime())->setDate($year, $monthEnd, 1)->modify('last day of this month')->format(\DateTimeInterface::ATOM)
+        ];
     }
 }
