@@ -3,6 +3,7 @@ FROM composer:2.3.9 as composer
 FROM mlocati/php-extension-installer:1.5.29 as php-ext-installer
 FROM php:8.1-bullseye as runtime
 ARG GITHUB_PERSONAL_TOKEN
+LABEL org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest/docker/base_image/php-8.1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/
 ENV COMPOSER_HOME="/tmp/composer"
