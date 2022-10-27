@@ -11,3 +11,8 @@ updates:
       interval: "daily"
     allow:
       - dependency-name: "jikan*"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+

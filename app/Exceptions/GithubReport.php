@@ -52,7 +52,7 @@ class GithubReport
     /**
      * @var string|bool
      */
-    private string|bool $redisRunning;
+    private string|bool $redisRunning = false;
 
     /**
      * @var string
@@ -94,7 +94,12 @@ class GithubReport
 
         $report->instanceType = 'UNKNOWN';
         if (env('APP_ENV') !== 'testing') {
-            $report->instanceType = $_SERVER['SERVER_NAME'] === 'api.jikan.moe' ? 'OFFICIAL' : 'HOSTED';
+            if (array_key_exists('SERVER_NAME', $_SERVER)) {
+                $report->instanceType = $_SERVER['SERVER_NAME'] === 'api.jikan.moe' ? 'OFFICIAL' : 'HOSTED';
+            }
+            else {
+                $report->instanceType = 'HOSTED-RR';
+            }
         }
 
         return $report;
