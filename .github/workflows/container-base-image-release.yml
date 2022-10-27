@@ -28,7 +28,6 @@ jobs:
             ghcr.io/jikan-me/jikan-rest-php
             jikanme/jikan-rest-php
           tags: |
-            type=raw,value=latest
             type=sha
 
       - name: Login to GitHub Container Registry
