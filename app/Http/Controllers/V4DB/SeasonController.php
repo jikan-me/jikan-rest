@@ -344,25 +344,13 @@ class SeasonController extends Controller
      */
     private function getSeasonRange(int $year, string $season) : array
     {
-        switch ($season) {
-            case 'Winter':
-                $monthStart = 1;
-                $monthEnd = 3;
-                break;
-            case 'Spring':
-                $monthStart = 4;
-                $monthEnd = 6;
-                break;
-            case 'Summer':
-                $monthStart = 7;
-                $monthEnd = 9;
-                break;
-            case 'Fall':
-                $monthStart = 10;
-                $monthEnd = 12;
-                break;
-            default: throw new BadRequestException('Invalid season supplied');
-        }
+        [$monthStart, $monthEnd] = match ($season) {
+            'Winter' => [1, 3],
+            'Spring' => [4, 6],
+            'Summer' => [7, 9],
+            'Fall' => [10, 12],
+            default => throw new BadRequestException('Invalid season supplied'),
+        };
 
         return [
             'from' => (new \DateTime())->setDate($year, $monthStart, 1)->format(\DateTimeInterface::ATOM),
