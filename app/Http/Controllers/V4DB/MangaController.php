@@ -2,39 +2,27 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
-use App\Http\Resources\V4\AnimeCharactersResource;
-use App\Http\Resources\V4\AnimeForumResource;
+use App\Http\QueryBuilder\Scraper\Query;
+use App\Http\QueryBuilder\Scraper\QueryResolver;
+use App\Http\QueryBuilder\Scraper\ScraperHandler;
 use App\Http\Resources\V4\ExternalLinksResource;
 use App\Http\Resources\V4\MangaRelationsResource;
 use App\Http\Resources\V4\ResultsResource;
 use App\Http\Resources\V4\ReviewsResource;
-use App\Http\Resources\V4\UserUpdatesResource;
 use App\Http\Resources\V4\RecommendationsResource;
 use App\Http\Resources\V4\MoreInfoResource;
-use App\Http\Resources\V4\AnimeNewsResource;
-use App\Http\Resources\V4\AnimeStatisticsResource;
 use App\Http\Resources\V4\ForumResource;
 use App\Http\Resources\V4\MangaCharactersResource;
 use App\Http\Resources\V4\MangaStatisticsResource;
-use App\Http\Resources\V4\NewsResource;
 use App\Http\Resources\V4\PicturesResource;
+use App\Http\Validation\ValidationTypeEnum;
 use App\Manga;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
+use Jikan\Exception\BadResponseException;
 use Jikan\Helper\Constants;
-use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
-use Jikan\Request\Anime\AnimeForumRequest;
-use Jikan\Request\Anime\AnimeMoreInfoRequest;
-use Jikan\Request\Anime\AnimeNewsRequest;
-use Jikan\Request\Anime\AnimePicturesRequest;
-use Jikan\Request\Anime\AnimeRecentlyUpdatedByUsersRequest;
-use Jikan\Request\Anime\AnimeRecommendationsRequest;
-use Jikan\Request\Anime\AnimeReviewsRequest;
-use Jikan\Request\Anime\AnimeStatsRequest;
 use Jikan\Request\Manga\MangaCharactersRequest;
 use Jikan\Request\Manga\MangaForumRequest;
 use Jikan\Request\Manga\MangaMoreInfoRequest;
@@ -42,11 +30,9 @@ use Jikan\Request\Manga\MangaNewsRequest;
 use Jikan\Request\Manga\MangaPicturesRequest;
 use Jikan\Request\Manga\MangaRecentlyUpdatedByUsersRequest;
 use Jikan\Request\Manga\MangaRecommendationsRequest;
-use Jikan\Request\Manga\MangaRequest;
 use Jikan\Request\Manga\MangaReviewsRequest;
 use Jikan\Request\Manga\MangaStatsRequest;
 use MongoDB\BSON\UTCDateTime;
-use mysql_xdevapi\Result;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class MangaController extends Controller
@@ -695,7 +681,7 @@ class MangaController extends Controller
     }
 
     /**
-     *  @OA\Get(
+     * @OA\Get(
      *     path="/manga/{id}/reviews",
      *     operationId="getMangaReviews",
      *     tags={"manga"},
@@ -721,6 +707,7 @@ class MangaController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
+     * @throws \Exception
      */
     public function reviews(Request $request, int $id)
     {
@@ -732,28 +719,24 @@ class MangaController extends Controller
             $results->isEmpty()
             || $this->isExpired($request, $results)
         ) {
-            $page = $request->get('page') ?? 1;
-            $sort = $request->get('sort') ?? Constants::REVIEWS_SORT_MOST_VOTED;
 
-            if (!in_array($sort, [Constants::REVIEWS_SORT_MOST_VOTED, Constants::REVIEWS_SORT_NEWEST, Constants::REVIEWS_SORT_OLDEST])) {
-                throw new BadRequestException('Invalid sort for reviews. Please refer to the documentation: https://docs.api.jikan.moe/');
-            }
 
-            $spoilers = $request->get('spoilers') ?? false;
-            $preliminary = $request->get('preliminary') ?? false;
+            $response = (new ScraperHandler(
+                'MangaReviews',
+                MangaReviewsRequest::class,
+                (new QueryResolver())
+                    ->setNewQuery(new Query('id', $id))
+                    ->setNewQuery(new Query('page', $request->get('page') ?? 1))
+                    ->setNewQuery(new Query(
+                        'sort',
+                        $request->get('sort') ?? Constants::REVIEWS_SORT_MOST_VOTED,
+                        new ValidationTypeEnum([Constants::REVIEWS_SORT_MOST_VOTED, Constants::REVIEWS_SORT_NEWEST, Constants::REVIEWS_SORT_OLDEST]),
+                        new BadRequestException('Invalid sort for reviews. Please refer to the documentation: https://docs.api.jikan.moe/')
+                    ))
+                    ->setNewQuery(new Query('spoilers', $request->get('spoilers') ?? false))
+                    ->setNewQuery(new Query('preliminary', $request->get('preliminary') ?? false))
+            ))->getSerializedJSON();
 
-            $manga = $this->jikan
-                ->getMangaReviews(
-                    new MangaReviewsRequest(
-                        $id,
-                        $page,
-                        $sort,
-                        $spoilers,
-                        $preliminary
-                    )
-                );
-
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
             $results = $this->updateCache($request, $results, $response);
         }
 
