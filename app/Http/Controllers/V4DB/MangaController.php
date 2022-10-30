@@ -720,7 +720,6 @@ class MangaController extends Controller
             || $this->isExpired($request, $results)
         ) {
 
-
             $response = (new ScraperHandler(
                 'MangaReviews',
                 MangaReviewsRequest::class,
