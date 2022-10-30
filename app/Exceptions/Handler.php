@@ -14,6 +14,7 @@ use Jikan\Exception\ParserException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Predis\Connection\ConnectionException;
 use Symfony\Component\HttpClient\Exception\TimeoutException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -93,6 +94,17 @@ class Handler extends ExceptionHandler
                         'error' => $e->getMessage(),
                         'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
                     ], 500);
+        }
+
+        // BadRequestException from Controllers
+        if ($e instanceof BadRequestException) {
+            return response()
+                ->json([
+                    'status' => 400,
+                    'type' => 'BadRequestException',
+                    'message' => $e->getMessage(),
+                    'error' => null
+                ], 400);
         }
 
         // BadResponseException from Jikan PHP API
