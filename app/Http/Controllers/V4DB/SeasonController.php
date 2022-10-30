@@ -9,6 +9,7 @@ use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\ResultsResource;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Jikan\Helper\Constants;
 use Jikan\Model\Common\DateRange;
@@ -353,8 +354,13 @@ class SeasonController extends Controller
         };
 
         return [
-            'from' => (new \DateTime())->setDate($year, $monthStart, 1)->format(\DateTimeInterface::ATOM),
-            'to' => (new \DateTime())->setDate($year, $monthEnd, 1)->modify('last day of this month')->format(\DateTimeInterface::ATOM)
+            'from' => Carbon::createFromDate($year, $monthStart, 1)->toAtomString(),
+            'to' => Carbon::createFromDate($year, $monthEnd, 1)->modify('last day of this month')->toAtomString()
         ];
+
+//        return [
+//            'from' => (new \DateTime())->setDate($year, $monthStart, 1)->format(\DateTimeInterface::ATOM),
+//            'to' => (new \DateTime())->setDate($year, $monthEnd, 1)->modify('last day of this month')->format(\DateTimeInterface::ATOM)
+//        ];
     }
 }
