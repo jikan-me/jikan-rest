@@ -4,9 +4,6 @@ namespace App\Http\QueryBuilder\Scraper;
 
 use App\Providers\SerializerFactory;
 
-/**
- *
- */
 class ScraperHandler
 {
     /**
@@ -31,8 +28,9 @@ class ScraperHandler
             );
     }
 
+
     /**
-     * @return string
+     * @return array
      */
     public function getSerializedJSON(): array
     {

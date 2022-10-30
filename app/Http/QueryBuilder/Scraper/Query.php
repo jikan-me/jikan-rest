@@ -7,7 +7,13 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class Query
 {
+    /**
+     * @var string
+     */
     private string $name;
+    /**
+     * @var mixed
+     */
     private mixed $value;
 
     /**

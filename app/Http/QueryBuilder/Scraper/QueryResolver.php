@@ -4,12 +4,15 @@ namespace App\Http\QueryBuilder\Scraper;
 
 class QueryResolver
 {
+    /**
+     * @var array
+     */
     private array $queries = [];
 
-    public function __construct() {
-        return $this;
-    }
-
+    /**
+     * @param Query $query
+     * @return $this
+     */
     public function setNewQuery(Query $query): self
     {
         $this->queries[] = $query;
