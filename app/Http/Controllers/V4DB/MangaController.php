@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Helpers\ScraperHelper;
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\QueryBuilder\Scraper\Query;
@@ -711,6 +712,16 @@ class MangaController extends Controller
      */
     public function reviews(Request $request, int $id)
     {
+        $validation = $this->validate($request, [
+            'page' => 'nullable|numeric',
+            'sort' => 'nullable|string'
+        ]);
+
+        $page = $request->get('page') ?? 1;
+        $spoilers = $request->get('spoilers') ?? false;
+        $preliminary = $request->get('preliminary') ?? false;
+        $sort = $request->get('sort');
+
         $results = DB::table($this->getRouteTable($request))
             ->where('request_hash', $this->fingerprint)
             ->get();
@@ -720,21 +731,18 @@ class MangaController extends Controller
             || $this->isExpired($request, $results)
         ) {
 
-            $response = (new ScraperHandler(
-                'MangaReviews',
-                MangaReviewsRequest::class,
-                (new QueryResolver())
-                    ->setNewQuery(new Query('id', $id))
-                    ->setNewQuery(new Query('page', $request->get('page') ?? 1))
-                    ->setNewQuery(new Query(
-                        'sort',
-                        $request->get('sort') ?? Constants::REVIEWS_SORT_MOST_VOTED,
-                        new ValidationTypeEnum([Constants::REVIEWS_SORT_MOST_VOTED, Constants::REVIEWS_SORT_NEWEST, Constants::REVIEWS_SORT_OLDEST]),
-                        new BadRequestException('Invalid sort for reviews. Please refer to the documentation: https://docs.api.jikan.moe/')
-                    ))
-                    ->setNewQuery(new Query('spoilers', $request->get('spoilers') ?? false))
-                    ->setNewQuery(new Query('preliminary', $request->get('preliminary') ?? false))
-            ))->getSerializedJSON();
+            $response = ScraperHelper::getSerializedJSON(
+                app('JikanParser')
+                    ->getMangaReviews(
+                        new MangaReviewsRequest(
+                            $id,
+                            $page,
+                            in_array($sort, [Constants::REVIEWS_SORT_MOST_VOTED, Constants::REVIEWS_SORT_NEWEST, Constants::REVIEWS_SORT_OLDEST]) ? $sort : Constants::REVIEWS_SORT_MOST_VOTED,
+                            $spoilers,
+                            $preliminary
+                        )
+                    )
+            );
 
             $results = $this->updateCache($request, $results, $response);
         }

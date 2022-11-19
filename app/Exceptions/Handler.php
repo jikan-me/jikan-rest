@@ -107,6 +107,16 @@ class Handler extends ExceptionHandler
                 ], 400);
         }
 
+        if ($e instanceof ValidationException) {
+            return response()
+                ->json([
+                    'status' => 400,
+                    'type' => 'BadRequestException',
+                    'message' => $e->getMessage(),
+                    'error' => null
+                ], 400);
+        }
+
         // BadResponseException from Jikan PHP API
         // This is basically the response MyAnimeList returns to Jikan
         if ($e instanceof BadResponseException) {
