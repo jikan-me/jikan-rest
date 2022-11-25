@@ -406,9 +406,14 @@ class AnimeControllerV4Test extends TestCase
                     [
                         'mal_id',
                         'url',
-                        'votes',
+                        'type',
+                        'reactions',
                         'date',
                         'review',
+                        'score',
+                        'tags',
+                        'is_spoiler',
+                        'is_preliminary',
                         'episodes_watched',
                         'scores' => [
                             'overall',
@@ -508,7 +513,7 @@ class AnimeControllerV4Test extends TestCase
                 ]
             ]);
 
-        $this->get('/v4/anime/1/userupdates?page=100')
+        $this->get('/v4/anime/1/userupdates?page=200')
             ->seeStatusCode(404);
     }
 
