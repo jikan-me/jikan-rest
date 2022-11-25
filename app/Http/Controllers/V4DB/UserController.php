@@ -14,6 +14,7 @@ use App\Http\Resources\V4\UserProfileMangaListResource;
 use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Jikan\Helper\Constants;
 use Jikan\Request\User\RecentlyOnlineUsersRequest;
 use Jikan\Request\User\UserAnimeListRequest;
 use Jikan\Request\User\UserClubsRequest;
@@ -23,6 +24,7 @@ use Jikan\Request\User\UserMangaListRequest;
 use Jikan\Request\User\UserRecommendationsRequest;
 use Jikan\Request\User\UserReviewsRequest;
 use MongoDB\BSON\UTCDateTime;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**
  * Class Controller
@@ -964,9 +966,16 @@ class UserController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $data = $this->jikan->getUserReviews(new UserReviewsRequest($username, $page));
-            $response = \json_decode($this->serializer->serialize($data, 'json'), true);
 
+            $data = $this->jikan
+                ->getUserReviews(
+                    new UserReviewsRequest(
+                        $username,
+                        $page,
+                    )
+                );
+
+            $response = \json_decode($this->serializer->serialize($data, 'json'), true);
             $results = $this->updateCache($request, $results, $response);
         }
 

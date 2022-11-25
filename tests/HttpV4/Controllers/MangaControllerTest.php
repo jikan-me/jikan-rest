@@ -228,9 +228,14 @@ class MangaControllerV4Test extends TestCase
                     [
                         'mal_id',
                         'url',
-                        'votes',
+                        'type',
+                        'reactions',
                         'date',
                         'review',
+                        'score',
+                        'tags',
+                        'is_spoiler',
+                        'is_preliminary',
                         'chapters_read',
                         'scores' => [
                             'overall',
@@ -331,7 +336,7 @@ class MangaControllerV4Test extends TestCase
                 ]
             ]);
 
-        $this->get('/v4/manga/1/userupdates?page=100')
+        $this->get('/v4/manga/1/userupdates?page=200')
             ->seeStatusCode(404);
     }
 
