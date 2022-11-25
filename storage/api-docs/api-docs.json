@@ -17,7 +17,7 @@
     "servers": [
         {
             "url": "https://api.jikan.moe/v4",
-            "description": "Jikan REST API Beta"
+            "description": "Jikan REST API"
         }
     ],
     "paths": {
@@ -3006,6 +3006,22 @@
                         }
                     },
                     {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Entry types",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "tv",
+                                "movie",
+                                "ova",
+                                "special",
+                                "ona",
+                                "music"
+                            ]
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     }
                 ],
@@ -3084,6 +3100,22 @@
                 ],
                 "operationId": "getSeasonUpcoming",
                 "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Entry types",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "tv",
+                                "movie",
+                                "ova",
+                                "special",
+                                "ona",
+                                "music"
+                            ]
+                        }
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     }
