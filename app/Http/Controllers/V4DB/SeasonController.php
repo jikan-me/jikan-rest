@@ -357,10 +357,5 @@ class SeasonController extends Controller
             'from' => Carbon::createFromDate($year, $monthStart, 1)->toAtomString(),
             'to' => Carbon::createFromDate($year, $monthEnd, 1)->modify('last day of this month')->toAtomString()
         ];
-
-//        return [
-//            'from' => (new \DateTime())->setDate($year, $monthStart, 1)->format(\DateTimeInterface::ATOM),
-//            'to' => (new \DateTime())->setDate($year, $monthEnd, 1)->modify('last day of this month')->format(\DateTimeInterface::ATOM)
-//        ];
     }
 }
