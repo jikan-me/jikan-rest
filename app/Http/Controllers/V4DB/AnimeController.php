@@ -22,6 +22,7 @@ use App\Http\Resources\V4\AnimeVideosResource;
 use App\Http\Resources\V4\ForumResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Jikan\Helper\Constants;
 use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
 use Jikan\Request\Anime\AnimeEpisodeRequest;
 use Jikan\Request\Anime\AnimeEpisodesRequest;
@@ -38,6 +39,7 @@ use Jikan\Request\Anime\AnimeVideosEpisodesRequest;
 use Jikan\Request\Anime\AnimeVideosRequest;
 use Laravel\Lumen\Http\ResponseFactory;
 use MongoDB\BSON\UTCDateTime;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnimeController extends Controller
@@ -1110,9 +1112,27 @@ class AnimeController extends Controller
             || $this->isExpired($request, $results)
         ) {
             $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getAnimeReviews(new AnimeReviewsRequest($id, $page));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
+            $sort = $request->get('sort') ?? Constants::REVIEWS_SORT_MOST_VOTED;
 
+            if (!in_array($sort, [Constants::REVIEWS_SORT_MOST_VOTED, Constants::REVIEWS_SORT_NEWEST, Constants::REVIEWS_SORT_OLDEST])) {
+                throw new BadRequestException('Invalid sort for reviews. Please refer to the documentation: https://docs.api.jikan.moe/');
+            }
+
+            $spoilers = $request->get('spoilers') ?? false;
+            $preliminary = $request->get('preliminary') ?? false;
+
+            $anime = $this->jikan
+                ->getAnimeReviews(
+                    new AnimeReviewsRequest(
+                        $id,
+                        $page,
+                        $sort,
+                        $spoilers,
+                        $preliminary
+                    )
+                );
+
+            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
             $results = $this->updateCache($request, $results, $response);
         }
 

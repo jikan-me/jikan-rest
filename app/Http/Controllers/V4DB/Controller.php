@@ -36,7 +36,7 @@ class Controller extends BaseController
      *         )
      *     ),
      *     @OA\Server(
-     *         description="Jikan REST API Beta",
+     *         description="Jikan REST API",
      *         url="https://api.jikan.moe/v4",
      *     ),
      *     @OA\ExternalDocumentation(
@@ -49,12 +49,12 @@ class Controller extends BaseController
     /**
      * @var Serializer
      */
-    protected $serializer;
+    protected Serializer $serializer;
 
     /**
      * @var MalClient
      */
-    protected $jikan;
+    protected MalClient $jikan;
 
     /**
      * @var Request
@@ -64,16 +64,16 @@ class Controller extends BaseController
     /**
      * @var array
      */
-    private $response;
+    private array $response;
 
-    protected $expired = false;
+    protected bool $expired = false;
 
-    protected $fingerprint;
+    protected string $fingerprint;
 
     /**
      * AnimeController constructor.
      *
-     * @param Serializer      $serializer
+     * @param Request $request
      * @param MalClient $jikan
      */
     public function __construct(Request $request, MalClient $jikan)

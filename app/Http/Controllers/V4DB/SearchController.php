@@ -641,6 +641,14 @@ class SearchController extends ControllerWithQueryBuilderProvider
     }
 
     /**
+     *
+     * @OA\Schema(
+     *   schema="producers_query_orderby",
+     *   description="Producers Search Query Order By",
+     *   type="string",
+     *   enum={"mal_id", "count", "favorites", "established"}
+     * )
+     *
      *  @OA\Get(
      *     path="/producers",
      *     operationId="getProducers",

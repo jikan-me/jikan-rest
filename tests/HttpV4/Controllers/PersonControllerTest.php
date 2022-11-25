@@ -112,7 +112,6 @@ class PersonControllerTest extends TestCase
                         'images' => [
                             'jpg' => [
                                 'image_url',
-                                'small_image_url',
                             ],
                             'webp' => [
                                 'image_url',
