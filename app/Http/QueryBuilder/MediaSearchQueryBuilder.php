@@ -48,12 +48,12 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
     private function filterByGenre(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $builder, int $genre, $exclude = false): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $builder->where(function ($query) use ($genre, $exclude) {
-            $operator = $exclude ? '!=' : null;
+            $operator = $exclude ? '!=' : '=';
             return $query
-                ->whereOr('genres.mal_id', $operator, $genre)
-                ->whereOr('demographics.mal_id', $operator, $genre)
-                ->whereOr('themes.mal_id', $operator, $genre)
-                ->whereOr('explicit_genres.mal_id', $operator, $genre);
+                ->orWhere('genres.mal_id', $operator, $genre)
+                ->orWhere('demographics.mal_id', $operator, $genre)
+                ->orWhere('themes.mal_id', $operator, $genre)
+                ->orWhere('explicit_genres.mal_id', $operator, $genre);
         });
     }
 
@@ -65,7 +65,7 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
                 continue;
             }
 
-            $genre = (int)$genre;
+            $genre = (int) $genre;
 
             $builder = $this->filterByGenre($builder, $genre, $exclude);
         }
