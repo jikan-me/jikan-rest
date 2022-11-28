@@ -98,10 +98,9 @@ class AnimeSearchQueryBuilder extends MediaSearchQueryBuilder
                 $producer = (int)$producer;
 
                 $results = $results
-                    ->query(fn($query) => $query
-                        ->orWhere('producers.mal_id', $producer)
-                        ->orWhere('licensors.mal_id', $producer)
-                        ->orWhere('studios.mal_id', $producer));
+                    ->orWhere('producers.mal_id', $producer)
+                    ->orWhere('licensors.mal_id', $producer)
+                    ->orWhere('studios.mal_id', $producer);
             }
         }
 
