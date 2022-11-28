@@ -37,25 +37,22 @@ trait TopQueryFilterResolver
         // Most popular ordered by members
         // Most favorites ordered by most favorites
 
-        return match ($filterType) {
+        $builder = match ($filterType) {
             $is_running => $builder
-                ->where($is_running, true)
-                ->whereNotNull("rank")
-                ->where("rank", ">", 0)
-                ->orderBy("rank", "asc"),
+                ->where($is_running, true),
             "upcoming" => $builder
-                ->where('airing', true)
-                ->whereNotNull('rank')
-                ->where('rank', '>', 0)
-                ->orderBy('rank', 'asc'),
+                ->where('status', 'Not yet aired')
+                ->orderBy('members', 'desc'),
             "bypopularity" => $builder
                 ->orderBy('members', 'desc'),
             "favorite" => $builder
                 ->orderBy('favorites', 'desc'),
             default => $builder
-                ->whereNotNull('rank')
-                ->where('rank', '>', 0)
-                ->orderBy('rank', 'asc'),
         };
+
+        return $builder
+            ->whereNotNull('rank')
+            ->where('rank', '>', 0)
+            ->orderBy('rank', 'asc');
     }
 }
