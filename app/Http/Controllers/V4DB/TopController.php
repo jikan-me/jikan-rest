@@ -2,26 +2,16 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
-use App\Character;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\QueryBuilder\SearchQueryBuilderUsers;
-use App\Http\QueryBuilder\TopQueryBuilderAnime;
-use App\Http\QueryBuilder\TopQueryBuilderManga;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Http\Resources\V4\CharacterCollection;
 use App\Http\Resources\V4\MangaCollection;
 use App\Http\Resources\V4\PersonCollection;
 use App\Http\Resources\V4\ResultsResource;
-use App\Manga;
-use App\Person;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Helper\Constants;
 use Jikan\Request\Reviews\RecentReviewsRequest;
-use Jikan\Request\Top\TopPeopleRequest;
-use MongoDB\BSON\UTCDateTime;
+
 
 class TopController extends ControllerWithQueryBuilderProvider
 {
@@ -45,6 +35,19 @@ class TopController extends ControllerWithQueryBuilderProvider
      *          required=false,
      *          @OA\Schema(type="string",enum={"airing", "upcoming", "bypopularity", "favorite"})
      *      ),
+     *
+     *     @OA\Parameter(
+     *       name="rating",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/anime_search_query_rating")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *       name="sfw",
+     *       in="query",
+     *       description="Filter out Adult entries",
+     *       @OA\Schema(type="boolean")
+     *     ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
