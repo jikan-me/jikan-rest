@@ -50,10 +50,10 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         return $builder->where(function ($query) use ($genre, $exclude) {
             $operator = $exclude ? '!=' : null;
             return $query
-                ->where('genres.mal_id', $operator, $genre)
-                ->where('demographics.mal_id', $operator, $genre)
-                ->where('themes.mal_id', $operator, $genre)
-                ->where('explicit_genres.mal_id', $operator, $genre);
+                ->whereOr('genres.mal_id', $operator, $genre)
+                ->whereOr('demographics.mal_id', $operator, $genre)
+                ->whereOr('themes.mal_id', $operator, $genre)
+                ->whereOr('explicit_genres.mal_id', $operator, $genre);
         });
     }
 
