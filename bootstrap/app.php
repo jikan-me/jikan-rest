@@ -181,7 +181,7 @@ $commonMiddleware = [
 $app->router->group(
     [
         'prefix' => 'v4',
-        'namespace' => env('SOURCE') === 'local' ? 'App\Http\Controllers\V4DB' : 'App\Http\Controllers\V4',
+        'namespace' => 'App\Http\Controllers\V4DB',
         'middleware' => $commonMiddleware
     ],
     function ($router) {
