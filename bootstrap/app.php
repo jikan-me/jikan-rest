@@ -85,9 +85,6 @@ if (env('INSIGHTS', false)) {
 $app->middleware($globalMiddleware);
 
 $app->routeMiddleware([
-//    'meta' => App\Http\Middleware\Meta::class,
-//    'cache-resolver' => App\Http\Middleware\CacheResolver::class,
-//    'throttle' => App\Http\Middleware\Throttle::class,
     'microcaching' => \App\Http\Middleware\MicroCaching::class,
     'source-health-monitor' => SourceHeartbeatMonitor::class,
 ]);
@@ -176,7 +173,6 @@ if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEn
 */
 
 $commonMiddleware = [
-//    'throttle'
     'source-health-monitor',
     'microcaching',
 ];
