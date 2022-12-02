@@ -4,8 +4,10 @@ about: Let us know if something is wrong \U0001F914
 title: ''
 labels: 'i: bug, i: needs triage'
 ---
-Make sure to add all the information needed to understand the bug so that someone can help. If the info is missing we'll add the 'Needs more information' label and close the issue until there is enough information.
+Make sure to add all the information needed to understand the bug so that someone can help. If the info is missing we'll add the 'Needs more information' label and close the issue until there is enough information. Additionally it would greatly help us reducing duplicates and we would really appriacte if you could search the existing issues for the problem you are experiencing.
+
 Feel free to delete the template text, but please leave in the questions and answers below.
+
 ## Bug Report
 
 * **What is the current behavior?**
