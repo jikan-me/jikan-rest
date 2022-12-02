@@ -100,11 +100,8 @@ $app->routeMiddleware([
 |
 */
 
-if (env('CACHING')) {
-    $app->configure('cache');
-    $app->register(Illuminate\Redis\RedisServiceProvider::class);
-}
 
+$app->configure('cache');
 $app->configure('database');
 $app->configure('queue');
 $app->configure('controller-to-table-mapping');
@@ -118,8 +115,9 @@ $app->register(\App\Providers\SourceHeartbeatProvider::class);
 $app->register(\App\Providers\EventServiceProvider::class);
 $app->register(Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
 $app->register(\App\Providers\AppServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
-if (env('REPORTING') && env('REPORTING_DRIVER') === 'sentry') {
+if (env('REPORTING') && strtolower(env('REPORTING_DRIVER')) === 'sentry') {
     $app->register(\Sentry\Laravel\ServiceProvider::class);
     // Sentry Performance Monitoring (optional)
     $app->register(\Sentry\Laravel\Tracing\ServiceProvider::class);
@@ -129,13 +127,6 @@ if (env('REPORTING') && env('REPORTING_DRIVER') === 'sentry') {
         $scope->setTag('parser.jikan.version', JIKAN_PARSER_VERSION);
     });
 }
-
-// Guzzle removed as of lumen 8.x
-//$guzzleClient = new \GuzzleHttp\Client([
-//    'timeout' => env('SOURCE_TIMEOUT', 5),
-//    'connect_timeout' => env('SOURCE_CONNECT_TIMEOUT', 5)
-//]);
-//$app->instance('GuzzleClient', $guzzleClient);
 
 $httpClient = \Symfony\Component\HttpClient\HttpClient::create(
     [

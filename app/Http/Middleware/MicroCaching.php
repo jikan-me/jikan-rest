@@ -49,7 +49,7 @@ class MicroCaching
         if (
             !env('CACHING')
             || !env('MICROCACHING')
-            || env('CACHE_DRIVER') !== 'redis'
+            || strtolower(env('CACHE_DRIVER')) !== 'redis'
         ) {
             return $next($request);
         }
