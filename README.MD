@@ -18,7 +18,7 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 This is Jikan REST API **v4** - which has been merged into master branch. If you're looking for deploying a v3 build, view the v3 branch for installation instructions:
 https://github.com/jikan-me/jikan-rest/tree/v3
 
-⚠ v3 is now maintaince-only and will stop receiving updates once it's discontinued from the public API.
+⚠ v3 is discontinued and will no longer receive any updates.
 
 ### Manual installation
 Please read the [manual installation guide](https://github.com/jikan-me/jikan-rest/wiki).
@@ -81,8 +81,11 @@ We have a free [REST API service](https://jikan.moe), if you wish to support us 
 ### Patrons
 
 - Aaron Treinish
+- Abdelhafid Achtaou
 - Aika Fujiwara
+- Bobby Williams
 - Cesar Irad Mendoza
+- CrafterSama
 - Fro116
 - Jason Weatherly
 - Jesse
