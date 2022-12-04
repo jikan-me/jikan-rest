@@ -5,9 +5,12 @@ namespace App;
 use App\Http\HttpHelper;
 use Jikan\Jikan;
 use Jikan\Request\Anime\AnimeRequest;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Anime extends JikanApiSearchableModel
 {
+    use HasFactory;
+
     // note that here we skip "score", "min_score", "max_score", "rating" and others because they need special logic
     // to set the correct filtering on the ORM.
     protected array $filters = ["order_by", "status", "type", "sort"];

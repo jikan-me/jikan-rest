@@ -4,6 +4,7 @@ namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jikan\Request\Genre\AnimeGenresRequest;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Magazine
@@ -11,6 +12,8 @@ use Jikan\Request\Genre\AnimeGenresRequest;
  */
 class GenreAnime extends JikanApiSearchableModel
 {
+    use HasFactory;
+
     protected array $filters = ["order_by", "sort"];
 
     /**
