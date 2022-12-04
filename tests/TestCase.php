@@ -1,5 +1,5 @@
 <?php
-use App\Http\Concerns\MakesHttpRequestsEx;
+use App\Testing\Concerns\MakesHttpRequestsEx;
 use App\Testing\ScoutFlush;
 
 abstract class TestCase extends Laravel\Lumen\Testing\TestCase

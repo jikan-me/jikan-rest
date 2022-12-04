@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Concerns;
+namespace App\Testing\Concerns;
 
 trait MakesHttpRequestsEx
 {
