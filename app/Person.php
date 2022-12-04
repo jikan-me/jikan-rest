@@ -5,9 +5,11 @@ namespace App;
 use Jikan\Jikan;
 use Jikan\Request\Person\PersonRequest;
 use function Symfony\Component\Translation\t;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Person extends JikanApiSearchableModel
 {
+    use HasFactory;
     protected array $filters = ["order_by", "sort"];
 
     /**
