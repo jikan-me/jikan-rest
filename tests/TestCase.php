@@ -1,6 +1,7 @@
 <?php
 use App\Testing\Concerns\MakesHttpRequestsEx;
 use App\Testing\ScoutFlush;
+use App\Testing\SyntheticMongoDbTransaction;
 
 abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 {
@@ -36,6 +37,11 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         if (isset($uses[ScoutFlush::class])) {
             /** @noinspection PhpUndefinedMethodInspection */
             $this->runScoutFlush();
+        }
+
+        if (isset($uses[SyntheticMongoDbTransaction::class])) {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $this->beginDatabaseTransaction();
         }
     }
 }
