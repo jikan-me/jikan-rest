@@ -1,7 +1,9 @@
 <?php
 namespace Database\Factories;
+use App\Testing\JikanDataGenerator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Manga;
+use MongoDB\BSON\UTCDateTime;
 
 class MangaFactory extends Factory
 {
@@ -79,7 +81,10 @@ class MangaFactory extends Factory
                     "name" => "Shounen",
                     "url" => "https://myanimelist.net/manga/genre/27/Shounen"
                 ]
-            ]
+            ],
+            "createdAt" => new UTCDateTime(),
+            "modifiedAt" => new UTCDateTime(),
+            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/manga/" . $mal_id))
         ];
     }
 }
