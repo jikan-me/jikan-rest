@@ -1,10 +1,12 @@
 <?php
+
+use App\Testing\ScoutFlush;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use App\Anime;
 
 class AnimeSearchEndpointTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseMigrations, ScoutFlush;
 
     public function limitParameterCombinationsProvider(): array
     {
@@ -36,9 +38,29 @@ class AnimeSearchEndpointTest extends TestCase
         $overrides = [];
         // let's make all database items the same type
         if (array_key_exists("type", $additionalParams)) {
-            $overrides["type"] = $additionalParams["type"];
+            $overrides["type"] = match ($additionalParams["type"]) {
+                "ova" => "OVA",
+                "movie" => "Movie",
+                default => "TV"
+            };
         }
-        $f->make($overrides);
+        if (array_key_exists("min_score", $additionalParams) && !array_key_exists("max_score", $additionalParams)) {
+            $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), 9.99);
+        }
+        if (!array_key_exists("min_score", $additionalParams) && array_key_exists("max_score", $additionalParams)) {
+            $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["max_score"]));
+        }
+        if (array_key_exists("min_score", $additionalParams) && array_key_exists("max_score", $additionalParams)) {
+            $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), floatval($additionalParams["max_score"]));
+        }
+        if (array_key_exists("status", $additionalParams)) {
+            $overrides["score"] = match ($additionalParams["status"]) {
+                "complete" => "Completed",
+                "airing" => "Currently Airing",
+                "upcoming" => "Upcoming"
+            };
+        }
+        $f->create($overrides);
         $parameters = http_build_query([
             "limit" => $limitCount,
             ...$additionalParams

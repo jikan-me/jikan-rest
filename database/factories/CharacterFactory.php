@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Testing\JikanDataGenerator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Character;
+use MongoDB\BSON\UTCDateTime;
 
 
 class CharacterFactory extends Factory
@@ -25,7 +27,10 @@ class CharacterFactory extends Factory
             "name_kanji" => "岡",
             "nicknames" => [],
             "favorites" => $this->faker->randomDigitNotNull(),
-            "about" => "test"
+            "about" => "test",
+            "createdAt" => new UTCDateTime(),
+            "modifiedAt" => new UTCDateTime(),
+            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/character/" . $mal_id))
         ];
     }
 }

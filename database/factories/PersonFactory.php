@@ -1,7 +1,9 @@
 <?php
 namespace Database\Factories;
+use App\Testing\JikanDataGenerator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Person;
+use MongoDB\BSON\UTCDateTime;
 
 
 class PersonFactory extends Factory
@@ -33,7 +35,10 @@ class PersonFactory extends Factory
             "alternate_names" => [],
             "birthday" => $this->createRandomDateTime("-80 years")->toAtomString(),
             "favorites" => $this->faker->randomDigitNotNull(),
-            "about" => "test"
+            "about" => "test",
+            "createdAt" => new UTCDateTime(),
+            "modifiedAt" => new UTCDateTime(),
+            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/people/" . $mal_id))
         ];
     }
 }

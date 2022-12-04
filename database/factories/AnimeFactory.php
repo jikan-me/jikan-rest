@@ -2,6 +2,8 @@
 namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Anime;
+use App\Testing\JikanDataGenerator;
+use MongoDB\BSON\UTCDateTime;
 
 
 class AnimeFactory extends Factory
@@ -55,7 +57,7 @@ class AnimeFactory extends Factory
             "favorites" => $this->faker->randomDigitNotNull(),
             "synopsis" => "test",
             "background" => "test",
-            "season" => $this->faker->randomElement(["winter", "spring", "fall", "summer"]),
+            "premiered" => $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]),
             "broadcast" => [
                 "day" => "",
                 "time" => "",
@@ -96,7 +98,10 @@ class AnimeFactory extends Factory
                     "name" => "Shounen",
                     "url" => "https://myanimelist.net/anime/genre/27/Shounen"
                 ]
-            ]
+            ],
+            "createdAt" => new UTCDateTime(),
+            "modifiedAt" => new UTCDateTime(),
+            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/anime/" . $mal_id))
         ];
     }
 }
