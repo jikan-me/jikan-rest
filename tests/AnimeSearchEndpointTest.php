@@ -8,6 +8,8 @@ class AnimeSearchEndpointTest extends TestCase
 {
     use DatabaseMigrations, ScoutFlush;
 
+    protected array $searchIndexModelCleanupList = ["App\\Anime"];
+
     public function limitParameterCombinationsProvider(): array
     {
         return [
