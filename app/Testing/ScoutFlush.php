@@ -6,11 +6,9 @@ trait ScoutFlush
 {
     public function runScoutFlush(): void
     {
-        $this->artisan("scout:flush App\\Anime");
-        $this->artisan("scout:flush App\\Manga");
-        $this->artisan("scout:flush App\\Character");
-        $this->artisan("scout:flush App\\GenreAnime");
-        $this->artisan("scout:flush App\\GenreManga");
-        $this->artisan("scout:flush App\\Person");
+        $models = ["App\\Anime", "App\\Manga", "App\\Character", "App\\GenreAnime", "App\\GenreManga", "App\\Person"];
+        foreach ($models as $model) {
+            $this->artisan("scout:flush", ["model" => $model]);
+        }
     }
 }

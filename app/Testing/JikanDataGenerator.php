@@ -97,7 +97,7 @@ trait JikanDataGenerator
 
     private function createMalId(): int
     {
-        return $this->faker->numberBetween(1, 99999);
+        return $this->faker->unique()->numberBetween(1, 99999);
     }
 
     private function createTitle(): string
