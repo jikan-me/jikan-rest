@@ -27,9 +27,9 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         return $app;
     }
 
-    protected function tearDown(): void
+    protected function setUpTraits()
     {
-        parent::tearDown();
+        parent::setUpTraits();
         $uses = array_flip(class_uses_recursive(get_class($this)));
 
         // we want to empty the search index
