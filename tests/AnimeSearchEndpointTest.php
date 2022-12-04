@@ -1,14 +1,19 @@
 <?php
 
 use App\Testing\ScoutFlush;
-use Laravel\Lumen\Testing\DatabaseMigrations;
 use App\Anime;
+use App\Testing\SyntheticMongoDbTransaction;
 
 class AnimeSearchEndpointTest extends TestCase
 {
-    use DatabaseMigrations, ScoutFlush;
+    use SyntheticMongoDbTransaction;
+    use ScoutFlush;
 
-    protected array $searchIndexModelCleanupList = ["App\\Anime"];
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->searchIndexModelCleanupList = ["App\\Anime"];
+    }
 
     public function limitParameterCombinationsProvider(): array
     {
