@@ -4,9 +4,12 @@ namespace App;
 
 use Jikan\Jikan;
 use Jikan\Request\Character\CharacterRequest;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Character extends JikanApiSearchableModel
 {
+    use HasFactory;
+
     protected array $filters = ["order_by", "sort"];
 
     /**
