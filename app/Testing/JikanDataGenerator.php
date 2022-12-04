@@ -1,5 +1,5 @@
 <?php
-namespace Database\Factories;
+namespace App\Testing;
 use Faker\Generator;
 use Illuminate\Support\Carbon;
 
@@ -125,5 +125,10 @@ trait JikanDataGenerator
     private function getRandomGenreNames($count = 1): array
     {
         return $this->faker->randomElements($this->dummyGenres, $count);
+    }
+
+    public function stuff()
+    {
+        return "";
     }
 }
