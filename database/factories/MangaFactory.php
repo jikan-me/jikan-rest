@@ -20,7 +20,7 @@ class MangaFactory extends Factory
 
         return [
             "mal_id" => $mal_id,
-            "url" => $this->createUrl($mal_id, "manga"),
+            "url" => $this->createMalUrl($mal_id, "manga"),
             "titles" => [
                 [
                     "type" => "Default",
@@ -84,7 +84,7 @@ class MangaFactory extends Factory
             ],
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
-            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/manga/" . $mal_id))
+            "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("manga", $mal_id))
         ];
     }
 }

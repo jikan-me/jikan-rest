@@ -40,7 +40,7 @@ class SourceHeartbeatProvider extends ServiceProvider
     {
         try {
             $failsJson = Storage::get('failovers.json');
-            $fails = json_decode($failsJson, true);
+            $fails = $failsJson ? json_decode($failsJson, true) : [];
         } catch (\Exception $e) {
             $fails = [];
         }

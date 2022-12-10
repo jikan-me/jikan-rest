@@ -17,7 +17,7 @@ class CharacterFactory extends Factory
     public function definition()
     {
         $mal_id = $this->createMalId();
-        $url = $this->createUrl($mal_id, "character");
+        $url = $this->createMalUrl($mal_id, "character");
 
         return [
             "mal_id" => $mal_id,
@@ -30,7 +30,7 @@ class CharacterFactory extends Factory
             "about" => "test",
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
-            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/character/" . $mal_id))
+            "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("character", $mal_id))
         ];
     }
 }

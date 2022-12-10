@@ -24,10 +24,11 @@ class AnimeFactory extends Factory
         $title = $this->createTitle();
         $status = $this->faker->randomElement(["Currently Airing", "Completed", "Upcoming"]);
         [$aired_from, $aired_to] = $this->createActiveDateRange($status, "Currently Airing");
+        $test_base_url =  env('APP_URL');
 
         return [
             "mal_id" => $mal_id,
-            "url" => $this->createUrl($mal_id, "anime"),
+            "url" => $this->createMalUrl($mal_id, "anime"),
             "titles" => [
                 [
                     "type" => "Default",
@@ -101,7 +102,7 @@ class AnimeFactory extends Factory
             ],
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
-            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/anime/" . $mal_id))
+            "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("anime", $mal_id))
         ];
     }
 }

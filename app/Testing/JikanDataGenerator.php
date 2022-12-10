@@ -90,7 +90,7 @@ trait JikanDataGenerator
         "Shounen"
     ];
 
-    private function createUrl($malId, $type): string
+    private function createMalUrl($malId, $type): string
     {
         return "https://myanimelist.net/" . $type . "/" . $malId . "/x";
     }
@@ -127,8 +127,12 @@ trait JikanDataGenerator
         return $this->faker->randomElements($this->dummyGenres, $count);
     }
 
-    public function stuff()
+    private function getItemTestUrl($type, $mal_id = "", $sub_type = ""): string
     {
-        return "";
+        $test_base_url =  env('APP_URL');
+        $url = empty($sub_type) ?
+            $test_base_url . "/v4/" . $type . "/" . $mal_id
+            : $test_base_url . "/v4/" . $type . "/" . $sub_type . "/" . $mal_id;
+        return sha1($url);
     }
 }
