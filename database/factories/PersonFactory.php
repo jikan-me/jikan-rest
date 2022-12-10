@@ -26,7 +26,7 @@ class PersonFactory extends Factory
 
         return [
             "mal_id" => $mal_id,
-            "url" => $this->createUrl($mal_id, "people"),
+            "url" => $this->createMalUrl($mal_id, "people"),
             "website_url" => "https://webiste.example",
             "images" => [],
             "name" => $name,
@@ -38,7 +38,7 @@ class PersonFactory extends Factory
             "about" => "test",
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
-            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/people/" . $mal_id))
+            "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("people", $mal_id))
         ];
     }
 }

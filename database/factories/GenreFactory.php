@@ -14,7 +14,7 @@ abstract class GenreFactory extends Factory
     {
         $mal_id = $this->createMalId();
         $name = $this->getRandomGenreName();
-        $url = $this->createUrl($mal_id, $this->mediaType . "/genre");
+        $url = $this->createMalUrl($mal_id, $this->mediaType . "/genre");
 
         return [
             "mal_id" => $mal_id,
@@ -23,7 +23,8 @@ abstract class GenreFactory extends Factory
             "count" => $this->faker->randomDigit(),
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
-            "request_hash" => sprintf("request:%s:%s", "v4", sha1("http://localhost-test/v4/genres/". $this->mediaType ."/" . $mal_id))
+            "request_hash" => sprintf("request:%s:%s", "v4",
+                $this->getItemTestUrl("genres", $mal_id, $this->mediaType))
         ];
     }
 }
