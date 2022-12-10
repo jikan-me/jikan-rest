@@ -23,7 +23,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     {
         $app = require __DIR__.'/../bootstrap/app.php';
         $database = env('DB_DATABASE', 'jikan_tests');
-        $app['config']->set('database.connections.mongodb.database', $database === 'jikan' ? 'jikan_test' : $database);
+        $app['config']->set('database.connections.mongodb.database', $database === 'jikan' ? 'jikan_tests' : $database);
 
         return $app;
     }
