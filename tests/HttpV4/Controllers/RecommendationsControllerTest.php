@@ -1,4 +1,7 @@
-<?php
+<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+
+namespace Tests\HttpV4\Controllers;
+use Tests\TestCase;
 
 class RecommendationsControllerTest extends TestCase
 {

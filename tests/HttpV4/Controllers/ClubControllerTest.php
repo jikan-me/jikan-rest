@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+namespace Tests\HttpV4\Controllers;
+use tests\TestCase;
 
 class ClubControllerTest extends TestCase
 {

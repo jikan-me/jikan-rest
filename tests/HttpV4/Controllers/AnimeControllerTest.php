@@ -1,6 +1,8 @@
-<?php
+<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+namespace Tests\HttpV4\Controllers;
+use Tests\TestCase;
 
-class AnimeControllerV4Test extends TestCase
+class AnimeControllerTest extends TestCase
 {
     public function testMain()
     {

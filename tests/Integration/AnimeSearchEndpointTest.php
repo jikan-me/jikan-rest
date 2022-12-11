@@ -1,8 +1,9 @@
-<?php
-
-use App\Testing\ScoutFlush;
+<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+namespace Tests\Integration;
 use App\Anime;
+use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
+use Tests\TestCase;
 
 class AnimeSearchEndpointTest extends TestCase
 {
