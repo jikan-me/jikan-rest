@@ -62,8 +62,8 @@ class AnimeSearchEndpointTest extends TestCase
             $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), floatval($additionalParams["max_score"]));
         }
         if (array_key_exists("status", $additionalParams)) {
-            $overrides["score"] = match ($additionalParams["status"]) {
-                "complete" => "Completed",
+            $overrides["status"] = match ($additionalParams["status"]) {
+                "complete" => "Finished Airing",
                 "airing" => "Currently Airing",
                 "upcoming" => "Upcoming"
             };
