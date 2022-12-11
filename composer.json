@@ -44,23 +44,22 @@
         "phpunit/phpunit": "^9.5.26"
     },
     "autoload": {
-        "classmap": [
-            "database/seeds",
-            "database/factories"
-        ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/",
-            "database/"
-        ]
+        "psr-4": {
+          "Tests\\": ["tests/"]
+        }
     },
     "scripts": {
         "post-root-package-install": [
             "php -r \"copy('.env.dist', '.env');\""
+        ],
+        "test": [
+          "php ./vendor/phpunit/phpunit/phpunit"
         ]
     },
     "minimum-stability": "dev",
