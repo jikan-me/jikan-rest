@@ -1,17 +1,21 @@
-<?php
+<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+namespace Tests;
 use App\Testing\Concerns\MakesHttpRequestsEx;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
+use Faker\Factory;
+use Faker\Generator;
+use Laravel\Lumen\Testing\TestCase as LumenTestCase;
 
-abstract class TestCase extends Laravel\Lumen\Testing\TestCase
+abstract class TestCase extends LumenTestCase
 {
     use MakesHttpRequestsEx;
-    protected Faker\Generator $faker;
+    protected Generator $faker;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->faker = Faker\Factory::create();
+        $this->faker = Factory::create();
     }
 
     /**
