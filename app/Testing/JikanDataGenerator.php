@@ -1,6 +1,7 @@
 <?php
 namespace App\Testing;
 use Faker\Generator;
+use Faker\UniqueGenerator;
 use Illuminate\Support\Carbon;
 
 trait JikanDataGenerator
@@ -11,6 +12,7 @@ trait JikanDataGenerator
      * @var Generator
      */
     protected $faker;
+    private UniqueGenerator $genreNameGenerator;
     private array $dummyGenres = [
         "Action",
         "Adventure",
@@ -117,9 +119,19 @@ trait JikanDataGenerator
         return [$from, $to];
     }
 
+    protected function getGenreNameGenerator(): UniqueGenerator
+    {
+        if (empty($this->genreNameGenerator))
+        {
+            $this->genreNameGenerator = $this->faker->unique();
+        }
+
+        return $this->genreNameGenerator;
+    }
+
     private function getRandomGenreName(): string
     {
-        return $this->faker->randomElement($this->dummyGenres);
+        return $this->getGenreNameGenerator()->randomElement($this->dummyGenres);
     }
 
     private function getRandomGenreNames($count = 1): array
