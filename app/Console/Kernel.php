@@ -69,5 +69,12 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('indexer:producers')
             ->daily();
+
+        $schedule->command('indexer:anime-sweeper')
+            ->daily();
+        
+        $schedule->command('indexer:manga-sweeper')
+            ->daily();
+
     }
 }
