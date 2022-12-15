@@ -13,7 +13,7 @@ class CharacterFactory extends JikanModelFactory
 
     protected $model = Character::class;
 
-    protected function definitionInternal()
+    protected function definitionInternal(): array
     {
         $mal_id = $this->createMalId();
         $url = $this->createMalUrl($mal_id, "character");

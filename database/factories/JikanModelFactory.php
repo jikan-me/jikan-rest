@@ -11,7 +11,7 @@ abstract class JikanModelFactory extends Factory
     /**
      * @inheritDoc
      */
-    public function definition()
+    public function definition(): array
     {
         /**
          * @var Serializer $serializer
