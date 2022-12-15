@@ -1,16 +1,15 @@
 <?php
 namespace Database\Factories;
 use App\Testing\JikanDataGenerator;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use MongoDB\BSON\UTCDateTime;
 
-abstract class GenreFactory extends Factory
+abstract class GenreFactory extends JikanModelFactory
 {
     use JikanDataGenerator;
 
     protected string $mediaType = "";
 
-    public function definition(): array
+    protected function definitionInternal(): array
     {
         $mal_id = $this->createMalId();
         $name = $this->getRandomGenreName();

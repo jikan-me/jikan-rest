@@ -1,12 +1,13 @@
 <?php
 namespace Database\Factories;
-use Illuminate\Database\Eloquent\Factories\Factory;
+
+use App\CarbonDateRange;
 use App\Anime;
 use App\Testing\JikanDataGenerator;
 use MongoDB\BSON\UTCDateTime;
 
 
-class AnimeFactory extends Factory
+class AnimeFactory extends JikanModelFactory
 {
     use JikanDataGenerator;
 
@@ -18,13 +19,12 @@ class AnimeFactory extends Factory
     protected $model = Anime::class;
 
 
-    public function definition(): array
+    protected function definitionInternal(): array
     {
         $mal_id = $this->createMalId();
         $title = $this->createTitle();
         $status = $this->faker->randomElement(["Currently Airing", "Completed", "Upcoming"]);
         [$aired_from, $aired_to] = $this->createActiveDateRange($status, "Currently Airing");
-        $test_base_url =  env('APP_URL');
 
         return [
             "mal_id" => $mal_id,
@@ -44,10 +44,7 @@ class AnimeFactory extends Factory
             "episodes" => $this->faker->randomElement([1, 12, 13, 16, 24, 48, 96, 128, 366]),
             "status" => $status,
             "airing" => $status == "Currently Airing",
-            "aired" => [
-                "from" => $aired_from->toAtomString(),
-                "to" => $aired_to,
-            ],
+            "aired" => new CarbonDateRange($aired_from, $aired_to),
             "duration" => "",
             "rating" => $this->faker->randomElement(["R - 17+ (violence & profanity)", "PG"]),
             "score" => $this->faker->randomFloat(2, 1.00, 9.99),
