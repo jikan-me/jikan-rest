@@ -3,18 +3,17 @@
 namespace Database\Factories;
 
 use App\Testing\JikanDataGenerator;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Character;
 use MongoDB\BSON\UTCDateTime;
 
 
-class CharacterFactory extends Factory
+class CharacterFactory extends JikanModelFactory
 {
     use JikanDataGenerator;
 
     protected $model = Character::class;
 
-    public function definition()
+    protected function definitionInternal()
     {
         $mal_id = $this->createMalId();
         $url = $this->createMalUrl($mal_id, "character");

@@ -1,17 +1,18 @@
 <?php
 namespace Database\Factories;
+
+use App\CarbonDateRange;
 use App\Testing\JikanDataGenerator;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Manga;
 use MongoDB\BSON\UTCDateTime;
 
-class MangaFactory extends Factory
+class MangaFactory extends JikanModelFactory
 {
     use JikanDataGenerator;
 
     protected $model = Manga::class;
 
-    public function definition()
+    protected function definitionInternal(): array
     {
         $mal_id = $this->createMalId();
         $title = $this->createTitle();
@@ -36,10 +37,7 @@ class MangaFactory extends Factory
             "volumes" => $this->faker->numberBetween(0, 55),
             "status" => $status,
             "publishing" => $status === "Finished",
-            "published" => [
-                "from" => $published_from->toAtomString(),
-                "to" => $published_to
-            ],
+            "published" => new CarbonDateRange($published_from, $published_to),
             "score" => $this->faker->randomFloat(2, 1.00, 9.99),
             "scored_by" => $this->faker->randomDigitNotNull(),
             "rank" => $this->faker->randomDigitNotNull(),
