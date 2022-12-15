@@ -115,7 +115,7 @@ trait JikanDataGenerator
     private function createActiveDateRange($status, $activeStatus): array
     {
         $from = $this->createRandomDateTime("-15 years");
-        $to = $status != $activeStatus ? $from->addDays($this->faker->numberBetween(1, 368))->toAtomString() : null;
+        $to = $status != $activeStatus ? $from->addDays($this->faker->numberBetween(1, 368)) : null;
         return [$from, $to];
     }
 

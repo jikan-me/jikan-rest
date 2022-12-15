@@ -7,7 +7,7 @@ use Jikan\Model\Common\DateProp;
 
 /**
  * Class representing a date range via Carbon objects.
- * 
+ *
  * Mainly used for testing.
  */
 class CarbonDateRange
