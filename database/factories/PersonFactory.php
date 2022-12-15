@@ -1,12 +1,11 @@
 <?php
 namespace Database\Factories;
 use App\Testing\JikanDataGenerator;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Person;
 use MongoDB\BSON\UTCDateTime;
 
 
-class PersonFactory extends Factory
+class PersonFactory extends JikanModelFactory
 {
     use JikanDataGenerator;
 
@@ -17,7 +16,7 @@ class PersonFactory extends Factory
      */
     protected $model = Person::class;
 
-    public function definition(): array
+    protected function definitionInternal(): array
     {
         $mal_id = $this->createMalId();
         $name = $this->faker->name();
