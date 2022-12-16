@@ -100,7 +100,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function statusParameterProvider(): array
+    public function commonParameterProvider(): array
     {
         return [
             [["status" => "airing"]],
@@ -109,6 +109,18 @@ class AnimeSearchEndpointTest extends TestCase
             [["status" => "Airing"]],
             [["status" => "Complete"]],
             [["status" => "Upcoming"]],
+            [["max_score" => "8"]],
+            [["min_score" => "6"]],
+            [["max_score" => "7", "min_score" => "3"]]
+        ];
+    }
+
+    public function invalidScoreParameterProvider(): array
+    {
+        return [
+            [["max_score" => "634638"], 15],
+            [["min_score" => "673473"], 0],
+            [["max_score" => "72344", "min_score" => "3532325"], 0]
         ];
     }
 
@@ -277,10 +289,39 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount(5, $content["data"]);
     }
 
+    public function testSearchByInvalidStatusParameter()
+    {
+        $params = [
+            "status" => "gibberish"
+        ];
+        $this->generateFiveSpecificAndTenRandomElementsInDb($params);
+        $content = $this->getJsonResponse($params);
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData(15);
+        $this->assertIsArray($content["data"]);
+        // it should return all, and disregard the gibberish filter
+        $this->assertCount(15, $content["data"]);
+    }
+
     /**
-     * @dataProvider statusParameterProvider
+     * @dataProvider invalidScoreParameterProvider
      */
-    public function testSearchByStatus($params)
+    public function testSearchByInvalidScoreParameters($params, $expectedCount)
+    {
+        $this->generateFiveSpecificAndTenRandomElementsInDb($params);
+        $content = $this->getJsonResponse($params);
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData($expectedCount);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount($expectedCount, $content["data"]);
+    }
+
+    /**
+     * @dataProvider commonParameterProvider
+     */
+    public function testSearchByCommonParams($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 

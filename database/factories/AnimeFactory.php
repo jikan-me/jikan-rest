@@ -49,7 +49,13 @@ class AnimeFactory extends JikanModelFactory
             "airing" => $status == "Currently Airing",
             "aired" => new CarbonDateRange($aired_from, $aired_to),
             "duration" => "",
-            "rating" => $this->faker->randomElement(["R - 17+ (violence & profanity)", "PG"]),
+            "rating" => $this->faker->randomElement([
+                "R - 17+ (violence & profanity)",
+                "PG - Children",
+                "PG-13 - Teens 13 or older",
+                "R+ - Mild Nudity",
+                "Rx - Hentai"
+            ]),
             "score" => $this->faker->randomFloat(2, 1.00, 9.99),
             "scored_by" => $this->faker->randomDigitNotNull(),
             "rank" => $this->faker->randomDigitNotNull(),
@@ -127,6 +133,11 @@ class AnimeFactory extends JikanModelFactory
         return $this->state($this->serializeStateDefinition($overrides));
     }
 
+    private function isScoreValueValid($score): bool
+    {
+        return $score <= 9.99 && $score >= 0.0;
+    }
+
     private function getOppositeOverridesFromQueryStringParameters(Collection $additionalParams): array
     {
         $overrides = [];
@@ -141,18 +152,30 @@ class AnimeFactory extends JikanModelFactory
         }
 
         if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
-            $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]));
+            $min_score = floatval($additionalParams["min_score"]);
+            if ($this->isScoreValueValid($min_score)) {
+                $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]));
+            }
         }
 
         if (!$additionalParams->has("min_score") && $additionalParams->has("max_score")) {
-            $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["max_score"]), 9.99);
+            $max_score = $additionalParams["max_score"];
+            if ($this->isScoreValueValid($max_score)) {
+                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["max_score"]), 9.99);
+            }
         }
 
         if ($additionalParams->has("min_score") && $additionalParams->has("max_score")) {
-            $overrides["score"] = $this->faker->randomElement([
-                $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"])),
-                $this->faker->randomFloat(2, floatval($additionalParams["max_score"]), 9.99)
-            ]);
+            $min_score = floatval($additionalParams["min_score"]);
+            $max_score = floatval($additionalParams["max_score"]);
+
+            if ($this->isScoreValueValid($min_score) && $this->isScoreValueValid($max_score))
+            {
+                $overrides["score"] = $this->faker->randomElement([
+                    $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"])),
+                    $this->faker->randomFloat(2, floatval($additionalParams["max_score"]), 9.99)
+                ]);
+            }
         }
 
         if ($additionalParams->has("status")) {
@@ -162,7 +185,8 @@ class AnimeFactory extends JikanModelFactory
                 "upcoming" => "Not yet aired"
             ];
 
-            $overrides["status"] = $this->faker->randomElement(array_diff(array_keys($statuses), [strtolower($additionalParams["status"])]));
+            $rndKey = $this->faker->randomElement(array_diff(array_keys($statuses), [strtolower($additionalParams["status"])]));
+            $overrides["status"] = $statuses[$rndKey];
         }
 
         if (($additionalParams->has("genres") && $additionalParams->has("genres_exclude")) || (
@@ -254,22 +278,39 @@ class AnimeFactory extends JikanModelFactory
         }
 
         if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
-            $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), 9.99);
+            $min_score = floatval($additionalParams["min_score"]);
+            if ($this->isScoreValueValid($min_score)) {
+                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), 9.99);
+            }
         }
 
         if (!$additionalParams->has("min_score") && $additionalParams->has("max_score")) {
-            $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["max_score"]));
+            $max_score = floatval($additionalParams["max_score"]);
+
+            if ($this->isScoreValueValid($max_score)) {
+                $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["max_score"]));
+            }
         }
 
         if ($additionalParams->has(["min_score", "max_score"])) {
-            $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), floatval($additionalParams["max_score"]));
+            $min_score = floatval($additionalParams["min_score"]);
+            $max_score = floatval($additionalParams["max_score"]);
+
+            if ($this->isScoreValueValid($min_score) && $this->isScoreValueValid($max_score)) {
+                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), floatval($additionalParams["max_score"]));
+            }
         }
 
         if ($additionalParams->has("status")) {
             $overrides["status"] = match (strtolower($additionalParams["status"])) {
                 "complete" => "Finished Airing",
                 "airing" => "Currently Airing",
-                "upcoming" => "Not yet aired"
+                "upcoming" => "Not yet aired",
+                default => $this->faker->randomElement([
+                    "Finished Airing",
+                    "Currently Airing",
+                    "Not yet aired"
+                ])
             };
         }
 
