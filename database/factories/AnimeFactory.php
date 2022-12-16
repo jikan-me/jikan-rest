@@ -159,10 +159,10 @@ class AnimeFactory extends JikanModelFactory
             $statuses = [
                 "complete" => "Finished Airing",
                 "airing" => "Currently Airing",
-                "upcoming" => "Upcoming"
+                "upcoming" => "Not yet aired"
             ];
 
-            $overrides["status"] = $this->faker->randomElement(array_diff(array_keys($statuses), [$additionalParams["status"]]));
+            $overrides["status"] = $this->faker->randomElement(array_diff(array_keys($statuses), [strtolower($additionalParams["status"])]));
         }
 
         if (($additionalParams->has("genres") && $additionalParams->has("genres_exclude")) || (
@@ -266,10 +266,10 @@ class AnimeFactory extends JikanModelFactory
         }
 
         if ($additionalParams->has("status")) {
-            $overrides["status"] = match ($additionalParams["status"]) {
+            $overrides["status"] = match (strtolower($additionalParams["status"])) {
                 "complete" => "Finished Airing",
                 "airing" => "Currently Airing",
-                "upcoming" => "Upcoming"
+                "upcoming" => "Not yet aired"
             };
         }
 
