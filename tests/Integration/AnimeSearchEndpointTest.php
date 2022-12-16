@@ -134,9 +134,9 @@ class AnimeSearchEndpointTest extends TestCase
     public function invalidRatingParameterProvider(): array
     {
         return [
-            [["rating" => "6263ssd"], 15],
-            [["rating" => "rx1"], 15],
-            [["rating" => "pg133"], 15]
+            [["rating" => "6263ssd"], 0],
+            [["rating" => "rx1"], 0],
+            [["rating" => "pg133"], 0]
         ];
     }
 
