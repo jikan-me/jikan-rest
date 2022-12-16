@@ -264,4 +264,36 @@ class AnimeSearchEndpointTest extends TestCase
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content["data"]);
     }
+
+    public function testTypeSenseSearchPagination()
+    {
+        // this should test https://github.com/jikan-me/jikan-rest/issues/298
+        $title = "awesome anime";
+        // typesense api only returns 250 hits max on one page
+        Anime::factory(255)->create([
+            "titles" => [
+                [
+                    "type" => "Default",
+                    "title" => $title
+                ]
+            ],
+            "title" => $title,
+            "title_english" => $title,
+            "title_japanese" => $title,
+            "title_synonyms" => [$title],
+        ]);
+        Anime::factory(5)->create();
+
+        $content = $this->getJsonResponse([
+            "q" => "awesome",
+            "page" => 2
+        ]);
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData(25, 255);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount(25, $content["data"]);
+        // https://github.com/jikan-me/jikan-rest/issues/298 shows that the array indexes start at 25, not from 0
+        $this->assertArrayHasKey(0, $content["data"]);
+    }
 }
