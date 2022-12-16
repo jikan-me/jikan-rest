@@ -100,6 +100,18 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
+    public function statusParameterProvider(): array
+    {
+        return [
+            [["status" => "airing"]],
+            [["status" => "complete"]],
+            [["status" => "upcoming"]],
+            [["status" => "Airing"]],
+            [["status" => "Complete"]],
+            [["status" => "Upcoming"]],
+        ];
+    }
+
     /**
      * @test
      */
@@ -253,6 +265,22 @@ class AnimeSearchEndpointTest extends TestCase
      * @dataProvider genresParameterCombinationsProvider
      */
     public function testSearchByGenres($params)
+    {
+        $this->generateFiveSpecificAndTenRandomElementsInDb($params);
+
+        $content = $this->getJsonResponse($params);
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData(5);
+        $this->assertIsArray($content["data"]);
+        // we created 5 elements according to parameters, so we expect 5 of them.
+        $this->assertCount(5, $content["data"]);
+    }
+
+    /**
+     * @dataProvider statusParameterProvider
+     */
+    public function testSearchByStatus($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
