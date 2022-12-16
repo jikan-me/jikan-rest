@@ -49,13 +49,7 @@ class AnimeFactory extends JikanModelFactory
             "airing" => $status == "Currently Airing",
             "aired" => new CarbonDateRange($aired_from, $aired_to),
             "duration" => "",
-            "rating" => $this->faker->randomElement([
-                "R - 17+ (violence & profanity)",
-                "PG - Children",
-                "PG-13 - Teens 13 or older",
-                "R+ - Mild Nudity",
-                "Rx - Hentai"
-            ]),
+            "rating" => $this->getRandomRating(),
             "score" => $this->faker->randomFloat(2, 1.00, 9.99),
             "scored_by" => $this->faker->randomDigitNotNull(),
             "rank" => $this->faker->randomDigitNotNull(),
@@ -133,6 +127,18 @@ class AnimeFactory extends JikanModelFactory
         return $this->state($this->serializeStateDefinition($overrides));
     }
 
+    private function getRandomRating(): string
+    {
+        return $this->faker->randomElement([
+            "G - All Ages",
+            "PG - Children",
+            "PG-13 - Teens 13 or older",
+            "R - 17+ (violence & profanity)",
+            "R+ - Mild Nudity",
+            "Rx - Hentai"
+        ]);
+    }
+
     private function isScoreValueValid($score): bool
     {
         return $score <= 9.99 && $score >= 0.0;
@@ -187,6 +193,19 @@ class AnimeFactory extends JikanModelFactory
 
             $rndKey = $this->faker->randomElement(array_diff(array_keys($statuses), [strtolower($additionalParams["status"])]));
             $overrides["status"] = $statuses[$rndKey];
+        }
+
+        if ($additionalParams->has("rating")) {
+            $ratings = [
+                "g" => "G - All Ages",
+                "pg" => "PG - Children",
+                "pg13" => "PG-13 - Teens 13 or older",
+                "r17" => "R - 17+ (violence & profanity)",
+                "r" => "R+ - Mild Nudity",
+                "rx" => "Rx - Hentai",
+            ];
+            $rndKey = $this->faker->randomElement(array_diff(array_keys($ratings), [strtolower($additionalParams["rating"])]));
+            $overrides["rating"] = $ratings[$rndKey];
         }
 
         if (($additionalParams->has("genres") && $additionalParams->has("genres_exclude")) || (
@@ -311,6 +330,18 @@ class AnimeFactory extends JikanModelFactory
                     "Currently Airing",
                     "Not yet aired"
                 ])
+            };
+        }
+
+        if ($additionalParams->has("rating")) {
+            $overrides["rating"] = match (strtolower($additionalParams["rating"])) {
+                "g" => "G - All Ages",
+                "pg" => "PG - Children",
+                "pg13" => "PG-13 - Teens 13 or older",
+                "r17" => "R - 17+ (violence & profanity)",
+                "r" => "R+ - Mild Nudity",
+                "rx" => "Rx - Hentai",
+                default => $this->getRandomRating()
             };
         }
 

@@ -111,7 +111,13 @@ class AnimeSearchEndpointTest extends TestCase
             [["status" => "Upcoming"]],
             [["max_score" => "8"]],
             [["min_score" => "6"]],
-            [["max_score" => "7", "min_score" => "3"]]
+            [["max_score" => "7", "min_score" => "3"]],
+            [["rating" => "pg"]],
+            [["rating" => "rx"]],
+            [["rating" => "r"]],
+            [["rating" => "pg13"]],
+            [["rating" => "g"]],
+            [["rating" => "r17"]],
         ];
     }
 
@@ -120,7 +126,17 @@ class AnimeSearchEndpointTest extends TestCase
         return [
             [["max_score" => "634638"], 15],
             [["min_score" => "673473"], 0],
-            [["max_score" => "72344", "min_score" => "3532325"], 0]
+            [["max_score" => "72344", "min_score" => "3532325"], 0],
+            [["max_score" => 1, "min_score" => 5], 0],
+        ];
+    }
+
+    public function invalidRatingParameterProvider(): array
+    {
+        return [
+            [["rating" => "6263ssd"], 15],
+            [["rating" => "rx1"], 15],
+            [["rating" => "pg133"], 15]
         ];
     }
 
@@ -332,6 +348,20 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertIsArray($content["data"]);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content["data"]);
+    }
+
+    /**
+     * @dataProvider invalidRatingParameterProvider
+     */
+    public function testSearchByInvalidRatingParameters($params, $expectedCount)
+    {
+        $this->generateFiveSpecificAndTenRandomElementsInDb($params);
+        $content = $this->getJsonResponse($params);
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData($expectedCount);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount($expectedCount, $content["data"]);
     }
 
     public function testTypeSenseSearchPagination()
