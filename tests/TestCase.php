@@ -5,17 +5,20 @@ use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Faker\Factory;
 use Faker\Generator;
+use Illuminate\Testing\TestResponse;
 use Laravel\Lumen\Testing\TestCase as LumenTestCase;
 
 abstract class TestCase extends LumenTestCase
 {
     use MakesHttpRequestsEx;
     protected Generator $faker;
+    protected int $maxResultsPerPage;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->faker = Factory::create();
+        $this->maxResultsPerPage = env("MAX_RESULTS_PER_PAGE", 25);
     }
 
     /**
@@ -47,5 +50,22 @@ abstract class TestCase extends LumenTestCase
             /** @noinspection PhpUndefinedMethodInspection */
             $this->beginDatabaseTransaction();
         }
+    }
+
+    public function assertPaginationData(int $expectedCount, ?int $expectedTotal = null, ?int $perPage = null): TestResponse
+    {
+        if (is_null($expectedTotal))
+        {
+            $expectedTotal = $expectedCount;
+        }
+
+        if (is_null($perPage))
+        {
+            $perPage = $this->maxResultsPerPage;
+        }
+
+        $this->response->assertJsonPath("pagination.items.count", $expectedCount);
+        $this->response->assertJsonPath("pagination.items.total", $expectedTotal);
+        return $this->response->assertJsonPath("pagination.items.per_page", $perPage);
     }
 }

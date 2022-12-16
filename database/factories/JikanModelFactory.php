@@ -16,7 +16,7 @@ abstract class JikanModelFactory extends Factory
         return $this->serializeStateDefinition($this->definitionInternal());
     }
 
-    protected function serializeStateDefinition($stateDefinition): array
+    public function serializeStateDefinition($stateDefinition): array
     {
         /**
          * @var Serializer $serializer

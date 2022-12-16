@@ -1,6 +1,7 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace Tests\Integration;
 use App\Anime;
+use App\CarbonDateRange;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Carbon;
@@ -55,7 +56,9 @@ class AnimeSearchEndpointTest extends TestCase
             [["start_date" => "2022"]],
             [["start_date" => "2012-05"]],
             [["start_date" => "2012-05-12"]],
-            [["start_date" => "2012-05-12", "page" => 1]],
+            [["start_date" => "2012-04-01"]],
+            [["start_date" => "2012-04-28"]],
+            [["start_date" => "2012-06-05", "page" => 1]],
         ];
     }
 
@@ -121,9 +124,7 @@ class AnimeSearchEndpointTest extends TestCase
         ]);
 
         $this->seeStatusCode(200);
-        $this->response->assertJsonPath("pagination.items.count", $limitCount);
-        $this->response->assertJsonPath("pagination.items.total", 25);
-        $this->response->assertJsonPath("pagination.items.per_page", $limitCount);
+        $this->assertPaginationData($limitCount, 25, $limitCount);
         $this->assertIsArray($content["data"]);
         $this->assertCount($limitCount, $content["data"]);
     }
@@ -138,9 +139,7 @@ class AnimeSearchEndpointTest extends TestCase
         $content = $this->getJsonResponse($params);
 
         $this->seeStatusCode(200);
-        $this->response->assertJsonPath("pagination.items.count", 15);
-        $this->response->assertJsonPath("pagination.items.total", 15);
-        $this->response->assertJsonPath("pagination.items.per_page", 25);
+        $this->assertPaginationData(15);
         $this->assertCount(15, $content["data"]);
     }
 
@@ -157,9 +156,7 @@ class AnimeSearchEndpointTest extends TestCase
         $paramStartDate = Carbon::parse($overrides["aired"]["from"]);
 
         $this->seeStatusCode(200);
-        $this->response->assertJsonPath("pagination.items.count", 5);
-        $this->response->assertJsonPath("pagination.items.total", 5);
-        $this->response->assertJsonPath("pagination.items.per_page", 25);
+        $this->assertPaginationData(5);
         $this->assertGreaterThanOrEqual(0, $paramStartDate->diff($actualStartDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content["data"]);
@@ -178,9 +175,7 @@ class AnimeSearchEndpointTest extends TestCase
         $paramEndDate = Carbon::parse($overrides["aired"]["to"]);
 
         $this->seeStatusCode(200);
-        $this->response->assertJsonPath("pagination.items.count", 5);
-        $this->response->assertJsonPath("pagination.items.total", 5);
-        $this->response->assertJsonPath("pagination.items.per_page", 25);
+        $this->assertPaginationData(5);
         $this->assertLessThanOrEqual(0, $actualEndDate->diff($paramEndDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content["data"]);
@@ -201,13 +196,57 @@ class AnimeSearchEndpointTest extends TestCase
         $paramEndDate = Carbon::parse($overrides["aired"]["to"]);
 
         $this->seeStatusCode(200);
-        $this->response->assertJsonPath("pagination.items.count", 5);
-        $this->response->assertJsonPath("pagination.items.total", 5);
-        $this->response->assertJsonPath("pagination.items.per_page", 25);
+        $this->assertPaginationData(5);
         $this->assertGreaterThanOrEqual(0, $paramStartDate->diff($actualStartDate)->days);
         $this->assertLessThanOrEqual(0, $actualEndDate->diff($paramEndDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content["data"]);
+    }
+
+    public function testSearchWithStartDateEqualToParam()
+    {
+        // we test here whether the filtering works by start date
+        // if the start date parameter's value exactly matches
+        // with one item in the database.
+        // this is mainly focused on mongodb features
+        $startDate = "2015-02-01";
+        $carbonStartDate = Carbon::parse($startDate);
+        Anime::factory(5)->create();
+        $f = Anime::factory(1);
+        $f->create($f->serializeStateDefinition([
+            "aired" => new CarbonDateRange($carbonStartDate, null)
+        ]));
+
+        $content = $this->getJsonResponse(["start_date" => $startDate]);
+        $actualStartDate = Carbon::parse(data_get($content, "data.0.aired.from"));
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData(1);
+        $this->assertEquals(0, $carbonStartDate->diff($actualStartDate)->days);
+        $this->assertCount(1, $content["data"]);
+    }
+
+    public function testSearchWithEndDateEqualToParam()
+    {
+        // we test here whether the filtering works by start date
+        // if the start date parameter's value exactly matches
+        // with one item in the database.
+        // this is mainly focused on mongodb features
+        $endDate = "2015-03-28";
+        $carbonEndDate = Carbon::parse($endDate);
+        Anime::factory(5)->create();
+        $f = Anime::factory(1);
+        $f->create($f->serializeStateDefinition([
+            "aired" => new CarbonDateRange(Carbon::parse("2015-01-05"), $carbonEndDate)
+        ]));
+
+        $content = $this->getJsonResponse(["end_date" => $endDate]);
+        $actualEndDate = Carbon::parse(data_get($content, "data.0.aired.to"));
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData(1);
+        $this->assertEquals(0, $carbonEndDate->diff($actualEndDate)->days);
+        $this->assertCount(1, $content["data"]);
     }
 
     /**
@@ -220,9 +259,7 @@ class AnimeSearchEndpointTest extends TestCase
         $content = $this->getJsonResponse($params);
 
         $this->seeStatusCode(200);
-        $this->response->assertJsonPath("pagination.items.count", 5);
-        $this->response->assertJsonPath("pagination.items.total", 5);
-        $this->response->assertJsonPath("pagination.items.per_page", 25);
+        $this->assertPaginationData(5);
         $this->assertIsArray($content["data"]);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content["data"]);
