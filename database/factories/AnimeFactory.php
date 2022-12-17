@@ -145,9 +145,9 @@ class AnimeFactory extends JikanModelFactory
                 return fn($i) => $randomDate->copy()->addDays($i);
             })()),
             "rating" => ((function() {
-                $validRatingNumbers = array_map(fn($el) => floatval($el), range(1, 9));
-                $validRatingNumbersCount = count($validRatingNumbers);
-                return fn($i) => $validRatingNumbers[$i % $validRatingNumbersCount];
+                $validRatingItems = array_values(AnimeSearchQueryBuilder::MAP_RATING);
+                $validRatingItemsCount = count($validRatingItems);
+                return fn($i) => $validRatingItems[$i % $validRatingItemsCount];
             })()),
             "title" => ((function() {
                $alphabet = range("a", "z");
