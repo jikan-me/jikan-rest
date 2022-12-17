@@ -4,6 +4,7 @@ namespace Database\Factories;
 use App\CarbonDateRange;
 use App\GenreAnime;
 use App\Anime;
+use App\Http\QueryBuilder\AnimeSearchQueryBuilder;
 use App\Testing\JikanDataGenerator;
 use Illuminate\Support\Collection;
 use MongoDB\BSON\UTCDateTime;
@@ -125,6 +126,60 @@ class AnimeFactory extends JikanModelFactory
         }
 
         return $this->state($this->serializeStateDefinition($overrides));
+    }
+
+    /**
+     * Helper function to create records in db in sequential order.
+     * The records are created with an increasing value for the specified field.
+     * @param string $orderByField The field to order items by. Used to generate increasing value for the field.
+     * @return Collection The created items/records
+     */
+    public function createManyWithOrder(string $orderByField): Collection
+    {
+        $count = $this->count ?? 3;
+        $items = collect();
+
+        $fieldValueGenerator = match($orderByField) {
+            "aired.from", "aired.to" => ((function() {
+                $randomDate = $this->createRandomDateTime("-5 years");
+                return fn($i) => $randomDate->copy()->addDays($i);
+            })()),
+            "rating" => ((function() {
+                $validRatingNumbers = array_map(fn($el) => floatval($el), range(1, 9));
+                $validRatingNumbersCount = count($validRatingNumbers);
+                return fn($i) => $validRatingNumbers[$i % $validRatingNumbersCount];
+            })()),
+            "title" => ((function() {
+               $alphabet = range("a", "z");
+               $alphabetCount = count($alphabet);
+               return fn($i) => $alphabet[$i % $alphabetCount];
+            })()),
+            "type" => ((function() {
+                $types = array_values(AnimeSearchQueryBuilder::MAP_TYPES);
+                $typesCount = count($types);
+                return fn($i) => $types[$i % $typesCount];
+            })()),
+            default => fn($i) => $i,
+        };
+
+        for ($i = 1; $i <= $count; $i++) {
+            if ($orderByField === "aired.from") {
+                $createdItem = $this->createOne($this->serializeStateDefinition([
+                    "aired" => new CarbonDateRange($fieldValueGenerator($i), null)
+                ]));
+            } else if ($orderByField === "aired.to") {
+                $createdItem = $this->createOne($this->serializeStateDefinition([
+                    "aired" => new CarbonDateRange(null, $fieldValueGenerator($i))
+                ]));
+            } else {
+                $createdItem = $this->createOne([
+                    $orderByField => $fieldValueGenerator($i)
+                ]);
+            }
+            $items->add($createdItem);
+        }
+
+        return $items;
     }
 
     private function getRandomRating(): string

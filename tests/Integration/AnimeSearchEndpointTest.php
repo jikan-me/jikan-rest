@@ -2,9 +2,12 @@
 namespace Tests\Integration;
 use App\Anime;
 use App\CarbonDateRange;
+use App\Http\QueryBuilder\AnimeSearchQueryBuilder;
+use App\Http\QueryBuilder\MediaSearchQueryBuilder;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class AnimeSearchEndpointTest extends TestCase
@@ -138,6 +141,18 @@ class AnimeSearchEndpointTest extends TestCase
             [["rating" => "rx1"], 0],
             [["rating" => "pg133"], 0]
         ];
+    }
+
+    public function orderByFieldMappingProvider(): array
+    {
+        $orderByFieldMappings = array_merge(MediaSearchQueryBuilder::ORDER_BY, AnimeSearchQueryBuilder::ORDER_BY);
+        $params = [];
+
+        foreach ($orderByFieldMappings as $paramName => $orderByField) {
+            $params[] = [$paramName, $orderByField];
+        }
+
+        return $params;
     }
 
     /**
@@ -348,6 +363,36 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertIsArray($content["data"]);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content["data"]);
+    }
+
+    /**
+     * @dataProvider orderByFieldMappingProvider
+     */
+    public function testOrdering(string $paramName, string $orderByField)
+    {
+        $expectedCount = 3;
+        $f = Anime::factory($expectedCount);
+        /**
+         * @var Collection $items
+         */
+        $items = $f->createManyWithOrder($orderByField);
+        $content = $this->getJsonResponse([
+            "orderBy" => $paramName
+        ]);
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData($expectedCount);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount($expectedCount, $content["data"]);
+        $expectedItems = $items->map(fn($elem) => data_get($elem, $orderByField));
+        $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, $orderByField));
+
+        if ($actualItems->first() instanceof Carbon && $expectedItems->first() instanceof Carbon) {
+            $expectedItems = $expectedItems->map(fn(Carbon $elem) => $elem->getTimestamp());
+            $actualItems = $actualItems->map(fn(Carbon $elem) => $elem->getTimestamp());
+        }
+
+        $this->assertEquals(0, $expectedItems->diff($actualItems)->count());
     }
 
     /**
