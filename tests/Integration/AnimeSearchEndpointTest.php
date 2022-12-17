@@ -368,7 +368,7 @@ class AnimeSearchEndpointTest extends TestCase
     /**
      * @dataProvider orderByFieldMappingProvider
      */
-    public function testOrdering(string $paramName, string $orderByField)
+    public function testOrderByQueryStringParameter(string $paramName, string $orderByField)
     {
         $expectedCount = 3;
         $f = Anime::factory($expectedCount);
@@ -377,7 +377,7 @@ class AnimeSearchEndpointTest extends TestCase
          */
         $items = $f->createManyWithOrder($orderByField);
         $content = $this->getJsonResponse([
-            "orderBy" => $paramName
+            "order_by" => $paramName
         ]);
 
         $this->seeStatusCode(200);
@@ -393,6 +393,7 @@ class AnimeSearchEndpointTest extends TestCase
         }
 
         $this->assertEquals(0, $expectedItems->diff($actualItems)->count());
+        $this->assertTrue($expectedItems->toArray() === $actualItems->toArray());
     }
 
     /**
