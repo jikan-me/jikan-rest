@@ -155,6 +155,17 @@ class AnimeSearchEndpointTest extends TestCase
         return $params;
     }
 
+    public function letterParameterProvider(): array
+    {
+        $letters = range("a", "f");
+        $result = [];
+        foreach ($letters as $letter) {
+            $result[] = [["letter" => $letter], 5];
+        }
+
+        return $result;
+    }
+
     /**
      * @test
      */
@@ -365,6 +376,25 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount(5, $content["data"]);
     }
 
+    public function testSearchByExplicitDefaultMinMaxScores()
+    {
+        // test for https://github.com/jikan-me/jikan-rest/issues/309
+        Anime::factory(5)
+            ->overrideFromQueryStringParameters([
+                "genres" => "1,2"
+            ])
+            ->create();
+        $content = $this->getJsonResponse([
+            "genres" => "1,2",
+            "min_score" => "0.0",
+            "max_score" => "10.0"
+        ]);
+        $this->seeStatusCode(200);
+        $this->assertPaginationData(5);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount(5, $content["data"]);
+    }
+
     /**
      * @dataProvider orderByFieldMappingProvider
      */
@@ -403,6 +433,36 @@ class AnimeSearchEndpointTest extends TestCase
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData($expectedCount);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount($expectedCount, $content["data"]);
+    }
+
+    /**
+     * @dataProvider letterParameterProvider
+     */
+    public function testSearchByLetter($params, $expectedCount)
+    {
+        $this->generateFiveSpecificAndTenRandomElementsInDb($params);
+        $content = $this->getJsonResponse($params);
+
+        $this->seeStatusCode(200);
+        $this->assertPaginationData($expectedCount);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount($expectedCount, $content["data"]);
+    }
+
+    public function testSearchByInvalidLetterParameter()
+    {
+        $expectedCount = 0;
+        $this->generateFiveSpecificAndTenRandomElementsInDb([
+            "letter" => "a"
+        ]);
+        $content = $this->getJsonResponse([
+            "letter" => "asd"
+        ]);
 
         $this->seeStatusCode(200);
         $this->assertPaginationData($expectedCount);

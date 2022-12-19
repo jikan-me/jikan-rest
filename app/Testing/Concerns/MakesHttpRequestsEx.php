@@ -23,10 +23,10 @@ trait MakesHttpRequestsEx
      * @param array $params
      * @return array
      */
-    public function getJsonResponse(array $params): array
+    public function getJsonResponse(array $params, ?string $baseUri = null): array
     {
         $parameters = http_build_query($params);
-        $uri = $this->getBaseUri() . "?" . $parameters;
+        $uri = $baseUri ?? $this->getBaseUri() . "?" . $parameters;
         $this->getJson($uri);
         return $this->response->json();
     }
