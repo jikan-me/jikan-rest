@@ -212,6 +212,24 @@ class AnimeFactory extends JikanModelFactory
             $overrides["type"] = $this->faker->randomElement(array_diff(array_keys($types), [$additionalParams["type"]]));
         }
 
+        if ($additionalParams->has("letter")) {
+            $alphabet = array_filter(range("a", "z"), fn ($elem) => $elem !== $additionalParams["letter"]);
+            $title = $this->faker->randomElement($alphabet) . $this->createTitle();
+            $a = [
+                "titles" => [
+                    [
+                        "type" => "Default",
+                        "title" => $title
+                    ]
+                ],
+                "title" => $title,
+                "title_english" => $title,
+                "title_japanese" => $title,
+                "title_synonyms" => [$title],
+            ];
+            $overrides = [...$overrides, ...$a];
+        }
+
         if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
             $min_score = floatval($additionalParams["min_score"]);
             if ($this->isScoreValueValid($min_score)) {
@@ -349,6 +367,23 @@ class AnimeFactory extends JikanModelFactory
                 "movie" => "Movie",
                 default => "TV"
             };
+        }
+
+        if ($additionalParams->has("letter")) {
+            $title = $additionalParams["letter"] . $this->createTitle();
+            $a = [
+                "titles" => [
+                    [
+                        "type" => "Default",
+                        "title" => $title
+                    ]
+                ],
+                "title" => $title,
+                "title_english" => $title,
+                "title_japanese" => $title,
+                "title_synonyms" => [$title],
+            ];
+            $overrides = [...$overrides, ...$a];
         }
 
         if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
