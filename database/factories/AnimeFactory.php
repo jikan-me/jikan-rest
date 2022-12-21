@@ -43,7 +43,7 @@ class AnimeFactory extends JikanMediaModelFactory
             "source" => $this->faker->randomElement(["Manga", "Original", "Novel"]),
             "episodes" => $this->faker->randomElement([1, 12, 13, 16, 24, 48, 96, 128, 366]),
             "status" => $status,
-            "airing" => $status == "Currently Airing",
+            "airing" => $status === "Currently Airing",
             "aired" => new CarbonDateRange($aired_from, $aired_to),
             "duration" => "",
             "rating" => $this->getRandomRating(),

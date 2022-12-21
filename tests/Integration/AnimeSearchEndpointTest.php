@@ -278,7 +278,10 @@ class AnimeSearchEndpointTest extends TestCase
         // this is mainly focused on mongodb features
         $startDate = "2015-02-01";
         $carbonStartDate = Carbon::parse($startDate);
-        Anime::factory(5)->create();
+        $fo = Anime::factory(5);
+        $fo->create($fo->serializeStateDefinition([
+            "aired" => new CarbonDateRange(Carbon::parse("2002-01-01"), Carbon::parse("2002-02-02"))
+        ]));
         $f = Anime::factory(1);
         $f->create($f->serializeStateDefinition([
             "aired" => new CarbonDateRange($carbonStartDate, null)
@@ -296,12 +299,15 @@ class AnimeSearchEndpointTest extends TestCase
     public function testSearchWithEndDateEqualToParam()
     {
         // we test here whether the filtering works by start date
-        // if the start date parameter's value exactly matches
+        // if the end date parameter's value exactly matches
         // with one item in the database.
         // this is mainly focused on mongodb features
         $endDate = "2015-03-28";
         $carbonEndDate = Carbon::parse($endDate);
-        Anime::factory(5)->create();
+        $fo = Anime::factory(5);
+        $fo->create($fo->serializeStateDefinition([
+            "aired" => new CarbonDateRange(Carbon::parse("2022-01-01"), Carbon::parse("2022-02-02"))
+        ]));
         $f = Anime::factory(1);
         $f->create($f->serializeStateDefinition([
             "aired" => new CarbonDateRange(Carbon::parse("2015-01-05"), $carbonEndDate)
