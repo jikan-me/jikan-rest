@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 
 abstract class JikanMediaModelFactory extends JikanModelFactory implements MediaModelFactory
 {
@@ -186,6 +187,15 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             else {
                 $overrides["status"] = $this->faker->randomElement(array_values($statusParamMap));
             }
+
+            $logicalActivityMarker = $this->descriptor->activityMarkerLogicalKeyName();
+
+            if (Str::contains(strtolower($overrides["status"]), strtolower($this->descriptor->statusParamMap()[$logicalActivityMarker]))) {
+                $overrides[$logicalActivityMarker] = true;
+            }
+            else {
+                $overrides[$logicalActivityMarker] = false;
+            }
         }
 
         if ($this->descriptor->hasRatingParam() && $additionalParams->has("rating")) {
@@ -304,6 +314,15 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
             $rndKey = $this->faker->randomElement(array_diff(array_keys($statuses), [strtolower($additionalParams["status"])]));
             $overrides["status"] = $statuses[$rndKey];
+
+            $logicalActivityMarker = $this->descriptor->activityMarkerLogicalKeyName();
+
+            if (Str::contains(strtolower($overrides["status"]), strtolower($this->descriptor->statusParamMap()[$logicalActivityMarker]))) {
+                $overrides[$logicalActivityMarker] = true;
+            }
+            else {
+                $overrides[$logicalActivityMarker] = false;
+            }
         }
 
         if ($this->descriptor->hasRatingParam() && $additionalParams->has("rating")) {
