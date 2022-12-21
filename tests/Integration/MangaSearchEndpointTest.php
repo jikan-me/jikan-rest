@@ -8,6 +8,7 @@ use App\Http\QueryBuilder\MediaSearchQueryBuilder;
 use App\Manga;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
@@ -411,6 +412,49 @@ class MangaSearchEndpointTest extends TestCase
 
         $this->assertEquals(0, $expectedItems->diff($actualItems)->count());
         $this->assertTrue($expectedItems->toArray() === $actualItems->toArray());
+    }
+
+    public function testOrderingByScoreWithKeywordSearch()
+    {
+        // test for issue https://github.com/jikan-me/jikan-rest/issues/332
+        $title = "awesome manga";
+        $items = Manga::factory(3)->state(new Sequence(
+            ["score" => 8.05],
+            ["score" => 7.15],
+            ["score" => 6.51],
+        ))->create([
+            "titles" => [
+                [
+                    "type" => "Default",
+                    "title" => $title
+                ]
+            ],
+            "title" => $title,
+            "title_english" => $title,
+            "title_japanese" => $title,
+            "title_synonyms" => [$title],
+        ]);
+        Manga::factory(3)->state(new Sequence(
+            ["score" => 3.05],
+            ["score" => 4.15],
+            ["score" => 1.51],
+        ))->create();
+
+        $content = $this->getJsonResponse([
+            "order_by" => "score",
+            "q" => "awesome",
+            "page" => 1,
+            "sort" => "desc",
+            "limit" => 15
+        ]);
+
+        $expectedItems = $items->map(fn($elem) => data_get($elem, "score"));
+        $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, "score"));
+
+        $this->assertPaginationData(3, 3, 15);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount(3, $content["data"]);
+        $this->assertCollectionsStrictlyEqual($expectedItems, $actualItems);
     }
 
     /**
