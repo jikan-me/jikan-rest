@@ -213,7 +213,6 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         if ($additionalParams->has("genres")) {
             $overrides["genres"] = [];
             $genreIds = explode(",", $additionalParams["genres"]);
-            $genreIds = $this->faker->randomElements($genreIds, $this->faker->numberBetween(0, count($genreIds)));
             foreach ($genreIds as $genreId) {
                 $m = $this->ensureGenreExists($genreId);
 
