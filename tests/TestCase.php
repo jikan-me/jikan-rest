@@ -3,7 +3,7 @@ namespace Tests;
 use App\Testing\Concerns\MakesHttpRequestsEx;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
-use Faker\Factory;
+use Faker\Factory as FakerFactory;
 use Faker\Generator;
 use Illuminate\Testing\TestResponse;
 use Laravel\Lumen\Testing\TestCase as LumenTestCase;
@@ -17,7 +17,7 @@ abstract class TestCase extends LumenTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->faker = Factory::create();
+        $this->faker = FakerFactory::create();
         $this->maxResultsPerPage = env("MAX_RESULTS_PER_PAGE", 25);
     }
 
@@ -31,6 +31,7 @@ abstract class TestCase extends LumenTestCase
         $app = require __DIR__.'/../bootstrap/app.php';
         $database = env('DB_DATABASE', 'jikan_tests');
         $app['config']->set('database.connections.mongodb.database', $database === 'jikan' ? 'jikan_tests' : $database);
+        $app->register(TestServiceProvider::class);
 
         return $app;
     }

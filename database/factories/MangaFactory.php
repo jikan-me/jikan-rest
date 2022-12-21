@@ -6,7 +6,7 @@ use App\Testing\JikanDataGenerator;
 use App\Manga;
 use MongoDB\BSON\UTCDateTime;
 
-class MangaFactory extends JikanModelFactory
+class MangaFactory extends JikanMediaModelFactory
 {
     use JikanDataGenerator;
 
