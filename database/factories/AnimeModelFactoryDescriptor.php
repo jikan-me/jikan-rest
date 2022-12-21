@@ -43,4 +43,9 @@ class AnimeModelFactoryDescriptor implements MediaModelFactoryDescriptor
     {
         return GenreAnime::factory($count, $state);
     }
+
+    public function activityMarkerLogicalKeyName(): string
+    {
+        return "airing";
+    }
 }

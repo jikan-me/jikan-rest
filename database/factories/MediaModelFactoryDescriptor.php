@@ -9,6 +9,8 @@ interface MediaModelFactoryDescriptor
 {
     public function activityMarkerKeyName(): string;
 
+    public function activityMarkerLogicalKeyName(): string;
+
     public function typeParamMap(): array;
 
     public function statusParamMap(): array;

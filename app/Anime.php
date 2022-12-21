@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Http\HttpHelper;
+use Database\Factories\AnimeFactory;
+use Illuminate\Support\Facades\App;
 use Jikan\Jikan;
 use Jikan\Request\Anime\AnimeRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -214,5 +216,10 @@ class Anime extends JikanApiSearchableModel
                 "direction" => "desc"
             ],
         ];
+    }
+
+    protected static function newFactory()
+    {
+        return App::make(AnimeFactory::class);
     }
 }

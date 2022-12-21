@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Http\HttpHelper;
+use Database\Factories\MangaFactory;
+use Illuminate\Support\Facades\App;
 use Jikan\Jikan;
 use Jikan\Request\Manga\MangaRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -137,5 +139,10 @@ class Manga extends JikanApiSearchableModel
                 "direction" => "desc"
             ],
         ];
+    }
+
+    protected static function newFactory()
+    {
+        return App::make(MangaFactory::class);
     }
 }

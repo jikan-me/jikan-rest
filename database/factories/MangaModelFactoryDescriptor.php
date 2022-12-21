@@ -44,4 +44,9 @@ class MangaModelFactoryDescriptor implements MediaModelFactoryDescriptor
     {
         return GenreManga::factory($count, $state);
     }
+
+    public function activityMarkerLogicalKeyName(): string
+    {
+        return "publishing";
+    }
 }

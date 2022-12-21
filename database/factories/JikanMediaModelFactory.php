@@ -16,26 +16,33 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
     protected ?MediaModelFactoryDescriptor $descriptor;
 
-    protected function configureInternal(): self
+    public function __construct(
+        MediaModelFactoryDescriptor $descriptor,
+        ?int        $count = null,
+        ?Collection $states = null,
+        ?Collection $has = null,
+        ?Collection $for = null,
+        ?Collection $afterMaking = null,
+        ?Collection $afterCreating = null,
+                    $connection = null,
+        ?Collection $recycle = null)
     {
-        // contextual binding / service location
-        App::call([$this, "withMediaModelFactoryDescriptor"]);
-        return $this;
-    }
-
-    public function configure()
-    {
-        return $this->configureInternal();
+        parent::__construct($count, $states, $has, $for, $afterMaking, $afterCreating, $connection, $recycle);
+        $this->descriptor = $descriptor;
     }
 
     protected function newInstance(array $arguments = []): self
     {
-        return parent::newInstance($arguments)->configureInternal();
-    }
-
-    public function withMediaModelFactoryDescriptor(MediaModelFactoryDescriptor $descriptor): void
-    {
-        $this->descriptor = $descriptor;
+        return App::makeWith(static::class, array_merge([
+            'count' => $this->count,
+            'states' => $this->states,
+            'has' => $this->has,
+            'for' => $this->for,
+            'afterMaking' => $this->afterMaking,
+            'afterCreating' => $this->afterCreating,
+            'connection' => $this->connection,
+            'recycle' => $this->recycle,
+        ], $arguments));
     }
 
     /**

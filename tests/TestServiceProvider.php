@@ -17,9 +17,6 @@ class TestServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->app->singleton(MediaModelFactoryDescriptor::class, AnimeModelFactoryDescriptor::class);
-        $this->app->singleton(MediaModelFactoryDescriptor::class, MangaModelFactoryDescriptor::class);
-
         $this->app->when(AnimeFactory::class)
             ->needs(MediaModelFactoryDescriptor::class)
             ->give(AnimeModelFactoryDescriptor::class);
