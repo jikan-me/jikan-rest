@@ -410,10 +410,6 @@ class AnimeSearchEndpointTest extends TestCase
             "order_by" => $paramName
         ]);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData($expectedCount);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount($expectedCount, $content["data"]);
         $expectedItems = $items->map(fn($elem) => data_get($elem, $orderByField));
         $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, $orderByField));
 
@@ -422,8 +418,11 @@ class AnimeSearchEndpointTest extends TestCase
             $actualItems = $actualItems->map(fn(Carbon $elem) => $elem->getTimestamp());
         }
 
-        $this->assertEquals(0, $expectedItems->diff($actualItems)->count());
-        $this->assertTrue($expectedItems->toArray() === $actualItems->toArray());
+        $this->seeStatusCode(200);
+        $this->assertPaginationData($expectedCount);
+        $this->assertIsArray($content["data"]);
+        $this->assertCount($expectedCount, $content["data"]);
+        $this->assertCollectionsStrictlyEqual($expectedItems, $actualItems);
     }
 
     /**

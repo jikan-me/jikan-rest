@@ -5,6 +5,7 @@ use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
+use Illuminate\Support\Collection;
 use Illuminate\Testing\TestResponse;
 use Laravel\Lumen\Testing\TestCase as LumenTestCase;
 
@@ -68,5 +69,11 @@ abstract class TestCase extends LumenTestCase
         $this->response->assertJsonPath("pagination.items.count", $expectedCount);
         $this->response->assertJsonPath("pagination.items.total", $expectedTotal);
         return $this->response->assertJsonPath("pagination.items.per_page", $perPage);
+    }
+
+    public function assertCollectionsStrictlyEqual(Collection $expectedItems, Collection $actualItems): void
+    {
+        $this->assertEquals(0, $expectedItems->diff($actualItems)->count());
+        $this->assertEquals($expectedItems->toArray(), $actualItems->toArray());
     }
 }
