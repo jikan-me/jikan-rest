@@ -93,11 +93,11 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
         $type = $requestParameters->get("type");
         $status = $requestParameters->get("status");
 
-        if (!is_null($start_date)) {
+        if (!empty($start_date)) {
             $builder = $this->filterByStartDate($builder, $this->formatIsoDateTime($start_date));
         }
 
-        if (!is_null($end_date)) {
+        if (!empty($end_date)) {
             $builder = $this->filterByEndDate($builder, $this->formatIsoDateTime($end_date));
         }
 
