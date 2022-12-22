@@ -4,6 +4,7 @@ namespace App\Http\QueryBuilder;
 
 use App\Http\QueryBuilder\Traits\PaginationParameterResolver;
 use App\Services\ScoutSearchService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\ArrayShape;
@@ -70,7 +71,24 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         $q = $requestParameters->get("q");
 
         if ($this->isSearchIndexUsed() && !empty($q)) {
-            $builder = $this->scoutSearchService->search($modelClass, $q);
+            $orderBy = $requestParameters->get("order_by");
+            $sort = $requestParameters->get("sort");
+            $searchOptions = [];
+
+            // todo: validate whether the specified field exists on the model
+            if (!empty($orderBy)) {
+                $searchOptions["order_by"] = $orderBy;
+            } else {
+                $searchOptions["order_by"] = null;
+            }
+
+            if (!empty($sort) && in_array($sort, ["asc", "desc"])) {
+                $searchOptions["sort_direction_descending"] = $sort == "desc";
+            } else {
+                $searchOptions["sort_direction_descending"] = false;
+            }
+            $builder = $this->scoutSearchService->search($modelClass, $q, $searchOptions["order_by"],
+                $searchOptions["sort_direction_descending"]);
         } else {
             // If "q" is not set, OR search indexes are disabled, we just get a query builder for the model.
             // This way we can have a single place where we get the query builder from.
@@ -104,11 +122,11 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
                         '$search' => $q
                     ],
                 ], [
-                    'score' => [
+                    'textMatchScore' => [
                         '$meta' => 'textScore'
                     ]
                 ])
-                ->orderBy('score', ['$meta' => 'textScore']);
+                ->orderBy('textMatchScore', 'desc');
         }
 
         // The ->filter() call is a local model scope function, which applies filters based on the query string
@@ -184,7 +202,7 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
         ];
     }
 
-    public function paginateBuilder(Request $request, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function paginateBuilder(Request $request, \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $results): LengthAwarePaginator
     {
         ['limit' => $limit, 'page' => $page] = $this->getPaginateParameters($request);
 
@@ -197,6 +215,9 @@ abstract class SearchQueryBuilder implements SearchQueryBuilderService
             // In that method the "$limit" member variable is being check whether it's null or it has value.
             // If it's set to a number then the result set will be limited which we do the pagination on.
             // If it's set to null, then the pagination will be done on the whole result set.
+            /**
+             * @var LengthAwarePaginator $paginated
+             */
             $paginated = $scoutBuilder
                 ->jikanPaginate(
                     $limit,

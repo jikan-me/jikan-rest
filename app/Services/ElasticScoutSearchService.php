@@ -16,23 +16,28 @@ class ElasticScoutSearchService implements ScoutSearchService
      * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
      * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
      */
-    public function search(object|string $modelClass, string $q): \Laravel\Scout\Builder
+    public function search(object|string $modelClass, string $q, ?string $orderByField = null,
+                           bool $sortDirectionDescending = false): \Laravel\Scout\Builder
     {
-        return $modelClass::search($q, function(\Elastic\ElasticSearch\Client $client, \ONGR\ElasticsearchDSL\Search $body) use ($modelClass) {
+        return $modelClass::search($q, function(\Elastic\ElasticSearch\Client $client, \ONGR\ElasticsearchDSL\Search $body) use ($modelClass, $orderByField, $sortDirectionDescending) {
             $modelInstance = new $modelClass;
 
             if ($modelInstance instanceof JikanApiSearchableModel) {
-                // if the model specifies search index sort order, use it
-                $sortByFields = $modelInstance->getSearchIndexSortBy();
-                if (!is_null($sortByFields)) {
-                    foreach ($sortByFields as $f) {
-                        $direction = match ($f['direction']) {
-                            'asc' => FieldSort::ASC,
-                            'desc' => FieldSort::DESC,
-                        };
+                if (!is_null($orderByField)) {
+                    $body->addSort(new FieldSort($orderByField, ['order' => $sortDirectionDescending ? FieldSort::DESC : FieldSort::ASC]));
+                } else {
+                    // if the model specifies search index sort order, use it
+                    $sortByFields = $modelInstance->getSearchIndexSortBy();
+                    if (!is_null($sortByFields)) {
+                        foreach ($sortByFields as $f) {
+                            $direction = match ($f['direction']) {
+                                'asc' => FieldSort::ASC,
+                                'desc' => FieldSort::DESC,
+                            };
 
-                        $sort = new FieldSort($f['field'], ['order' => $direction]);
-                        $body->addSort($sort);
+                            $sort = new FieldSort($f['field'], ['order' => $direction]);
+                            $body->addSort($sort);
+                        }
                     }
                 }
             }

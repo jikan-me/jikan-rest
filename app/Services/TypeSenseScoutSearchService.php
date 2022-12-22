@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\JikanApiSearchableModel;
+use Illuminate\Support\Str;
 use Typesense\Documents;
 
 class TypeSenseScoutSearchService implements ScoutSearchService
@@ -25,9 +26,10 @@ class TypeSenseScoutSearchService implements ScoutSearchService
      * @throws \Http\Client\Exception
      * @throws \Typesense\Exceptions\TypesenseClientError
      */
-    public function search(object|string $modelClass, string $q): \Laravel\Scout\Builder
+    public function search(object|string $modelClass, string $q, ?string $orderByField = null,
+                           bool $sortDirectionDescending = false): \Laravel\Scout\Builder
     {
-        return $modelClass::search($q, function (Documents $documents, string $query, array $options) use ($modelClass) {
+        return $modelClass::search($q, function (Documents $documents, string $query, array $options) use ($modelClass, $orderByField, $sortDirectionDescending) {
             // let's enable exhaustive search
             // which will make Typesense consider all variations of prefixes and typo corrections of the words
             // in the query exhaustively, without stopping early when enough results are found.
@@ -56,6 +58,16 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                     }
                     $sortBy = rtrim($sortBy, ',');
                     $options['sort_by'] = $sortBy;
+                }
+
+                // override ordering field
+                if (!is_null($orderByField)) {
+                    $options['sort_by'] = "_text_match:desc,$orderByField:" . ($sortDirectionDescending ? "desc" : "asc");
+                }
+
+                // override overall sorting direction
+                if (is_null($orderByField) && $sortDirectionDescending && array_key_exists("sort_by", $options) && Str::contains($options["sort_by"], "asc")) {
+                    $options["sort_by"] = Str::replace("asc", "desc", $options["sort_by"]);
                 }
             }
 

@@ -6,7 +6,8 @@ use App\Helpers\Guards;
 
 class DefaultScoutSearchService implements ScoutSearchService
 {
-    public function search(object|string $modelClass, string $q): \Laravel\Scout\Builder
+    public function search(object|string $modelClass, string $q, ?string $orderByField = null,
+                           bool $sortDirectionDescending = false): \Laravel\Scout\Builder
     {
         Guards::shouldBeMongoDbModel($modelClass);
 

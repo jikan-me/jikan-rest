@@ -2,13 +2,18 @@
 
 namespace App\Services;
 
+use Laravel\Scout\Builder;
+
 interface ScoutSearchService
 {
     /**
      * Executes a search operation via Laravel Scout on the provided model class.
      * @param object|string $modelClass
      * @param string $q
-     * @return \Laravel\Scout\Builder
+     * @param string|null $orderByField
+     * @param bool $sortDirectionDescending
+     * @return Builder
      */
-    public function search(object|string $modelClass, string $q): \Laravel\Scout\Builder;
+    public function search(object|string $modelClass, string $q, ?string $orderByField = null,
+                           bool $sortDirectionDescending = false): \Laravel\Scout\Builder;
 }

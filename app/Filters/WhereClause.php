@@ -14,7 +14,7 @@ class WhereClause extends BaseClause
 
     protected function validate($value): bool
     {
-        return !is_null($value);
+        return !in_array(null, (array)$value);
     }
 
     private function orWhere($query, $filter, $values): Builder
