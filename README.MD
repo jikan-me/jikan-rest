@@ -18,7 +18,7 @@ The word _Jikan_ literally translates to _Time_ in Japanese (**時間**). And th
 This is Jikan REST API **v4** - which has been merged into master branch. If you're looking for deploying a v3 build, view the v3 branch for installation instructions:
 https://github.com/jikan-me/jikan-rest/tree/v3
 
-⚠ v3 is now maintaince-only and will stop receiving updates once it's discontinued from the public API.
+⚠ v3 is discontinued and will no longer receive any updates.
 
 ### Manual installation
 Please read the [manual installation guide](https://github.com/jikan-me/jikan-rest/wiki).
@@ -47,9 +47,9 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 |------------|----------|
 | JavaScript | [JikanJS](https://github.com/zuritor/jikanjs) by Zuritor<br>🆕 **(v4)** [JikanJS](https://github.com/mateoaranda/jikanjs) by Mateo Aranda |
 | Java       | [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs<br>🆕 **(v4)** [reactive-jikan](https://github.com/SandroHc/reactive-jikan) by Sandro Marques<br>🆕 **(v4)** [Jaikan](https://github.com/ShindouMihou/Jaikan) by ShindouMihou |
-| Python     | [JikanPy](https://github.com/abhinavk99/jikanpy) by Abhinav Kasamsetty |
+| Python     | [JikanPy](https://github.com/abhinavk99/jikanpy) by Abhinav Kasamsetty<br>🆕 **(v4)** [jikan4snek](https://github.com/ScathachGrip/jikan4snek) by Indrawan I. |
 | Node.js    | [jikan-node](https://github.com/xy137/jikan-node) by xy137<br>[jikan-nodejs](https://github.com/ribeirogab/jikan-nodejs) by ribeirogab<br>🆕 **(v4)** [Jikan4JS](https://github.com/rizzzigit/jikan4.js) by RizzziGit<br>🆕 **(v4)** [jikan-api.js](https://github.com/OpenianDevelopment/jikan-api.js) by OpenianDev |
-| TypeScript | [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard<br>[jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco |
+| TypeScript | [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard<br>[jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco<br>🆕 **(v4)** [jikan-ts](https://github.com/tutkli/jikan-ts) by Clara Castillo |
 | PHP        | [jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe |
 | .NET       | 🆕 **(v4)** [Jikan.net](https://github.com/Ervie/jikan.net) by Ervie |
 | Elixir     | [JikanEx](https://github.com/seanbreckenridge/jikan_ex) by Sean Breckenridge |
@@ -81,8 +81,11 @@ We have a free [REST API service](https://jikan.moe), if you wish to support us 
 ### Patrons
 
 - Aaron Treinish
+- Abdelhafid Achtaou
 - Aika Fujiwara
+- Bobby Williams
 - Cesar Irad Mendoza
+- CrafterSama
 - Fro116
 - Jason Weatherly
 - Jesse
