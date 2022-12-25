@@ -111,21 +111,21 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
                 ->where('status', $status);
         }
 
-        if ($score !== 0) {
+        if (!is_null($score)) {
             $score = (float)$score;
 
             $builder = $builder
                 ->where('score', '>=', $score);
         }
 
-        if ($min_score !== null) {
+        if (!is_null($min_score)) {
             $min_score = (float)$min_score;
 
             $builder = $builder
                 ->where('score', '>=', $min_score);
         }
 
-        if ($max_score !== null) {
+        if (!is_null($max_score)) {
             $max_score = (float)$max_score;
 
             $builder = $builder
