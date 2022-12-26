@@ -368,6 +368,13 @@ class MangaSearchEndpointTest extends TestCase
     {
         // test for https://github.com/jikan-me/jikan-rest/issues/309
         Manga::factory(5)
+            ->state(new Sequence(
+                ["score" => null],
+                ["score" => $this->faker->randomFloat(2, 1.0, 9.99)],
+                ["score" => $this->faker->randomFloat(2, 1.0, 9.99)],
+                ["score" => $this->faker->randomFloat(2, 1.0, 9.99)],
+                ["score" => $this->faker->randomFloat(2, 1.0, 9.99)],
+            ))
             ->overrideFromQueryStringParameters([
                 "genres" => "1,2"
             ])
