@@ -35,7 +35,7 @@ abstract class MediaSearchQueryBuilder extends SearchQueryBuilder
     {
         $parameters = parent::sanitizeParameters($parameters);
 
-        if (!$parameters->offsetExists("score")) {
+        if (!$parameters->has("score")) {
             $parameters["score"] = 0;
         }
 

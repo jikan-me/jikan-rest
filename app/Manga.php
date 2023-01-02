@@ -2,7 +2,10 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
+use App\Concerns\MediaFilters;
 use App\Http\HttpHelper;
+use Carbon\CarbonImmutable;
 use Database\Factories\MangaFactory;
 use Illuminate\Support\Facades\App;
 use Jikan\Jikan;
@@ -11,11 +14,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Manga extends JikanApiSearchableModel
 {
-    use HasFactory;
+    use HasFactory, MediaFilters, FilteredByLetter;
 
-    // note that here we skip "score", "min_score", "max_score", "rating" and others because they need special logic
-    // to set the correct filtering on the ORM.
-    protected array $filters = ["order_by", "status", "type", "sort"];
+    protected array $filters = ["order_by", "status", "type", "sort", "max_score", "min_score", "score", "start_date", "end_date", "magazine", "magazines", "letter"];
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +35,7 @@ class Manga extends JikanApiSearchableModel
      */
     protected $appends = [];
 
+    protected ?string $displayNameFieldName = "title";
 
     /**
      * The table associated with the model.
@@ -50,6 +52,48 @@ class Manga extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'expiresAt', 'request_hash'
     ];
+
+    /** @noinspection PhpUnused */
+    public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("published.from", $date->setTime(0, 0)->toAtomString());
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("published.to", $date->setTime(0, 0)->toAtomString());
+    }
+
+    public function filterByMagazine(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        if (empty($value)) {
+            return $query;
+        }
+
+        $magazine = (int)$value;
+        return $query
+            ->orWhere('serializations.mal_id', $magazine);
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByMagazines(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        if (empty($value)) {
+            return $query;
+        }
+
+        $magazines = explode(',', $value);
+        foreach ($magazines as $magazine) {
+            if (empty($magazine)) {
+                continue;
+            }
+
+            $query = $this->filterByMagazine($query, $value);
+        }
+
+        return $query;
+    }
 
     public static function scrape(int $id)
     {

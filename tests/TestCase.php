@@ -8,6 +8,7 @@ use Faker\Generator;
 use Illuminate\Support\Collection;
 use Illuminate\Testing\TestResponse;
 use Laravel\Lumen\Testing\TestCase as LumenTestCase;
+use Spatie\Enum\Faker\FakerEnumProvider;
 
 abstract class TestCase extends LumenTestCase
 {
@@ -19,6 +20,7 @@ abstract class TestCase extends LumenTestCase
     {
         parent::setUp();
         $this->faker = FakerFactory::create();
+        $this->faker->addProvider(new FakerEnumProvider($this->faker));
         $this->maxResultsPerPage = env("MAX_RESULTS_PER_PAGE", 25);
     }
 

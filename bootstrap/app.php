@@ -5,6 +5,7 @@ use App\Providers\SerializerFactory;
 use PackageVersions\Versions;
 
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../app/Support/helpers.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -107,6 +108,7 @@ $app->configure('queue');
 $app->configure('controller-to-table-mapping');
 $app->configure('controller');
 $app->configure('roadrunner');
+$app->configure('data');
 
 $app->register(\pushrbx\LumenRoadRunner\ServiceProvider::class);
 $app->register(\SwaggerLume\ServiceProvider::class);
@@ -115,6 +117,8 @@ $app->register(\App\Providers\SourceHeartbeatProvider::class);
 $app->register(\App\Providers\EventServiceProvider::class);
 $app->register(\App\Providers\AppServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
+$app->register(Spatie\LaravelData\LaravelDataServiceProvider::class);
+$app->register(\App\Providers\JikanEnumServiceProvider::class);
 
 if (env('REPORTING') && strtolower(env('REPORTING_DRIVER')) === 'sentry') {
     $app->register(\Sentry\Laravel\ServiceProvider::class);

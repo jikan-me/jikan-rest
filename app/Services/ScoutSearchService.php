@@ -14,6 +14,6 @@ interface ScoutSearchService
      * @param bool $sortDirectionDescending
      * @return Builder
      */
-    public function search(object|string $modelClass, string $q, ?string $orderByField = null,
+    public function search(string $q, ?string $orderByField = null,
                            bool $sortDirectionDescending = false): \Laravel\Scout\Builder;
 }

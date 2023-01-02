@@ -2,25 +2,29 @@
 
 namespace App\Services;
 
+use App\Contracts\Repository;
 use App\JikanApiSearchableModel;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
 
 class ElasticScoutSearchService implements ScoutSearchService
 {
+    public function __construct(private readonly Repository $repository)
+    {
+    }
+
     /**
      * Executes a search operation via Laravel Scout on the provided model class.
-     * @param object|string $modelClass
      * @param string $q
      * @return \Laravel\Scout\Builder
      * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
      * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
      * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
      */
-    public function search(object|string $modelClass, string $q, ?string $orderByField = null,
+    public function search(string $q, ?string $orderByField = null,
                            bool $sortDirectionDescending = false): \Laravel\Scout\Builder
     {
-        return $modelClass::search($q, function(\Elastic\ElasticSearch\Client $client, \ONGR\ElasticsearchDSL\Search $body) use ($modelClass, $orderByField, $sortDirectionDescending) {
-            $modelInstance = new $modelClass;
+        return $this->repository->search($q, function(\Elastic\ElasticSearch\Client $client, \ONGR\ElasticsearchDSL\Search $body) use ($orderByField, $sortDirectionDescending) {
+            $modelInstance = $this->repository->createEntity();
 
             if ($modelInstance instanceof JikanApiSearchableModel) {
                 if (!is_null($orderByField)) {

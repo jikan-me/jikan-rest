@@ -2,12 +2,13 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use App\Concerns\FilteredByLetter;
 use Jikan\Request\User\UserProfileRequest;
 
 class Profile extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use FilteredByLetter;
+    protected array $filters = ["order_by", "sort", "letter"];
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +25,8 @@ class Profile extends JikanApiSearchableModel
      * @var string
      */
     protected $table = 'users';
+
+    protected ?string $displayNameFieldName = "username";
 
     /**
      * The attributes excluded from the model's JSON form.

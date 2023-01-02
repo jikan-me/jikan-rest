@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Http\Resources\V4\AnimeCollection;
-use App\Http\Resources\V4\CharacterCollection;
-use App\Http\Resources\V4\MangaCollection;
-use App\Http\Resources\V4\PersonCollection;
-use App\Http\Resources\V4\ResultsResource;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\Helper\Constants;
-use Jikan\Request\Reviews\RecentReviewsRequest;
+use App\Dto\QueryTopAnimeItemsCommand;
+use App\Dto\QueryTopCharactersCommand;
+use App\Dto\QueryTopMangaItemsCommand;
+use App\Dto\QueryTopPeopleCommand;
+use App\Dto\QueryTopReviewsCommand;
 
-
-class TopController extends ControllerWithQueryBuilderProvider
+class TopController extends Controller
 {
 
     /**
@@ -33,7 +28,7 @@ class TopController extends ControllerWithQueryBuilderProvider
      *          name="filter",
      *          in="query",
      *          required=false,
-     *          @OA\Schema(type="string",enum={"airing", "upcoming", "bypopularity", "favorite"})
+     *          @OA\Schema(ref="#/components/schemas/top_anime_filter)
      *      ),
      *
      *     @OA\Parameter(
@@ -65,9 +60,9 @@ class TopController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function anime(Request $request)
+    public function anime(QueryTopAnimeItemsCommand $request)
     {
-        return $this->preparePaginatedResponse(AnimeCollection::class, "top_anime", $request);
+        return $this->mediator->send($request);
     }
 
     /**
@@ -87,7 +82,7 @@ class TopController extends ControllerWithQueryBuilderProvider
      *          name="filter",
      *          in="query",
      *          required=false,
-     *          @OA\Schema(type="string",enum={"publishing", "upcoming", "bypopularity", "favorite"})
+     *          @OA\Schema(ref="#/components/schemas/top_manga_filter)
      *      ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
@@ -106,9 +101,9 @@ class TopController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function manga(Request $request)
+    public function manga(QueryTopMangaItemsCommand $request)
     {
-        return $this->preparePaginatedResponse(MangaCollection::class, "top_manga", $request);
+        return $this->mediator->send($request);
     }
 
     /**
@@ -133,18 +128,9 @@ class TopController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function people(Request $request)
+    public function people(QueryTopPeopleCommand $request)
     {
-        $results = $this->getQueryBuilder("people", $request)
-            ->whereNotNull('member_favorites')
-            ->where('member_favorites', '>', 0)
-            ->orderBy('member_favorites', 'desc');
-
-        $results = $this->getPaginator("people", $request, $results);
-
-        return new PersonCollection(
-            $results
-        );
+        return $this->mediator->send($request);
     }
 
     /**
@@ -169,18 +155,9 @@ class TopController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function characters(Request $request)
+    public function characters(QueryTopCharactersCommand $request)
     {
-        $results = $this->getQueryBuilder("character", $request)
-            ->whereNotNull('member_favorites')
-            ->where('member_favorites', '>', 0)
-            ->orderBy('member_favorites', 'desc');
-
-        $results = $this->getPaginator("character", $request, $results);
-
-        return new CharacterCollection(
-            $results
-        );
+        return $this->mediator->send($request);
     }
 
     /**
@@ -276,33 +253,8 @@ class TopController extends ControllerWithQueryBuilderProvider
      *     ),
      *  ),
      */
-    public function reviews(Request $request)
+    public function reviews(QueryTopReviewsCommand $request)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $data = $this->jikan->getRecentReviews(
-                new RecentReviewsRequest(Constants::RECENT_REVIEW_BEST_VOTED, $page)
-            );
-            $response = \json_decode($this->serializer->serialize($data, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($request);
     }
 }

@@ -2,15 +2,18 @@
 
 namespace App\Services;
 
-use App\Helpers\Guards;
+use App\Contracts\Repository;
 
 class DefaultScoutSearchService implements ScoutSearchService
 {
-    public function search(object|string $modelClass, string $q, ?string $orderByField = null,
+    public function __construct(private readonly Repository $repository)
+    {
+    }
+
+    public function search(string $q, ?string $orderByField = null,
                            bool $sortDirectionDescending = false): \Laravel\Scout\Builder
     {
-        Guards::shouldBeMongoDbModel($modelClass);
 
-        return $modelClass::search($q);
+        return $this->repository->search($q);
     }
 }

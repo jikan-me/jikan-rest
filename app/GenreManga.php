@@ -14,7 +14,7 @@ class GenreManga extends JikanApiSearchableModel
 {
     use HasFactory;
 
-    protected array $filters = ["order_by", "sort"];
+    protected array $filters = [];
 
     /**
      * The attributes that are mass assignable.

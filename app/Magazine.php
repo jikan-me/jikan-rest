@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
 use Jikan\Jikan;
 use Jikan\Request\Magazine\MagazinesRequest;
 
@@ -11,7 +12,8 @@ use Jikan\Request\Magazine\MagazinesRequest;
  */
 class Magazine extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use FilteredByLetter;
+    protected array $filters = ["order_by", "sort", "letter"];
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +31,7 @@ class Magazine extends JikanApiSearchableModel
      */
     protected $table = 'magazines';
 
+    protected ?string $displayNameFieldName = "name";
 
     /**
      * The attributes excluded from the model's JSON form.

@@ -112,6 +112,11 @@ trait JikanDataGenerator
         return Carbon::createFromTimestamp($this->faker->dateTimeBetween($startDate)->getTimestamp());
     }
 
+    /**
+     * @param $status
+     * @param $activeStatus
+     * @return array<Carbon>
+     */
     private function createActiveDateRange($status, $activeStatus): array
     {
         $from = $this->createRandomDateTime("-15 years");

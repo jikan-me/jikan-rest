@@ -23,12 +23,12 @@ trait JikanApiQueryBuilder
 
     /**
      * @template T
-     * @param T $resourceCollectionClass
+     * @param class-string<T> $resourceCollectionClass
      * @param string $resourceTypeName
      * @param \Illuminate\Http\Request $request
      * @return T
      */
-    protected function preparePaginatedResponse(string|object $resourceCollectionClass, string $resourceTypeName, Request $request)
+    protected function preparePaginatedResponse(string $resourceCollectionClass, string $resourceTypeName, Request $request)
     {
         $results = $this->getQueryBuilder($resourceTypeName, $request);
         $paginator = $this->getPaginator($resourceTypeName, $request, $results);

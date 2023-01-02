@@ -33,13 +33,6 @@ class GenreCollection extends ResourceCollection
      *              ref="#/components/schemas/genre"
      *          ),
      *      ),
-     *  ),
-     *
-     *  @OA\Schema(
-     *    schema="genre_query_filter",
-     *    description="Filter genres by type",
-     *    type="string",
-     *    enum={"genres","explicit_genres", "themes", "demographics"}
      *  )
      */
     public function toArray($request)

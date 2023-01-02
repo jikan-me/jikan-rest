@@ -54,12 +54,7 @@ class MagazineController extends ControllerWithQueryBuilderProvider
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
-     *  @OA\Schema(
-     *    schema="magazines_query_orderby",
-     *    description="Order by magazine data",
-     *    type="string",
-     *    enum={"mal_id", "name", "count"}
-     *  )
+     *
      */
     public function main(Request $request): MagazineCollection
     {

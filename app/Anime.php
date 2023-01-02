@@ -2,7 +2,12 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
+use App\Concerns\MediaFilters;
+use App\Enums\AnimeRatingEnum;
+use App\Enums\AnimeTypeEnum;
 use App\Http\HttpHelper;
+use Carbon\CarbonImmutable;
 use Database\Factories\AnimeFactory;
 use Illuminate\Support\Facades\App;
 use Jikan\Jikan;
@@ -11,11 +16,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Anime extends JikanApiSearchableModel
 {
-    use HasFactory;
+    use HasFactory, MediaFilters, FilteredByLetter;
 
-    // note that here we skip "score", "min_score", "max_score", "rating" and others because they need special logic
-    // to set the correct filtering on the ORM.
-    protected array $filters = ["order_by", "status", "type", "sort"];
+    protected array $filters = ["order_by", "status", "type", "sort", "max_score", "min_score", "score", "rating", "start_date", "end_date", "producer", "producers", "letter"];
     /**
      * The attributes that are mass assignable.
      *
@@ -24,6 +27,8 @@ class Anime extends JikanApiSearchableModel
     protected $fillable = [
         'mal_id','url','title','title_english','title_japanese','title_synonyms', 'titles', 'images', 'type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres', 'explicit_genres', 'themes', 'demographics', 'opening_themes','ending_themes'
     ];
+
+    protected ?string $displayNameFieldName = "title";
 
     /**
      * The accessors to append to the model's array form.
@@ -122,6 +127,68 @@ class Anime extends JikanApiSearchableModel
             'timezone' => null,
             'string' => null
         ];
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByLetter(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("title", "like", "{$value}%");
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, AnimeTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("type", $value->label);
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByRating(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, AnimeRatingEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("rating", $value->label);
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("aired.from", $date->setTime(0, 0)->toAtomString());
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("aired.to", $date->setTime(0, 0)->toAtomString());
+    }
+
+    public function filterByProducer(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        if (empty($value)) {
+            return $query;
+        }
+
+        $producer = (int)$value;
+        return $query
+            ->orWhere('producers.mal_id', $producer)
+            ->orWhere('licensors.mal_id', $producer)
+            ->orWhere('studios.mal_id', $producer);
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByProducers(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        if (empty($value)) {
+            return $query;
+        }
+
+        $producers = explode(',', $value);
+        foreach ($producers as $producer) {
+            if (empty($producer)) {
+                continue;
+            }
+
+            $query = $this->filterByProducer($query, $value);
+        }
+
+        return $query;
     }
 
     public static function scrape(int $id)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Contracts\Mediator;
 use App\Http\HttpHelper;
 use App\Providers\SerializerFactory;
 use Illuminate\Http\Request;
@@ -70,17 +71,20 @@ class Controller extends BaseController
 
     protected string $fingerprint;
 
+    protected Mediator $mediator;
+
     /**
      * AnimeController constructor.
      *
      * @param Request $request
      * @param MalClient $jikan
      */
-    public function __construct(Request $request, MalClient $jikan)
+    public function __construct(Request $request, MalClient $jikan, Mediator $mediator)
     {
         $this->serializer = SerializerFactory::createV4();
         $this->jikan = $jikan;
         $this->fingerprint = HttpHelper::resolveRequestFingerprint($request);
+        $this->mediator = $mediator;
     }
 
     protected  function isExpired($request, $results) : bool

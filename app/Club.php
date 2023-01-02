@@ -2,11 +2,16 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
+use App\Enums\ClubCategoryEnum;
+use App\Enums\ClubTypeEnum;
 use Jikan\Request\Club\ClubRequest;
 
 class Club extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use FilteredByLetter;
+
+    protected array $filters = ["order_by", "sort", "letter", "category", "type"];
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +29,8 @@ class Club extends JikanApiSearchableModel
      */
     protected $appends = ['images'];
 
+    protected ?string $displayNameFieldName = "title";
+
     /**
      * The table associated with the model.
      *
@@ -39,6 +46,18 @@ class Club extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'request_hash', 'expiresAt', 'images'
     ];
+
+    /** @noinspection PhpUnused */
+    public function filterByCategory(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubCategoryEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("category", $value->label);
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("access", $value->label);
+    }
 
     public static function scrape(int $id)
     {

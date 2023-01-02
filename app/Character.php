@@ -2,15 +2,16 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
 use Jikan\Jikan;
 use Jikan\Request\Character\CharacterRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Character extends JikanApiSearchableModel
 {
-    use HasFactory;
+    use HasFactory, FilteredByLetter;
 
-    protected array $filters = ["order_by", "sort"];
+    protected array $filters = ["order_by", "sort", "letter"];
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +29,8 @@ class Character extends JikanApiSearchableModel
      */
     protected $appends = ['images', 'favorites'];
 
+    protected ?string $displayNameFieldName = "name";
+
     /**
      * The table associated with the model.
      *
@@ -44,6 +47,7 @@ class Character extends JikanApiSearchableModel
         '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images', 'member_favorites'
     ];
 
+    /** @noinspection PhpUnused */
     public function getFavoritesAttribute()
     {
         return $this->attributes['member_favorites'];
