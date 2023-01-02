@@ -10,8 +10,13 @@ class ProducerControllerTest extends TestCase
             ->seeJsonStructure(['data'=>[
                 [
                     'mal_id',
-                    'name',
                     'url',
+                    'titles',
+                    'images',
+                    'count',
+                    'favorites',
+                    'established',
+                    'about',
                     'count'
                 ]
             ]]);

@@ -84,7 +84,7 @@ class GithubReport
         $report->phpVersion = PHP_VERSION;
 
         $report->redisRunning = false;
-        if (env('CACHING') && env('CACHE_DRIVER') === 'redis') {
+        if (env('CACHING') && strtolower(env('CACHE_DRIVER')) === 'redis') {
             try {
                 $report->redisRunning = trim(app('redis')->ping()) === 'PONG' ? "Connected" : "Disconnected";
             } catch (ConnectionException $e) {

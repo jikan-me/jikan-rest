@@ -27,14 +27,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        ModifyCacheMethod::class,
-        ModifyCacheDriver::class,
-        ClearQueuedJobs::class,
         CacheRemove::class,
         CommonIndexer::class,
         AnimeScheduleIndexer::class,
         CurrentSeasonIndexer::class,
-        ManageMicrocaching::class,
         AnimeIndexer::class,
         MangaIndexer::class,
         GenreIndexer::class,

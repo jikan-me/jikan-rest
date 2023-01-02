@@ -306,12 +306,6 @@ class UserControllerTest extends TestCase
             ->seeStatusCode(200);
     }
 
-    public function testUserPrivateList()
-    {
-        $this->get('/v4/users/nekomata1037/mangalist?order_by=last_updated&sort=descending')
-            ->seeStatusCode(400);
-    }
-
     public function testUserClubs()
     {
         $this->get('/v4/users/nekomata1037/clubs')

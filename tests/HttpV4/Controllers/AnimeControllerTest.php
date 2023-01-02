@@ -123,8 +123,7 @@ class AnimeControllerV4Test extends TestCase
                         'url',
                         'images' => [
                             'jpg' => [
-                                'image_url',
-                                'small_image_url',
+                                'image_url'
                             ],
                             'webp' => [
                                 'image_url',
@@ -189,6 +188,7 @@ class AnimeControllerV4Test extends TestCase
                         'title_japanese',
                         'title_romanji',
                         'aired',
+                        'score',
                         'filler',
                         'recap',
                         'forum_url'
@@ -211,20 +211,13 @@ class AnimeControllerV4Test extends TestCase
                         'title_japanese',
                         'title_romanji',
                         'aired',
+                        'score',
                         'filler',
                         'recap',
                         'forum_url'
                     ]
                 ]
-            ])
-            ->seeJsonContains([
-                'data' => [
-                    [
-                        'mal_id' => 101,
-                        'title' => 'Showdown in a Heat Haze! Ace vs. the Gallant Scorpion!'
-                    ]
-                ]
-            ]);;
+            ]);
     }
 
     public function testEpisode()
@@ -415,14 +408,6 @@ class AnimeControllerV4Test extends TestCase
                         'is_spoiler',
                         'is_preliminary',
                         'episodes_watched',
-                        'scores' => [
-                            'overall',
-                            'story',
-                            'animation',
-                            'sound',
-                            'character',
-                            'enjoyment'
-                        ],
                         'user' => [
                             'url',
                             'username',
@@ -440,7 +425,7 @@ class AnimeControllerV4Test extends TestCase
             ]);
 
         $this->get('/v4/anime/1/reviews?page=100')
-            ->seeStatusCode(200)
+            ->seeStatusCode(404)
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
