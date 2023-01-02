@@ -46,6 +46,7 @@ class MangaIndexer extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->ids = [];
     }
 
     /**
@@ -151,7 +152,7 @@ class MangaIndexer extends Command
         );
 
         $ids = array_merge($ids['sfw'], $ids['nsfw']);
-        Storage::put('indexer/manga_mal_id.json', json_encode($this->ids));
+        Storage::put('indexer/manga_mal_id.json', json_encode($ids));
 
         return json_decode(Storage::get('indexer/manga_mal_id.json'));
     }
