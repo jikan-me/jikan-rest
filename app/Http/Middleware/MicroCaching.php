@@ -35,10 +35,12 @@ class MicroCaching
             }
         }
 
+        // Allow bypass of caching if APP_KEY supplied in auth header
         if ($request->header('auth') === env('APP_KEY')) {
             return $next($request);
         }
 
+        // cache /v*/* paths only
         if (
             empty($request->segments())
             || !isset($request->segments()[1])
@@ -46,21 +48,13 @@ class MicroCaching
             return $next($request);
         }
 
-        if (
-            !env('CACHING')
-            || !env('MICROCACHING')
-            || env('CACHE_DRIVER') !== 'redis'
-        ) {
-            return $next($request);
-        }
-
-        $fingerprint = "microcache:".HttpHelper::resolveRequestFingerprint($request);
+        $fingerprint = sha1(HttpHelper::resolveRequestFingerprint($request));
 
         // if cache exists, return cache
-        if (app('redis')->exists($fingerprint)) {
+        if (Cache::has($fingerprint)) {
             return response()
                 ->json(
-                   \json_decode(app('redis')->get($fingerprint), true)
+                    \json_decode(Cache::get($fingerprint), true)
                 );
         }
 
@@ -68,14 +62,13 @@ class MicroCaching
         $response = $next($request);
 
         try {
-            app('redis')->set(
+            Cache::add(
                 $fingerprint,
                 json_encode(
                     $next($request)->getData()
-                )
+                ),
+                env('MICROCACHING_EXPIRE', 60)
             );
-
-            app('redis')->expire($fingerprint, env('MICROCACHING_EXPIRE', 5));
 
         } catch (\Exception $e) {
             // ->getData() is a BadMethodCallException if HTTP status is not 200

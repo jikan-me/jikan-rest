@@ -93,8 +93,7 @@ class MangaControllerV4Test extends TestCase
                         'url',
                         'images' => [
                             'jpg' => [
-                                'image_url',
-                                'small_image_url',
+                                'image_url'
                             ],
                             'webp' => [
                                 'image_url',
@@ -237,13 +236,6 @@ class MangaControllerV4Test extends TestCase
                         'is_spoiler',
                         'is_preliminary',
                         'chapters_read',
-                        'scores' => [
-                            'overall',
-                            'story',
-                            'art',
-                            'character',
-                            'enjoyment'
-                        ],
                         'user' => [
                             'url',
                             'username',
@@ -261,7 +253,7 @@ class MangaControllerV4Test extends TestCase
             ]);
 
         $this->get('/v4/manga/1/reviews?page=100')
-            ->seeStatusCode(200)
+            ->seeStatusCode(404)
             ->seeJsonStructure([
                 'pagination' => [
                     'last_visible_page',
