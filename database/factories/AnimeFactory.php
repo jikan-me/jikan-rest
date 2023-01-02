@@ -55,7 +55,7 @@ class AnimeFactory extends JikanModelFactory
             "favorites" => $this->faker->randomDigitNotNull(),
             "synopsis" => "test",
             "background" => "test",
-            "premiered" => $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]),
+            "premiered" => $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]) . " " . $aired_from->year,
             "broadcast" => [
                 "day" => "",
                 "time" => "",

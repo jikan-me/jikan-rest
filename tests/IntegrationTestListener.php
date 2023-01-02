@@ -70,11 +70,9 @@ class IntegrationTestListener implements TestListener
 
     public function startTest(\PHPUnit\Framework\Test $test): void
     {
-        // TODO: Implement startTest() method.
     }
 
     public function endTest(\PHPUnit\Framework\Test $test, float $time): void
     {
-        // TODO: Implement endTest() method.
     }
 }
