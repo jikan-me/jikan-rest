@@ -32,6 +32,7 @@ class MangaFactory extends JikanModelFactory
             "title_english" => $title,
             "title_japanese" => $title,
             "title_synonyms" => [$title],
+            "images" => [],
             "type" => $this->faker->randomElement(["Manga", "Light Novel", "Web Novel"]),
             "chapters" => $this->faker->numberBetween(1, 255),
             "volumes" => $this->faker->numberBetween(0, 55),

@@ -35,6 +35,7 @@ class AnimeFactory extends JikanModelFactory
                     "title" => $title
                 ]
             ],
+            "images" => [],
             "title" => $title,
             "title_english" => $title,
             "title_japanese" => $title,
