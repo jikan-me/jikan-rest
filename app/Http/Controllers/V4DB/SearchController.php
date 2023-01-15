@@ -8,6 +8,7 @@ use App\Dto\ClubSearchCommand;
 use App\Dto\MangaSearchCommand;
 use App\Dto\PeopleSearchCommand;
 use App\Dto\ProducersSearchCommand;
+use App\Dto\UserByIdLookupCommand;
 use App\Dto\UsersSearchCommand;
 use App\Http\Resources\V4\ResultsResource;
 use Illuminate\Http\Request;
@@ -518,29 +519,7 @@ class SearchController extends Controller
      */
     public function userById(Request $request, int $id)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = ['results'=>$this->jikan->getUsernameById(new UsernameByIdRequest($id))];
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send(UserByIdLookupCommand::from($request, $id));
     }
 
     /**

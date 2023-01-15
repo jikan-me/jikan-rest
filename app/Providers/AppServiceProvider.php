@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Contracts\AnimeRepository;
+use App\Contracts\CachedScraperService;
 use App\Contracts\CharacterRepository;
 use App\Contracts\ClubRepository;
 use App\Contracts\MagazineRepository;
@@ -15,18 +16,39 @@ use App\Contracts\RequestHandler;
 use App\Contracts\UnitOfWork;
 use App\Contracts\UserRepository;
 use App\Dto\QueryTopPeopleCommand;
+use App\Features\AnimeEpisodeLookupHandler;
+use App\Features\AnimeEpisodesLookupHandler;
+use App\Features\AnimeExternalLookupHandler;
+use App\Features\AnimeForumLookupHandler;
 use App\Features\AnimeGenreListHandler;
+use App\Features\AnimeMoreInfoLookupHandler;
+use App\Features\AnimeNewsLookupHandler;
+use App\Features\AnimePicturesLookupHandler;
+use App\Features\AnimeRecommendationsLookupHandler;
+use App\Features\AnimeRelationsLookupHandler;
+use App\Features\AnimeReviewsLookupHandler;
 use App\Features\AnimeSearchHandler;
+use App\Features\AnimeCharactersLookupHandler;
+use App\Features\AnimeStaffLookupHandler;
+use App\Features\AnimeStatsLookupHandler;
+use App\Features\AnimeStreamingLookupHandler;
+use App\Features\AnimeThemesLookupHandler;
+use App\Features\AnimeVideosEpisodesLookupHandler;
+use App\Features\AnimeVideosLookupHandler;
 use App\Features\CharacterSearchHandler;
 use App\Features\ClubSearchHandler;
 use App\Features\MagazineSearchHandler;
+use App\Features\MangaGenreListHandler;
 use App\Features\MangaSearchHandler;
 use App\Features\PeopleSearchHandler;
 use App\Features\ProducerSearchHandler;
+use App\Features\QueryAnimeHandler;
+use App\Features\QueryFullAnimeHandler;
 use App\Features\QueryTopAnimeItemsHandler;
 use App\Features\QueryTopCharactersHandler;
 use App\Features\QueryTopMangaItemsHandler;
 use App\Features\QueryTopReviewsHandler;
+use App\Features\UserByIdLookupHandler;
 use App\Features\UserSearchHandler;
 use App\GenreAnime;
 use App\GenreManga;
@@ -52,6 +74,7 @@ use App\Repositories\DefaultPeopleRepository;
 use App\Repositories\DefaultProducerRepository;
 use App\Repositories\DefaultUserRepository;
 use App\Repositories\MangaGenresRepository;
+use App\Services\DefaultCachedScraperService;
 use App\Services\DefaultQueryBuilderService;
 use App\Services\DefaultScoutSearchService;
 use App\Services\ElasticScoutSearchService;
@@ -67,6 +90,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
+use Jikan\MyAnimeList\MalClient;
 use Laravel\Scout\Builder as ScoutBuilder;
 use Typesense\LaravelTypesense\Typesense;
 
@@ -195,6 +219,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(MangaGenresRepository::class);
 
         $this->app->singleton(UnitOfWork::class, JikanUnitOfWork::class);
+        $this->app->singleton(CachedScraperService::class, DefaultCachedScraperService::class);
     }
 
     private function registerRequestHandlers()
@@ -209,9 +234,7 @@ class AppServiceProvider extends ServiceProvider
          * Validation for requests is specified in the DTOs.
          * Querying/Filtering entirely happens on the model side.
          * The lines below explicitly define the mapping between request handlers and repositories.
-         * Repositories are just a bit of abstraction over models. (A step away from magic class strings)
-         * Every request handler gets a dedicated instance of QueryBuilderService which will be configured with a
-         * specific repository instance.
+         * Repositories are just a bit of abstraction over models.
          */
         $this->app->when(DefaultMediator::class)
             ->needs(RequestHandler::class)
@@ -229,11 +252,10 @@ class AppServiceProvider extends ServiceProvider
                     ClubSearchHandler::class => $unitOfWorkInstance->clubs(),
                     MagazineSearchHandler::class => $unitOfWorkInstance->magazines(),
                     ProducerSearchHandler::class => $unitOfWorkInstance->producers(),
-                    UserSearchHandler::class => $unitOfWorkInstance->users()
                 ];
                 $requestHandlers = [];
                 foreach ($searchRequestHandlersDescriptors as $handlerClass => $repositoryInstance) {
-                    $requestHandlers[] = $this->app->make($handlerClass, [
+                    $requestHandlers[] = $app->make($handlerClass, [
                         $app->make(DefaultQueryBuilderService::class, [
                             static::makeSearchService($app, $searchIndexesEnabled, $repositoryInstance),
                             $app->make($searchIndexesEnabled ? ScoutBuilderPaginatorService::class : EloquentBuilderPaginatorService::class)
@@ -249,23 +271,64 @@ class AppServiceProvider extends ServiceProvider
                 ];
 
                 foreach ($queryTopItemsDescriptors as $handlerClass => $repositoryInstance) {
-                    $requestHandlers[] = $this->app->make($handlerClass, [
+                    $requestHandlers[] = $app->make($handlerClass, [
                         $repositoryInstance,
                         // top queries don't use the search engine, so it's enough for them to use eloquent paginator
-                        $this->app->make(EloquentBuilderPaginatorService::class)
+                        $app->make(EloquentBuilderPaginatorService::class)
                     ]);
                 }
 
-                $genreRequestHandlerDescriptors = [
+                // request handlers which only depend on a repository instance
+                $requestHandlersWithOnlyRepositoryDependency = [
                     AnimeGenreListHandler::class => $unitOfWorkInstance->animeGenres(),
-                    MangaGenresRepository::class => $unitOfWorkInstance->mangaGenres()
+                    MangaGenreListHandler::class => $unitOfWorkInstance->mangaGenres(),
                 ];
 
-                foreach ($genreRequestHandlerDescriptors as $handlerClass => $repositoryInstance) {
-                    $requestHandlers[] = $this->app->make($handlerClass, [$repositoryInstance]);
+                foreach ($requestHandlersWithOnlyRepositoryDependency as $handlerClass => $repositoryInstance) {
+                    $requestHandlers[] = $app->make($handlerClass, [$repositoryInstance]);
                 }
 
-                $requestHandlers[] = $this->app->make(QueryTopReviewsHandler::class);
+                // request handlers which are fetching data through the jikan library from MAL, and caching the result.
+                $requestHandlersWithScraperService = [
+                    QueryFullAnimeHandler::class => $unitOfWorkInstance->anime(),
+                    QueryAnimeHandler::class => $unitOfWorkInstance->anime(),
+                    UserSearchHandler::class => $unitOfWorkInstance->documents("common"),
+                    QueryTopReviewsHandler::class => $unitOfWorkInstance->documents("common"),
+                    UserByIdLookupHandler::class => $unitOfWorkInstance->documents("common"),
+                    AnimeCharactersLookupHandler::class => $unitOfWorkInstance->documents("anime_characters_staff"),
+                    AnimeStaffLookupHandler::class => $unitOfWorkInstance->documents("anime_characters_staff"),
+                    AnimeEpisodesLookupHandler::class => $unitOfWorkInstance->documents("anime_episodes"),
+                    AnimeEpisodeLookupHandler::class => $unitOfWorkInstance->documents("anime_episode"),
+                    AnimeNewsLookupHandler::class => $unitOfWorkInstance->documents("anime_news"),
+                    AnimeForumLookupHandler::class => $unitOfWorkInstance->documents("anime_forum"),
+                    AnimeVideosLookupHandler::class => $unitOfWorkInstance->documents("anime_videos"),
+                    AnimeVideosEpisodesLookupHandler::class => $unitOfWorkInstance->documents("anime_videos_episodes"),
+                    AnimePicturesLookupHandler::class => $unitOfWorkInstance->documents("anime_pictures"),
+                    AnimeStatsLookupHandler::class => $unitOfWorkInstance->documents("anime_stats"),
+                    AnimeMoreInfoLookupHandler::class => $unitOfWorkInstance->documents("anime_moreinfo"),
+                    AnimeRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("anime_recommendations"),
+                    AnimeReviewsLookupHandler::class => $unitOfWorkInstance->documents("anime_reviews"),
+                    AnimeRelationsLookupHandler::class => $unitOfWorkInstance->anime(),
+                    AnimeExternalLookupHandler::class => $unitOfWorkInstance->anime(),
+                    AnimeStreamingLookupHandler::class => $unitOfWorkInstance->anime(),
+                    AnimeThemesLookupHandler::class => $unitOfWorkInstance->anime(),
+                ];
+
+                foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
+                    $jikan = $app->make(MalClient::class);
+                    $serializer = $app->make("SerializerV4");
+                    $requestHandlers[] = $app->make($handlerClass, [
+                        $app->make(DefaultCachedScraperService::class,
+                            [$repositoryInstance, $jikan, $serializer])
+                    ]);
+                }
+
+                $requestHandlersWithNoDependencies = [
+                ];
+
+                foreach ($requestHandlersWithNoDependencies as $handlerClass) {
+                    $requestHandlers[] = $this->app->make($handlerClass);
+                }
 
                 return $requestHandlers;
             });

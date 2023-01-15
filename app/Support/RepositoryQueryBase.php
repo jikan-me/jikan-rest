@@ -2,11 +2,11 @@
 
 namespace App\Support;
 use Laravel\Scout\Builder as ScoutBuilder;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Query\Builder;
 
 class RepositoryQueryBase
 {
-    private ?EloquentBuilder $queryableBuilder;
+    private ?Builder $queryableBuilder;
     private ?ScoutBuilder $searchableBuilder;
 
     public function __construct(
@@ -15,7 +15,7 @@ class RepositoryQueryBase
     {
     }
 
-    protected function queryable(bool $createNew = false): EloquentBuilder
+    protected function queryable(bool $createNew = false): Builder
     {
         if ($createNew) {
             $callback = $this->getQueryable;

@@ -15,6 +15,7 @@ use App\Contracts\UnitOfWork;
 use App\Contracts\UserRepository;
 use App\Repositories\AnimeGenresRepository;
 use App\Repositories\DatabaseRepository;
+use App\Repositories\DocumentRepository;
 use App\Repositories\MangaGenresRepository;
 
 final class JikanUnitOfWork implements UnitOfWork
@@ -92,5 +93,10 @@ final class JikanUnitOfWork implements UnitOfWork
     private function getRepository(string $modelClass): Repository
     {
         return new DatabaseRepository(fn () => $modelClass::query(), fn ($x, $y) => $modelClass::search($x, $y));
+    }
+
+    public function documents(string $tableName): DocumentRepository
+    {
+        return new DocumentRepository($tableName);
     }
 }

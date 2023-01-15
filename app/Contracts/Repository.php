@@ -3,7 +3,7 @@
 namespace App\Contracts;
 
 use App\JikanApiModel;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Collection;
 
 /**
@@ -24,13 +24,13 @@ interface Repository extends RepositoryQuery
 
     public function getAllByMalId(int $id): Collection;
 
-    public function queryByMalId(int $id): EloquentBuilder;
+    public function queryByMalId(int $id): Builder;
 
     public function tableName(): string;
 
     // fixme: this should not be here.
     //        this is here because we have the "scrape" static method on models
-    public function scrape(int $id): array;
+    public function scrape(int|string $id): array;
 
     public function insert(array $attributes): bool;
 }

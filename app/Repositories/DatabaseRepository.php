@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\Repository;
 use App\Support\RepositoryQuery;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Collection;
 
 class DatabaseRepository extends RepositoryQuery implements Repository
@@ -30,7 +30,7 @@ class DatabaseRepository extends RepositoryQuery implements Repository
             ->get();
     }
 
-    public function queryByMalId(int $id): EloquentBuilder
+    public function queryByMalId(int $id): Builder
     {
         return $this->queryable(true)
             ->where('mal_id', $id);
@@ -43,7 +43,7 @@ class DatabaseRepository extends RepositoryQuery implements Repository
 
     // fixme: this should not be here.
     //        this is here because we have the "scrape" static method on models
-    public function scrape(int $id): array
+    public function scrape(int|string $id): array
     {
         $modelClass = get_class($this->queryable(true)->newModelInstance());
 

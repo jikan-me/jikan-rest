@@ -11,6 +11,7 @@ use Spatie\LaravelData\Attributes\Validation\Alpha;
 use Spatie\LaravelData\Attributes\Validation\IntegerType;
 use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\Min;
+use Spatie\LaravelData\Attributes\Validation\Numeric;
 use Spatie\LaravelData\Attributes\Validation\Size;
 use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -25,6 +26,9 @@ class SearchCommand extends Data
      */
     #[Max(255), StringType]
     public string|Optional $q;
+
+    #[Numeric, Min(1)]
+    public int|Optional $page;
 
     #[IntegerType, Min(1)]
     public int|Optional $limit;

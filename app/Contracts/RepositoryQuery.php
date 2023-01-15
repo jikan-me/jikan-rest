@@ -3,7 +3,7 @@
 namespace App\Contracts;
 
 use App\JikanApiModel;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
 
@@ -14,9 +14,9 @@ interface RepositoryQuery
 {
     /**
      * @param Collection $params
-     * @return EloquentBuilder<T>|ScoutBuilder<T>
+     * @return Builder<T>|ScoutBuilder<T>
      */
-    public function filter(Collection $params): EloquentBuilder|ScoutBuilder;
+    public function filter(Collection $params): Builder|ScoutBuilder;
 
     /**
      * @param string $keywords
@@ -24,4 +24,12 @@ interface RepositoryQuery
      * @return ScoutBuilder<T>
      */
     public function search(string $keywords, ?\Closure $callback = null): ScoutBuilder;
+
+    /**
+     * Get a where filter query
+     * @param string $key
+     * @param mixed $value
+     * @return Builder
+     */
+    public function where(string $key, mixed $value): Builder;
 }

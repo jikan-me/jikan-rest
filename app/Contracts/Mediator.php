@@ -2,11 +2,6 @@
 
 namespace App\Contracts;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Http\Response;
-use Spatie\LaravelData\Data;
-
 interface Mediator
 {
     /**

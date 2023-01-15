@@ -2,9 +2,8 @@
 
 namespace App\Features;
 
-use App\Concerns\ScraperResultCache;
-use App\Contracts\DataRequest;
-use App\Contracts\Repository;
+use App\Contracts\CachedScraperService;
+use App\Dto\LookupDataCommand;
 use App\Contracts\RequestHandler;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -14,34 +13,28 @@ use Spatie\LaravelData\Data;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @template TRequest of DataRequest<TResponse>
+ * @template TRequest of LookupDataCommand<TResponse>
  * @template TResponse of ResourceCollection|JsonResource|Response
  * @implements RequestHandler<TRequest, TResponse>
  */
 abstract class ItemLookupHandler extends Data implements RequestHandler
 {
-    use ScraperResultCache;
-
-    public function __construct(protected readonly Repository $repository)
+    public function __construct(protected readonly CachedScraperService $scraperService)
     {
     }
 
     /**
-     * @param TRequest $request
+     * @param TRequest|LookupDataCommand<TResponse> $request
      * @return TResponse
      * @throws NotFoundHttpException
      */
     public function handle($request)
     {
         $requestFingerprint = $request->getFingerPrint();
-        $results = $this->queryFromScraperCacheById(
-            $this->repository,
-            $request->id,
-            $request->getFingerPrint(),
-        );
+        $results = $this->scraperService->find($request->id, $requestFingerprint);
 
-        $resource = $this->resource($results);
-        return $this->prepareResponse($requestFingerprint, $results, $resource->response());
+        $resource = $this->resource($results->collect());
+        return $this->scraperService->augmentResponse($resource->response(), $requestFingerprint, $results);
     }
 
     protected abstract function resource(Collection $results): JsonResource;

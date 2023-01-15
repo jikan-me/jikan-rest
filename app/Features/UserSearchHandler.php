@@ -2,21 +2,18 @@
 
 namespace App\Features;
 
-use App\Concerns\ScraperResultCache;
-use App\Contracts\RequestHandler;
 use App\Dto\UsersSearchCommand;
-use App\Http\Resources\V4\ResultsResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Search\UserSearchRequest;
 
 /**
- * @implements RequestHandler<UsersSearchCommand, JsonResponse>
+ * @implements RequestHandlerWithScraperCache<UsersSearchCommand, JsonResponse>
  */
-final class UserSearchHandler implements RequestHandler
+final class UserSearchHandler extends RequestHandlerWithScraperCache
 {
-    use ScraperResultCache;
-
     /**
      * @inheritDoc
      */
@@ -25,16 +22,9 @@ final class UserSearchHandler implements RequestHandler
         return UsersSearchCommand::class;
     }
 
-    /**
-     * @param UsersSearchCommand $request
-     * @return JsonResponse
-     */
-    public function handle($request): JsonResponse
+    protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $requestParams = collect($request->all());
-        $requestFingerPrint = $request->getFingerPrint();
-        $results = $this->queryFromScraperCacheByFingerPrint(
-            "users",
+        return $this->scraperService->findList(
             $requestFingerPrint,
             fn (MalClient $jikan, int $page) => $jikan->getUserSearch((new UserSearchRequest())
                 ->setQuery($requestParams->get("q"))
@@ -45,9 +35,5 @@ final class UserSearchHandler implements RequestHandler
                 ->setPage($page)),
             $requestParams->get("page")
         );
-
-        return $this->prepareResponse($requestFingerPrint, $results, (new ResultsResource(
-            $results->first()
-        ))->response());
     }
 }
