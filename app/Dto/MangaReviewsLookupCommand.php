@@ -2,6 +2,7 @@
 
 namespace App\Dto;
 
+
 use App\Casts\EnumCast;
 use App\Enums\MediaReviewsSortEnum;
 use Illuminate\Http\JsonResponse;
@@ -14,7 +15,7 @@ use Spatie\LaravelData\Optional;
 /**
  * @extends LookupDataCommand<JsonResponse>
  */
-final class AnimeReviewsLookupCommand extends LookupDataCommand
+final class MangaReviewsLookupCommand extends LookupDataCommand
 {
     #[Numeric]
     public int|Optional $page;

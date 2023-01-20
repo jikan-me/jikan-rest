@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * @extends ItemLookupHandler<AnimeFullLookupCommand, JsonResponse>
  */
-final class QueryFullAnimeHandler extends ItemLookupHandler
+final class AnimeFullLookupHandler extends ItemLookupHandler
 {
     public function requestClass(): string
     {

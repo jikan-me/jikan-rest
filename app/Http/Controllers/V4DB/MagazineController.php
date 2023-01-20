@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Dto\MagazineSearchCommand;
 use App\Http\Resources\V4\MagazineCollection;
-use Illuminate\Http\Request;
 
-class MagazineController extends ControllerWithQueryBuilderProvider
+class MagazineController extends Controller
 {
     /**
      *  @OA\Get(
@@ -56,8 +56,8 @@ class MagazineController extends ControllerWithQueryBuilderProvider
      * )
      *
      */
-    public function main(Request $request): MagazineCollection
+    public function main(MagazineSearchCommand $command): MagazineCollection
     {
-        return $this->preparePaginatedResponse(MagazineCollection::class, "magazine", $request);
+        return $this->mediator->send($command);
     }
 }

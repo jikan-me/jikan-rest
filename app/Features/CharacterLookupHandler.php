@@ -2,20 +2,20 @@
 
 namespace App\Features;
 
-use App\Dto\AnimeLookupCommand;
-use App\Http\Resources\V4\AnimeResource;
+use App\Dto\CharacterLookupCommand;
+use App\Http\Resources\V4\CharacterResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 
 /**
- * @extends ItemLookupHandler<AnimeLookupCommand, JsonResponse>
+ * @extends ItemLookupHandler<CharacterLookupCommand, JsonResponse>
  */
-final class QueryAnimeHandler extends ItemLookupHandler
+final class CharacterLookupHandler extends ItemLookupHandler
 {
     protected function resource(Collection $results): JsonResource
     {
-        return new AnimeResource($results->first());
+        return new CharacterResource($results->first());
     }
 
     /**
@@ -23,6 +23,6 @@ final class QueryAnimeHandler extends ItemLookupHandler
      */
     public function requestClass(): string
     {
-        return AnimeLookupCommand::class;
+        return CharacterLookupCommand::class;
     }
 }

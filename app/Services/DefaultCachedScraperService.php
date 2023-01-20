@@ -46,7 +46,7 @@ final class DefaultCachedScraperService implements CachedScraperService
         if ($results->isEmpty() || $results->isExpired()) {
             $page = $page ?? 1;
             $data = $getMalDataCallback($this->jikan, $page);
-            $scraperResponse = $this->serializeScraperResult($data);
+            $scraperResponse = $this->serializeScraperResult(Collection::unwrap($data));
             $results = $this->updateCacheByKey($cacheKey, $results, $scraperResponse);
         }
 
@@ -191,7 +191,7 @@ final class DefaultCachedScraperService implements CachedScraperService
         return $this->repository->where("request_hash", $cacheKey);
     }
 
-    private function serializeScraperResult($data): array
+    private function serializeScraperResult(array $data): array
     {
         return $this->serializer->toArray($data);
     }

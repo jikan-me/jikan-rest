@@ -3,7 +3,7 @@ namespace App\Macros;
 
 use Illuminate\Support\Collection;
 
-class To2dArrayWithDottedKeys
+final class To2dArrayWithDottedKeys
 {
     public function __invoke(): \Closure
     {

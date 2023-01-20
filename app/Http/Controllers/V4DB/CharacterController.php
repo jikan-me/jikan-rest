@@ -4,6 +4,12 @@ namespace App\Http\Controllers\V4DB;
 
 use App\Anime;
 use App\Character;
+use App\Dto\CharacterAnimeLookupCommand;
+use App\Dto\CharacterFullLookupCommand;
+use App\Dto\CharacterLookupCommand;
+use App\Dto\CharacterMangaLookupCommand;
+use App\Dto\CharacterPicturesLookupCommand;
+use App\Dto\CharacterVoicesLookupCommand;
 use App\Http\HttpHelper;
 use App\Http\HttpResponse;
 use App\Http\Resources\V4\CharacterAnimeCollection;
@@ -53,59 +59,8 @@ class CharacterController extends Controller
      */
     public function full(Request $request, int $id)
     {
-        $results = Character::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Character::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Character::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Character::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Character::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\CharacterFullResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = CharacterFullLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -113,7 +68,7 @@ class CharacterController extends Controller
      *     path="/characters/{id}",
      *     operationId="getCharacterById",
      *     tags={"characters"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -139,59 +94,8 @@ class CharacterController extends Controller
      */
     public function main(Request $request, int $id)
     {
-        $results = Character::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Character::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Character::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Character::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Character::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\CharacterResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = CharacterLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -220,56 +124,8 @@ class CharacterController extends Controller
      */
     public function anime(Request $request, int $id)
     {
-        $results = Character::query()
-            ->where('mal_id', $id)
-            ->get();
-
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Character::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Character::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Character::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Character::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new CharacterAnimeCollection(
-            $results->first()['animeography']
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = CharacterAnimeLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
 
@@ -299,55 +155,8 @@ class CharacterController extends Controller
      */
     public function manga(Request $request, int $id)
     {
-        $results = Character::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Character::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Character::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Character::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Character::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new CharacterMangaCollection(
-            $results->first()['mangaography']
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = CharacterMangaLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -376,55 +185,8 @@ class CharacterController extends Controller
      */
     public function voices(Request $request, int $id)
     {
-        $results = Character::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Character::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Character::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Character::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Character::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new CharacterSeiyuuCollection(
-            $results->first()['voice_actors']
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = CharacterVoicesLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -432,7 +194,7 @@ class CharacterController extends Controller
      *     path="/characters/{id}/pictures",
      *     operationId="getCharacterPictures",
      *     tags={"characters"},
-     * 
+     *
      *     @OA\Parameter(
      *       name="id",
      *       in="path",
@@ -453,14 +215,14 @@ class CharacterController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
-     * 
+     *
      *  @OA\Schema(
      *      schema="character_pictures",
      *      description="Character Pictures",
      *      @OA\Property(
      *          property="data",
      *          type="array",
-     * 
+     *
      *          @OA\Items(
      *              @OA\Property(
      *                  property="image_url",
@@ -480,28 +242,7 @@ class CharacterController extends Controller
      */
     public function pictures(Request $request, int $id)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $character = ['pictures' => $this->jikan->getCharacterPictures(new CharacterPicturesRequest($id))];
-            $response = \json_decode($this->serializer->serialize($character, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new PicturesResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = CharacterPicturesLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 }

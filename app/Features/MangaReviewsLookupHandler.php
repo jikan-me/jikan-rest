@@ -2,30 +2,26 @@
 
 namespace App\Features;
 
-use App\Dto\AnimeReviewsLookupCommand;
-use App\Enums\MediaReviewsSortEnum;
+use App\Dto\MangaReviewsLookupCommand;
 use App\Features\Concerns\ResolvesMediaReviewParams;
 use App\Http\Resources\V4\ReviewsResource;
-use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
+use App\Support\CachedData;
 use Jikan\MyAnimeList\MalClient;
-use Jikan\Request\Anime\AnimeReviewsRequest;
+use Jikan\Request\Manga\MangaReviewsRequest;
 
 /**
- * @extends RequestHandlerWithScraperCache<AnimeReviewsLookupCommand, JsonResponse>
+ * @extends RequestHandlerWithScraperCache<MangaReviewsLookupCommand, JsonResponse>
  */
-final class AnimeReviewsLookupHandler extends RequestHandlerWithScraperCache
+final class MangaReviewsLookupHandler extends RequestHandlerWithScraperCache
 {
     use ResolvesMediaReviewParams;
 
-    /**
-     * @inheritDoc
-     */
     public function requestClass(): string
     {
-        return AnimeReviewsLookupCommand::class;
+        return MangaReviewsLookupCommand::class;
     }
 
     protected function resource(Collection $results): JsonResource
@@ -41,7 +37,7 @@ final class AnimeReviewsLookupHandler extends RequestHandlerWithScraperCache
 
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn (MalClient $jikan, ?int $page = null) => $jikan->getAnimeReviews(new AnimeReviewsRequest(
+            fn(MalClient $jikan, ?int $page = null) => $jikan->getMangaReviews(new MangaReviewsRequest(
                 $id, $page, $sort, $spoilers, $preliminary
             )),
             $requestParams->get("page", 1)

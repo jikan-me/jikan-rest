@@ -10,7 +10,7 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self newest()
  * @method static self oldest()
  */
-final class AnimeReviewsSortEnum extends Enum
+final class MediaReviewsSortEnum extends Enum
 {
     protected static function labels(): array
     {
