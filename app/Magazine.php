@@ -31,8 +31,6 @@ class Magazine extends JikanApiSearchableModel
      */
     protected $table = 'magazines';
 
-    protected ?string $displayNameFieldName = "name";
-
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -41,6 +39,12 @@ class Magazine extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'expiresAt'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "name";
+    }
 
     /**
      * @return array

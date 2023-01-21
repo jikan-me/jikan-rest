@@ -10,6 +10,7 @@ use App\Enums\AnimeScheduleFilterEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Illuminate\Support\Carbon;
 use Jikan\Helper\Constants;
 use Laravel\Scout\Builder as ScoutBuilder;
 
@@ -100,5 +101,19 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         }
 
         return $queryable;
+    }
+
+    public function getAiredBetween(Carbon $from, Carbon $to, ?AnimeTypeEnum $type = null): EloquentBuilder
+    {
+        $queryable = $this->queryable(true)->where("aired.from", [
+            $from->toAtomString(),
+            $to->modify("last day of this month")->toAtomString()
+        ]);
+
+        if (!is_null($type)) {
+            $queryable = $queryable->where("type", $type->label);
+        }
+
+        return $queryable->orderBy("members", "desc");
     }
 }

@@ -47,14 +47,17 @@ use App\Services\DefaultScoutSearchService;
 use App\Services\ElasticScoutSearchService;
 use App\Services\EloquentBuilderPaginatorService;
 use App\Services\MongoSearchService;
+use App\Services\QueryBuilderPaginatorService;
 use App\Services\ScoutBuilderPaginatorService;
 use App\Services\ScoutSearchService;
 use App\Services\SearchEngineSearchService;
+use App\Services\SearchService;
 use App\Services\TypeSenseScoutSearchService;
 use App\Support\DefaultMediator;
 use App\Support\JikanUnitOfWork;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\JsonResponse;
+use Laravel\Lumen\Application;
 use Illuminate\Http\Response;
 use Illuminate\Support\Env;
 use Illuminate\Support\ServiceProvider;
@@ -87,88 +90,34 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-//        $this->app->singleton(ScoutSearchService::class, function($app) {
-//            $scoutDriver = $this->getSearchIndexDriver($app);
-//
-//            return match ($scoutDriver) {
-//                "typesense" => new TypeSenseScoutSearchService(),
-//                "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine" => new ElasticScoutSearchService(),
-//                default => new DefaultScoutSearchService()
-//            };
-//        });
-
-        // todo: remove SearchQueryBuilders
-
-        $queryBuilders = [
-            AnimeSearchQueryBuilder::class,
-            MangaSearchQueryBuilder::class,
-            ClubSearchQueryBuilder::class,
-            CharacterSearchQueryBuilder::class,
-            PeopleSearchQueryBuilder::class,
-            TopAnimeQueryBuilder::class,
-            TopMangaQueryBuilder::class
-        ];
-
-        foreach($queryBuilders as $queryBuilderClass) {
-            $this->app->singleton($queryBuilderClass,
-                $this->getQueryBuilderFactory($queryBuilderClass)
-            );
-        }
-
-        $simpleQueryBuilderAbstracts = [];
-        $simpleQueryBuilders = [
-            [
-                "name" => "GenreAnime",
-                "identifier" => "genre_anime",
-                "modelClass" => GenreAnime::class
-            ],
-            [
-                "name" => "GenreManga",
-                "identifier" => "genre_manga",
-                "modelClass" => GenreManga::class
-            ],
-            [
-                "name" => "Producers",
-                "identifier" => "producers",
-                "modelClass" => Producers::class,
-                "orderByFields" => ["mal_id", "count", "favorites", "established"]
-            ],
-            [
-                "name" => "Magazine",
-                "identifier" => "magazine",
-                "modelClass" => Magazine::class
-            ]
-        ];
-
-        foreach ($simpleQueryBuilders as $simpleQueryBuilder) {
-            $abstractName = SimpleSearchQueryBuilder::class . $simpleQueryBuilder["name"];
-            $simpleQueryBuilderAbstracts[] = $abstractName;
-            $this->app->singleton($abstractName, function($app) use($simpleQueryBuilder) {
-                $searchIndexesEnabled = $this->getSearchIndexesEnabledConfig($app);
-
-                $ctorArgs = [
-                    $simpleQueryBuilder["identifier"],
-                    $simpleQueryBuilder["modelClass"],
-                    $searchIndexesEnabled,
-                    $app->make(ScoutSearchService::class)
-                ];
-                if (array_key_exists("orderByFields", $simpleQueryBuilder)) {
-                    $ctorArgs[] = $simpleQueryBuilder["orderByFields"];
-                }
-                return $this->simpleSearchQueryBuilderClassReflection->newInstanceArgs($ctorArgs);
-            });
-        }
-
-        $this->app->tag(array_merge($queryBuilders, $simpleQueryBuilderAbstracts), "searchQueryBuilders");
-
-        $this->app->singleton(SearchQueryBuilderProvider::class, function($app) {
-            return new SearchQueryBuilderProvider($app->tagged("searchQueryBuilders"));
-        });
-
-        // new stuff
         $this->app->singleton(CachedScraperService::class, DefaultCachedScraperService::class);
+        if ($this->getSearchIndexesEnabledConfig($this->app)) {
+            $this->app->bind(QueryBuilderPaginatorService::class, ScoutBuilderPaginatorService::class);
+        } else {
+            $this->app->bind(QueryBuilderPaginatorService::class, EloquentBuilderPaginatorService::class);
+        }
         $this->registerModelRepositories();
         $this->registerRequestHandlers();
+    }
+
+    private function getSearchService(Repository $repository): SearchService
+    {
+        if ($this->getSearchIndexesEnabledConfig($this->app)) {
+            $scoutDriver = static::getSearchIndexDriver($this->app);
+            $serviceClass = match ($scoutDriver) {
+                "typesense" => TypeSenseScoutSearchService::class,
+                "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine" => ElasticScoutSearchService::class,
+                default => DefaultScoutSearchService::class
+            };
+
+            $scoutSearchService = new $serviceClass($repository);
+            $result = new SearchEngineSearchService($scoutSearchService, $repository);
+        }
+        else {
+            $result = new MongoSearchService($repository);
+        }
+
+        return $result;
     }
 
     private function registerModelRepositories()
@@ -214,7 +163,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->when(DefaultMediator::class)
             ->needs(RequestHandler::class)
             ->give(function (Application $app) {
-                $searchIndexesEnabled = $this->getSearchIndexesEnabledConfig($app);
                 /**
                  * @var UnitOfWork $unitOfWorkInstance
                  */
@@ -231,10 +179,10 @@ class AppServiceProvider extends ServiceProvider
                 $requestHandlers = [];
                 foreach ($searchRequestHandlersDescriptors as $handlerClass => $repositoryInstance) {
                     $requestHandlers[] = $app->make($handlerClass, [
-                        $app->make(DefaultQueryBuilderService::class, [
-                            static::makeSearchService($app, $searchIndexesEnabled, $repositoryInstance),
-                            $app->make($searchIndexesEnabled ? ScoutBuilderPaginatorService::class : EloquentBuilderPaginatorService::class)
-                        ])
+                        "queryBuilderService" => new DefaultQueryBuilderService(
+                            $this->getSearchService($repositoryInstance),
+                            $app->make(QueryBuilderPaginatorService::class)
+                        )
                     ]);
                 }
 
@@ -260,7 +208,7 @@ class AppServiceProvider extends ServiceProvider
                 ];
 
                 foreach ($requestHandlersWithOnlyRepositoryDependency as $handlerClass => $repositoryInstance) {
-                    $requestHandlers[] = $app->make($handlerClass, [$repositoryInstance]);
+                    $requestHandlers[] = $app->make($handlerClass, ["repository" => $repositoryInstance]);
                 }
 
                 // request handlers which are fetching data through the jikan library from MAL, and caching the result.
@@ -328,9 +276,10 @@ class AppServiceProvider extends ServiceProvider
                 foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
                     $jikan = $app->make(MalClient::class);
                     $serializer = $app->make("SerializerV4");
+                    $scraperService = $app->make(DefaultCachedScraperService::class,
+                        ["repository" => $repositoryInstance, "jikan" => $jikan, "serializer" => $serializer]);
                     $requestHandlers[] = $app->make($handlerClass, [
-                        $app->make(DefaultCachedScraperService::class,
-                            [$repositoryInstance, $jikan, $serializer])
+                        "scraperService" => $scraperService
                     ]);
                 }
 
@@ -353,37 +302,6 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Creates a search service instance.
-     * Search service knows how to do a full-text search on the database query builder instance.
-     * @throws BindingResolutionException
-     */
-    private static function makeSearchService(Application $app, bool $searchIndexesEnabled, Repository $repositoryInstance)
-    {
-        return $searchIndexesEnabled ? $app->make( SearchEngineSearchService::class, [
-            static::makeScoutSearchService($app, $repositoryInstance), $repositoryInstance
-        ]) : $app->make(MongoSearchService::class, [$repositoryInstance]);
-    }
-
-    /**
-     * Creates a scout search service instance.
-     * Scout search service knows about the configured search engine's implementation details.
-     * E.g. per search request configuration.
-     * @throws BindingResolutionException
-     */
-    private static function makeScoutSearchService(Application $app, Repository $repositoryInstance)
-    {
-        // todo: cache result
-        $scoutDriver = static::getSearchIndexDriver($app);
-        $serviceClass = match ($scoutDriver) {
-            "typesense" => TypeSenseScoutSearchService::class,
-            "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine" => ElasticScoutSearchService::class,
-            default => DefaultScoutSearchService::class
-        };
-
-        return $app->make($serviceClass, [$repositoryInstance]);
-    }
-
-    /**
      * @throws \ReflectionException
      * @throws BindingResolutionException
      * @return void
@@ -395,6 +313,7 @@ class AppServiceProvider extends ServiceProvider
             ->each(fn ($class, $macro) => Collection::macro($macro, app($class)()));
 
         Response::macro("addJikanCacheFlags", app(ResponseJikanCacheFlags::class)());
+        JsonResponse::macro("addJikanCacheFlags", app(ResponseJikanCacheFlags::class)());
 
         ScoutBuilder::mixin(new ScoutBuilderMixin());
     }

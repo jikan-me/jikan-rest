@@ -517,9 +517,9 @@ class SearchController extends Controller
      *
      *
      */
-    public function userById(Request $request, int $id)
+    public function userById(UserByIdLookupCommand $command)
     {
-        return $this->mediator->send(UserByIdLookupCommand::from($request, $id));
+        return $this->mediator->send($command);
     }
 
     /**

@@ -55,9 +55,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function full(Request $request, int $id)
+    public function full(AnimeFullLookupCommand $command)
     {
-        $command = AnimeFullLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -90,9 +89,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(AnimeLookupCommand $command)
     {
-        $command = AnimeLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -122,9 +120,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function characters(Request $request, int $id)
+    public function characters(AnimeCharactersLookupCommand $command)
     {
-        $command = AnimeCharactersLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -154,9 +151,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function staff(Request $request, int $id)
+    public function staff(AnimeStaffLookupCommand $command)
     {
-        $command = AnimeStaffLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -261,9 +257,8 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function episodes(Request $request, int $id)
+    public function episodes(AnimeEpisodesLookupCommand $command)
     {
-        $command = AnimeEpisodesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -303,9 +298,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function episode(Request $request, int $id, int $episodeId)
+    public function episode(AnimeEpisodeLookupCommand $command)
     {
-        $command = AnimeEpisodeLookupCommand::from($request, $id, $episodeId);
         return $this->mediator->send($command);
     }
 
@@ -349,9 +343,8 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function news(Request $request, int $id)
+    public function news(AnimeNewsLookupCommand $command)
     {
-        $command = AnimeNewsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -389,9 +382,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function forum(Request $request, int $id)
+    public function forum(AnimeForumLookupCommand $command)
     {
-        $command = AnimeForumLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -421,9 +413,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function videos(Request $request, int $id)
+    public function videos(AnimeVideosLookupCommand $command)
     {
-        $command = AnimeVideosLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -498,9 +489,8 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function videosEpisodes(Request $request, int $id)
+    public function videosEpisodes(AnimeVideosEpisodesLookupCommand $command)
     {
-        $command = AnimeVideosEpisodesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -532,9 +522,8 @@ class AnimeController extends Controller
      * )
      *
      */
-    public function pictures(Request $request, int $id)
+    public function pictures(AnimePicturesLookupCommand $command)
     {
-        $command = AnimePicturesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -564,9 +553,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function stats(Request $request, int $id)
+    public function stats(AnimeStatsLookupCommand $command)
     {
-        $command = AnimeStatsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -596,9 +584,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function moreInfo(Request $request, int $id)
+    public function moreInfo(AnimeMoreInfoLookupCommand $command)
     {
-        $command = AnimeMoreInfoLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -628,9 +615,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function recommendations(Request $request, int $id)
+    public function recommendations(AnimeRecommendationsLookupCommand $command)
     {
-        $command = AnimeRecommendationsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -662,9 +648,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function userupdates(Request $request, int $id)
+    public function userupdates(AnimeUserUpdatesLookupCommand $command)
     {
-        $command = AnimeUserUpdatesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -696,9 +681,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function reviews(Request $request, int $id)
+    public function reviews(AnimeReviewsLookupCommand $command)
     {
-        $command = AnimeReviewsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -737,9 +721,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function relations(Request $request, int $id)
+    public function relations(AnimeRelationsLookupCommand $command)
     {
-        $command = AnimeRelationsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -769,9 +752,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function themes(Request $request, int $id)
+    public function themes(AnimeThemesLookupCommand $command)
     {
-        $command = AnimeThemesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -801,9 +783,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function external(Request $request, int $id)
+    public function external(AnimeExternalLookupCommand $command)
     {
-        $command = AnimeExternalLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -833,9 +814,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function streaming(Request $request, int $id)
+    public function streaming(AnimeStreamingLookupCommand $command)
     {
-        $command = AnimeStreamingLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 }

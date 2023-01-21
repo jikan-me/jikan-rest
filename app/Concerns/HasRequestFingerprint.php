@@ -18,7 +18,7 @@ trait HasRequestFingerprint
     public static function fromRequest(Request $request): ?static
     {
         $result = app(DataFromSomethingResolver::class)
-                    ->withoutMagicalCreation()->execute(self::class, $request);
+                    ->withoutMagicalCreation()->execute(static::class, $request);
         $result->fingerprint = HttpHelper::resolveRequestFingerprint($request);
         return $result;
     }

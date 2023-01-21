@@ -3,6 +3,7 @@
 namespace App\Dto;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * @extends LookupDataCommand<JsonResponse>

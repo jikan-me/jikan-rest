@@ -29,8 +29,6 @@ class Club extends JikanApiSearchableModel
      */
     protected $appends = ['images'];
 
-    protected ?string $displayNameFieldName = "title";
-
     /**
      * The table associated with the model.
      *
@@ -46,6 +44,12 @@ class Club extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'request_hash', 'expiresAt', 'images'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "title";
+    }
 
     /** @noinspection PhpUnused */
     public function filterByCategory(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubCategoryEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder

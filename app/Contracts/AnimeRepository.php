@@ -4,7 +4,9 @@ namespace App\Contracts;
 
 use App\Anime;
 use App\Enums\AnimeScheduleFilterEnum;
+use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Illuminate\Support\Carbon;
 use \Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -29,4 +31,6 @@ interface AnimeRepository extends Repository
         bool $kids = false,
         bool $sfw = false
     ): EloquentBuilder;
+
+    public function getAiredBetween(Carbon $from, Carbon $to, ?AnimeTypeEnum $type = null): EloquentBuilder;
 }

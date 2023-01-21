@@ -26,8 +26,6 @@ class Profile extends JikanApiSearchableModel
      */
     protected $table = 'users';
 
-    protected ?string $displayNameFieldName = "username";
-
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -36,6 +34,12 @@ class Profile extends JikanApiSearchableModel
     protected $hidden = [
         '_id',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "username";
+    }
 
     public static function scrape(string $username)
     {

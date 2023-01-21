@@ -9,7 +9,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Spatie\LaravelData\Data;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -17,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @template TResponse of ResourceCollection|JsonResource|Response
  * @implements RequestHandler<TRequest, TResponse>
  */
-abstract class ItemLookupHandler extends Data implements RequestHandler
+abstract class ItemLookupHandler implements RequestHandler
 {
     public function __construct(protected readonly CachedScraperService $scraperService)
     {

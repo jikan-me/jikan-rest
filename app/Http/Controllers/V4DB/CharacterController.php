@@ -57,9 +57,8 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function full(Request $request, int $id)
+    public function full(CharacterFullLookupCommand $command)
     {
-        $command = CharacterFullLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -92,9 +91,8 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(CharacterLookupCommand $command)
     {
-        $command = CharacterLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -122,9 +120,8 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function anime(Request $request, int $id)
+    public function anime(CharacterAnimeLookupCommand $command)
     {
-        $command = CharacterAnimeLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -153,9 +150,8 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function manga(Request $request, int $id)
+    public function manga(CharacterMangaLookupCommand $command)
     {
-        $command = CharacterMangaLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -183,9 +179,8 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function voices(Request $request, int $id)
+    public function voices(CharacterVoicesLookupCommand $command)
     {
-        $command = CharacterVoicesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -240,9 +235,8 @@ class CharacterController extends Controller
      *      )
      *  )
      */
-    public function pictures(Request $request, int $id)
+    public function pictures(CharacterPicturesLookupCommand $command)
     {
-        $command = CharacterPicturesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 }

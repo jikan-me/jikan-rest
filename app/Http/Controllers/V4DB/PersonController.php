@@ -42,9 +42,8 @@ class PersonController extends Controller
      *     ),
      * )
      */
-    public function full(Request $request, int $id)
+    public function full(PersonFullLookupCommand $command)
     {
-        $command = PersonFullLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -78,9 +77,8 @@ class PersonController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(PersonLookupCommand $command)
     {
-        $command = PersonLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -108,9 +106,8 @@ class PersonController extends Controller
      *     ),
      * )
      */
-    public function anime(Request $request, int $id)
+    public function anime(PersonAnimeLookupCommand $command)
     {
-        $command = PersonAnimeLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -138,9 +135,8 @@ class PersonController extends Controller
      *     ),
      * )
      */
-    public function voices(Request $request, int $id)
+    public function voices(PersonVoicesLookupCommand $command)
     {
-        $command = PersonVoicesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -168,9 +164,8 @@ class PersonController extends Controller
      *     ),
      * )
      */
-    public function manga(Request $request, int $id)
+    public function manga(PersonMangaLookupCommand $command)
     {
-        $command = PersonMangaLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -214,9 +209,8 @@ class PersonController extends Controller
      *      )
      *  )
      */
-    public function pictures(Request $request, int $id)
+    public function pictures(PersonPicturesLookupCommand $command)
     {
-        $command = PersonPicturesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 }

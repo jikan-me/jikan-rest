@@ -51,9 +51,8 @@ class ClubController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(ClubLookupCommand $command)
     {
-        $command = ClubLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -103,9 +102,8 @@ class ClubController extends Controller
      *      ),
      * ),
      */
-    public function members(Request $request, int $id)
+    public function members(ClubMembersLookupCommand $command)
     {
-        $command = ClubMembersLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -135,9 +133,8 @@ class ClubController extends Controller
      *     ),
      * )
      */
-    public function staff(Request $request, int $id)
+    public function staff(ClubStaffLookupCommand $command)
     {
-        $command = ClubStaffLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -167,9 +164,8 @@ class ClubController extends Controller
      *     ),
      * )
      */
-    public function relations(Request $request, int $id)
+    public function relations(ClubRelationLookupCommand $command)
     {
-        $command = ClubRelationLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 }

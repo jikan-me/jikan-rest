@@ -35,8 +35,6 @@ class Manga extends JikanApiSearchableModel
      */
     protected $appends = [];
 
-    protected ?string $displayNameFieldName = "title";
-
     /**
      * The table associated with the model.
      *
@@ -52,6 +50,12 @@ class Manga extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'expiresAt', 'request_hash'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "title";
+    }
 
     /** @noinspection PhpUnused */
     public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder

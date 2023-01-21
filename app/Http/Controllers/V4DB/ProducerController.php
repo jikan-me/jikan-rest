@@ -38,9 +38,8 @@ class ProducerController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(ProducerLookupCommand $command)
     {
-        $command = ProducerLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -73,9 +72,8 @@ class ProducerController extends Controller
      *     ),
      * )
      */
-    public function full(Request $request, int $id)
+    public function full(ProducerFullLookupCommand $command)
     {
-        $command = ProducerFullLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -105,9 +103,8 @@ class ProducerController extends Controller
      *     ),
      * )
      */
-    public function external(Request $request, int $id)
+    public function external(ProducerExternalLookupCommand $command)
     {
-        $command = ProducerExternalLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 }

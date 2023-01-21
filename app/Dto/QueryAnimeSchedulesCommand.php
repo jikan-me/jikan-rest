@@ -9,6 +9,7 @@ use App\Contracts\DataRequest;
 use App\Enums\AnimeScheduleFilterEnum;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Env;
 use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\Validation\BooleanType;
 use Spatie\LaravelData\Attributes\Validation\IntegerType;
@@ -17,6 +18,7 @@ use Spatie\LaravelData\Attributes\Validation\Nullable;
 use Spatie\LaravelData\Attributes\Validation\Numeric;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Optional;
 
 /**
  * @implements DataRequest<JsonResponse>
@@ -26,16 +28,16 @@ final class QueryAnimeSchedulesCommand extends Data implements DataRequest
     use HasRequestFingerprint;
 
     #[Numeric, Min(1)]
-    public int $page = 1;
+    public int|Optional $page = 1;
 
-    #[IntegerType, Min(1), Nullable]
-    public ?int $limit;
-
-    #[BooleanType]
-    public bool $kids = false;
+    #[IntegerType, Min(1)]
+    public int|Optional $limit;
 
     #[BooleanType]
-    public bool $sfw = false;
+    public bool|Optional $kids = false;
+
+    #[BooleanType]
+    public bool|Optional $sfw = false;
 
     #[WithCast(EnumCast::class, AnimeScheduleFilterEnum::class)]
     public ?AnimeScheduleFilterEnum $filter;
@@ -57,6 +59,10 @@ final class QueryAnimeSchedulesCommand extends Data implements DataRequest
 
         if (!is_null($day)) {
             $data->filter = AnimeScheduleFilterEnum::from($day);
+        }
+
+        if ($data->limit == Optional::create()) {
+            $data->limit = Env::get("MAX_RESULTS_PER_PAGE", 25);
         }
 
         return $data;

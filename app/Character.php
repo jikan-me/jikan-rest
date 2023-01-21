@@ -29,8 +29,6 @@ class Character extends JikanApiSearchableModel
      */
     protected $appends = ['images', 'favorites'];
 
-    protected ?string $displayNameFieldName = "name";
-
     /**
      * The table associated with the model.
      *
@@ -46,6 +44,12 @@ class Character extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images', 'member_favorites'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "name";
+    }
 
     /** @noinspection PhpUnused */
     public function getFavoritesAttribute()

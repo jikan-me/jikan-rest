@@ -28,8 +28,6 @@ class Anime extends JikanApiSearchableModel
         'mal_id','url','title','title_english','title_japanese','title_synonyms', 'titles', 'images', 'type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres', 'explicit_genres', 'themes', 'demographics', 'opening_themes','ending_themes'
     ];
 
-    protected ?string $displayNameFieldName = "title";
-
     /**
      * The accessors to append to the model's array form.
      *
@@ -52,6 +50,12 @@ class Anime extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'premiered', 'opening_themes', 'ending_themes', 'request_hash', 'expiresAt'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "title";
+    }
 
     public function setSeasonAttribute($value)
     {

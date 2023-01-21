@@ -9,9 +9,6 @@ abstract class SearchServiceBase implements SearchService
 {
     protected Collection $filterParameters;
 
-    /**
-     * @throws \Exception
-     */
     public function __construct(protected readonly Repository $repository)
     {
     }

@@ -49,9 +49,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function full(Request $request, int $id)
+    public function full(MangaFullLookupCommand $command)
     {
-        $command = MangaFullLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -85,9 +84,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(MangaLookupCommand $command)
     {
-        $command = MangaLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -117,9 +115,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function characters(Request $request, int $id)
+    public function characters(MangaCharactersLookupCommand $command)
     {
-        $command = MangaCharactersLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -161,9 +158,8 @@ class MangaController extends Controller
      *      }
      *  )
      */
-    public function news(Request $request, int $id)
+    public function news(MangaNewsLookupCommand $command)
     {
-        $command = MangaNewsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -201,9 +197,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function forum(Request $request, int $id)
+    public function forum(MangaForumLookupCommand $command)
     {
-        $command = MangaForumLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -246,9 +241,8 @@ class MangaController extends Controller
      *     )
      * )
      */
-    public function pictures(Request $request, int $id)
+    public function pictures(MangaPicturesLookupCommand $command)
     {
-        $command = MangaPicturesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -278,9 +272,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function stats(Request $request, int $id)
+    public function stats(MangaStatsLookupCommand $command)
     {
-        $command = MangaStatsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -310,9 +303,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function moreInfo(Request $request, int $id)
+    public function moreInfo(MangaMoreInfoLookupCommand $command)
     {
-        $command = MangaMoreInfoLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -342,9 +334,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function recommendations(Request $request, int $id)
+    public function recommendations(MangaRecommendationsLookupCommand $command)
     {
-        $command = MangaRecommendationsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -376,9 +367,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function userupdates(Request $request, int $id)
+    public function userupdates(MangaUserUpdatesLookupCommand $command)
     {
-        $command = MangaUserUpdatesLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -411,9 +401,8 @@ class MangaController extends Controller
      * )
      * @throws \Exception
      */
-    public function reviews(Request $request, int $id)
+    public function reviews(MangaReviewsLookupCommand $command)
     {
-        $command = MangaReviewsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -450,9 +439,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function relations(Request $request, int $id)
+    public function relations(MangaRelationsLookupCommand $command)
     {
-        $command = MangaRelationsLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 
@@ -482,9 +470,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function external(Request $request, int $id)
+    public function external(MangaExternalLookupCommand $command)
     {
-        $command = MangaExternalLookupCommand::from($request, $id);
         return $this->mediator->send($command);
     }
 }

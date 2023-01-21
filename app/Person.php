@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
 use Jikan\Jikan;
 use Jikan\Request\Person\PersonRequest;
 use function Symfony\Component\Translation\t;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Person extends JikanApiSearchableModel
 {
-    use HasFactory;
+    use HasFactory, FilteredByLetter;
     protected array $filters = ["order_by", "sort"];
 
     /**
@@ -43,6 +44,12 @@ class Person extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'images', 'member_favorites'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "name";
+    }
 
     public function getFavoritesAttribute()
     {

@@ -6,12 +6,9 @@ use App\Contracts\Repository;
 
 final class SearchEngineSearchService extends SearchServiceBase
 {
-    /**
-     * @throws \Exception
-     */
     public function __construct(
         private readonly ScoutSearchService $scoutSearchService,
-        protected readonly Repository $repository
+        Repository $repository
     )
     {
         parent::__construct($repository);

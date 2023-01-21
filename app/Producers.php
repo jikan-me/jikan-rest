@@ -26,8 +26,6 @@ class Producers extends JikanApiSearchableModel
      */
     protected $table = 'producers';
 
-    protected ?string $displayNameFieldName = "titles.0.title";
-
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -36,6 +34,12 @@ class Producers extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'request_hash', 'expiresAt'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "titles.0.title";
+    }
 
     public static function scrape(int $id)
     {

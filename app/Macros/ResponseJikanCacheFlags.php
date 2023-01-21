@@ -22,7 +22,7 @@ final class ResponseJikanCacheFlags
              */
             return $this
                 ->header("X-Request-Fingerprint", $cacheKey)
-                ->setTtl(self::cacheTtl())
+                ->setTtl(ResponseJikanCacheFlags::cacheTtl())
                 ->setExpires(Carbon::createFromTimestamp($scraperResults->expiry()))
                 ->setLastModified(Carbon::createFromTimestamp($scraperResults->lastModified()));
         };
