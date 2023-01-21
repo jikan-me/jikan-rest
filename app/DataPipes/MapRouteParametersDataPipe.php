@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Support\DataClass;
 
-class MapRouteParametersDataPipe implements \Spatie\LaravelData\DataPipes\DataPipe
+/**
+ * Maps route parameters to the data class properties if a request object payload is present.
+ *
+ * This makes the mapping of requests to dtos easier: The controller action only has to have the dto as argument.
+ */
+final class MapRouteParametersDataPipe implements \Spatie\LaravelData\DataPipes\DataPipe
 {
     public function handle(mixed $payload, DataClass $class, Collection $properties): Collection
     {
