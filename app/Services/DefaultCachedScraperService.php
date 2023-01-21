@@ -8,9 +8,6 @@ use App\Contracts\Repository;
 use App\Http\HttpHelper;
 use App\Support\CachedData;
 use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Jikan\MyAnimeList\MalClient;
 use MongoDB\BSON\UTCDateTime;
@@ -108,15 +105,6 @@ final class DefaultCachedScraperService implements CachedScraperService
     public function get(string $cacheKey): CachedData
     {
         return CachedData::from($this->getByCacheKey($cacheKey));
-    }
-
-    public function augmentResponse(JsonResponse|Response $response, string $cacheKey, CachedData $scraperResults): JsonResponse|Response
-    {
-        return $response
-            ->header("X-Request-Fingerprint", $cacheKey)
-            ->setTtl($this->cacheTtl())
-            ->setExpires(Carbon::createFromTimestamp($scraperResults->expiry()))
-            ->setLastModified(Carbon::createFromTimestamp($scraperResults->lastModified()));
     }
 
     private function raiseNotFoundIfEmpty(CachedData $results)

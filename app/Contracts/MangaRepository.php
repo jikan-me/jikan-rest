@@ -3,7 +3,7 @@
 namespace App\Contracts;
 
 use App\Manga;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -20,4 +20,6 @@ interface MangaRepository extends Repository
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder;
 
     public function orderByRank(): EloquentBuilder|ScoutBuilder;
+
+    public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder;
 }

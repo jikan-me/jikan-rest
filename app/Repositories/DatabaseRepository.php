@@ -55,4 +55,9 @@ class DatabaseRepository extends RepositoryQuery implements Repository
     {
         return $this->queryable(true)->insert($attributes);
     }
+
+    public function random(int $numberOfRandomItems = 1): Collection
+    {
+        return $this->queryable(true)->random($numberOfRandomItems);
+    }
 }

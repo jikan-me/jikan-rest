@@ -4,6 +4,7 @@ namespace App\Dto;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Optional;
+use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Numeric;
 
 /**
@@ -11,6 +12,6 @@ use Spatie\LaravelData\Attributes\Validation\Numeric;
  */
 final class AnimeVideosEpisodesLookupCommand extends LookupDataCommand
 {
-    #[Numeric]
+    #[Numeric, Min(1)]
     public int|Optional $page;
 }

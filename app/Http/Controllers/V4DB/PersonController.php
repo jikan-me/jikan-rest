@@ -2,22 +2,13 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Character;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\Resources\V4\PersonAnimeCollection;
-use App\Http\Resources\V4\PersonAnimeResource;
-use App\Http\Resources\V4\PersonMangaCollection;
-use App\Http\Resources\V4\PersonVoiceResource;
-use App\Http\Resources\V4\PersonVoicesCollection;
-use App\Http\Resources\V4\PicturesResource;
-use App\Person;
+use App\Dto\PersonAnimeLookupCommand;
+use App\Dto\PersonFullLookupCommand;
+use App\Dto\PersonLookupCommand;
+use App\Dto\PersonMangaLookupCommand;
+use App\Dto\PersonPicturesLookupCommand;
+use App\Dto\PersonVoicesLookupCommand;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\Request\Character\CharacterPicturesRequest;
-use Jikan\Request\Person\PersonRequest;
-use Jikan\Request\Person\PersonPicturesRequest;
-use MongoDB\BSON\UTCDateTime;
 
 class PersonController extends Controller
 {
@@ -53,59 +44,8 @@ class PersonController extends Controller
      */
     public function full(Request $request, int $id)
     {
-        $results = Person::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Person::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Person::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Person::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Person::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\PersonFullResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = PersonFullLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -140,59 +80,8 @@ class PersonController extends Controller
      */
     public function main(Request $request, int $id)
     {
-        $results = Person::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Person::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Person::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Person::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Person::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\PersonResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = PersonLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -221,59 +110,8 @@ class PersonController extends Controller
      */
     public function anime(Request $request, int $id)
     {
-        $results = Person::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Person::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Person::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Person::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Person::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new PersonAnimeCollection(
-            $results->first()['anime_staff_positions']
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = PersonAnimeLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -302,59 +140,8 @@ class PersonController extends Controller
      */
     public function voices(Request $request, int $id)
     {
-        $results = Person::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Person::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Person::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Person::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Person::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new PersonVoicesCollection(
-            $results->first()['voice_acting_roles']
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = PersonVoicesLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -383,59 +170,8 @@ class PersonController extends Controller
      */
     public function manga(Request $request, int $id)
     {
-        $results = Person::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Person::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Person::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Person::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Person::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new PersonMangaCollection(
-            $results->first()['published_manga']
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = PersonMangaLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 
     /**
@@ -480,28 +216,7 @@ class PersonController extends Controller
      */
     public function pictures(Request $request, int $id)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $person = ['pictures' => $this->jikan->getPersonPictures(new PersonPicturesRequest($id))];
-            $response = \json_decode($this->serializer->serialize($person, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new PicturesResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        $command = PersonPicturesLookupCommand::from($request, $id);
+        return $this->mediator->send($command);
     }
 }

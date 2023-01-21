@@ -26,6 +26,7 @@ use App\Http\QueryBuilder\MangaSearchQueryBuilder;
 use App\Http\QueryBuilder\TopAnimeQueryBuilder;
 use App\Http\QueryBuilder\TopMangaQueryBuilder;
 use App\Macros\CollectionOffsetGetFirst;
+use App\Macros\ResponseJikanCacheFlags;
 use App\Macros\To2dArrayWithDottedKeys;
 use App\Magazine;
 use App\Mixins\ScoutBuilderMixin;
@@ -54,6 +55,7 @@ use App\Support\DefaultMediator;
 use App\Support\JikanUnitOfWork;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\Response;
 use Illuminate\Support\Env;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
@@ -307,7 +309,20 @@ class AppServiceProvider extends ServiceProvider
                     Features\MangaLookupHandler::class => $unitOfWorkInstance->manga(),
                     Features\MangaFullLookupHandler::class => $unitOfWorkInstance->manga(),
                     Features\MangaRelationsLookupHandler::class => $unitOfWorkInstance->manga(),
-                    Features\MangaExternalLookupHandler::class => $unitOfWorkInstance->manga()
+                    Features\MangaExternalLookupHandler::class => $unitOfWorkInstance->manga(),
+                    Features\PersonLookupHandler::class => $unitOfWorkInstance->people(),
+                    Features\PersonAnimeLookupHandler::class => $unitOfWorkInstance->people(),
+                    Features\PersonFullLookupHandler::class => $unitOfWorkInstance->people(),
+                    Features\PersonMangaLookupHandler::class => $unitOfWorkInstance->people(),
+                    Features\PersonVoicesLookupHandler::class => $unitOfWorkInstance->people(),
+                    Features\PersonPicturesLookupHandler::class => $unitOfWorkInstance->documents("people_pictures"),
+                    Features\ProducerLookupHandler::class => $unitOfWorkInstance->producers(),
+                    Features\ProducerFullLookupHandler::class => $unitOfWorkInstance->producers(),
+                    Features\ProducerExternalLookupHandler::class => $unitOfWorkInstance->producers(),
+                    Features\QueryAnimeRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
+                    Features\QueryMangaRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
+                    Features\QueryAnimeReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
+                    Features\QueryMangaReviewsHandler::class => $unitOfWorkInstance->documents("reviews")
                 ];
 
                 foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
@@ -319,7 +334,14 @@ class AppServiceProvider extends ServiceProvider
                     ]);
                 }
 
+                // automatically resolvable dependencies or no dependencies at all
                 $requestHandlersWithNoDependencies = [
+                    Features\QueryRandomAnimeHandler::class,
+                    Features\QueryRandomMangaHandler::class,
+                    Features\QueryRandomCharacterHandler::class,
+                    Features\QueryRandomPersonHandler::class,
+                    Features\QueryRandomUserHandler::class,
+                    Features\QueryAnimeSchedulesHandler::class
                 ];
 
                 foreach ($requestHandlersWithNoDependencies as $handlerClass) {
@@ -371,6 +393,8 @@ class AppServiceProvider extends ServiceProvider
         Collection::make($this->collectionMacros())
             ->reject(fn ($class, $macro) => Collection::hasMacro($macro))
             ->each(fn ($class, $macro) => Collection::macro($macro, app($class)()));
+
+        Response::macro("addJikanCacheFlags", app(ResponseJikanCacheFlags::class)());
 
         ScoutBuilder::mixin(new ScoutBuilderMixin());
     }

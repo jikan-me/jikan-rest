@@ -3,7 +3,8 @@
 namespace App\Contracts;
 
 use App\Anime;
-use \Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use App\Enums\AnimeScheduleFilterEnum;
+use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use \Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -22,4 +23,10 @@ interface AnimeRepository extends Repository
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder;
 
     public function orderByRank(): EloquentBuilder|ScoutBuilder;
+
+    public function getCurrentlyAiring(
+        ?AnimeScheduleFilterEnum $filter = null,
+        bool $kids = false,
+        bool $sfw = false
+    ): EloquentBuilder;
 }

@@ -7,6 +7,7 @@ use App\Enums\MediaReviewsSortEnum;
 use Illuminate\Http\JsonResponse;
 use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\Validation\BooleanType;
+use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Numeric;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
@@ -16,7 +17,7 @@ use Spatie\LaravelData\Optional;
  */
 final class AnimeReviewsLookupCommand extends LookupDataCommand
 {
-    #[Numeric]
+    #[Numeric, Min(1)]
     public int|Optional $page;
 
     #[WithCast(EnumCast::class, MediaReviewsSortEnum::class)]

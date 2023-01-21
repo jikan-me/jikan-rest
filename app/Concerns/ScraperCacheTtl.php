@@ -2,10 +2,12 @@
 
 namespace App\Concerns;
 
+use Illuminate\Support\Env;
+
 trait ScraperCacheTtl
 {
-    protected function cacheTtl(): int
+    protected static function cacheTtl(): int
     {
-        return (int) env('CACHE_DEFAULT_EXPIRE');
+        return (int) Env::get('CACHE_DEFAULT_EXPIRE');
     }
 }

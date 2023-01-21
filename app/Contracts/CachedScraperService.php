@@ -33,6 +33,4 @@ interface CachedScraperService
     public function findByKey(string $key, mixed $val, string $cacheKey): CachedData;
 
     public function get(string $cacheKey): CachedData;
-
-    public function augmentResponse(JsonResponse|Response $response, string $cacheKey, CachedData $scraperResults): JsonResponse|Response;
 }

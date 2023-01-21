@@ -6,8 +6,11 @@ use App\Anime;
 use App\Contracts\AnimeRepository;
 use App\Contracts\Repository;
 use App\Enums\AnimeRatingEnum;
+use App\Enums\AnimeScheduleFilterEnum;
 use App\Enums\AnimeStatusEnum;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use App\Enums\AnimeTypeEnum;
+use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Jikan\Helper\Constants;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -59,5 +62,43 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ->whereNotNull("rank")
             ->where("rank", ">", 0)
             ->orderBy("rank");
+    }
+
+    public function getCurrentlyAiring(
+        ?AnimeScheduleFilterEnum $filter = null,
+        bool $kids = false,
+        bool $sfw = false): EloquentBuilder
+    {
+        /*
+         * all have status as currently airing
+         * all have premiered, but they're not necessarily the current season or year
+         * all have aired date, but they're not necessarily the current date/season
+         */
+        $queryable = $this->queryable(true)
+                          ->orderBy("members")
+                          ->where("type", AnimeTypeEnum::tv()->label)
+                          ->where("status", AnimeStatusEnum::airing()->label);
+
+        if ($kids) {
+            $queryable = $queryable->where("demographics.mal_id", Constants::GENRE_ANIME_KIDS);
+        }
+        else {
+            $queryable = $queryable->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_KIDS);
+        }
+
+        if ($sfw) {
+            $queryable = $queryable->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI);
+        }
+
+        if (!is_null($filter)) {
+            if ($filter->isWeekDay()) {
+                $queryable = $queryable->where("broadcast", "like", "{$filter->label}%");
+            }
+            else {
+                $queryable = $queryable->where("broadcast", $filter->label);
+            }
+        }
+
+        return $queryable;
     }
 }

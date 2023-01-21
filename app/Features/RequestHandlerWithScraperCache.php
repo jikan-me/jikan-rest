@@ -53,6 +53,6 @@ abstract class RequestHandlerWithScraperCache implements RequestHandler
     {
         $finalResults = $results->collect();
         $response = $this->resource($finalResults)->response();
-        return $this->scraperService->augmentResponse($response, $requestFingerPrint, $results);
+        return $response->addJikanCacheFlags($requestFingerPrint, $results);
     }
 }

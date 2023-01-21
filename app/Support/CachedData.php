@@ -73,11 +73,11 @@ final class CachedData
 
         $result = $this->scraperResult->first();
 
-        if (is_array($result)) {
+        if (is_array($result) && array_key_exists("modifiedAt", $result)) {
             return (int) $result["modifiedAt"]->toDateTime()->format("U");
         }
 
-        if (is_object($result)) {
+        if (is_object($result) && property_exists($result, "modifiedAt")) {
             return $result->modifiedAt->toDateTime()->format("U");
         }
 

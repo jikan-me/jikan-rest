@@ -34,7 +34,7 @@ abstract class ItemLookupHandler extends Data implements RequestHandler
         $results = $this->scraperService->find($request->id, $requestFingerprint);
 
         $resource = $this->resource($results->collect());
-        return $this->scraperService->augmentResponse($resource->response(), $requestFingerprint, $results);
+        return $resource->response()->addJikanCacheFlags($requestFingerprint, $results);
     }
 
     protected abstract function resource(Collection $results): JsonResource;

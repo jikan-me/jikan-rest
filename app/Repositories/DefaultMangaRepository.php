@@ -4,8 +4,9 @@ namespace App\Repositories;
 
 use App\Contracts\MangaRepository;
 use App\Enums\MangaStatusEnum;
+use App\Enums\MangaTypeEnum;
 use App\Manga;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 class DefaultMangaRepository extends DatabaseRepository implements MangaRepository
@@ -43,5 +44,10 @@ class DefaultMangaRepository extends DatabaseRepository implements MangaReposito
             ->whereNotNull("rank")
             ->where("rank", ">", 0)
             ->orderBy("rank");
+    }
+
+    public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
+    {
+        return $this->queryable()->where("type", "!=", MangaTypeEnum::doujin()->label);
     }
 }

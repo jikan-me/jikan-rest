@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Filters\FilterQueryString;
+use Illuminate\Support\Collection;
+use Jenssegers\Mongodb\Eloquent\Builder;
 
 class JikanApiModel extends \Jenssegers\Mongodb\Eloquent\Model
 {
@@ -15,4 +17,12 @@ class JikanApiModel extends \Jenssegers\Mongodb\Eloquent\Model
      * @var string[]
      */
     protected array $filters = [];
+
+    /** @noinspection PhpUnused */
+    public function scopeRandom(Builder $query, int $numberOfRandomItems = 1): Collection
+    {
+        return $query->raw(fn(\MongoDB\Collection $collection) => $collection->aggregate([
+            ['$sample' => ['size' => $numberOfRandomItems]]
+        ]));
+    }
 }
