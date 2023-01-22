@@ -13,5 +13,5 @@ use Spatie\LaravelData\Attributes\Validation\Numeric;
 final class AnimeVideosEpisodesLookupCommand extends LookupDataCommand
 {
     #[Numeric, Min(1)]
-    public int|Optional $page;
+    public int|Optional $page = 1;
 }

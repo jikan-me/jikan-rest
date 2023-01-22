@@ -14,5 +14,5 @@ use Spatie\LaravelData\Optional;
 final class MangaNewsLookupCommand extends LookupDataCommand
 {
     #[Numeric, Min(1)]
-    public int|Optional $page;
+    public int|Optional $page = 1;
 }

@@ -5,11 +5,10 @@ namespace App\Dto;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
 use App\DataPipes\MapRouteParametersDataPipe;
-use Illuminate\Http\Request;
+use App\Dto\Concerns\MapsRouteParameters;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Numeric;
 use Spatie\LaravelData\Attributes\Validation\Required;
@@ -28,20 +27,8 @@ use Spatie\LaravelData\DataPipes\ValidatePropertiesDataPipe;
  */
 abstract class LookupDataCommand extends Data implements DataRequest
 {
-    use HasRequestFingerprint;
+    use MapsRouteParameters, HasRequestFingerprint;
 
     #[Numeric, Required, Min(1)]
     public int $id;
-
-    public static function pipeline(): DataPipeline
-    {
-        return DataPipeline::create()
-            ->into(static::class)
-            ->through(AuthorizedDataPipe::class)
-            ->through(MapPropertiesDataPipe::class)
-            ->through(MapRouteParametersDataPipe::class) // if a payload is a request object, we map route params
-            ->through(ValidatePropertiesDataPipe::class)
-            ->through(DefaultValuesDataPipe::class)
-            ->through(CastPropertiesDataPipe::class);
-    }
 }

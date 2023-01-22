@@ -69,8 +69,6 @@ use App\Features;
 
 class AppServiceProvider extends ServiceProvider
 {
-    private \ReflectionClass $simpleSearchQueryBuilderClassReflection;
-
     /**
      * @throws \ReflectionException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
@@ -78,7 +76,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerMacros();
-        $this->simpleSearchQueryBuilderClassReflection = new \ReflectionClass(SimpleSearchQueryBuilder::class);
     }
 
     /**
@@ -270,7 +267,8 @@ class AppServiceProvider extends ServiceProvider
                     Features\QueryAnimeRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
                     Features\QueryMangaRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
                     Features\QueryAnimeReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
-                    Features\QueryMangaReviewsHandler::class => $unitOfWorkInstance->documents("reviews")
+                    Features\QueryMangaReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
+                    Features\QueryAnimeSeasonListHandler::class => $unitOfWorkInstance->documents("season_archive")
                 ];
 
                 foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
@@ -290,7 +288,10 @@ class AppServiceProvider extends ServiceProvider
                     Features\QueryRandomCharacterHandler::class,
                     Features\QueryRandomPersonHandler::class,
                     Features\QueryRandomUserHandler::class,
-                    Features\QueryAnimeSchedulesHandler::class
+                    Features\QueryAnimeSchedulesHandler::class,
+                    Features\QueryCurrentAnimeSeasonHandler::class,
+                    Features\QuerySpecificAnimeSeasonHandler::class,
+                    Features\QueryUpcomingAnimeSeasonHandler::class
                 ];
 
                 foreach ($requestHandlersWithNoDependencies as $handlerClass) {

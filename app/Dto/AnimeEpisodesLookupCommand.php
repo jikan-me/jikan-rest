@@ -13,5 +13,5 @@ use Spatie\LaravelData\Optional;
 final class AnimeEpisodesLookupCommand extends LookupDataCommand
 {
     #[Numeric, Min(1)]
-    public int|Optional $page;
+    public int|Optional $page = 1;
 }

@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Concerns\ScraperCacheTtl;
+use App\JikanApiModel;
 use Illuminate\Support\Collection;
 
 final class CachedData
@@ -72,6 +73,10 @@ final class CachedData
         }
 
         $result = $this->scraperResult->first();
+
+        if ($result instanceof JikanApiModel && !is_null($result->getAttributeValue("modifiedAt"))) {
+            return (int) $result["modifiedAt"]->toDateTime()->format("U");
+        }
 
         if (is_array($result) && array_key_exists("modifiedAt", $result)) {
             return (int) $result["modifiedAt"]->toDateTime()->format("U");

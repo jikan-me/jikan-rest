@@ -116,4 +116,15 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
         return $queryable->orderBy("members", "desc");
     }
+
+    public function getUpcomingSeasonItems(?AnimeTypeEnum $type = null): EloquentBuilder
+    {
+        $queryable = $this->queryable(true)->where("status", AnimeStatusEnum::upcoming()->label);
+
+        if (!is_null($type)) {
+            $queryable = $queryable->where("type", $type->label);
+        }
+
+        return $queryable->orderBy("members", "desc");
+    }
 }

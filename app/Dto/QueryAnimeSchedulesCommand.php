@@ -6,7 +6,9 @@ namespace App\Dto;
 use App\Casts\EnumCast;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
+use App\Dto\Concerns\MapsDefaultLimitParameter;
 use App\Enums\AnimeScheduleFilterEnum;
+use App\Rules\Attributes\MaxLimitWithFallback;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Env;
@@ -25,12 +27,12 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryAnimeSchedulesCommand extends Data implements DataRequest
 {
-    use HasRequestFingerprint;
+    use MapsDefaultLimitParameter, HasRequestFingerprint;
 
     #[Numeric, Min(1)]
     public int|Optional $page = 1;
 
-    #[IntegerType, Min(1)]
+    #[IntegerType, Min(1), MaxLimitWithFallback]
     public int|Optional $limit;
 
     #[BooleanType]
@@ -59,10 +61,6 @@ final class QueryAnimeSchedulesCommand extends Data implements DataRequest
 
         if (!is_null($day)) {
             $data->filter = AnimeScheduleFilterEnum::from($day);
-        }
-
-        if ($data->limit == Optional::create()) {
-            $data->limit = Env::get("MAX_RESULTS_PER_PAGE", 25);
         }
 
         return $data;

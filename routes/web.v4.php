@@ -256,7 +256,7 @@ $router->group(
         ]);
 
         $router->get('/now', [
-            'uses' => 'SeasonController@main'
+            'uses' => 'SeasonController@now'
         ]);
 
         $router->get('/upcoming', [

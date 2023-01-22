@@ -19,7 +19,7 @@ use Spatie\LaravelData\Optional;
 final class MangaReviewsLookupCommand extends LookupDataCommand
 {
     #[Numeric, Min(1)]
-    public int|Optional $page;
+    public int|Optional $page = 1;
 
     #[WithCast(EnumCast::class, MediaReviewsSortEnum::class)]
     public MediaReviewsSortEnum|Optional $sort;

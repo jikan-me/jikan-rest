@@ -24,7 +24,7 @@ abstract class QueryReviewsCommand extends Data implements DataRequest
     use HasRequestFingerprint;
 
     #[Numeric, Min(1)]
-    public int|Optional $page;
+    public int|Optional $page = 1;
 
     #[WithCast(EnumCast::class, MediaReviewsSortEnum::class)]
     public MediaReviewsSortEnum|Optional $sort;

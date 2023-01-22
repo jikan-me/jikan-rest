@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Features;
+
+use App\Contracts\AnimeRepository;
+use App\Contracts\RequestHandler;
+use App\Dto\QueryAnimeSeasonCommand;
+use App\Enums\AnimeSeasonEnum;
+use App\Http\Resources\V4\AnimeCollection;
+use App\Support\CachedData;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+
+/**
+ * @template TRequest of QueryAnimeSeasonCommand
+ * @implements RequestHandler<TRequest, JsonResponse>
+ */
+abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
+{
+    public function __construct(protected readonly AnimeRepository $repository)
+    {
+    }
+
+    /**
+     * @param QueryAnimeSeasonCommand $request
+     * @return JsonResponse
+     */
+    public function handle($request): JsonResponse
+    {
+        /**
+         * @var Carbon $from
+         * @var Carbon $to
+         */
+        [$from, $to] = $this->getSeasonRangeFrom($request);
+        $type = collect($request->all())->has("filter") ? $request->filter : null;
+        $results = $this->repository->getAiredBetween($from, $to, $type);
+        $results = $results->paginate($request->limit, ["*"], null, $request->page);
+
+        $animeCollection = new AnimeCollection($results);
+        $response = $animeCollection->response();
+
+        return $response->addJikanCacheFlags($request->getFingerPrint(), CachedData::from($animeCollection->collection));
+    }
+
+    /**
+     * @param TRequest $request
+     * @return array
+     */
+    protected abstract function getSeasonRangeFrom($request): array;
+
+    protected function getSeasonRange(int $year, AnimeSeasonEnum $season): array
+    {
+        [$monthStart, $monthEnd] = match ($season->value) {
+            AnimeSeasonEnum::winter()->value => [1, 3],
+            AnimeSeasonEnum::spring()->value => [4, 6],
+            AnimeSeasonEnum::summer()->value => [7, 9],
+            AnimeSeasonEnum::fall()->value => [10, 12],
+            default => throw new BadRequestException('Invalid season supplied'),
+        };
+
+        return [
+            Carbon::createFromDate($year, $monthStart, 1),
+            Carbon::createFromDate($year, $monthEnd, 1)
+        ];
+    }
+}
