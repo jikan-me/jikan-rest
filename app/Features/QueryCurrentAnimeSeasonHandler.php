@@ -2,17 +2,25 @@
 
 namespace App\Features;
 
+use App\Contracts\AnimeRepository;
 use App\Contracts\RequestHandler;
 use App\Dto\QueryCurrentAnimeSeasonCommand;
 use App\Enums\AnimeSeasonEnum;
+use App\Enums\AnimeTypeEnum;
 use Exception;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
 
 /**
  * @implements RequestHandler<QueryCurrentAnimeSeasonCommand, JsonResponse>
  */
 final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
 {
+    public function __construct(private readonly AnimeRepository $repository)
+    {
+    }
+
     public function requestClass(): string
     {
         return QueryCurrentAnimeSeasonCommand::class;
@@ -41,14 +49,14 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
     /**
      * @throws Exception
      */
-    protected function getSeasonRangeFrom($request): array
+    protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder
     {
-        /**
-         * @var AnimeSeasonEnum $season
-         * @var int $year
-         */
         [$season, $year] = $this->getCurrentSeason();
-
-        return $this->getSeasonRange($year, $season);
+        /**
+         * @var Carbon $from
+         * @var Carbon $to
+         */
+        [$to, $from] = $this->getSeasonRange($year, $season);
+        return $this->repository->getAiredBetween($from, $to, $type);
     }
 }

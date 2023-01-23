@@ -2,23 +2,33 @@
 
 namespace App\Features;
 
+use App\Contracts\AnimeRepository;
 use App\Dto\QuerySpecificAnimeSeasonCommand;
-use App\Enums\AnimeSeasonEnum;
+use App\Enums\AnimeTypeEnum;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**
  * @extends QueryAnimeSeasonHandlerBase<QuerySpecificAnimeSeasonCommand>
  */
 final class QuerySpecificAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
 {
+    public function __construct(private readonly AnimeRepository $repository)
+    {
+    }
+
     public function requestClass(): string
     {
         return QuerySpecificAnimeSeasonCommand::class;
     }
 
-    protected function getSeasonRangeFrom($request): array
+    protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder
     {
-        return $this->getSeasonRange($request->year, $request->season);
+        /**
+         * @var Carbon $from
+         * @var Carbon $to
+         */
+        [$to, $from] = $this->getSeasonRange($request->year, $request->season);
+        return $this->repository->getAiredBetween($from, $to, $type);
     }
 }

@@ -2,12 +2,13 @@
 
 namespace App\Features;
 
-use App\Contracts\AnimeRepository;
 use App\Contracts\RequestHandler;
 use App\Dto\QueryAnimeSeasonCommand;
 use App\Enums\AnimeSeasonEnum;
+use App\Enums\AnimeTypeEnum;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Support\CachedData;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -18,23 +19,14 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
  */
 abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
 {
-    public function __construct(protected readonly AnimeRepository $repository)
-    {
-    }
-
     /**
      * @param QueryAnimeSeasonCommand $request
      * @return JsonResponse
      */
     public function handle($request): JsonResponse
     {
-        /**
-         * @var Carbon $from
-         * @var Carbon $to
-         */
-        [$from, $to] = $this->getSeasonRangeFrom($request);
         $type = collect($request->all())->has("filter") ? $request->filter : null;
-        $results = $this->repository->getAiredBetween($from, $to, $type);
+        $results = $this->getSeasonItems($request, $type);
         $results = $results->paginate($request->limit, ["*"], null, $request->page);
 
         $animeCollection = new AnimeCollection($results);
@@ -45,9 +37,10 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
 
     /**
      * @param TRequest $request
-     * @return array
+     * @param ?AnimeTypeEnum $type
+     * @return Builder
      */
-    protected abstract function getSeasonRangeFrom($request): array;
+    protected abstract function getSeasonItems($request, ?AnimeTypeEnum $type): Builder;
 
     protected function getSeasonRange(int $year, AnimeSeasonEnum $season): array
     {
