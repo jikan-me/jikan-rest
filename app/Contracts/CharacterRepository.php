@@ -3,8 +3,8 @@
 namespace App\Contracts;
 
 use App\Character;
-use \Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use \Laravel\Scout\Builder as ScoutBuilder;
+use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
  * @implements Repository<Character>

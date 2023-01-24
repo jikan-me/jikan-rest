@@ -13,7 +13,7 @@ use Spatie\LaravelData\Resolvers\DataFromSomethingResolver;
  */
 trait HasRequestFingerprint
 {
-    protected ?string $fingerprint;
+    protected ?string $fingerprint = null;
 
     public static function fromRequest(Request $request): ?static
     {

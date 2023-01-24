@@ -6,6 +6,7 @@ namespace App\Dto;
 use App\Casts\EnumCast;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
+use App\Dto\Concerns\HasPageParameter;
 use App\Enums\MediaReviewsSortEnum;
 use App\Http\Resources\V4\ResultsResource;
 use Spatie\Enum\Laravel\Rules\EnumRule;
@@ -21,10 +22,7 @@ use Spatie\LaravelData\Optional;
  */
 abstract class QueryReviewsCommand extends Data implements DataRequest
 {
-    use HasRequestFingerprint;
-
-    #[Numeric, Min(1)]
-    public int|Optional $page = 1;
+    use HasRequestFingerprint, HasPageParameter;
 
     #[WithCast(EnumCast::class, MediaReviewsSortEnum::class)]
     public MediaReviewsSortEnum|Optional $sort;

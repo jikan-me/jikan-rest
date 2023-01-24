@@ -9,7 +9,7 @@ use App\Profile;
 /**
  * @implements Repository<Profile>
  */
-class DefaultUserRepository extends DatabaseRepository implements UserRepository
+final class DefaultUserRepository extends DatabaseRepository implements UserRepository
 {
     public function __construct()
     {

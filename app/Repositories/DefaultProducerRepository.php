@@ -9,7 +9,7 @@ use App\Producers;
 /**
  * @implements Repository<Producers>
  */
-class DefaultProducerRepository extends DatabaseRepository implements ProducerRepository
+final class DefaultProducerRepository extends DatabaseRepository implements ProducerRepository
 {
     public function __construct()
     {

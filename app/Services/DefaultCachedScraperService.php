@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Concerns\ScraperCacheTtl;
 use App\Contracts\CachedScraperService;
 use App\Contracts\Repository;
 use App\Http\HttpHelper;
@@ -19,8 +18,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class DefaultCachedScraperService implements CachedScraperService
 {
-    use ScraperCacheTtl;
-
     public function __construct(
         private readonly Repository $repository,
         private readonly MalClient $jikan,
@@ -133,7 +130,7 @@ final class DefaultCachedScraperService implements CachedScraperService
             $this->repository->queryByMalId($id)->update($response->toArray());
         }
 
-        return new CachedData(collect($this->repository->getAllByMalId($id)));
+        return CachedData::from(collect($this->repository->getAllByMalId($id)));
     }
 
     private function updateCacheByKey(string $cacheKey, CachedData $results, array $scraperResponse): CachedData
@@ -149,7 +146,7 @@ final class DefaultCachedScraperService implements CachedScraperService
             $this->getQueryableByCacheKey($cacheKey)->update($response->toArray());
         }
 
-        return new CachedData($this->getByCacheKey($cacheKey));
+        return CachedData::from($this->getByCacheKey($cacheKey));
     }
 
     private function prepareScraperResponse(string $cacheKey, bool $resultsEmpty, array $scraperResponse): CachedData
@@ -166,7 +163,7 @@ final class DefaultCachedScraperService implements CachedScraperService
         $meta['modifiedAt'] = new UTCDateTime();
 
         // join meta data with response
-        return new CachedData(collect($meta + $scraperResponse));
+        return CachedData::from(collect($meta + $scraperResponse));
     }
 
     private function getByCacheKey(string $cacheKey): Collection
@@ -179,7 +176,7 @@ final class DefaultCachedScraperService implements CachedScraperService
         return $this->repository->where("request_hash", $cacheKey);
     }
 
-    private function serializeScraperResult(array $data): array
+    private function serializeScraperResult(mixed $data): array
     {
         return $this->serializer->toArray($data);
     }

@@ -2,8 +2,8 @@
 
 namespace App\Macros;
 
-use App\Concerns\ScraperCacheTtl;
 use App\Support\CachedData;
+use App\Support\CacheOptions;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
@@ -12,8 +12,6 @@ use Illuminate\Support\Carbon;
  */
 final class ResponseJikanCacheFlags
 {
-    use ScraperCacheTtl;
-
     public function __invoke(): \Closure
     {
         return function (string $cacheKey, CachedData $scraperResults) {
@@ -22,7 +20,7 @@ final class ResponseJikanCacheFlags
              */
             return $this
                 ->header("X-Request-Fingerprint", $cacheKey)
-                ->setTtl(ResponseJikanCacheFlags::cacheTtl())
+                ->setTtl(app(CacheOptions::class)->ttl())
                 ->setExpires(Carbon::createFromTimestamp($scraperResults->expiry()))
                 ->setLastModified(Carbon::createFromTimestamp($scraperResults->lastModified()));
         };

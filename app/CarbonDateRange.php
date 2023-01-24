@@ -12,8 +12,8 @@ use Jikan\Model\Common\DateProp;
  */
 class CarbonDateRange
 {
-    private ?Carbon $fromObj;
-    private ?Carbon $untilObj;
+    private ?Carbon $fromObj = null;
+    private ?Carbon $untilObj = null;
 
     public function __construct(?Carbon $from, ?Carbon $to)
     {

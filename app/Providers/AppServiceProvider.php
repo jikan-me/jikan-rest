@@ -15,22 +15,11 @@ use App\Contracts\Repository;
 use App\Contracts\RequestHandler;
 use App\Contracts\UnitOfWork;
 use App\Contracts\UserRepository;
-use App\GenreAnime;
-use App\GenreManga;
-use App\Http\QueryBuilder\AnimeSearchQueryBuilder;
-use App\Http\QueryBuilder\CharacterSearchQueryBuilder;
-use App\Http\QueryBuilder\ClubSearchQueryBuilder;
-use App\Http\QueryBuilder\PeopleSearchQueryBuilder;
-use App\Http\QueryBuilder\SimpleSearchQueryBuilder;
-use App\Http\QueryBuilder\MangaSearchQueryBuilder;
-use App\Http\QueryBuilder\TopAnimeQueryBuilder;
-use App\Http\QueryBuilder\TopMangaQueryBuilder;
+use App\Http\Middleware\EndpointCacheTtlMiddleware;
 use App\Macros\CollectionOffsetGetFirst;
 use App\Macros\ResponseJikanCacheFlags;
 use App\Macros\To2dArrayWithDottedKeys;
-use App\Magazine;
 use App\Mixins\ScoutBuilderMixin;
-use App\Producers;
 use App\Repositories\AnimeGenresRepository;
 use App\Repositories\DefaultAnimeRepository;
 use App\Repositories\DefaultCharacterRepository;
@@ -53,7 +42,9 @@ use App\Services\ScoutSearchService;
 use App\Services\SearchEngineSearchService;
 use App\Services\SearchService;
 use App\Services\TypeSenseScoutSearchService;
+use App\Support\CacheOptions;
 use App\Support\DefaultMediator;
+use App\Support\JikanConfig;
 use App\Support\JikanUnitOfWork;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
@@ -87,6 +78,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(JikanConfig::class, fn() => new JikanConfig(config("jikan")));
+        // cache options class is used to share the request scope level cache settings
+        $this->app->singleton(CacheOptions::class);
         $this->app->singleton(CachedScraperService::class, DefaultCachedScraperService::class);
         if ($this->getSearchIndexesEnabledConfig($this->app)) {
             $this->app->bind(QueryBuilderPaginatorService::class, ScoutBuilderPaginatorService::class);
@@ -268,7 +262,20 @@ class AppServiceProvider extends ServiceProvider
                     Features\QueryMangaRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
                     Features\QueryAnimeReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
                     Features\QueryMangaReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
-                    Features\QueryAnimeSeasonListHandler::class => $unitOfWorkInstance->documents("season_archive")
+                    Features\QueryAnimeSeasonListHandler::class => $unitOfWorkInstance->documents("season_archive"),
+                    Features\UserFullLookupHandler::class => $unitOfWorkInstance->users(),
+                    Features\UserProfileLookupHandler::class => $unitOfWorkInstance->users(),
+                    Features\UserStatisticsLookupHandler::class => $unitOfWorkInstance->users(),
+                    Features\UserFavoritesLookupHandler::class => $unitOfWorkInstance->users(),
+                    Features\UserUpdatesLookupHandler::class => $unitOfWorkInstance->users(),
+                    Features\UserAboutLookupHandler::class => $unitOfWorkInstance->users(),
+                    Features\UserHistoryLookupHandler::class => $unitOfWorkInstance->documents("users_history"),
+                    Features\UserFriendsLookupHandler::class => $unitOfWorkInstance->documents("users_friends"),
+                    Features\UserReviewsLookupHandler::class => $unitOfWorkInstance->documents("users_reviews"),
+                    Features\UserRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("users_recommendations"),
+                    Features\UserClubsLookupHandler::class => $unitOfWorkInstance->documents("users_clubs"),
+                    Features\UserExternalLookupHandler::class => $unitOfWorkInstance->users(),
+                    Features\QueryRecentlyOnlineUsersHandler::class => $unitOfWorkInstance->documents("users_recently_online")
                 ];
 
                 foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
@@ -347,15 +354,11 @@ class AppServiceProvider extends ServiceProvider
 
     public static function servicesToWarm(): array
     {
+        // todo: test again with roadrunner -- specific issue: typesense driver not loaded in time
         $services = [
             ScoutSearchService::class,
-            AnimeSearchQueryBuilder::class,
-            MangaSearchQueryBuilder::class,
-            ClubSearchQueryBuilder::class,
-            CharacterSearchQueryBuilder::class,
-            PeopleSearchQueryBuilder::class,
-            TopAnimeQueryBuilder::class,
-            TopMangaQueryBuilder::class
+            UnitOfWork::class,
+            CachedScraperService::class
         ];
 
         if (Env::get("SCOUT_DRIVER") === "typesense") {
@@ -364,6 +367,12 @@ class AppServiceProvider extends ServiceProvider
 
         if (Env::get("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
             $services[] = \Elastic\Elasticsearch\Client::class;
+        }
+
+        if (Env::get("SCOUT_DRIVER") !== "none" && Env::get("SCOUT_DRIVER")) {
+            $services[] = ScoutBuilderPaginatorService::class;
+        } else {
+            $services[] = EloquentBuilderPaginatorService::class;
         }
 
         return $services;

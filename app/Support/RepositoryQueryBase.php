@@ -6,8 +6,8 @@ use Illuminate\Contracts\Database\Query\Builder;
 
 class RepositoryQueryBase
 {
-    private ?Builder $queryableBuilder;
-    private ?ScoutBuilder $searchableBuilder;
+    private ?Builder $queryableBuilder = null;
+    private ?ScoutBuilder $searchableBuilder = null;
 
     public function __construct(
         private readonly \Closure $getQueryable,

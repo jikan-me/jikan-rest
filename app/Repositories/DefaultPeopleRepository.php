@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Contracts\PeopleRepository;
 use App\Contracts\Repository;
 use App\Person;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**

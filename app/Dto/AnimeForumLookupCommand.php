@@ -5,9 +5,9 @@ namespace App\Dto;
 use App\Casts\EnumCast;
 use App\Enums\AnimeForumFilterEnum;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Optional;
 use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Optional;
 
 /**
  * @extends LookupDataCommand<JsonResponse>

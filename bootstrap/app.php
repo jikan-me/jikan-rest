@@ -41,7 +41,6 @@ $app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config'
 $app->instance('path.storage', app()->basePath() . DIRECTORY_SEPARATOR . 'storage');
 
 $app->withEloquent();
-
 $app->configure('swagger-lume');
 $app->configure('scout');
 
@@ -88,6 +87,7 @@ $app->middleware($globalMiddleware);
 $app->routeMiddleware([
     'microcaching' => \App\Http\Middleware\MicroCaching::class,
     'source-health-monitor' => SourceHeartbeatMonitor::class,
+    'cache-ttl' => \App\Http\Middleware\EndpointCacheTtlMiddleware::class
 ]);
 
 /*
@@ -109,6 +109,7 @@ $app->configure('controller-to-table-mapping');
 $app->configure('controller');
 $app->configure('roadrunner');
 $app->configure('data');
+$app->configure('jikan');
 
 $app->register(\pushrbx\LumenRoadRunner\ServiceProvider::class);
 $app->register(\SwaggerLume\ServiceProvider::class);
@@ -169,6 +170,7 @@ if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEn
 $commonMiddleware = [
     'source-health-monitor',
     'microcaching',
+    'cache-ttl'
 ];
 
 

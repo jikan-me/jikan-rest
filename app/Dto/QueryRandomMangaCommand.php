@@ -4,9 +4,9 @@ namespace App\Dto;
 
 use App\Contracts\DataRequest;
 use App\Http\Resources\V4\MangaResource;
-use Illuminate\Support\Optional;
 use Spatie\LaravelData\Attributes\Validation\BooleanType;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Optional;
 
 /**
  * @implements DataRequest<MangaResource>

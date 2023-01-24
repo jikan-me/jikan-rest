@@ -15,7 +15,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 {
     use JikanDataGenerator;
 
-    protected ?MediaModelFactoryDescriptor $descriptor;
+    protected ?MediaModelFactoryDescriptor $descriptor = null;
 
     public function __construct(
         MediaModelFactoryDescriptor $descriptor,

@@ -9,7 +9,7 @@ use App\Manga;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
-class DefaultMangaRepository extends DatabaseRepository implements MangaRepository
+final class DefaultMangaRepository extends DatabaseRepository implements MangaRepository
 {
     public function __construct()
     {

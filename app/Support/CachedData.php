@@ -5,20 +5,23 @@ namespace App\Support;
 use App\Concerns\ScraperCacheTtl;
 use App\JikanApiModel;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Env;
 
 final class CachedData
 {
-    use ScraperCacheTtl;
+    private int $cacheTimeToLive;
 
-    public function __construct(
-        private readonly Collection $scraperResult
+    private function __construct(
+        private readonly Collection $scraperResult,
+        int $cacheTtl
     )
     {
+        $this->cacheTimeToLive = $cacheTtl;
     }
 
     public static function from(Collection $scraperResult): self
     {
-        return new self($scraperResult);
+        return new self($scraperResult, app(CacheOptions::class)->ttl());
     }
 
     public function collect(): Collection
@@ -62,8 +65,13 @@ final class CachedData
     public function expiry(): int
     {
         $modifiedAt = $this->lastModified();
-        $ttl = $this->cacheTtl();
+        $ttl = $this->cacheTimeToLive;
         return $modifiedAt !== null ? $ttl + $modifiedAt : $ttl;
+    }
+
+    public function cacheTtl(): int
+    {
+        return $this->cacheTimeToLive;
     }
 
     public function lastModified(): ?int

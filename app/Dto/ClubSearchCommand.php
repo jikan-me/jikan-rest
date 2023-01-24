@@ -8,11 +8,11 @@ use App\Enums\ClubCategoryEnum;
 use App\Enums\ClubOrderByEnum;
 use App\Enums\ClubTypeEnum;
 use App\Http\Resources\V4\ClubCollection;
-use Illuminate\Support\Optional;
 use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Optional;
 
 /**
  * @implements DataRequest<ClubCollection>

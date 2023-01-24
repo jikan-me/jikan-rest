@@ -9,7 +9,7 @@ use App\Contracts\Repository;
 /**
  * @implements Repository<Club>
  */
-class DefaultClubRepository extends DatabaseRepository implements ClubRepository
+final class DefaultClubRepository extends DatabaseRepository implements ClubRepository
 {
     public function __construct()
     {

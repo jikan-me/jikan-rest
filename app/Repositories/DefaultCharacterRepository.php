@@ -5,13 +5,13 @@ namespace App\Repositories;
 use App\Character;
 use App\Contracts\CharacterRepository;
 use App\Contracts\Repository;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
  * @implements Repository<Character>
  */
-class DefaultCharacterRepository extends DatabaseRepository implements CharacterRepository
+final class DefaultCharacterRepository extends DatabaseRepository implements CharacterRepository
 {
     public function __construct()
     {

@@ -9,7 +9,7 @@ use App\Magazine;
 /**
  * @implements Repository<Magazine>
  */
-class DefaultMagazineRepository extends DatabaseRepository implements MagazineRepository
+final class DefaultMagazineRepository extends DatabaseRepository implements MagazineRepository
 {
     public function __construct()
     {

@@ -7,7 +7,7 @@ use App\Enums\AnimeScheduleFilterEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Support\Carbon;
-use \Laravel\Scout\Builder as ScoutBuilder;
+use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
  * @implements Repository<Anime>
