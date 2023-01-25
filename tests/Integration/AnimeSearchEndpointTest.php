@@ -2,8 +2,7 @@
 namespace Tests\Integration;
 use App\Anime;
 use App\CarbonDateRange;
-use App\Http\QueryBuilder\AnimeSearchQueryBuilder;
-use App\Http\QueryBuilder\MediaSearchQueryBuilder;
+use App\Enums\AnimeOrderByEnum;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -146,7 +145,7 @@ class AnimeSearchEndpointTest extends TestCase
 
     public function orderByFieldMappingProvider(): array
     {
-        $orderByFieldMappings = array_merge(MediaSearchQueryBuilder::ORDER_BY, AnimeSearchQueryBuilder::ORDER_BY);
+        $orderByFieldMappings = AnimeOrderByEnum::toArray();
         $params = [];
 
         foreach ($orderByFieldMappings as $paramName => $orderByField) {

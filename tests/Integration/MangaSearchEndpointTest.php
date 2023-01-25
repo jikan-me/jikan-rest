@@ -3,8 +3,7 @@
 namespace Tests\Integration;
 
 use App\CarbonDateRange;
-use App\Http\QueryBuilder\MangaSearchQueryBuilder;
-use App\Http\QueryBuilder\MediaSearchQueryBuilder;
+use App\Enums\MangaOrderByEnum;
 use App\Manga;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
@@ -133,7 +132,7 @@ class MangaSearchEndpointTest extends TestCase
 
     public function orderByFieldMappingProvider(): array
     {
-        $orderByFieldMappings = array_merge(MediaSearchQueryBuilder::ORDER_BY, MangaSearchQueryBuilder::ORDER_BY);
+        $orderByFieldMappings = MangaOrderByEnum::toArray();
         $params = [];
 
         foreach ($orderByFieldMappings as $paramName => $orderByField) {

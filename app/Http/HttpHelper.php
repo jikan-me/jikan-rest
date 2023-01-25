@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Env;
 
 class HttpHelper
 {
@@ -29,7 +30,7 @@ class HttpHelper
     public static function requestCacheExpiry(string $requestType): int
     {
         $requestType = strtoupper($requestType);
-        return (int) (env("CACHE_{$requestType}_EXPIRE") ?? env('CACHE_DEFAULT_EXPIRE'));
+        return (int) (Env::get("CACHE_{$requestType}_EXPIRE") ?? Env::get('CACHE_DEFAULT_EXPIRE'));
     }
 
     public static function requestAPIVersion(Request $request) : int
@@ -93,11 +94,5 @@ class HttpHelper
     public static function getRequestUriHash(Request $request) : string
     {
         return sha1($request->getRequestUri());
-    }
-
-    public static function getRouteTable($request) : string
-    {
-        $routeName = HttpHelper::getRouteName($request);
-        return config("controller.{$routeName}.table_name");
     }
 }

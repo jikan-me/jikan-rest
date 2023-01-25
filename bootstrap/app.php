@@ -105,8 +105,6 @@ $app->routeMiddleware([
 $app->configure('cache');
 $app->configure('database');
 $app->configure('queue');
-$app->configure('controller-to-table-mapping');
-$app->configure('controller');
 $app->configure('roadrunner');
 $app->configure('data');
 $app->configure('jikan');

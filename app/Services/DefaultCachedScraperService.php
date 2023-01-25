@@ -39,7 +39,10 @@ final class DefaultCachedScraperService implements CachedScraperService
 
         if ($results->isEmpty() || $results->isExpired()) {
             $page = $page ?? 1;
+
+            // most of the time callback uses a call to the jikan lib, which scrapes some info from MAL
             $data = $getMalDataCallback($this->jikan, $page);
+
             $scraperResponse = $this->serializeScraperResult(Collection::unwrap($data));
             $results = $this->updateCacheByKey($cacheKey, $results, $scraperResponse);
         }

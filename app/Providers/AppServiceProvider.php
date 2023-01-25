@@ -275,7 +275,11 @@ class AppServiceProvider extends ServiceProvider
                     Features\UserRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("users_recommendations"),
                     Features\UserClubsLookupHandler::class => $unitOfWorkInstance->documents("users_clubs"),
                     Features\UserExternalLookupHandler::class => $unitOfWorkInstance->users(),
-                    Features\QueryRecentlyOnlineUsersHandler::class => $unitOfWorkInstance->documents("users_recently_online")
+                    Features\QueryRecentlyOnlineUsersHandler::class => $unitOfWorkInstance->documents("users_recently_online"),
+                    Features\QueryRecentlyAddedEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
+                    Features\QueryPopularEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
+                    Features\QueryRecentlyAddedPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
+                    Features\QueryPopularPromoVideosHandler::class => $unitOfWorkInstance->documents("watch")
                 ];
 
                 foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {

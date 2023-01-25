@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Jikan\Exception\BadResponseException;
+use Jikan\Exception\BadResponseException as JikanBadResponseException;
+use GuzzleHttp\Exception\BadResponseException;
 use Jikan\Exception\ParserException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Predis\Connection\ConnectionException;
 use Symfony\Component\HttpClient\Exception\TimeoutException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -119,7 +121,7 @@ class Handler extends ExceptionHandler
 
         // BadResponseException from Jikan PHP API
         // This is basically the response MyAnimeList returns to Jikan
-        if ($e instanceof BadResponseException) {
+        if ($e instanceof BadResponseException || $e instanceof JikanBadResponseException) {
             switch ($e->getCode()) {
                 case 404:
 //                    $this->set404Cache($request, $e);
@@ -174,6 +176,16 @@ class Handler extends ExceptionHandler
                     'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds)',
                     'error' => $e->getMessage()
                 ], 408);
+        }
+
+        if ($e instanceof TransportException) {
+            return response()
+                ->json([
+                    'status' => 500,
+                    'type' => 'TransportException',
+                    'message' => 'Request to MyAnimeList.net has failed. The upstream server has returned a non-successful status code.',
+                    'error' => $e->getMessage()
+                ], 500);
         }
 
         if ($e instanceof Exception && $e->getMessage() === "Undefined index: url") {

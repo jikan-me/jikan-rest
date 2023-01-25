@@ -48,16 +48,6 @@ class Controller extends BaseController
      */
 
     /**
-     * @var Serializer
-     */
-    protected Serializer $serializer;
-
-    /**
-     * @var MalClient
-     */
-    protected MalClient $jikan;
-
-    /**
      * @var Request
      */
     private $request;
@@ -67,138 +57,16 @@ class Controller extends BaseController
      */
     private array $response;
 
-    protected bool $expired = false;
-
-    protected string $fingerprint;
-
     protected Mediator $mediator;
 
     /**
      * AnimeController constructor.
      *
-     * @param Request $request
-     * @param MalClient $jikan
+     * @param Mediator $mediator
      */
-    public function __construct(Request $request, MalClient $jikan, Mediator $mediator)
+    public function __construct(Mediator $mediator)
     {
-        $this->serializer = SerializerFactory::createV4();
-        $this->jikan = $jikan;
-        $this->fingerprint = HttpHelper::resolveRequestFingerprint($request);
         $this->mediator = $mediator;
-    }
-
-    protected  function isExpired($request, $results) : bool
-    {
-        $lastModified = $this->getLastModified($results);
-
-        if ($lastModified === null) {
-            return true;
-        }
-
-        $routeName = HttpHelper::getRouteName($request);
-        $expiry = (int) config("controller.{$routeName}.ttl") + $lastModified;
-
-        if (time() > $expiry) {
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function getExpiry($results, $request)
-    {
-        $modifiedAt = $this->getLastModified($results);
-
-        $routeName = HttpHelper::getRouteName($request);
-        return (int) config("controller.{$routeName}.ttl") + $modifiedAt;
-    }
-
-    protected function getTtl($results, $request)
-    {
-        $routeName = HttpHelper::getRouteName($request);
-        return (int) config("controller.{$routeName}.ttl");
-    }
-
-    protected function getLastModified($results) : ?int
-    {
-        if (is_array($results->first())) {
-            return (int) $results->first()['modifiedAt']->toDateTime()->format('U');
-        }
-
-        if (is_object($results->first())) {
-            return (int) $results->first()->modifiedAt->toDateTime()->format('U');
-        }
-
-        return null;
-    }
-
-    protected function serialize($data) : array
-    {
-        return \json_decode(
-            $this->serializer->serialize($data, 'json')
-        );
-    }
-
-    protected function getRouteName($request) : string
-    {
-        return HttpHelper::getRouteName($request);
-    }
-
-    protected function getRouteTable($request) : string
-    {
-        return config("controller.{$this->getRouteName($request)}.table_name");
-    }
-
-    protected function prepareResponse($response, $results, $request)
-    {
-        return $response
-            ->header('X-Request-Fingerprint', $this->fingerprint)
-            ->setTtl($this->getTtl($results, $request))
-            ->setExpires(
-                (new \DateTimeImmutable())->setTimestamp(
-                    $this->getExpiry($results, $request)
-                )
-            )
-            ->setLastModified(
-                (new \DateTimeImmutable())->setTimestamp(
-                    $this->getLastModified($results)
-                )
-            );
-    }
-
-    protected function updateCache($request, $results, $response)
-    {
-        // If resource doesn't exist, prepare meta
-        if ($results->isEmpty()) {
-            $meta = [
-                'createdAt' => new UTCDateTime(),
-                'modifiedAt' => new UTCDateTime(),
-                'request_hash' => $this->fingerprint
-            ];
-        }
-
-        // Update `modifiedAt` meta
-        $meta['modifiedAt'] = new UTCDateTime();
-        // join meta data with response
-        $response = $meta + $response;
-
-        // insert cache if resource doesn't exist
-        if ($results->isEmpty()) {
-            DB::table($this->getRouteTable($request))
-                ->insert($response);
-        }
-
-        // update cache if resource exists
-        if ($this->isExpired($request, $results)) {
-            DB::table($this->getRouteTable($request))
-                ->where('request_hash', $this->fingerprint)
-                ->update($response);
-        }
-
-        // return results
-        return DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
     }
 
     /**

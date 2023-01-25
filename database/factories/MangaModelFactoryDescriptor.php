@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\MangaStatusEnum;
+use App\Enums\MangaTypeEnum;
 use App\GenreManga;
-use App\Http\QueryBuilder\MangaSearchQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,12 +18,12 @@ class MangaModelFactoryDescriptor implements MediaModelFactoryDescriptor
 
     public function typeParamMap(): array
     {
-        return MangaSearchQueryBuilder::MAP_TYPES;
+        return MangaTypeEnum::toArray();
     }
 
     public function statusParamMap(): array
     {
-        return MangaSearchQueryBuilder::MAP_STATUS;
+        return MangaStatusEnum::toArray();
     }
 
     public function hasRatingParam(): bool
