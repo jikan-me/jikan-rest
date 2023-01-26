@@ -1,6 +1,6 @@
 ---
-name: \U0001F41B Bug report
-about: Let us know if something is wrong \U0001F914
+name: "\U0001F41B Bug report"
+about: "Let us know if something is wrong \U0001F914"
 title: ''
 labels: 'i: bug, i: needs triage'
 ---
