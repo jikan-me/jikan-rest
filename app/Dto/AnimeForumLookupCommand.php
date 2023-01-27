@@ -4,8 +4,8 @@ namespace App\Dto;
 
 use App\Casts\EnumCast;
 use App\Enums\AnimeForumFilterEnum;
+use App\Rules\Attributes\EnumValidation;
 use Illuminate\Http\JsonResponse;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
 
@@ -14,13 +14,6 @@ use Spatie\LaravelData\Optional;
  */
 final class AnimeForumLookupCommand extends LookupDataCommand
 {
-    #[WithCast(EnumCast::class, AnimeForumFilterEnum::class)]
+    #[WithCast(EnumCast::class, AnimeForumFilterEnum::class), EnumValidation(AnimeForumFilterEnum::class)]
     public AnimeForumFilterEnum|Optional $filter;
-
-    public static function rules(): array
-    {
-        return [
-            "filter" => [new EnumRule(AnimeForumFilterEnum::class)]
-        ];
-    }
 }

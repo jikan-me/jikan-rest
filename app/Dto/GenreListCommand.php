@@ -3,7 +3,7 @@
 namespace App\Dto;
 
 use App\Enums\GenreFilterEnum;
-use Spatie\Enum\Laravel\Rules\EnumRule;
+use App\Rules\Attributes\EnumValidation;
 use Spatie\LaravelData\Attributes\WithCast;
 use App\Casts\EnumCast;
 use Spatie\LaravelData\Data;
@@ -11,13 +11,6 @@ use Spatie\LaravelData\Optional;
 
 abstract class GenreListCommand extends Data
 {
-    #[WithCast(EnumCast::class, GenreFilterEnum::class)]
+    #[WithCast(EnumCast::class, GenreFilterEnum::class), EnumValidation(GenreFilterEnum::class)]
     public GenreFilterEnum|Optional $filter;
-
-    public static function rules(): array
-    {
-        return [
-            "filter" => [new EnumRule(GenreFilterEnum::class)]
-        ];
-    }
 }

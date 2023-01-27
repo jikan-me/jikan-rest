@@ -4,8 +4,8 @@ namespace App\Dto;
 
 use App\Casts\EnumCast;
 use App\Enums\MediaReviewsSortEnum;
+use App\Rules\Attributes\EnumValidation;
 use Illuminate\Http\JsonResponse;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\Validation\BooleanType;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Numeric;
@@ -20,7 +20,7 @@ final class AnimeReviewsLookupCommand extends LookupDataCommand
     #[Numeric, Min(1)]
     public int|Optional $page = 1;
 
-    #[WithCast(EnumCast::class, MediaReviewsSortEnum::class)]
+    #[WithCast(EnumCast::class, MediaReviewsSortEnum::class), EnumValidation(MediaReviewsSortEnum::class)]
     public MediaReviewsSortEnum|Optional $sort;
 
     #[BooleanType]
@@ -28,11 +28,4 @@ final class AnimeReviewsLookupCommand extends LookupDataCommand
 
     #[BooleanType]
     public bool|Optional $preliminary;
-
-    public static function rules(): array
-    {
-        return [
-            "sort" => [new EnumRule(MediaReviewsSortEnum::class)]
-        ];
-    }
 }

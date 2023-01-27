@@ -9,10 +9,8 @@ use App\Contracts\DataRequest;
 use App\Dto\Concerns\HasPageParameter;
 use App\Enums\MediaReviewsSortEnum;
 use App\Http\Resources\V4\ResultsResource;
-use Spatie\Enum\Laravel\Rules\EnumRule;
+use App\Rules\Attributes\EnumValidation;
 use Spatie\LaravelData\Attributes\Validation\BooleanType;
-use Spatie\LaravelData\Attributes\Validation\Min;
-use Spatie\LaravelData\Attributes\Validation\Numeric;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
@@ -24,7 +22,7 @@ abstract class QueryReviewsCommand extends Data implements DataRequest
 {
     use HasRequestFingerprint, HasPageParameter;
 
-    #[WithCast(EnumCast::class, MediaReviewsSortEnum::class)]
+    #[WithCast(EnumCast::class, MediaReviewsSortEnum::class), EnumValidation(MediaReviewsSortEnum::class)]
     public MediaReviewsSortEnum|Optional $sort;
 
     #[BooleanType]
@@ -32,11 +30,4 @@ abstract class QueryReviewsCommand extends Data implements DataRequest
 
     #[BooleanType]
     public bool|Optional $preliminary;
-
-    public static function rules(): array
-    {
-        return [
-            "sort" => [new EnumRule(MediaReviewsSortEnum::class)]
-        ];
-    }
 }

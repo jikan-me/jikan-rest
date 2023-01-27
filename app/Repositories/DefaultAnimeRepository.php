@@ -105,7 +105,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function getAiredBetween(Carbon $from, Carbon $to, ?AnimeTypeEnum $type = null): EloquentBuilder
     {
-        $queryable = $this->queryable(true)->where("aired.from", [
+        $queryable = $this->queryable(true)->whereBetween("aired.from", [
             $from->toAtomString(),
             $to->modify("last day of this month")->toAtomString()
         ]);

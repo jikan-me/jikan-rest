@@ -7,6 +7,7 @@ use App\Contracts\DataRequest;
 use App\Enums\AnimeTypeEnum;
 use App\Enums\TopAnimeFilterEnum;
 use App\Http\Resources\V4\AnimeCollection;
+use App\Rules\Attributes\EnumValidation;
 use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
@@ -16,17 +17,9 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryTopAnimeItemsCommand extends QueryTopItemsCommand implements DataRequest
 {
-    #[WithCast(EnumCast::class, AnimeTypeEnum::class)]
+    #[WithCast(EnumCast::class, AnimeTypeEnum::class), EnumValidation(AnimeTypeEnum::class)]
     public AnimeTypeEnum|Optional $type;
 
-    #[WithCast(EnumCast::class, TopAnimeFilterEnum::class)]
+    #[WithCast(EnumCast::class, TopAnimeFilterEnum::class), EnumValidation(TopAnimeFilterEnum::class)]
     public TopAnimeFilterEnum|Optional $filter;
-
-    public static function rules(): array
-    {
-        return [
-            "type" => [new EnumRule(AnimeTypeEnum::class)],
-            "filter" => [new EnumRule(TopAnimeFilterEnum::class)]
-        ];
-    }
 }
