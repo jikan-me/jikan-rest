@@ -115,6 +115,7 @@ class GithubReport
             "Please fill out the details below.\n\n**Summary:**\n\n**Steps to reproduce:**\n\n\n\n ### Additional Details \n **Jikan Parser Version**: ```{$this->jikanVersion}```\n**PHP:** ```{$this->phpVersion}```\n**Redis**: ```{$this->redisRunning}```\n**Exception:** ```{$this->name}```\n**Code:** ```{$this->code}```\n**Message:** ```{$this->error}```\n**Trace:** ```{$this->trace}```\n**Request:** `{$this->requestMethod} {$this->requestUri}`\n"
         );
 
+        // https://github.com/jikan-me/jikan-rest/issues/new?assignees=&labels=i%3A+bug%2C+i%3A+needs+triage&template=bug.md&title=
         return "https://github.com/{$this->repo}/issues/new?title={$title}&body={$body}";
     }
 

@@ -7,6 +7,7 @@ use App\Enums\AnimeOrderByEnum;
 use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Http\Resources\V4\AnimeCollection;
+use App\Rules\Attributes\EnumValidation;
 use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
@@ -23,10 +24,10 @@ use Spatie\LaravelData\Optional;
  */
 final class AnimeSearchCommand extends MediaSearchCommand implements DataRequest
 {
-    #[WithCast(EnumCast::class, AnimeStatusEnum::class)]
+    #[WithCast(EnumCast::class, AnimeStatusEnum::class), EnumValidation(AnimeStatusEnum::class)]
     public AnimeStatusEnum|Optional $status;
 
-    #[WithCast(EnumCast::class, AnimeRatingEnum::class)]
+    #[WithCast(EnumCast::class, AnimeRatingEnum::class), EnumValidation(AnimeRatingEnum::class)]
     public AnimeRatingEnum|Optional $rating;
 
     #[IntegerType, Min(1)]
@@ -35,16 +36,11 @@ final class AnimeSearchCommand extends MediaSearchCommand implements DataRequest
     #[Prohibits("producer"), StringType]
     public string|Optional $producers;
 
-    #[MapInputName("order_by"), MapOutputName("order_by"), WithCast(EnumCast::class, AnimeOrderByEnum::class)]
+    #[
+        MapInputName("order_by"),
+        MapOutputName("order_by"),
+        WithCast(EnumCast::class, AnimeOrderByEnum::class),
+        EnumValidation(AnimeOrderByEnum::class)
+    ]
     public AnimeOrderByEnum|Optional $orderBy;
-
-    public static function rules(): array
-    {
-        return [
-            ...parent::rules(),
-            "status" => [new EnumRule(AnimeStatusEnum::class)],
-            "rating" => [new EnumRule(AnimeRatingEnum::class)],
-            "order_by" => [new EnumRule(AnimeOrderByEnum::class)]
-        ];
-    }
 }

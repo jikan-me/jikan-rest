@@ -15,7 +15,6 @@ use App\Contracts\Repository;
 use App\Contracts\RequestHandler;
 use App\Contracts\UnitOfWork;
 use App\Contracts\UserRepository;
-use App\Http\Middleware\EndpointCacheTtlMiddleware;
 use App\Macros\CollectionOffsetGetFirst;
 use App\Macros\ResponseJikanCacheFlags;
 use App\Macros\To2dArrayWithDottedKeys;
@@ -30,6 +29,7 @@ use App\Repositories\DefaultPeopleRepository;
 use App\Repositories\DefaultProducerRepository;
 use App\Repositories\DefaultUserRepository;
 use App\Repositories\MangaGenresRepository;
+use App\Services\DefaultBuilderPaginatorService;
 use App\Services\DefaultCachedScraperService;
 use App\Services\DefaultQueryBuilderService;
 use App\Services\DefaultScoutSearchService;
@@ -82,11 +82,7 @@ class AppServiceProvider extends ServiceProvider
         // cache options class is used to share the request scope level cache settings
         $this->app->singleton(CacheOptions::class);
         $this->app->singleton(CachedScraperService::class, DefaultCachedScraperService::class);
-        if ($this->getSearchIndexesEnabledConfig($this->app)) {
-            $this->app->bind(QueryBuilderPaginatorService::class, ScoutBuilderPaginatorService::class);
-        } else {
-            $this->app->bind(QueryBuilderPaginatorService::class, EloquentBuilderPaginatorService::class);
-        }
+        $this->app->bind(QueryBuilderPaginatorService::class, DefaultBuilderPaginatorService::class);
         $this->registerModelRepositories();
         $this->registerRequestHandlers();
     }

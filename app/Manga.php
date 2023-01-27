@@ -16,7 +16,7 @@ class Manga extends JikanApiSearchableModel
 {
     use HasFactory, MediaFilters, FilteredByLetter;
 
-    protected array $filters = ["order_by", "status", "type", "sort", "max_score", "min_score", "score", "start_date", "end_date", "magazine", "magazines", "letter"];
+    protected array $filters = ["order_by", "status", "type", "sort", "max_score", "min_score", "score", "start_date", "end_date", "magazine", "magazines", "letter", "genres", "genres_exclude"];
 
     /**
      * The attributes that are mass assignable.
@@ -58,15 +58,15 @@ class Manga extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
-    public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("published.from", $date->setTime(0, 0)->toAtomString());
+        return $query->where("published.from", ">=", $value->setTime(0, 0)->toAtomString());
     }
 
     /** @noinspection PhpUnused */
-    public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("published.to", $date->setTime(0, 0)->toAtomString());
+        return $query->where("published.to", "<=", $value->setTime(0, 0)->toAtomString());
     }
 
     public function filterByMagazine(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder

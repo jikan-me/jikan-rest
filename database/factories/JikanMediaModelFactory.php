@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\CarbonDateRange;
-use App\Http\QueryBuilder\AnimeSearchQueryBuilder;
+use App\Enums\AnimeRatingEnum;
+use App\Enums\AnimeTypeEnum;
+use App\Enums\MangaTypeEnum;
 use App\Testing\JikanDataGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -88,7 +90,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
                 return fn($i) => $randomDate->copy()->addDays($i);
             })()),
             "rating" => ((function() {
-                $validRatingItems = array_values(AnimeSearchQueryBuilder::MAP_RATING);
+                $validRatingItems = AnimeRatingEnum::toValues();
                 $validRatingItemsCount = count($validRatingItems);
                 return fn($i) => $validRatingItems[$i % $validRatingItemsCount];
             })()),
@@ -98,7 +100,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
                 return fn($i) => $alphabet[$i % $alphabetCount];
             })()),
             "type" => ((function() {
-                $types = array_values(AnimeSearchQueryBuilder::MAP_TYPES);
+                $types = $this->modelName() === "App\Anime" ? AnimeTypeEnum::toValues() : MangaTypeEnum::toValues();
                 $typesCount = count($types);
                 return fn($i) => $types[$i % $typesCount];
             })()),

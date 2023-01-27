@@ -53,11 +53,19 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
+    public function partialDatesParameterProvider(): array
+    {
+        return [
+            [["start_date" => "2012"]],
+            [["start_date" => "2012-05"]],
+            [["end_date" => "2015"]],
+            [["end_date" => "2015-05"]]
+        ];
+    }
+
     public function startDatesParameterProvider(): array
     {
         return [
-            [["start_date" => "2022"]],
-            [["start_date" => "2012-05"]],
             [["start_date" => "2012-05-12"]],
             [["start_date" => "2012-04-01"]],
             [["start_date" => "2012-04-28"]],
@@ -68,8 +76,6 @@ class AnimeSearchEndpointTest extends TestCase
     public function endDatesParameterProvider(): array
     {
         return [
-            [["end_date" => "2022"]],
-            [["end_date" => "2012-05"]],
             [["end_date" => "2012-05-12"]],
             [["end_date" => "2012-05-12", "page" => 1]],
         ];
@@ -78,8 +84,6 @@ class AnimeSearchEndpointTest extends TestCase
     public function startAndEndDatesParameterProvider(): array
     {
         return [
-            [["start_date" => "2021", "end_date" => "2022"]],
-            [["start_date" => "2021-01", "end_date" => "2021-02"]],
             [["start_date" => "2021-01-01", "end_date" => "2021-03-22"]],
             [["start_date" => "2021-01-01", "end_date" => "2021-03-22", "page" => 1]],
         ];
@@ -127,10 +131,10 @@ class AnimeSearchEndpointTest extends TestCase
     public function invalidScoreParameterProvider(): array
     {
         return [
-            [["max_score" => "634638"], 15],
-            [["min_score" => "673473"], 0],
-            [["max_score" => "72344", "min_score" => "3532325"], 0],
-            [["max_score" => 1, "min_score" => 5], 0],
+            [["max_score" => "634638"]],
+            [["min_score" => "673473"]],
+            [["max_score" => "72344", "min_score" => "3532325"]],
+            [["max_score" => 1, "min_score" => 5]],
         ];
     }
 
@@ -198,15 +202,26 @@ class AnimeSearchEndpointTest extends TestCase
     /**
      * @dataProvider emptyDateRangeProvider
      */
-    public function testSearchByEmptyDatesShouldDoNothing($params)
+    public function testSearchByEmptyDatesShouldRaiseValidationError($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(15);
-        $this->assertCount(15, $content["data"]);
+        $this->seeStatusCode(400);
+        $this->assertEquals("ValidationException", data_get($content, "type"));
+    }
+
+    /**
+     * @dataProvider partialDatesParameterProvider
+     */
+    public function testSearchByStartDateShouldRaiseIfPartialDate($params)
+    {
+        $this->generateFiveSpecificAndTenRandomElementsInDb($params);
+        $content = $this->getJsonResponse($params);
+
+        $this->seeStatusCode(400);
+        $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
     /**
@@ -345,25 +360,20 @@ class AnimeSearchEndpointTest extends TestCase
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(15);
-        $this->assertIsArray($content["data"]);
-        // it should return all, and disregard the gibberish filter
-        $this->assertCount(15, $content["data"]);
+        $this->seeStatusCode(400);
+        $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
     /**
      * @dataProvider invalidScoreParameterProvider
      */
-    public function testSearchByInvalidScoreParameters($params, $expectedCount)
+    public function testSearchByInvalidScoreParameters($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData($expectedCount);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount($expectedCount, $content["data"]);
+        $this->seeStatusCode(400);
+        $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
     /**
@@ -489,10 +499,8 @@ class AnimeSearchEndpointTest extends TestCase
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData($expectedCount);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount($expectedCount, $content["data"]);
+        $this->seeStatusCode(400);
+        $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
     /**
@@ -511,7 +519,6 @@ class AnimeSearchEndpointTest extends TestCase
 
     public function testSearchByInvalidLetterParameter()
     {
-        $expectedCount = 0;
         $this->generateFiveSpecificAndTenRandomElementsInDb([
             "letter" => "a"
         ]);
@@ -519,10 +526,8 @@ class AnimeSearchEndpointTest extends TestCase
             "letter" => "asd"
         ]);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData($expectedCount);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount($expectedCount, $content["data"]);
+        $this->seeStatusCode(400);
+        $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
     public function testTypeSenseSearchPagination()

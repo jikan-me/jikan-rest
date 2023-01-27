@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Concerns\ResolvesPaginatorParams;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class ScoutBuilderPaginatorService implements QueryBuilderPaginatorService
+final class ScoutBuilderPaginatorService implements QueryBuilderPaginatorService
 {
     use ResolvesPaginatorParams;
 

@@ -113,9 +113,9 @@ class Handler extends ExceptionHandler
             return response()
                 ->json([
                     'status' => 400,
-                    'type' => 'BadRequestException',
-                    'message' => $e->getMessage(),
-                    'error' => null
+                    'type' => 'ValidationException',
+                    'messages' => $e->validator->getMessageBag()->getMessages(),
+                    'error' => 'Invalid or incomplete request. Make sure your request is correct. https://docs.api.jikan.moe/'
                 ], 400);
         }
 

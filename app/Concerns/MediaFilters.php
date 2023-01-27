@@ -8,11 +8,21 @@ trait MediaFilters
 {
     public function filterByMaxScore(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
+        // if the client specifies the "max" possible value, ignore it, in that case they want everything included
+        // https://github.com/jikan-me/jikan-rest/issues/309
+        if (floatval($value) == 10) {
+            return $query;
+        }
         return $query->where("score", "<=", floatval($value));
     }
 
     public function filterByMinScore(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
+        // if the client specifies the "max" possible value, ignore it, in that case they want everything included
+        // https://github.com/jikan-me/jikan-rest/issues/309
+        if (floatval($value) == 0) {
+            return $query;
+        }
         return $query->where("score", ">=", floatval($value));
     }
 

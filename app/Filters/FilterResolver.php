@@ -18,6 +18,10 @@ trait FilterResolver
 
     private function resolveCustomFilter($filterName, $values)
     {
+        $filterMethodName = "filterBy" . ucfirst(Str::camel($filterName));
+        if (method_exists($this, $filterMethodName)) {
+            $filterName = $filterMethodName;
+        }
         return $this->getClosure($this->makeCallable($filterName), $values);
     }
 

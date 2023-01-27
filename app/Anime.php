@@ -18,7 +18,7 @@ class Anime extends JikanApiSearchableModel
 {
     use HasFactory, MediaFilters, FilteredByLetter;
 
-    protected array $filters = ["order_by", "status", "type", "sort", "max_score", "min_score", "score", "rating", "start_date", "end_date", "producer", "producers", "letter"];
+    protected array $filters = ["order_by", "status", "type", "sort", "max_score", "min_score", "score", "rating", "start_date", "end_date", "producer", "producers", "letter", "genres", "genres_exclude"];
     /**
      * The attributes that are mass assignable.
      *
@@ -134,12 +134,6 @@ class Anime extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
-    public function filterByLetter(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
-    {
-        return $query->where("title", "like", "{$value}%");
-    }
-
-    /** @noinspection PhpUnused */
     public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, AnimeTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query->where("type", $value->label);
@@ -152,15 +146,15 @@ class Anime extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
-    public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("aired.from", $date->setTime(0, 0)->toAtomString());
+        return $query->where("aired.from", ">=", $value->setTime(0, 0)->toAtomString());
     }
 
     /** @noinspection PhpUnused */
-    public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $date): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("aired.to", $date->setTime(0, 0)->toAtomString());
+        return $query->where("aired.to", "<=", $value->setTime(0, 0)->toAtomString());
     }
 
     public function filterByProducer(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder

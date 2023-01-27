@@ -10,6 +10,6 @@ trait ResolvesPaginatorParams
         $limit = $limit ?? $default_max_results_per_page;
         $page = $page ?? 1;
 
-        return compact($limit, $page);
+        return compact("limit", "page");
     }
 }
