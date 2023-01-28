@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V4DB;
 
 use App\Dto\AnimeGenreListCommand;
+use App\Dto\MangaGenreListCommand;
 use App\Http\Resources\V4\GenreCollection;
 
 class GenreController extends Controller
@@ -63,7 +64,7 @@ class GenreController extends Controller
      *     ),
      * )
      */
-    public function manga(AnimeGenreListCommand $command): GenreCollection
+    public function manga(MangaGenreListCommand $command): GenreCollection
     {
         return $this->mediator->send($command);
     }

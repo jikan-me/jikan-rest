@@ -2,7 +2,7 @@
 
 namespace App\Features;
 
-use App\Dto\AnimeStatsLookupCommand;
+use App\Dto\AnimeMoreInfoLookupCommand;
 use App\Http\Resources\V4\MoreInfoResource;
 use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +12,7 @@ use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Anime\AnimeMoreInfoRequest;
 
 /**
- * @extends RequestHandlerWithScraperCache<AnimeStatsLookupCommand, JsonResponse>
+ * @extends RequestHandlerWithScraperCache<AnimeMoreInfoLookupCommand, JsonResponse>
  */
 final class AnimeMoreInfoLookupHandler extends RequestHandlerWithScraperCache
 {
@@ -28,7 +28,7 @@ final class AnimeMoreInfoLookupHandler extends RequestHandlerWithScraperCache
      */
     public function requestClass(): string
     {
-        return AnimeStatsLookupCommand::class;
+        return AnimeMoreInfoLookupCommand::class;
     }
 
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData

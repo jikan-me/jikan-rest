@@ -45,7 +45,7 @@ class DatabaseRepository extends RepositoryQuery implements Repository
     //        this is here because we have the "scrape" static method on models
     public function scrape(int|string $id): array
     {
-        $modelClass = get_class($this->queryable(true)->newModelInstance());
+        $modelClass = $this->getModelClass();
 
         /** @noinspection PhpUndefinedMethodInspection */
         return $modelClass::scrape($id);
@@ -53,11 +53,21 @@ class DatabaseRepository extends RepositoryQuery implements Repository
 
     public function insert(array $attributes): bool
     {
-        return $this->queryable(true)->insert($attributes);
+        // this way we trigger scout to index records in the search index.
+        $modelClass = $this->getModelClass();
+        /** @noinspection PhpUndefinedMethodInspection */
+        $modelClass::create($attributes);
+
+        return true;
     }
 
     public function random(int $numberOfRandomItems = 1): Collection
     {
         return $this->queryable(true)->random($numberOfRandomItems);
+    }
+
+    private function getModelClass(): string
+    {
+        return get_class($this->queryable(true)->newModelInstance());
     }
 }

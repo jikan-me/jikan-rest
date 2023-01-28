@@ -19,7 +19,7 @@ class Club extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'title', 'members_count', 'pictures_count', 'category', 'created', 'type', 'staff', 'anime_relations', 'manga_relations', 'character_relations'
+        'mal_id', 'url', 'images', 'name', 'members', 'category', 'created', 'access', 'anime', 'manga'
     ];
 
     /**
@@ -79,15 +79,16 @@ class Club extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (string) $this->mal_id,
-            'title' => $this->title,
+            'name' => $this->name,
             'category' => $this->category,
             'created' => $this->convertToTimestamp($this->created),
-            'type' => $this->type
+            'access' => $this->type,
+            'members' => $this->members
         ];
     }
 
     public function typesenseQueryBy(): array
     {
-        return ['title'];
+        return ['name'];
     }
 }

@@ -27,6 +27,12 @@ final class DocumentRepository extends DatabaseRepository
         return $this->tableName;
     }
 
+    public function insert(array $attributes): bool
+    {
+        // override the parent method, because these records are not search indexed
+        return $this->queryable(true)->insert($attributes);
+    }
+
     public function createEntity()
     {
         throw new \Exception("Not supported");

@@ -14,6 +14,6 @@ trait ResolvesMediaReviewParams
         $spoilers = $requestParams->get("spoilers", false);
         $preliminary = $requestParams->get("preliminary", false);
 
-        return compact($id, $sort, $spoilers, $preliminary);
+        return compact("id", "sort", "spoilers", "preliminary");
     }
 }

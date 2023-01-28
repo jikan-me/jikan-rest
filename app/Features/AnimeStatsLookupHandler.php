@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use Jikan\MyAnimeList\MalClient;
+use Jikan\Request\Anime\AnimeStatsRequest;
 
 /**
  * @extends RequestHandlerWithScraperCache<AnimeStatsLookupCommand, JsonResponse>
@@ -36,7 +37,7 @@ final class AnimeStatsLookupHandler extends RequestHandlerWithScraperCache
 
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn (MalClient $jikan, ?int $page = null) => $jikan->getAnimeStats($id)
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getAnimeStats(new AnimeStatsRequest($id))
         );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Macros;
 
+use App\JikanApiModel;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,7 +20,14 @@ final class CollectionOffsetGetFirst
             $firstItem = $this->first();
             if (is_array($firstItem)) {
                 $result = collect($firstItem)->get($offset, $default);
-            } else {
+            }
+            else if ($firstItem instanceof JikanApiModel) {
+                $result = $firstItem[$offset];
+            }
+            else if ($firstItem instanceof Collection) {
+                $result = $firstItem->get($offset, $default);
+            }
+            else {
                 $result = $default;
             }
 

@@ -3,7 +3,7 @@
 namespace App\Features;
 
 use App\Dto\AnimeThemesLookupCommand;
-use App\Http\Resources\V4\StreamingLinksResource;
+use App\Http\Resources\V4\AnimeThemesResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -16,7 +16,7 @@ final class AnimeThemesLookupHandler extends ItemLookupHandler
 
     protected function resource(Collection $results): JsonResource
     {
-        return new StreamingLinksResource(
+        return new AnimeThemesResource(
             $results->first()
         );
     }

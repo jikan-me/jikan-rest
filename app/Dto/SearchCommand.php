@@ -10,6 +10,7 @@ use App\Rules\Attributes\EnumValidation;
 use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\Validation\Alpha;
 use Spatie\LaravelData\Attributes\Validation\Max;
+use Spatie\LaravelData\Attributes\Validation\Prohibits;
 use Spatie\LaravelData\Attributes\Validation\Size;
 use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -30,6 +31,6 @@ class SearchCommand extends Data
     #[WithCast(EnumCast::class, SortDirection::class), EnumValidation(SortDirection::class)]
     public SortDirection|Optional $sort;
 
-    #[Size(1), StringType, Alpha]
+    #[Size(1), StringType, Alpha, Prohibits("q")]
     public string|Optional $letter;
 }

@@ -9,7 +9,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 /**
  * @extends SearchRequestHandler<CharactersSearchCommand, CharacterCollection>
  */
-class CharacterSearchHandler extends SearchRequestHandler
+final class CharacterSearchHandler extends SearchRequestHandler
 {
     /**
      * @inheritDoc

@@ -9,7 +9,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 /**
  * @extends SearchRequestHandler<ClubSearchCommand, ClubCollection>
  */
-class ClubSearchHandler extends SearchRequestHandler
+final class ClubSearchHandler extends SearchRequestHandler
 {
 
     /**
