@@ -80,7 +80,9 @@ class Person extends JikanApiSearchableModel
             'name' => $this->name,
             'given_name' => $this->given_name,
             'family_name' => $this->family_name,
-            'alternate_names' => $this->alternate_names
+            'alternate_names' => $this->alternate_names,
+            'member_favorites' => $this->member_favorites,
+            'birthday' => $this->convertToTimestamp($this->birthday)
         ];
     }
 
