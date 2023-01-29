@@ -7,10 +7,11 @@ use App\Contracts\Repository;
 use App\Http\HttpHelper;
 use App\Support\CachedData;
 use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Jikan\MyAnimeList\MalClient;
+use JMS\Serializer\SerializerInterface;
 use MongoDB\BSON\UTCDateTime;
-use JMS\Serializer\Serializer;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -21,7 +22,7 @@ final class DefaultCachedScraperService implements CachedScraperService
     public function __construct(
         private readonly Repository $repository,
         private readonly MalClient $jikan,
-        private readonly Serializer $serializer,
+        private readonly SerializerInterface $serializer,
     )
     {
     }
@@ -143,9 +144,7 @@ final class DefaultCachedScraperService implements CachedScraperService
         // insert cache if resource doesn't exist
         if ($results->isEmpty()) {
             $this->repository->insert($response->toArray());
-        }
-
-        if ($results->isExpired()) {
+        } else if ($results->isExpired()) {
             $this->getQueryableByCacheKey($cacheKey)->update($response->toArray());
         }
 
@@ -157,13 +156,15 @@ final class DefaultCachedScraperService implements CachedScraperService
         $meta = [];
         if ($resultsEmpty) {
             $meta = [
-                'createdAt' => new UTCDateTime(),
+                // Using Carbon here for testability
+                'createdAt' => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3)),
                 'request_hash' => $cacheKey
             ];
         }
 
         // Update `modifiedAt` meta
-        $meta['modifiedAt'] = new UTCDateTime();
+        // Using Carbon here for testability
+        $meta['modifiedAt'] = new UTCDateTime(Carbon::now()->getPreciseTimestamp(3));
 
         // join meta data with response
         return CachedData::from(collect($meta + $scraperResponse));
