@@ -201,15 +201,8 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         }
 
         if ($this->descriptor->hasRatingParam() && $additionalParams->has("rating")) {
-            $overrides["rating"] = match (strtolower($additionalParams["rating"])) {
-                "g" => "G - All Ages",
-                "pg" => "PG - Children",
-                "pg13" => "PG-13 - Teens 13 or older",
-                "r17" => "R - 17+ (violence & profanity)",
-                "r" => "R+ - Mild Nudity",
-                "rx" => "Rx - Hentai",
-                default => $this->getRandomRating()
-            };
+
+            $overrides["rating"] = AnimeRatingEnum::from(strtolower($additionalParams["rating"]))->label;
         }
 
         if ($additionalParams->has("genres")) {
