@@ -3,14 +3,21 @@
 namespace App\Enums;
 
 use Jikan\Helper\Constants as JikanConstants;
+use Spatie\Enum\Laravel\Enum;
 
 /**
  * @method static self any()
  * @method static self male()
  * @method static self female()
  * @method static self nonbinary()
+ * @OA\Schema(
+ *   schema="users_search_query_gender",
+ *   description="Users Search Query Gender.",
+ *   type="string",
+ *   enum={"any","male","female","nonbinary"}
+ * )
  */
-final class GenderEnum extends \Spatie\Enum\Laravel\Enum
+final class GenderEnum extends Enum
 {
     protected static function labels(): array
     {

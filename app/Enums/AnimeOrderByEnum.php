@@ -14,7 +14,7 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self episodes()
  * @method static self score()
  * @method static self scored_by()
- * @method static self rank
+ * @method static self rank()
  * @method static self popularity()
  * @method static self members()
  * @method static self favorites()

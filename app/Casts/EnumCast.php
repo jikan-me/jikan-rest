@@ -9,7 +9,7 @@ use Spatie\LaravelData\Exceptions\CannotCastEnum;
 use Spatie\LaravelData\Support\DataProperty;
 use Throwable;
 
-class EnumCast implements Cast
+final class EnumCast implements Cast
 {
     public function __construct(
         protected ?string $type = null

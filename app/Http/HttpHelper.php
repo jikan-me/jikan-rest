@@ -38,32 +38,16 @@ class HttpHelper
         return (int) str_replace('v', '', $request->segment(1));
     }
 
-    public static function serializeEmptyObjects(string $requestType, array $data)
+    public static function serializeEmptyObjects(string $requestType, array $data): array
     {
         if (!($requestType === 'anime' || $requestType === 'manga')) {
             return $data;
         }
 
-        if (isset($data['related']) && \count($data['related']) === 0) {
-            $data['related'] = new \stdClass();
-        }
-
-        if (isset($data['related'])) {
-            $related = $data['related'];
-            $data['related'] = [];
-
-            foreach ($related as $relation => $items) {
-                $data['related'][] = [
-                    'relation' => $relation,
-                    'entry' => $items
-                ];
-            }
-        }
-
-        return $data;
+        return self::serializeEmptyObjectsControllerLevel($data);
     }
 
-    public static function serializeEmptyObjectsControllerLevel(array $data)
+    public static function serializeEmptyObjectsControllerLevel(array $data): array
     {
         if (isset($data['related']) && \count($data['related']) === 0) {
             $data['related'] = new \stdClass();

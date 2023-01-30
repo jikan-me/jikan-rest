@@ -2982,6 +2982,53 @@
                 }
             }
         },
+        "/seasons/now": {
+            "get": {
+                "tags": [
+                    "seasons"
+                ],
+                "operationId": "getSeasonNow",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Entry types",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "tv",
+                                "movie",
+                                "ova",
+                                "special",
+                                "ona",
+                                "music"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns current seasonal anime",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/anime_search"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/seasons/{year}/{season}": {
             "get": {
                 "tags": [
@@ -3023,39 +3070,14 @@
                     },
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Returns seasonal anime",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/anime_search"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Error: Bad request. When required parameters were not supplied."
-                    }
-                }
-            }
-        },
-        "/seasons/now": {
-            "get": {
-                "tags": [
-                    "seasons"
-                ],
-                "operationId": "getSeasonNow",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/page"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Returns current seasonal anime",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3118,6 +3140,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     }
                 ],
                 "responses": {
@@ -3157,13 +3182,22 @@
                         "in": "query",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "airing",
-                                "upcoming",
-                                "bypopularity",
-                                "favorite"
-                            ]
+                            "$ref": "#/components/schemas/top_anime_filter"
+                        }
+                    },
+                    {
+                        "name": "rating",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/anime_search_query_rating"
+                        }
+                    },
+                    {
+                        "name": "sfw",
+                        "in": "query",
+                        "description": "Filter out Adult entries",
+                        "schema": {
+                            "type": "boolean"
                         }
                     },
                     {
@@ -3210,13 +3244,7 @@
                         "in": "query",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "publishing",
-                                "upcoming",
-                                "bypopularity",
-                                "favorite"
-                            ]
+                            "$ref": "#/components/schemas/top_manga_filter"
                         }
                     },
                     {
@@ -3314,6 +3342,32 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/components/schemas/top_reviews_type_enum"
+                        }
+                    },
+                    {
+                        "name": "preliminary",
+                        "in": "query",
+                        "description": "Whether the results include preliminary reviews or not. Defaults to true.",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "spoilers",
+                        "in": "query",
+                        "description": "Whether the results include reviews with spoilers or not. Defaults to true.",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 ],
                 "responses": {
@@ -3974,11 +4028,6 @@
                     "watch"
                 ],
                 "operationId": "getWatchRecentEpisodes",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Returns Recently Added Episodes",
@@ -4002,11 +4051,6 @@
                     "watch"
                 ],
                 "operationId": "getWatchPopularEpisodes",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Returns Popular Episodes",
@@ -4030,6 +4074,11 @@
                     "watch"
                 ],
                 "operationId": "getWatchRecentPromos",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Recently Added Promotional Videos",
@@ -4053,11 +4102,6 @@
                     "watch"
                 ],
                 "operationId": "getWatchPopularPromos",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Returns Popular Promotional Videos",
@@ -4078,6 +4122,231 @@
     },
     "components": {
         "schemas": {
+            "anime_search_query_orderby": {
+                "description": "Available Anime order_by properties",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "title",
+                    "type",
+                    "rating",
+                    "start_date",
+                    "end_date",
+                    "episodes",
+                    "score",
+                    "scored_by",
+                    "rank",
+                    "popularity",
+                    "members",
+                    "favorites"
+                ]
+            },
+            "anime_search_query_rating": {
+                "description": "Available Anime audience ratings<br><br><b>Ratings</b><br><ul><li>G - All Ages</li><li>PG - Children</li><li>PG-13 - Teens 13 or older</li><li>R - 17+ (violence & profanity)</li><li>R+ - Mild Nudity</li><li>Rx - Hentai</li></ul>",
+                "type": "string",
+                "enum": [
+                    "g",
+                    "pg",
+                    "pg13",
+                    "r17",
+                    "r",
+                    "rx"
+                ]
+            },
+            "anime_search_query_status": {
+                "description": "Available Anime statuses",
+                "type": "string",
+                "enum": [
+                    "airing",
+                    "complete",
+                    "upcoming"
+                ]
+            },
+            "anime_search_query_type": {
+                "description": "Available Anime types",
+                "type": "string",
+                "enum": [
+                    "tv",
+                    "movie",
+                    "ova",
+                    "special",
+                    "ona",
+                    "music"
+                ]
+            },
+            "characters_search_query_orderby": {
+                "description": "Available Character order_by properties",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "favorites"
+                ]
+            },
+            "club_search_query_category": {
+                "description": "Club Search Query Category",
+                "type": "string",
+                "enum": [
+                    "anime",
+                    "manga",
+                    "actors_and_artists",
+                    "characters",
+                    "cities_and_neighborhoods",
+                    "companies",
+                    "conventions",
+                    "games",
+                    "japan",
+                    "music",
+                    "other",
+                    "schools"
+                ]
+            },
+            "club_search_query_orderby": {
+                "description": "Club Search Query OrderBy",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "members_count",
+                    "created"
+                ]
+            },
+            "club_search_query_type": {
+                "description": "Club Search Query Type",
+                "type": "string",
+                "enum": [
+                    "public",
+                    "private",
+                    "secret"
+                ]
+            },
+            "users_search_query_gender": {
+                "description": "Users Search Query Gender.",
+                "type": "string",
+                "enum": [
+                    "any",
+                    "male",
+                    "female",
+                    "nonbinary"
+                ]
+            },
+            "genre_query_filter": {
+                "description": "Filter genres by type",
+                "type": "string",
+                "enum": [
+                    "genres",
+                    "explicit_genres",
+                    "themes",
+                    "demographics"
+                ]
+            },
+            "magazines_query_orderby": {
+                "description": "Order by magazine data",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "count"
+                ]
+            },
+            "manga_search_query_orderby": {
+                "description": "Available Manga order_by properties",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "title",
+                    "start_date",
+                    "end_date",
+                    "chapters",
+                    "volumes",
+                    "score",
+                    "scored_by",
+                    "rank",
+                    "popularity",
+                    "members",
+                    "favorites"
+                ]
+            },
+            "manga_search_query_status": {
+                "description": "Available Manga statuses",
+                "type": "string",
+                "enum": [
+                    "publishing",
+                    "complete",
+                    "hiatus",
+                    "discontinued",
+                    "upcoming"
+                ]
+            },
+            "manga_search_query_type": {
+                "description": "Available Manga types",
+                "type": "string",
+                "enum": [
+                    "manga",
+                    "novel",
+                    "lightnovel",
+                    "oneshot",
+                    "doujin",
+                    "manhwa",
+                    "manhua"
+                ]
+            },
+            "people_search_query_orderby": {
+                "description": "Available People order_by properties",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "name",
+                    "birthday",
+                    "favorites"
+                ]
+            },
+            "producers_query_orderby": {
+                "description": "Producers Search Query Order By",
+                "type": "string",
+                "enum": [
+                    "mal_id",
+                    "count",
+                    "favorites",
+                    "established"
+                ]
+            },
+            "search_query_sort": {
+                "description": "Search query sort direction",
+                "type": "string",
+                "enum": [
+                    "desc",
+                    "asc"
+                ]
+            },
+            "top_anime_filter": {
+                "description": "Top items filter types",
+                "type": "string",
+                "enum": [
+                    "airing",
+                    "upcoming",
+                    "bypopularity",
+                    "favorite"
+                ]
+            },
+            "top_manga_filter": {
+                "description": "Top items filter types",
+                "type": "string",
+                "enum": [
+                    "publishing",
+                    "upcoming",
+                    "bypopularity",
+                    "favorite"
+                ]
+            },
+            "top_reviews_type_enum": {
+                "description": "The type of reviews to filter by. Defaults to anime.",
+                "type": "string",
+                "enum": [
+                    "anime",
+                    "manga"
+                ]
+            },
             "anime_episodes": {
                 "description": "Anime Episodes Resource",
                 "allOf": [
@@ -4231,15 +4500,6 @@
                 },
                 "type": "object"
             },
-            "magazines_query_orderby": {
-                "description": "Order by magazine data",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "name",
-                    "count"
-                ]
-            },
             "manga_news": {
                 "description": "Manga News Resource",
                 "allOf": [
@@ -4320,14 +4580,6 @@
                     }
                 ]
             },
-            "search_query_sort": {
-                "description": "Characters Search Query Sort",
-                "type": "string",
-                "enum": [
-                    "desc",
-                    "asc"
-                ]
-            },
             "users_search": {
                 "description": "User Results",
                 "allOf": [
@@ -4362,16 +4614,6 @@
                     {
                         "$ref": "#/components/schemas/pagination"
                     }
-                ]
-            },
-            "producers_query_orderby": {
-                "description": "Producers Search Query Order By",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "count",
-                    "favorites",
-                    "established"
                 ]
             },
             "seasons": {
@@ -4588,167 +4830,6 @@
                             }
                         ]
                     }
-                ]
-            },
-            "anime_search_query_type": {
-                "description": "Available Anime types",
-                "type": "string",
-                "enum": [
-                    "tv",
-                    "movie",
-                    "ova",
-                    "special",
-                    "ona",
-                    "music"
-                ]
-            },
-            "anime_search_query_status": {
-                "description": "Available Anime statuses",
-                "type": "string",
-                "enum": [
-                    "airing",
-                    "complete",
-                    "upcoming"
-                ]
-            },
-            "anime_search_query_rating": {
-                "description": "Available Anime audience ratings<br><br><b>Ratings</b><br><ul><li>G - All Ages</li><li>PG - Children</li><li>PG-13 - Teens 13 or older</li><li>R - 17+ (violence & profanity)</li><li>R+ - Mild Nudity</li><li>Rx - Hentai</li></ul>",
-                "type": "string",
-                "enum": [
-                    "g",
-                    "pg",
-                    "pg13",
-                    "r17",
-                    "r",
-                    "rx"
-                ]
-            },
-            "anime_search_query_orderby": {
-                "description": "Available Anime order_by properties",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "title",
-                    "type",
-                    "rating",
-                    "start_date",
-                    "end_date",
-                    "episodes",
-                    "score",
-                    "scored_by",
-                    "rank",
-                    "popularity",
-                    "members",
-                    "favorites"
-                ]
-            },
-            "characters_search_query_orderby": {
-                "description": "Available Character order_by properties",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "name",
-                    "favorites"
-                ]
-            },
-            "club_search_query_type": {
-                "description": "Club Search Query Type",
-                "type": "string",
-                "enum": [
-                    "public",
-                    "private",
-                    "secret"
-                ]
-            },
-            "club_search_query_category": {
-                "description": "Club Search Query Category",
-                "type": "string",
-                "enum": [
-                    "anime",
-                    "manga",
-                    "actors_and_artists",
-                    "characters",
-                    "cities_and_neighborhoods",
-                    "companies",
-                    "conventions",
-                    "games",
-                    "japan",
-                    "music",
-                    "other",
-                    "schools"
-                ]
-            },
-            "club_search_query_orderby": {
-                "description": "Club Search Query OrderBy",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "title",
-                    "members_count",
-                    "pictures_count",
-                    "created"
-                ]
-            },
-            "manga_search_query_type": {
-                "description": "Available Manga types",
-                "type": "string",
-                "enum": [
-                    "manga",
-                    "novel",
-                    "lightnovel",
-                    "oneshot",
-                    "doujin",
-                    "manhwa",
-                    "manhua"
-                ]
-            },
-            "manga_search_query_status": {
-                "description": "Available Manga statuses",
-                "type": "string",
-                "enum": [
-                    "publishing",
-                    "complete",
-                    "hiatus",
-                    "discontinued",
-                    "upcoming"
-                ]
-            },
-            "manga_search_query_orderby": {
-                "description": "Available Manga order_by properties",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "title",
-                    "start_date",
-                    "end_date",
-                    "chapters",
-                    "volumes",
-                    "score",
-                    "scored_by",
-                    "rank",
-                    "popularity",
-                    "members",
-                    "favorites"
-                ]
-            },
-            "people_search_query_orderby": {
-                "description": "Available People order_by properties",
-                "type": "string",
-                "enum": [
-                    "mal_id",
-                    "name",
-                    "birthday",
-                    "favorites"
-                ]
-            },
-            "users_search_query_gender": {
-                "description": "Users Search Query Gender",
-                "type": "string",
-                "enum": [
-                    "any",
-                    "male",
-                    "female",
-                    "nonbinary"
                 ]
             },
             "anime_characters": {
@@ -6648,16 +6729,6 @@
                     }
                 },
                 "type": "object"
-            },
-            "genre_query_filter": {
-                "description": "Filter genres by type",
-                "type": "string",
-                "enum": [
-                    "genres",
-                    "explicit_genres",
-                    "themes",
-                    "demographics"
-                ]
             },
             "genre": {
                 "description": "Genre Resource",
@@ -8564,11 +8635,11 @@
                     },
                     "is_spoiler": {
                         "description": "The review contains spoiler",
-                        "type": "bool"
+                        "type": "boolean"
                     },
                     "is_preliminary": {
                         "description": "The review was made before the entry was completed",
-                        "type": "bool"
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
@@ -8646,11 +8717,11 @@
                     },
                     "is_spoiler": {
                         "description": "The review contains spoiler",
-                        "type": "bool"
+                        "type": "boolean"
                     },
                     "is_preliminary": {
                         "description": "The review was made before the entry was completed",
-                        "type": "bool"
+                        "type": "boolean"
                     },
                     "episodes_watched": {
                         "description": "Number of episodes watched",

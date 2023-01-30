@@ -21,7 +21,7 @@ class JikanApiModel extends \Jenssegers\Mongodb\Eloquent\Model
     /** @noinspection PhpUnused */
     public function scopeRandom(Builder $query, int $numberOfRandomItems = 1): Collection
     {
-        return $query->raw(fn(\MongoDB\Collection $collection) => $collection->aggregate([
+        return $query->raw(fn(\Jenssegers\Mongodb\Collection $collection) => $collection->aggregate([
             ['$sample' => ['size' => $numberOfRandomItems]]
         ]));
     }

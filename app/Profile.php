@@ -8,7 +8,7 @@ use Jikan\Request\User\UserProfileRequest;
 class Profile extends JikanApiSearchableModel
 {
     use FilteredByLetter;
-    protected array $filters = ["order_by", "sort", "letter"];
+    protected array $filters = [];
 
     /**
      * The attributes that are mass assignable.
@@ -61,7 +61,7 @@ class Profile extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
+            'mal_id' => (int) $this->mal_id,
             'username' => $this->username
         ];
     }

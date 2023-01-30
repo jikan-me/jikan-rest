@@ -2,6 +2,7 @@
 
 namespace App\Dto;
 
+use App\Dto\Concerns\HasSfwParameter;
 use Carbon\CarbonImmutable;
 use Illuminate\Validation\Validator;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -22,6 +23,8 @@ use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 
 class MediaSearchCommand extends SearchCommand
 {
+    use HasSfwParameter;
+
     #[MapInputName("min_score"), MapOutputName("min_score"), Between(0.00, 10.00), Numeric]
     public float|Optional $minScore;
 
@@ -30,8 +33,6 @@ class MediaSearchCommand extends SearchCommand
 
     #[Between(1.00, 9.99), Numeric, Prohibits(["min_score", "max_score"])]
     public float|Optional $score;
-
-    public bool|Optional $sfw;
 
     public string|Optional $genres;
 

@@ -28,7 +28,7 @@ class TopController extends Controller
      *          name="filter",
      *          in="query",
      *          required=false,
-     *          @OA\Schema(ref="#/components/schemas/top_anime_filter)
+     *          @OA\Schema(ref="#/components/schemas/top_anime_filter")
      *      ),
      *
      *     @OA\Parameter(
@@ -82,7 +82,7 @@ class TopController extends Controller
      *          name="filter",
      *          in="query",
      *          required=false,
-     *          @OA\Schema(ref="#/components/schemas/top_manga_filter)
+     *          @OA\Schema(ref="#/components/schemas/top_manga_filter")
      *      ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
@@ -167,6 +167,29 @@ class TopController extends Controller
      *     tags={"top"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *
+     *     @OA\Parameter(
+     *          name="type",
+     *          in="query",
+     *          required=false,
+     *          @OA\Schema(ref="#/components/schemas/top_reviews_type_enum")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *          name="preliminary",
+     *          in="query",
+     *          required=false,
+     *          description="Whether the results include preliminary reviews or not. Defaults to true.",
+     *          @OA\Schema(type="boolean")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *          name="spoilers",
+     *          in="query",
+     *          required=false,
+     *          description="Whether the results include reviews with spoilers or not. Defaults to true.",
+     *          @OA\Schema(type="boolean")
+     *     ),
      *
      *     @OA\Response(
      *         response="200",

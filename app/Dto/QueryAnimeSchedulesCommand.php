@@ -3,11 +3,14 @@
 namespace App\Dto;
 
 
+use App\Casts\ContextualBooleanCast;
 use App\Casts\EnumCast;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
 use App\Dto\Concerns\HasLimitParameter;
 use App\Dto\Concerns\HasPageParameter;
+use App\Dto\Concerns\HasSfwParameter;
+use App\Dto\Concerns\PreparesData;
 use App\Enums\AnimeScheduleFilterEnum;
 use App\Rules\Attributes\EnumValidation;
 use Illuminate\Http\JsonResponse;
@@ -22,13 +25,10 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryAnimeSchedulesCommand extends Data implements DataRequest
 {
-    use HasLimitParameter, HasRequestFingerprint, HasPageParameter;
+    use HasLimitParameter, HasRequestFingerprint, HasPageParameter, PreparesData, HasSfwParameter;
 
-    #[BooleanType]
+    #[BooleanType, WithCast(ContextualBooleanCast::class)]
     public bool|Optional $kids = false;
-
-    #[BooleanType]
-    public bool|Optional $sfw = false;
 
     #[WithCast(EnumCast::class, AnimeScheduleFilterEnum::class), EnumValidation(AnimeScheduleFilterEnum::class)]
     public ?AnimeScheduleFilterEnum $filter;
