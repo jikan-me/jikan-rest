@@ -110,13 +110,22 @@ class GithubReport
      */
     public function __toString() : string
     {
-        $title = urlencode("[{$this->instanceType}] Generated Issue: {$this->getClassName()}");
-        $body = urlencode(
-            "Please fill out the details below.\n\n**Summary:**\n\n**Steps to reproduce:**\n\n\n\n ### Additional Details \n **Jikan Parser Version**: ```{$this->jikanVersion}```\n**PHP:** ```{$this->phpVersion}```\n**Redis**: ```{$this->redisRunning}```\n**Exception:** ```{$this->name}```\n**Code:** ```{$this->code}```\n**Message:** ```{$this->error}```\n**Trace:** ```{$this->trace}```\n**Request:** `{$this->requestMethod} {$this->requestUri}`\n"
+        // 🐛 emoji v
+        $title = "%F0%9F%90%9B" . urlencode(" [{$this->instanceType}] Generated Issue: {$this->getClassName()}");
+
+        $currentBehavior = urlencode(
+            "The API has returned an error: \n```{$this->name}```\nStatus code: ```{$this->code}```\nMessage: ```{$this->error}```\nTrace: ```{$this->trace}```"
         );
 
-        // https://github.com/jikan-me/jikan-rest/issues/new?assignees=&labels=i%3A+bug%2C+i%3A+needs+triage&template=bug.md&title=
-        return "https://github.com/{$this->repo}/issues/new?title={$title}&body={$body}";
+        $expectedBehavior = urlencode("The API should have returned a successful response with data.");
+        $env = urlencode(
+            "Jikan Parser Version**: ```{$this->jikanVersion}```\nPHP: ```{$this->phpVersion}```\nIs redis used: ```{$this->redisRunning}```"
+        );
+        $reproSteps = urlencode(
+            "Http Request: `{$this->requestMethod} {$this->requestUri}"
+        );
+
+        return "https://github.com/{$this->repo}/issues/new?template=bug.yml&title={$title}&system_env={$env}&repro_steps={$reproSteps}&expected_behavior={$expectedBehavior}&current_behavior={$currentBehavior}";
     }
 
     /**
