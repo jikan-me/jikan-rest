@@ -47,7 +47,7 @@ http:
   # Host and port to listen on (eg.: `127.0.0.1:8080`).
   #
   # This option is required.
-  address: 0.0.0.0:8080
+  address: 0.0.0.0:8000
 
   # HTTP access logs
   #
@@ -113,7 +113,7 @@ http:
     # Maximal count of worker executions. Zero (or nothing) means no limit.
     #
     # Default: 0
-    max_jobs: 64
+    max_jobs: 1
 
     # Timeout for worker allocation. Zero means no limit.
     #
@@ -204,6 +204,8 @@ reload:
       #
       # Default: false
       recursive: true
+
+      patterns: [ ".php", ".go", ".md" ]
 
       # Ignored folders.
       #

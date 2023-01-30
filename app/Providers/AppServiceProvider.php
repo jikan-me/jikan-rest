@@ -354,11 +354,9 @@ class AppServiceProvider extends ServiceProvider
 
     public static function servicesToWarm(): array
     {
-        // todo: test again with roadrunner -- specific issue: typesense driver not loaded in time
         $services = [
             ScoutSearchService::class,
-            UnitOfWork::class,
-            CachedScraperService::class
+            UnitOfWork::class
         ];
 
         if (Env::get("SCOUT_DRIVER") === "typesense") {
