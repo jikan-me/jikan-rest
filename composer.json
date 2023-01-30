@@ -17,6 +17,7 @@
         "amphp/http-client": "^4.6",
         "danielmewes/php-rql": "dev-master",
         "darkaonline/swagger-lume": "^9.0",
+        "doctrine/annotations": "1.14.2",
         "fabpot/goutte": "^4.0",
         "flipbox/lumen-generator": "^9.0",
         "illuminate/redis": "^9.0",
