@@ -21,7 +21,15 @@ class CharacterFactory extends JikanModelFactory
         return [
             "mal_id" => $mal_id,
             "url" => $url,
-            "images" => [],
+            "images" => [
+                "jpg" => [
+                    "image_url" => "https://cdn.myanimelist.net/images/characters/4/50197.jpg"
+                ],
+                "webp" => [
+                    "image_url" => "https://cdn.myanimelist.net/images/characters/4/50197.webp",
+                    "small_image_url" => "https://cdn.myanimelist.net/images/characters/4/50197t.webp"
+                ]
+            ],
             "name" => $this->faker->name(),
             "name_kanji" => "岡",
             "nicknames" => [],
@@ -29,7 +37,20 @@ class CharacterFactory extends JikanModelFactory
             "about" => "test",
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
-            "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("character", $mal_id))
+            "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("character", $mal_id)),
+            "animeography" => [],
+            "mangaography" => [],
+            "voice_actors" => [
+                [
+                    "person" => [
+                        "mal_id" => 11,
+                        "url" => "https://myanimelist.net/people/11/Kouichi_Yamadera",
+                        "images" => [],
+                        "name" => "Yamadera, Kouichi"
+                    ],
+                    "language" => "Japanese"
+                ]
+            ]
         ];
     }
 }

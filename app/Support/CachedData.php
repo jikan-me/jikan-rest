@@ -4,8 +4,10 @@ namespace App\Support;
 
 use App\Concerns\ScraperCacheTtl;
 use App\JikanApiModel;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Env;
+use MongoDB\BSON\UTCDateTime;
 
 final class CachedData
 {
@@ -82,16 +84,31 @@ final class CachedData
 
         $result = $this->scraperResult->first();
 
-        if ($result instanceof JikanApiModel && !is_null($result->getAttributeValue("modifiedAt"))) {
-            return (int) $result["modifiedAt"]->toDateTime()->format("U");
+        if ($result instanceof JikanApiModel && null != $modifiedAt = $result->getAttributeValue("modifiedAt")) {
+            return $this->mixedToTimestamp($modifiedAt);
         }
 
         if (is_array($result) && array_key_exists("modifiedAt", $result)) {
-            return (int) $result["modifiedAt"]->toDateTime()->format("U");
+            return $this->mixedToTimestamp($result["modifiedAt"]);
         }
 
         if (is_object($result) && property_exists($result, "modifiedAt")) {
-            return $result->modifiedAt->toDateTime()->format("U");
+            return $this->mixedToTimestamp($result->modifiedAt);
+        }
+
+        return null;
+    }
+
+    private function mixedToTimestamp(mixed $modifiedAt): ?int
+    {
+        if ($modifiedAt instanceof UTCDateTime) {
+            return (int) $modifiedAt->toDateTime()->format("U");
+        }
+        if ($modifiedAt instanceof \DateTimeInterface) {
+            return (int) $modifiedAt->format("U");
+        }
+        if (is_string($modifiedAt)) {
+            return Carbon::createFromTimeString($modifiedAt)->format("U");
         }
 
         return null;

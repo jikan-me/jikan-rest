@@ -1,9 +1,14 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace Tests\HttpV4\Controllers;
+use App\Testing\ScoutFlush;
+use App\Testing\SyntheticMongoDbTransaction;
 use Tests\TestCase;
 
 class SearchControllerTest extends TestCase
 {
+    use SyntheticMongoDbTransaction;
+    use ScoutFlush;
+
     public function testAnimeSearch()
     {
         $this->get('/v4/anime?order_by=id&sort=asc')

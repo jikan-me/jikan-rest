@@ -5,11 +5,12 @@ namespace App;
 use App\Concerns\FilteredByLetter;
 use App\Enums\ClubCategoryEnum;
 use App\Enums\ClubTypeEnum;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Club\ClubRequest;
 
 class Club extends JikanApiSearchableModel
 {
-    use FilteredByLetter;
+    use FilteredByLetter, HasFactory;
 
     protected array $filters = ["order_by", "sort", "letter", "category", "type"];
 
@@ -19,7 +20,7 @@ class Club extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'name', 'members', 'category', 'created', 'access', 'anime', 'manga'
+        'mal_id', 'url', 'images', 'name', 'members', 'category', 'created', 'access', 'anime', 'manga', 'created_at', 'updated_at', 'characters', 'staff'
     ];
 
     /**
@@ -48,7 +49,7 @@ class Club extends JikanApiSearchableModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->displayNameFieldName = "title";
+        $this->displayNameFieldName = "name";
     }
 
     /** @noinspection PhpUnused */

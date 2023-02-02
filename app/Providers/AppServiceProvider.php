@@ -222,6 +222,7 @@ class AppServiceProvider extends ServiceProvider
                     Features\AnimeExternalLookupHandler::class => $unitOfWorkInstance->anime(),
                     Features\AnimeStreamingLookupHandler::class => $unitOfWorkInstance->anime(),
                     Features\AnimeThemesLookupHandler::class => $unitOfWorkInstance->anime(),
+                    Features\AnimeUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents("anime_userupdates"),
                     Features\CharacterLookupHandler::class => $unitOfWorkInstance->characters(),
                     Features\CharacterFullLookupHandler::class => $unitOfWorkInstance->characters(),
                     Features\CharacterAnimeLookupHandler::class => $unitOfWorkInstance->characters(),
@@ -355,8 +356,7 @@ class AppServiceProvider extends ServiceProvider
     public static function servicesToWarm(): array
     {
         $services = [
-            ScoutSearchService::class,
-            UnitOfWork::class
+            ScoutSearchService::class
         ];
 
         if (Env::get("SCOUT_DRIVER") === "typesense") {
@@ -374,5 +374,14 @@ class AppServiceProvider extends ServiceProvider
         }
 
         return $services;
+    }
+
+    public static function servicesToClear(): array
+    {
+        return [
+            // in RoadRunner we want to reset the repositories after each request, because we cache the query builders in them.
+            // todo: refactor repositories to avoid caching query builders, so this step is not necessary
+            JikanUnitOfWork::class
+        ];
     }
 }

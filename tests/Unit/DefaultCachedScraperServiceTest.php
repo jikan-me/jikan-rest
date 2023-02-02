@@ -16,7 +16,6 @@ final class DefaultCachedScraperServiceTest extends TestCase
 {
     public function tearDown(): void
     {
-        Mockery::close();
         // reset time pinning
         Carbon::setTestNow();
     }

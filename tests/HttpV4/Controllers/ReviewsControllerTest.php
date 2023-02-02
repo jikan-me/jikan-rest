@@ -1,9 +1,13 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace Tests\HttpV4\Controllers;
+use App\Testing\ScoutFlush;
+use App\Testing\SyntheticMongoDbTransaction;
 use Tests\TestCase;
 
 class ReviewsControllerTest extends TestCase
 {
+    use SyntheticMongoDbTransaction;
+    use ScoutFlush;
 
     public function testAnimeReviews()
     {

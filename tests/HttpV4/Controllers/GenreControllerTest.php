@@ -1,9 +1,14 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace Tests\HttpV4\Controllers;
+use App\Testing\ScoutFlush;
+use App\Testing\SyntheticMongoDbTransaction;
 use Tests\TestCase;
 
 class GenreControllerTest extends TestCase
 {
+    use SyntheticMongoDbTransaction;
+    use ScoutFlush;
+
     public function testAnimeGenre()
     {
         $this->get('/v4/genres/anime')
@@ -34,6 +39,7 @@ class GenreControllerTest extends TestCase
 
     public function test404()
     {
+        $this->mockJikanParserWith404RespondingUpstream();
         $this->get('/v4/genres')
             ->seeStatusCode(404);
     }

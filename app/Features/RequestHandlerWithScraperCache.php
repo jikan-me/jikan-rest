@@ -40,7 +40,7 @@ abstract class RequestHandlerWithScraperCache implements RequestHandler
     protected function resource(Collection $results): JsonResource
     {
         return new ResultsResource(
-            $results->first()
+            $results->first() ?? ["results" => []]
         );
     }
 

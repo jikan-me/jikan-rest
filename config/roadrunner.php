@@ -33,6 +33,7 @@ return [
     'listeners' => [
         Events\BeforeLoopStartedEvent::class => [
             ...Defaults::beforeLoopStarted(),
+            Listeners\ResetLaravelScoutListener::class
         ],
 
         Events\BeforeLoopIterationEvent::class => [
@@ -86,6 +87,7 @@ return [
 
     'clear' => [
         ...Defaults::servicesToClear(),
+        ...\App\Providers\AppServiceProvider::servicesToClear(),
         'auth', // is not required for Laravel >= v8.35
     ],
 

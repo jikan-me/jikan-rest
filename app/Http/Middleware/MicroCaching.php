@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Http\HttpHelper;
+use App\Support\JikanConfig;
 use Closure;
+use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Cache;
 use Jikan\Exception\BadResponseException;
 
@@ -18,6 +20,13 @@ class MicroCaching
         'InsightsController@main'
     ];
 
+    private readonly bool $isEnabled;
+
+    public function __construct(JikanConfig $jikanConfig)
+    {
+        $this->isEnabled = $jikanConfig->isMicroCachingEnabled();
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -27,6 +36,9 @@ class MicroCaching
      */
     public function handle($request, Closure $next)
     {
+        if (!$this->isEnabled) {
+            return $next($request);
+        }
         if (isset($request->route()[1]['uses'])) {
             $route = explode('\\', $request->route()[1]['uses']);
             $route = end($route);
@@ -65,7 +77,7 @@ class MicroCaching
             Cache::add(
                 $fingerprint,
                 json_encode(
-                    $next($request)->getData()
+                    $response->getData()
                 ),
                 env('MICROCACHING_EXPIRE', 60)
             );

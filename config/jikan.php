@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'micro_caching_enabled' => env('MICROCACHING', false),
     'default_cache_expire' => env('CACHE_DEFAULT_EXPIRE', 86400),
     'per_endpoint_cache_ttl' => [
         /**

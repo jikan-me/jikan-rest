@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "64ddaa662c7d0df9a7127336259b22ff",
+    "content-hash": "9ffd521140d58bc63cf640fedd62a978",
     "packages": [
         {
             "name": "amphp/amp",
@@ -7238,12 +7238,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pushrbx/lumen-roadrunner.git",
-                "reference": "835e99ba6854f31236a7039f29e730c785800a88"
+                "reference": "52ab151734d13861759415f1985c8e01e96885dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pushrbx/lumen-roadrunner/zipball/835e99ba6854f31236a7039f29e730c785800a88",
-                "reference": "835e99ba6854f31236a7039f29e730c785800a88",
+                "url": "https://api.github.com/repos/pushrbx/lumen-roadrunner/zipball/52ab151734d13861759415f1985c8e01e96885dd",
+                "reference": "52ab151734d13861759415f1985c8e01e96885dd",
                 "shasum": ""
             },
             "require": {
@@ -7337,7 +7337,7 @@
                 "issues": "https://github.com/spiral/roadrunner-laravel/issues",
                 "source": "https://github.com/spiral/roadrunner-laravel"
             },
-            "time": "2022-08-16T16:49:18+00:00"
+            "time": "2023-02-01T00:49:15+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -11551,6 +11551,48 @@
                 "source": "https://github.com/hamcrest/hamcrest-php/tree/v2.0.1"
             },
             "time": "2020-07-09T08:09:16+00:00"
+        },
+        {
+            "name": "haydenpierce/class-finder",
+            "version": "0.4.4",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.com:hpierce1102/ClassFinder.git",
+                "reference": "94c602870ddf8d4fa2d67fb9bae637d88f9bd76e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/hpierce1102%2FClassFinder/repository/archive.zip?sha=94c602870ddf8d4fa2d67fb9bae637d88f9bd76e",
+                "reference": "94c602870ddf8d4fa2d67fb9bae637d88f9bd76e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "mikey179/vfsstream": "^1.6",
+                "phpunit/phpunit": "~9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HaydenPierce\\ClassFinder\\": "src/",
+                    "HaydenPierce\\ClassFinder\\UnitTest\\": "test/unit"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hayden Pierce",
+                    "email": "hayden@haydenpierce.com"
+                }
+            ],
+            "description": "A library that can provide of a list of classes in a given namespace",
+            "time": "2022-09-26T22:42:59+00:00"
         },
         {
             "name": "mockery/mockery",

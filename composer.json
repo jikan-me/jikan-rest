@@ -43,6 +43,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.21",
+        "haydenpierce/class-finder": "^0.4.4",
         "mockery/mockery": "^1.5.1",
         "phpunit/phpunit": "^9.5.28"
     },
@@ -64,8 +65,13 @@
         "post-root-package-install": [
             "php -r \"copy('.env.dist', '.env');\""
         ],
+        "phpunit": "@php ./vendor/bin/phpunit --no-coverage",
+        "phpunit-cover": "@php ./vendor/bin/phpunit",
         "test": [
-          "php ./vendor/phpunit/phpunit/phpunit"
+          "@phpunit"
+        ],
+        "test-cover": [
+          "@phpunit-cover"
         ]
     },
     "minimum-stability": "dev",

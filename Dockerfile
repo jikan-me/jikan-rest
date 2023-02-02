@@ -19,8 +19,11 @@ RUN	set -ex \
 	# enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit>
 	&& echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1235\n" >> \
 	    ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
+  # show php version
+  && php -v \
 	# show installed modules
 	&& php -m \
+  && composer --version \
 	# create unpriviliged user
 	&& adduser --disabled-password --shell "/sbin/nologin" --home "/nonexistent" --no-create-home --uid "10001" --gecos "" "jikanapi" \
 	&& mkdir /app /var/run/rr \

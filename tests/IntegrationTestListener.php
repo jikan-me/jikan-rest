@@ -1,19 +1,21 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 
 namespace Tests;
+use Illuminate\Support\Str;
 use \Throwable;
 use PHPUnit\Framework\TestListener;
 
 // fixme: with phpunit 10, this should be replaced with the new event system
 class IntegrationTestListener implements TestListener
 {
-    private $app;
+    private \Laravel\Lumen\Application $app;
 
     public function __construct()
     {
         $app = require __DIR__.'/../bootstrap/app.php';
         $database = env('DB_DATABASE', 'jikan_tests');
         $app['config']->set('database.connections.mongodb.database', $database === 'jikan' ? 'jikan_tests' : $database);
+        $app['config']->set('jikan.micro_caching_enabled', false);
         $this->app = $app;
     }
 
@@ -41,10 +43,18 @@ class IntegrationTestListener implements TestListener
     {
     }
 
+    private function isIntegrationTest(\PHPUnit\Framework\TestSuite $suite): bool
+    {
+        $suiteName = $suite->getName();
+        return in_array($suiteName, [
+            "integration", "http-integration", "Tests\HttpV4\Controllers", "Tests\Integration",
+            "Integration"
+        ]);
+    }
+
     public function startTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
-        echo $suite->getName();
-        if ($suite->getName() == "integration") {
+        if ($this->isIntegrationTest($suite)) {
             $app = $this->app;
             $kernel = $app->make(
                 'Illuminate\Contracts\Console\Kernel'
@@ -53,13 +63,14 @@ class IntegrationTestListener implements TestListener
                 $kernel->call('migrate:fresh', []);
             } catch (\Exception $ex) {
                 print_r($ex->getMessage());
+                throw $ex;
             }
         }
     }
 
     public function endTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
-        if ($suite->getName() == "integration") {
+        if ($this->isIntegrationTest($suite)) {
             $app = $this->app;
             $kernel = $app->make(
                 'Illuminate\Contracts\Console\Kernel'
@@ -70,11 +81,9 @@ class IntegrationTestListener implements TestListener
 
     public function startTest(\PHPUnit\Framework\Test $test): void
     {
-        // TODO: Implement startTest() method.
     }
 
     public function endTest(\PHPUnit\Framework\Test $test, float $time): void
     {
-        // TODO: Implement endTest() method.
     }
 }

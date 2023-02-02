@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\CarbonDateRange;
+use Jikan\Model\Common\DateRange;
 use JMS\Serializer\Serializer;
 use \Illuminate\Database\Eloquent\Factories\Factory;
 use Spatie\Enum\Laravel\Faker\FakerEnumProvider;
@@ -28,7 +30,16 @@ abstract class JikanModelFactory extends Factory
          * @var Serializer $serializer
          */
         $serializer = app("SerializerV4");
-        return $serializer->toArray($stateDefinition);
+        $translated = array_merge(array(), $stateDefinition);
+        foreach ($stateDefinition as $k => $v)
+        {
+            if ($v instanceof DateRange || $v instanceof CarbonDateRange)
+            {
+                $converted = $serializer->toArray([$k => $v]);
+                $translated[$k] = $converted[$k];
+            }
+        }
+        return $translated;
     }
 
     protected abstract function definitionInternal(): array;

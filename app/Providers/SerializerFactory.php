@@ -7,8 +7,10 @@ use Jikan\Model\Common\DateRange;
 use Jikan\Model\Common\MalUrl;
 use JMS\Serializer\GraphNavigatorInterface;
 use JMS\Serializer\Handler\HandlerRegistry;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializerBuilder;
+use MongoDB\BSON\UTCDateTime;
 
 class SerializerFactory
 {
@@ -44,6 +46,13 @@ class SerializerFactory
                         CarbonDateRange::class,
                         'json',
                         self::convertCarbonDateRange(...)
+                    );
+
+                    $registry->registerHandler(
+                        GraphNavigatorInterface::DIRECTION_SERIALIZATION,
+                        UTCDateTime::class,
+                        'json',
+                        self::convertBsonDateTime(...)
                     );
                 }
             )
@@ -128,5 +137,10 @@ class SerializerFactory
     private static function convertDateTimeImmutable($visitor, \DateTimeImmutable $obj, array $type): ?string
     {
         return $obj ? $obj->format(DATE_ATOM) : null;
+    }
+
+    private static function convertBsonDateTime($visitor, UTCDateTime $obj, array $type, SerializationContext $context): string
+    {
+        return $obj->toDateTime()->format(DATE_ATOM);
     }
 }

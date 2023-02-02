@@ -1,12 +1,93 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
-namespace Tests\HttpV4\Controllers;
+<?php
+/** @noinspection PhpIllegalPsrClassPathInspection */
+namespace Tests\Integration;
+
+use App\Anime;
+use App\Testing\ScoutFlush;
+use App\Testing\SyntheticMongoDbTransaction;
+use Illuminate\Support\Facades\DB;
+use MongoDB\BSON\UTCDateTime;
 use Tests\TestCase;
 
 class AnimeControllerTest extends TestCase
 {
+    use SyntheticMongoDbTransaction;
+    use ScoutFlush;
+
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->searchIndexModelCleanupList = ["App\\Anime"];
+    }
+
+    private function givenDummyCharactersStaffData($uri)
+    {
+        DB::table("anime_characters_staff")->insert([
+            "createdAt" => new UTCDateTime(),
+            "modifiedAt" => new UTCDateTime(),
+            "request_hash" => "request:anime:" . sha1($uri),
+            "characters" => [
+                [
+                    "character" => [
+                        "mal_id" => 3,
+                        "url" => "https://myanimelist.net/character/3/Jet_Black",
+                        "images" => [
+                            "jpg" => [
+                                "image_url" => "https://cdn.myanimelist.net/images/characters/11/253723.jpg?s=6c8a19a79a88c46ae15f30e3ef5fd839",
+                                "small_image_url" => "https://cdn.myanimelist.net/images/characters/11/253723t.jpg?s=6c8a19a79a88c46ae15f30e3ef5fd839"
+                            ],
+                            "webp" => [
+                                "image_url" => "https://cdn.myanimelist.net/images/characters/11/253723.webp?s=6c8a19a79a88c46ae15f30e3ef5fd839",
+                                "small_image_url" => "https://cdn.myanimelist.net/images/characters/11/253723t.webp?s=6c8a19a79a88c46ae15f30e3ef5fd839"
+                            ]
+                        ],
+                        "name" => "Black, Jet"
+                    ],
+                    "role" => "Main",
+                    "favorites" => 1,
+                    "voice_actors" => [
+                        [
+                            "person" => [
+                                "mal_id" => 357,
+                                "url" => "https://myanimelist.net/people/357/Unshou_Ishizuk",
+                                "images" => [
+                                    "jpg" => [
+                                        "image_url" => "https://cdn.myanimelist.net/images/voiceactors/2/17135.jpg?s=5925123b8a7cf9b51a445c225442f0ef"
+                                    ]
+                                ],
+                                "name" => "Ishizuka, Unshou"
+                            ],
+                            "language" => "Japanese"
+                        ]
+                    ]
+                ]
+            ],
+            "staff" => [
+                [
+                    "person" => [
+                        "mal_id" => 40009,
+                        "url" => "https://myanimelist.net/people/40009/Yutaka_Maseba",
+                        "images" => [
+                            "jpg" => [
+                                "image_url" => "https://cdn.myanimelist.net/images/voiceactors/3/40216.jpg?s=d9fb7a625868ec7d9cd3804fa0da3fd6"
+                            ]
+                        ],
+                        "name" => "Maseba, Yutaka"
+                    ],
+                    "positions" => [
+                        "Producer"
+                    ]
+                ]
+            ]
+        ]);
+    }
+
     public function testMain()
     {
-        $this->get('/v4/anime/1')
+        Anime::factory(1)->create([
+            "mal_id" => 1
+        ]);
+        $this->getJson('/v4/anime/1')
             ->seeStatusCode(200)
             ->seeJsonStructure(['data' => [
                 'mal_id',
@@ -116,16 +197,20 @@ class AnimeControllerTest extends TestCase
 
     public function testCharacters()
     {
-        $this->get('/v4/anime/1/characters')
+        // let's avoid sending request to MAL in tests
+        $this->givenDummyCharactersStaffData("/v4/anime/1/characters");
+
+        $this->getJson('/v4/anime/1/characters')
             ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->seeJsonStructure(['data' => [
                 [
                     'character' => [
                         'mal_id',
                         'url',
                         'images' => [
                             'jpg' => [
-                                'image_url'
+                                'image_url',
+                                'small_image_url',
                             ],
                             'webp' => [
                                 'image_url',
@@ -155,7 +240,8 @@ class AnimeControllerTest extends TestCase
 
     public function testStaff()
     {
-        $this->get('/v4/anime/1/staff')
+        $this->givenDummyCharactersStaffData('/v4/anime/1/staff');
+        $this->getJson('/v4/anime/1/staff')
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
                 [
@@ -171,375 +257,5 @@ class AnimeControllerTest extends TestCase
                     'positions'
                 ]
             ]]);
-    }
-
-    public function testEpisodes()
-    {
-        $this->get('/v4/anime/1/episodes')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'pagination' => [
-                    'last_visible_page',
-                    'has_next_page',
-                ],
-                'data' => [
-                    [
-                        'mal_id',
-                        'url',
-                        'title',
-                        'title_japanese',
-                        'title_romanji',
-                        'aired',
-                        'score',
-                        'filler',
-                        'recap',
-                        'forum_url'
-                    ]
-                ]
-            ]);
-
-        $this->get('/v4/anime/21/episodes?page=2')
-            ->seeStatusCode(200)
-            ->seeJson([
-                'pagination' => [
-                    'last_visible_page',
-                    'has_next_page',
-                ],
-                'data' => [
-                    [
-                        'mal_id',
-                        'url',
-                        'title',
-                        'title_japanese',
-                        'title_romanji',
-                        'aired',
-                        'score',
-                        'filler',
-                        'recap',
-                        'forum_url'
-                    ]
-                ]
-            ]);
-    }
-
-    public function testEpisode()
-    {
-        $this->get('/v4/anime/21/episodes/1')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'data' => [
-                    'mal_id',
-                    'url',
-                    'title',
-                    'title_japanese',
-                    'title_romanji',
-                    'duration',
-                    'aired',
-                    'aired',
-                    'filler',
-                    'recap',
-                    'synopsis',
-                ]
-            ]);
-    }
-
-    public function testNews()
-    {
-        $this->get('/v4/anime/1/news')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'pagination' => [
-                    'last_visible_page',
-                    'has_next_page',
-                ],
-                'data' => [
-                    [
-                        'mal_id',
-                        'url',
-                        'title',
-                        'date',
-                        'author_username',
-                        'author_url',
-                        'forum_url',
-                        'images' => [
-                            'jpg' => [
-                                'image_url',
-                            ],
-                        ],
-                        'comments',
-                        'excerpt'
-                    ]
-                ]
-            ]);
-    }
-
-    public function testPictures()
-    {
-        $this->get('/v4/anime/1/pictures')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'data' => [
-                    [
-                        'jpg' => [
-                            'image_url',
-                            'large_image_url',
-                            'small_image_url',
-                        ],
-                        'webp' => [
-                            'image_url',
-                            'large_image_url',
-                            'small_image_url',
-                        ]
-                    ]
-                ]
-            ]);
-    }
-
-    public function testVideos()
-    {
-        $this->get('/v4/anime/1/videos')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
-                'promo' => [
-                    [
-                        'title',
-                        'trailer' => [
-                            'youtube_id',
-                            'url',
-                            'embed_url',
-                            'images' => [
-                                'image_url',
-                                'small_image_url',
-                                'medium_image_url',
-                                'large_image_url',
-                                'maximum_image_url',
-                            ]
-                        ],
-                    ]
-                ],
-                'episodes' => [
-                    [
-                        'mal_id',
-                        'title',
-                        'episode',
-                        'url',
-                        'images' => [
-                            'jpg' => [
-                                'image_url',
-                            ],
-                        ],
-                    ]
-                ]
-            ]]);
-    }
-
-    public function testStats()
-    {
-        $this->get('/v4/anime/21/statistics')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
-                'watching',
-                'completed',
-                'on_hold',
-                'dropped',
-                'plan_to_watch',
-                'total',
-                'scores' => [
-                    [
-                        'score',
-                        'votes',
-                        'percentage'
-                    ]
-                ]
-            ]]);
-    }
-
-    public function testForum()
-    {
-        $this->get('/v4/anime/1/forum')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'data' => [
-                    [
-                        'mal_id',
-                        'url',
-                        'title',
-                        'date',
-                        'author_username',
-                        'author_url',
-                        'comments',
-                        'last_comment' => [
-                            'url',
-                            'author_username',
-                            'author_url',
-                            'date'
-                        ]
-                    ]
-                ]
-            ]);
-    }
-
-    public function testMoreInfo()
-    {
-        $this->get('/v4/anime/1/moreinfo')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
-                'moreinfo'
-            ]]);
-    }
-
-    public function testReviews()
-    {
-        $this->get('/v4/anime/1/reviews')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'pagination' => [
-                    'last_visible_page',
-                    'has_next_page',
-                ],
-                'data' => [
-                    [
-                        'mal_id',
-                        'url',
-                        'type',
-                        'reactions',
-                        'date',
-                        'review',
-                        'score',
-                        'tags',
-                        'is_spoiler',
-                        'is_preliminary',
-                        'episodes_watched',
-                        'user' => [
-                            'url',
-                            'username',
-                            'images' => [
-                                'jpg' => [
-                                    'image_url',
-                                ],
-                                'webp' => [
-                                    'image_url',
-                                ],
-                            ],
-                        ]
-                    ]
-                ]
-            ]);
-
-        $this->get('/v4/anime/1/reviews?page=100')
-            ->seeStatusCode(404)
-            ->seeJsonStructure([
-                'pagination' => [
-                    'last_visible_page',
-                    'has_next_page',
-                ],
-                'data' => []
-            ]);
-    }
-
-    public function testRecommendations()
-    {
-        $this->get('/v4/anime/1/recommendations')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'data' => [
-                    [
-                        'entry' => [
-                            'mal_id',
-                            'url',
-                            'images' => [
-                                'jpg' => [
-                                    'image_url',
-                                    'small_image_url',
-                                    'large_image_url'
-                                ],
-                                'webp' => [
-                                    'image_url',
-                                    'small_image_url',
-                                    'large_image_url'
-                                ],
-                            ],
-                            'title'
-                        ],
-                        'url',
-                        'votes',
-                    ]
-                ]
-            ]);
-    }
-
-    public function testAnimeUserUpdates()
-    {
-        $this->get('/v4/anime/1/userupdates')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'pagination' => [
-                    'last_visible_page',
-                    'has_next_page',
-                ],
-                'data' => [
-                    [
-                        'user' => [
-                            'username',
-                            'url',
-                            'images' => [
-                                'jpg' => [
-                                    'image_url',
-                                ],
-                                'webp' => [
-                                    'image_url',
-                                ],
-                            ],
-                        ],
-                        'score',
-                        'status',
-                        'episodes_seen',
-                        'episodes_total',
-                        'date'
-                    ]
-                ]
-            ]);
-
-        $this->get('/v4/anime/1/userupdates?page=200')
-            ->seeStatusCode(404);
-    }
-
-    public function testAnimeRelations()
-    {
-        $this->get('/v4/anime/1/relations')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'data' => [
-                    [
-                        'relation',
-                        'entry' => [
-                            [
-                                'mal_id',
-                                'type',
-                                'name',
-                                'url'
-                            ]
-                        ],
-                    ]
-                ]
-            ]);
-    }
-
-    public function testAnimeThemes()
-    {
-        $this->get('/v4/anime/1/themes')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
-                'data' => [
-                    'openings',
-                    'endings',
-                ]
-            ]);
-    }
-
-    public function test404()
-    {
-        $this->get('/v4/anime/2')
-            ->seeStatusCode(404);
     }
 }

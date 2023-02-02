@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Concerns\FilteredByLetter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Jikan;
 use Jikan\Request\Magazine\MagazinesRequest;
 
@@ -12,7 +13,7 @@ use Jikan\Request\Magazine\MagazinesRequest;
  */
 class Magazine extends JikanApiSearchableModel
 {
-    use FilteredByLetter;
+    use FilteredByLetter, HasFactory;
     protected array $filters = ["order_by", "sort", "letter"];
 
     /**
