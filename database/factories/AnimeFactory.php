@@ -29,6 +29,18 @@ class AnimeFactory extends JikanMediaModelFactory
         return [
             "mal_id" => $mal_id,
             "url" => $this->createMalUrl($mal_id, "anime"),
+            "images" => [
+                'jpg' => [
+                    'image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644.jpg',
+                    'small_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644t.jpg',
+                    'large_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644l.jpg',
+                ],
+                'webp' => [
+                    'image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644.webp',
+                    'small_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644t.webp',
+                    'large_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644l.webp',
+                ],
+            ],
             "titles" => [
                 [
                     "type" => "Default",
@@ -48,11 +60,11 @@ class AnimeFactory extends JikanMediaModelFactory
             "duration" => "",
             "rating" => $this->getRandomRating(),
             "score" => $this->faker->randomFloat(2, 1.00, 9.99),
-            "scored_by" => $this->faker->randomDigitNotNull(),
-            "rank" => $this->faker->randomDigitNotNull(),
-            "popularity" => $this->faker->randomDigitNotNull(),
-            "members" => $this->faker->randomDigitNotNull(),
-            "favorites" => $this->faker->randomDigitNotNull(),
+            "scored_by" => $this->faker->randomDigitNotnull(),
+            "rank" => $this->faker->randomDigitNotnull(),
+            "popularity" => $this->faker->randomDigitNotnull(),
+            "members" => $this->faker->randomDigitNotnull(),
+            "favorites" => $this->faker->randomDigitNotnull(),
             "synopsis" => "test",
             "background" => "test",
             "premiered" => $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]),
@@ -62,6 +74,18 @@ class AnimeFactory extends JikanMediaModelFactory
                 "timezone" => "Asia/Tokyo",
                 "string" => "Tuesdays at 00:00 (JST)"
             ],
+            'trailer' => [
+                'youtube_id' => null,
+                'url' => null,
+                'embed_url' => null,
+                'images' => [
+                    'image_url' => null,
+                    'small_image_url' => null,
+                    'medium_image_url' => null,
+                    'large_image_url' => null,
+                    'maximum_image_url' => null,
+                ],
+            ],
             "producers" => [
                 [
                     "mal_id" => 16,
@@ -70,7 +94,7 @@ class AnimeFactory extends JikanMediaModelFactory
                     "url" => "https://myanimelist.net/anime/producer/16/TV_Tokyo"
                 ]
             ],
-            "lincesors" => [
+            "licensors" => [
                 [
                     "mal_id" => 119,
                     "type" => "anime",
@@ -78,7 +102,14 @@ class AnimeFactory extends JikanMediaModelFactory
                     "url" => "https://myanimelist.net/anime/producer/119/VIZ_Media"
                 ]
             ],
-            "studios" => [],
+            "studios" => [
+                [
+                    'mal_id' => 14,
+                    'type' => 'anime',
+                    'name' => 'Sunrise',
+                    'url' => 'https://myanimelist.net/anime/producer/14/Sunrise',
+                ]
+            ],
             "genres" => [
                 [
                     "mal_id" => 1,

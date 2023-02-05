@@ -1,31 +1,27 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace Tests\HttpV4\Controllers;
+use App\Magazine;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Tests\TestCase;
 
-class ProducerControllerTest extends TestCase
+class MagazineControllerTest extends TestCase
 {
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
-    public function testProducersListing()
+    public function testMagazinesListing()
     {
-        $this->get('/v4/producers')
+        Magazine::factory(1)->create();
+        $this->get('/v4/magazines')
             ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->seeJsonStructure(['data' => [
                 [
                     'mal_id',
+                    'name',
                     'url',
-                    'titles',
-                    'images',
-                    'count',
-                    'favorites',
-                    'established',
-                    'about',
                     'count'
                 ]
             ]]);
     }
-
 }

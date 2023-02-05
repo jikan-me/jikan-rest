@@ -269,7 +269,7 @@ $router->group(
     }
 );
 
-$router->get('schedules[/{day:[A-Za-z]+}]', [
+$router->get('schedules[/{dayFilter:[A-Za-z]+}]', [
     'uses' => 'ScheduleController@main'
 ]);
 

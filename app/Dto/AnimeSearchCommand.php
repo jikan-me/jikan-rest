@@ -8,7 +8,6 @@ use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Rules\Attributes\EnumValidation;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Attributes\Validation\IntegerType;

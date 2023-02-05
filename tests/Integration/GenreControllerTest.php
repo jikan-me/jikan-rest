@@ -1,5 +1,7 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace Tests\HttpV4\Controllers;
+use App\GenreAnime;
+use App\GenreManga;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Tests\TestCase;
@@ -11,6 +13,7 @@ class GenreControllerTest extends TestCase
 
     public function testAnimeGenre()
     {
+        GenreAnime::factory()->createOne();
         $this->get('/v4/genres/anime')
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
@@ -25,6 +28,7 @@ class GenreControllerTest extends TestCase
 
     public function testMangaGenre()
     {
+        GenreManga::factory()->createOne();
         $this->get('/v4/genres/manga')
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[

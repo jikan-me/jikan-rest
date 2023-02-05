@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\V4DB;
 
 use App\Dto\QueryAnimeSchedulesCommand;
-use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
@@ -74,9 +73,13 @@ class ScheduleController extends Controller
      *      }
      *  )
      */
-    public function main(Request $request, ?string $day = null)
+    public function main(QueryAnimeSchedulesCommand $command)
     {
-        $command = QueryAnimeSchedulesCommand::from($request, $day);
         return $this->mediator->send($command);
     }
+
+//    public function byDay(QueryAnimeSchedulesByDayCommand $command)
+//    {
+//        return $this->mediator->send($command);
+//    }
 }

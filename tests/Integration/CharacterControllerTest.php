@@ -3,6 +3,7 @@ namespace Tests\HttpV4\Controllers;
 use App\Character;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 
@@ -46,7 +47,18 @@ class CharacterControllerTest extends TestCase
                     "anime" => [
                         "mal_id" => 1,
                         "url" => "https://myanimelist.net/anime/1/Cowboy_Bebop",
-                        "images" => [],
+                        "images" => [
+                            'jpg' => [
+                                'image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644.jpg?s=42d7666179a2851c99fada2e0ceb5da1',
+                                'small_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644t.jpg?s=42d7666179a2851c99fada2e0ceb5da1',
+                                'large_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644l.jpg?s=42d7666179a2851c99fada2e0ceb5da1',
+                            ],
+                            'webp' => [
+                                'image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644.webp?s=42d7666179a2851c99fada2e0ceb5da1',
+                                'small_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644t.webp?s=42d7666179a2851c99fada2e0ceb5da1',
+                                'large_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644l.webp?s=42d7666179a2851c99fada2e0ceb5da1',
+                            ],
+                        ],
                         "title" => "Cowboy Bebop"
                     ]
                 ]
@@ -88,7 +100,18 @@ class CharacterControllerTest extends TestCase
                     "manga" => [
                         "mal_id" => 1,
                         "url" => "https://myanimelist.net/anime/1/Cowboy_Bebop",
-                        "images" => [],
+                        "images" => [
+                            'jpg' => [
+                                'image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644.jpg?s=42d7666179a2851c99fada2e0ceb5da1',
+                                'small_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644t.jpg?s=42d7666179a2851c99fada2e0ceb5da1',
+                                'large_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644l.jpg?s=42d7666179a2851c99fada2e0ceb5da1',
+                            ],
+                            'webp' => [
+                                'image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644.webp?s=42d7666179a2851c99fada2e0ceb5da1',
+                                'small_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644t.webp?s=42d7666179a2851c99fada2e0ceb5da1',
+                                'large_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644l.webp?s=42d7666179a2851c99fada2e0ceb5da1',
+                            ],
+                        ],
                         "title" => "Cowboy Bebop"
                     ]
                 ]
@@ -146,9 +169,16 @@ class CharacterControllerTest extends TestCase
 
     public function testPictures()
     {
-        Character::factory()->createOne([
-            "mal_id" => 1
+        $document = $this->dummyScraperResultDocument('/v4/characters/1/pictures', 'characters', [
+            'pictures' => [
+                [
+                    'jpg' => [
+                        'image_url' => 'https://cdn.myanimelist.net/images/characters/10/34138.jpg',
+                    ],
+                ]
+            ]
         ]);
+        DB::table("characters_pictures")->insert($document);
         $this->get('/v4/characters/1/pictures')
             ->seeStatusCode(200)
             ->seeJsonStructure([

@@ -27,17 +27,26 @@ class PersonFactory extends JikanModelFactory
             "mal_id" => $mal_id,
             "url" => $this->createMalUrl($mal_id, "people"),
             "website_url" => "https://webiste.example",
-            "images" => [],
+            "images" => [
+                "jpg" => [
+                    "image_url" => "https://cdn.myanimelist.net/images/voiceactors/1/55486.jpg"
+                ]
+            ],
             "name" => $name,
             "given_name" => $given_name,
             "family_name" => $family_name,
-            "alternate_names" => [],
+            "alternate_names" => [
+                $this->faker->name()
+            ],
             "birthday" => $this->createRandomDateTime("-80 years")->toAtomString(),
-            "favorites" => $this->faker->randomDigitNotNull(),
+            "member_favorites" => $this->faker->randomDigitNotNull(),
             "about" => "test",
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
-            "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("people", $mal_id))
+            "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("people", $mal_id)),
+            "published_manga" => [],
+            "voice_acting_roles" => [],
+            "anime_staff_positions" => []
         ];
     }
 }

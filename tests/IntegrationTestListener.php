@@ -1,7 +1,10 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 
 namespace Tests;
-use Illuminate\Support\Str;
+use Illuminate\Console\OutputStyle;
+use Illuminate\Container\Container;
+use Illuminate\Database\Migrations\Migrator;
+use Illuminate\Support\Facades\Facade;
 use \Throwable;
 use PHPUnit\Framework\TestListener;
 
@@ -47,8 +50,7 @@ class IntegrationTestListener implements TestListener
     {
         $suiteName = $suite->getName();
         return in_array($suiteName, [
-            "integration", "http-integration", "Tests\HttpV4\Controllers", "Tests\Integration",
-            "Integration"
+            "integration", "Tests\Integration", "Integration"
         ]);
     }
 
@@ -56,6 +58,8 @@ class IntegrationTestListener implements TestListener
     {
         if ($this->isIntegrationTest($suite)) {
             $app = $this->app;
+            Container::setInstance($app);
+            Facade::setFacadeApplication($app);
             $kernel = $app->make(
                 'Illuminate\Contracts\Console\Kernel'
             );
@@ -63,6 +67,7 @@ class IntegrationTestListener implements TestListener
                 $kernel->call('migrate:fresh', []);
             } catch (\Exception $ex) {
                 print_r($ex->getMessage());
+                print_r($ex);
                 throw $ex;
             }
         }
@@ -71,11 +76,20 @@ class IntegrationTestListener implements TestListener
     public function endTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
         if ($this->isIntegrationTest($suite)) {
+
             $app = $this->app;
+            Container::setInstance($app);
+            Facade::setFacadeApplication($app);
             $kernel = $app->make(
                 'Illuminate\Contracts\Console\Kernel'
             );
-            $kernel->call('migrate:rollback');
+            try {
+                $kernel->call('migrate:rollback');
+            } catch (\Exception $ex) {
+                print_r($ex->getMessage());
+                print_r($ex);
+                throw $ex;
+            }
         }
     }
 

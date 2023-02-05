@@ -1,5 +1,9 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace Tests\HttpV4\Controllers;
+use App\Anime;
+use App\Character;
+use App\Manga;
+use App\Person;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Tests\TestCase;
@@ -11,7 +15,8 @@ class SearchControllerTest extends TestCase
 
     public function testAnimeSearch()
     {
-        $this->get('/v4/anime?order_by=id&sort=asc')
+        Anime::factory(3)->create();
+        $this->get('/v4/anime?order_by=mal_id&sort=asc')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'pagination' => [
@@ -89,6 +94,7 @@ class SearchControllerTest extends TestCase
                         'background',
                         'season',
                         'year',
+                        'themes',
                         'broadcast' => [
                             'day',
                             'time',
@@ -135,7 +141,8 @@ class SearchControllerTest extends TestCase
 
     public function testMangaSearch()
     {
-        $this->get('/v4/manga?order_by=id&sort=asc')
+        Manga::factory(3)->create();
+        $this->get('/v4/manga?order_by=mal_id&sort=asc')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'pagination' => [
@@ -229,6 +236,10 @@ class SearchControllerTest extends TestCase
 
     public function testPeopleSearch()
     {
+        Person::factory(2)->create();
+        Person::factory()->createOne([
+            "name" => "Sawano Kuma"
+        ]);
         $this->get('/v4/people?q=Sawano')
             ->seeStatusCode(200)
             ->seeJsonStructure([
@@ -266,7 +277,11 @@ class SearchControllerTest extends TestCase
 
     public function testCharacterSearch()
     {
-        $this->get('/v4/characters?q=Okabe,%20Rintarou')
+        Character::factory(2)->create();
+        Character::factory()->createOne([
+            "name" => "Okabe"
+        ]);
+        $this->get('/v4/characters?q=Okabe')
             ->seeStatusCode(200)
             ->seeJsonStructure([
                 'pagination' => [

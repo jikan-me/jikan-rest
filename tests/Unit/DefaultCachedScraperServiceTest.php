@@ -5,6 +5,7 @@ namespace Unit;
 use App\Contracts\Repository;
 use App\Services\DefaultCachedScraperService;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\SerializerInterface;
@@ -70,8 +71,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
 
         // the cached data in the database
         $dummyResults = collect([
-            ["dummy" => "dummy1", "modifiedAt" => new UTCDateTime($now->sub("2 days")->timestamp)],
-            ["dummy" => "dummy2", "modifiedAt" => new UTCDateTime($now->sub("2 days")->timestamp)]
+            ["dummy" => "dummy1", "modifiedAt" => new UTCDateTime($now->sub("2 days")->getPreciseTimestamp(3))],
+            ["dummy" => "dummy2", "modifiedAt" => new UTCDateTime($now->sub("2 days")->getPreciseTimestamp(3))]
         ]);
 
         // the data returned by the scraper
@@ -93,8 +94,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $result = $target->findList($testRequestHash, fn() => []);
 
         $this->assertEquals([
-            ["dummy" => "dummy1", "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3))],
-            ["dummy" => "dummy2", "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3))]
+            ["dummy" => "dummy1", "modifiedAt" => $dummyResults->toArray()[0]["modifiedAt"]],
+            ["dummy" => "dummy2", "modifiedAt" => $dummyResults->toArray()[1]["modifiedAt"]]
         ], $result->toArray());
     }
 

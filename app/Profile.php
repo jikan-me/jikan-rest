@@ -3,11 +3,12 @@
 namespace App;
 
 use App\Concerns\FilteredByLetter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\User\UserProfileRequest;
 
 class Profile extends JikanApiSearchableModel
 {
-    use FilteredByLetter;
+    use FilteredByLetter, HasFactory;
     protected array $filters = [];
 
     /**

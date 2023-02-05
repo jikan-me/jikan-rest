@@ -22,6 +22,18 @@ class MangaFactory extends JikanMediaModelFactory
         return [
             "mal_id" => $mal_id,
             "url" => $this->createMalUrl($mal_id, "manga"),
+            "images" => [
+                'jpg' => [
+                    'image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644.jpg',
+                    'small_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644t.jpg',
+                    'large_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644l.jpg',
+                ],
+                'webp' => [
+                    'image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644.webp',
+                    'small_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644t.webp',
+                    'large_image_url' => 'https://cdn.myanimelist.net/images/anime/4/19644l.webp',
+                ],
+            ],
             "titles" => [
                 [
                     "type" => "Default",

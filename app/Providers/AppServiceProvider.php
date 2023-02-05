@@ -280,8 +280,8 @@ class AppServiceProvider extends ServiceProvider
                 ];
 
                 foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
-                    $jikan = $app->make(MalClient::class);
-                    $serializer = $app->make("SerializerV4");
+                    $jikan = $app->get("JikanParser");
+                    $serializer = $app->get("SerializerV4");
                     $scraperService = $app->make(DefaultCachedScraperService::class,
                         ["repository" => $repositoryInstance, "jikan" => $jikan, "serializer" => $serializer]);
                     $requestHandlers[] = $app->make($handlerClass, [

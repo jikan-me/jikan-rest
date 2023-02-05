@@ -137,7 +137,7 @@ $httpClient = \Symfony\Component\HttpClient\HttpClient::create(
 );
 $app->instance('HttpClient', $httpClient);
 
-$jikan = new \Jikan\MyAnimeList\MalClient(app('HttpClient'));
+$jikan = new \Jikan\MyAnimeList\MalClient($httpClient);
 $app->instance('JikanParser', $jikan);
 
 $app->instance('SerializerV4', SerializerFactory::createV4());

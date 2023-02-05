@@ -52,7 +52,16 @@ trait SyntheticMongoDbTransaction
             "manga_reviews",
             "manga_stats",
             "manga_userupdates",
-            "people_pictures"
+            "people_pictures",
+            "reviews",
+            "recommendations",
+            "themes_anime",
+            "themes_manga",
+            "users_history",
+            "users_friends",
+            "users_recommendations",
+            "users_reviews",
+            "users_clubs"
         ];
 
         foreach ($jikanModels as $jikanModel)

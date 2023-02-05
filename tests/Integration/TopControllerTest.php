@@ -1,7 +1,12 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace Tests\HttpV4\Controllers;
+use App\Anime;
+use App\Character;
+use App\Manga;
+use App\Person;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Tests\TestCase;
 
 class TopControllerTest extends TestCase
@@ -11,6 +16,11 @@ class TopControllerTest extends TestCase
 
     public function testTopAnime()
     {
+        Anime::factory(3)->state(new Sequence(
+            ["rank" => 54],
+            ["rank" => 22],
+            ["rank" => 12]
+        ))->create();
         $this->get('/v4/top/anime')
             ->seeStatusCode(200)
             ->seeJsonStructure([
@@ -125,6 +135,11 @@ class TopControllerTest extends TestCase
 
     public function testTopManga()
     {
+        Manga::factory(3)->state(new Sequence(
+            ["rank" => 54],
+            ["rank" => 22],
+            ["rank" => 12]
+        ))->create();
         $this->get('/v4/top/manga')
             ->seeStatusCode(200)
             ->seeJsonStructure([
@@ -209,6 +224,11 @@ class TopControllerTest extends TestCase
 
     public function testTopPeople()
     {
+        Person::factory(3)->state(new Sequence(
+            ["member_favorites" => 524],
+            ["member_favorites" => 323],
+            ["member_favorites" => 224],
+        ))->create();
         $this->get('/v4/top/people')
             ->seeStatusCode(200)
             ->seeJsonStructure([
@@ -236,6 +256,11 @@ class TopControllerTest extends TestCase
 
     public function testTopCharacters()
     {
+        Character::factory(3)->state(new Sequence(
+            ["member_favorites" => 524],
+            ["member_favorites" => 323],
+            ["member_favorites" => 224],
+        ))->create();
         $this->get('/v4/top/characters')
             ->seeStatusCode(200)
             ->seeJsonStructure([

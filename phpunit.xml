@@ -6,9 +6,6 @@
          verbose="true"
 >
     <testsuites>
-        <testsuite name="http-integration">
-            <directory>./tests/HttpV4/</directory>
-        </testsuite>
         <testsuite name="integration">
           <directory>./tests/Integration/</directory>
         </testsuite>

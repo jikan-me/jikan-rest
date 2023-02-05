@@ -3,11 +3,12 @@
 namespace App;
 
 use App\Concerns\FilteredByLetter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Producer\ProducerRequest;
 
 class Producers extends JikanApiSearchableModel
 {
-    use FilteredByLetter;
+    use FilteredByLetter, HasFactory;
     protected array $filters = ["order_by", "sort", "letter"];
 
     /**
