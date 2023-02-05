@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Contracts\Repository;
+use App\JikanApiModel;
 use App\Support\RepositoryQuery;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Collection;
@@ -17,7 +18,7 @@ class DatabaseRepository extends RepositoryQuery implements Repository
         return $this->queryable()->newModelInstance();
     }
 
-    public function getByMalId(int $id)
+    public function getByMalId(int $id): JikanApiModel|array|null
     {
         $results = $this->getAllByMalId($id);
 

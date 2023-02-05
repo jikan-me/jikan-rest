@@ -20,7 +20,7 @@ interface Repository extends RepositoryQuery
     /**
      * @return ?T
      */
-    public function getByMalId(int $id);
+    public function getByMalId(int $id): JikanApiModel|array|null;
 
     public function getAllByMalId(int $id): Collection;
 

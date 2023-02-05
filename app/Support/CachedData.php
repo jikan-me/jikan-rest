@@ -26,6 +26,16 @@ final class CachedData
         return new self($scraperResult, app(CacheOptions::class)->ttl());
     }
 
+    public static function fromArray(array $scraperResult): self
+    {
+        return self::from(collect($scraperResult));
+    }
+
+    public static function fromModel(JikanApiModel $model): self
+    {
+        return self::fromArray($model->toArray());
+    }
+
     public function collect(): Collection
     {
         return $this->scraperResult;
@@ -82,18 +92,10 @@ final class CachedData
             return null;
         }
 
-        $result = $this->scraperResult->first();
+        $result = $this->scraperResult;
 
-        if ($result instanceof JikanApiModel && null != $modifiedAt = $result->getAttributeValue("modifiedAt")) {
+        if (null !== $modifiedAt = $result->get("modifiedAt")) {
             return $this->mixedToTimestamp($modifiedAt);
-        }
-
-        if (is_array($result) && array_key_exists("modifiedAt", $result)) {
-            return $this->mixedToTimestamp($result["modifiedAt"]);
-        }
-
-        if (is_object($result) && property_exists($result, "modifiedAt")) {
-            return $this->mixedToTimestamp($result->modifiedAt);
         }
 
         return null;

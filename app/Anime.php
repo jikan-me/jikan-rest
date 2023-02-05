@@ -133,6 +133,16 @@ class Anime extends JikanApiSearchableModel
         ];
     }
 
+    public function getThemesAttribute()
+    {
+        $result = [];
+        if (array_key_exists("themes", $this->attributes)) {
+            $result = $this->attributes["themes"];
+        }
+
+        return $result;
+    }
+
     /** @noinspection PhpUnused */
     public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, AnimeTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {

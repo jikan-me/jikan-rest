@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\CachedScraperService;
 use App\Contracts\Repository;
 use App\Http\HttpHelper;
+use App\JikanApiModel;
 use App\Support\CachedData;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
@@ -60,7 +61,8 @@ final class DefaultCachedScraperService implements CachedScraperService
      */
     public function find(int $id, string $cacheKey): CachedData
     {
-        $results = CachedData::from($this->repository->getAllByMalId($id));
+        $dbResults = $this->repository->getAllByMalId($id);
+        $results = $this->dbResultSetToCachedData($dbResults);
 
         if ($results->isEmpty() || $results->isExpired()) {
             $response = $this->repository->scrape($id);
@@ -77,7 +79,8 @@ final class DefaultCachedScraperService implements CachedScraperService
 
     public function findByKey(string $key, mixed $val, string $cacheKey): CachedData
     {
-        $results = CachedData::from($this->repository->where($key, $val)->get());
+        $dbResults = $this->repository->where($key, $val)->get();
+        $results = $this->dbResultSetToCachedData($dbResults);
 
         if ($results->isEmpty() || $results->isExpired()) {
             $scraperResponse = $this->repository->scrape($key);
@@ -85,17 +88,18 @@ final class DefaultCachedScraperService implements CachedScraperService
             $this->raiseNotFoundIfErrors($scraperResponse);
 
             $response = $this->prepareScraperResponse($cacheKey, $results->isEmpty(), $scraperResponse);
-            $response->offsetSet($key, $val);
+            $response[$key] = $val;
 
             if ($results->isEmpty()) {
-                $this->repository->insert($response->toArray());
+                $this->repository->insert($response);
             }
 
             if ($results->isExpired()) {
-                $this->repository->where($key, $val)->update($response->toArray());
+                $this->repository->where($key, $val)->update($response);
             }
 
-            $results = CachedData::from($this->repository->where($key, $val)->get());
+            $dbResults = $this->repository->where($key, $val)->get();
+            $results = $this->dbResultSetToCachedData($dbResults);
         }
 
         $this->raiseNotFoundIfEmpty($results);
@@ -105,7 +109,30 @@ final class DefaultCachedScraperService implements CachedScraperService
 
     public function get(string $cacheKey): CachedData
     {
-        return CachedData::from($this->getByCacheKey($cacheKey));
+        $dbResults = $this->getByCacheKey($cacheKey);
+        return $this->dbResultSetToCachedData($dbResults);
+    }
+
+    private function dbResultSetToCachedData(Collection $dbResults): CachedData
+    {
+        if (!$dbResults->isEmpty()) {
+            $item = $dbResults->first();
+            return $this->dbRecordToCachedData($item);
+        }
+        else {
+            $item = collect();
+        }
+
+        return CachedData::from($item);
+    }
+
+    private function dbRecordToCachedData(JikanApiModel|array $item): CachedData
+    {
+        if ($item instanceof JikanApiModel) {
+            return CachedData::fromModel($item);
+        }
+
+        return CachedData::fromArray($item);
     }
 
     private function raiseNotFoundIfEmpty(CachedData $results)
@@ -127,14 +154,19 @@ final class DefaultCachedScraperService implements CachedScraperService
         $response = $this->prepareScraperResponse($cacheKey, $results->isEmpty(), $scraperResponse);
 
         if ($results->isEmpty()) {
-            $this->repository->insert($response->toArray());
+            $this->repository->insert($response);
         }
 
         if ($results->isExpired()) {
-            $this->repository->queryByMalId($id)->update($response->toArray());
+            $this->repository->queryByMalId($id)->update($response);
         }
 
-        return CachedData::from(collect($this->repository->getAllByMalId($id)));
+        $dbResult = $this->repository->getByMalId($id);
+        if ($dbResult === null) {
+            return CachedData::from(collect());
+        }
+
+        return $this->dbRecordToCachedData($dbResult);
     }
 
     private function updateCacheByKey(string $cacheKey, CachedData $results, array $scraperResponse): CachedData
@@ -143,15 +175,15 @@ final class DefaultCachedScraperService implements CachedScraperService
 
         // insert cache if resource doesn't exist
         if ($results->isEmpty()) {
-            $this->repository->insert($response->toArray());
+            $this->repository->insert($response);
         } else if ($results->isExpired()) {
-            $this->getQueryableByCacheKey($cacheKey)->update($response->toArray());
+            $this->getQueryableByCacheKey($cacheKey)->update($response);
         }
 
-        return CachedData::from($this->getByCacheKey($cacheKey));
+        return $this->get($cacheKey);
     }
 
-    private function prepareScraperResponse(string $cacheKey, bool $resultsEmpty, array $scraperResponse): CachedData
+    private function prepareScraperResponse(string $cacheKey, bool $resultsEmpty, array $scraperResponse): array
     {
         $meta = [];
         if ($resultsEmpty) {
@@ -167,7 +199,7 @@ final class DefaultCachedScraperService implements CachedScraperService
         $meta['modifiedAt'] = new UTCDateTime(Carbon::now()->getPreciseTimestamp(3));
 
         // join meta data with response
-        return CachedData::from(collect($meta + $scraperResponse));
+        return $meta + $scraperResponse;
     }
 
     private function getByCacheKey(string $cacheKey): Collection

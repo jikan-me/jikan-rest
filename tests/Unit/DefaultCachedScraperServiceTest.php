@@ -48,11 +48,18 @@ final class DefaultCachedScraperServiceTest extends TestCase
     public function testIfFindListReturnsNotExpiredItems()
     {
         $testRequestHash = $this->requestHash();
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
         // the cached data in the database
-        $dummyResults = collect([
-            ["dummy" => "dummy1", "modifiedAt" => new UTCDateTime()],
-            ["dummy" => "dummy2", "modifiedAt" => new UTCDateTime()]
-        ]);
+        // this should be an array of arrays as builder->get() returns multiple items
+        $dummyResults = collect([[
+            "request_hash" => $testRequestHash,
+            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "results" => [
+                ["dummy" => "dummy1"],
+                ["dummy" => "dummy2"]
+            ]
+        ]]);
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
         $queryBuilderMock->expects()->get()->once()->andReturn($dummyResults);
 
@@ -60,7 +67,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
 
         $result = $target->findList($testRequestHash, fn() => []);
 
-        $this->assertEquals($dummyResults->toArray(), $result->toArray());
+        $this->assertEquals($dummyResults->first(), $result->toArray());
     }
 
     public function testIfFindListUpdatesCacheIfItemsExpired()
@@ -70,10 +77,15 @@ final class DefaultCachedScraperServiceTest extends TestCase
         Carbon::setTestNow($now);
 
         // the cached data in the database
-        $dummyResults = collect([
-            ["dummy" => "dummy1", "modifiedAt" => new UTCDateTime($now->sub("2 days")->getPreciseTimestamp(3))],
-            ["dummy" => "dummy2", "modifiedAt" => new UTCDateTime($now->sub("2 days")->getPreciseTimestamp(3))]
-        ]);
+        // this should be an array of arrays as builder->get() returns multiple items
+        $dummyResults = collect([[
+            "request_hash" => $testRequestHash,
+            "modifiedAt" => new UTCDateTime($now->sub("2 days")->getPreciseTimestamp(3)),
+            "results" => [
+                ["dummy" => "dummy1"],
+                ["dummy" => "dummy2"]
+            ]
+        ]]);
 
         // the data returned by the scraper
         $scraperData = [
@@ -83,8 +95,16 @@ final class DefaultCachedScraperServiceTest extends TestCase
             ]
         ];
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks(3);
-        $queryBuilderMock->expects()->get()->twice()->andReturn($dummyResults);
-        $queryBuilderMock->expects()->update(Mockery::any())->once()->andReturn(1);
+        $queryBuilderMock->expects()->update(Mockery::capture($updatedData))->once()->andReturn(1);
+        $queryBuilderMock->shouldReceive("get")->twice()->andReturnUsing(
+            fn () => $dummyResults,
+            function () use (&$updatedData) {
+                // builder->get() returns multiple items
+                return collect([
+                    $updatedData
+                ]);
+            }
+        );
 
         $serializerMock->allows([
             "toArray" => $scraperData
@@ -94,8 +114,11 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $result = $target->findList($testRequestHash, fn() => []);
 
         $this->assertEquals([
-            ["dummy" => "dummy1", "modifiedAt" => $dummyResults->toArray()[0]["modifiedAt"]],
-            ["dummy" => "dummy2", "modifiedAt" => $dummyResults->toArray()[1]["modifiedAt"]]
+            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "results" => [
+                ["dummy" => "dummy1"],
+                ["dummy" => "dummy2"]
+            ]
         ], $result->toArray());
     }
 
@@ -113,17 +136,27 @@ final class DefaultCachedScraperServiceTest extends TestCase
             ]
         ];
 
-        $cacheData = [
-            ["dummy" => "dummy1", "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3))],
-            ["dummy" => "dummy2", "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3))]
-        ];
+        // the cached data in the database
+        // this should be an array of arrays as builder->get() returns multiple items
+        $cacheData = collect([[
+            "request_hash" => $testRequestHash,
+            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "results" => [
+                ["dummy" => "dummy1"],
+                ["dummy" => "dummy2"]
+            ]
+        ]]);;
 
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks(2);
-        // at first the cache is empty
-        $queryBuilderMock->expects()->get()->once()->andReturn(collect());
-        // then it gets "inserted" into
-        $queryBuilderMock->expects()->get()->once()->andReturn(collect($cacheData));
-        $repositoryMock->expects()->insert(Mockery::any())->once()->andReturn(true);
+        $repositoryMock->expects()->insert(Mockery::capture($insertedData))->once()->andReturn(true);
+        // at first the cache is empty, then it gets "inserted" into
+        // so, we change the return value of builder->get accordingly
+        $queryBuilderMock->expects()->get()->twice()->andReturnUsing(fn() => collect(), function () use (&$insertedData) {
+            return collect([
+                $insertedData
+            ]);
+        });
 
         $serializerMock->allows([
             "toArray" => $scraperData
@@ -132,11 +165,6 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $target = new DefaultCachedScraperService($repositoryMock, new MalClient(), $serializerMock);
         $result = $target->findList($testRequestHash, fn() => []);
 
-        $this->assertEquals($cacheData, $result->toArray());
-    }
-
-    public function testIfModifiedAtValueSetCorrectlyDuringCacheUpdate()
-    {
-
+        $this->assertEquals($cacheData->first(), $result->toArray());
     }
 }
