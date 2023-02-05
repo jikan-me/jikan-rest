@@ -3,6 +3,7 @@
 namespace Tests\Integration;
 
 use App\Anime;
+use App\Enums\AnimeRatingEnum;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -36,7 +37,7 @@ class TopAnimeEndpointTest extends TestCase
             ["rank", false, ["type" => "ona"]],
             ["rank", false, ["type" => "special"]],
             ["rank", false, ["type" => "music"]],
-            ["members", true, ["filter" => "upcoming"]],
+            ["rank", false, ["filter" => "upcoming"]],
             ["members", true, ["filter" => "bypopularity"]],
             ["favorites", true, ["filter" => "favorite"]]
         ];
@@ -68,7 +69,7 @@ class TopAnimeEndpointTest extends TestCase
         // create a model factory and pin the rating attribute's value to "G - All Ages".
         $f = Anime::factory($expectedCount)
             ->state([
-                "rating" => "G - All Ages"
+                "rating" => AnimeRatingEnum::g()->label
             ]);
 
         // pin attribute values in the model factory and create data in the database
@@ -103,8 +104,8 @@ class TopAnimeEndpointTest extends TestCase
         }
         $content = $this->getJsonResponse($params);
 
-        $expectedItems = $items->map(fn($elem) => data_get($elem, $fieldToOrderBy));
-        $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, $fieldToOrderBy));
+        $expectedItems = $items->map(fn($elem) => data_get($elem, $fieldToOrderBy))->values();
+        $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, $fieldToOrderBy))->values();
 
         $this->seeStatusCode(200);
         $this->assertPaginationData($expectedCount);

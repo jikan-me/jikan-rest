@@ -203,7 +203,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         if ($this->descriptor->hasRatingParam() && $additionalParams->has("rating")) {
             $v = AnimeRatingEnum::tryFrom(strtolower($additionalParams["rating"]));
             if (!is_null($v)) {
-                $overrides["rating"] = $v->value;
+                $overrides["rating"] = $v->label;
             }
         }
 
