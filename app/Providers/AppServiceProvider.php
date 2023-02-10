@@ -31,11 +31,13 @@ use App\Repositories\DefaultUserRepository;
 use App\Repositories\MangaGenresRepository;
 use App\Services\DefaultBuilderPaginatorService;
 use App\Services\DefaultCachedScraperService;
+use App\Services\DefaultPrivateFieldMapperService;
 use App\Services\DefaultQueryBuilderService;
 use App\Services\DefaultScoutSearchService;
 use App\Services\ElasticScoutSearchService;
 use App\Services\EloquentBuilderPaginatorService;
 use App\Services\MongoSearchService;
+use App\Services\PrivateFieldMapperService;
 use App\Services\QueryBuilderPaginatorService;
 use App\Services\ScoutBuilderPaginatorService;
 use App\Services\ScoutSearchService;
@@ -82,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
         // cache options class is used to share the request scope level cache settings
         $this->app->singleton(CacheOptions::class);
         $this->app->singleton(CachedScraperService::class, DefaultCachedScraperService::class);
+        $this->app->singleton(PrivateFieldMapperService::class, DefaultPrivateFieldMapperService::class);
         $this->app->bind(QueryBuilderPaginatorService::class, DefaultBuilderPaginatorService::class);
         $this->registerModelRepositories();
         $this->registerRequestHandlers();
@@ -276,7 +279,9 @@ class AppServiceProvider extends ServiceProvider
                     Features\QueryRecentlyAddedEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
                     Features\QueryPopularEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
                     Features\QueryRecentlyAddedPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
-                    Features\QueryPopularPromoVideosHandler::class => $unitOfWorkInstance->documents("watch")
+                    Features\QueryPopularPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
+                    Features\QueryAnimeListOfUserHandler::class => $unitOfWorkInstance->documents("users_animelist"),
+                    Features\QueryMangaListOfUserHandler::class => $unitOfWorkInstance->documents("users_mangalist")
                 ];
 
                 foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
@@ -333,14 +338,6 @@ class AppServiceProvider extends ServiceProvider
             "to2dArrayWithDottedKeys" => To2dArrayWithDottedKeys::class,
             "offsetGetFirst" => CollectionOffsetGetFirst::class
         ];
-    }
-
-    private function getQueryBuilderFactory($queryBuilderClass): \Closure
-    {
-        return function($app) use($queryBuilderClass) {
-            $searchIndexesEnabled = $this->getSearchIndexesEnabledConfig($app);
-            return new $queryBuilderClass($searchIndexesEnabled, $app->make(ScoutSearchService::class));
-        };
     }
 
     private function getSearchIndexesEnabledConfig($app): bool

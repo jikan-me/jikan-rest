@@ -133,6 +133,8 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         $activityMarkerKeyName = $this->descriptor->activityMarkerKeyName();
         // let's make all database items the same type
         if ($additionalParams->has("type")) {
+            // value => label  key pairs
+            // we store labels in the database
             $typeOverride = collect($this->descriptor->typeParamMap())->get(strtolower($additionalParams["type"]));
             if (!is_null($typeOverride)) {
                 $overrides["type"] = $typeOverride;
@@ -256,8 +258,11 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         $activityMarkerKeyName = $this->descriptor->activityMarkerKeyName();
 
         if ($additionalParams->has("type")) {
+            // value => label  key pairs
+            // we store labels in the database
             $types = $this->descriptor->typeParamMap();
-            $overrides["type"] = $this->faker->randomElement(array_diff(array_keys($types), [$additionalParams["type"]]));
+            $typeKey = $this->faker->randomElement(array_diff(array_keys($types), [$additionalParams["type"]]));
+            $overrides["type"] = $types[$typeKey];
         }
 
         if ($additionalParams->has("letter")) {

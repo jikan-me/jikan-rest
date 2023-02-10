@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Dto\QueryMangaListOfUserCommand;
 use App\Dto\QueryRecentlyOnlineUsersCommand;
+use App\Dto\QueryAnimeListOfUserCommand;
 use App\Dto\UserAboutLookupCommand;
 use App\Dto\UserClubsLookupCommand;
 use App\Dto\UserExternalLookupCommand;
@@ -349,6 +351,12 @@ class UserController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
+     *     @OA\Parameter(
+     *       name="status",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/user_anime_list_status_filter")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user anime list",
@@ -362,10 +370,9 @@ class UserController extends Controller
      * ),
      *
      */
-    public function animelist(Request $request, string $username, ?string $status = null)
+    public function animelist(QueryAnimeListOfUserCommand $command)
     {
-        // noop, intentionally left blank
-        // todo: remove as this is obsolete
+        return $this->mediator->send($command);
     }
 
     /**
@@ -383,6 +390,12 @@ class UserController extends Controller
      *       @OA\Schema(type="string")
      *     ),
      *
+     *     @OA\Parameter(
+     *       name="status",
+     *       in="query",
+     *       @OA\Schema(ref="#/components/schemas/user_manga_list_status_filter")
+     *     ),
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user manga list",
@@ -396,10 +409,9 @@ class UserController extends Controller
      * ),
      *
      */
-    public function mangalist(Request $request, string $username, ?string $status = null)
+    public function mangalist(QueryMangaListOfUserCommand $command)
     {
-        // noop, intentionally left blank
-        // todo: remove as this is obsolete
+        return $this->mediator->send($command);
     }
 
     /**

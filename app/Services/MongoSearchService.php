@@ -14,8 +14,7 @@ final class MongoSearchService extends SearchServiceBase
         $query = $this->query();
 
         /** @noinspection PhpParamsInspection */
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $query->whereRaw([
+        $builder = $query->whereRaw([
             '$text' => [
                 '$search' => $searchTerms
             ],
@@ -24,5 +23,14 @@ final class MongoSearchService extends SearchServiceBase
                 '$meta' => 'textScore'
             ]
         ])->orderBy('textMatchScore', 'desc');
+
+        if ($orderByFields !== null) {
+            $order = explode(",", $orderByFields);
+            foreach ($order as $o) {
+                $builder = $builder->orderBy($o, $sortDirectionDescending ? 'desc' : 'asc');
+            }
+        }
+
+        return $builder;
     }
 }

@@ -146,7 +146,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
                 ["dummy" => "dummy1"],
                 ["dummy" => "dummy2"]
             ]
-        ]]);;
+        ]]);
 
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks(2);
         $repositoryMock->expects()->insert(Mockery::capture($insertedData))->once()->andReturn(true);

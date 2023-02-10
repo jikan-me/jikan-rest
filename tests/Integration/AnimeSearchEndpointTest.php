@@ -44,12 +44,22 @@ class AnimeSearchEndpointTest extends TestCase
     public function limitParameterCombinationsProvider(): array
     {
         return [
-            [5, []],
-            [5, ["type" => "tv"]],
-            [5, ["type" => "tv", "min_score" => 7]],
-            [5, ["type" => "tv", "max_score" => 6]],
-            [5, ["type" => "tv", "status" => "complete", "max_score" => 8]],
-            [5, ["type" => "movie", "status" => "complete", "max_score" => 8]]
+            "query string = `?limit=5`" => [
+                [5, []]
+            ],
+            "query string = `?limit=5&type=tv`" => [5, ["type" => "tv"]],
+            "query string = `?limit=5&type=tv&min_score=7`" => [
+                5, ["type" => "tv", "min_score" => 7]
+            ],
+            "query string = `?limit=5&type=tv&max_score=6`" => [
+                5, ["type" => "tv", "max_score" => 6]
+            ],
+            "query string = `?limit=5&type=tv&status=complete&max_score=8`" => [
+                5, ["type" => "tv", "status" => "complete", "max_score" => 8]
+            ],
+            "query string = `?limit=5&type=movie&status=complete&max_score=8`" => [
+                5, ["type" => "movie", "status" => "complete", "max_score" => 8]
+            ]
         ];
     }
 

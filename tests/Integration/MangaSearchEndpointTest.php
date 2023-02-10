@@ -46,12 +46,16 @@ class MangaSearchEndpointTest extends TestCase
     public function limitParameterCombinationsProvider(): array
     {
         return [
-            [5, []],
-            [5, ["type" => "manga"]],
-            [5, ["type" => "novel", "min_score" => 7]],
-            [5, ["type" => "manga", "max_score" => 6]],
-            [5, ["type" => "manga", "status" => "complete", "max_score" => 8]],
-            [5, ["type" => "oneshot", "status" => "complete", "max_score" => 8]]
+            "query string = `?limit=5`" => [5, []],
+            "query string = `?limit=5&type=manga`" =>[5, ["type" => "manga"]],
+            "query string = `?limit=5&type=novel&min_score=7`" => [5, ["type" => "novel", "min_score" => 7]],
+            "query string = `?limit=5&type=manga&max_score=6`" => [5, ["type" => "manga", "max_score" => 6]],
+            "query string = `?limit=5&type=manga&status=complete&max_score=8`" => [
+                5, ["type" => "manga", "status" => "complete", "max_score" => 8]
+            ],
+            "query string = `?limit=5&type=oneshot&status=complete&max_score=8`" => [
+                5, ["type" => "oneshot", "status" => "complete", "max_score" => 8]
+            ]
         ];
     }
 
