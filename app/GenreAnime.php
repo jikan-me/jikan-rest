@@ -22,7 +22,8 @@ class GenreAnime extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'name', 'url', 'count'
+        'mal_id', 'name', 'url', 'count',
+        'createdAt', 'modifiedAt'
     ];
 
     /**

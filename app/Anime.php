@@ -25,7 +25,12 @@ class Anime extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id','url','title','title_english','title_japanese','title_synonyms', 'titles', 'images', 'type','source','episodes','status','airing','aired','duration','rating','score','scored_by','rank','popularity','members','favorites','synopsis','background','premiered','broadcast','related','producers','licensors','studios','genres', 'explicit_genres', 'themes', 'demographics', 'opening_themes','ending_themes'
+        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms',
+        'titles', 'images', 'type', 'source', 'episodes', 'status', 'airing', 'aired',
+        'duration', 'rating', 'score', 'scored_by', 'rank', 'popularity', 'members',
+        'favorites', 'synopsis', 'background', 'premiered', 'broadcast', 'related',
+        'producers', 'licensors', 'studios', 'genres', 'explicit_genres', 'themes',
+        'demographics', 'opening_themes', 'ending_themes', 'trailer', 'approved', 'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -59,12 +64,13 @@ class Anime extends JikanApiSearchableModel
 
     public function setSeasonAttribute($value)
     {
-        $this->attributes['season'] = $this->getSeasonAttribute();
+        // noop
+        // this attribute is calculated
     }
 
     public function getSeasonAttribute()
     {
-        $premiered = $this->attributes['premiered'];
+        $premiered = array_key_exists('premiered', $this->attributes) ? $this->attributes['premiered'] : null;
 
         if (empty($premiered)
             || is_null($premiered)
@@ -79,12 +85,13 @@ class Anime extends JikanApiSearchableModel
 
     public function setYearAttribute($value)
     {
-        $this->attributes['year'] = $this->getYearAttribute();
+        // noop
+        // this attribute is calculated
     }
 
     public function getYearAttribute()
     {
-        $premiered = $this->attributes['premiered'];
+        $premiered = array_key_exists('premiered', $this->attributes) ? $this->attributes['premiered'] : null;
 
         if (empty($premiered)
             || is_null($premiered)
@@ -93,36 +100,18 @@ class Anime extends JikanApiSearchableModel
             return null;
         }
 
-        return (int) explode(' ', $premiered)[1];
+        return (int)explode(' ', $premiered)[1];
     }
 
     public function setBroadcastAttribute($value)
     {
-        $this->attributes['year'] = $this->getBroadcastAttribute();
+        $this->attributes['broadcast'] = $this->adaptBroadcastValue($value);
     }
 
     public function getBroadcastAttribute()
     {
         if (array_key_exists("broadcast", $this->attributes)) {
-            $broadcastStr = $this->attributes['broadcast'];
-
-            if (!preg_match('~(.*) at (.*) \(~', $broadcastStr, $matches)) {
-                return [
-                    'day' => null,
-                    'time' => null,
-                    'timezone' => null,
-                    'string' => $broadcastStr
-                ];
-            }
-
-            if (preg_match('~(.*) at (.*) \(~', $broadcastStr, $matches)) {
-                return [
-                    'day' => $matches[1],
-                    'time' => $matches[2],
-                    'timezone' => 'Asia/Tokyo',
-                    'string' => $broadcastStr
-                ];
-            }
+            return $this->adaptBroadcastValue($this->attributes['broadcast']);
         }
 
         return [
@@ -220,8 +209,8 @@ class Anime extends JikanApiSearchableModel
     public function toSearchableArray(): array
     {
         return [
-            'id' => (string) $this->mal_id,
-            'mal_id' => (int) $this->mal_id,
+            'id' => (string)$this->mal_id,
+            'mal_id' => (int)$this->mal_id,
             'start_date' => $this->convertToTimestamp($this->aired['from']),
             'end_date' => $this->convertToTimestamp($this->aired['to']),
             'title' => $this->title,
@@ -290,6 +279,38 @@ class Anime extends JikanApiSearchableModel
                 "field" => "members",
                 "direction" => "desc"
             ],
+        ];
+    }
+
+    private function adaptBroadcastValue(array|string $broadcast): array
+    {
+        if (is_array($broadcast)) {
+            return $broadcast;
+        }
+
+        if (!preg_match('~(.*) at (.*) \(~', $broadcast, $matches)) {
+            return [
+                'day' => null,
+                'time' => null,
+                'timezone' => null,
+                'string' => $broadcast
+            ];
+        }
+
+        if (preg_match('~(.*) at (.*) \(~', $broadcast, $matches)) {
+            return [
+                'day' => $matches[1],
+                'time' => $matches[2],
+                'timezone' => 'Asia/Tokyo',
+                'string' => $broadcast
+            ];
+        }
+
+        return [
+            'day' => null,
+            'time' => null,
+            'timezone' => null,
+            'string' => null
         ];
     }
 

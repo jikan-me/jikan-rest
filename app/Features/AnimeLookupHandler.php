@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\AnimeLookupCommand;
 use App\Http\Resources\V4\AnimeResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -13,9 +14,9 @@ use Illuminate\Support\Collection;
  */
 final class AnimeLookupHandler extends ItemLookupHandler
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new AnimeResource($results->first());
+        return new AnimeResource($results);
     }
 
     /**

@@ -16,9 +16,9 @@ use Jikan\Request\Character\CharacterPicturesRequest;
  */
 final class CharacterPicturesLookupHandler extends RequestHandlerWithScraperCache
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new PicturesResource($results->first());
+        return new PicturesResource($results);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\ProducerLookupCommand;
 use App\Http\Resources\V4\ProducerResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -18,8 +19,8 @@ final class ProducerLookupHandler extends ItemLookupHandler
         return ProducerLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new ProducerResource($results->first());
+        return new ProducerResource($results);
     }
 }

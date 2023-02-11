@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\MangaFullLookupCommand;
 use App\Http\Resources\V4\MangaFullResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -18,8 +19,8 @@ final class MangaFullLookupHandler extends ItemLookupHandler
         return MangaFullLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new MangaFullResource($results->first());
+        return new MangaFullResource($results);
     }
 }

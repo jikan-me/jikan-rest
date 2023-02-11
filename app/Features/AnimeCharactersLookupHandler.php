@@ -16,9 +16,9 @@ use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
  */
 final class AnimeCharactersLookupHandler extends RequestHandlerWithScraperCache
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new AnimeCharactersResource($results->first());
+        return new AnimeCharactersResource($results);
     }
 
     /**

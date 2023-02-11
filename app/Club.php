@@ -43,7 +43,7 @@ class Club extends JikanApiSearchableModel
      * @var array
      */
     protected $hidden = [
-        '_id', 'request_hash', 'expiresAt', 'images'
+        '_id', 'request_hash', 'expiresAt'
     ];
 
     public function __construct(array $attributes = [])
@@ -62,6 +62,12 @@ class Club extends JikanApiSearchableModel
     public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query->where("access", $value->label);
+    }
+
+    /** @noinspection PhpUnused */
+    public function getImagesAttribute()
+    {
+        return $this->attributes['images'];
     }
 
     public static function scrape(int $id)

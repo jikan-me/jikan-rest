@@ -21,9 +21,9 @@ final class MangaRecommendationsLookupHandler extends RequestHandlerWithScraperC
         return MangaRecommendationsLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new RecommendationsResource($results->first());
+        return new RecommendationsResource($results);
     }
 
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData

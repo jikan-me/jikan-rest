@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\PersonAnimeLookupCommand;
 use App\Http\Resources\V4\PersonAnimeCollection;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 
@@ -17,8 +18,8 @@ final class PersonAnimeLookupHandler extends ItemLookupHandler
         return PersonAnimeLookupCommand::class;
     }
 
-    protected function resource(Collection $results): PersonAnimeCollection
+    protected function resource(CachedData $results): PersonAnimeCollection
     {
-        return new PersonAnimeCollection($results->offsetGetFirst("anime_staff_positions"));
+        return new PersonAnimeCollection($results->get("anime_staff_positions"));
     }
 }

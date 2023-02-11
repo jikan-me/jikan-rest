@@ -16,10 +16,10 @@ use Jikan\Request\Anime\AnimeRecommendationsRequest;
  */
 final class AnimeRecommendationsLookupHandler extends RequestHandlerWithScraperCache
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         return new RecommendationsResource(
-            $results->first()
+            $results
         );
     }
 

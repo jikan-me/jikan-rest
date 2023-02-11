@@ -21,7 +21,7 @@ final class QueryRandomPersonHandler extends QueryRandomItemHandler
     protected function resource(Collection $results): JsonResource
     {
         return new PersonResource(
-            $results->first()
+            $results
         );
     }
 

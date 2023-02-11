@@ -30,7 +30,7 @@ final class QueryAnimeListOfUserHandler extends RequestHandlerWithScraperCache
         return $this->renderResponse($requestFingerPrint, $results);
     }
 
-    public function resource(Collection $results): JsonResource
+    public function resource(CachedData $results): JsonResource
     {
         if ($results->isEmpty() || count($results->get("anime")) === 0) {
             return new UserProfileAnimeListCollection([]);

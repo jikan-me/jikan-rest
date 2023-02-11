@@ -19,7 +19,10 @@ class Person extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'website_url', 'name', 'given_name', 'family_name', 'alternative_names', 'birthday', 'member_favorites', 'about', 'voice_acting_roles', 'anime_staff_positions', 'published_manga'
+        'mal_id', 'url', 'images', 'website_url', 'name', 'given_name', 'family_name',
+        'alternative_names', 'birthday', 'member_favorites', 'about', 'voice_acting_roles',
+        'anime_staff_positions', 'published_manga',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -42,7 +45,7 @@ class Person extends JikanApiSearchableModel
      * @var array
      */
     protected $hidden = [
-        '_id', 'images', 'member_favorites'
+        '_id', 'member_favorites'
     ];
 
     public function __construct(array $attributes = [])
@@ -51,11 +54,17 @@ class Person extends JikanApiSearchableModel
         $this->displayNameFieldName = "name";
     }
 
+    /** @noinspection PhpUnused */
     public function getFavoritesAttribute()
     {
         return $this->attributes['member_favorites'];
     }
 
+    /** @noinspection PhpUnused */
+    public function getImagesAttribute()
+    {
+        return $this->attributes['images'];
+    }
 
     public static function scrape(int $id)
     {

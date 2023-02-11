@@ -16,10 +16,10 @@ use Jikan\Request\Anime\AnimeMoreInfoRequest;
  */
 final class AnimeMoreInfoLookupHandler extends RequestHandlerWithScraperCache
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         return new MoreInfoResource(
-            $results->first()
+            $results
         );
     }
 

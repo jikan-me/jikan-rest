@@ -21,9 +21,9 @@ final class MangaMoreInfoLookupHandler extends RequestHandlerWithScraperCache
         return MangaMoreInfoLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new MoreInfoResource($results->first());
+        return new MoreInfoResource($results);
     }
 
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData

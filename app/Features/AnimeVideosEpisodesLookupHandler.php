@@ -17,10 +17,10 @@ use Jikan\Request\Anime\AnimeVideosEpisodesRequest;
  */
 final class AnimeVideosEpisodesLookupHandler extends RequestHandlerWithScraperCache
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         return new AnimeEpisodesResource(
-            $results->first()
+            $results
         );
     }
 

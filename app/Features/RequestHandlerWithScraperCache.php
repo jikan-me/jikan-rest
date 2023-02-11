@@ -37,10 +37,10 @@ abstract class RequestHandlerWithScraperCache implements RequestHandler
 
     protected abstract function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData;
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         return new ResultsResource(
-            $results->first() ?? ["results" => []]
+            $results->isEmpty() ? ["results" => []] : $results->toArray()
         );
     }
 
@@ -51,8 +51,7 @@ abstract class RequestHandlerWithScraperCache implements RequestHandler
      */
     protected function renderResponse(string $requestFingerPrint, CachedData $results)
     {
-        $finalResults = $results->collect();
-        $response = $this->resource($finalResults)->response();
+        $response = $this->resource($results)->response();
         return $response->addJikanCacheFlags($requestFingerPrint, $results);
     }
 }

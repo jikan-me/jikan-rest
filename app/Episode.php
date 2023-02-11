@@ -16,7 +16,8 @@ class Episode extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'title', 'title_japanese', 'title_romanji', 'aired', 'filler', 'recap', 'video_url', 'forum_url', 'synopsis'
+        'mal_id', 'title', 'title_japanese', 'title_romanji', 'aired', 'filler', 'recap', 'video_url', 'forum_url', 'synopsis',
+        'createdAt', 'modifiedAt'
     ];
 
     /**

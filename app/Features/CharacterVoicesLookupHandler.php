@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\CharacterVoicesLookupCommand;
 use App\Http\Resources\V4\CharacterSeiyuuCollection;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -13,11 +14,11 @@ use Illuminate\Support\Collection;
  */
 final class CharacterVoicesLookupHandler extends ItemLookupHandler
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return new CharacterSeiyuuCollection(
-            $results->offsetGetFirst("voice_actors")
+            $results->get("voice_actors")
         );
     }
 

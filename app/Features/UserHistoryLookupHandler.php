@@ -20,9 +20,9 @@ final class UserHistoryLookupHandler extends RequestHandlerWithScraperCache
         return UserHistoryLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new ProfileHistoryResource($results->first());
+        return new ProfileHistoryResource($results);
     }
 
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData

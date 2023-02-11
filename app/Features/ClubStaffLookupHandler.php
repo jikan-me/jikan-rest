@@ -3,6 +3,7 @@
 namespace App\Features;
 
 use App\Dto\ClubStaffLookupCommand;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -13,9 +14,9 @@ use App\Http\Resources\V4\ClubStaffResource;
  */
 final class ClubStaffLookupHandler extends ItemLookupHandler
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new ClubStaffResource($results->first());
+        return new ClubStaffResource($results);
     }
 
     /**

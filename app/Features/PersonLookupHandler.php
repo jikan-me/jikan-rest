@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\PersonLookupCommand;
 use App\Http\Resources\V4\PersonResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -18,8 +19,8 @@ final class PersonLookupHandler extends ItemLookupHandler
         return PersonLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new PersonResource($results->first());
+        return new PersonResource($results);
     }
 }

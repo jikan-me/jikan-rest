@@ -17,10 +17,10 @@ use Jikan\Request\Anime\AnimePicturesRequest;
  */
 final class AnimePicturesLookupHandler extends RequestHandlerWithScraperCache
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         return new PicturesResource(
-            $results->first()
+            $results
         );
     }
 

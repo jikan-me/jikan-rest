@@ -83,7 +83,7 @@ final class DefaultCachedScraperService implements CachedScraperService
         $results = $this->dbResultSetToCachedData($dbResults);
 
         if ($results->isEmpty() || $results->isExpired()) {
-            $scraperResponse = $this->repository->scrape($key);
+            $scraperResponse = $this->repository->scrape($val);
 
             $this->raiseNotFoundIfErrors($scraperResponse);
 
@@ -93,8 +93,7 @@ final class DefaultCachedScraperService implements CachedScraperService
             if ($results->isEmpty()) {
                 $this->repository->insert($response);
             }
-
-            if ($results->isExpired()) {
+            else if ($results->isExpired()) {
                 $this->repository->where($key, $val)->update($response);
             }
 
@@ -156,8 +155,7 @@ final class DefaultCachedScraperService implements CachedScraperService
         if ($results->isEmpty()) {
             $this->repository->insert($response);
         }
-
-        if ($results->isExpired()) {
+        else if ($results->isExpired()) {
             $this->repository->queryByMalId($id)->update($response);
         }
 

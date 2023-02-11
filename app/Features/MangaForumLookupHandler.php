@@ -21,9 +21,9 @@ final class MangaForumLookupHandler extends RequestHandlerWithScraperCache
         return MangaForumLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new ForumResource($results->first());
+        return new ForumResource($results);
     }
 
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData

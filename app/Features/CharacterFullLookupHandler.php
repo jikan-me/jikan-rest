@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\CharacterFullLookupCommand;
 use App\Http\Resources\V4\CharacterFullResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -13,9 +14,9 @@ use Illuminate\Support\Collection;
  */
 final class CharacterFullLookupHandler extends ItemLookupHandler
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new CharacterFullResource($results->first());
+        return new CharacterFullResource($results);
     }
 
     /**

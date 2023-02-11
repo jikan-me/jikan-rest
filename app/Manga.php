@@ -24,8 +24,11 @@ class Manga extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'titles', 'images', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
-        'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related', 'genres', 'explicit_genres', 'themes', 'demographics', 'authors', 'serializations',
+        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'titles',
+        'images', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
+        'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related',
+        'genres', 'explicit_genres', 'themes', 'demographics', 'authors', 'serializations',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -33,7 +36,7 @@ class Manga extends JikanApiSearchableModel
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends = ['themes'];
 
     /**
      * The table associated with the model.
@@ -149,9 +152,15 @@ class Manga extends JikanApiSearchableModel
         ];
     }
 
-    public function getThemesAttribute(): array
+    /** @noinspection PhpUnused */
+    public function getThemesAttribute()
     {
-        return [];
+        $result = [];
+        if (array_key_exists("themes", $this->attributes)) {
+            $result = $this->attributes["themes"];
+        }
+
+        return $result;
     }
 
     public function typesenseQueryBy(): array

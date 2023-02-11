@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\UserFavoritesLookupCommand;
 use App\Http\Resources\V4\ProfileFavoritesResource;
+use App\Support\CachedData;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 
@@ -17,8 +18,8 @@ final class UserFavoritesLookupHandler extends UserLookupHandler
         return UserFavoritesLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new ProfileFavoritesResource($results->first());
+        return new ProfileFavoritesResource($results);
     }
 }

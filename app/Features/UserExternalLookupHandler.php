@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\UserExternalLookupCommand;
 use App\Http\Resources\V4\ExternalLinksResource;
+use App\Support\CachedData;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 
@@ -17,8 +18,8 @@ final class UserExternalLookupHandler extends UserLookupHandler
         return UserExternalLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new ExternalLinksResource($results->first());
+        return new ExternalLinksResource($results);
     }
 }

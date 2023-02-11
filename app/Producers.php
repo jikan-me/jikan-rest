@@ -17,7 +17,8 @@ class Producers extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'external', 'count'
+        'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'external', 'count',
+        'createdAt', 'modifiedAt'
     ];
 
     /**

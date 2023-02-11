@@ -30,13 +30,13 @@ final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
         return $this->renderResponse($requestFingerPrint, $results);
     }
 
-    public function resource(Collection $results): JsonResource
+    public function resource(CachedData $results): JsonResource
     {
         if ($results->isEmpty()) {
             return new UserProfileAnimeListCollection([]);
         }
 
-        $listResults = $results->first()['manga'];
+        $listResults = $results->get("manga");
         foreach ($listResults as &$result) {
             $result = (new UserProfileMangaListResource($result));
         }

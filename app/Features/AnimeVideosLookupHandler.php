@@ -16,10 +16,10 @@ use Jikan\Request\Anime\AnimeVideosRequest;
  */
 final class AnimeVideosLookupHandler extends RequestHandlerWithScraperCache
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         return new AnimeVideosResource(
-            $results->first()
+            $results
         );
     }
 

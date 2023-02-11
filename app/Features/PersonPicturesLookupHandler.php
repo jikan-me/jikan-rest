@@ -21,9 +21,9 @@ final class PersonPicturesLookupHandler extends RequestHandlerWithScraperCache
         return PersonPicturesLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new PicturesResource($results->first());
+        return new PicturesResource($results);
     }
 
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData

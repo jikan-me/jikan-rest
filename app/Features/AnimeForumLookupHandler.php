@@ -17,10 +17,10 @@ use Jikan\Request\Anime\AnimeForumRequest;
  */
 final class AnimeForumLookupHandler extends RequestHandlerWithScraperCache
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         return new ForumResource(
-            $results->first()
+            $results
         );
     }
 

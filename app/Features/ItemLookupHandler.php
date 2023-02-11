@@ -5,6 +5,7 @@ namespace App\Features;
 use App\Contracts\CachedScraperService;
 use App\Dto\LookupDataCommand;
 use App\Contracts\RequestHandler;
+use App\Support\CachedData;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
@@ -32,9 +33,9 @@ abstract class ItemLookupHandler implements RequestHandler
         $requestFingerprint = $request->getFingerPrint();
         $results = $this->scraperService->find($request->id, $requestFingerprint);
 
-        $resource = $this->resource($results->collect());
+        $resource = $this->resource($results);
         return $resource->response()->addJikanCacheFlags($requestFingerprint, $results);
     }
 
-    protected abstract function resource(Collection $results): JsonResource;
+    protected abstract function resource(CachedData $results): JsonResource;
 }

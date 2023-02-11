@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\CharacterMangaLookupCommand;
 use App\Http\Resources\V4\CharacterMangaCollection;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -13,11 +14,11 @@ use Illuminate\Support\Collection;
  */
 final class CharacterMangaLookupHandler extends ItemLookupHandler
 {
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return new CharacterMangaCollection(
-            $results->offsetGetFirst("mangaography")
+            $results->get("mangaography")
         );
     }
 

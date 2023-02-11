@@ -4,6 +4,7 @@ namespace App\Features;
 
 use App\Dto\PersonVoicesLookupCommand;
 use App\Http\Resources\V4\PersonVoicesCollection;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -18,8 +19,8 @@ final class PersonVoicesLookupHandler extends ItemLookupHandler
         return PersonVoicesLookupCommand::class;
     }
 
-    protected function resource(Collection $results): JsonResource
+    protected function resource(CachedData $results): JsonResource
     {
-        return new PersonVoicesCollection($results->offsetGetFirst("voice_acting_roles"));
+        return new PersonVoicesCollection($results->get("voice_acting_roles"));
     }
 }

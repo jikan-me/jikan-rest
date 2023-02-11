@@ -45,7 +45,7 @@ class AnimeSearchEndpointTest extends TestCase
     {
         return [
             "query string = `?limit=5`" => [
-                [5, []]
+                5, []
             ],
             "query string = `?limit=5&type=tv`" => [5, ["type" => "tv"]],
             "query string = `?limit=5&type=tv&min_score=7`" => [
