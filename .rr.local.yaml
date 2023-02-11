@@ -137,7 +137,8 @@ http:
       # Maximal job lifetime (hard limit). Zero means no limit.
       #
       # Default: 0s
-      exec_ttl: 60s
+      # we use 0s here to allow time for debugging
+      exec_ttl: 0s
 
   # HTTP/2 settings.
   http2:
