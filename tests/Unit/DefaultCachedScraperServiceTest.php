@@ -2,7 +2,9 @@
 
 namespace Unit;
 
+use App\Anime;
 use App\Contracts\Repository;
+use App\Profile;
 use App\Services\DefaultCachedScraperService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -166,5 +168,147 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $result = $target->findList($testRequestHash, fn() => []);
 
         $this->assertEquals($cacheData->first(), $result->toArray());
+    }
+
+    public function testIfFindReturnsNotExpiredItems()
+    {
+        $malId = 1;
+        $testRequestHash = $this->requestHash();
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
+        $mockModel = Anime::factory()->makeOne([
+            "mal_id" => $malId,
+            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3))
+        ]);
+        [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect([
+            $mockModel
+        ]));
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient(), $serializerMock);
+        $result = $sut->find($malId, $testRequestHash);
+
+        $this->assertEquals($mockModel->toArray(), $result->toArray());
+    }
+
+    public function testIfFindScrapesNotFoundKey()
+    {
+        $malId = 1;
+        $testRequestHash = $this->requestHash();
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
+        $mockModel = Anime::factory()->makeOne([
+            "mal_id" => $malId,
+            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3))
+        ]);
+        [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        // nothing in db:
+        $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect());
+        // scrape returns data:
+        $repositoryMock->expects()->scrape($malId)->andReturns(
+            collect($mockModel->toArray())->except(["request_hash", "modifiedAt", "createdAt"])->toArray()
+        );
+        $repositoryMock->expects()->insert(Mockery::any())->andReturns(true);
+        $repositoryMock->expects()->getByMalId($malId)->andReturns($mockModel);
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient(), $serializerMock);
+        $result = $sut->find($malId, $testRequestHash);
+
+        $this->assertEquals($mockModel->toArray(), $result->toArray());
+    }
+
+    public function testIfFindUpdatesExpiredDbItem()
+    {
+        $malId = 1;
+        $testRequestHash = $this->requestHash();
+        $now = Carbon::now();
+        $mockModel = Anime::factory()->makeOne([
+            "mal_id" => $malId,
+            "modifiedAt" => new UTCDateTime($now->sub("3 days")->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->sub("3 days")->getPreciseTimestamp(3))
+        ]);
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
+
+        $updatedMockModel = Anime::factory()->makeOne([
+            ...$mockModel->toArray(),
+            "mal_id" => $malId,
+            "modifiedAt" => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3))
+        ]);
+
+        [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect([
+            $mockModel
+        ]));
+
+        $repositoryMock->expects()->scrape($malId)->andReturns(
+            collect($mockModel->toArray())->except(["request_hash", "createdAt"])->toArray()
+        );
+
+        $repositoryMock->expects()->queryByMalId($malId)->andReturns($queryBuilderMock);
+        $queryBuilderMock->expects()->update(Mockery::any())->andReturns($malId);
+        $repositoryMock->expects()->getByMalId($malId)->andReturns($updatedMockModel);
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient(), $serializerMock);
+        $result = $sut->find($malId, $testRequestHash);
+
+        $this->assertEquals($updatedMockModel->toArray(), $result->toArray());
+    }
+
+    public function testIfFindByKeyReturnsNotExpiredItems()
+    {
+        $username = "kompot";
+        $testRequestHash = $this->requestHash();
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
+        $mockModel = Profile::factory()->makeOne([
+            "username" => $username,
+            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3))
+        ]);
+        [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->where("username", $username)->andReturns($queryBuilderMock);
+        $queryBuilderMock->expects()->get()->andReturns(collect([
+            $mockModel
+        ]));
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient(), $serializerMock);
+        $result = $sut->findByKey("username", $username, $testRequestHash);
+
+        $this->assertEquals($mockModel->toArray(), $result->toArray());
+    }
+
+    public function testIfFindByKeyScrapesNotFoundKey()
+    {
+        $username = "kompot";
+        $testRequestHash = $this->requestHash();
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
+        $mockModel = Profile::factory()->makeOne([
+            "username" => $username,
+            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3))
+        ]);
+
+        [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->where("username", $username)->andReturns($queryBuilderMock);
+        // nothing in db
+        $queryBuilderMock->expects()->get()->andReturns(collect());
+        // scrape returns data
+        $repositoryMock->expects()->scrape($username)->andReturns(
+            collect($mockModel->toArray())->except(["request_hash", "modifiedAt", "createdAt"])->toArray()
+        );
+        $repositoryMock->expects()->insert(Mockery::any())->andReturns(true);
+        $queryBuilderMock->expects()->get()->andReturns(collect([
+            $mockModel
+        ]));
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient(), $serializerMock);
+        $result = $sut->findByKey("username", $username, $testRequestHash);
+
+        $this->assertEquals($mockModel->toArray(), $result->toArray());
     }
 }
