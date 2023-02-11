@@ -7238,12 +7238,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pushrbx/lumen-roadrunner.git",
-                "reference": "52ab151734d13861759415f1985c8e01e96885dd"
+                "reference": "5f0265e218e66db6d29b021853cfad02388940dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pushrbx/lumen-roadrunner/zipball/52ab151734d13861759415f1985c8e01e96885dd",
-                "reference": "52ab151734d13861759415f1985c8e01e96885dd",
+                "url": "https://api.github.com/repos/pushrbx/lumen-roadrunner/zipball/5f0265e218e66db6d29b021853cfad02388940dd",
+                "reference": "5f0265e218e66db6d29b021853cfad02388940dd",
                 "shasum": ""
             },
             "require": {
@@ -7337,7 +7337,7 @@
                 "issues": "https://github.com/spiral/roadrunner-laravel/issues",
                 "source": "https://github.com/spiral/roadrunner-laravel"
             },
-            "time": "2023-02-01T00:49:15+00:00"
+            "time": "2023-02-11T19:00:06+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
