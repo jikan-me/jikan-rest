@@ -1,5 +1,5 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
-namespace Tests\HttpV4\Controllers;
+namespace Tests\Integration;
 use App\Anime;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;

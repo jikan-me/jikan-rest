@@ -1,5 +1,5 @@
 <?php /** @noinspection PhpIllegalPsrClassPathInspection */
-namespace Tests\HttpV4\Controllers;
+namespace Tests\Integration;
 use App\Character;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
