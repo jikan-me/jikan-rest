@@ -32,7 +32,7 @@
         "mirazmac/dotenvwriter": "^0.1.0",
         "ocramius/package-versions": "^2.5",
         "predis/predis": "^1.1",
-        "pushrbx/lumen-roadrunner": "dev-master",
+        "pushrbx/lumen-roadrunner": "5.9.1",
         "sentry/sentry-laravel": "^2.8",
         "spatie/laravel-data": "^2.2",
         "spatie/laravel-enum": "^3.0",
@@ -79,6 +79,9 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }
