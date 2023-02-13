@@ -1,13 +1,12 @@
 <?php
-
-namespace Unit;
+/** @noinspection PhpIllegalPsrClassPathInspection */
+namespace Tests\Unit;
 
 use App\Anime;
 use App\Contracts\Repository;
 use App\Profile;
 use App\Services\DefaultCachedScraperService;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\SerializerInterface;
@@ -17,8 +16,9 @@ use Tests\TestCase;
 
 final class DefaultCachedScraperServiceTest extends TestCase
 {
-    public function tearDown(): void
+    protected function tearDown(): void
     {
+        parent::tearDown();
         // reset time pinning
         Carbon::setTestNow();
     }
@@ -35,8 +35,9 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $serializerMock = Mockery::mock(SerializerInterface::class);
 
         $repositoryMock
-            ->expects()
+            ->allows()
             ->where("request_hash", $this->requestHash())
+            ->atMost()
             ->times($repositoryWhereCallCount)
             ->andReturn($queryBuilderMock);
 
@@ -240,6 +241,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
         ]);
 
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        // stale record in db
         $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect([
             $mockModel
         ]));
@@ -294,7 +296,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
         ]);
 
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
-        $repositoryMock->expects()->where("username", $username)->andReturns($queryBuilderMock);
+        $repositoryMock->expects()->where("username", $username)->atMost()->times(2)->andReturns($queryBuilderMock);
         // nothing in db
         $queryBuilderMock->expects()->get()->andReturns(collect());
         // scrape returns data
@@ -310,5 +312,47 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $result = $sut->findByKey("username", $username, $testRequestHash);
 
         $this->assertEquals($mockModel->toArray(), $result->toArray());
+    }
+
+    public function testIfFindByKeyUpdatesCache()
+    {
+        $malId = 1;
+        $username = "kompot";
+        $testRequestHash = $this->requestHash();
+        $now = Carbon::now();
+        $mockModel = Profile::factory()->makeOne([
+            "mal_id" => $malId,
+            "username" => $username,
+            "modifiedAt" => new UTCDateTime($now->sub("3 days")->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->sub("3 days")->getPreciseTimestamp(3))
+        ]);
+        $now = Carbon::now();
+        Carbon::setTestNow($now);
+        $updatedMockModel = Profile::factory()->makeOne([
+            ...$mockModel->toArray(),
+            "location" => "North Pole",
+            "modifiedAt" => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3))
+        ]);
+        [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        // stale record in db
+        $repositoryMock->expects()->where("username", $username)->atMost()->times(3)->andReturns($queryBuilderMock);
+        $queryBuilderMock->expects()->get()->andReturns(collect([
+            $mockModel
+        ]));
+        $repositoryMock->expects()->scrape($username)->andReturns(
+            collect($updatedMockModel->toArray())->except(["request_hash", "modifiedAt", "createdAt"])->toArray()
+        );
+        // mock out update
+        $queryBuilderMock->expects()->update(Mockery::any())->andReturns($malId);
+        // second call to ->get() should return the updated value
+        $queryBuilderMock->expects()->get()->andReturns(collect([
+            $updatedMockModel
+        ]));
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient(), $serializerMock);
+        $result = $sut->findByKey("username", $username, $testRequestHash);
+
+        $this->assertEquals($updatedMockModel->toArray(), $result->toArray());
     }
 }

@@ -66,9 +66,7 @@ class IntegrationTestListener implements TestListener
             try {
                 $kernel->call('migrate:fresh', []);
             } catch (\Exception $ex) {
-                print_r($ex->getMessage());
-                print_r($ex);
-                throw $ex;
+                dd($ex);
             }
         }
     }

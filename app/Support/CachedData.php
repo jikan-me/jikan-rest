@@ -50,11 +50,6 @@ final class CachedData implements ArrayAccess
         return self::fromArray($model->toArray());
     }
 
-    public function collect(): Collection
-    {
-        return $this->scraperResult;
-    }
-
     public function isEmpty(): bool
     {
         return $this->scraperResult->isEmpty();
@@ -83,11 +78,6 @@ final class CachedData implements ArrayAccess
         $modifiedAt = $this->lastModified();
         $ttl = $this->cacheTimeToLive;
         return $modifiedAt !== null ? $ttl + $modifiedAt : $ttl;
-    }
-
-    public function cacheTtl(): int
-    {
-        return $this->cacheTimeToLive;
     }
 
     public function lastModified(): ?int

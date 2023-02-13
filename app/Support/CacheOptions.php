@@ -2,6 +2,9 @@
 
 namespace App\Support;
 
+/**
+ * A class to provide strongly typed options about the cache configuration.
+ */
 final class CacheOptions
 {
     private ?int $ttl = null;

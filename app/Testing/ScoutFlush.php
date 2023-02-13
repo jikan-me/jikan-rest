@@ -4,6 +4,9 @@ namespace App\Testing;
 
 use Typesense\LaravelTypesense\Typesense;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait ScoutFlush
 {
     protected array $searchIndexModelCleanupList = [

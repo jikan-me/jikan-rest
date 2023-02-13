@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * A trait for test cases which want to clear the database after each test
+ * @codeCoverageIgnore
  */
 trait SyntheticMongoDbTransaction
 {

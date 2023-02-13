@@ -10,6 +10,7 @@ use TypeError;
 
 /**
  * An exception handler class which helps to highlight errors during tests.
+ * @codeCoverageIgnore
  */
 class TestExceptionsHandler extends Handler
 {

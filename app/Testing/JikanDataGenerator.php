@@ -4,6 +4,9 @@ use Faker\Generator;
 use Faker\UniqueGenerator;
 use Illuminate\Support\Carbon;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait JikanDataGenerator
 {
     /**

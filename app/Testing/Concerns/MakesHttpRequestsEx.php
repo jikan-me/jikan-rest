@@ -1,6 +1,9 @@
 <?php
 namespace App\Testing\Concerns;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait MakesHttpRequestsEx
 {
     protected function getBaseUri(): string
