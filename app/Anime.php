@@ -282,8 +282,18 @@ class Anime extends JikanApiSearchableModel
         ];
     }
 
-    private function adaptBroadcastValue(array|string $broadcast): array
+    private function adaptBroadcastValue(array|string|null $broadcast): array
     {
+        $null_value = [
+            'day' => null,
+            'time' => null,
+            'timezone' => null,
+            'string' => null
+        ];
+        if (is_null($broadcast)) {
+            return $null_value;
+        }
+
         if (is_array($broadcast)) {
             return $broadcast;
         }
@@ -306,12 +316,7 @@ class Anime extends JikanApiSearchableModel
             ];
         }
 
-        return [
-            'day' => null,
-            'time' => null,
-            'timezone' => null,
-            'string' => null
-        ];
+        return $null_value;
     }
 
     protected static function newFactory()
