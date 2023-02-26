@@ -204,7 +204,8 @@ class AnimeController extends Controller
      *                   @OA\Property(
      *                       property="url",
      *                       type="string",
-     *                       description="MyAnimeList URL"
+     *                       description="MyAnimeList URL. This is the URL of the episode's video. If there is no video url, this will be null."
+     *                       nullable=true
      *                   ),
      *                   @OA\Property(
      *                       property="title",

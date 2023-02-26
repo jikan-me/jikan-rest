@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Support\CachedData;
+use App\Support\CacheOptions;
 use Illuminate\Support\Carbon;
 use MongoDB\BSON\UTCDateTime;
 use Tests\TestCase;
@@ -76,6 +77,13 @@ final class CachedDataTest extends TestCase
     public function testIsExpiredReturnTrueIfEmpty()
     {
         $sut = CachedData::from(collect());
+        $this->assertEquals(true, $sut->isExpired());
+    }
+
+    public function testIsExpiredReturnsTrueIfLastModifiedIsMoreThanCacheTtlAgo()
+    {
+        $this->app->get(CacheOptions::class)->setTtl(99);
+        $sut = CachedData::from(collect(["modifiedAt" => Carbon::now()->subSeconds(100)]));
         $this->assertEquals(true, $sut->isExpired());
     }
 }
