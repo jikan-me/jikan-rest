@@ -48,7 +48,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          context: ./docker/base_image/php-8.0
+          context: ./docker/base_image/php-8.1
           # let's use github action cache storage
           cache-from: type=gha
           cache-to: type=gha,mode=max
