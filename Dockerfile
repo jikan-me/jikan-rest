@@ -61,8 +61,7 @@ RUN composer install -n --no-dev --no-cache --no-ansi --no-autoloader --no-scrip
 COPY --chown=jikanapi:jikanapi . /app/
 
 RUN set -ex \
-    && composer update jikan-me/jikan \
-    && composer dump-autoload -n --optimize \
+    && composer dump-autoload -n --optimize --no-ansi --no-dev  \
     && chmod -R 777 ${COMPOSER_HOME}/cache \
     && chmod -R a+w storage/ \
     && chown -R jikanapi:jikanapi /app \
