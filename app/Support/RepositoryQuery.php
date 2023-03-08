@@ -16,7 +16,7 @@ class RepositoryQuery extends RepositoryQueryBase implements RepositoryQueryCont
 
     public function search(string $keywords, ?\Closure $callback = null): ScoutBuilder
     {
-        return $this->searchable($keywords, $callback);
+        return $this->searchable($keywords, $callback, true);
     }
 
     public function where(string $key, mixed $value): Builder

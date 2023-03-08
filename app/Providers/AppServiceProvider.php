@@ -140,7 +140,7 @@ class AppServiceProvider extends ServiceProvider
         /*
          * This bit is about a "mediator" pattern for handling requests.
          */
-        $this->app->singleton(Mediator::class, DefaultMediator::class);
+        $this->app->bind(Mediator::class, DefaultMediator::class);
         /*
          * Contextual binding for the mediator.
          * Each request is represented as a data transfer object, and spatie/laravel-data package's service provider
@@ -378,7 +378,9 @@ class AppServiceProvider extends ServiceProvider
         return [
             // in RoadRunner we want to reset the repositories after each request, because we cache the query builders in them.
             // todo: refactor repositories to avoid caching query builders, so this step is not necessary
-            JikanUnitOfWork::class
+            JikanUnitOfWork::class,
+            Mediator::class,
+            SearchService::class
         ];
     }
 }
