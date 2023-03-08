@@ -10,6 +10,7 @@ use App\Http\HttpHelper;
 use Carbon\CarbonImmutable;
 use Database\Factories\AnimeFactory;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Jikan\Jikan;
 use Jikan\Request\Anime\AnimeRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -95,8 +96,10 @@ class Anime extends JikanApiSearchableModel
 
         if (empty($premiered)
             || is_null($premiered)
+            || !is_string($premiered)
             || !preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
         ) {
+            Log::warning("Invalid premiered value in Anime model[$this->mal_id]: " . $premiered);
             return null;
         }
 
