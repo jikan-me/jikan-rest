@@ -259,12 +259,13 @@ class Anime extends JikanApiSearchableModel
             'title_english_transformed',
             'title_japanese',
             'title_japanese_transformed',
+            'title_synonyms',
         ];
     }
 
     public function getTypeSenseQueryByWeights(): string|null
     {
-        return "2,2,1,1,2,2";
+        return "2,2,1,1,2,2,1";
     }
 
     /**

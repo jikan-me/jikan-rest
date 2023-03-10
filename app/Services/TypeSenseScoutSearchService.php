@@ -33,7 +33,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             // let's enable exhaustive search
             // which will make Typesense consider all variations of prefixes and typo corrections of the words
             // in the query exhaustively, without stopping early when enough results are found.
-            $options['exhaustive_search'] = env('TYPESENSE_SEARCH_EXHAUSTIVE', true);
+            $options['exhaustive_search'] = env('TYPESENSE_SEARCH_EXHAUSTIVE', "true");
             $options['search_cutoff_ms'] = (int) env('TYPESENSE_SEARCH_EXHAUSTIVE', 450);
 
             if (array_key_exists('per_page', $options) && $options['per_page'] > 250) {
