@@ -18,7 +18,7 @@ final class DefaultQueryBuilderService implements QueryBuilderService
 
     public function query(Collection $requestParameters): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        if ($requestParameters->has("q") && !$requestParameters->has("letter")) {
+        if ($requestParameters->get("q", "") !== "" && !$requestParameters->has("letter")) {
             $searchEngineOptions = $this->getSearchEngineOptions($requestParameters);
             $builder = $this->searchService->setFilterParameters($requestParameters)
                 ->search($requestParameters->get("q"), $searchEngineOptions["order_by"], $searchEngineOptions["sort_direction_descending"]);
