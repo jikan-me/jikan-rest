@@ -6,6 +6,7 @@ use App\Contracts\DataRequest;
 use App\Enums\AnimeOrderByEnum;
 use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeStatusEnum;
+use App\Enums\AnimeTypeEnum;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Rules\Attributes\EnumValidation;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -25,6 +26,9 @@ final class AnimeSearchCommand extends MediaSearchCommand implements DataRequest
 {
     #[WithCast(EnumCast::class, AnimeStatusEnum::class), EnumValidation(AnimeStatusEnum::class)]
     public AnimeStatusEnum|Optional $status;
+
+    #[WithCast(EnumCast::class, AnimeTypeEnum::class), EnumValidation(AnimeTypeEnum::class)]
+    public AnimeTypeEnum|Optional $type;
 
     #[WithCast(EnumCast::class, AnimeRatingEnum::class), EnumValidation(AnimeRatingEnum::class)]
     public AnimeRatingEnum|Optional $rating;
