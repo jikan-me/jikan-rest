@@ -124,7 +124,10 @@ class MangaSearchEndpointTest extends TestCase
             [["status" => "Upcoming"]],
             [["max_score" => "8"]],
             [["min_score" => "6"]],
-            [["max_score" => "7", "min_score" => "3"]]
+            [["max_score" => "7", "min_score" => "3"]],
+            [["type" => "novel"]],
+            [["type" => "lightnovel"]],
+            [["type" => "oneshot"]],
         ];
     }
 

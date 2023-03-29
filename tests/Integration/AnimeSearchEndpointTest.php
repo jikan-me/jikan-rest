@@ -135,6 +135,9 @@ class AnimeSearchEndpointTest extends TestCase
             [["rating" => "pg13"]],
             [["rating" => "g"]],
             [["rating" => "r17"]],
+            [["type" => "movie"]],
+            [["type" => "ova"]],
+            [["type" => "special"]],
         ];
     }
 
