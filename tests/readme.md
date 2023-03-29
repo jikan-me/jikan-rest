@@ -4,6 +4,9 @@ When developing run all the tests once with `phpunit` if you are just getting st
 This will setup the test database for you in mongodb, as there is a test listener class which runs the migrations
 for a new database named `jikan-test`. (by default, feel free to override it if required)
 
+> Please note that the test database should not be the same as the development database you have already indexed data into, as
+> the tests will drop all collections in mongodb at the end of the test run.
+
 When writing tests you should not use `DatabaseMigration` and `DatabaseTransaction` traits.  
 - If the search index requires resetting between tests, use `ScoutFlush` trait.   
 - If the database contents requires resetting between tests, use `SyntheticMongoDbTransaction` trait.
