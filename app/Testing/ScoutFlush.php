@@ -17,7 +17,8 @@ trait ScoutFlush
         "App\\GenreManga",
         "App\\Person",
         "App\\Club",
-        "App\\Magazine"
+        "App\\Magazine",
+        "App\\Producers"
     ];
 
     public function runScoutFlush(): void
