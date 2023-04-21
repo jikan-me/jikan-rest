@@ -28,7 +28,7 @@ final class UserSearchHandler extends RequestHandlerWithScraperCache
             $requestFingerPrint,
             fn (MalClient $jikan, int $page) => $jikan->getUserSearch((new UserSearchRequest())
                 ->setQuery($requestParams->get("q"))
-                ->setGender($requestParams->get("gender"))
+                ->setGender((int) $requestParams->get("gender")->label)
                 ->setLocation($requestParams->get("location"))
                 ->setMaxAge($requestParams->get("maxAge"))
                 ->setMinAge($requestParams->get("minAge"))
