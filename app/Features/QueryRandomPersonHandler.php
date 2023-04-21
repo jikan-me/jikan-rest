@@ -18,18 +18,16 @@ final class QueryRandomPersonHandler extends QueryRandomItemHandler
         parent::__construct($repository);
     }
 
-    protected function resource(Collection $results): JsonResource
-    {
-        return new PersonResource(
-            $results
-        );
-    }
-
     /**
      * @inheritDoc
      */
     public function requestClass(): string
     {
         return QueryRandomPersonCommand::class;
+    }
+
+    protected function resource(Collection $results): JsonResource
+    {
+        return new PersonResource($results->first());
     }
 }
