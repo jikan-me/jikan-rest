@@ -7,6 +7,7 @@ use App\Enums\MangaStatusEnum;
 use App\Enums\MangaTypeEnum;
 use App\Manga;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Jikan\Helper\Constants;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 final class DefaultMangaRepository extends DatabaseRepository implements MangaRepository
@@ -48,6 +49,10 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
-        return $this->queryable()->where("type", "!=", MangaTypeEnum::doujin()->label);
+        return $this->queryable()
+            ->where("type", "!=", MangaTypeEnum::doujin()->label)
+            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_HENTAI)
+            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_EROTICA);
+            ;
     }
 }

@@ -44,7 +44,10 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
-        return $this->queryable()->where("rating", "!=", AnimeRatingEnum::rx()->label);
+        return $this->queryable()
+            ->where("rating", "!=", AnimeRatingEnum::rx()->label)
+            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
+            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA);
     }
 
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
