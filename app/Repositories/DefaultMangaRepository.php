@@ -53,6 +53,5 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
             ->where("type", "!=", MangaTypeEnum::doujin()->label)
             ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_HENTAI)
             ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_EROTICA);
-            ;
     }
 }
