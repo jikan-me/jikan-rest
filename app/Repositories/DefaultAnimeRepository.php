@@ -87,8 +87,8 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function getCurrentlyAiring(
         ?AnimeScheduleFilterEnum $filter = null,
-        bool $kids = false,
-        bool $sfw = false,
+        ?bool $kids = false,
+        ?bool $sfw = false,
         ?bool $unapproved = false
     ): EloquentBuilder
     {
@@ -144,6 +144,10 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             $queryable = $queryable->where("type", $type->label);
         }
 
+        if (!$unapproved) {
+            $this->excludeUnapprovedItems($queryable);
+        }
+
         if (!$kids) {
             $this->excludeKidsItems($queryable);
         }
@@ -157,14 +161,27 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function getUpcomingSeasonItems(
         ?AnimeTypeEnum $type = null,
-        bool $kids = false,
-        bool $sfw = false
+        ?bool $kids = false,
+        ?bool $sfw = false,
+        ?bool $unapproved = false
     ): EloquentBuilder
     {
         $queryable = $this->queryable(true)->where("status", AnimeStatusEnum::upcoming()->label);
 
         if (!is_null($type)) {
             $queryable = $queryable->where("type", $type->label);
+        }
+
+        if (!$unapproved) {
+            $this->excludeUnapprovedItems($queryable);
+        }
+
+        if (!$kids) {
+            $this->excludeKidsItems($queryable);
+        }
+
+        if ($sfw) {
+            $this->excludeNsfwItems($queryable);
         }
 
         return $queryable->orderBy("members", "desc");

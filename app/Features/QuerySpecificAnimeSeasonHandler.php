@@ -30,6 +30,6 @@ final class QuerySpecificAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
          */
 
         [$from, $to] = $this->getSeasonRange($request->year, $request->season);
-        return $this->repository->getAiredBetween($from, $to, $type, $request->kids, $request->sfw);
+        return $this->repository->getAiredBetween($from, $to, $type, $request->kids, $request->sfw, $request->unapproved);
     }
 }

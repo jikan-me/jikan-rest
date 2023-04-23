@@ -3,6 +3,9 @@
 namespace App\Dto;
 
 use App\Casts\EnumCast;
+use App\Dto\Concerns\HasKidsParameter;
+use App\Dto\Concerns\HasSfwParameter;
+use App\Dto\Concerns\HasUnapprovedParameter;
 use App\Dto\Concerns\MapsRouteParameters;
 use App\Enums\AnimeSeasonEnum;
 use App\Rules\Attributes\EnumValidation;
@@ -13,7 +16,7 @@ use Spatie\LaravelData\Attributes\WithCast;
 
 final class QuerySpecificAnimeSeasonCommand extends QueryAnimeSeasonCommand
 {
-    use MapsRouteParameters;
+    use MapsRouteParameters, HasSfwParameter, HasKidsParameter, HasUnapprovedParameter;
 
     #[Required, Between(1000, 2999)]
     public int $year;

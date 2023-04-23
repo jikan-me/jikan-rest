@@ -10,6 +10,7 @@ use App\Dto\Concerns\HasKidsParameter;
 use App\Dto\Concerns\HasLimitParameter;
 use App\Dto\Concerns\HasPageParameter;
 use App\Dto\Concerns\HasSfwParameter;
+use App\Dto\Concerns\HasUnapprovedParameter;
 use App\Enums\AnimeTypeEnum;
 use App\Rules\Attributes\EnumValidation;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -19,7 +20,7 @@ use Spatie\LaravelData\Optional;
 
 abstract class QueryAnimeSeasonCommand extends Data implements DataRequest
 {
-    use HasSfwParameter, HasKidsParameter, HasLimitParameter, HasRequestFingerprint, HasPageParameter;
+    use HasSfwParameter, HasKidsParameter, HasUnapprovedParameter, HasLimitParameter, HasRequestFingerprint, HasPageParameter;
 
     #[WithCast(EnumCast::class, AnimeTypeEnum::class), EnumValidation(AnimeTypeEnum::class)]
     public AnimeTypeEnum|Optional $filter;
