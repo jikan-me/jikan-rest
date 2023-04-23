@@ -65,6 +65,11 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                     $options['sort_by'] = "_text_match:desc,$orderByField:" . ($sortDirectionDescending ? "desc" : "asc");
                 }
 
+                // if order_by is a user supplied value make it a priority over _text_match
+                if ($orderByField !== 'members' && !is_null($orderByField)) {
+                    $options['sort_by'] = "$orderByField:" . ($sortDirectionDescending ? "desc" : "asc") . ",_text_match:desc";
+                }
+
                 // override overall sorting direction
                 if (is_null($orderByField) && $sortDirectionDescending && array_key_exists("sort_by", $options) && Str::contains($options["sort_by"], "asc")) {
                     $options["sort_by"] = Str::replace("asc", "desc", $options["sort_by"]);
