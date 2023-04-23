@@ -2,7 +2,9 @@
 
 namespace App\Dto;
 
+use App\Casts\ContextualBooleanCast;
 use App\Contracts\DataRequest;
+use App\Dto\Concerns\HasSfwParameter;
 use App\Enums\AnimeOrderByEnum;
 use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeStatusEnum;
@@ -11,6 +13,7 @@ use App\Http\Resources\V4\AnimeCollection;
 use App\Rules\Attributes\EnumValidation;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
+use Spatie\LaravelData\Attributes\Validation\BooleanType;
 use Spatie\LaravelData\Attributes\Validation\IntegerType;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Prohibits;
@@ -24,6 +27,8 @@ use Spatie\LaravelData\Optional;
  */
 final class AnimeSearchCommand extends MediaSearchCommand implements DataRequest
 {
+    use HasSfwParameter;
+
     #[WithCast(EnumCast::class, AnimeStatusEnum::class), EnumValidation(AnimeStatusEnum::class)]
     public AnimeStatusEnum|Optional $status;
 

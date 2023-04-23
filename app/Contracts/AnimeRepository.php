@@ -20,6 +20,10 @@ interface AnimeRepository extends Repository
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder;
 
+    public function excludeKidsItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder;
+
+    public function excludeNsfwItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder;
+
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder;
 
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder;
@@ -32,7 +36,13 @@ interface AnimeRepository extends Repository
         bool $sfw = false
     ): EloquentBuilder;
 
-    public function getAiredBetween(Carbon $from, Carbon $to, ?AnimeTypeEnum $type = null): EloquentBuilder;
+    public function getAiredBetween(
+        Carbon $from,
+        Carbon $to,
+        ?AnimeTypeEnum $type = null,
+        ?bool $kids = false,
+        ?bool $sfw = false
+    ): EloquentBuilder;
 
     public function getUpcomingSeasonItems(?AnimeTypeEnum $type = null): EloquentBuilder;
 }

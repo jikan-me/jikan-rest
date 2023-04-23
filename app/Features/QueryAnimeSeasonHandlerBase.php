@@ -26,7 +26,7 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
     public function handle($request): JsonResponse
     {
         $type = collect($request->all())->has("filter") ? $request->filter : null;
-        $results = $this->getSeasonItems($request, $type);
+        $results = $this->getSeasonItems($request, $type, $request->kids, $request->sfw);
         $results = $results->paginate($request->limit, ["*"], null, $request->page);
 
         $animeCollection = new AnimeCollection($results);
