@@ -24,7 +24,7 @@ class QueryTopPeopleHandler implements RequestHandler
      * @param QueryTopPeopleCommand $request
      * @returns PersonCollection
      */
-    public function handle($request)
+    public function handle($request): PersonCollection
     {
         $requestParams = collect($request->all());
         $topItemsQuery = $this->repository->topPeople()->filter($requestParams);
