@@ -3763,6 +3763,13 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/user_anime_list_status_filter"
+                        }
                     }
                 ],
                 "responses": {
@@ -3795,6 +3802,13 @@
                         "required": true,
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "schema": {
+                            "$ref": "#/components/schemas/user_manga_list_status_filter"
                         }
                     }
                 ],
@@ -4122,6 +4136,18 @@
     },
     "components": {
         "schemas": {
+            "user_anime_list_status_filter": {
+                "description": "User's anime list status filter options",
+                "type": "string",
+                "enum": [
+                    "all",
+                    "watching",
+                    "completed",
+                    "onhold",
+                    "dropped",
+                    "plantowatch"
+                ]
+            },
             "anime_search_query_orderby": {
                 "description": "Available Anime order_by properties",
                 "type": "string",
@@ -4249,6 +4275,18 @@
                     "count"
                 ]
             },
+            "user_manga_list_status_filter": {
+                "description": "User's anime list status filter options",
+                "type": "string",
+                "enum": [
+                    "all",
+                    "reading",
+                    "completed",
+                    "onhold",
+                    "dropped",
+                    "plantoread"
+                ]
+            },
             "manga_search_query_orderby": {
                 "description": "Available Manga order_by properties",
                 "type": "string",
@@ -4361,8 +4399,8 @@
                                             "type": "integer"
                                         },
                                         "url": {
-                                            "description": "MyAnimeList URL",
-                                            "type": "string"
+                                            "type": "string",
+                                            "nullable": true
                                         },
                                         "title": {
                                             "description": "Title",
