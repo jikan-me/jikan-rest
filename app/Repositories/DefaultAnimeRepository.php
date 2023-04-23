@@ -45,7 +45,12 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
         return $this->queryable()
-            ->where("rating", "!=", AnimeRatingEnum::rx()->label)
+            ->where("rating", "!=", AnimeRatingEnum::rx()->label);
+    }
+
+    public function excludeNsfwItems(EloquentBuilder|ScoutBuilder $builder): EloquentBuilder|ScoutBuilder
+    {
+        return $builder
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA);
     }
@@ -91,7 +96,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         }
 
         if ($sfw) {
-            $queryable = $queryable->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI);
+            $queryable = $queryable->excludeNsfwItems($queryable);
         }
 
         if (!is_null($filter)) {
