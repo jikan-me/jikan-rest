@@ -70,7 +70,7 @@ class HttpHelper
 
     public static function getRouteName(Request $request) : string
     {
-        $route = explode('\\', $request->route()[1]['uses']);
+        $route = explode('\\', $request->route()[1]['uses'] ?? 'App\Undefined');
 
         return end($route);
     }
