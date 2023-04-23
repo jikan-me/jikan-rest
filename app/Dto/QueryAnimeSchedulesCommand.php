@@ -7,9 +7,11 @@ use App\Casts\ContextualBooleanCast;
 use App\Casts\EnumCast;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
+use App\Dto\Concerns\HasKidsParameter;
 use App\Dto\Concerns\HasLimitParameter;
 use App\Dto\Concerns\HasPageParameter;
 use App\Dto\Concerns\HasSfwParameter;
+use App\Dto\Concerns\HasUnapprovedParameter;
 use App\Dto\Concerns\MapsRouteParameters;
 use App\Dto\Concerns\PreparesData;
 use App\Enums\AnimeScheduleFilterEnum;
@@ -25,10 +27,7 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryAnimeSchedulesCommand extends Data implements DataRequest
 {
-    use HasLimitParameter, HasRequestFingerprint, HasPageParameter, PreparesData, HasSfwParameter, MapsRouteParameters;
-
-    #[BooleanType, WithCast(ContextualBooleanCast::class)]
-    public bool|Optional $kids = false;
+    use HasLimitParameter, HasRequestFingerprint, HasPageParameter, PreparesData, HasSfwParameter, HasKidsParameter, HasUnapprovedParameter, MapsRouteParameters;
 
     #[WithCast(EnumCast::class, AnimeScheduleFilterEnum::class), EnumValidation(AnimeScheduleFilterEnum::class)]
     public ?AnimeScheduleFilterEnum $dayFilter;

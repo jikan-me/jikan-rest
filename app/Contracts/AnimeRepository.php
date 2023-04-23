@@ -24,6 +24,8 @@ interface AnimeRepository extends Repository
 
     public function excludeNsfwItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder;
 
+    public function excludeUnapprovedItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder;
+
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder;
 
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder;
@@ -33,7 +35,8 @@ interface AnimeRepository extends Repository
     public function getCurrentlyAiring(
         ?AnimeScheduleFilterEnum $filter = null,
         bool $kids = false,
-        bool $sfw = false
+        bool $sfw = false,
+        ?bool $unapproved = false
     ): EloquentBuilder;
 
     public function getAiredBetween(
@@ -41,7 +44,8 @@ interface AnimeRepository extends Repository
         Carbon $to,
         ?AnimeTypeEnum $type = null,
         ?bool $kids = false,
-        ?bool $sfw = false
+        ?bool $sfw = false,
+        ?bool $unapproved = false
     ): EloquentBuilder;
 
     public function getUpcomingSeasonItems(?AnimeTypeEnum $type = null): EloquentBuilder;

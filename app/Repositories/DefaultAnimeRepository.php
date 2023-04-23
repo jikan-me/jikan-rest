@@ -55,6 +55,12 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA);
     }
 
+    public function excludeUnapprovedItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder
+    {
+        return $builder
+            ->where("approved", true);
+    }
+
     public function excludeKidsItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder
     {
         return $builder
@@ -82,7 +88,9 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     public function getCurrentlyAiring(
         ?AnimeScheduleFilterEnum $filter = null,
         bool $kids = false,
-        bool $sfw = false): EloquentBuilder
+        bool $sfw = false,
+        ?bool $unapproved = false
+    ): EloquentBuilder
     {
         /*
          * all have status as currently airing
@@ -93,6 +101,10 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                           ->orderBy("members")
                           ->where("type", AnimeTypeEnum::tv()->label)
                           ->where("status", AnimeStatusEnum::airing()->label);
+
+        if (!$unapproved) {
+            $this->excludeUnapprovedItems($queryable);
+        }
 
         if (!$kids) {
             $this->excludeKidsItems($queryable);
@@ -119,7 +131,8 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         Carbon $to,
         ?AnimeTypeEnum $type = null,
         ?bool $kids = false,
-        ?bool $sfw = false
+        ?bool $sfw = false,
+        ?bool $unapproved = false
     ): EloquentBuilder
     {
         $queryable = $this->queryable(true)->whereBetween("aired.from", [
