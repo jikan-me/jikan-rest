@@ -44,8 +44,13 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
-        return $this->queryable()
+        $builder = $this->queryable()
             ->where("rating", "!=", AnimeRatingEnum::rx()->label);
+
+        $this->excludeUnapprovedItems($builder);
+        $this->excludeNsfwItems($builder);
+
+        return $builder;
     }
 
     public function excludeNsfwItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder
