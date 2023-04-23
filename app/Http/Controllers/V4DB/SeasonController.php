@@ -29,14 +29,17 @@ class SeasonController extends Controller
      *     operationId="getSeasonNow",
      *     tags={"seasons"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *     @OA\Parameter(
      *       name="filter",
      *       description="Entry types",
      *       in="query",
      *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
      *     ),
+     *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
      *         response="200",
@@ -84,6 +87,8 @@ class SeasonController extends Controller
      *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
      *     ),
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
@@ -170,6 +175,8 @@ class SeasonController extends Controller
      *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
      *     ),
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *

@@ -2307,6 +2307,15 @@
                         }
                     },
                     {
+                        "$ref": "#/components/parameters/sfw"
+                    },
+                    {
+                        "$ref": "#/components/parameters/unapproved"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
                         "$ref": "#/components/parameters/limit"
                     }
                 ],
@@ -2334,6 +2343,12 @@
                 ],
                 "operationId": "getAnimeSearch",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/sfw"
+                    },
+                    {
+                        "$ref": "#/components/parameters/unapproved"
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     },
@@ -2486,6 +2501,12 @@
                 ],
                 "operationId": "getMangaSearch",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/sfw"
+                    },
+                    {
+                        "$ref": "#/components/parameters/unapproved"
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     },
@@ -2990,12 +3011,6 @@
                 "operationId": "getSeasonNow",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    },
-                    {
                         "name": "filter",
                         "in": "query",
                         "description": "Entry types",
@@ -3010,6 +3025,18 @@
                                 "music"
                             ]
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/sfw"
+                    },
+                    {
+                        "$ref": "#/components/parameters/unapproved"
+                    },
+                    {
+                        "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
                     }
                 ],
                 "responses": {
@@ -3067,6 +3094,12 @@
                                 "music"
                             ]
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/sfw"
+                    },
+                    {
+                        "$ref": "#/components/parameters/unapproved"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -3137,6 +3170,12 @@
                                 "music"
                             ]
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/sfw"
+                    },
+                    {
+                        "$ref": "#/components/parameters/unapproved"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -4399,6 +4438,7 @@
                                             "type": "integer"
                                         },
                                         "url": {
+                                            "description": "MyAnimeList URL. This is the URL of the episode's video. If there is no video url, this will be null.",
                                             "type": "string",
                                             "nullable": true
                                         },
@@ -8971,6 +9011,33 @@
                 "in": "query",
                 "schema": {
                     "type": "integer"
+                }
+            },
+            "sfw": {
+                "name": "sfw",
+                "in": "query",
+                "description": "'Safe For Work'. This is a flag. When supplied it will filter out entries according to the SFW Policy. You do not need to pass a value to it. e.g usage: `?sfw`",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                }
+            },
+            "kids": {
+                "name": "kids",
+                "in": "query",
+                "description": "This is a flag. When supplied it will include entries with the Kids genres in specific endpoints that filter them out by default. You do not need to pass a value to it. e.g usage: `?kids`",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                }
+            },
+            "unapproved": {
+                "name": "unapproved",
+                "in": "query",
+                "description": "This is a flag. When supplied it will include entries which are unapproved. Unapproved entries on MyAnimeList are those that are user submitted and have not yet been approved by MAL to show up on other pages. They will have their own specifc pages and are often removed resulting in a 404 error. You do not need to pass a value to it. e.g usage: `?unapproved`",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
                 }
             }
         }

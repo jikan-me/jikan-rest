@@ -14,21 +14,10 @@ use App\Http\Resources\V4\ResultsResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\User\UsernameByIdRequest;
+use OpenApi\Annotations as OA;
 
 class SearchController extends Controller
 {
-    /**
-     *  @OA\Parameter(
-     *    name="page",
-     *    in="query",
-     *    @OA\Schema(type="integer")
-     *  ),
-     *  @OA\Parameter(
-     *    name="limit",
-     *    in="query",
-     *    @OA\Schema(type="integer")
-     *  ),
-     */
 
     /**
      *  @OA\Get(
@@ -36,6 +25,8 @@ class SearchController extends Controller
      *     operationId="getAnimeSearch",
      *     tags={"anime"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
@@ -168,6 +159,8 @@ class SearchController extends Controller
      *     operationId="getMangaSearch",
      *     tags={"manga"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
