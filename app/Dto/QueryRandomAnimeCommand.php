@@ -4,6 +4,7 @@ namespace App\Dto;
 
 use App\Contracts\DataRequest;
 use App\Dto\Concerns\HasSfwParameter;
+use App\Dto\Concerns\HasUnapprovedParameter;
 use App\Http\Resources\V4\AnimeResource;
 use Spatie\LaravelData\Data;
 
@@ -12,5 +13,5 @@ use Spatie\LaravelData\Data;
  */
 final class QueryRandomAnimeCommand extends Data implements DataRequest
 {
-    use HasSfwParameter;
+    use HasSfwParameter, HasUnapprovedParameter;
 }

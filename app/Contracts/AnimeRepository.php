@@ -7,6 +7,7 @@ use App\Enums\AnimeScheduleFilterEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -20,11 +21,11 @@ interface AnimeRepository extends Repository
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder;
 
-    public function excludeKidsItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder;
+    public function excludeKidsItems(&$builder): Collection|EloquentBuilder|ScoutBuilder;
 
-    public function excludeNsfwItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder;
+    public function excludeNsfwItems(&$builder): Collection|EloquentBuilder|ScoutBuilder;
 
-    public function excludeUnapprovedItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder;
+    public function excludeUnapprovedItems(&$builder): Collection|EloquentBuilder|ScoutBuilder;
 
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder;
 

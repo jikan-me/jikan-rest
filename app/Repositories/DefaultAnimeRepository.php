@@ -10,6 +10,7 @@ use App\Enums\AnimeScheduleFilterEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Jikan\Helper\Constants;
 use Laravel\Scout\Builder as ScoutBuilder;
@@ -47,26 +48,24 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         $builder = $this->queryable()
             ->where("rating", "!=", AnimeRatingEnum::rx()->label);
 
-        $this->excludeUnapprovedItems($builder);
         $this->excludeNsfwItems($builder);
-
         return $builder;
     }
 
-    public function excludeNsfwItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder
+    public function excludeNsfwItems(&$builder): EloquentBuilder|ScoutBuilder
     {
         return $builder
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA);
     }
 
-    public function excludeUnapprovedItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder
+    public function excludeUnapprovedItems(&$builder): Collection|EloquentBuilder|ScoutBuilder
     {
         return $builder
             ->where("approved", true);
     }
 
-    public function excludeKidsItems(EloquentBuilder|ScoutBuilder &$builder): EloquentBuilder|ScoutBuilder
+    public function excludeKidsItems(&$builder): EloquentBuilder|ScoutBuilder
     {
         return $builder
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_KIDS);

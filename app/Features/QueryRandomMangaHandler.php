@@ -26,18 +26,23 @@ final class QueryRandomMangaHandler implements RequestHandler
     public function handle($request)
     {
         $sfw = Optional::create() !== $request->sfw ? $request->sfw : null;
+        $unapproved = Optional::create() !== $request->unapproved ? $request->unapproved : null;
 
         /**
          * @var Collection $results;
          */
+        $results = $this->repository;
+
+        if (!$unapproved) {
+            $results->excludeUnapprovedItems($results);
+        }
+
         if ($sfw) {
-            $results = $this->repository->exceptItemsWithAdultRating()->random();
-        } else {
-            $results = $this->repository->random();
+            $results->excludeNsfwItems($results);
         }
 
         return new MangaResource(
-            $results->first()
+            $results->random()->first()
         );
     }
 
