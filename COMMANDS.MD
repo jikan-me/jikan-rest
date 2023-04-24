@@ -12,8 +12,8 @@ For an entire list of commands, you can run `php artisan list`
     - [Change Cache Driver](#cache-change-cache-driver)
     - [Change Cache Method](#cache-change-cache-method)
 - [Indexer](#indexer)
-    - [Anime](#anime)
-    - [Manga](#manga)
+    - [Anime](#indexer-anime)
+    - [Manga](#indexer-manga)
   
 ## Commands
 
@@ -61,7 +61,7 @@ Example: `cache:method queue`
 
 [Read more on how it works](https://github.com/jikan-me/jikan-rest/blob/master/README.md#06-configuring-how-jikan-handles-expired-cache-optional)
 
-
+### Indexer
 #### Indexer: Anime
 Since v4 uses MongoDB as a means to index cache on some endpoints, having a built cache is important since it
 works best for endpoints like search or top.
