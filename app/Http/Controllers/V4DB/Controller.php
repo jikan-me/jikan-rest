@@ -48,47 +48,6 @@ class Controller extends BaseController
      * )
      */
 
-
-    /**
-     * Common parameters
-     *
-     *  @OA\Parameter(
-     *    name="page",
-     *    in="query",
-     *    @OA\Schema(type="integer")
-     *  ),
-     *
-     *  @OA\Parameter(
-     *    name="limit",
-     *    in="query",
-     *    @OA\Schema(type="integer")
-     *  ),
-     *
-     *  @OA\Parameter(
-     *      name="sfw",
-     *      in="query",
-     *      required=false,
-     *      description="'Safe For Work'. This is a flag. When supplied it will filter out entries according to the SFW Policy. You do not need to pass a value to it. e.g usage: `?sfw`",
-     *      @OA\Schema(type="boolean")
-     * ),
-     *
-     *  @OA\Parameter(
-     *      name="kids",
-     *      in="query",
-     *      required=false,
-     *      description="This is a flag. When supplied it will include entries with the Kids genres in specific endpoints that filter them out by default. You do not need to pass a value to it. e.g usage: `?kids`",
-     *      @OA\Schema(type="boolean")
-     * ),
-     *
-     *  @OA\Parameter(
-     *      name="unapproved",
-     *      in="query",
-     *      required=false,
-     *      description="This is a flag. When supplied it will include entries which are unapproved. Unapproved entries on MyAnimeList are those that are user submitted and have not yet been approved by MAL to show up on other pages. They will have their own specifc pages and are often removed resulting in a 404 error. You do not need to pass a value to it. e.g usage: `?unapproved`",
-     *      @OA\Schema(type="boolean")
-     * ),
-     */
-
     /**
      * @var Request
      */

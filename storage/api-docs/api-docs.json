@@ -8999,11 +8999,13 @@
             }
         },
         "parameters": {
-            "page": {
-                "name": "page",
+            "kids": {
+                "name": "kids",
                 "in": "query",
+                "description": "This is a flag. When supplied it will include entries with the Kids genres in specific endpoints that filter them out by default. You do not need to pass a value to it. e.g usage: `?kids`",
+                "required": false,
                 "schema": {
-                    "type": "integer"
+                    "type": "boolean"
                 }
             },
             "limit": {
@@ -9013,19 +9015,17 @@
                     "type": "integer"
                 }
             },
+            "page": {
+                "name": "page",
+                "in": "query",
+                "schema": {
+                    "type": "integer"
+                }
+            },
             "sfw": {
                 "name": "sfw",
                 "in": "query",
                 "description": "'Safe For Work'. This is a flag. When supplied it will filter out entries according to the SFW Policy. You do not need to pass a value to it. e.g usage: `?sfw`",
-                "required": false,
-                "schema": {
-                    "type": "boolean"
-                }
-            },
-            "kids": {
-                "name": "kids",
-                "in": "query",
-                "description": "This is a flag. When supplied it will include entries with the Kids genres in specific endpoints that filter them out by default. You do not need to pass a value to it. e.g usage: `?kids`",
                 "required": false,
                 "schema": {
                     "type": "boolean"
