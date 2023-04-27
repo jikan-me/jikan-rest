@@ -16,7 +16,7 @@ class SerializerFactory
 {
     public static function createV4(): Serializer
     {
-        $serializer = (new SerializerBuilder())
+        return (new SerializerBuilder())
             ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v4')
             ->configureHandlers(
                 function (HandlerRegistry $registry) {
@@ -58,8 +58,6 @@ class SerializerFactory
             )
             ->setSerializationContextFactory(new SerializationContextFactory())
             ->build();
-
-        return $serializer;
     }
 
     private static function convertMalUrl($visitor, MalUrl $obj, array $type): array
