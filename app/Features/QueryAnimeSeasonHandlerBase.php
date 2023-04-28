@@ -2,6 +2,7 @@
 
 namespace App\Features;
 
+use App\Contracts\AnimeRepository;
 use App\Contracts\RequestHandler;
 use App\Dto\QueryAnimeSeasonCommand;
 use App\Enums\AnimeSeasonEnum;
@@ -19,14 +20,36 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
  */
 abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
 {
+    public function __construct(protected readonly AnimeRepository $repository)
+    {
+    }
+
     /**
      * @param QueryAnimeSeasonCommand $request
      * @return JsonResponse
      */
     public function handle($request): JsonResponse
     {
-        $type = collect($request->all())->has("filter") ? $request->filter : null;
-        $results = $this->getSeasonItems($request, $type, $request->kids, $request->sfw);
+        $requestParams = collect($request->all());
+        $type = $requestParams->has("filter") ? $request->filter : null;
+        $results = $this->getSeasonItems($request, $type);
+
+        $includeUnapproved = $requestParams->get("unapproved", false);
+        $includeKids = $requestParams->get("kids", false);
+        $shouldBeSfw = $requestParams->get("sfw", false);
+
+        if (!$includeUnapproved) {
+            $results = $this->repository->excludeUnapprovedItems($results);
+        }
+
+        if (!$includeKids) {
+            $results = $this->repository->excludeKidsItems($results);
+        }
+
+        if ($shouldBeSfw) {
+            $results = $this->repository->excludeNsfwItems($results);
+        }
+
         $results = $results->paginate($request->limit, ["*"], null, $request->page);
 
         $animeCollection = new AnimeCollection($results);

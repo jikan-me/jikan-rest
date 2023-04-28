@@ -52,20 +52,20 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         return $builder;
     }
 
-    public function excludeNsfwItems(&$builder): EloquentBuilder|ScoutBuilder
+    public function excludeNsfwItems($builder): EloquentBuilder|ScoutBuilder
     {
         return $builder
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA);
     }
 
-    public function excludeUnapprovedItems(&$builder): Collection|EloquentBuilder|ScoutBuilder
+    public function excludeUnapprovedItems($builder): Collection|EloquentBuilder|ScoutBuilder
     {
         return $builder
             ->where("approved", true);
     }
 
-    public function excludeKidsItems(&$builder): EloquentBuilder|ScoutBuilder
+    public function excludeKidsItems($builder): EloquentBuilder|ScoutBuilder
     {
         return $builder
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_KIDS);
@@ -90,10 +90,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     }
 
     public function getCurrentlyAiring(
-        ?AnimeScheduleFilterEnum $filter = null,
-        ?bool $kids = false,
-        ?bool $sfw = false,
-        ?bool $unapproved = false
+        ?AnimeScheduleFilterEnum $filter = null
     ): EloquentBuilder
     {
         /*
@@ -105,18 +102,6 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                           ->orderBy("members")
                           ->where("type", AnimeTypeEnum::tv()->label)
                           ->where("status", AnimeStatusEnum::airing()->label);
-
-        if (!$unapproved) {
-            $this->excludeUnapprovedItems($queryable);
-        }
-
-        if (!$kids) {
-            $this->excludeKidsItems($queryable);
-        }
-
-        if ($sfw) {
-            $this->excludeNsfwItems($queryable);
-        }
 
         if (!is_null($filter)) {
             if ($filter->isWeekDay()) {
@@ -133,10 +118,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     public function getAiredBetween(
         Carbon $from,
         Carbon $to,
-        ?AnimeTypeEnum $type = null,
-        ?bool $kids = false,
-        ?bool $sfw = false,
-        ?bool $unapproved = false
+        ?AnimeTypeEnum $type = null
     ): EloquentBuilder
     {
         $queryable = $this->queryable(true)->whereBetween("aired.from", [
@@ -148,44 +130,17 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             $queryable = $queryable->where("type", $type->label);
         }
 
-        if (!$unapproved) {
-            $this->excludeUnapprovedItems($queryable);
-        }
-
-        if (!$kids) {
-            $this->excludeKidsItems($queryable);
-        }
-
-        if ($sfw) {
-            $this->excludeNsfwItems($queryable);
-        }
-
         return $queryable->orderBy("members", "desc");
     }
 
     public function getUpcomingSeasonItems(
-        ?AnimeTypeEnum $type = null,
-        ?bool $kids = false,
-        ?bool $sfw = false,
-        ?bool $unapproved = false
+        ?AnimeTypeEnum $type = null
     ): EloquentBuilder
     {
         $queryable = $this->queryable(true)->where("status", AnimeStatusEnum::upcoming()->label);
 
         if (!is_null($type)) {
             $queryable = $queryable->where("type", $type->label);
-        }
-
-        if (!$unapproved) {
-            $this->excludeUnapprovedItems($queryable);
-        }
-
-        if (!$kids) {
-            $this->excludeKidsItems($queryable);
-        }
-
-        if ($sfw) {
-            $this->excludeNsfwItems($queryable);
         }
 
         return $queryable->orderBy("members", "desc");

@@ -2,7 +2,6 @@
 
 namespace App\Features;
 
-use App\Contracts\AnimeRepository;
 use App\Dto\QueryUpcomingAnimeSeasonCommand;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder;
@@ -12,10 +11,6 @@ use Illuminate\Contracts\Database\Query\Builder;
  */
 final class QueryUpcomingAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
 {
-    public function __construct(private readonly AnimeRepository $repository)
-    {
-    }
-
     public function requestClass(): string
     {
         return QueryUpcomingAnimeSeasonCommand::class;

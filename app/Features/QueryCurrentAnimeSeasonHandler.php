@@ -17,10 +17,6 @@ use Illuminate\Support\Carbon;
  */
 final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
 {
-    public function __construct(private readonly AnimeRepository $repository)
-    {
-    }
-
     public function requestClass(): string
     {
         return QueryCurrentAnimeSeasonCommand::class;

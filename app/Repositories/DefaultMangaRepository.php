@@ -55,17 +55,4 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
             ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_HENTAI)
             ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_EROTICA);
     }
-
-    public function excludeNsfwItems(&$builder): EloquentBuilder|ScoutBuilder
-    {
-        return $builder
-            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_HENTAI)
-            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_EROTICA);
-    }
-
-    public function excludeUnapprovedItems(&$builder): Collection|EloquentBuilder|ScoutBuilder
-    {
-        return $builder
-            ->where("approved", true);
-    }
 }

@@ -34,7 +34,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             // which will make Typesense consider all variations of prefixes and typo corrections of the words
             // in the query exhaustively, without stopping early when enough results are found.
             $options['exhaustive_search'] = env('TYPESENSE_SEARCH_EXHAUSTIVE', "true");
-            $options['search_cutoff_ms'] = (int) env('TYPESENSE_SEARCH_EXHAUSTIVE', 450);
+            $options['search_cutoff_ms'] = (int) env('TYPESENSE_SEARCH_CUTOFF_MS', 450);
 
             if (array_key_exists('per_page', $options) && $options['per_page'] > 250) {
                 $options['per_page'] = min($this->maxItemsPerPage, 250);
@@ -49,6 +49,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 }
 
                 // if the model specifies search index sort order, use it
+                // this is the default sort order for the model
                 $sortByFields = $modelInstance->getSearchIndexSortBy();
                 if (!is_null($sortByFields)) {
                     $sortBy = "";
@@ -62,11 +63,6 @@ class TypeSenseScoutSearchService implements ScoutSearchService
 
                 // override ordering field
                 if (!is_null($orderByField)) {
-                    $options['sort_by'] = "_text_match:desc,$orderByField:" . ($sortDirectionDescending ? "desc" : "asc");
-                }
-
-                // if order_by is a user supplied value make it a priority over _text_match
-                if ($orderByField !== 'members' && !is_null($orderByField)) {
                     $options['sort_by'] = "$orderByField:" . ($sortDirectionDescending ? "desc" : "asc") . ",_text_match:desc";
                 }
 
