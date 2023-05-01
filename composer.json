@@ -21,7 +21,7 @@
         "fabpot/goutte": "^4.0",
         "flipbox/lumen-generator": "^9.0",
         "illuminate/redis": "^9.0",
-        "jenssegers/mongodb": "^3.8",
+        "jenssegers/mongodb": "^3.9",
         "jikan-me/jikan": "^4",
         "jms/serializer": "^3.0",
         "laravel/legacy-factories": "^1.1",

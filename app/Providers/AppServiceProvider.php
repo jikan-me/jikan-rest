@@ -96,6 +96,7 @@ class AppServiceProvider extends ServiceProvider
             $scoutDriver = static::getSearchIndexDriver($this->app);
             $serviceClass = match ($scoutDriver) {
                 "typesense" => TypeSenseScoutSearchService::class,
+                // experimental
                 "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine" => ElasticScoutSearchService::class,
                 default => DefaultScoutSearchService::class
             };
@@ -360,6 +361,7 @@ class AppServiceProvider extends ServiceProvider
             $services[] = Typesense::class;
         }
 
+        // experimental
         if (Env::get("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
             $services[] = \Elastic\Elasticsearch\Client::class;
         }

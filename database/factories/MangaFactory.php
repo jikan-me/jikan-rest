@@ -57,6 +57,7 @@ class MangaFactory extends JikanMediaModelFactory
             "members" => $this->faker->randomDigitNotNull(),
             "favorites" => $this->faker->randomDigitNotNull(),
             "synopsis" => "test",
+            "approved" => true,
             "background" => "test",
             "authors" => [
                 [

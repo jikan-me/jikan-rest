@@ -2,47 +2,28 @@
 
 namespace App\Features;
 
-use App\Contracts\AnimeRepository;
+use App\Anime;
 use App\Contracts\RequestHandler;
 use App\Dto\QueryRandomAnimeCommand;
 use App\Http\Resources\V4\AnimeResource;
-use Illuminate\Support\Collection;
-use Spatie\LaravelData\Optional;
 
 /**
  * @implements RequestHandler<QueryRandomAnimeCommand, AnimeResource>
  */
 final class QueryRandomAnimeHandler implements RequestHandler
 {
-    public function __construct(
-        private readonly AnimeRepository $repository
-    )
-    {
-    }
-
     /**
      * @inheritDoc
      */
     public function handle($request): AnimeResource
     {
-        $sfw = Optional::create() !== $request->sfw ? $request->sfw : null;
-        $unapproved = Optional::create() !== $request->unapproved ? $request->unapproved : null;
-
-        /**
-         * @var Collection $results;
-         */
-        $results = $this->repository;
-
-        if (!$unapproved) {
-            $results->excludeUnapprovedItems($results);
-        }
-
-        if ($sfw) {
-            $results->excludeNsfwItems($results);
-        }
+        $queryable = Anime::query();
+        // apply sfw, kids and unapproved filters
+        /** @noinspection PhpUndefinedMethodInspection */
+        $queryable = $queryable->filter(collect($request->all()));
 
         return new AnimeResource(
-            $results->random()->first()
+            $queryable->random()->first()
         );
     }
 

@@ -62,7 +62,7 @@ trait FilterQueryString
         };
 
         $result = collect(array_filter($queryParameters->all(), $filter, ARRAY_FILTER_USE_KEY))
-                    ->filter(fn ($v, $k) => !empty($v)) ?? Collection::empty();
+                    ->filter(fn ($v, $k) => $v !== "" && $v !== null && !(is_float($v) && is_nan($v))) ?? Collection::empty();
 
         return $this->_normalizeOrderBy($result);
     }

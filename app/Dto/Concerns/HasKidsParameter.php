@@ -22,5 +22,5 @@ trait HasKidsParameter
     use PreparesData;
 
     #[BooleanType, WithCast(ContextualBooleanCast::class)]
-    public bool|Optional $kids = false;
+    public bool|Optional $kids;
 }

@@ -50,9 +50,7 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
-        return $this->queryable()
-            ->where("type", "!=", MangaTypeEnum::doujin()->label)
-            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_HENTAI)
-            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_EROTICA);
+        /** @noinspection PhpUndefinedMethodInspection */
+        return $this->queryable()->exceptItemsWithAdultRating();
     }
 }

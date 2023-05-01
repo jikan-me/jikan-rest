@@ -2,7 +2,6 @@
 
 namespace App\Features;
 
-use App\Contracts\AnimeRepository;
 use App\Contracts\RequestHandler;
 use App\Dto\QueryCurrentAnimeSeasonCommand;
 use App\Enums\AnimeSeasonEnum;
@@ -28,7 +27,7 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
      */
     private function getCurrentSeason() : array
     {
-        $date = new \DateTime(null, new \DateTimeZone('Asia/Tokyo'));
+        $date = new \DateTime('now', new \DateTimeZone('Asia/Tokyo'));
 
         $year = (int) $date->format('Y');
         $month = (int) $date->format('n');

@@ -66,6 +66,7 @@ class AnimeFactory extends JikanMediaModelFactory
             "members" => $this->faker->randomDigitNotnull(),
             "favorites" => $this->faker->randomDigitNotnull(),
             "synopsis" => "test",
+            "approved" => true,
             "background" => "test",
             "premiered" => $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]),
             "broadcast" => [

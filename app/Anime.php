@@ -11,6 +11,7 @@ use Carbon\CarbonImmutable;
 use Database\Factories\AnimeFactory;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
+use Jikan\Helper\Constants;
 use Jikan\Jikan;
 use Jikan\Request\Anime\AnimeRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,10 @@ class Anime extends JikanApiSearchableModel
 {
     use HasFactory, MediaFilters, FilteredByLetter;
 
-    protected array $filters = ["order_by", "status", "type", "sort", "max_score", "min_score", "score", "rating", "start_date", "end_date", "producer", "producers", "letter", "genres", "genres_exclude"];
+    protected array $filters = [
+        "order_by", "status", "type", "sort", "max_score", "min_score", "score", "rating", "start_date", "end_date",
+        "producer", "producers", "letter", "genres", "genres_exclude", "sfw", "unapproved", "kids"
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -191,6 +195,29 @@ class Anime extends JikanApiSearchableModel
         return $query;
     }
 
+    /** @noinspection PhpUnused */
+    public function scopeExceptItemsWithAdultRating(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query
+            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
+            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA)
+            ->where("rating", "!=", AnimeRatingEnum::rx()->label);
+    }
+
+    /** @noinspection PhpUnused */
+    public function scopeExceptKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query
+            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_KIDS);
+    }
+
+    /** @noinspection PhpUnused */
+    public function scopeOnlyKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query
+            ->where("demographics.mal_id", Constants::GENRE_ANIME_KIDS);
+    }
+
     public static function scrape(int $id)
     {
         $data = app('JikanParser')->getAnime(new AnimeRequest($id));
@@ -237,6 +264,7 @@ class Anime extends JikanApiSearchableModel
             'synopsis' => $this->synopsis,
             'season' => $this->season,
             'year' => $this->year,
+            'approved' => $this->approved ?? false,
             'producers' => $this->getMalIdsOfField($this->producers),
             'studios' => $this->getMalIdsOfField($this->studios),
             'licensors' => $this->getMalIdsOfField($this->licensors),

@@ -17,7 +17,8 @@ final class MediaReviewsSortEnum extends Enum
         return [
             "mostVoted" => Constants::REVIEWS_SORT_MOST_VOTED,
             "newest" => Constants::REVIEWS_SORT_NEWEST,
-            "oldest" => Constants::REVIEWS_SORT_OLDEST
+            "oldest" => Constants::REVIEWS_SORT_OLDEST,
+            "suggested" => "suggested",
         ];
     }
 }

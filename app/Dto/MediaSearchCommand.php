@@ -3,6 +3,7 @@
 namespace App\Dto;
 
 use App\Dto\Concerns\HasSfwParameter;
+use App\Dto\Concerns\HasUnapprovedParameter;
 use Carbon\CarbonImmutable;
 use Illuminate\Validation\Validator;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -23,7 +24,7 @@ use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 
 class MediaSearchCommand extends SearchCommand
 {
-    use HasSfwParameter;
+    use HasSfwParameter, HasUnapprovedParameter;
 
     #[MapInputName("min_score"), MapOutputName("min_score"), Between(0.00, 10.00), Numeric]
     public float|Optional $minScore;

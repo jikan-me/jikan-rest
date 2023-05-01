@@ -45,8 +45,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
-        $builder = $this->queryable()
-            ->where("rating", "!=", AnimeRatingEnum::rx()->label);
+        $builder = $this->queryable();
 
         $this->excludeNsfwItems($builder);
         return $builder;
@@ -54,9 +53,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function excludeNsfwItems($builder): EloquentBuilder|ScoutBuilder
     {
-        return $builder
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA);
+        return $builder->exceptItemsWithAdultRating();
     }
 
     public function excludeUnapprovedItems($builder): Collection|EloquentBuilder|ScoutBuilder
@@ -67,8 +64,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function excludeKidsItems($builder): EloquentBuilder|ScoutBuilder
     {
-        return $builder
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_KIDS);
+        return $builder->exceptKidsItems();
     }
 
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
@@ -121,9 +117,17 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         ?AnimeTypeEnum $type = null
     ): EloquentBuilder
     {
-        $queryable = $this->queryable(true)->whereBetween("aired.from", [
-            $from->toAtomString(),
-            $to->modify("last day of this month")->toAtomString()
+//        $queryable = $this->queryable(true)->whereBetween("aired.from", [
+//            $from->toAtomString(),
+//            $to->modify("last day of this month")->toAtomString()
+//        ]);
+
+        /** @noinspection PhpParamsInspection */
+        $queryable = $this->queryable(true)->whereRaw([
+            "aired.from" => [
+                '$gte' => $from->toAtomString(),
+                '$lte' => $to->modify("last day of this month")->toAtomString()
+            ]
         ]);
 
         if (!is_null($type)) {

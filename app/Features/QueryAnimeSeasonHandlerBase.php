@@ -33,23 +33,9 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
         $requestParams = collect($request->all());
         $type = $requestParams->has("filter") ? $request->filter : null;
         $results = $this->getSeasonItems($request, $type);
-
-        $includeUnapproved = $requestParams->get("unapproved", false);
-        $includeKids = $requestParams->get("kids", false);
-        $shouldBeSfw = $requestParams->get("sfw", false);
-
-        if (!$includeUnapproved) {
-            $results = $this->repository->excludeUnapprovedItems($results);
-        }
-
-        if (!$includeKids) {
-            $results = $this->repository->excludeKidsItems($results);
-        }
-
-        if ($shouldBeSfw) {
-            $results = $this->repository->excludeNsfwItems($results);
-        }
-
+        // apply sfw, kids and unapproved filters
+        /** @noinspection PhpUndefinedMethodInspection */
+        $results = $results->filter($requestParams);
         $results = $results->paginate($request->limit, ["*"], null, $request->page);
 
         $animeCollection = new AnimeCollection($results);

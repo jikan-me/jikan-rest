@@ -25,8 +25,6 @@ use Spatie\LaravelData\Optional;
  */
 final class AnimeSearchCommand extends MediaSearchCommand implements DataRequest
 {
-    use HasSfwParameter;
-
     #[WithCast(EnumCast::class, AnimeStatusEnum::class), EnumValidation(AnimeStatusEnum::class)]
     public AnimeStatusEnum|Optional $status;
 

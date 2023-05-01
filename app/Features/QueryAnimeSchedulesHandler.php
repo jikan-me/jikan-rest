@@ -23,8 +23,12 @@ final class QueryAnimeSchedulesHandler implements RequestHandler
      */
     public function handle($request)
     {
-        $limit = intval($request->limit ?? Env::get("MAX_RESULTS_PER_PAGE", 25));
-        $results = $this->repository->getCurrentlyAiring($request->dayFilter, $request->kids, $request->sfw, $request->unapproved);
+        $requestParams = collect($request->all());
+        $limit = $requestParams->get("limit");
+        $results = $this->repository->getCurrentlyAiring($request->dayFilter);
+        // apply sfw, kids and unapproved filters
+        /** @noinspection PhpUndefinedMethodInspection */
+        $results = $results->filter($requestParams);
         $results = $results->paginate(
             $limit,
             ["*"],
