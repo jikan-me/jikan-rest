@@ -41,6 +41,8 @@ body:
   attributes:
     label: Environment
     description: |
+      If you have used the public API, please just say "Used public API", and add your browser and its version.
+      If you are self-hosting, then write down your OS, the method of hosting (docker/container, kubernetes, or plain), and the version of jikan you are running.
       examples:
         - **OS**: Ubuntu 20.04
         - **Browser**: Firefox 104.1
