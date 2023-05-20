@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQueueFailedIndex extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateQueueFailedIndex extends Migration
      */
     public function up()
     {
-        Schema::create(env('QUEUE_FAILED_TABLE', 'jobs_failed'), function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('jobs_failed', function (Blueprint $table) {
+            $table->id();
+            $table->string('uuid')->unique();
             $table->text('connection');
             $table->text('queue');
             $table->longText('payload');
@@ -30,6 +31,6 @@ class CreateQueueFailedIndex extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(env('QUEUE_FAILED_TABLE', 'jobs_failed'));
+        Schema::dropIfExists('jobs_failed');
     }
-}
+};

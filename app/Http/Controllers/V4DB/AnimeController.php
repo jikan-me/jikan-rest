@@ -20,6 +20,8 @@ use App\Http\Resources\V4\StreamingLinksResource;
 use App\Http\Resources\V4\UserUpdatesResource;
 use App\Http\Resources\V4\AnimeVideosResource;
 use App\Http\Resources\V4\ForumResource;
+use App\Http\Resources\V4\NewsResource;
+use App\Jobs\UpdateResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Helper\Constants;
@@ -92,11 +94,11 @@ class AnimeController extends Controller
             if ($results->isEmpty()) {
                 $meta = [
                     'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
+                    'updated_at' => new UTCDateTime(),
                     'request_hash' => $this->fingerprint
                 ];
             }
-            $meta['modifiedAt'] = new UTCDateTime();
+            $meta['updated_at'] = new UTCDateTime();
 
             $response = $meta + $response;
 
@@ -165,55 +167,42 @@ class AnimeController extends Controller
             ->where('mal_id', $id)
             ->get();
 
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
+        if ($results->isEmpty()) {
             $response = Anime::scrape($id);
 
             if (HttpHelper::hasError($response)) {
                 return HttpResponse::notFound($request);
             }
 
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Anime::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Anime::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
+            Anime::query()
+                ->insert(
+                    [
+                        'created_at' => new UTCDateTime(),
+                        'updated_at' => new UTCDateTime(),
+                        'request_hash' => $this->fingerprint
+                    ] + $response
+                );
         }
 
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
+        if ($this->isExpired($request, $results)) {
+            dispatch(new UpdateResource(
+                Anime::class, $id, $this->fingerprint
+            ));
         }
 
-        $response = (new \App\Http\Resources\V4\AnimeResource(
-            $results->first()
-        ))->response();
+        $results = Anime::query()
+            ->where('mal_id', $id)
+            ->get();
 
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $results->isEmpty()
+            ? HttpResponse::notFound($request)
+            : $this->prepareResponse(
+                (new \App\Http\Resources\V4\AnimeResource(
+                    $results->first()
+                ))->response(),
+                $results,
+                $request
+            );
     }
 
     /**
