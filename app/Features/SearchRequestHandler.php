@@ -56,7 +56,6 @@ abstract class SearchRequestHandler implements RequestHandler
         if ($requestData->has('order_by') && $requestData->has('q')) {
             $requestData->offsetSet("order_by", $requestData->get("order_by")->label);
             return $requestData;
-
         }
 
         $requestData->offsetSet("order_by", 'mal_id');

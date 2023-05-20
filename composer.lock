@@ -11101,32 +11101,34 @@
         },
         {
             "name": "typesense/laravel-scout-typesense-driver",
-            "version": "v5.1.0",
+            "version": "v5.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/typesense/laravel-scout-typesense-driver.git",
-                "reference": "d5b488ad8968989d9425e4b58aceb9231b569440"
+                "reference": "026187e037a91c1532ecd1d209ae03c7e8733a40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/typesense/laravel-scout-typesense-driver/zipball/d5b488ad8968989d9425e4b58aceb9231b569440",
-                "reference": "d5b488ad8968989d9425e4b58aceb9231b569440",
+                "url": "https://api.github.com/repos/typesense/laravel-scout-typesense-driver/zipball/026187e037a91c1532ecd1d209ae03c7e8733a40",
+                "reference": "026187e037a91c1532ecd1d209ae03c7e8733a40",
                 "shasum": ""
             },
             "require": {
-                "illuminate/bus": "^7.0|^8.0|^9.0",
-                "illuminate/contracts": "^7.0|^8.0|^9.0",
-                "illuminate/database": "^7.0|^8.0|^9.0",
-                "illuminate/pagination": "^7.0|^8.0|^9.0",
-                "illuminate/queue": "^7.0|^8.0|^9.0",
-                "illuminate/support": "^7.0|^8.0|^9.0",
+                "illuminate/bus": "^7.0|^8.0|^9.0|^10.0",
+                "illuminate/contracts": "^7.0|^8.0|^9.0|^10.0",
+                "illuminate/database": "^7.0|^8.0|^9.0|^10.0",
+                "illuminate/pagination": "^7.0|^8.0|^9.0|^10.0",
+                "illuminate/queue": "^7.0|^8.0|^9.0|^10.0",
+                "illuminate/support": "^7.0|^8.0|^9.0|^10.0",
                 "laravel/scout": "^8.0|^9.0",
                 "php": "^8.0",
                 "typesense/typesense-php": "^4.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.3",
-                "phpunit/phpunit": "^8.0|^9.0"
+                "orchestra/testbench": "^6.17|^7.0|^8.0",
+                "phpunit/phpunit": "^8.0|^9.0",
+                "symfony/http-client": "^5.4"
             },
             "suggest": {
                 "typesense/typesense-php": "Required to use the Typesense php client."
@@ -11144,7 +11146,8 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Typesense\\LaravelTypesense\\": "src/"
+                    "Typesense\\LaravelTypesense\\": "src/",
+                    "Typesense\\LaravelTypesense\\Tests\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -11173,7 +11176,7 @@
             ],
             "support": {
                 "issues": "https://github.com/typesense/laravel-scout-typesense-driver/issues",
-                "source": "https://github.com/typesense/laravel-scout-typesense-driver/tree/v5.1.0"
+                "source": "https://github.com/typesense/laravel-scout-typesense-driver/tree/v5.2.5"
             },
             "funding": [
                 {
@@ -11181,7 +11184,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-07-20T18:55:28+00:00"
+            "time": "2023-05-18T07:06:25+00:00"
         },
         {
             "name": "typesense/typesense-php",

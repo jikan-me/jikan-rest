@@ -180,6 +180,70 @@ class Manga extends JikanApiSearchableModel
         ];
     }
 
+    public function getCollectionSchema(): array
+    {
+        return [
+            'name' => $this->searchableAs(),
+            'fields' => [
+                [
+                    'name' => '.*',
+                    'type' => 'auto',
+                ],
+                [
+                    'name' => 'title',
+                    'type' => 'string',
+                    'optional' => false,
+                    'infix' => true,
+                    'sort' => true
+                ],
+                [
+                    'name' => 'title_transformed',
+                    'type' => 'string',
+                    'optional' => false,
+                    'infix' => true,
+                    'sort' => true
+                ],
+                [
+                    'name' => 'title_japanese',
+                    'type' => 'string',
+                    'optional' => true,
+                    'locale' => 'jp',
+                    'infix' => true,
+                    'sort' => false
+                ],
+                [
+                    'name' => 'title_japanese_transformed',
+                    'type' => 'string',
+                    'optional' => true,
+                    'locale' => 'jp',
+                    'infix' => true,
+                    'sort' => false
+                ],
+                [
+                    'name' => 'title_english',
+                    'type' => 'string',
+                    'optional' => true,
+                    'infix' => true,
+                    'sort' => true
+                ],
+                [
+                    'name' => 'title_english_transformed',
+                    'type' => 'string',
+                    'optional' => true,
+                    'infix' => true,
+                    'sort' => true
+                ],
+                [
+                    'name' => 'title_synonyms',
+                    'type' => 'string[]',
+                    'optional' => true,
+                    'infix' => true,
+                    'sort' => false
+                ]
+            ]
+        ];
+    }
+
     /** @noinspection PhpUnused */
     public function getThemesAttribute()
     {
