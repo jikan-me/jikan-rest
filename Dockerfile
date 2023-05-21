@@ -14,6 +14,8 @@ RUN set -x \
 # install roadrunner
 COPY --from=roadrunner /usr/bin/rr /usr/bin/rr
 LABEL org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
+# used only for supercronic atm. Supported values are: amd64, arm64
+ARG TARGET_ARCH="amd64"
 RUN	set -ex \
     && apt-get update && apt-get install -y --no-install-recommends \
 	openssl \
@@ -22,7 +24,7 @@ RUN	set -ex \
 	unzip \
   wget \
   # install supercronic (for laravel task scheduling), project page: <https://github.com/aptible/supercronic>
-	&& wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-amd64" \
+	&& wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-${TARGET_ARCH}" \
 	   -O /usr/bin/supercronic \
 	&& chmod +x /usr/bin/supercronic \
 	&& mkdir /etc/supercronic \
