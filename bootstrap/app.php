@@ -82,6 +82,10 @@ if (env('INSIGHTS', false)) {
     $globalMiddleware[] = \App\Http\Middleware\Insights::class;
 }
 
+if (env('CORS_MIDDLEWARE', false)) {
+    $globalMiddleware[] = \App\Http\Middleware\CorsMiddleware::class;
+}
+
 $app->middleware($globalMiddleware);
 
 $app->routeMiddleware([
