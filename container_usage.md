@@ -14,7 +14,7 @@ docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikanme/jikan-r
 > address of these services.
 
 > **Tip**: If you run the container on a non-default network, you can use the container names in the configuration to
-> specify the address of services like MongoDB and TypeSense/ElasticSearch. However, this is not a concern if you
+> specify the address of services like MongoDB and TypeSense. However, this is not a concern if you
 > use `docker-compose`.
 
 There is also a `Dockerfile` in the repo which you can use to build the container image and startup the app in a
