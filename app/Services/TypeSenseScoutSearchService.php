@@ -40,7 +40,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             $options['typo_tokens_threshold'] = (int) env('TYPESENSE_TYPO_TOKENS_THRESHOLD', 1);
             // prevent `Could not parse the filter query: unbalanced `&&` operands.` error
             // this adds support for typesense v0.24.1
-            if ($options['filter_by'] === ' && ' || $options['filter_by'] === '&&') {
+            if (array_key_exists('filter_by', $options) && ($options['filter_by'] === ' && ' || $options['filter_by'] === '&&')) {
                 unset($options['filter_by']);
             }
 
