@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Laravel\Lumen\Http\ResponseFactory;
 
 class CorsMiddleware
@@ -12,7 +14,7 @@ class CorsMiddleware
     {
     }
 
-    public function handle(Request $request, \Closure $next): Response
+    public function handle(Request $request, \Closure $next): Response | JsonResponse | RedirectResponse
     {
         if ($request->isMethod('OPTIONS')) {
             $headers = [
