@@ -2,36 +2,49 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
+use Fruitcake\Cors\CorsService;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Middleware\HandleCors;
 use Laravel\Lumen\Http\ResponseFactory;
 
-class CorsMiddleware
+class CorsMiddleware extends HandleCors
 {
-    public function __construct(private readonly ResponseFactory $responseFactory)
+    public function __construct(Container $container, CorsService $cors, private readonly ResponseFactory $responseFactory)
     {
+        parent::__construct($container, $cors);
     }
 
-    public function handle(Request $request, \Closure $next): Response | JsonResponse | RedirectResponse
+    public function handle($request, \Closure $next): Response | JsonResponse | RedirectResponse
     {
-        if ($request->isMethod('OPTIONS')) {
-            $headers = [
-                'Access-Control-Allow-Origin'      => '*',
-                'Access-Control-Allow-Methods'     => 'GET, OPTIONS',
-                'Access-Control-Max-Age'           => '86400',
-                'Accept-Control-Allow-Headers' => 'Accept,Accept-Encoding,DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range',
-                'Content-Type' => 'text/plain',
-                'Content-Length' => '0'
-            ];
-            $response = $this->responseFactory->make("", 204, $headers);
-            $response->setProtocolVersion("1.1");
-        }
-        else {
-            $response = $next($request);
+        if (! $this->hasMatchingPath($request)) {
+            return $next($request);
         }
 
-        return $response;
+        $this->cors->setOptions($this->container['config']->get('cors', []));
+
+        if ($this->cors->isPreflightRequest($request)) {
+            $symfonyResponse = $this->cors->handlePreflightRequest($request);
+
+            $this->cors->varyHeader($symfonyResponse, 'Access-Control-Request-Method');
+            $lumenResponse = $this->responseFactory->make($symfonyResponse->getContent(), $symfonyResponse->getStatusCode(), $symfonyResponse->headers->all());
+            $lumenResponse->setProtocolVersion("1.1");
+
+            return $lumenResponse;
+        }
+
+        $response = $next($request);
+
+        if ($request->getMethod() === 'OPTIONS') {
+            $this->cors->varyHeader($response, 'Access-Control-Request-Method');
+        }
+
+        $symfonyResponse = $this->cors->addActualRequestHeaders($response, $request);
+        $lumenResponse = $this->responseFactory->make($symfonyResponse->getContent(), $symfonyResponse->getStatusCode(), $symfonyResponse->headers->all());
+        $lumenResponse->setProtocolVersion("1.1");
+
+        return $lumenResponse;
     }
 }

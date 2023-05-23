@@ -83,6 +83,7 @@ if (env('INSIGHTS', false)) {
 }
 
 if (env('CORS_MIDDLEWARE', false)) {
+    $app->configure('cors');
     $globalMiddleware[] = \App\Http\Middleware\CorsMiddleware::class;
 }
 
