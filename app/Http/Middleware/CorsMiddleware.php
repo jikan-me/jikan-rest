@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Middleware\HandleCors;
 use Laravel\Lumen\Http\ResponseFactory;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class CorsMiddleware extends HandleCors
 {
@@ -17,9 +18,16 @@ class CorsMiddleware extends HandleCors
         parent::__construct($container, $cors);
     }
 
-    public function handle($request, \Closure $next): Response | JsonResponse | RedirectResponse
+    private function wrapResponse(SymfonyResponse $response): Response
     {
-        if (! $this->hasMatchingPath($request)) {
+        $lumenResponse = $this->responseFactory->make($response->getContent(), $response->getStatusCode(), $response->headers->all());
+        $lumenResponse->setProtocolVersion("1.1");
+        return $lumenResponse;
+    }
+
+    public function handle($request, \Closure $next): Response|JsonResponse|RedirectResponse
+    {
+        if (!$this->hasMatchingPath($request)) {
             return $next($request);
         }
 
@@ -29,10 +37,7 @@ class CorsMiddleware extends HandleCors
             $symfonyResponse = $this->cors->handlePreflightRequest($request);
 
             $this->cors->varyHeader($symfonyResponse, 'Access-Control-Request-Method');
-            $lumenResponse = $this->responseFactory->make($symfonyResponse->getContent(), $symfonyResponse->getStatusCode(), $symfonyResponse->headers->all());
-            $lumenResponse->setProtocolVersion("1.1");
-
-            return $lumenResponse;
+            return $this->wrapResponse($symfonyResponse);
         }
 
         $response = $next($request);
@@ -42,9 +47,7 @@ class CorsMiddleware extends HandleCors
         }
 
         $symfonyResponse = $this->cors->addActualRequestHeaders($response, $request);
-        $lumenResponse = $this->responseFactory->make($symfonyResponse->getContent(), $symfonyResponse->getStatusCode(), $symfonyResponse->headers->all());
-        $lumenResponse->setProtocolVersion("1.1");
 
-        return $lumenResponse;
+        return $this->wrapResponse($symfonyResponse);
     }
 }
