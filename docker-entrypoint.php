@@ -7,7 +7,7 @@ require_once __DIR__.'/vendor/autoload.php';
 
 $safe_defaults = [
     // mongodb regex search by default
-    "SCOUT_DRIVER" => "null",
+    "SCOUT_DRIVER" => "none",
     "SCOUT_QUEUE" => false,
     "THROTTLE" => false,
     "QUEUE_CONNECTION" => "database",

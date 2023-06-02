@@ -2,28 +2,12 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
-use App\Character;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\Resources\V4\AnimeCollection;
-use App\Http\Resources\V4\AnimeResource;
-use App\Http\Resources\V4\CharacterCollection;
-use App\Http\Resources\V4\CharacterResource;
-use App\Http\Resources\V4\CommonResource;
-use App\Http\Resources\V4\MangaCollection;
-use App\Http\Resources\V4\MangaResource;
-use App\Http\Resources\V4\PersonCollection;
-use App\Http\Resources\V4\PersonResource;
-use App\Http\Resources\V4\ProfileResource;
-use App\Http\Resources\V4\ResultsResource;
-use App\Http\Resources\V4\UserCollection;
-use App\Manga;
-use App\Person;
-use App\Profile;
-use App\User;
-use Illuminate\Http\Request;
-use MongoDB\BSON\UTCDateTime;
+use App\Dto\QueryRandomAnimeCommand;
+use App\Dto\QueryRandomCharacterCommand;
+use App\Dto\QueryRandomMangaCommand;
+use App\Dto\QueryRandomPersonCommand;
+use App\Dto\QueryRandomUserCommand;
+
 
 class RandomController extends Controller
 {
@@ -72,23 +56,9 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function anime(Request $request)
+    public function anime(QueryRandomAnimeCommand $command)
     {
-        $sfw = $request->get('sfw');
-
-        $results = Anime::query();
-
-        if (!is_null($sfw)) {
-            $results = $results
-                ->where('rating', '!=', 'Rx - Hentai');
-        }
-
-        $results = $results
-            ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
-
-        return new AnimeResource(
-            $results->first()
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -113,24 +83,9 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function manga(Request $request)
+    public function manga(QueryRandomMangaCommand $command)
     {
-        $sfw = $request->get('sfw');
-
-
-        $results = Manga::query();
-
-        if (!is_null($sfw)) {
-            $results = $results
-                ->where('type', '!=', 'Doujinshi');
-        }
-
-        $results = $results
-            ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
-
-        return new MangaResource(
-            $results->first()
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -155,14 +110,9 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function characters(Request $request)
+    public function characters(QueryRandomCharacterCommand $command)
     {
-        $results = Character::query()
-            ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
-
-        return new CharacterResource(
-            $results->first()
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -187,14 +137,9 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function people(Request $request)
+    public function people(QueryRandomPersonCommand $command)
     {
-        $results = Person::query()
-            ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
-
-        return new PersonResource(
-            $results->first()
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -219,13 +164,8 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function users(Request $request)
+    public function users(QueryRandomUserCommand $command)
     {
-        $results = Profile::query()
-            ->raw(fn($collection) => $collection->aggregate([ ['$sample' => ['size' => 1]] ]));
-
-        return new ProfileResource(
-            $results->first()
-        );
+        return $this->mediator->send($command);
     }
 }

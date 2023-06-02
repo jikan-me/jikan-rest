@@ -256,7 +256,7 @@ $router->group(
         ]);
 
         $router->get('/now', [
-            'uses' => 'SeasonController@main'
+            'uses' => 'SeasonController@now'
         ]);
 
         $router->get('/upcoming', [
@@ -269,7 +269,7 @@ $router->group(
     }
 );
 
-$router->get('schedules[/{day:[A-Za-z]+}]', [
+$router->get('schedules[/{dayFilter:[A-Za-z]+}]', [
     'uses' => 'ScheduleController@main'
 ]);
 

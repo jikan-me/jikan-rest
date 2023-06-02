@@ -94,12 +94,12 @@ class ReviewsResource extends JsonResource
      *     ),
      *     @OA\Property (
      *         property="is_spoiler",
-     *         type="bool",
+     *         type="boolean",
      *         description="The review contains spoiler"
      *     ),
      *     @OA\Property (
      *         property="is_preliminary",
-     *         type="bool",
+     *         type="boolean",
      *         description="The review was made before the entry was completed"
      *     ),
      *  ),
@@ -190,12 +190,12 @@ class ReviewsResource extends JsonResource
      *     ),
      *     @OA\Property (
      *         property="is_spoiler",
-     *         type="bool",
+     *         type="boolean",
      *         description="The review contains spoiler"
      *     ),
      *     @OA\Property (
      *         property="is_preliminary",
-     *         type="bool",
+     *         type="boolean",
      *         description="The review was made before the entry was completed"
      *     ),
      *     @OA\Property(

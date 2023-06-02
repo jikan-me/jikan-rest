@@ -2,15 +2,26 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
+use App\Concerns\MediaFilters;
+use App\Enums\MangaTypeEnum;
 use App\Http\HttpHelper;
+use Carbon\CarbonImmutable;
+use Database\Factories\MangaFactory;
+use Illuminate\Support\Facades\App;
+use Jikan\Helper\Constants;
 use Jikan\Jikan;
 use Jikan\Request\Manga\MangaRequest;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Manga extends JikanApiSearchableModel
 {
-    // note that here we skip "score", "min_score", "max_score", "rating" and others because they need special logic
-    // to set the correct filtering on the ORM.
-    protected array $filters = ["order_by", "status", "type", "sort"];
+    use HasFactory, MediaFilters, FilteredByLetter;
+
+    protected array $filters = [
+        "order_by", "status", "type", "sort", "max_score", "min_score", "score", "start_date", "end_date", "magazine",
+        "magazines", "letter", "genres", "genres_exclude", "sfw", "unapproved", "kids"
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -18,8 +29,11 @@ class Manga extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'titles', 'images', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
-        'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related', 'genres', 'explicit_genres', 'themes', 'demographics', 'authors', 'serializations',
+        'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'titles',
+        'images', 'status', 'type', 'volumes', 'chapters', 'publishing', 'published', 'rank', 'score',
+        'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related',
+        'genres', 'explicit_genres', 'themes', 'demographics', 'authors', 'serializations',
+        'createdAt', 'modifiedAt', 'approved'
     ];
 
     /**
@@ -27,8 +41,7 @@ class Manga extends JikanApiSearchableModel
      *
      * @var array
      */
-    protected $appends = [];
-
+    protected $appends = ['themes'];
 
     /**
      * The table associated with the model.
@@ -45,6 +58,77 @@ class Manga extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'expiresAt', 'request_hash'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "title";
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("published.from", ">=", $value->setTime(0, 0)->toAtomString());
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("published.to", "<=", $value->setTime(0, 0)->toAtomString());
+    }
+
+    public function filterByMagazine(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        if (empty($value)) {
+            return $query;
+        }
+
+        $magazine = (int)$value;
+        return $query
+            ->orWhere('serializations.mal_id', $magazine);
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByMagazines(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        if (empty($value)) {
+            return $query;
+        }
+
+        $magazines = explode(',', $value);
+        foreach ($magazines as $magazine) {
+            if (empty($magazine)) {
+                continue;
+            }
+
+            $query = $this->filterByMagazine($query, $value);
+        }
+
+        return $query;
+    }
+
+    /** @noinspection PhpUnused */
+    public function scopeExceptItemsWithAdultRating(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query
+            ->where("type", "!=", MangaTypeEnum::doujin()->label)
+            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_HENTAI)
+            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_EROTICA);
+    }
+
+    /** @noinspection PhpUnused */
+    public function scopeExceptKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query
+            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_KIDS);
+    }
+
+    /** @noinspection PhpUnused */
+    public function scopeOnlyKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query
+            ->where("demographics.mal_id", Constants::GENRE_MANGA_KIDS);
+    }
 
     public static function scrape(int $id)
     {
@@ -68,7 +152,7 @@ class Manga extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
+            'mal_id' => (int) $this->mal_id,
             'start_date' => $this->convertToTimestamp($this->published['from']),
             'end_date' => $this->convertToTimestamp($this->published['to']),
             'title' => $this->title,
@@ -89,16 +173,86 @@ class Manga extends JikanApiSearchableModel
             'members' => $this->members,
             'favorites' => $this->favorites,
             'synopsis' => $this->synopsis,
-            'season' => $this->season,
+            'approved' => $this->approved ?? false,
             'magazines' => $this->getMalIdsOfField($this->magazines),
             'genres' => $this->getMalIdsOfField($this->genres),
             'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres)
         ];
     }
 
-    public function getThemesAttribute(): array
+    public function getCollectionSchema(): array
     {
-        return [];
+        return [
+            'name' => $this->searchableAs(),
+            'fields' => [
+                [
+                    'name' => '.*',
+                    'type' => 'auto',
+                ],
+                [
+                    'name' => 'title',
+                    'type' => 'string',
+                    'optional' => false,
+                    'infix' => true,
+                    'sort' => true
+                ],
+                [
+                    'name' => 'title_transformed',
+                    'type' => 'string',
+                    'optional' => false,
+                    'infix' => true,
+                    'sort' => true
+                ],
+                [
+                    'name' => 'title_japanese',
+                    'type' => 'string',
+                    'optional' => true,
+                    'locale' => 'jp',
+                    'infix' => true,
+                    'sort' => false
+                ],
+                [
+                    'name' => 'title_japanese_transformed',
+                    'type' => 'string',
+                    'optional' => true,
+                    'locale' => 'jp',
+                    'infix' => true,
+                    'sort' => false
+                ],
+                [
+                    'name' => 'title_english',
+                    'type' => 'string',
+                    'optional' => true,
+                    'infix' => true,
+                    'sort' => true
+                ],
+                [
+                    'name' => 'title_english_transformed',
+                    'type' => 'string',
+                    'optional' => true,
+                    'infix' => true,
+                    'sort' => true
+                ],
+                [
+                    'name' => 'title_synonyms',
+                    'type' => 'string[]',
+                    'optional' => true,
+                    'infix' => true,
+                    'sort' => false
+                ]
+            ]
+        ];
+    }
+
+    /** @noinspection PhpUnused */
+    public function getThemesAttribute()
+    {
+        $result = [];
+        if (array_key_exists("themes", $this->attributes)) {
+            $result = $this->attributes["themes"];
+        }
+
+        return $result;
     }
 
     public function typesenseQueryBy(): array
@@ -110,12 +264,13 @@ class Manga extends JikanApiSearchableModel
             'title_english_transformed',
             'title_japanese',
             'title_japanese_transformed',
+            'title_synonyms',
         ];
     }
 
     public function getTypeSenseQueryByWeights(): string|null
     {
-        return "2,2,1,1,2,2";
+        return "2,2,1,1,2,2,1";
     }
 
     /**
@@ -134,5 +289,10 @@ class Manga extends JikanApiSearchableModel
                 "direction" => "desc"
             ],
         ];
+    }
+
+    protected static function newFactory()
+    {
+        return App::make(MangaFactory::class);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace App\Filters;
 
+use Illuminate\Support\Str;
+
 trait FilterResolver
 {
     private function resolve($filterName, $values)
@@ -16,6 +18,10 @@ trait FilterResolver
 
     private function resolveCustomFilter($filterName, $values)
     {
+        $filterMethodName = "filterBy" . ucfirst(Str::camel($filterName));
+        if (method_exists($this, $filterMethodName)) {
+            $filterName = $filterMethodName;
+        }
         return $this->getClosure($this->makeCallable($filterName), $values);
     }
 
@@ -26,7 +32,7 @@ trait FilterResolver
 
     private function isCustomFilter($filterName)
     {
-        return method_exists($this, $filterName);
+        return method_exists($this, $filterName) || method_exists($this, "filterBy" . ucfirst(Str::camel($filterName)));
     }
 
     private function getClosure($callable, $values)

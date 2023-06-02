@@ -4,6 +4,7 @@ namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jikan\Request\Genre\AnimeGenresRequest;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Magazine
@@ -11,7 +12,9 @@ use Jikan\Request\Genre\AnimeGenresRequest;
  */
 class GenreAnime extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use HasFactory;
+
+    protected array $filters = [];
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +22,8 @@ class GenreAnime extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'name', 'url', 'count'
+        'mal_id', 'name', 'url', 'count',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -57,7 +61,7 @@ class GenreAnime extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
+            'mal_id' => (int) $this->mal_id,
             'name' => $this->name,
             'count' => $this->count
         ];

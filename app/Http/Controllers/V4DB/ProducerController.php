@@ -2,19 +2,12 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
-use App\Http\Resources\V4\ExternalLinksResource;
-use App\Producers;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\QueryBuilder\SearchQueryBuilderProducer;
-use App\Http\Resources\V4\AnimeCollection;
-use App\Http\Resources\V4\ProducerCollection;
+use App\Dto\ProducerExternalLookupCommand;
+use App\Dto\ProducerFullLookupCommand;
+use App\Dto\ProducerLookupCommand;
 use Illuminate\Http\Request;
-use Jikan\Model\Producer\Producer;
-use MongoDB\BSON\UTCDateTime;
 
-class ProducerController extends ControllerWithQueryBuilderProvider
+class ProducerController extends Controller
 {
     /**
      *  @OA\Get(
@@ -45,62 +38,9 @@ class ProducerController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(ProducerLookupCommand $command)
     {
-        $results = Producers::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Producers::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Producers::query()
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Producers::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Producers::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\ProducerResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -132,62 +72,9 @@ class ProducerController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function full(Request $request, int $id)
+    public function full(ProducerFullLookupCommand $command)
     {
-        $results = Producers::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Producers::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Producers::query()
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Producers::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Producers::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\ProducerFullResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -216,61 +103,8 @@ class ProducerController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function external(Request $request, int $id)
+    public function external(ProducerExternalLookupCommand $command)
     {
-        $results = Producers::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Producers::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Producers::query()
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Producers::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Producers::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new ExternalLinksResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 }

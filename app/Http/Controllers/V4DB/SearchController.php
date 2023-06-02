@@ -2,39 +2,22 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Http\QueryBuilder\SearchQueryBuilderUsers;
-use App\Http\Resources\V4\AnimeCollection;
-use App\Http\Resources\V4\CharacterCollection;
-use App\Http\Resources\V4\ClubCollection;
-use App\Http\Resources\V4\MangaCollection;
-use App\Http\Resources\V4\PersonCollection;
-use App\Http\Resources\V4\ProducerCollection;
+use App\Dto\AnimeSearchCommand;
+use App\Dto\CharactersSearchCommand;
+use App\Dto\ClubSearchCommand;
+use App\Dto\MangaSearchCommand;
+use App\Dto\PeopleSearchCommand;
+use App\Dto\ProducersSearchCommand;
+use App\Dto\UserByIdLookupCommand;
+use App\Dto\UsersSearchCommand;
 use App\Http\Resources\V4\ResultsResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\User\UsernameByIdRequest;
+use OpenApi\Annotations as OA;
 
-class SearchController extends ControllerWithQueryBuilderProvider
+class SearchController extends Controller
 {
-    /**
-     *  @OA\Parameter(
-     *    name="page",
-     *    in="query",
-     *    @OA\Schema(type="integer")
-     *  ),
-     *  @OA\Parameter(
-     *    name="limit",
-     *    in="query",
-     *    @OA\Schema(type="integer")
-     *  ),
-     *
-     * @OA\Schema(
-     *   schema="search_query_sort",
-     *   description="Characters Search Query Sort",
-     *   type="string",
-     *   enum={"desc","asc"}
-     * )
-     */
 
     /**
      *  @OA\Get(
@@ -42,6 +25,8 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     operationId="getAnimeSearch",
      *     tags={"anime"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
@@ -163,9 +148,9 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function anime(Request $request)
+    public function anime(AnimeSearchCommand $request)
     {
-        return $this->preparePaginatedResponse(AnimeCollection::class, "anime", $request);
+        return $this->mediator->send($request);
     }
 
     /**
@@ -174,6 +159,8 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     operationId="getMangaSearch",
      *     tags={"manga"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
@@ -289,9 +276,9 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function manga(Request $request)
+    public function manga(MangaSearchCommand $request)
     {
-        return $this->preparePaginatedResponse(MangaCollection::class, "manga", $request);
+        return $this->mediator->send($request);
     }
 
     /**
@@ -339,9 +326,9 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function people(Request $request)
+    public function people(PeopleSearchCommand $request)
     {
-        return $this->preparePaginatedResponse(PersonCollection::class, "people", $request);
+        return $this->mediator->send($request);
     }
 
     /**
@@ -391,9 +378,9 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function character(Request $request)
+    public function character(CharactersSearchCommand $request)
     {
-        return $this->preparePaginatedResponse(CharacterCollection::class, "character", $request);
+        return $this->mediator->send($request);
     }
 
     /**
@@ -487,35 +474,9 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *      },
      *  ),
      */
-    public function users(Request $request)
+    public function users(UsersSearchCommand $request)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = $this->jikan->getUserSearch(
-                SearchQueryBuilderUsers::query(
-                    $request
-                )
-            );
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($request);
     }
 
     /**
@@ -549,31 +510,9 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *
      *
      */
-    public function userById(Request $request, int $id)
+    public function userById(UserByIdLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = ['results'=>$this->jikan->getUsernameById(new UsernameByIdRequest($id))];
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -635,20 +574,12 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function clubs(Request $request)
+    public function clubs(ClubSearchCommand $request)
     {
-        return $this->preparePaginatedResponse(ClubCollection::class, "club", $request);
+        return $this->mediator->send($request);
     }
 
     /**
-     *
-     * @OA\Schema(
-     *   schema="producers_query_orderby",
-     *   description="Producers Search Query Order By",
-     *   type="string",
-     *   enum={"mal_id", "count", "favorites", "established"}
-     * )
-     *
      *  @OA\Get(
      *     path="/producers",
      *     operationId="getProducers",
@@ -696,8 +627,8 @@ class SearchController extends ControllerWithQueryBuilderProvider
      *     ),
      * )
      */
-    public function producers(Request $request)
+    public function producers(ProducersSearchCommand $request)
     {
-        return $this->preparePaginatedResponse(ProducerCollection::class, "producers", $request);
+        return $this->mediator->send($request);
     }
 }

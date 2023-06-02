@@ -2,11 +2,17 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
+use App\Enums\ClubCategoryEnum;
+use App\Enums\ClubTypeEnum;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Club\ClubRequest;
 
 class Club extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use FilteredByLetter, HasFactory;
+
+    protected array $filters = ["order_by", "sort", "letter", "category", "type"];
 
     /**
      * The attributes that are mass assignable.
@@ -14,7 +20,7 @@ class Club extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'title', 'members_count', 'pictures_count', 'category', 'created', 'type', 'staff', 'anime_relations', 'manga_relations', 'character_relations'
+        'mal_id', 'url', 'images', 'name', 'members', 'category', 'created', 'access', 'anime', 'manga', 'created_at', 'updated_at', 'characters', 'staff'
     ];
 
     /**
@@ -37,8 +43,32 @@ class Club extends JikanApiSearchableModel
      * @var array
      */
     protected $hidden = [
-        '_id', 'request_hash', 'expiresAt', 'images'
+        '_id', 'request_hash', 'expiresAt'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "name";
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByCategory(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubCategoryEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("category", $value->label);
+    }
+
+    /** @noinspection PhpUnused */
+    public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("access", $value->label);
+    }
+
+    /** @noinspection PhpUnused */
+    public function getImagesAttribute()
+    {
+        return $this->attributes['images'];
+    }
 
     public static function scrape(int $id)
     {
@@ -55,16 +85,17 @@ class Club extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
-            'title' => $this->title,
+            'mal_id' => (int) $this->mal_id,
+            'name' => $this->name,
             'category' => $this->category,
             'created' => $this->convertToTimestamp($this->created),
-            'type' => $this->type
+            'access' => $this->type,
+            'members' => $this->members
         ];
     }
 
     public function typesenseQueryBy(): array
     {
-        return ['title'];
+        return ['name'];
     }
 }

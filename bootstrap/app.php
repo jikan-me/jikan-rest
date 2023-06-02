@@ -5,6 +5,7 @@ use App\Providers\SerializerFactory;
 use PackageVersions\Versions;
 
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../app/Support/helpers.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -40,7 +41,6 @@ $app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config'
 $app->instance('path.storage', app()->basePath() . DIRECTORY_SEPARATOR . 'storage');
 
 $app->withEloquent();
-
 $app->configure('swagger-lume');
 $app->configure('scout');
 
@@ -82,11 +82,17 @@ if (env('INSIGHTS', false)) {
     $globalMiddleware[] = \App\Http\Middleware\Insights::class;
 }
 
+if (env('CORS_MIDDLEWARE', false)) {
+    $app->configure('cors');
+    $globalMiddleware[] = \App\Http\Middleware\CorsMiddleware::class;
+}
+
 $app->middleware($globalMiddleware);
 
 $app->routeMiddleware([
     'microcaching' => \App\Http\Middleware\MicroCaching::class,
     'source-health-monitor' => SourceHeartbeatMonitor::class,
+    'cache-ttl' => \App\Http\Middleware\EndpointCacheTtlMiddleware::class
 ]);
 
 /*
@@ -104,18 +110,19 @@ $app->routeMiddleware([
 $app->configure('cache');
 $app->configure('database');
 $app->configure('queue');
-$app->configure('controller-to-table-mapping');
-$app->configure('controller');
 $app->configure('roadrunner');
+$app->configure('data');
+$app->configure('jikan');
 
 $app->register(\pushrbx\LumenRoadRunner\ServiceProvider::class);
 $app->register(\SwaggerLume\ServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(\App\Providers\SourceHeartbeatProvider::class);
 $app->register(\App\Providers\EventServiceProvider::class);
-$app->register(Illuminate\Database\Eloquent\LegacyFactoryServiceProvider::class);
 $app->register(\App\Providers\AppServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
+$app->register(Spatie\LaravelData\LaravelDataServiceProvider::class);
+$app->register(\App\Providers\JikanEnumServiceProvider::class);
 
 if (env('REPORTING') && strtolower(env('REPORTING_DRIVER')) === 'sentry') {
     $app->register(\Sentry\Laravel\ServiceProvider::class);
@@ -135,17 +142,18 @@ $httpClient = \Symfony\Component\HttpClient\HttpClient::create(
 );
 $app->instance('HttpClient', $httpClient);
 
-$jikan = new \Jikan\MyAnimeList\MalClient(app('HttpClient'));
+$jikan = new \Jikan\MyAnimeList\MalClient($httpClient);
 $app->instance('JikanParser', $jikan);
 
 $app->instance('SerializerV4', SerializerFactory::createV4());
 $app->register(Laravel\Scout\ScoutServiceProvider::class);
 
-// we support TypeSense and ElasticSearch as search indexes.
+// we support TypeSense search index.
 if (env("SCOUT_DRIVER") === "typesense") {
     // in this case the TYPESENSE_HOST env var should be set too
     $app->register(\Typesense\LaravelTypesense\TypesenseServiceProvider::class);
 }
+// experimental support for ElasticSearch search index
 if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
     // in this case the ELASTICSEARCH_HOST env var should be set too
     $app->register(\Matchish\ScoutElasticSearch\ElasticSearchServiceProvider::class);
@@ -166,6 +174,7 @@ if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEn
 $commonMiddleware = [
     'source-health-monitor',
     'microcaching',
+    'cache-ttl'
 ];
 
 

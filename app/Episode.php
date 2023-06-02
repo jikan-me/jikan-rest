@@ -2,16 +2,13 @@
 
 namespace App;
 
-use App\Http\HttpHelper;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Helper\Media;
-use Jikan\Helper\Parser;
 use Jikan\Jikan;
-use Jikan\Model\Common\YoutubeMeta;
-use Jikan\Request\Anime\AnimeRequest;
 
 class Episode extends Model
 {
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +16,8 @@ class Episode extends Model
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'title', 'title_japanese', 'title_romanji', 'aired', 'filler', 'recap', 'video_url', 'forum_url', 'synopsis'
+        'mal_id', 'title', 'title_japanese', 'title_romanji', 'aired', 'filler', 'recap', 'video_url', 'forum_url', 'synopsis',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -34,7 +32,7 @@ class Episode extends Model
      *
      * @var string
      */
-    protected $table = 'anime_episodes';
+    protected $table = 'anime_episode';
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -42,6 +40,7 @@ class Episode extends Model
      * @var array
      */
     protected $hidden = [
+        '_id', 'request_hash'
     ];
 
 }

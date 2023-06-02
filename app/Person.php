@@ -2,12 +2,15 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
 use Jikan\Jikan;
 use Jikan\Request\Person\PersonRequest;
 use function Symfony\Component\Translation\t;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Person extends JikanApiSearchableModel
 {
+    use HasFactory, FilteredByLetter;
     protected array $filters = ["order_by", "sort"];
 
     /**
@@ -16,7 +19,10 @@ class Person extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'website_url', 'name', 'given_name', 'family_name', 'alternative_names', 'birthday', 'member_favorites', 'about', 'voice_acting_roles', 'anime_staff_positions', 'published_manga'
+        'mal_id', 'url', 'images', 'website_url', 'name', 'given_name', 'family_name',
+        'alternative_names', 'birthday', 'member_favorites', 'about', 'voice_acting_roles',
+        'anime_staff_positions', 'published_manga',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -39,14 +45,26 @@ class Person extends JikanApiSearchableModel
      * @var array
      */
     protected $hidden = [
-        '_id', 'images', 'member_favorites'
+        '_id', 'member_favorites'
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "name";
+    }
+
+    /** @noinspection PhpUnused */
     public function getFavoritesAttribute()
     {
         return $this->attributes['member_favorites'];
     }
 
+    /** @noinspection PhpUnused */
+    public function getImagesAttribute()
+    {
+        return $this->attributes['images'];
+    }
 
     public static function scrape(int $id)
     {
@@ -67,11 +85,13 @@ class Person extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
+            'mal_id' => (int) $this->mal_id,
             'name' => $this->name,
             'given_name' => $this->given_name,
             'family_name' => $this->family_name,
-            'alternate_names' => $this->alternate_names
+            'alternate_names' => $this->alternate_names,
+            'member_favorites' => $this->member_favorites,
+            'birthday' => $this->convertToTimestamp($this->birthday)
         ];
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Env;
 
 class HttpHelper
 {
@@ -29,7 +30,7 @@ class HttpHelper
     public static function requestCacheExpiry(string $requestType): int
     {
         $requestType = strtoupper($requestType);
-        return (int) (env("CACHE_{$requestType}_EXPIRE") ?? env('CACHE_DEFAULT_EXPIRE'));
+        return (int) (Env::get("CACHE_{$requestType}_EXPIRE") ?? Env::get('CACHE_DEFAULT_EXPIRE'));
     }
 
     public static function requestAPIVersion(Request $request) : int
@@ -37,32 +38,16 @@ class HttpHelper
         return (int) str_replace('v', '', $request->segment(1));
     }
 
-    public static function serializeEmptyObjects(string $requestType, array $data)
+    public static function serializeEmptyObjects(string $requestType, array $data): array
     {
         if (!($requestType === 'anime' || $requestType === 'manga')) {
             return $data;
         }
 
-        if (isset($data['related']) && \count($data['related']) === 0) {
-            $data['related'] = new \stdClass();
-        }
-
-        if (isset($data['related'])) {
-            $related = $data['related'];
-            $data['related'] = [];
-
-            foreach ($related as $relation => $items) {
-                $data['related'][] = [
-                    'relation' => $relation,
-                    'entry' => $items
-                ];
-            }
-        }
-
-        return $data;
+        return self::serializeEmptyObjectsControllerLevel($data);
     }
 
-    public static function serializeEmptyObjectsControllerLevel(array $data)
+    public static function serializeEmptyObjectsControllerLevel(array $data): array
     {
         if (isset($data['related']) && \count($data['related']) === 0) {
             $data['related'] = new \stdClass();
@@ -85,7 +70,7 @@ class HttpHelper
 
     public static function getRouteName(Request $request) : string
     {
-        $route = explode('\\', $request->route()[1]['uses']);
+        $route = explode('\\', $request->route()[1]['uses'] ?? 'App\Undefined');
 
         return end($route);
     }
@@ -93,11 +78,5 @@ class HttpHelper
     public static function getRequestUriHash(Request $request) : string
     {
         return sha1($request->getRequestUri());
-    }
-
-    public static function getRouteTable($request) : string
-    {
-        $routeName = HttpHelper::getRouteName($request);
-        return config("controller.{$routeName}.table_name");
     }
 }

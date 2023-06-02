@@ -69,7 +69,7 @@ class AnimeIndexer extends Command
 
         $this->info("Info: AnimeIndexer uses seanbreckenridge/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
 
-        if ($failed && Storage::exists('indexer/indexer_anime.save')) {
+        if ($failed && Storage::exists('indexer/indexer_anime.failed')) {
             $this->ids = $this->loadFailedMalIds();
         }
 

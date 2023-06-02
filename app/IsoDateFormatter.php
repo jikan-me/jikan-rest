@@ -13,6 +13,7 @@ trait IsoDateFormatter
                 $dt[1] ?? 1,
                 $dt[2] ?? 1
             )
-            ->format(\DateTimeInterface::ISO8601);
+            ->setTime(0, 0)
+            ->format(DATE_ATOM);
     }
 }

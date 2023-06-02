@@ -69,7 +69,7 @@ class MangaIndexer extends Command
 
         $this->info("Info: MangaIndexer uses seanbreckenridge/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
 
-        if ($failed && Storage::exists('indexer/indexer_manga.save')) {
+        if ($failed && Storage::exists('indexer/indexer_manga.failed')) {
             $this->ids = $this->loadFailedMalIds();
         }
 

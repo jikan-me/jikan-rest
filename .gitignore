@@ -11,3 +11,9 @@ composer.phar
 /storage/app/failovers.json
 /storage/app/source_failover_last_downtime
 /storage/app/source_failover.lock
+# Temp dirs & trash
+/temp
+/tmp
+/coverage
+.DS_Store
+*.cache

@@ -2,12 +2,16 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
 use Jikan\Jikan;
 use Jikan\Request\Character\CharacterRequest;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Character extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use HasFactory, FilteredByLetter;
+
+    protected array $filters = ["order_by", "sort", "letter"];
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +19,9 @@ class Character extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'name', 'name_kanji', 'nicknames', 'about', 'member_favorites', 'images', 'animeography', 'mangaography', 'voice_actors'
+        'mal_id', 'url', 'name', 'name_kanji', 'nicknames', 'about', 'member_favorites',
+        'images', 'animeography', 'mangaography', 'voice_actors',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -38,12 +44,25 @@ class Character extends JikanApiSearchableModel
      * @var array
      */
     protected $hidden = [
-        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'images', 'member_favorites'
+        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'member_favorites'
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "name";
+    }
+
+    /** @noinspection PhpUnused */
     public function getFavoritesAttribute()
     {
         return $this->attributes['member_favorites'];
+    }
+
+    /** @noinspection PhpUnused */
+    public function getImagesAttribute()
+    {
+        return $this->attributes['images'];
     }
 
     public static function scrape(int $id)
@@ -60,7 +79,7 @@ class Character extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
+            'mal_id' => (int) $this->mal_id,
             'name' => $this->name,
             'name_kanji' => $this->name_kanji,
             'member_favorites' => $this->member_favorites

@@ -2,39 +2,20 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Helpers\ScraperHelper;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\QueryBuilder\Scraper\Query;
-use App\Http\QueryBuilder\Scraper\QueryResolver;
-use App\Http\QueryBuilder\Scraper\ScraperHandler;
-use App\Http\Resources\V4\ExternalLinksResource;
-use App\Http\Resources\V4\MangaRelationsResource;
-use App\Http\Resources\V4\ResultsResource;
-use App\Http\Resources\V4\ReviewsResource;
-use App\Http\Resources\V4\RecommendationsResource;
-use App\Http\Resources\V4\MoreInfoResource;
-use App\Http\Resources\V4\ForumResource;
-use App\Http\Resources\V4\MangaCharactersResource;
-use App\Http\Resources\V4\MangaStatisticsResource;
-use App\Http\Resources\V4\PicturesResource;
-use App\Http\Validation\ValidationTypeEnum;
-use App\Manga;
+use App\Dto\MangaCharactersLookupCommand;
+use App\Dto\MangaExternalLookupCommand;
+use App\Dto\MangaForumLookupCommand;
+use App\Dto\MangaFullLookupCommand;
+use App\Dto\MangaLookupCommand;
+use App\Dto\MangaMoreInfoLookupCommand;
+use App\Dto\MangaNewsLookupCommand;
+use App\Dto\MangaPicturesLookupCommand;
+use App\Dto\MangaRecommendationsLookupCommand;
+use App\Dto\MangaRelationsLookupCommand;
+use App\Dto\MangaReviewsLookupCommand;
+use App\Dto\MangaStatsLookupCommand;
+use App\Dto\MangaUserUpdatesLookupCommand;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\Exception\BadResponseException;
-use Jikan\Helper\Constants;
-use Jikan\Request\Manga\MangaCharactersRequest;
-use Jikan\Request\Manga\MangaForumRequest;
-use Jikan\Request\Manga\MangaMoreInfoRequest;
-use Jikan\Request\Manga\MangaNewsRequest;
-use Jikan\Request\Manga\MangaPicturesRequest;
-use Jikan\Request\Manga\MangaRecentlyUpdatedByUsersRequest;
-use Jikan\Request\Manga\MangaRecommendationsRequest;
-use Jikan\Request\Manga\MangaReviewsRequest;
-use Jikan\Request\Manga\MangaStatsRequest;
-use MongoDB\BSON\UTCDateTime;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class MangaController extends Controller
 {
@@ -68,62 +49,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function full(Request $request, int $id)
+    public function full(MangaFullLookupCommand $command)
     {
-        $results = Manga::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Manga::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Manga::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Manga::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Manga::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\MangaFullResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -156,62 +84,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(MangaLookupCommand $command)
     {
-        $results = Manga::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Manga::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Manga::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Manga::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Manga::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\MangaResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -240,31 +115,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function characters(Request $request, int $id)
+    public function characters(MangaCharactersLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $manga = ['characters' => $this->jikan->getMangaCharacters(new MangaCharactersRequest($id))];
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new MangaCharactersResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -305,32 +158,9 @@ class MangaController extends Controller
      *      }
      *  )
      */
-    public function news(Request $request, int $id)
+    public function news(MangaNewsLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $manga = $this->jikan->getNewsList(new MangaNewsRequest($id, $page));
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -367,37 +197,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function forum(Request $request, int $id)
+    public function forum(MangaForumLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $topic = $request->get('topic');
-
-            if ($request->get('filter') != null) {
-                $topic = $request->get('filter');
-            }
-
-            $manga = ['topics' => $this->jikan->getMangaForum(new MangaForumRequest($id, $topic))];
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ForumResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -439,31 +241,9 @@ class MangaController extends Controller
      *     )
      * )
      */
-    public function pictures(Request $request, int $id)
+    public function pictures(MangaPicturesLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $manga = ['pictures' => $this->jikan->getMangaPictures(new MangaPicturesRequest($id))];
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new PicturesResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -492,31 +272,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function stats(Request $request, int $id)
+    public function stats(MangaStatsLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $manga = $this->jikan->getMangaStats(new MangaStatsRequest($id));
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new MangaStatisticsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -545,31 +303,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function moreInfo(Request $request, int $id)
+    public function moreInfo(MangaMoreInfoLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $manga = ['moreinfo' => $this->jikan->getMangaMoreInfo(new MangaMoreInfoRequest($id))];
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new MoreInfoResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -598,31 +334,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function recommendations(Request $request, int $id)
+    public function recommendations(MangaRecommendationsLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $manga = ['recommendations' => $this->jikan->getMangaRecommendations(new MangaRecommendationsRequest($id))];
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new RecommendationsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -653,32 +367,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function userupdates(Request $request, int $id)
+    public function userupdates(MangaUserUpdatesLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $manga = $this->jikan->getMangaRecentlyUpdatedByUsers(new MangaRecentlyUpdatedByUsersRequest($id, $page));
-            $response = \json_decode($this->serializer->serialize($manga, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -710,52 +401,9 @@ class MangaController extends Controller
      * )
      * @throws \Exception
      */
-    public function reviews(Request $request, int $id)
+    public function reviews(MangaReviewsLookupCommand $command)
     {
-        $validation = $this->validate($request, [
-            'page' => 'nullable|numeric',
-            'sort' => 'nullable|string'
-        ]);
-
-        $page = $request->get('page') ?? 1;
-        $spoilers = $request->get('spoilers') ?? false;
-        $preliminary = $request->get('preliminary') ?? false;
-        $sort = $request->get('sort');
-
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-
-            $response = ScraperHelper::getSerializedJSON(
-                app('JikanParser')
-                    ->getMangaReviews(
-                        new MangaReviewsRequest(
-                            $id,
-                            $page,
-                            in_array($sort, [Constants::REVIEWS_SORT_MOST_VOTED, Constants::REVIEWS_SORT_NEWEST, Constants::REVIEWS_SORT_OLDEST]) ? $sort : Constants::REVIEWS_SORT_MOST_VOTED,
-                            $spoilers,
-                            $preliminary
-                        )
-                    )
-            );
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ReviewsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -791,58 +439,9 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function relations(Request $request, int $id)
+    public function relations(MangaRelationsLookupCommand $command)
     {
-        $results = Manga::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Manga::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Manga::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Manga::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Manga::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-
-        $response = (new MangaRelationsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -871,56 +470,8 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function external(Request $request, int $id)
+    public function external(MangaExternalLookupCommand $command)
     {
-        $results = Manga::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Manga::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Manga::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Manga::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Manga::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new ExternalLinksResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 }

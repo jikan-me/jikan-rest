@@ -4,6 +4,7 @@ namespace App;
 use Jikan\Helper\Parser;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Searchable;
+use MongoDB\BSON\UTCDateTime;
 
 trait JikanSearchable
 {
@@ -30,8 +31,14 @@ trait JikanSearchable
         }, $field);
     }
 
-    protected function convertToTimestamp(?string $datetime): int
+    protected function convertToTimestamp(mixed $datetime): int
     {
+        if ($datetime instanceof \DateTimeInterface) {
+            return $datetime->getTimestamp();
+        }
+        if ($datetime instanceof UTCDateTime) {
+            return $datetime->toDateTime()->getTimestamp();
+        }
         return $datetime ? Parser::parseDate($datetime)->getTimestamp() : 0;
     }
 

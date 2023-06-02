@@ -11,16 +11,17 @@
       }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-json": "*",
         "ext-mongodb": "*",
         "amphp/http-client": "^4.6",
         "danielmewes/php-rql": "dev-master",
         "darkaonline/swagger-lume": "^9.0",
+        "doctrine/annotations": "1.14.2",
         "fabpot/goutte": "^4.0",
         "flipbox/lumen-generator": "^9.0",
         "illuminate/redis": "^9.0",
-        "jenssegers/mongodb": "^3.8",
+        "jenssegers/mongodb": "^3.9",
         "jikan-me/jikan": "^4",
         "jms/serializer": "^3.0",
         "laravel/legacy-factories": "^1.1",
@@ -31,35 +32,46 @@
         "mirazmac/dotenvwriter": "^0.1.0",
         "ocramius/package-versions": "^2.5",
         "predis/predis": "^1.1",
-        "pushrbx/lumen-roadrunner": "dev-master",
+        "pushrbx/lumen-roadrunner": "5.9.1",
         "sentry/sentry-laravel": "^2.8",
+        "spatie/laravel-data": "^2.2",
+        "spatie/laravel-enum": "^3.0",
         "symfony/yaml": "^4.1",
         "typesense/laravel-scout-typesense-driver": "^5.0",
         "vlucas/phpdotenv": "^5",
         "zircote/swagger-php": "3.*"
     },
     "require-dev": {
-        "mockery/mockery": "^1.3.1",
-        "phpunit/phpunit": "^8.5"
+        "fakerphp/faker": "^1.21",
+        "haydenpierce/class-finder": "^0.4.4",
+        "mockery/mockery": "^1.5.1",
+        "phpunit/phpunit": "^9.5.28"
     },
     "autoload": {
-        "classmap": [
-            "database/seeds",
-            "database/factories"
-        ],
         "psr-4": {
-            "App\\": "app/"
-        }
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/"
+        },
+        "files": [
+          "app/Support/helpers.php"
+        ]
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/",
-            "database/"
-        ]
+        "psr-4": {
+          "Tests\\": ["tests/"]
+        }
     },
     "scripts": {
         "post-root-package-install": [
             "php -r \"copy('.env.dist', '.env');\""
+        ],
+        "phpunit": "@php ./vendor/bin/phpunit --no-coverage",
+        "phpunit-cover": "@php ./vendor/bin/phpunit",
+        "test": [
+          "@phpunit"
+        ],
+        "test-cover": [
+          "@phpunit-cover"
         ]
     },
     "minimum-stability": "dev",
@@ -67,6 +79,9 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }

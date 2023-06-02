@@ -5,6 +5,7 @@ use Illuminate\Container\Container;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Laravel\Scout\Contracts\PaginatesEloquentModels;
+use Typesense\LaravelTypesense\Engines\TypesenseEngine;
 
 /** @mixin \Laravel\Scout\Builder */
 class ScoutBuilderMixin
@@ -18,6 +19,7 @@ class ScoutBuilderMixin
     {
         return function (int|null $perPage = null, string $pageName = 'page', int|null $page = null) {
             /** @var \Laravel\Scout\Builder $this */
+            /** @var TypesenseEngine $engine */
             $engine = $this->engine();
             if ($engine instanceof PaginatesEloquentModels) {
                 return $engine->paginate($this, $perPage, $page)->appends('query', $this->query);
@@ -45,7 +47,7 @@ class ScoutBuilderMixin
             // Notice forPage call here. We use that to only get the records for the current page from db.
             $results = $this->model->newCollection($engine->map(
                 $this, $rawResults, $this->model
-            )->forPage($page, $perPage)->all());
+            )->forPage($page, $perPage)->values()->all());
 
             return Container::getInstance()->makeWith(LengthAwarePaginator::class, [
                 'items' => $results,

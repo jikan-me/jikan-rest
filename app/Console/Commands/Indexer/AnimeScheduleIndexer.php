@@ -37,12 +37,11 @@ class AnimeScheduleIndexer extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
      */
     public function handle()
     {
 
-        echo "Note: AnimeScheduleIndexer makes sure anime currently airing are upto update so the schedules endpoint returns fresh information\n\n";
+        echo "Note: AnimeScheduleIndexer makes sure anime currently airing are up to date so the schedules endpoint returns fresh information\n\n";
 
         /**
          * Schedule
@@ -80,10 +79,6 @@ class AnimeScheduleIndexer extends Command
             sleep(3); // prevent rate-limit
 
             echo "Updating {$i}/{$itemCount} \r";
-            try {
-            } catch (\Exception $e) {
-                echo "[SKIPPED] Failed to fetch {$url}";
-            }
             $i++;
         }
 

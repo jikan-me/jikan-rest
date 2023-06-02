@@ -2,12 +2,14 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use App\Concerns\FilteredByLetter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Producer\ProducerRequest;
 
 class Producers extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use FilteredByLetter, HasFactory;
+    protected array $filters = ["order_by", "sort", "letter"];
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +17,8 @@ class Producers extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'external', 'count'
+        'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'external', 'count',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -33,6 +36,12 @@ class Producers extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'request_hash', 'expiresAt'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "titles.0.title";
+    }
 
     public static function scrape(int $id)
     {
@@ -52,9 +61,12 @@ class Producers extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
-            'url' => !is_null($this->url) ? collect(explode('/', $this->url))->last() : '',
-            'titles' => !is_null($this->titles) ? $this->titles : ['']
+            'mal_id' => (int) $this->mal_id,
+            'url' => !is_null($this->url) ? $this->url : '',
+            'titles' => !is_null($this->titles) ? collect($this->titles)->map(fn ($x) => $x["title"])->toArray() : [''],
+            'established' => $this->convertToTimestamp($this->established),
+            'favorites' => $this->favorites,
+            'count' => $this->count
         ];
     }
 

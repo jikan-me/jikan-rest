@@ -2,15 +2,8 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\Resources\V4\ResultsResource;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\Helper\Constants;
-use Jikan\Request\Recommendations\RecentRecommendationsRequest;
-use Jikan\Request\Reviews\RecentReviewsRequest;
-use MongoDB\BSON\UTCDateTime;
+use App\Dto\QueryAnimeRecommendationsCommand;
+use App\Dto\QueryMangaRecommendationsCommand;
 
 class RecommendationsController extends Controller
 {
@@ -37,33 +30,9 @@ class RecommendationsController extends Controller
      * ),
      *
      */
-    public function anime(Request $request)
+    public function anime(QueryAnimeRecommendationsCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getRecentRecommendations(new RecentRecommendationsRequest(Constants::RECENT_RECOMMENDATION_ANIME, $page));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -88,31 +57,8 @@ class RecommendationsController extends Controller
      * ),
      *
      */
-    public function manga(Request $request)
+    public function manga(QueryMangaRecommendationsCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getRecentRecommendations(new RecentRecommendationsRequest(Constants::RECENT_RECOMMENDATION_MANGA, $page));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 }

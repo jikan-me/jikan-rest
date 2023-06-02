@@ -1,3 +1,4 @@
 !.gitignore
 failovers.json
 source_failover.lock
+jikan_model_classes.json

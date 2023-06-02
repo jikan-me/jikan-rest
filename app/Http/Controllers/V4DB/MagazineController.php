@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Dto\MagazineSearchCommand;
 use App\Http\Resources\V4\MagazineCollection;
-use Illuminate\Http\Request;
 
-class MagazineController extends ControllerWithQueryBuilderProvider
+class MagazineController extends Controller
 {
     /**
      *  @OA\Get(
@@ -54,15 +54,10 @@ class MagazineController extends ControllerWithQueryBuilderProvider
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
-     *  @OA\Schema(
-     *    schema="magazines_query_orderby",
-     *    description="Order by magazine data",
-     *    type="string",
-     *    enum={"mal_id", "name", "count"}
-     *  )
+     *
      */
-    public function main(Request $request): MagazineCollection
+    public function main(MagazineSearchCommand $command): MagazineCollection
     {
-        return $this->preparePaginatedResponse(MagazineCollection::class, "magazine", $request);
+        return $this->mediator->send($command);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Concerns\FilteredByLetter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Jikan;
 use Jikan\Request\Magazine\MagazinesRequest;
 
@@ -11,7 +13,8 @@ use Jikan\Request\Magazine\MagazinesRequest;
  */
 class Magazine extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use FilteredByLetter, HasFactory;
+    protected array $filters = ["order_by", "sort", "letter"];
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +22,8 @@ class Magazine extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'name', 'url', 'count'
+        'mal_id', 'name', 'url', 'count',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -29,7 +33,6 @@ class Magazine extends JikanApiSearchableModel
      */
     protected $table = 'magazines';
 
-
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -38,6 +41,12 @@ class Magazine extends JikanApiSearchableModel
     protected $hidden = [
         '_id', 'expiresAt'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "name";
+    }
 
     /**
      * @return array
@@ -57,7 +66,7 @@ class Magazine extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
+            'mal_id' => (int) $this->mal_id,
             'name' => $this->name,
             'count' => $this->count
         ];

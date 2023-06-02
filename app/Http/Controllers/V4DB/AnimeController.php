@@ -2,45 +2,27 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\Resources\V4\AnimeCharactersResource;
-use App\Http\Resources\V4\AnimeEpisodeResource;
-use App\Http\Resources\V4\ExternalLinksResource;
-use App\Http\Resources\V4\AnimeRelationsResource;
-use App\Http\Resources\V4\AnimeThemesResource;
-use App\Http\Resources\V4\MoreInfoResource;
-use App\Http\Resources\V4\PicturesResource;
-use App\Http\Resources\V4\RecommendationsResource;
-use App\Http\Resources\V4\ResultsResource;
-use App\Http\Resources\V4\AnimeStaffResource;
-use App\Http\Resources\V4\AnimeStatisticsResource;
-use App\Http\Resources\V4\StreamingLinksResource;
-use App\Http\Resources\V4\UserUpdatesResource;
-use App\Http\Resources\V4\AnimeVideosResource;
-use App\Http\Resources\V4\ForumResource;
+use App\Dto\AnimeCharactersLookupCommand;
+use App\Dto\AnimeEpisodeLookupCommand;
+use App\Dto\AnimeEpisodesLookupCommand;
+use App\Dto\AnimeExternalLookupCommand;
+use App\Dto\AnimeForumLookupCommand;
+use App\Dto\AnimeFullLookupCommand;
+use App\Dto\AnimeLookupCommand;
+use App\Dto\AnimeMoreInfoLookupCommand;
+use App\Dto\AnimeNewsLookupCommand;
+use App\Dto\AnimePicturesLookupCommand;
+use App\Dto\AnimeRecommendationsLookupCommand;
+use App\Dto\AnimeRelationsLookupCommand;
+use App\Dto\AnimeReviewsLookupCommand;
+use App\Dto\AnimeStaffLookupCommand;
+use App\Dto\AnimeStatsLookupCommand;
+use App\Dto\AnimeStreamingLookupCommand;
+use App\Dto\AnimeThemesLookupCommand;
+use App\Dto\AnimeUserUpdatesLookupCommand;
+use App\Dto\AnimeVideosEpisodesLookupCommand;
+use App\Dto\AnimeVideosLookupCommand;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\Helper\Constants;
-use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
-use Jikan\Request\Anime\AnimeEpisodeRequest;
-use Jikan\Request\Anime\AnimeEpisodesRequest;
-use Jikan\Request\Anime\AnimeForumRequest;
-use Jikan\Request\Anime\AnimeMoreInfoRequest;
-use Jikan\Request\Anime\AnimeNewsRequest;
-use Jikan\Request\Anime\AnimePicturesRequest;
-use Jikan\Request\Anime\AnimeRecentlyUpdatedByUsersRequest;
-use Jikan\Request\Anime\AnimeRecommendationsRequest;
-use Jikan\Request\Anime\AnimeRequest;
-use Jikan\Request\Anime\AnimeReviewsRequest;
-use Jikan\Request\Anime\AnimeStatsRequest;
-use Jikan\Request\Anime\AnimeVideosEpisodesRequest;
-use Jikan\Request\Anime\AnimeVideosRequest;
-use Laravel\Lumen\Http\ResponseFactory;
-use MongoDB\BSON\UTCDateTime;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnimeController extends Controller
 {
@@ -73,61 +55,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function full(Request $request, int $id)
+    public function full(AnimeFullLookupCommand $command)
     {
-        $results = Anime::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Anime::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Anime::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Anime::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\AnimeFullResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -159,61 +89,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function main(Request $request, int $id)
+    public function main(AnimeLookupCommand $command)
     {
-        $results = Anime::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Anime::scrape($id);
-
-            if (HttpHelper::hasError($response)) {
-                return HttpResponse::notFound($request);
-            }
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Anime::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Anime::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new \App\Http\Resources\V4\AnimeResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -242,31 +120,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function characters(Request $request, int $id)
+    public function characters(AnimeCharactersLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new AnimeCharactersResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -295,32 +151,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function staff(Request $request, int $id)
+    public function staff(AnimeStaffLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getAnimeCharactersAndStaff(new AnimeCharactersAndStaffRequest($id));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new AnimeStaffResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -371,7 +204,8 @@ class AnimeController extends Controller
      *                   @OA\Property(
      *                       property="url",
      *                       type="string",
-     *                       description="MyAnimeList URL"
+     *                       description="MyAnimeList URL. This is the URL of the episode's video. If there is no video url, this will be null.",
+     *                       nullable=true
      *                   ),
      *                   @OA\Property(
      *                       property="title",
@@ -424,32 +258,9 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function episodes(Request $request, int $id)
+    public function episodes(AnimeEpisodesLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getAnimeEpisodes(new AnimeEpisodesRequest($id, $page));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -488,32 +299,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function episode(Request $request, int $id, int $episodeId)
+    public function episode(AnimeEpisodeLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getAnimeEpisode(new AnimeEpisodeRequest($id, $episodeId));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new AnimeEpisodeResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -556,32 +344,9 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function news(Request $request, int $id)
+    public function news(AnimeNewsLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getNewsList(new AnimeNewsRequest($id, $page));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -618,37 +383,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function forum(Request $request, int $id)
+    public function forum(AnimeForumLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $topic = $request->get('topic');
-
-            if ($request->get('filter') != null) {
-                $topic = $request->get('filter');
-            }
-
-            $anime = ['topics' => $this->jikan->getAnimeForum(new AnimeForumRequest($id, $topic))];
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ForumResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -677,31 +414,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function videos(Request $request, int $id)
+    public function videos(AnimeVideosLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = $this->jikan->getAnimeVideos(new AnimeVideosRequest($id));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new AnimeVideosResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -775,32 +490,9 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function videosEpisodes(Request $request, int $id)
+    public function videosEpisodes(AnimeVideosEpisodesLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getAnimeVideosEpisodes(new AnimeVideosEpisodesRequest($id, $page));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new AnimeEpisodesResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -831,31 +523,9 @@ class AnimeController extends Controller
      * )
      *
      */
-    public function pictures(Request $request, int $id)
+    public function pictures(AnimePicturesLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = ['pictures' => $this->jikan->getAnimePictures(new AnimePicturesRequest($id))];
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new PicturesResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -884,31 +554,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function stats(Request $request, int $id)
+    public function stats(AnimeStatsLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = $this->jikan->getAnimeStats(new AnimeStatsRequest($id));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new AnimeStatisticsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -937,31 +585,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function moreInfo(Request $request, int $id)
+    public function moreInfo(AnimeMoreInfoLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = ['moreinfo' => $this->jikan->getAnimeMoreInfo(new AnimeMoreInfoRequest($id))];
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new MoreInfoResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -990,31 +616,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function recommendations(Request $request, int $id)
+    public function recommendations(AnimeRecommendationsLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $anime = ['recommendations' => $this->jikan->getAnimeRecommendations(new AnimeRecommendationsRequest($id))];
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new RecommendationsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -1045,32 +649,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function userupdates(Request $request, int $id)
+    public function userupdates(AnimeUserUpdatesLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $anime = $this->jikan->getAnimeRecentlyUpdatedByUsers(new AnimeRecentlyUpdatedByUsersRequest($id, $page));
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -1101,50 +682,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function reviews(Request $request, int $id)
+    public function reviews(AnimeReviewsLookupCommand $command)
     {
-        $results = DB::table($this->getRouteTable($request))
-            ->where('request_hash', $this->fingerprint)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $page = $request->get('page') ?? 1;
-            $sort = $request->get('sort') ?? Constants::REVIEWS_SORT_MOST_VOTED;
-
-            if (!in_array($sort, [Constants::REVIEWS_SORT_MOST_VOTED, Constants::REVIEWS_SORT_NEWEST, Constants::REVIEWS_SORT_OLDEST])) {
-                throw new BadRequestException('Invalid sort for reviews. Please refer to the documentation: https://docs.api.jikan.moe/');
-            }
-
-            $spoilers = $request->get('spoilers') ?? false;
-            $preliminary = $request->get('preliminary') ?? false;
-
-            $anime = $this->jikan
-                ->getAnimeReviews(
-                    new AnimeReviewsRequest(
-                        $id,
-                        $page,
-                        $sort,
-                        $spoilers,
-                        $preliminary
-                    )
-                );
-
-            $response = \json_decode($this->serializer->serialize($anime, 'json'), true);
-            $results = $this->updateCache($request, $results, $response);
-        }
-
-        $response = (new ResultsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
 
@@ -1182,57 +722,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function relations(Request $request, int $id)
+    public function relations(AnimeRelationsLookupCommand $command)
     {
-        $results = Anime::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Anime::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Anime::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Anime::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-        $response = (new AnimeRelationsResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -1261,58 +753,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function themes(Request $request, int $id)
+    public function themes(AnimeThemesLookupCommand $command)
     {
-        $results = Anime::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Anime::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Anime::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Anime::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-
-        $response = (new AnimeThemesResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -1341,58 +784,9 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function external(Request $request, int $id)
+    public function external(AnimeExternalLookupCommand $command)
     {
-        $results = Anime::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Anime::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Anime::create($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Anime::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-
-        $response = (new ExternalLinksResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 
     /**
@@ -1421,58 +815,8 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function streaming(Request $request, int $id)
+    public function streaming(AnimeStreamingLookupCommand $command)
     {
-        $results = Anime::query()
-            ->where('mal_id', $id)
-            ->get();
-
-        if (
-            $results->isEmpty()
-            || $this->isExpired($request, $results)
-        ) {
-            $response = Anime::scrape($id);
-
-            if ($results->isEmpty()) {
-                $meta = [
-                    'createdAt' => new UTCDateTime(),
-                    'modifiedAt' => new UTCDateTime(),
-                    'request_hash' => $this->fingerprint
-                ];
-            }
-            $meta['modifiedAt'] = new UTCDateTime();
-
-            $response = $meta + $response;
-
-            if ($results->isEmpty()) {
-                Anime::query()
-                    ->insert($response);
-            }
-
-            if ($this->isExpired($request, $results)) {
-                Anime::query()
-                    ->where('mal_id', $id)
-                    ->update($response);
-            }
-
-            $results = Anime::query()
-                ->where('mal_id', $id)
-                ->get();
-        }
-
-        if ($results->isEmpty()) {
-            return HttpResponse::notFound($request);
-        }
-
-
-        $response = (new StreamingLinksResource(
-            $results->first()
-        ))->response();
-
-        return $this->prepareResponse(
-            $response,
-            $results,
-            $request
-        );
+        return $this->mediator->send($command);
     }
 }

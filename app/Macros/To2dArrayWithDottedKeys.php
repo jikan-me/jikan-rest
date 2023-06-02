@@ -1,11 +1,16 @@
 <?php
 namespace App\Macros;
 
-class To2dArrayWithDottedKeys
+use Illuminate\Support\Collection;
+
+final class To2dArrayWithDottedKeys
 {
     public function __invoke(): \Closure
     {
         return function ($prefix = '') {
+            /**
+             * @var $this Collection
+             */
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveArrayIterator($this->toArray()),
                 \RecursiveIteratorIterator::SELF_FIRST

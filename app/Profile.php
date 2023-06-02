@@ -2,12 +2,14 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use App\Concerns\FilteredByLetter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\User\UserProfileRequest;
 
 class Profile extends JikanApiSearchableModel
 {
-    protected array $filters = ["order_by", "sort"];
+    use FilteredByLetter, HasFactory;
+    protected array $filters = [];
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +17,9 @@ class Profile extends JikanApiSearchableModel
      * @var array
      */
     protected $fillable = [
-        'mal_id', 'username', 'url', 'images', 'last_online', 'gender', 'birthday', 'location', 'joined', 'anime_stats', 'manga_stats', 'favorites', 'about'
+        'mal_id', 'username', 'url', 'images', 'last_online', 'gender', 'birthday', 'location',
+        'joined', 'anime_stats', 'manga_stats', 'favorites', 'about',
+        'createdAt', 'modifiedAt'
     ];
 
     /**
@@ -33,6 +37,12 @@ class Profile extends JikanApiSearchableModel
     protected $hidden = [
         '_id',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->displayNameFieldName = "username";
+    }
 
     public static function scrape(string $username)
     {
@@ -54,7 +64,7 @@ class Profile extends JikanApiSearchableModel
     {
         return [
             'id' => (string) $this->mal_id,
-            'mal_id' => (string) $this->mal_id,
+            'mal_id' => (int) $this->mal_id,
             'username' => $this->username
         ];
     }

@@ -39,7 +39,7 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
      */
     public function searchableAs(): string
     {
-        return strtolower($this->table) . '_index';
+        return strtolower($this->table) . '_index' . (env("APP_ENV") === "testing" ? "_testing" : "");
     }
 
     /**
@@ -83,6 +83,9 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
 
     protected function simplifyStringForSearch($val): string
     {
+        if (!$val) {
+            return "";
+        }
         return preg_replace("/[^[:alnum:][:space:]]/u", ' ', $val) ?? "";
     }
 }
