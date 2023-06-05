@@ -106,3 +106,7 @@ services:
       - typesense-data:/data
     ports:
       - "8108/tcp"
+    healthcheck:
+      test: [ 'CMD-SHELL', 'curl', '-s', '-f', 'http://localhost:8108/health' ]
+      interval: 5s
+      timeout: 2s
