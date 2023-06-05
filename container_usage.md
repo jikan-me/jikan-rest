@@ -25,14 +25,6 @@ docker build -t jikan-rest:nightly .
 docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikan-rest:nightly
 ```
 
-If you need a different CPU architecture, set the `TARGET_ARCH` build argument:
-
-```bash
-docker build -t jikan-rest:nightly --build-arg TARGET_ARCH=arm64 .
-```
-
-`TARGET_ARCH` is `amd64` by default.
-
 ### Docker compose usage
 
 ```
@@ -42,10 +34,23 @@ docker-compose up
 Docker compose will use the `.env` file from the folder where you execute it from to load configurations for the
 services. If you don't have a `.env` file yet in the folder, copy the `.env.dist` file, and set the passwords.
 
+Docker compose will start up a production ready setup with redis, typesense and mongodb.
+Change the environment variables for the `jikan_rest` service in the `docker-compose.yml` file to customise the configuration of the Jikan API.
+By default docker-compose sets it to:
+- Not use [queuing](https://laravel.com/docs/9.x/scout#queueing) for search requests. (Not yet supported for  typesense.)
+- Use typesense search for more accurate search results
+- Use redis for microcaching and caching.
+- Add CORS headers to responses
+
+Of course these defaults can be overridden through the `.env` file or through setting environment variables in the command-line before  executing `docker-compose up`.
+
 > **Please note**: The syntax rules of docker compose for `.env` applies
 > here: https://docs.docker.com/compose/env-file/#syntax-rules
 
-#### Note for Podman
+> **Additional configuration**: You can change the mongodb memory usage via `MONGO_CACHE_SIZE_GB` environment variable. 
+> It sets how many gigabytes of memory is available for wired tiger. Default is `1`. This is useful for systems with low memory capacity.
+
+### Note for Podman
 
 If you build the container image yourself with podman, the resulting image format will be OCI by default.
 To make the health checks work in that situation you need to run the container the following way:
@@ -54,7 +59,7 @@ To make the health checks work in that situation you need to run the container t
 podman run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env --health-start-period=5s --health-cmd="curl --fail http://localhost:2114/health?plugin=http || exit 1" jikan-rest:nightly
 ```
 
-#### Configuration of the container
+### Configuration of the container
 
 You can change the settings of Jikan through setting environment variables via the `-e` command line argument option for
 the `docker run` command.
