@@ -17,8 +17,9 @@ abstract class UserLookupHandler extends RequestHandlerWithScraperCache
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $username = $requestParams->get("username");
+
         return $this->scraperService->findByKey(
-            "username",
+            "internal_username",
             $username,
             $requestFingerPrint,
         );
