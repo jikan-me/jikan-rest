@@ -26,7 +26,8 @@ final class QuerySpecificAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
          */
 
         [$from, $to] = $this->getSeasonRange($request->year, $request->season);
-        return $this->repository->getAiredBetween($from, $to, $type)
-            ->where("status", "!=", AnimeStatusEnum::upcoming()->label);
+
+        return $this->repository->getAiredBetween($from, $to, $type);
+//            ->where("status", "!=", AnimeStatusEnum::upcoming()->label);
     }
 }
