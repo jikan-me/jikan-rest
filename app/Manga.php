@@ -123,7 +123,8 @@ class Manga extends JikanApiSearchableModel
         return $query
             ->where("type", "!=", MangaTypeEnum::doujin()->label)
             ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_HENTAI)
-            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_EROTICA);
+            ->where("demographics.mal_id", "!=", Constants::GENRE_MANGA_EROTICA)
+            ->where("genres.mal_id", "!=", Constants::GENRE_MANGA_HENTAI);
     }
 
     /** @noinspection PhpUnused */
