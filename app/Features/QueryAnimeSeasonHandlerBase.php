@@ -61,11 +61,13 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
             default => throw new BadRequestException('Invalid season supplied'),
         };
 
-        $from = Carbon::createFromDate($year, $monthStart, 1);
-        $from->setTime(0, 0);
+        $from = Carbon::createFromDate($year, $monthStart, 1)
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->setTime(0, 0);
 
-        $to = Carbon::createFromDate($year, $monthEnd, 1);
-        $to->setTime(0, 0);
+        $to = Carbon::createFromDate($year, $monthEnd, 1)
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->setTime(0,0);
 
         return [
             $from,

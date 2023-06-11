@@ -68,13 +68,23 @@ class Manga extends JikanApiSearchableModel
     /** @noinspection PhpUnused */
     public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("published.from", ">=", $value->setTime(0, 0)->toAtomString());
+        return $query
+            ->where("published.from", ">=",
+                $value->setTime(0, 0)
+                    ->setTimezone(new \DateTimeZone('UTC'))
+                    ->toAtomString()
+            );
     }
 
     /** @noinspection PhpUnused */
     public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("published.to", "<=", $value->setTime(0, 0)->toAtomString());
+        return $query
+            ->where("published.to", "<=",
+                $value->setTime(0, 0)
+                    ->setTimezone(new \DateTimeZone('UTC'))
+                    ->toAtomString()
+            );
     }
 
     public function filterByMagazine(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder

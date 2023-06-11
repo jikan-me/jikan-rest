@@ -14,6 +14,7 @@ trait IsoDateFormatter
                 $dt[2] ?? 1
             )
             ->setTime(0, 0)
+            ->setTimezone(new \DateTimeZone('UTC'))
             ->format(DATE_ATOM);
     }
 }

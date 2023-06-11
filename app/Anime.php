@@ -154,13 +154,25 @@ class Anime extends JikanApiSearchableModel
     /** @noinspection PhpUnused */
     public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("aired.from", ">=", $value->setTime(0, 0)->toAtomString());
+        return $query
+            ->where("aired.from", ">=",
+                $value
+                    ->setTime(0, 0)
+                    ->setTimezone(new \DateTimeZone('UTC'))
+                    ->toAtomString()
+            );
     }
 
     /** @noinspection PhpUnused */
     public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("aired.to", "<=", $value->setTime(0, 0)->toAtomString());
+        return $query
+            ->where("aired.to", "<=",
+                $value
+                    ->setTime(0, 0)
+                    ->setTimezone(new \DateTimeZone('UTC'))
+                    ->toAtomString()
+            );
     }
 
     public function filterByProducer(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
