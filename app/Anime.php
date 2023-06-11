@@ -213,7 +213,8 @@ class Anime extends JikanApiSearchableModel
         return $query
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
             ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA)
-            ->where("rating", "!=", AnimeRatingEnum::rx()->label);
+            ->where("rating", "!=", AnimeRatingEnum::rx()->label)
+            ->where("genres.mal_id", "!=", Constants::GENRE_ANIME_HENTAI);
     }
 
     /** @noinspection PhpUnused */
