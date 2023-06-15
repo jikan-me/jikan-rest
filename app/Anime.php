@@ -58,7 +58,7 @@ class Anime extends JikanApiSearchableModel
      * @var array
      */
     protected $hidden = [
-        '_id', 'premiered', 'opening_themes', 'ending_themes', 'request_hash', 'expiresAt'
+        '_id', 'premiered', 'request_hash', 'expiresAt'
     ];
 
     public function __construct(array $attributes = [])
