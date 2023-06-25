@@ -81,7 +81,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     {
         return $this->exceptItemsWithAdultRating()
             ->whereNotNull("rank")
-            ->where("rank", ">=", 0)
+            ->where("rank", ">", 0)
             ->orderBy("rank");
     }
 
