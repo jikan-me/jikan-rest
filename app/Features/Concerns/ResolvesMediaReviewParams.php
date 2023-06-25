@@ -13,7 +13,8 @@ trait ResolvesMediaReviewParams
         $sort = $requestParams->get("sort", MediaReviewsSortEnum::mostVoted()->value);
         $spoilers = $requestParams->get("spoilers", false);
         $preliminary = $requestParams->get("preliminary", false);
+        $page = $requestParams->get("page", 1);
 
-        return compact("id", "sort", "spoilers", "preliminary");
+        return compact("id", "sort", "spoilers", "preliminary", "page");
     }
 }
