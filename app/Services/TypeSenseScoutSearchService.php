@@ -39,8 +39,8 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             $options['exhaustive_search'] = env('TYPESENSE_SEARCH_EXHAUSTIVE', "false");
             $options['search_cutoff_ms'] = (int) env('TYPESENSE_SEARCH_CUTOFF_MS', 450);
             // this will be ignored together with exhaustive_search set to "true"
-            $options['drop_tokens_threshold'] = (int) env('TYPESENSE_DROP_TOKENS_THRESHOLD', 1);
-            $options['typo_tokens_threshold'] = (int) env('TYPESENSE_TYPO_TOKENS_THRESHOLD', 1);
+            $options['drop_tokens_threshold'] = (int) env('TYPESENSE_DROP_TOKENS_THRESHOLD', $this->maxItemsPerPage);
+            $options['typo_tokens_threshold'] = (int) env('TYPESENSE_TYPO_TOKENS_THRESHOLD', $this->maxItemsPerPage);
             $options['enable_highlight_v1'] = 'false';
             $options['infix'] = 'fallback';
             // prevent `Could not parse the filter query: unbalanced `&&` operands.` error
