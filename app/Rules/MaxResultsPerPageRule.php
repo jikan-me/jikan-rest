@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Env;
+use Illuminate\Support\Facades\App;
 
 final class MaxResultsPerPageRule implements Rule
 {
@@ -41,6 +42,6 @@ final class MaxResultsPerPageRule implements Rule
 
     private function maxResultsPerPage(): int
     {
-        return (int) Env::get("MAX_RESULTS_PER_PAGE", $this->fallbackLimit);
+        return (int) App::make("jikan-config")->maxResultsPerPage($this->fallbackLimit);
     }
 }

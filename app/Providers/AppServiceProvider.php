@@ -81,11 +81,15 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(JikanConfig::class, fn() => new JikanConfig(config("jikan")));
+        $this->app->alias(JikanConfig::class, "jikan-config");
         // cache options class is used to share the request scope level cache settings
         $this->app->singleton(CacheOptions::class);
         $this->app->singleton(CachedScraperService::class, DefaultCachedScraperService::class);
         $this->app->singleton(PrivateFieldMapperService::class, DefaultPrivateFieldMapperService::class);
         $this->app->bind(QueryBuilderPaginatorService::class, DefaultBuilderPaginatorService::class);
+        if (static::getSearchIndexDriver($this->app) === "typesense") {
+            $this->app->singleton(App\Services\TypesenseCollectionDescriptor::class);
+        }
         $this->registerModelRepositories();
         $this->registerRequestHandlers();
     }
@@ -101,7 +105,10 @@ class AppServiceProvider extends ServiceProvider
                 default => DefaultScoutSearchService::class
             };
 
-            $scoutSearchService = new $serviceClass($repository);
+            $scoutSearchService = $this->app->make($serviceClass, [
+                "repository" => $repository,
+                "config" => $this->app->make("jikan-config")
+            ]);
             $result = new SearchEngineSearchService($scoutSearchService, $repository);
         }
         else {
