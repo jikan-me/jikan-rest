@@ -262,7 +262,11 @@ class Anime extends JikanApiSearchableModel
             'title_english_transformed' => $this->simplifyStringForSearch($this->title_english),
             'title_japanese' => $this->title_japanese,
             'title_japanese_transformed' => $this->simplifyStringForSearch($this->title_japanese),
-            'title_synonyms' => $this->title_synonyms,
+            'title_synonyms' => collect($this->titles ?? [])
+                                    ->filter(fn($v, $k) => !in_array($v["type"], ["Default", "English", "Japanese"]))
+                                    ->pluck("title")
+                                    ->values()
+                                    ->all(),
             'type' => $this->type,
             'source' => $this->source,
             'episodes' => $this->episodes,
