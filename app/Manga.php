@@ -77,6 +77,12 @@ class Manga extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
+    public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, MangaTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where("type", $value->label);
+    }
+
+    /** @noinspection PhpUnused */
     public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
