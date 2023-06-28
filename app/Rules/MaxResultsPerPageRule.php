@@ -28,7 +28,7 @@ final class MaxResultsPerPageRule implements Rule
             $value = intval($value);
         }
 
-        if ($value > $this->maxResultsPerPage()) {
+        if ($value > max_results_per_page()) {
             return false;
         }
 
@@ -37,11 +37,7 @@ final class MaxResultsPerPageRule implements Rule
 
     public function message(): array|string
     {
-        return "Value {$this->value} is higher than the configured '{$this->maxResultsPerPage()}' max value.";
-    }
-
-    private function maxResultsPerPage(): int
-    {
-        return (int) App::make("jikan-config")->maxResultsPerPage($this->fallbackLimit);
+        $mrpp = max_results_per_page();
+        return "Value {$this->value} is higher than the configured '$mrpp' max value.";
     }
 }

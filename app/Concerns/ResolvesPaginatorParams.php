@@ -8,7 +8,7 @@ trait ResolvesPaginatorParams
 {
     private function getPaginatorParams(?int $limit = null, ?int $page = null): array
     {
-        $default_max_results_per_page = App::make("jikan-config")->maxResultsPerPage();
+        $default_max_results_per_page = max_results_per_page();
         $limit = $limit ?? $default_max_results_per_page;
         $page = $page ?? 1;
 

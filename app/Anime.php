@@ -381,7 +381,7 @@ class Anime extends JikanApiSearchableModel
     {
         return [
             [
-                "field" => "_text_match(buckets:" . App::make("jikan-config")->maxResultsPerPage() . ")",
+                "field" => "_text_match(buckets:" . max_results_per_page() . ")",
                 "direction" => "desc"
             ],
             [
