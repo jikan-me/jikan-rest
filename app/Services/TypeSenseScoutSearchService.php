@@ -9,12 +9,17 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Typesense\Documents;
+use App\Contracts\SearchAnalyticsService;
+use App\Services\TypesenseCollectionDescriptor;
 
 class TypeSenseScoutSearchService implements ScoutSearchService
 {
     private int $maxItemsPerPage;
 
-    public function __construct(private readonly Repository $repository, JikanConfig $config)
+    public function __construct(private readonly Repository $repository,
+                    JikanConfig $config,
+                    private readonly TypesenseCollectionDescriptor $collectionDescriptor,
+                    private readonly SearchAnalyticsService $searchAnalytics)
     {
         $this->maxItemsPerPage = (int) $config->maxResultsPerPage();
         if ($this->maxItemsPerPage > 250) {
@@ -32,7 +37,12 @@ class TypeSenseScoutSearchService implements ScoutSearchService
     public function search(string $q, ?string $orderByField = null,
                            bool $sortDirectionDescending = false): \Laravel\Scout\Builder
     {
-        return $this->repository->search($q, function (Documents $documents, string $query, array $options) use ($orderByField, $sortDirectionDescending) {
+        return $this->repository->search($q, $this->middleware($orderByField, $sortDirectionDescending));
+    }
+
+    private function middleware(?string $orderByField = null, bool $sortDirectionDescending = false): \Closure
+    {
+        return function (Documents $documents, string $query, array $options) use ($orderByField, $sortDirectionDescending) {
             // let's enable exhaustive search
             // which will make Typesense consider all variations of prefixes and typo corrections of the words
             // in the query exhaustively, without stopping early when enough results are found.
@@ -53,75 +63,105 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 $options['per_page'] = min($this->maxItemsPerPage, 250);
             }
 
-            // skip typo checking for short queries
-            if (strlen($query) <= 3) {
-                $options['num_typos'] = 0;
-                $options['typo_tokens_threshold'] = 0;
-                $options['drop_tokens_threshold'] = 0;
-                $options['exhaustive_search'] = 'false';
-                $options['infix'] = 'off';
-                $options['prefix'] = 'false';
-            }
- 
+            $options = $this->skipTypoCheckingForShortQueries($query, $options);
             $modelInstance = $this->repository->createEntity();
-            // get the weights of the query_by fields, if they are provided by the model.
+
             if ($modelInstance instanceof JikanApiSearchableModel) {
-                $queryByWeights = $modelInstance->getTypeSenseQueryByWeights();
-                if (!is_null($queryByWeights)) {
-                    $options['query_by_weights'] = $queryByWeights;
-                }
-
-                // if the model specifies search index sort order, use it
-                // this is the default sort order for the model
-                $sortByFields = $modelInstance->getSearchIndexSortBy();
-                if (!is_null($sortByFields)) {
-                    $sortBy = "";
-                    foreach ($sortByFields as $f) {
-                        $sortBy .= $f['field'] . ':' . $f['direction'];
-                        $sortBy .= ',';
-                    }
-                    $sortBy = rtrim($sortBy, ',');
-                    $options['sort_by'] = $sortBy;
-                }
-
-                // todo: try to avoid service lookup, resolve things via constructor instead.
-                // this is currently a workaround as the search service resolution in the service provider is complex,
-                // and it gives errors when you try to resolve the Typesense class from the LaraveTypesense driver package.
-                // here we'd like to get all the searchable attributes of the model, so we can override the sort order.
-                // we use these attribute names to validate the incoming field name against them, otherwise ignoring them.  
-                $collectionDescriptor = App::make(TypesenseCollectionDescriptor::class);
-                $modelAttrNames = $collectionDescriptor->getSearchableAttributes($modelInstance);
-
-                // fixme: this shouldn't be here, but it's a quick fix for the time being
-                if ($orderByField === "aired.from") {
-                    $orderByField = "start_date";
-                }
-
-                if ($orderByField === "aired.to") {
-                    $orderByField = "end_date";
-                }
-
-                if ($orderByField === "published.from") {
-                    $orderByField = "start_date";
-                }
-
-                if ($orderByField === "published.to") {
-                    $orderByField = "end_date";
-                }
-                // fixme end
-
-                // override ordering field
-                if (!is_null($orderByField) && Arr::has($modelAttrNames, $orderByField)) {
-                    $options['sort_by'] = "$orderByField:" . ($sortDirectionDescending ? "desc" : "asc") . ",_text_match(buckets:".$this->maxItemsPerPage."):desc";
-                }
-
-                // override overall sorting direction
-                if (is_null($orderByField) && $sortDirectionDescending && array_key_exists("sort_by", $options) && Str::contains($options["sort_by"], "asc")) {
-                    $options["sort_by"] = Str::replace("asc", "desc", $options["sort_by"]);
-                }
+                $options = $this->setQueryByWeights($options, $modelInstance);
+                $options = $this->setSortOrder($options, $modelInstance);
+                $options = $this->overrideSortingOrder($options, $modelInstance, $orderByField, $sortDirectionDescending);
             }
 
-            return $documents->search($options);
-        });
+            $results = $documents->search($options);
+            $this->recordSearchTelemetry($query, $results);
+            
+            return $results;
+        };
+    }
+
+    private function skipTypoCheckingForShortQueries(string $query, array $options): array
+    {
+        if (strlen($query) <= 3) {
+            $options['num_typos'] = 0;
+            $options['typo_tokens_threshold'] = 0;
+            $options['drop_tokens_threshold'] = 0;
+            $options['exhaustive_search'] = 'false';
+            $options['infix'] = 'off';
+            $options['prefix'] = 'false';
+        }
+
+        return $options;
+    }
+
+    private function setQueryByWeights(array $options, JikanApiSearchableModel $modelInstance): array
+    {
+        $queryByWeights = $modelInstance->getTypeSenseQueryByWeights();
+        if (!is_null($queryByWeights)) {
+            $options['query_by_weights'] = $queryByWeights;
+        }
+
+        return $options;
+    }
+
+    private function setSortOrder(array $options, JikanApiSearchableModel $modelInstance): array
+    {
+        $sortByFields = $modelInstance->getSearchIndexSortBy();
+        if (!is_null($sortByFields)) {
+            $sortBy = "";
+            foreach ($sortByFields as $f) {
+                $sortBy .= $f['field'] . ':' . $f['direction'];
+                $sortBy .= ',';
+            }
+            $sortBy = rtrim($sortBy, ',');
+            $options['sort_by'] = $sortBy;
+        }
+
+        return $options;
+    }
+
+    private function overrideSortingOrder(array $options, JikanApiSearchableModel $modelInstance, ?string $orderByField, bool $sortDirectionDescending): array
+    {
+        $modelAttrNames = $this->collectionDescriptor->getSearchableAttributes($modelInstance);
+
+        // fixme: this shouldn't be here, but it's a quick fix for the time being
+        if ($orderByField === "aired.from") {
+            $orderByField = "start_date";
+        }
+
+        if ($orderByField === "aired.to") {
+            $orderByField = "end_date";
+        }
+
+        if ($orderByField === "published.from") {
+            $orderByField = "start_date";
+        }
+
+        if ($orderByField === "published.to") {
+            $orderByField = "end_date";
+        }
+        // fixme end
+
+        // override ordering field
+        if (!is_null($orderByField) && Arr::has($modelAttrNames, $orderByField)) {
+            $options['sort_by'] = "$orderByField:" . ($sortDirectionDescending ? "desc" : "asc") . ",_text_match(buckets:".$this->maxItemsPerPage."):desc";
+        }
+
+        // override overall sorting direction
+        if (is_null($orderByField) && $sortDirectionDescending && array_key_exists("sort_by", $options) && Str::contains($options["sort_by"], "asc")) {
+            $options["sort_by"] = Str::replace("asc", "desc", $options["sort_by"]);
+        }
+
+        return $options;
+    }
+
+    private function recordSearchTelemetry(string $query, array $typesenseApiResponse): void
+    {
+        $hits = collect($typesenseApiResponse["hits"]);
+        $this->searchAnalytics->logSearch(
+            $query,
+            $typesenseApiResponse["found"],
+            $hits->pluck('document')->values(),
+            $typesenseApiResponse["request_params"]["collection_name"]
+        );
     }
 }

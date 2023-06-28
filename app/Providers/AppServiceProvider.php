@@ -69,6 +69,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerMacros();
+        // the registration of request handlers should happen after the load of all service providers.
+        $this->registerRequestHandlers();
     }
 
     /**
@@ -81,6 +83,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(JikanConfig::class, fn() => new JikanConfig(config("jikan")));
+        $this->app->singleton(\App\Contracts\SearchAnalyticsService::class, \App\Services\DefaultSearchAnalyticsService::class);
         $this->app->alias(JikanConfig::class, "jikan-config");
         // cache options class is used to share the request scope level cache settings
         $this->app->singleton(CacheOptions::class);
@@ -88,10 +91,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PrivateFieldMapperService::class, DefaultPrivateFieldMapperService::class);
         $this->app->bind(QueryBuilderPaginatorService::class, DefaultBuilderPaginatorService::class);
         if (static::getSearchIndexDriver($this->app) === "typesense") {
-            $this->app->singleton(App\Services\TypesenseCollectionDescriptor::class);
+            $this->app->singleton(\App\Services\TypesenseCollectionDescriptor::class);
         }
         $this->registerModelRepositories();
-        $this->registerRequestHandlers();
     }
 
     private function getSearchService(Repository $repository): SearchService
@@ -107,7 +109,6 @@ class AppServiceProvider extends ServiceProvider
 
             $scoutSearchService = $this->app->make($serviceClass, [
                 "repository" => $repository,
-                "config" => $this->app->make("jikan-config")
             ]);
             $result = new SearchEngineSearchService($scoutSearchService, $repository);
         }
@@ -177,10 +178,9 @@ class AppServiceProvider extends ServiceProvider
                 $requestHandlers = [];
                 foreach ($searchRequestHandlersDescriptors as $handlerClass => $repositoryInstance) {
                     $requestHandlers[] = $app->make($handlerClass, [
-                        "queryBuilderService" => new DefaultQueryBuilderService(
-                            $this->getSearchService($repositoryInstance),
-                            $app->make(QueryBuilderPaginatorService::class)
-                        )
+                        "queryBuilderService" => $app->make(DefaultQueryBuilderService::class, [
+                            "searchService" => $this->getSearchService($repositoryInstance)
+                        ]),
                     ]);
                 }
 
