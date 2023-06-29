@@ -17,7 +17,6 @@ use App\Rules\Attributes\EnumValidation;
 use Illuminate\Http\JsonResponse;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
 
 /**
@@ -30,7 +29,6 @@ final class QueryAnimeSchedulesCommand extends Data implements DataRequest
     #[
         WithCast(EnumCast::class, AnimeScheduleFilterEnum::class),
         EnumValidation(AnimeScheduleFilterEnum::class),
-        MapInputName("filter"),
         MapOutputName("filter")
     ]
     public ?AnimeScheduleFilterEnum $dayFilter;
