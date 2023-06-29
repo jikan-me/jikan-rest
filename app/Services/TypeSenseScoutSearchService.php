@@ -6,11 +6,9 @@ use App\Contracts\Repository;
 use App\JikanApiSearchableModel;
 use App\Support\JikanConfig;
 use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\App;
+use Laravel\Scout\Builder;
 use Typesense\Documents;
 use App\Contracts\SearchAnalyticsService;
-use App\Services\TypesenseCollectionDescriptor;
 
 class TypeSenseScoutSearchService implements ScoutSearchService
 {
@@ -30,9 +28,9 @@ class TypeSenseScoutSearchService implements ScoutSearchService
     /**
      * Executes a search operation via Laravel Scout on the provided model class.
      * @param string $q
-     * @return \Laravel\Scout\Builder
-     * @throws \Http\Client\Exception
-     * @throws \Typesense\Exceptions\TypesenseClientError
+     * @param string|null $orderByField
+     * @param bool $sortDirectionDescending
+     * @return Builder
      */
     public function search(string $q, ?string $orderByField = null,
                            bool $sortDirectionDescending = false): \Laravel\Scout\Builder
@@ -74,7 +72,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
 
             $results = $documents->search($options);
             $this->recordSearchTelemetry($query, $results);
-            
+
             return $results;
         };
     }
@@ -142,7 +140,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         // fixme end
 
         // override ordering field
-        if (!is_null($orderByField) && Arr::has($modelAttrNames, $orderByField)) {
+        if (!is_null($orderByField) && in_array($orderByField, $modelAttrNames)) {
             $options['sort_by'] = "$orderByField:" . ($sortDirectionDescending ? "desc" : "asc") . ",_text_match(buckets:".$this->maxItemsPerPage."):desc";
         }
 
