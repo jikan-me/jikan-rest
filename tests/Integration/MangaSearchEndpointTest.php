@@ -98,9 +98,9 @@ class MangaSearchEndpointTest extends TestCase
     public function genresParameterCombinationsProvider(): array
     {
         return [
-            [["genres" => "1,2"]],
-            [["genres_exclude" => "4,5", "type" => "tv"]],
-            [["genres" => "1,2", "genres_exclude" => "3", "min_score" => 8, "type" => "tv", "status" => "complete", "page" => 1]],
+            "?genres=1,2" => [["genres" => "1,2"]],
+            "?genres_exclude=4,5&type=manga" => [["genres_exclude" => "4,5", "type" => "manga"]],
+            "?genres=1,2&genres_exclude=3&min_score=8&type=manga&status=complete" => [["genres" => "1,2", "genres_exclude" => "3", "min_score" => 8, "type" => "manga", "status" => "complete", "page" => 1]],
         ];
     }
 

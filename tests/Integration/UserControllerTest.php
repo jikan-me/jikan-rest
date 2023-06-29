@@ -19,8 +19,10 @@ class UserControllerTest extends TestCase
 
     public function testUserProfile()
     {
+        $username = "nekomata1037";
         Profile::factory()->createOne([
-            "username" => "nekomata1037"
+            "username" => $username,
+            "internal_username" => $username
         ]);
         $this->get('/v4/users/nekomata1037')
             ->seeStatusCode(200)
@@ -46,8 +48,10 @@ class UserControllerTest extends TestCase
 
     public function testUserStatistics()
     {
+        $username = "nekomata1037";
         Profile::factory()->createOne([
-            "username" => "nekomata1037"
+            "username" => $username,
+            "internal_username" => $username
         ]);
         $this->get('/v4/users/nekomata1037/statistics')
             ->seeStatusCode(200)
@@ -83,8 +87,10 @@ class UserControllerTest extends TestCase
 
     public function testUserAbout()
     {
+        $username = "nekomata1037";
         Profile::factory()->createOne([
-            "username" => "nekomata1037"
+            "username" => $username,
+            "internal_username" => $username
         ]);
         $this->get('/v4/users/nekomata1037/about')
             ->seeStatusCode(200)
@@ -95,8 +101,10 @@ class UserControllerTest extends TestCase
 
     public function testUserFavorites()
     {
+        $username = "nekomata1037";
         Profile::factory()->createOne([
-            "username" => "nekomata1037"
+            "username" => $username,
+            "internal_username" => $username
         ]);
         $this->get('/v4/users/nekomata1037/favorites')
             ->seeStatusCode(200)

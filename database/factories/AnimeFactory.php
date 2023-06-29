@@ -68,7 +68,7 @@ class AnimeFactory extends JikanMediaModelFactory
             "synopsis" => "test",
             "approved" => true,
             "background" => "test",
-            "premiered" => $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]),
+            "premiered" => $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]) . " " . $this->faker->year(),
             "broadcast" => [
                 "day" => "",
                 "time" => "",

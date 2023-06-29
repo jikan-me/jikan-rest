@@ -83,7 +83,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(JikanConfig::class, fn() => new JikanConfig(config("jikan")));
-        $this->app->singleton(\App\Contracts\SearchAnalyticsService::class, \App\Services\DefaultSearchAnalyticsService::class);
+        $this->app->singleton(\App\Contracts\SearchAnalyticsService::class,
+            env("APP_ENV") !== "testing" ? \App\Services\DefaultSearchAnalyticsService::class :
+                \App\Services\DummySearchAnalyticsService::class);
         $this->app->alias(JikanConfig::class, "jikan-config");
         // cache options class is used to share the request scope level cache settings
         $this->app->singleton(CacheOptions::class);
