@@ -19,7 +19,7 @@ class Profile extends JikanApiSearchableModel
     protected $fillable = [
         'mal_id', 'username', 'url', 'images', 'last_online', 'gender', 'birthday', 'location',
         'joined', 'anime_stats', 'manga_stats', 'favorites', 'about',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt', 'internal_username'
     ];
 
     /**

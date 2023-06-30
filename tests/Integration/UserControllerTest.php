@@ -7,8 +7,13 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Jikan\Model\Recommendations\UserRecommendations;
 use Jikan\Model\User\Friends;
+use Jikan\Model\User\AnimeStats;
+use Jikan\Model\User\MangaStats;
+use Jikan\Model\User\LastUpdates;
+use Jikan\Model\User\Profile as JikanProfile;
 use Jikan\Model\User\Reviews\UserReviews;
 use Jikan\MyAnimeList\MalClient;
+use Jikan\Parser\User\Profile\UserProfileParser;
 use Jikan\Request\User\UserRecommendationsRequest;
 use Tests\TestCase;
 
@@ -17,14 +22,159 @@ class UserControllerTest extends TestCase
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
-    public function testUserProfile()
+    public function userNameProvider(): array
     {
-        $username = "nekomata1037";
+        return [
+            "nekomata1037" => ["nekomata1037"],
+            "ExampleUser123" => ["ExampleUser123"],
+        ];
+    }
+
+    /**
+     * @dataProvider userNameProvider
+     * @param string $username
+     */
+    public function testUserProfile(string $username)
+    {
         Profile::factory()->createOne([
             "username" => $username,
             "internal_username" => $username
         ]);
-        $this->get('/v4/users/nekomata1037')
+        $this->get('/v4/users/'.$username)
+            ->seeStatusCode(200)
+            ->seeJsonStructure(['data'=>[
+                'mal_id',
+                'username',
+                'url',
+                'images' => [
+                    'jpg' => [
+                        'image_url'
+                    ],
+                    'webp' => [
+                        'image_url'
+                    ]
+                ],
+                'last_online',
+                'gender',
+                'birthday',
+                'location',
+                'joined',
+            ]]);
+    }
+
+    /**
+     * Tests if the scraped item from upstream is inserted correctly in the database.
+     * @dataProvider userNameProvider
+     * @param string $username
+     * @throws \Exception
+     */
+    public function testUserProfileScrapeAndInsert(string $username)
+    {
+        // this is a test for https://github.com/jikan-me/jikan-rest/issues/411
+        $jikanParser = \Mockery::mock(MalClient::class)->makePartial();
+        $userProfileParser = \Mockery::mock(UserProfileParser::class)->makePartial();
+        $userProfileParser->allows()
+            ->getUserId()
+            ->andReturn(1);
+        $userProfileParser->allows()
+            ->getUsername()
+            ->andReturn($username);
+        $userProfileParser->allows()
+            ->getProfileUrl()
+            ->andReturn("https://myanimelist.net/profile/".$username);
+        $userProfileParser->allows()
+            ->getProfileImageUrl()
+            ->andReturn("https://myanimelist.cdn-dena.com/images/userimages/1.jpg");
+        $userProfileParser->allows()
+            ->getLastOnline()
+            ->andReturn(Carbon::now()->toDateTimeImmutable());
+        $userProfileParser->allows()
+            ->getImageUrl()
+            ->andReturn("https://myanimelist.cdn-dena.com/images/userimages/1.jpg");
+        $userProfileParser->allows()
+            ->getGender()
+            ->andReturn(null);
+        $userProfileParser->allows()
+            ->getBirthday()
+            ->andReturn(\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339, "1990-10-01T00:00:00+00:00"));
+        $userProfileParser->allows()
+            ->getLocation()
+            ->andReturn("Mars");
+        $userProfileParser->allows()
+            ->getJoinDate()
+            ->andReturn(\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339, "2000-10-01T00:00:00+00:00"));
+        $animeStats = \Mockery::mock(AnimeStats::class)->makePartial();
+        $animeStats->allows([
+            "getDaysWatched" => 0,
+            "getMeanScore" => 0,
+            "getWatching" => 0,
+            "getCompleted" => 0,
+            "getOnHold" => 0,
+            "getDropped" => 0,
+            "getPlanToWatch" => 0,
+            "getTotalEntries" => 0,
+            "getRewatched" => 0,
+            "getEpisodesWatched" => 0
+        ]);
+        $userProfileParser->allows()
+            ->getAnimeStats()
+            ->andReturn($animeStats);
+        $mangaStats = \Mockery::mock(MangaStats::class)->makePartial();
+        $mangaStats->allows([
+            "getDaysRead" => 0,
+            "getMeanScore" => 0,
+            "getReading" => 0,
+            "getCompleted" => 0,
+            "getOnHold" => 0,
+            "getDropped" => 0,
+            "getPlanToRead" => 0,
+            "getTotalEntries" => 0,
+            "getReread" => 0,
+            "getChaptersRead" => 0,
+            "getVolumesRead" => 0
+        ]);
+        $userProfileParser->allows()
+            ->getMangaStats()
+            ->andReturn($mangaStats);
+        $favorites = \Mockery::mock(\Jikan\Model\User\Favorites::class)->makePartial();
+        $favorites->allows([
+            "getAnime" => [],
+            "getManga" => [],
+            "getCharacters" => [],
+            "getPeople" => []
+        ]);
+        $userProfileParser->allows()
+            ->getFavorites()
+            ->andReturn($favorites);
+        $userProfileParser->allows()
+            ->getAbout()
+            ->andReturn(null);
+        $userProfileParser->allows()
+            ->getUserExternalLinks()
+            ->andReturn([]);
+        $userProfileParser->allows()
+            ->getAbout()
+            ->andReturn(null);
+        $lastUpdates = \Mockery::mock(LastUpdates::class)->makePartial();
+        $lastUpdates->allows()
+            ->getAnime()
+            ->andReturn([]);
+        $lastUpdates->allows()
+            ->getManga()
+            ->andReturn([]);
+        $userProfileParser->allows()
+            ->getUserLastUpdates()
+            ->andReturn($lastUpdates);
+
+
+        /** @noinspection PhpParamsInspection */
+        $jikanParser->allows()
+            ->getUserProfile(\Mockery::any())
+            ->andReturn(JikanProfile::fromParser($userProfileParser));
+
+        $this->app->instance('JikanParser', $jikanParser);
+
+        $this->get('/v4/users/'.$username)
             ->seeStatusCode(200)
             ->seeJsonStructure(['data'=>[
                 'mal_id',
