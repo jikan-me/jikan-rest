@@ -4,6 +4,7 @@ namespace App\Dto\Concerns;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Env;
+use Illuminate\Support\Facades\App;
 use \ReflectionClass;
 use Spatie\LaravelData\Support\DataConfig;
 
@@ -19,8 +20,8 @@ trait PreparesData
         // let's always set the limit parameter to the globally configured default value
         if (property_exists(static::class, "limit") && !$properties->has("limit")) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $properties->put("limit", Env::get("MAX_RESULTS_PER_PAGE",
-                property_exists(static::class, "defaultLimit") ? static::$defaultLimit : 25));
+            $properties->put("limit", max_results_per_page(
+                property_exists(static::class, "defaultLimit") ? static::$defaultLimit : null));
         }
 
         // we want to cast "true" and "false" string values to boolean before validation, so let's take all properties

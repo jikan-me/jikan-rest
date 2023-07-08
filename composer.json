@@ -68,7 +68,10 @@
         "phpunit": "@php ./vendor/bin/phpunit --no-coverage",
         "phpunit-cover": "@php ./vendor/bin/phpunit",
         "test": [
-          "@phpunit"
+          "@phpunit --testsuite unit"
+        ],
+        "integration-test": [
+          "@phpunit --testsuite integration"
         ],
         "test-cover": [
           "@phpunit-cover"

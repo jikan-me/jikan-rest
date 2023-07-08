@@ -21,6 +21,7 @@ final class ProfileFactory extends JikanModelFactory
         return [
             "mal_id" => $mal_id,
             "username" => $username,
+            "internal_username" => $username,
             "url" => $url,
             "request_hash" => sprintf("request:%s:%s", "users", $this->getItemTestUrl("users", $username)),
             "images" => [

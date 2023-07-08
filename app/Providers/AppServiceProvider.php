@@ -69,6 +69,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerMacros();
+        // the registration of request handlers should happen after the load of all service providers.
+        $this->registerRequestHandlers();
     }
 
     /**
@@ -81,13 +83,19 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(JikanConfig::class, fn() => new JikanConfig(config("jikan")));
+        $this->app->singleton(\App\Contracts\SearchAnalyticsService::class,
+            env("APP_ENV") !== "testing" ? \App\Services\DefaultSearchAnalyticsService::class :
+                \App\Services\DummySearchAnalyticsService::class);
+        $this->app->alias(JikanConfig::class, "jikan-config");
         // cache options class is used to share the request scope level cache settings
         $this->app->singleton(CacheOptions::class);
         $this->app->singleton(CachedScraperService::class, DefaultCachedScraperService::class);
         $this->app->singleton(PrivateFieldMapperService::class, DefaultPrivateFieldMapperService::class);
         $this->app->bind(QueryBuilderPaginatorService::class, DefaultBuilderPaginatorService::class);
+        if (static::getSearchIndexDriver($this->app) === "typesense") {
+            $this->app->singleton(\App\Services\TypesenseCollectionDescriptor::class);
+        }
         $this->registerModelRepositories();
-        $this->registerRequestHandlers();
     }
 
     private function getSearchService(Repository $repository): SearchService
@@ -101,7 +109,9 @@ class AppServiceProvider extends ServiceProvider
                 default => DefaultScoutSearchService::class
             };
 
-            $scoutSearchService = new $serviceClass($repository);
+            $scoutSearchService = $this->app->make($serviceClass, [
+                "repository" => $repository,
+            ]);
             $result = new SearchEngineSearchService($scoutSearchService, $repository);
         }
         else {
@@ -170,10 +180,9 @@ class AppServiceProvider extends ServiceProvider
                 $requestHandlers = [];
                 foreach ($searchRequestHandlersDescriptors as $handlerClass => $repositoryInstance) {
                     $requestHandlers[] = $app->make($handlerClass, [
-                        "queryBuilderService" => new DefaultQueryBuilderService(
-                            $this->getSearchService($repositoryInstance),
-                            $app->make(QueryBuilderPaginatorService::class)
-                        )
+                        "queryBuilderService" => $app->make(DefaultQueryBuilderService::class, [
+                            "searchService" => $this->getSearchService($repositoryInstance)
+                        ]),
                     ]);
                 }
 

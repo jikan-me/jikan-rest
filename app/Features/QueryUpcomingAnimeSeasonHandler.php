@@ -18,6 +18,6 @@ final class QueryUpcomingAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
 
     protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder
     {
-        return $this->repository->getUpcomingSeasonItems($type, $request->kids, $request->sfw, $request->unapproved);
+        return $this->repository->getUpcomingSeasonItems($type);
     }
 }

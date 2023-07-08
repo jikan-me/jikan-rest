@@ -302,13 +302,17 @@ class Manga extends JikanApiSearchableModel
     {
         return [
             [
-                "field" => "_text_match",
+                "field" => "_text_match(buckets:" . App::make("jikan-config")->maxResultsPerPage() . ")",
                 "direction" => "desc"
             ],
             [
-                "field" => "members",
-                "direction" => "desc"
+                "field" => "popularity",
+                "direction" => "asc"
             ],
+            [
+                "field" => "rank",
+                "direction" => "asc"
+            ]
         ];
     }
 

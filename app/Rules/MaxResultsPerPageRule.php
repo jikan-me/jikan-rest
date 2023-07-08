@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Env;
+use Illuminate\Support\Facades\App;
 
 final class MaxResultsPerPageRule implements Rule
 {
@@ -27,7 +28,7 @@ final class MaxResultsPerPageRule implements Rule
             $value = intval($value);
         }
 
-        if ($value > $this->maxResultsPerPage()) {
+        if ($value > max_results_per_page()) {
             return false;
         }
 
@@ -36,11 +37,7 @@ final class MaxResultsPerPageRule implements Rule
 
     public function message(): array|string
     {
-        return "Value {$this->value} is higher than the configured '{$this->maxResultsPerPage()}' max value.";
-    }
-
-    private function maxResultsPerPage(): int
-    {
-        return (int) Env::get("MAX_RESULTS_PER_PAGE", $this->fallbackLimit);
+        $mrpp = max_results_per_page();
+        return "Value {$this->value} is higher than the configured '$mrpp' max value.";
     }
 }

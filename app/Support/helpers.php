@@ -54,3 +54,10 @@ if (!function_exists('to_boolean')) {
     }
 }
 
+
+if (!function_exists('max_results_per_page')) {
+    function max_results_per_page(?int $fallbackLimit = null): int
+    {
+        return app()->make("jikan-config")->maxResultsPerPage($fallbackLimit);
+    }
+}
