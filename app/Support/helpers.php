@@ -61,3 +61,10 @@ if (!function_exists('max_results_per_page')) {
         return app()->make("jikan-config")->maxResultsPerPage($fallbackLimit);
     }
 }
+
+if (!function_exists('text_match_buckets')) {
+    function text_match_buckets(): int
+    {
+        return app()->make("jikan-config")->textMatchBuckets();
+    }
+}

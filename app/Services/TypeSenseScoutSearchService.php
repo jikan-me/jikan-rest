@@ -14,12 +14,15 @@ class TypeSenseScoutSearchService implements ScoutSearchService
 {
     private int $maxItemsPerPage;
 
+    private JikanConfig $jikanConfig;
+
     public function __construct(private readonly Repository $repository,
                     JikanConfig $config,
                     private readonly TypesenseCollectionDescriptor $collectionDescriptor,
                     private readonly SearchAnalyticsService $searchAnalytics)
     {
         $this->maxItemsPerPage = (int) $config->maxResultsPerPage();
+        $this->jikanConfig = $config;
         if ($this->maxItemsPerPage > 250) {
             $this->maxItemsPerPage = 250;
         }
@@ -41,14 +44,11 @@ class TypeSenseScoutSearchService implements ScoutSearchService
     private function middleware(?string $orderByField = null, bool $sortDirectionDescending = false): \Closure
     {
         return function (Documents $documents, string $query, array $options) use ($orderByField, $sortDirectionDescending) {
-            // let's enable exhaustive search
-            // which will make Typesense consider all variations of prefixes and typo corrections of the words
-            // in the query exhaustively, without stopping early when enough results are found.
-            $options['exhaustive_search'] = env('TYPESENSE_SEARCH_EXHAUSTIVE', "false");
-            $options['search_cutoff_ms'] = (int) env('TYPESENSE_SEARCH_CUTOFF_MS', 450);
+            $options['exhaustive_search'] = $this->jikanConfig->exhaustiveSearch();
+            $options['search_cutoff_ms'] = $this->jikanConfig->searchCutOffMs();
             // this will be ignored together with exhaustive_search set to "true"
-            $options['drop_tokens_threshold'] = (int) env('TYPESENSE_DROP_TOKENS_THRESHOLD', $this->maxItemsPerPage);
-            $options['typo_tokens_threshold'] = (int) env('TYPESENSE_TYPO_TOKENS_THRESHOLD', $this->maxItemsPerPage);
+            $options['drop_tokens_threshold'] = $this->jikanConfig->dropTokensThreshold();
+            $options['typo_tokens_threshold'] = $this->jikanConfig->typoTokensThreshold();
             $options['enable_highlight_v1'] = 'false';
             $options['infix'] = 'fallback';
             // prevent `Could not parse the filter query: unbalanced `&&` operands.` error
@@ -69,6 +69,8 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 $options = $this->setSortOrder($options, $modelInstance);
                 $options = $this->overrideSortingOrder($options, $modelInstance, $orderByField, $sortDirectionDescending);
             }
+
+            dd($options, $orderByField);
 
             $results = $documents->search($options);
             $this->recordSearchTelemetry($query, $results);
