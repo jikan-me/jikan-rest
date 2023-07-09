@@ -25,14 +25,4 @@ class AnimeSearchHandler extends SearchRequestHandler
     {
         return new AnimeCollection($paginator);
     }
-
-    protected function prepareOrderByParam(Collection $requestData): Collection
-    {
-        if ($requestData->has("q") && !$requestData->has("order_by")) {
-            // default order by should be popularity, as MAL seems to use this trick.
-            $requestData->offsetSet("order_by", AnimeOrderByEnum::popularity());
-        }
-
-        return parent::prepareOrderByParam($requestData);
-    }
 }
