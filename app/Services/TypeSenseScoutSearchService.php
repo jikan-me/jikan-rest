@@ -70,8 +70,6 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 $options = $this->overrideSortingOrder($options, $modelInstance, $orderByField, $sortDirectionDescending);
             }
 
-            dd($options, $orderByField);
-
             $results = $documents->search($options);
             $this->recordSearchTelemetry($query, $results);
 
