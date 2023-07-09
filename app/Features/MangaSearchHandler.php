@@ -28,14 +28,4 @@ class MangaSearchHandler extends SearchRequestHandler
     {
         return new MangaCollection($paginator);
     }
-
-    protected function prepareOrderByParam(Collection $requestData): Collection
-    {
-        if ($requestData->has("q") && !$requestData->has("order_by")) {
-            // default order by should be popularity, as MAL seems to use this trick.
-            $requestData->offsetSet("order_by", MangaOrderByEnum::popularity());
-        }
-
-        return parent::prepareOrderByParam($requestData);
-    }
 }

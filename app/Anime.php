@@ -374,7 +374,7 @@ class Anime extends JikanApiSearchableModel
 
     public function getTypeSenseQueryByWeights(): string|null
     {
-        return "2,2,1,1,2,2,1";
+        return "2,2,1,1,3,3,1";
     }
 
     /**
@@ -385,7 +385,7 @@ class Anime extends JikanApiSearchableModel
     {
         return [
             [
-                "field" => "_text_match(buckets:" . max_results_per_page() . ")",
+                "field" => "_text_match(buckets:".text_match_buckets().")",
                 "direction" => "desc"
             ],
             [

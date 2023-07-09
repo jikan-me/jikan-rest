@@ -1,9 +1,16 @@
 <?php
 
 return [
-    'max_results_per_page' => env('MAX_RESULTS_PER_PAGE', 25),
+    'max_results_per_page' => (int) env('MAX_RESULTS_PER_PAGE', 25),
     'micro_caching_enabled' => env('MICROCACHING', false),
     'default_cache_expire' => env('CACHE_DEFAULT_EXPIRE', 86400),
+    'typesense_options' => [
+        'text_match_buckets' => env('TYPESENSE_TEXT_MATCH_BUCKETS', 85),
+        'typo_tokens_threshold' => (int) env('TYPESENSE_TYPO_TOKENS_THRESHOLD'),
+        'drop_tokens_threshold' => (int) env('TYPESENSE_DROP_TOKENS_THRESHOLD'),
+        'search_cutoff_ms' => (int) env('TYPESENSE_SEARCH_CUTOFF_MS', 450),
+        'exhaustive_search' => env('TYPESENSE_ENABLE_EXHAUSTIVE_SEARCH', 'false')
+    ],
     'per_endpoint_cache_ttl' => [
         /**
          * Anime

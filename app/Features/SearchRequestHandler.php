@@ -48,17 +48,11 @@ abstract class SearchRequestHandler implements RequestHandler
 
     protected function prepareOrderByParam(Collection $requestData): Collection
     {
-        if (!$requestData->has('order_by') || !$requestData->get('order_by') instanceof Enum) {
-            $requestData->offsetSet('order_by', 'mal_id');
-            return $requestData;
-        }
-
-        if ($requestData->has('order_by')) {
+        if ($requestData->has('order_by') && !is_null($requestData->get("order_by"))) {
             $requestData->offsetSet("order_by", $requestData->get("order_by")->label);
             return $requestData;
         }
 
-        $requestData->offsetSet("order_by", 'mal_id');
         return $requestData;
     }
 }

@@ -291,7 +291,7 @@ class Manga extends JikanApiSearchableModel
 
     public function getTypeSenseQueryByWeights(): string|null
     {
-        return "2,2,1,1,2,2,1";
+        return "2,2,1,1,3,3,1";
     }
 
     /**
@@ -302,7 +302,7 @@ class Manga extends JikanApiSearchableModel
     {
         return [
             [
-                "field" => "_text_match(buckets:" . App::make("jikan-config")->maxResultsPerPage() . ")",
+                "field" => "_text_match(buckets:".text_match_buckets().")",
                 "direction" => "desc"
             ],
             [
