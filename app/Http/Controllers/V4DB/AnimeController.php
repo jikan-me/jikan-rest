@@ -668,6 +668,8 @@ class AnimeController extends Controller
      *     ),
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/preliminary"),
+     *     @OA\Parameter(ref="#/components/parameters/spoiler"),
      *
      *     @OA\Response(
      *         response="200",

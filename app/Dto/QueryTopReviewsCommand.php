@@ -6,6 +6,8 @@ use App\Casts\ContextualBooleanCast;
 use App\Casts\EnumCast;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
+use App\Dto\Concerns\HasPreliminaryParameter;
+use App\Dto\Concerns\HasSpoilersParameter;
 use App\Dto\Concerns\PreparesData;
 use App\Enums\TopAnimeFilterEnum;
 use App\Enums\TopReviewsTypeEnum;
@@ -19,14 +21,8 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryTopReviewsCommand extends QueryTopItemsCommand implements DataRequest
 {
-    use HasRequestFingerprint, PreparesData;
+    use HasRequestFingerprint, HasPreliminaryParameter, HasSpoilersParameter, PreparesData;
 
     #[WithCast(EnumCast::class, TopAnimeFilterEnum::class), EnumValidation(TopReviewsTypeEnum::class)]
     public TopReviewsTypeEnum|Optional $type;
-
-    #[WithCast(ContextualBooleanCast::class)]
-    public bool|Optional $spoilers;
-
-    #[WithCast(ContextualBooleanCast::class)]
-    public bool|Optional $preliminary;
 }

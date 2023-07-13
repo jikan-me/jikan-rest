@@ -8,6 +8,8 @@ use App\Casts\EnumCast;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
 use App\Dto\Concerns\HasPageParameter;
+use App\Dto\Concerns\HasPreliminaryParameter;
+use App\Dto\Concerns\HasSpoilersParameter;
 use App\Dto\Concerns\PreparesData;
 use App\Enums\MediaReviewsSortEnum;
 use App\Http\Resources\V4\ResultsResource;
@@ -22,14 +24,8 @@ use Spatie\LaravelData\Optional;
  */
 abstract class QueryReviewsCommand extends Data implements DataRequest
 {
-    use HasRequestFingerprint, HasPageParameter, PreparesData;
+    use HasRequestFingerprint, HasPageParameter, HasPreliminaryParameter, HasSpoilersParameter, PreparesData;
 
     #[WithCast(EnumCast::class, MediaReviewsSortEnum::class), EnumValidation(MediaReviewsSortEnum::class)]
     public MediaReviewsSortEnum|Optional $sort;
-
-    #[BooleanType, WithCast(ContextualBooleanCast::class)]
-    public bool|Optional $spoilers;
-
-    #[BooleanType, WithCast(ContextualBooleanCast::class)]
-    public bool|Optional $preliminary;
 }
