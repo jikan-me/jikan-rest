@@ -141,7 +141,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
 
         // override ordering field
         if (!is_null($orderByField) && in_array($orderByField, $modelAttrNames)) {
-            $options['sort_by'] = "$orderByField:" . ($sortDirectionDescending ? "desc" : "asc") . ",_text_match(buckets:".$this->maxItemsPerPage."):desc";
+            $options['sort_by'] = "$orderByField:" . ($sortDirectionDescending ? "desc" : "asc") . ",_text_match(buckets:".$this->jikanConfig->textMatchBuckets()."):desc";
         }
 
         // override overall sorting direction
