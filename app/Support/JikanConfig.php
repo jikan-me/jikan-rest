@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 
 /**
  * Jikan behavior config
@@ -32,16 +33,15 @@ final class JikanConfig
 
     public function __construct(array $config)
     {
-        $config = collect($config);
-        $this->perEndpointCacheTtl = $config->get("per_endpoint_cache_ttl", []);
-        $this->defaultCacheExpire = $config->get("default_cache_expire", 0);
-        $this->microCachingEnabled = in_array($config->get("micro_caching_enabled", false), [true, 1, "1", "true"]);
-        $this->textMatchBuckets = $config->get("typesense_options.text_match_buckets", 85);
-        $this->exhaustiveSearch = (string) $config->get("typesense_options.exhaustive_search", "false");
-        $this->config = $config;
-        $this->typoTokensThreshold = $config->get("typesense_options.typo_tokens_threshold", $this->maxResultsPerPage());
-        $this->dropTokensThreshold = $config->get("typesense_options.drop_tokens_threshold", $this->maxResultsPerPage());
-        $this->searchCutOffMs = $config->get("typesense_options.search_cutoff_ms", 450);
+        $this->perEndpointCacheTtl = Arr::get($config, "per_endpoint_cache_ttl", []);
+        $this->defaultCacheExpire = Arr::get($config, "default_cache_expire", 0);
+        $this->microCachingEnabled = in_array(Arr::get($config, "micro_caching_enabled", false), [true, 1, "1", "true"]);
+        $this->textMatchBuckets = Arr::get($config,"typesense_options.text_match_buckets", 1);
+        $this->exhaustiveSearch = (string) Arr::get($config, "typesense_options.exhaustive_search", "false");
+        $this->config = collect($config);
+        $this->typoTokensThreshold = Arr::get($config, "typesense_options.typo_tokens_threshold") ?? $this->maxResultsPerPage();
+        $this->dropTokensThreshold = Arr::get($config, "typesense_options.drop_tokens_threshold") ?? $this->maxResultsPerPage();
+        $this->searchCutOffMs = Arr::get($config, "typesense_options.search_cutoff_ms", 450);
     }
 
     public function cacheTtlForEndpoint(string $endpoint): ?int
@@ -61,7 +61,7 @@ final class JikanConfig
 
     public function maxResultsPerPage(?int $defaultValue = null): int
     {
-        return $this->config->get("max_results_per_page", $defaultValue ?? 25);
+        return (int) $this->config->get("max_results_per_page", $defaultValue ?? 25);
     }
 
     public function textMatchBuckets(): int

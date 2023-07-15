@@ -25,7 +25,7 @@ final class QueryAnimeSchedulesHandler implements RequestHandler
     {
         $requestParams = collect($request->all());
         $limit = $requestParams->get("limit");
-        $results = $this->repository->getCurrentlyAiring($request->dayFilter);
+        $results = $this->repository->getCurrentlyAiring($request->filter);
         // apply sfw, kids and unapproved filters
         /** @noinspection PhpUndefinedMethodInspection */
         $results = $results->filter($requestParams);

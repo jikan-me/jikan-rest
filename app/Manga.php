@@ -101,7 +101,7 @@ class Manga extends JikanApiSearchableModel
 
         $magazine = (int)$value;
         return $query
-            ->orWhere('serializations.mal_id', $magazine);
+            ->where('serializations.mal_id', $magazine);
     }
 
     /** @noinspection PhpUnused */
@@ -111,16 +111,14 @@ class Manga extends JikanApiSearchableModel
             return $query;
         }
 
-        $magazines = explode(',', $value);
-        foreach ($magazines as $magazine) {
-            if (empty($magazine)) {
-                continue;
-            }
+        $magazines = collect(explode(',', $value))->filter()->map(fn($x) => (int)$x)->toArray();
 
-            $query = $this->filterByMagazine($query, $value);
-        }
-
-        return $query;
+        /** @noinspection PhpParamsInspection */
+        return $query->whereRaw([
+            "serializations.mal_id" => [
+                '$in' => $magazines
+            ]
+        ]);
     }
 
     /** @noinspection PhpUnused */

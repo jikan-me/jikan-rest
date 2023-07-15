@@ -61,7 +61,6 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 $options['per_page'] = min($this->maxItemsPerPage, 250);
             }
 
-            $options = $this->skipTypoCheckingForShortQueries($query, $options);
             $modelInstance = $this->repository->createEntity();
 
             if ($modelInstance instanceof JikanApiSearchableModel) {
@@ -69,6 +68,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 $options = $this->setSortOrder($options, $modelInstance);
                 $options = $this->overrideSortingOrder($options, $modelInstance, $orderByField, $sortDirectionDescending);
             }
+            $options = $this->adaptToShortQueries($query, $options);
 
             $results = $documents->search($options);
             $this->recordSearchTelemetry($query, $results);
@@ -77,7 +77,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         };
     }
 
-    private function skipTypoCheckingForShortQueries(string $query, array $options): array
+    private function adaptToShortQueries(string $query, array $options): array
     {
         if (strlen($query) <= 3) {
             $options['num_typos'] = 0;
@@ -85,7 +85,18 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             $options['drop_tokens_threshold'] = 0;
             $options['exhaustive_search'] = 'false';
             $options['infix'] = 'off';
-            $options['prefix'] = 'false';
+            $options['prioritize_token_position'] = 'true';
+
+            if (Str::startsWith($options["sort_by"], "_text_match")) {
+                $options["sort_by"] = "_text_match:desc,title:asc";
+            } else {
+                // move text_match to the beginning if there is an orderby parameter set.
+                $options["sort_by"] = Str::replace("(buckets:". $this->jikanConfig->textMatchBuckets().")", "", $options["sort_by"]);
+                $parts = collect(explode(",", $options["sort_by"]));
+                $last = $parts->pop();
+                $parts = $parts->prepend($last);
+                $options["sort_by"] = $parts->implode(",");
+            }
         }
 
         return $options;

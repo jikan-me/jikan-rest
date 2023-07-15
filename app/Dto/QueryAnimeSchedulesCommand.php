@@ -28,8 +28,7 @@ final class QueryAnimeSchedulesCommand extends Data implements DataRequest
 
     #[
         WithCast(EnumCast::class, AnimeScheduleFilterEnum::class),
-        EnumValidation(AnimeScheduleFilterEnum::class),
-        MapOutputName("filter")
+        EnumValidation(AnimeScheduleFilterEnum::class)
     ]
-    public ?AnimeScheduleFilterEnum $dayFilter;
+    public ?AnimeScheduleFilterEnum $filter;
 }
