@@ -582,6 +582,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/preliminary"
+                    },
+                    {
+                        "$ref": "#/components/parameters/spoiler"
                     }
                 ],
                 "responses": {
@@ -1594,6 +1600,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/preliminary"
+                    },
+                    {
+                        "$ref": "#/components/parameters/spoiler"
                     }
                 ],
                 "responses": {
@@ -2209,6 +2221,12 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/preliminary"
+                    },
+                    {
+                        "$ref": "#/components/parameters/spoiler"
                     }
                 ],
                 "responses": {
@@ -2235,6 +2253,12 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "$ref": "#/components/parameters/preliminary"
+                    },
+                    {
+                        "$ref": "#/components/parameters/spoiler"
                     }
                 ],
                 "responses": {
@@ -9022,10 +9046,28 @@
                     "type": "integer"
                 }
             },
+            "preliminary": {
+                "name": "preliminary",
+                "in": "query",
+                "description": "Any reviews left during an ongoing anime/manga, those reviews are tagged as preliminary. Preliminary reviews are not returned by default. e.g usage: `?preliminary=true`",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                }
+            },
             "sfw": {
                 "name": "sfw",
                 "in": "query",
                 "description": "'Safe For Work'. This is a flag. When supplied it will filter out entries according to the SFW Policy. You do not need to pass a value to it. e.g usage: `?sfw`",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                }
+            },
+            "spoiler": {
+                "name": "spoiler",
+                "in": "query",
+                "description": "Any reviews that are tagged as a spoiler. Spoiler reviews are not returned by default. e.g usage: `?spoiler=true`",
                 "required": false,
                 "schema": {
                     "type": "boolean"
