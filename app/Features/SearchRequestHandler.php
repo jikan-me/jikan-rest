@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Spatie\Enum\Laravel\Enum;
 
 /**
@@ -30,6 +31,13 @@ abstract class SearchRequestHandler implements RequestHandler
     {
         // note: ->all() doesn't transform the dto, all the parsed data is returned as it was parsed. (and validated)
         $requestData = collect($request->all());
+        $prohibitedSearchCharacters = collect(["\n", "\\n", "\r", "\t", "\0", "%0A"]);
+        if (in_array($requestData->get("q", ""), $prohibitedSearchCharacters->toArray())
+            || $prohibitedSearchCharacters->filter(fn($value) => strpos($requestData->get("q", ""), $value) !== false)->count() > 0) {
+            throw ValidationException::withMessages([
+                "q" => "The q parameter cannot contain any of the following characters: \\n, \\r, \\t, \\0, %0A"
+            ]);
+        }
         $builder = $this->queryBuilderService->query(
             $this->prepareOrderByParam($requestData)
         );
