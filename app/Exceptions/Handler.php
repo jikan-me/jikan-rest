@@ -79,7 +79,7 @@ class Handler extends ExceptionHandler
                 ->json([
                     'status' => 500,
                     'type' => 'ConnectionException',
-                    'message' => 'Failed to communicate with Redis.',
+                    'message' => 'Failed to communicate with the Redis server',
                     'error' => env('APP_DEBUG') ?  $e->getMessage() : null,
                     'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
                 ], 500);
@@ -137,8 +137,8 @@ class Handler extends ExceptionHandler
                     return response()
                         ->json([
                             'status' => $e->getCode(),
-                            'type' => 'BadResponseException',
-                            'message' => 'Jikan is being rate limited by MyAnimeList',
+                            'type' => 'RateLimitException',
+                            'message' => 'Jikan is being rate limited by MyAnimeList.',
                             'error' => $e->getMessage()
                         ], $e->getCode());
                 case 403:
@@ -154,7 +154,7 @@ class Handler extends ExceptionHandler
                         ->json([
                             'status' => $e->getCode(),
                             'type' => 'UpstreamException',
-                            'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond.',
+                            'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
                             'error' => $e->getMessage()
                         ], 504);
                 default:
@@ -162,7 +162,7 @@ class Handler extends ExceptionHandler
                         ->json([
                             'status' => $e->getCode(),
                             'type' => 'BadResponseException',
-                            'message' => 'Something went wrong, please try again later',
+                            'message' => 'Something went wrong, please try again later.',
                             'error' => $e->getMessage()
                         ], $e->getCode());
             }
@@ -175,7 +175,7 @@ class Handler extends ExceptionHandler
                 ->json([
                     'status' => 504,
                     'type' => 'UpstreamException',
-                    'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds)',
+                    'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds). Please try again later.',
                     'error' => $e->getMessage()
                 ], 504);
         }
@@ -187,7 +187,7 @@ class Handler extends ExceptionHandler
                 ->json([
                     'status' => 504,
                     'type' => 'UpstreamException',
-                    'message' => 'Request to MyAnimeList.net has failed. The upstream server has returned a non-successful status code.',
+                    'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
                     'error' => $e->getMessage()
                 ], 504);
         }
@@ -199,7 +199,7 @@ class Handler extends ExceptionHandler
                 ->json([
                     'status' => 504,
                     'type' => 'UpstreamException',
-                    'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Retry the request!',
+                    'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
                     'error' => $e->getMessage()
                 ], 504);
         }
