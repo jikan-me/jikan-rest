@@ -70,18 +70,21 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
     {
         return $this
+            ->queryable()
             ->orderBy("members", "desc");
     }
 
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder
     {
         return $this
+            ->queryable()
             ->orderBy("favorites", "desc");
     }
 
     public function orderByRank(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()
+        return $this
+            ->queryable()
             ->whereNotNull("rank")
             ->where("rank", ">", 0)
             ->orderBy("rank");
