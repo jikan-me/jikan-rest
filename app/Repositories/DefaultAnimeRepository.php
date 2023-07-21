@@ -27,7 +27,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function getTopAiringItems(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()
+        return $this
             ->where("airing", true)
             ->whereNotNull("rank")
             ->where("rank", ">", 0)
@@ -36,7 +36,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()
+        return $this
             ->where("status", AnimeStatusEnum::upcoming()->label)
             ->whereNotNull("rank")
             ->where("rank", ">=", 0)
@@ -69,12 +69,14 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()->orderBy("members", "desc");
+        return $this
+            ->orderBy("members", "desc");
     }
 
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()->orderBy("favorites", "desc");
+        return $this
+            ->orderBy("favorites", "desc");
     }
 
     public function orderByRank(): EloquentBuilder|ScoutBuilder
