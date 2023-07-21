@@ -152,11 +152,11 @@ class Handler extends ExceptionHandler
 
                     return response()
                         ->json([
-                            'status' => $e->getCode(),
+                            'status' => 500,
                             'type' => 'UpstreamException',
                             'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
                             'error' => $e->getMessage()
-                        ], 504);
+                        ], 500);
                 default:
                     return response()
                         ->json([
@@ -173,11 +173,11 @@ class Handler extends ExceptionHandler
 
             return response()
                 ->json([
-                    'status' => 504,
+                    'status' => 500,
                     'type' => 'UpstreamException',
                     'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds). Please try again later.',
                     'error' => $e->getMessage()
-                ], 504);
+                ], 500);
         }
 
         if ($e instanceof TransportException) {
@@ -185,11 +185,11 @@ class Handler extends ExceptionHandler
 
             return response()
                 ->json([
-                    'status' => 504,
+                    'status' => 500,
                     'type' => 'UpstreamException',
                     'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
                     'error' => $e->getMessage()
-                ], 504);
+                ], 500);
         }
 
         if ($e instanceof Exception && $e->getMessage() === "Undefined index: url") {
@@ -197,11 +197,11 @@ class Handler extends ExceptionHandler
 
             return response()
                 ->json([
-                    'status' => 504,
+                    'status' => 500,
                     'type' => 'UpstreamException',
                     'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
                     'error' => $e->getMessage()
-                ], 504);
+                ], 500);
         }
 
         // Bad REST API requests
