@@ -3,8 +3,6 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Env;
-use Illuminate\Support\Facades\App;
 
 final class MaxResultsPerPageRule implements Rule
 {
@@ -37,7 +35,7 @@ final class MaxResultsPerPageRule implements Rule
 
     public function message(): array|string
     {
-        $mrpp = max_results_per_page();
+        $mrpp = max_results_per_page($this->fallbackLimit);
         return "Value {$this->value} is higher than the configured '$mrpp' max value.";
     }
 }

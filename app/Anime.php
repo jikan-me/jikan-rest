@@ -182,10 +182,14 @@ class Anime extends JikanApiSearchableModel
         }
 
         $producer = (int)$value;
-        return $query
-            ->orWhere('producers.mal_id', $producer)
-            ->orWhere('licensors.mal_id', $producer)
-            ->orWhere('studios.mal_id', $producer);
+        /** @noinspection PhpParamsInspection */
+        return $query->whereRaw([
+            '$or' => [
+                ['producers.mal_id' => $producer],
+                ['licensors.mal_id' => $producer],
+                ['studios.mal_id' => $producer]
+            ]
+        ]);
     }
 
     /** @noinspection PhpUnused */
@@ -195,16 +199,16 @@ class Anime extends JikanApiSearchableModel
             return $query;
         }
 
-        $producers = explode(',', $value);
+        $producers = collect(explode(',', $value))->filter()->toArray();
+        $orFilters = [];
         foreach ($producers as $producer) {
-            if (empty($producer)) {
-                continue;
-            }
-
-            $query = $this->filterByProducer($query, $value);
+            $producer = (int)$producer;
+            $orFilters[] = ['producers.mal_id' => $producer];
+            $orFilters[] = ['licensors.mal_id' => $producer];
+            $orFilters[] = ['studios.mal_id' => $producer];
         }
-
-        return $query;
+        /** @noinspection PhpParamsInspection */
+        return $query->whereRaw(['$or' => $orFilters]);
     }
 
     /** @noinspection PhpUnused */

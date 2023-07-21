@@ -24,6 +24,9 @@ final class DefaultQueryBuilderService implements QueryBuilderService
                 ->search($requestParameters->get("q"), $searchEngineOptions["order_by"], $searchEngineOptions["sort_direction_descending"]);
         } else {
             $builder = $this->searchService->setFilterParameters($requestParameters)->query();
+            if (!$requestParameters->has("order_by")) {
+                $builder = $builder->orderBy("mal_id");
+            }
         }
 
         return $builder;
