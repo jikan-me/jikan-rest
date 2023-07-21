@@ -20,13 +20,15 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
 
     public function getTopPublishingItems(): EloquentBuilder|ScoutBuilder
     {
-        return $this->orderByRank()
+        return $this
+            ->orderByRank()
             ->where("publishing", true);
     }
 
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder
     {
-        return $this->orderByRank()
+        return $this
+            ->orderByRank()
             ->where("status", MangaStatusEnum::upcoming()->label);
     }
 
