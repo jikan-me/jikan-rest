@@ -228,12 +228,7 @@ return [
         ## Caching
         By **CACHING**, we refer to the data parsed from MyAnimeList which is stored temporarily on our servers to provide better API performance.
 
-        All requests, by default are cached for **24 hours** except the following endpoints which have their own unique cache **Time To Live**.
-
-        | Request | TTL |
-        | ---- | ---- |
-        | All (Default) | 24 hours |
-
+        All requests are cached for **24 hours**.
 
         The following response headers will detail cache information.
 
