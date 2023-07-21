@@ -153,7 +153,7 @@ class Handler extends ExceptionHandler
                     return response()
                         ->json([
                             'status' => $e->getCode(),
-                            'type' => 'BadResponseException',
+                            'type' => 'UpstreamException',
                             'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond.',
                             'error' => $e->getMessage()
                         ], 504);
