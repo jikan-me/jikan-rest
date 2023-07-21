@@ -35,7 +35,7 @@ class QueryTopMangaItemsHandler implements RequestHandler
             TopMangaFilterEnum::upcoming() => $this->repository->getTopUpcomingItems(),
             TopMangaFilterEnum::bypopularity() => $this->repository->orderByPopularity(),
             TopMangaFilterEnum::favorite() => $this->repository->orderByFavoriteCount(),
-            default => $this->repository->orderByRank()
+            default => $this->repository->orderByScore()
         };
 
         $builder = $builder->filter($requestParams);

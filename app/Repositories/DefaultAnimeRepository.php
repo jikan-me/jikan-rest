@@ -27,20 +27,16 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function getTopAiringItems(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()
-            ->where("airing", true)
-            ->whereNotNull("rank")
-            ->where("rank", ">", 0)
-            ->orderBy("rank");
+        return $this
+            ->orderByScore()
+            ->where("airing", true);
     }
 
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()
-            ->where("status", AnimeStatusEnum::upcoming()->label)
-            ->whereNotNull("rank")
-            ->where("rank", ">=", 0)
-            ->orderBy("rank");
+        return $this
+            ->orderByPopularity()
+            ->where("status", AnimeStatusEnum::upcoming()->label);
     }
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
@@ -69,17 +65,22 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()->orderBy("members", "desc");
+        return $this
+            ->queryable()
+            ->orderBy("members", "desc");
     }
 
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()->orderBy("favorites", "desc");
+        return $this
+            ->queryable()
+            ->orderBy("favorites", "desc");
     }
 
     public function orderByRank(): EloquentBuilder|ScoutBuilder
     {
-        return $this->exceptItemsWithAdultRating()
+        return $this
+            ->queryable()
             ->whereNotNull("rank")
             ->where("rank", ">", 0)
             ->orderBy("rank");
@@ -148,5 +149,12 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         }
 
         return $queryable->orderBy("members", "desc");
+    }
+
+    public function orderByScore(): EloquentBuilder|ScoutBuilder
+    {
+        return $this
+            ->queryable()
+            ->orderBy("score", "desc");
     }
 }

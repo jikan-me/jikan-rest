@@ -4,6 +4,8 @@ namespace App\Dto;
 
 use App\Casts\EnumCast;
 use App\Contracts\DataRequest;
+use App\Dto\Concerns\HasSfwParameter;
+use App\Dto\Concerns\PreparesData;
 use App\Enums\MangaTypeEnum;
 use App\Enums\TopMangaFilterEnum;
 use App\Http\Resources\V4\MangaCollection;
@@ -17,6 +19,8 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryTopMangaItemsCommand extends QueryTopItemsCommand implements DataRequest
 {
+    use PreparesData, HasSfwParameter;
+
     #[WithCast(EnumCast::class, MangaTypeEnum::class), EnumValidation(MangaTypeEnum::class)]
     public MangaTypeEnum|Optional $type;
 

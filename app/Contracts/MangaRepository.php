@@ -22,4 +22,7 @@ interface MangaRepository extends Repository
     public function orderByRank(): EloquentBuilder|ScoutBuilder;
 
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder;
+
+    public function orderByScore(): EloquentBuilder|ScoutBuilder;
+
 }
