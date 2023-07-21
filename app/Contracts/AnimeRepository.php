@@ -9,6 +9,7 @@ use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Laravel\Scout\Builder as ScoutBuilder;
+use Laravel\Scout\Scout;
 
 /**
  * @implements Repository<Anime>
@@ -44,4 +45,6 @@ interface AnimeRepository extends Repository
     ): EloquentBuilder;
 
     public function getUpcomingSeasonItems(?AnimeTypeEnum $type = null): EloquentBuilder;
+
+    public function orderByScore(): EloquentBuilder|ScoutBuilder;
 }

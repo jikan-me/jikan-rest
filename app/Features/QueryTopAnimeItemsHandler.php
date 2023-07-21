@@ -36,7 +36,7 @@ final class QueryTopAnimeItemsHandler implements RequestHandler
             TopAnimeFilterEnum::upcoming() => $this->repository->getTopUpcomingItems(),
             TopAnimeFilterEnum::bypopularity() => $this->repository->orderByPopularity(),
             TopAnimeFilterEnum::favorite() => $this->repository->orderByFavoriteCount(),
-            default => $this->repository->orderByRank()
+            default => $this->repository->orderByScore()
         };
 
         $builder = $builder->filter($requestParams);
