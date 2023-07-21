@@ -7,12 +7,12 @@ use Spatie\Enum\Laravel\Enum;
 /**
  * @method static self mal_id()
  * @method static self title()
- * @method static self rating()
  * @method static self start_date()
  * @method static self end_date()
  * @method static self episodes()
  * @method static self score()
  * @method static self scored_by()
+ * @method static self rank()
  * @method static self popularity()
  * @method static self members()
  * @method static self favorites()
