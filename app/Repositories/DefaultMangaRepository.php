@@ -20,19 +20,23 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
 
     public function getTopPublishingItems(): EloquentBuilder|ScoutBuilder
     {
-        return $this->orderByRank()
+        return $this
+            ->orderByPopularity()
             ->where("publishing", true);
     }
 
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder
     {
-        return $this->orderByRank()
+        return $this
+            ->orderByPopularity()
             ->where("status", MangaStatusEnum::upcoming()->label);
     }
 
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
     {
-        return $this->queryable()->orderBy("members", "desc");
+        return $this
+            ->queryable()
+            ->orderBy("members", "desc");
     }
 
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder
@@ -52,5 +56,12 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return $this->queryable()->exceptItemsWithAdultRating();
+    }
+
+    public function orderByScore(): EloquentBuilder|ScoutBuilder
+    {
+        return $this
+            ->queryable()
+            ->orderBy("score", "desc");
     }
 }
