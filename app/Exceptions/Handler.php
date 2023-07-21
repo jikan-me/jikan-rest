@@ -156,7 +156,7 @@ class Handler extends ExceptionHandler
                             'type' => 'BadResponseException',
                             'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond.',
                             'error' => $e->getMessage()
-                        ], 503);
+                        ], 504);
                 default:
                     return response()
                         ->json([
@@ -169,23 +169,27 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof TimeoutException) {
+            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
+
             return response()
                 ->json([
-                    'status' => 408,
-                    'type' => 'TimeoutException',
+                    'status' => 504,
+                    'type' => 'UpstreamException',
                     'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds)',
                     'error' => $e->getMessage()
-                ], 408);
+                ], 504);
         }
 
         if ($e instanceof TransportException) {
+            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $e->getCode()));
+
             return response()
                 ->json([
-                    'status' => 500,
-                    'type' => 'TransportException',
+                    'status' => 504,
+                    'type' => 'UpstreamException',
                     'message' => 'Request to MyAnimeList.net has failed. The upstream server has returned a non-successful status code.',
                     'error' => $e->getMessage()
-                ], 500);
+                ], 504);
         }
 
         if ($e instanceof Exception && $e->getMessage() === "Undefined index: url") {
@@ -193,11 +197,11 @@ class Handler extends ExceptionHandler
 
             return response()
                 ->json([
-                    'status' => $e->getCode(),
-                    'type' => 'BadResponseException',
+                    'status' => 504,
+                    'type' => 'UpstreamException',
                     'message' => 'Jikan failed to connect to MyAnimeList.net. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Retry the request!',
                     'error' => $e->getMessage()
-                ], 503);
+                ], 504);
         }
 
         // Bad REST API requests
