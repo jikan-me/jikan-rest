@@ -259,9 +259,7 @@ return [
         | `BadResponseException` | `404 - Not Found` | The resource was not found or MyAnimeList responded with a `404` |
         | `BadRequestException` | `405 - Method Not Allowed` | Requested Method is not supported for resource. Only `GET` requests are allowed |
         | `RateLimitException` | `429 - Too Many Request` | You are being rate limited by Jikan or MyAnimeList is rate-limiting our servers (specified in the error response) |
-        | Multiple | `500 - Internal Server Error` | Something is not working on our end. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |
-        | `UpstreamException` | `504 - Gateway Timeout` | This is an upstream error. The request sent to MyAnimeList.net was not successful. Try again later. |
-
+        | `UpstreamException|ParserException`, Multiple | `500 - Internal Server Error` | Something didn't work. Try again later. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |
 
         ## JSON Error Response
 
