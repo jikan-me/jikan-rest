@@ -203,7 +203,7 @@ return [
         'API_DESCRIPTION' => str_replace("\r\n", "\n", <<<EOF
         [Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.
         It scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.
-        
+
         # Information
 
         ⚡ Jikan is powered by it's awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)
@@ -212,9 +212,11 @@ return [
 
         | Duration | Requests |
         |----|----|
-        | Monthly | **Unlimited** |
+        | Daily | **Unlimited** |
         | Per Minute | 60 requests |
         | Per Second | 3 requests |
+
+        Note: It's still possible to get rate limited from MyAnimeList.net instead.
 
 
         ## JSON Notes
@@ -226,23 +228,18 @@ return [
         ## Caching
         By **CACHING**, we refer to the data parsed from MyAnimeList which is stored temporarily on our servers to provide better API performance.
 
-        All requests, by default are cached for **24 hours** except the following endpoints which have their own unique cache **Time To Live**. 
-
-        | Request | TTL |
-        | ---- | ---- |
-        | All (Default) | 24 hours |
-
+        All requests are cached for **24 hours**.
 
         The following response headers will detail cache information.
-        
+
         | Header | Remarks |
         | ---- | ---- |
         | `Expires` | Cache expiry date |
         | `Last-Modified` | Cache set date |
-        | `X-Request-Fingerprint` | Unique request fingerprint |
-        
+        | `X-Request-Fingerprint` | Unique request fingerprint (only for cachable requests, not queries) |
 
-        Note: Caching headers will only be available on single resource requests and their child endpoints. e.g `/anime/1`, `/anime/1/relations`. 
+
+        Note: `X-Request-Fingerprint` will only be available on single resource requests and their child endpoints. e.g `/anime/1`, `/anime/1/relations`.
         They won't be available on pages which perform queries, like /anime, or /top/anime, etc.
 
         ## Allowed HTTP(s) requests
@@ -252,26 +249,26 @@ return [
 
         ## HTTP Responses
 
-        | HTTP Status | Remarks |
-        | ---- | ---- |
-        | `200 - OK` | The request was successful |
-        | `304 - Not Modified` | You have the latest data (Cache Validation response) |
-        | `400 - Bad Request` | You've made an invalid request. Recheck documentation |
-        | `404 - Not Found` | The resource was not found or MyAnimeList responded with a `404` |
-        | `405 - Method Not Allowed` | Requested Method is not supported for resource. Only `GET` requests are allowed |
-        | `429 - Too Many Request` | You are being rate limited by Jikan or MyAnimeList is rate-limiting our servers (specified in the error response) |
-        | `500 - Internal Server Error` | Something is not working on our end. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |
-        | `503 - Service Unavailable` | The service has broke. |
+        All error responses are accompanied by a JSON Error response.
 
+        | Exception | HTTP Status | Remarks |
+        | ---- | ---- | ---- |
+        | N/A | `200 - OK` | The request was successful |
+        | N/A | `304 - Not Modified` | You have the latest data (Cache Validation response) |
+        | `BadRequestException|ValidationException` | `400 - Bad Request` | You've made an invalid request. Recheck documentation |
+        | `BadResponseException` | `404 - Not Found` | The resource was not found or MyAnimeList responded with a `404` |
+        | `BadRequestException` | `405 - Method Not Allowed` | Requested Method is not supported for resource. Only `GET` requests are allowed |
+        | `RateLimitException` | `429 - Too Many Request` | You are being rate limited by Jikan or MyAnimeList is rate-limiting our servers (specified in the error response) |
+        | `UpstreamException|ParserException`, Multiple | `500 - Internal Server Error` | Something didn't work. Try again later. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |
 
         ## JSON Error Response
 
         ```json
          {
-             "status": 404,
-             "type": "BadResponseException",
-             "message": "Resource does not exist",
-             "error": "Something Happened",
+             "status": 500,
+             "type": "InternalException",
+             "message": "Exception Message",
+             "error": "Exception Trace",
              "report_url": "https://github.com..."
           }
         ```
@@ -282,7 +279,7 @@ return [
         | `type` | Thrown Exception |
         | `message` | Human-readable error message |
         | `error` | Error response and trace from the API |
-        | `report_url` | Clicking this would redirect you to a generated GitHub issue. ℹ It's only returned on a parser error. |
+        | `report_url` | Clicking this would redirect you to a generated GitHub issue |
 
 
         ## Cache Validation
