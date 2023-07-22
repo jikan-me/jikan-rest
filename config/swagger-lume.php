@@ -255,11 +255,11 @@ return [
         | ---- | ---- | ---- |
         | N/A | `200 - OK` | The request was successful |
         | N/A | `304 - Not Modified` | You have the latest data (Cache Validation response) |
-        | `BadRequestException|ValidationException` | `400 - Bad Request` | You've made an invalid request. Recheck documentation |
+        | `BadRequestException`,`ValidationException` | `400 - Bad Request` | You've made an invalid request. Recheck documentation |
         | `BadResponseException` | `404 - Not Found` | The resource was not found or MyAnimeList responded with a `404` |
         | `BadRequestException` | `405 - Method Not Allowed` | Requested Method is not supported for resource. Only `GET` requests are allowed |
         | `RateLimitException` | `429 - Too Many Request` | You are being rate limited by Jikan or MyAnimeList is rate-limiting our servers (specified in the error response) |
-        | `UpstreamException|ParserException`, Multiple | `500 - Internal Server Error` | Something didn't work. Try again later. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |
+        | `UpstreamException`,`ParserException`,etc. | `500 - Internal Server Error` | Something didn't work. Try again later. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |
 
         ## JSON Error Response
 
