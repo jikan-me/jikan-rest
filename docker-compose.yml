@@ -4,7 +4,12 @@ volumes:
   redis-data: { }
   typesense-data: { }
 
+networks:
+  jikan_network: { }
+
 secrets:
+  db_username:
+    file: db_username.txt
   db_password:
     file: db_password.txt
   redis_password:
@@ -13,48 +18,30 @@ secrets:
     file: typesense_api_key.txt
 
 services:
-  jikan_rest: &jikan_rest
-    image: jikanme/jikan-rest:latest
+  jikan_rest:
+    image: jikanme/jikan-rest:v4.0.0-rc.11
     user: "${APP_UID:-10001}:${APP_GID:-10001}"
+    networks:
+      - jikan_network
     secrets:
+      - db_username
       - db_password
       - typesense_api_key
+      - redis_password
     environment:
       PS1: '\[\033[1;32m\]\[\033[1;36m\][\u@\h] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
-      APP_DEBUG: 'false'
-      APP_ENV: production
-      CACHING: 'true'
-      CACHE_DRIVER: redis
-      REDIS_HOST: redis
-      REDIS_PASSWORD__FILE: /run/secrets/redis_password
-      DB_CONNECTION: mongodb
-      DB_HOST: mongodb
-      DB_DATABASE: jikan
-      DB_PORT: 27017
-      DB_ADMIN: "${DB_USERNAME:-root}"
-      DB_USERNAME: "${DB_USERNAME:-root}"
-      SCOUT_DRIVER: typesense
-      SCOUT_QUEUE: 'false'
-      DB_PASSWORD__FILE: /run/secrets/db_password
-      TYPESENSE_HOST: typesense
-      TYPESENSE_PORT: 8108
-      TYPESENSE_API_KEY__FILE: /run/secrets/typesense_api_key
-      CORS_MIDDLEWARE: 'true'
-      MICROCACHING: 'true'
-      MICROCACHING_EXPIRE: 60
-    depends_on:
-      mongodb: { condition: service_healthy }
-      redis: { condition: service_healthy }
-      typesense: { condition: service_healthy }
-
-  web:
-    <<: *jikan_rest
+    env_file:
+      - ./docker/config/.env.compose
     ports:
       - '8080:8080/tcp'
     healthcheck:
       test: [ 'CMD-SHELL', 'wget --spider -q "http://127.0.0.1:2114/health?plugin=http"' ]
       interval: 2s
       timeout: 2s
+    depends_on:
+      mongodb: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      typesense: { condition: service_healthy }
 
   mongodb:
     image: mongo:focal
@@ -63,6 +50,8 @@ services:
     ports:
       - '27017/tcp'
     command: --wiredTigerCacheSizeGB ${MONGO_CACHE_SIZE_GB:1}
+    networks:
+      - jikan_network
     secrets:
       - db_password
     environment:
@@ -80,6 +69,8 @@ services:
       - redis_password
     environment:
       REDIS_PASSWORD: "${REDIS_PASSWORD:-null}"
+    networks:
+      - jikan_network
     command:
       - /bin/sh
       - -c
@@ -98,6 +89,8 @@ services:
     entrypoint: /bin/sh
     secrets:
       - typesense_api_key
+    networks:
+      - jikan_network
     command:
       - -c
       - TYPESENSE_API_KEY="$$(cat /run/secrets/typesense_api_key)" /opt/typesense-server --data-dir /data

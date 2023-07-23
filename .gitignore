@@ -17,3 +17,7 @@ composer.phar
 /coverage
 .DS_Store
 *.cache
+db_username.txt
+db_password.txt
+redis_password.txt
+typesense_api_key.txt

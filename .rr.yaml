@@ -61,7 +61,7 @@ logs:
 
   # we want to use docker's log drivers, so push logs to stdout
   output: stdout
-  # we to use docker's log drivers, so push error logs to stdout
+  # we want to use docker's log drivers, so push error logs to stdout
   # this way it is possible for example to pipe logs to journald or to AWS Cloudwatch
   err_output: stdout
 
