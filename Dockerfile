@@ -1,6 +1,6 @@
-FROM spiralscout/roadrunner:2.12.2 as roadrunner
-FROM composer:2.5.1 as composer
-FROM mlocati/php-extension-installer:1.5.52 as php-ext-installer
+FROM docker.io/spiralscout/roadrunner:2.12.2 as roadrunner
+FROM docker.io/composer:2.5.1 as composer
+FROM docker.io/mlocati/php-extension-installer:1.5.52 as php-ext-installer
 FROM php:8.1.16-bullseye
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/

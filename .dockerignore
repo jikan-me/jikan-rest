@@ -23,3 +23,7 @@ db_username.txt
 db_password.txt
 redis_password.txt
 typesense_api_key.txt
+.phpunit.result.cache
+.env
+.env.dist
+docker-compose.yml

@@ -19,7 +19,7 @@ secrets:
 
 services:
   jikan_rest:
-    image: jikanme/jikan-rest:v4.0.0-rc.11
+    image: "jikanme/jikan-rest:${_JIKAN_API_VERSION:-latest}"
     user: "${APP_UID:-10001}:${APP_GID:-10001}"
     networks:
       - jikan_network
@@ -34,6 +34,7 @@ services:
       - ./docker/config/.env.compose
     ports:
       - '8080:8080/tcp'
+    hostname: jikan-rest-api
     healthcheck:
       test: [ 'CMD-SHELL', 'wget --spider -q "http://127.0.0.1:2114/health?plugin=http"' ]
       interval: 2s
@@ -44,18 +45,20 @@ services:
       typesense: { condition: service_healthy }
 
   mongodb:
-    image: mongo:focal
+    image: docker.io/mongo:focal
+    hostname: mongodb
     volumes:
       - mongo-data:/data/db
     ports:
       - '27017/tcp'
-    command: --wiredTigerCacheSizeGB ${MONGO_CACHE_SIZE_GB:1}
+    command: "--wiredTigerCacheSizeGB ${MONGO_CACHE_SIZE_GB:1}"
     networks:
       - jikan_network
     secrets:
+      - db_username
       - db_password
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "${DB_USERNAME:-root}"
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/db_username
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_password
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo mongodb://localhost:27017 --quiet
@@ -64,7 +67,8 @@ services:
       retries: 5
 
   redis:
-    image: redis:7-alpine
+    image: docker.io/redis:7-alpine
+    hostname: redis
     secrets:
       - redis_password
     environment:
@@ -74,7 +78,7 @@ services:
     command:
       - /bin/sh
       - -c
-      - redis-server --requirepass "$${cat /run/secrets/redis_password}"
+      - redis-server --requirepass "$$(cat /run/secrets/redis_password)"
     volumes:
       - redis-data:/data:rw
     ports:
@@ -85,7 +89,8 @@ services:
       timeout: 1s
 
   typesense:
-    image: typesense/typesense:0.24.1
+    image: docker.io/typesense/typesense:0.24.1
+    hostname: typesense
     entrypoint: /bin/sh
     secrets:
       - typesense_api_key
@@ -100,6 +105,6 @@ services:
     ports:
       - "8108/tcp"
     healthcheck:
-      test: [ 'CMD-SHELL', 'curl', '-s', '-f', 'http://localhost:8108/health' ]
+      test: [ 'CMD-SHELL', '{ ! [ -f "curl_created" ] && apt -qq update -y && apt -qq install -y curl && touch curl_created && curl -s -f http://localhost:8108/health; } || { curl -s -f http://localhost:8108/health; }' ]
       interval: 5s
       timeout: 2s

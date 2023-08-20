@@ -37,6 +37,7 @@ if (!file_exists(".env")) {
 $envWriter = new \MirazMac\DotEnv\Writer(__DIR__ . '/' . '.env');
 $itemsWritten = 0;
 foreach (array_keys($current_env) as $env_key) {
+    echo $env_key;
     if (!str_contains($env_key, "__FILE")) {
         continue;
     }
@@ -51,6 +52,7 @@ foreach (array_keys($current_env) as $env_key) {
 
 if ($itemsWritten > 0) {
     $envWriter->write();
+    echo "Secrets loaded successfully.";
 }
 
 $dotenv = Dotenv::createImmutable(__DIR__);
