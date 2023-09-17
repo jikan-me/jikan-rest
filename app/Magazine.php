@@ -78,4 +78,9 @@ class Magazine extends JikanApiSearchableModel
             'name'
         ];
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return 'name';
+    }
 }

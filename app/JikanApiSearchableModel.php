@@ -88,4 +88,9 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
         }
         return preg_replace("/[^[:alnum:][:space:]]/u", ' ', $val) ?? "";
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return 'title';
+    }
 }

@@ -93,4 +93,9 @@ class Character extends JikanApiSearchableModel
             'name_kanji'
         ];
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return 'name';
+    }
 }

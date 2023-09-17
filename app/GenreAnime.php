@@ -73,4 +73,9 @@ class GenreAnime extends JikanApiSearchableModel
             'name'
         ];
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return 'name';
+    }
 }

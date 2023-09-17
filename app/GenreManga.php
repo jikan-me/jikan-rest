@@ -72,4 +72,9 @@ class GenreManga extends JikanApiSearchableModel
             'name'
         ];
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return 'name';
+    }
 }

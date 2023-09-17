@@ -62,13 +62,15 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             }
 
             $modelInstance = $this->repository->createEntity();
+            $modelTitleAttributeName = "title";
 
             if ($modelInstance instanceof JikanApiSearchableModel) {
                 $options = $this->setQueryByWeights($options, $modelInstance);
                 $options = $this->setSortOrder($options, $modelInstance);
                 $options = $this->overrideSortingOrder($options, $modelInstance, $orderByField, $sortDirectionDescending);
+                $modelTitleAttributeName = $modelInstance->getTitleAttributeName();
             }
-            $options = $this->adaptToShortQueries($query, $options);
+            $options = $this->adaptToShortQueries($query, $modelTitleAttributeName, $options);
 
             $results = $documents->search($options);
             $this->recordSearchTelemetry($query, $results);
@@ -77,7 +79,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         };
     }
 
-    private function adaptToShortQueries(string $query, array $options): array
+    private function adaptToShortQueries(string $query, string $modelTitleAttributeName, array $options): array
     {
         if (strlen($query) <= 3) {
             $options['num_typos'] = 0;
@@ -87,15 +89,19 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             $options['infix'] = 'off';
             $options['prioritize_token_position'] = 'true';
 
-            if (Str::startsWith($options["sort_by"], "_text_match")) {
-                $options["sort_by"] = "_text_match:desc,title:asc";
+            if (array_key_exists("sort_by", $options)) {
+                if (Str::startsWith($options["sort_by"], "_text_match")) {
+                    $options["sort_by"] = "_text_match:desc," . $modelTitleAttributeName .":asc";
+                } else {
+                    // move text_match to the beginning if there is an orderby parameter set.
+                    $options["sort_by"] = Str::replace("(buckets:". $this->jikanConfig->textMatchBuckets().")", "", $options["sort_by"]);
+                    $parts = collect(explode(",", $options["sort_by"]));
+                    $last = $parts->pop();
+                    $parts = $parts->prepend($last);
+                    $options["sort_by"] = $parts->implode(",");
+                }
             } else {
-                // move text_match to the beginning if there is an orderby parameter set.
-                $options["sort_by"] = Str::replace("(buckets:". $this->jikanConfig->textMatchBuckets().")", "", $options["sort_by"]);
-                $parts = collect(explode(",", $options["sort_by"]));
-                $last = $parts->pop();
-                $parts = $parts->prepend($last);
-                $options["sort_by"] = $parts->implode(",");
+                $options["sort_by"] = "_text_match:desc," . $modelTitleAttributeName .":asc";
             }
         }
 
@@ -123,6 +129,8 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             }
             $sortBy = rtrim($sortBy, ',');
             $options['sort_by'] = $sortBy;
+        } else if (is_null($sortByFields) && !array_key_exists("sort_by", $options)) {
+            $options['sort_by'] = "_text_match:desc";
         }
 
         return $options;
