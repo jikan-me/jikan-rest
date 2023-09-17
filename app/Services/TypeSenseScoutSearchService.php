@@ -128,9 +128,9 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 $sortBy .= ',';
             }
             $sortBy = rtrim($sortBy, ',');
-            $options['sort_by'] = $sortBy;
+            $options["sort_by"] = $sortBy;
         } else if (is_null($sortByFields) && !array_key_exists("sort_by", $options)) {
-            $options['sort_by'] = "_text_match:desc";
+            $options["sort_by"] = "_text_match:desc";
         }
 
         return $options;
