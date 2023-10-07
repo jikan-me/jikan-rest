@@ -77,4 +77,9 @@ class Producers extends JikanApiSearchableModel
             'titles'
         ];
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return 'titles';
+    }
 }

@@ -98,4 +98,9 @@ class Club extends JikanApiSearchableModel
     {
         return ['name'];
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return 'name';
+    }
 }

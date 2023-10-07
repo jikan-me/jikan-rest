@@ -104,4 +104,9 @@ class Person extends JikanApiSearchableModel
             "alternate_names"
         ];
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return 'name';
+    }
 }
