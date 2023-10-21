@@ -3,6 +3,7 @@
 namespace App\Features;
 
 use App\Dto\QueryUpcomingAnimeSeasonCommand;
+use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder;
 
@@ -16,7 +17,7 @@ final class QueryUpcomingAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
         return QueryUpcomingAnimeSeasonCommand::class;
     }
 
-    protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder
+    protected function getSeasonItems($request, ?AnimeTypeEnum $type, ?AnimeSeasonEnum $season, ?int $year): Builder
     {
         return $this->repository->getUpcomingSeasonItems($type);
     }

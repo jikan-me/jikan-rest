@@ -44,7 +44,7 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
     /**
      * @throws Exception
      */
-    protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder
+    protected function getSeasonItems($request, ?AnimeTypeEnum $type, ?AnimeSeasonEnum $season, ?int $year): Builder
     {
         [$season, $year] = $this->getCurrentSeason();
         /**
@@ -52,6 +52,6 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
          * @var Carbon $to
          */
         [$from, $to] = $this->getSeasonRange($year, $season);
-        return $this->repository->getAiredBetween($from, $to, $type);
+        return $this->repository->getAiredBetween($from, $to, $type, $season, $year);
     }
 }

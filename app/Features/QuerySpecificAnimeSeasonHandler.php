@@ -3,6 +3,7 @@
 namespace App\Features;
 
 use App\Dto\QuerySpecificAnimeSeasonCommand;
+use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder;
@@ -18,7 +19,7 @@ final class QuerySpecificAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
         return QuerySpecificAnimeSeasonCommand::class;
     }
 
-    protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder
+    protected function getSeasonItems($request, ?AnimeTypeEnum $type, ?AnimeSeasonEnum $season, ?int $year): Builder
     {
         /**
          * @var Carbon $from
@@ -27,7 +28,7 @@ final class QuerySpecificAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
 
         [$from, $to] = $this->getSeasonRange($request->year, $request->season);
 
-        return $this->repository->getAiredBetween($from, $to, $type);
+        return $this->repository->getAiredBetween($from, $to, $type, $request->season, $request->year);
 //            ->where("status", "!=", AnimeStatusEnum::upcoming()->label);
     }
 }
