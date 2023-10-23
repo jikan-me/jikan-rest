@@ -39,6 +39,10 @@ services:
       test: [ 'CMD-SHELL', 'wget --spider -q "http://127.0.0.1:2114/health?plugin=http"' ]
       interval: 2s
       timeout: 2s
+    links:
+      - mongodb
+      - redis
+      - typesense
     depends_on:
       mongodb: { condition: service_healthy }
       redis: { condition: service_healthy }
@@ -51,7 +55,7 @@ services:
       - mongo-data:/data/db
     ports:
       - '27017/tcp'
-    command: "--wiredTigerCacheSizeGB ${MONGO_CACHE_SIZE_GB:1}"
+    command: "--wiredTigerCacheSizeGB ${MONGO_CACHE_SIZE_GB:-1.0}"
     networks:
       - jikan_network
     secrets:
@@ -61,18 +65,16 @@ services:
       MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/db_username
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_password
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo mongodb://localhost:27017 --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://localhost:27017 --quiet
       interval: 30s
       timeout: 10s
       retries: 5
 
   redis:
-    image: docker.io/redis:7-alpine
+    image: docker.io/redis:6-alpine
     hostname: redis
     secrets:
       - redis_password
-    environment:
-      REDIS_PASSWORD: "${REDIS_PASSWORD:-null}"
     networks:
       - jikan_network
     command:
@@ -99,7 +101,9 @@ services:
     command:
       - -c
       - TYPESENSE_API_KEY="$$(cat /run/secrets/typesense_api_key)" /opt/typesense-server --data-dir /data
-    restart: no
+    deploy:
+      restart_policy:
+        condition: none
     volumes:
       - typesense-data:/data
     ports:

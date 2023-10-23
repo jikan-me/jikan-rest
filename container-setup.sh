@@ -21,6 +21,7 @@ display_help() {
   echo "help                   Print CLI help"
   echo "build-image            Build Image Locally"
   echo "start                  Start Jikan API (mongodb, typesense, redis, jikan-api workers)"
+  echo "stop                   Stop Jikan API"
   echo "validate-prereqs       Validate pre-reqs installed (docker, docker-compose)"
   echo "execute-indexers       Execute the indexers, which will scrape and index data from MAL. (Notice: This can take days)"
   echo ""
@@ -69,6 +70,7 @@ validate_prereqs() {
 
 build_image() {
   validate_prereqs
+  $DOCKER_CMD inspect jikanme/jikan-rest:"$_JIKAN_API_VERSION" &> /dev/null && $DOCKER_CMD rmi jikanme/jikan-rest:"$_JIKAN_API_VERSION"
   $DOCKER_CMD build --rm --compress -t jikanme/jikan-rest:"$_JIKAN_API_VERSION" .
   $DOCKER_CMD tag jikanme/jikan-rest:"$_JIKAN_API_VERSION" jikanme/jikan-rest:latest
 }
@@ -116,11 +118,11 @@ case "$1" in
    "start")
       start
       ;;
-    "stop")
+   "stop")
       validate_prereqs
       $DOCKER_COMPOSE_CMD -p "$DOCKER_COMPOSE_PROJECT_NAME" down
       ;;
-    "execute-indexers")
+   "execute-indexers")
       echo "Indexing anime..."
       $DOCKER_COMPOSE_CMD -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:anime
       echo "Indexing manga..."

@@ -37,7 +37,6 @@ if (!file_exists(".env")) {
 $envWriter = new \MirazMac\DotEnv\Writer(__DIR__ . '/' . '.env');
 $itemsWritten = 0;
 foreach (array_keys($current_env) as $env_key) {
-    echo $env_key;
     if (!str_contains($env_key, "__FILE")) {
         continue;
     }
@@ -52,11 +51,13 @@ foreach (array_keys($current_env) as $env_key) {
 
 if ($itemsWritten > 0) {
     $envWriter->write();
-    echo "Secrets loaded successfully.";
+    echo "Secrets loaded successfully.\n";
 }
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+
+$current_env = $_ENV;
 
 if ($current_env["SCOUT_DRIVER"] === "typesense" && empty($current_env["TYPESENSE_API_KEY"])) {
     echo "Please set the TYPESENSE_API_KEY environment variable when setting SCOUT_DRIVER to typesense.";

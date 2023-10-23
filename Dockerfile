@@ -1,12 +1,12 @@
 FROM docker.io/spiralscout/roadrunner:2.12.2 as roadrunner
 FROM docker.io/composer:2.5.1 as composer
-FROM docker.io/mlocati/php-extension-installer:1.5.52 as php-ext-installer
+FROM docker.io/mlocati/php-extension-installer:2.1.58 as php-ext-installer
 FROM php:8.1.16-bullseye
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/
 ENV COMPOSER_HOME="/tmp/composer"
 RUN set -x \
-    && install-php-extensions intl bz2 gettext mongodb-stable redis opcache sockets pcntl \
+    && install-php-extensions intl mbstring mongodb-stable redis opcache sockets pcntl \
     # install xdebug (for testing with code coverage), but do not enable it
     && IPE_DONT_ENABLE=1 install-php-extensions xdebug-3.2.0
 
@@ -17,9 +17,8 @@ RUN	set -ex \
     && apt-get update && apt-get install -y --no-install-recommends \
 	openssl \
 	git \
-	dos2unix \
+    wget \
 	unzip \
-  wget \
   # install supercronic (for laravel task scheduling), project page: <https://github.com/aptible/supercronic>
 	&& wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-$(dpkg --print-architecture)" \
 	   -O /usr/bin/supercronic \
