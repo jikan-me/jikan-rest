@@ -12,6 +12,10 @@ secrets:
     file: db_username.txt
   db_password:
     file: db_password.txt
+  db_admin_username:
+    file: db_admin_username.txt
+  db_admin_password:
+    file: db_admin_password.txt
   redis_password:
     file: redis_password.txt
   typesense_api_key:
@@ -40,9 +44,9 @@ services:
       interval: 2s
       timeout: 2s
     links:
-      - mongodb
-      - redis
-      - typesense
+      - mongodb:mongodb
+      - redis:redis
+      - typesense:typesense
     depends_on:
       mongodb: { condition: service_healthy }
       redis: { condition: service_healthy }
@@ -53,17 +57,21 @@ services:
     hostname: mongodb
     volumes:
       - mongo-data:/data/db
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
-      - '27017/tcp'
+      - 27017/tcp
     command: "--wiredTigerCacheSizeGB ${MONGO_CACHE_SIZE_GB:-1.0}"
     networks:
       - jikan_network
     secrets:
       - db_username
       - db_password
+      - db_admin_username
+      - db_admin_password
     environment:
-      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/db_username
-      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_password
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/db_admin_username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_admin_password
+      MONGO_INITDB_DATABASE: jikan_admin
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh mongodb://localhost:27017 --quiet
       interval: 30s

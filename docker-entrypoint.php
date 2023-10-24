@@ -19,6 +19,8 @@ $safe_defaults = [
     "DB_PASSWORD" => ""
 ];
 
+// get a copy of the current env vars.
+// these are the ones that are set during the container creation
 $current_env = $_ENV;
 
 if (!file_exists(".env")) {
@@ -34,6 +36,8 @@ if (!file_exists(".env")) {
 // We'd like to support Container secrets. So we'll check if any of the env vars has a __FILE suffix
 // then we'll try to load the file and set the env var to the contents of the file.
 // https://docs.docker.com/engine/swarm/secrets/
+// Additionally we need to write the secrets to the .env file so the workers in roadrunner can access them.
+// (it might just pass down the global env vars, but haven't tested that yet)
 $envWriter = new \MirazMac\DotEnv\Writer(__DIR__ . '/' . '.env');
 $itemsWritten = 0;
 foreach (array_keys($current_env) as $env_key) {
@@ -45,7 +49,8 @@ foreach (array_keys($current_env) as $env_key) {
         continue;
     }
     $originalKey = str_replace("__FILE", "", $env_key);
-    $envWriter->set($originalKey, file_get_contents($current_env[$env_key]));
+    $secretsFileContents = file_get_contents($current_env[$env_key]);
+    $envWriter->set($originalKey, str_replace(["\n", "\r"], "", $secretsFileContents));
     $itemsWritten++;
 }
 

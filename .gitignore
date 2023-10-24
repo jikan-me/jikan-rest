@@ -18,6 +18,8 @@ composer.phar
 .DS_Store
 *.cache
 db_username.txt
+db_admin_username.txt
 db_password.txt
+db_admin_password.txt
 redis_password.txt
 typesense_api_key.txt

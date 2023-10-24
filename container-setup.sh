@@ -3,7 +3,12 @@
 _JIKAN_API_VERSION=v4.0.0
 SUBSTITUTE_VERSION=$_JIKAN_API_VERSION
 if [ -x "$(command -v git)" ]; then
-  SUBSTITUTE_VERSION=$(git describe --tags | sed -e "s/-[a-z0-9]\{8\}/-$(git rev-parse --short HEAD)/g")
+  git symbolic-ref HEAD &> /dev/null
+  if [ $? -ne 0 ]; then
+    SUBSTITUTE_VERSION=$(git describe --tags)
+  else
+    SUBSTITUTE_VERSION=$(git describe --tags | sed -e "s/-[a-z0-9]\{8\}/-$(git rev-parse --short HEAD)/g")
+  fi
 fi
 export _JIKAN_API_VERSION=${JIKAN_API_VERSION:-$SUBSTITUTE_VERSION}
 
@@ -76,7 +81,29 @@ build_image() {
 }
 
 ensure_secrets() {
-  declare -a secrets=("db_password" "db_username" "redis_password" "typesense_api_key")
+  declare -a secrets=("db_password" "db_admin_password" "redis_password" "typesense_api_key")
+
+  if [ ! -f "db_username.txt" ]; then
+    echo "db_username.txt not found, please provide a db_username [default is jikan]:"
+    read -r db_username
+    if [ -z "$db_username" ]; then
+      db_username="jikan"
+    fi
+    echo -n "$db_username" > "db_username.txt"
+  else
+    echo -e "db_username.txt found, using it's value. \xE2\x9C\x94"
+  fi
+
+  if [ ! -f "db_admin_username.txt" ]; then
+    echo "db_admin_username.txt not found, please provide a db_admin_username [default is jikan_admin]:"
+    read -r db_admin_username
+    if [ -z "$db_admin_username" ]; then
+      db_admin_username="jikan_admin"
+    fi
+    echo -n "$db_admin_username" > "db_admin_username.txt"
+  else
+    echo -e "db_admin_username.txt found, using it's value. \xE2\x9C\x94"
+  fi
 
   for secret_name in "${secrets[@]}"
   do
@@ -84,7 +111,7 @@ ensure_secrets() {
       if [ "$secret_name" == "db_username" ]; then
         generated_secret="jikan"
       else
-        generated_secret=$(LC_ALL=c tr -dc 'A-Za-z0-9!"#$%&'\''()*+,-./:;<=>?@[\]^_{|}~' </dev/urandom | head -c 16  ; echo)
+        generated_secret=$(LC_ALL=c tr -dc 'A-Za-z0-9!'\''()*+,-;<=>_' </dev/urandom | head -c 16  ; echo)
       fi
       echo "$secret_name.txt not found, please provide a $secret_name [default is $generated_secret]:"
       # prompt for secret and save it in file
@@ -92,7 +119,7 @@ ensure_secrets() {
       if [ -z "$secret_value" ]; then
         secret_value=$generated_secret
       fi
-      echo "$secret_value" > "$secret_name.txt"
+      echo -n "$secret_value" > "$secret_name.txt"
     else
       echo -e "$secret_name.txt found, using it's value. \xE2\x9C\x94"
     fi
