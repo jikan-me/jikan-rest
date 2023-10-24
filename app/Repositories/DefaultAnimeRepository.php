@@ -117,8 +117,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         Carbon $from,
         Carbon $to,
         ?AnimeTypeEnum $type = null,
-        ?AnimeSeasonEnum $season = null,
-        ?int $year = null
+        ?string $premiered = null
     ): EloquentBuilder
     {
 //        $queryable = $this->queryable(true)->whereBetween("aired.from", [
@@ -129,8 +128,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         /** @noinspection PhpParamsInspection */
         $queryable = $this->queryable(true);
 
-        if (!is_null($season) && !is_null($year)) {
-            $premiered = ucfirst($season)." {$year}";
+        if ($premiered !== null) {
             $queryable = $this->queryable()
                 ->where("premiered", null)
                 ->orWhere("premiered", $premiered);
@@ -152,8 +150,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     }
 
     public function getUpcomingSeasonItems(
-        ?AnimeTypeEnum $type = null,
-        ?AnimeSeasonEnum $specificSeason = null
+        ?AnimeTypeEnum $type = null
     ): EloquentBuilder
     {
         $queryable = $this->queryable(true)->where("status", AnimeStatusEnum::upcoming()->label);

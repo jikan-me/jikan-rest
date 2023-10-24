@@ -51,7 +51,7 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
      * @param ?AnimeTypeEnum $type
      * @return Builder
      */
-    protected abstract function getSeasonItems($request, ?AnimeTypeEnum $type, ?AnimeSeasonEnum $season, ?int $year): Builder;
+    protected abstract function getSeasonItems($request, ?AnimeTypeEnum $type): Builder;
 
     protected function getSeasonRange(int $year, AnimeSeasonEnum $season): array
     {

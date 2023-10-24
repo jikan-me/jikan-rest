@@ -19,7 +19,7 @@ final class QuerySpecificAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
         return QuerySpecificAnimeSeasonCommand::class;
     }
 
-    protected function getSeasonItems($request, ?AnimeTypeEnum $type, ?AnimeSeasonEnum $season, ?int $year): Builder
+    protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder
     {
         /**
          * @var Carbon $from
@@ -27,8 +27,9 @@ final class QuerySpecificAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
          */
 
         [$from, $to] = $this->getSeasonRange($request->year, $request->season);
+        $premiered = ucfirst($request->season)." {$request->year}";
 
-        return $this->repository->getAiredBetween($from, $to, $type, $request->season, $request->year);
+        return $this->repository->getAiredBetween($from, $to, $type, $premiered);
 //            ->where("status", "!=", AnimeStatusEnum::upcoming()->label);
     }
 }

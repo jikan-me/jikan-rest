@@ -17,7 +17,7 @@ final class QueryUpcomingAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
         return QueryUpcomingAnimeSeasonCommand::class;
     }
 
-    protected function getSeasonItems($request, ?AnimeTypeEnum $type, ?AnimeSeasonEnum $season, ?int $year): Builder
+    protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder
     {
         return $this->repository->getUpcomingSeasonItems($type);
     }

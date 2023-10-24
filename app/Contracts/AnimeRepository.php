@@ -43,8 +43,7 @@ interface AnimeRepository extends Repository
         Carbon $from,
         Carbon $to,
         ?AnimeTypeEnum $type = null,
-        ?AnimeSeasonEnum $season = null,
-        ?int $year = null
+        ?string $premiered = null
     ): EloquentBuilder;
 
     public function getUpcomingSeasonItems(?AnimeTypeEnum $type = null): EloquentBuilder;
