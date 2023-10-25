@@ -3,16 +3,21 @@
 _JIKAN_API_VERSION=v4.0.0
 SUBSTITUTE_VERSION=$_JIKAN_API_VERSION
 if [ -x "$(command -v git)" ]; then
+  # check if we have checked out a tag or not
   git symbolic-ref HEAD &> /dev/null
   if [ $? -ne 0 ]; then
+    # if a tag is checked out then use the tag name as the version
     SUBSTITUTE_VERSION=$(git describe --tags)
   else
+    # this is used when building locally
     SUBSTITUTE_VERSION=$(git describe --tags | sed -e "s/-[a-z0-9]\{8\}/-$(git rev-parse --short HEAD)/g")
   fi
 fi
+# set JIKAN_API_VERSION env var to "latest" or a tag which exists in the container registry to use the remote image
+# otherwise docker-compose will look for a locally builded image
 export _JIKAN_API_VERSION=${JIKAN_API_VERSION:-$SUBSTITUTE_VERSION}
 
-DOCKER_COMPOSE_PROJECT_NAME=jikan-api-$_JIKAN_API_VERSION
+DOCKER_COMPOSE_PROJECT_NAME=jikan-api
 DOCKER_CMD="docker"
 DOCKER_COMPOSE_CMD="docker-compose"
 
@@ -127,6 +132,7 @@ ensure_secrets() {
 }
 
 start() {
+   # todo: create a marker file for initial startup, and on initial startup ask the user whether they want a local image or the remote one
   validate_prereqs
   ensure_secrets
   exec $DOCKER_COMPOSE_CMD -p "$DOCKER_COMPOSE_PROJECT_NAME" up -d
