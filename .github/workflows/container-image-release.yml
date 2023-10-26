@@ -108,6 +108,13 @@ jobs:
           images: |
             ${{ env.REGISTRY_IMAGE }}
             jikanme/jikan-rest
+          labels: |
+            org.opencontainers.image.title=Jikan REST API
+            org.opencontainers.image.description=REST API for Jikan
+            org.opencontainers.image.url=https://jikan.moe
+            org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.revision=${{ github.sha }}
           tags: |
             type=raw,value=${{ inputs.image_tag }}
             type=raw,value=${{ github.ref_type == 'tag' && 'latest' || 'latest-nightly' }}
