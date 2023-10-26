@@ -1,76 +1,94 @@
-# For now this is just for local development. This is not production ready.
 version: '3.8'
 volumes:
-  mongo-data: {}
-  redis-data: {}
-  tmp-data: {}
-  typesense-data: {}
+  mongo-data: { }
+  redis-data: { }
+  typesense-data: { }
+
+networks:
+  jikan_network: { }
+
+secrets:
+  db_username:
+    file: db_username.txt
+  db_password:
+    file: db_password.txt
+  db_admin_username:
+    file: db_admin_username.txt
+  db_admin_password:
+    file: db_admin_password.txt
+  redis_password:
+    file: redis_password.txt
+  typesense_api_key:
+    file: typesense_api_key.txt
 
 services:
-  jikan_rest: &jikan_rest
-    build:
-      context: .
-      dockerfile: Dockerfile
+  jikan_rest:
+    image: "jikanme/jikan-rest:${_JIKAN_API_VERSION:-latest}"
     user: "${APP_UID:-10001}:${APP_GID:-10001}"
+    networks:
+      - jikan_network
+    secrets:
+      - db_username
+      - db_password
+      - typesense_api_key
+      - redis_password
     environment:
       PS1: '\[\033[1;32m\]\[\033[1;36m\][\u@\h] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
-      HOME: /tmp
-      APP_DEBUG: 'true'
-      APP_ENV: local
-      REDIS_HOST: redis
-      REDIS_PASSWORD: "${REDIS_PASSWORD:-null}"
-      DB_CONNECTION: mongodb
-      DB_HOST: mongodb
-      DB_DATABASE: jikan
-      DB_PORT: 27017
-      DB_ADMIN: jikan
-      DB_USERNAME: "${DB_USERNAME}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-    volumes:
-      - /etc/passwd:/etc/passwd:ro
-      - /etc/group:/etc/group:ro
-      - tmp-data:/tmp:rw
-      - .:/app:rw
-    depends_on:
-      mongodb: {condition: service_healthy}
-      redis: {condition: service_healthy}
-      typesense: {condition: service_healthy}
-
-  web:
-    <<: *jikan_rest
+    env_file:
+      - ./docker/config/.env.compose
     ports:
       - '8080:8080/tcp'
+    hostname: jikan-rest-api
     healthcheck:
       test: [ 'CMD-SHELL', 'wget --spider -q "http://127.0.0.1:2114/health?plugin=http"' ]
       interval: 2s
       timeout: 2s
-
-  cron:
-    <<: *jikan_rest
-    command: supercronic /etc/supercronic/laravel # it runs artisan schedule:run
+    links:
+      - mongodb:mongodb
+      - redis:redis
+      - typesense:typesense
+    depends_on:
+      mongodb: { condition: service_healthy }
+      redis: { condition: service_healthy }
+      typesense: { condition: service_healthy }
 
   mongodb:
-    image: mongo:focal
+    image: docker.io/mongo:focal
+    hostname: mongodb
     volumes:
       - mongo-data:/data/db
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
-      - '27017/tcp'
-    command: --wiredTigerCacheSizeGB 1
+      - 27017/tcp
+    command: "--wiredTigerCacheSizeGB ${MONGO_CACHE_SIZE_GB:-1.0}"
+    networks:
+      - jikan_network
+    secrets:
+      - db_username
+      - db_password
+      - db_admin_username
+      - db_admin_password
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "${DB_USERNAME:-root}"
-      MONGO_INITDB_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/db_admin_username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_admin_password
+      MONGO_INITDB_DATABASE: jikan_admin
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo mongodb://localhost:27017 --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://localhost:27017 --quiet
       interval: 30s
       timeout: 10s
       retries: 5
 
   redis:
-    image: redis:7-alpine
+    image: docker.io/redis:6-alpine
+    hostname: redis
+    secrets:
+      - redis_password
+    networks:
+      - jikan_network
     command:
       - /bin/sh
       - -c
-      - redis-server --requirepass "$${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
+      - redis-server --requirepass "$$(cat /run/secrets/redis_password)"
     volumes:
       - redis-data:/data:rw
     ports:
@@ -81,13 +99,24 @@ services:
       timeout: 1s
 
   typesense:
-    image: typesense/typesense:0.23.1
+    image: docker.io/typesense/typesense:0.24.1
+    hostname: typesense
     entrypoint: /bin/sh
+    secrets:
+      - typesense_api_key
+    networks:
+      - jikan_network
     command:
       - -c
-      - /opt/typesense-server --data-dir /data --api-key "$${TYPESENSE_API_KEY:?TYPESENSE_API_KEY variable is not set}"
-    restart: no
+      - TYPESENSE_API_KEY="$$(cat /run/secrets/typesense_api_key)" /opt/typesense-server --data-dir /data
+    deploy:
+      restart_policy:
+        condition: none
     volumes:
       - typesense-data:/data
     ports:
       - "8108/tcp"
+    healthcheck:
+      test: [ 'CMD-SHELL', '{ ! [ -f "curl_created" ] && apt -qq update -y && apt -qq install -y curl && touch curl_created && curl -s -f http://localhost:8108/health; } || { curl -s -f http://localhost:8108/health; }' ]
+      interval: 5s
+      timeout: 2s
