@@ -13,7 +13,7 @@ on:
       image_tag:
         description: 'Image tag'
         required: true
-        default: 'nightly-<put_date_here>'
+        default: 'v4.0.0-nightly-<put_date_here>'
 
 env:
   REGISTRY_IMAGE: ghcr.io/jikan-me/jikan-rest
@@ -50,6 +50,8 @@ jobs:
             org.opencontainers.image.description=REST API for Jikan
             org.opencontainers.image.url=https://jikan.moe
             org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.revision=${{ github.sha }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -107,7 +109,8 @@ jobs:
             ${{ env.REGISTRY_IMAGE }}
             jikanme/jikan-rest
           tags: |
-            type=raw,value=${{ inputs.image_tag || github.ref_name }}
+            type=raw,value=${{ inputs.image_tag }}
+            type=raw,value=${{ github.ref_type == "tag" && 'latest' || 'latest-nightly' }}
             type=sha
 
       - name: Login to GitHub Container Registry
