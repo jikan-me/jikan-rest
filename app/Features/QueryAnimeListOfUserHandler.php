@@ -60,7 +60,8 @@ final class QueryAnimeListOfUserHandler extends RequestHandlerWithScraperCache
         $jikanParserRequest = $requestParams->get("jikanParserRequest");
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => ["anime" => $jikan->getUserAnimeList($jikanParserRequest)]
+            fn(MalClient $jikan, ?int $page = null) => ["anime" => $jikan->getUserAnimeList($jikanParserRequest)],
+            $requestParams->get("page", 1)
         );
     }
 }
