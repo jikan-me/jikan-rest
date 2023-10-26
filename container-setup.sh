@@ -43,7 +43,7 @@ validate_prereqs() {
   podman_exists=$(command -v podman)
   podman_compose_exists=$(command -v podman-compose)
 
-   if [ -x "$docker_exists" ] && [ -x "$podman_exists" ]; then
+   if [ ! -x "$docker_exists" ] && [ ! -x "$podman_exists" ]; then
       echo -e "'docker' is not installed. \xE2\x9D\x8C"
       exit 1
    else
@@ -61,7 +61,7 @@ validate_prereqs() {
       DOCKER_CMD="podman"
    fi
 
-   if [ -x "$docker_compose_exists" ] && [ -x "$docker_compose_exists" ]; then
+   if [ ! -x "$docker_compose_exists" ] && [ ! -x "$podman_compose_exists" ]; then
        echo -e "'docker-compose' is not installed. \xE2\x9D\x8C"
        exit 1
     else
