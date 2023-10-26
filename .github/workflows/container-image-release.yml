@@ -110,7 +110,7 @@ jobs:
             jikanme/jikan-rest
           tags: |
             type=raw,value=${{ inputs.image_tag }}
-            type=raw,value=${{ github.ref_type == "tag" && 'latest' || 'latest-nightly' }}
+            type=raw,value=${{ github.ref_type == 'tag' && 'latest' || 'latest-nightly' }}
             type=sha
 
       - name: Login to GitHub Container Registry
