@@ -129,12 +129,12 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         $queryable = $this->queryable(true);
 
         if ($premiered !== null) {
-            $queryable = $this->queryable()
+            $queryable = $queryable
                 ->where("premiered", null)
                 ->orWhere("premiered", $premiered);
         }
 
-        $queryable = $this->queryable()
+        $queryable = $queryable
             ->whereRaw([
             "aired.from" => [
                 '$gte' => $from->toAtomString(),
