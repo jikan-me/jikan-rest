@@ -1,24 +1,34 @@
 name: Container Image Release
-concurrency: production
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  packages: write
+  contents: read
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image tag'
+        required: true
+        default: 'v4.0.0-nightly-<put_date_here>'
+
+env:
+  REGISTRY_IMAGE: ghcr.io/jikan-me/jikan-rest
 
 jobs:
-  release-app-image:
+  build-app-image:
     runs-on: ubuntu-latest
-    name: Release App container image
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    name: Build App container image
     steps:
-      - name: Check if base container image exists
-        id: baseImageExists
-        run: |
-          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)
-          curl --fail -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/jikan-me/jikan-rest-php/tags/list | grep -q latest
-
-      - name: Base image existance check failed
-        if: ${{ always() && steps.baseImageExists.outcome == 'failure' }}
-        run: echo "Base image doesn't exist yet. Please run the base image creation workflow first."
-      
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -29,18 +39,88 @@ jobs:
 
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Read metadata
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          platforms: linux/amd64,linux/arm64
+          images: ${{ env.REGISTRY_IMAGE }}
+          labels: |
+            org.opencontainers.image.title=Jikan REST API
+            org.opencontainers.image.description=REST API for Jikan
+            org.opencontainers.image.url=https://jikan.moe
+            org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.revision=${{ github.sha }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          # let's use github action cache storage
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # todo: We are building a multi arch image, and because of the OCI standard the labels defined above should go in the annotations too. 
+          # todo: Add "annotations" when the new version hits of this action: https://github.com/docker/build-push-action/pull/992
+          # todo: that way all the fields in packages will be populated, so each version will have proper revision, name, description.
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  publish-app-image:
+    runs-on: ubuntu-latest
+    name: Publish app container image
+    needs:
+      - build-app-image
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Read metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/jikan-me/jikan-rest
+            ${{ env.REGISTRY_IMAGE }}
             jikanme/jikan-rest
+          labels: |
+            org.opencontainers.image.title=Jikan REST API
+            org.opencontainers.image.description=REST API for Jikan
+            org.opencontainers.image.url=https://jikan.moe
+            org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.revision=${{ github.sha }}
           tags: |
-            type=raw,value=${{ github.ref_name }}
+            type=raw,value=${{ inputs.image_tag || github.ref_name }}
+            type=raw,value=${{ github.ref_type == 'tag' && 'latest' || 'latest-nightly' }}
             type=sha
 
       - name: Login to GitHub Container Registry
@@ -56,16 +136,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          context: .
-          # let's use github action cache storage
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: |
-            GITHUB_PERSONAL_TOKEN=${{ secrets.GITHUB_TOKEN }}
-            BASE_IMAGE_VERSION=latest
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") $(jq -cr '.labels | to_entries | map("--annotation \"\(.key)=\(.value)\"") | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}

@@ -2,20 +2,8 @@
 
 namespace App\Console;
 
-use App\Console\Commands\ClearQueuedJobs;
 use App\Console\Commands\CacheRemove;
-use App\Console\Commands\Indexer\AnimeIndexer;
-use App\Console\Commands\Indexer\AnimeSweepIndexer;
-use App\Console\Commands\Indexer\AnimeScheduleIndexer;
-use App\Console\Commands\Indexer\CommonIndexer;
-use App\Console\Commands\Indexer\CurrentSeasonIndexer;
-use App\Console\Commands\Indexer\GenreIndexer;
-use App\Console\Commands\Indexer\MangaIndexer;
-use App\Console\Commands\Indexer\MangaSweepIndexer;
-use App\Console\Commands\Indexer\ProducersIndexer;
-use App\Console\Commands\ManageMicrocaching;
-use App\Console\Commands\ModifyCacheDriver;
-use App\Console\Commands\ModifyCacheMethod;
+use App\Console\Commands\Indexer;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -28,15 +16,15 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         CacheRemove::class,
-        CommonIndexer::class,
-        AnimeScheduleIndexer::class,
-        CurrentSeasonIndexer::class,
-        AnimeIndexer::class,
-        MangaIndexer::class,
-        GenreIndexer::class,
-        ProducersIndexer::class,
-        AnimeSweepIndexer::class,
-        MangaSweepIndexer::class,
+        Indexer\CommonIndexer::class,
+        Indexer\AnimeScheduleIndexer::class,
+        Indexer\CurrentSeasonIndexer::class,
+        Indexer\AnimeIndexer::class,
+        Indexer\MangaIndexer::class,
+        Indexer\GenreIndexer::class,
+        Indexer\ProducersIndexer::class,
+        Indexer\AnimeSweepIndexer::class,
+        Indexer\MangaSweepIndexer::class
     ];
 
     /**

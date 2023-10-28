@@ -28,10 +28,6 @@ final class JikanUserListRequestMapperService
             $values["sort"] = $values["sort"] === "asc" ? -1 : 1;
         }
 
-        if (!array_key_exists("page", $values)) {
-            $values["page"] = 1;
-        }
-
         if ($listType->equals(UserListTypeEnum::anime())) {
             $rangeFrom = "airedFrom";
             $rangeTo = "airedTo";

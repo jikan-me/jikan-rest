@@ -92,14 +92,31 @@ class ClubController extends Controller
      * @OA\Schema(
      *      schema="club_member",
      *      description="Club Member",
-     *      @OA\Property(
+     *
+     *     @OA\Property(
      *          property="data",
      *          type="array",
-     *           @OA\Items(
+     *
+     *          @OA\Items(
      *               type="object",
-     *               ref="#/components/schemas/user_images"
-     *           ),
-     *      ),
+     *
+     *              @OA\Property(
+     *                  property="username",
+     *                  type="string",
+     *                  description="User's username",
+     *              ),
+     *              @OA\Property(
+     *                  property="url",
+     *                  type="string",
+     *                  description="User URL",
+     *              ),
+     *              @OA\Property(
+     *                  property="images",
+     *                  type="object",
+     *                  ref="#/components/schemas/user_images"
+     *              ),
+     *          ),
+     *     ),
      * ),
      */
     public function members(ClubMembersLookupCommand $command)

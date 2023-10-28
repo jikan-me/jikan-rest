@@ -19,3 +19,10 @@ node_modules
 .vscode
 .github
 .git
+db_username.txt
+db_password.txt
+redis_password.txt
+typesense_api_key.txt
+.phpunit.result.cache
+.env
+docker-compose.yml

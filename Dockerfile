@@ -1,30 +1,26 @@
-FROM spiralscout/roadrunner:2.12.2 as roadrunner
-FROM composer:2.5.1 as composer
-FROM mlocati/php-extension-installer:1.5.52 as php-ext-installer
+FROM docker.io/spiralscout/roadrunner:2.12.2 as roadrunner
+FROM docker.io/composer:2.5.1 as composer
+FROM docker.io/mlocati/php-extension-installer:2.1.58 as php-ext-installer
 FROM php:8.1.16-bullseye
-ARG GITHUB_PERSONAL_TOKEN
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/
 ENV COMPOSER_HOME="/tmp/composer"
 RUN set -x \
-    && install-php-extensions gd exif intl bz2 gettext mongodb-stable redis opcache sockets pcntl \
+    && install-php-extensions intl mbstring mongodb-stable redis opcache sockets pcntl \
     # install xdebug (for testing with code coverage), but do not enable it
     && IPE_DONT_ENABLE=1 install-php-extensions xdebug-3.2.0
 
 # install roadrunner
 COPY --from=roadrunner /usr/bin/rr /usr/bin/rr
 LABEL org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
-# used only for supercronic atm. Supported values are: amd64, arm64
-ARG TARGET_ARCH="amd64"
 RUN	set -ex \
     && apt-get update && apt-get install -y --no-install-recommends \
 	openssl \
 	git \
-	dos2unix \
+    wget \
 	unzip \
-  wget \
   # install supercronic (for laravel task scheduling), project page: <https://github.com/aptible/supercronic>
-	&& wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-${TARGET_ARCH}" \
+	&& wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-$(dpkg --print-architecture)" \
 	   -O /usr/bin/supercronic \
 	&& chmod +x /usr/bin/supercronic \
 	&& mkdir /etc/supercronic \
@@ -50,11 +46,6 @@ WORKDIR /app
 
 # copy composer (json|lock) files for dependencies layer caching
 COPY --chown=jikanapi:jikanapi ./composer.* /app/
-
-# check if GITHUB_PERSONAL_TOKEN is set and configure it for composer
-# it is recommended to set this for the build, otherwise the build might fail because of github's rate limits
-RUN if [ -z "$GITHUB_PERSONAL_TOKEN" ]; then echo "** GITHUB_PERSONAL_TOKEN is not set. This build may fail due to github rate limits."; \
-    else composer config github-oauth.github.com "$GITHUB_PERSONAL_TOKEN"; fi
 
 # install composer dependencies (autoloader MUST be generated later!)
 RUN composer install -n --no-dev --no-cache --no-ansi --no-autoloader --no-scripts --prefer-dist
