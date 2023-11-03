@@ -7,6 +7,7 @@ use App\Contracts\AnimeRepository;
 use App\Contracts\Repository;
 use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeScheduleFilterEnum;
+use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
@@ -115,7 +116,8 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     public function getAiredBetween(
         Carbon $from,
         Carbon $to,
-        ?AnimeTypeEnum $type = null
+        ?AnimeTypeEnum $type = null,
+        ?string $premiered = null
     ): EloquentBuilder
     {
 //        $queryable = $this->queryable(true)->whereBetween("aired.from", [
@@ -124,7 +126,16 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 //        ]);
 
         /** @noinspection PhpParamsInspection */
-        $queryable = $this->queryable(true)->whereRaw([
+        $queryable = $this->queryable(true);
+
+        if ($premiered !== null) {
+            $queryable = $queryable
+                ->where("premiered", null)
+                ->orWhere("premiered", $premiered);
+        }
+
+        $queryable = $queryable
+            ->whereRaw([
             "aired.from" => [
                 '$gte' => $from->toAtomString(),
                 '$lte' => $to->modify("last day of this month")->toAtomString()

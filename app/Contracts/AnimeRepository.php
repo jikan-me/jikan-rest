@@ -4,6 +4,7 @@ namespace App\Contracts;
 
 use App\Anime;
 use App\Enums\AnimeScheduleFilterEnum;
+use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Support\Carbon;
@@ -41,7 +42,8 @@ interface AnimeRepository extends Repository
     public function getAiredBetween(
         Carbon $from,
         Carbon $to,
-        ?AnimeTypeEnum $type = null
+        ?AnimeTypeEnum $type = null,
+        ?string $premiered = null
     ): EloquentBuilder;
 
     public function getUpcomingSeasonItems(?AnimeTypeEnum $type = null): EloquentBuilder;
