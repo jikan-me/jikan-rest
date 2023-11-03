@@ -3,7 +3,6 @@
 namespace App\Features;
 
 use App\Dto\QueryUpcomingAnimeSeasonCommand;
-use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder;
 
