@@ -67,8 +67,8 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           # let's use github action cache storage
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=buildkit_${{ matrix.platform }}
+          cache-to: type=gha,mode=max,scope=buildkit_${{ matrix.platform }}
           # todo: We are building a multi arch image, and because of the OCI standard the labels defined above should go in the annotations too. 
           # todo: Add "annotations" when the new version hits of this action: https://github.com/docker/build-push-action/pull/992
           # todo: that way all the fields in packages will be populated, so each version will have proper revision, name, description.
