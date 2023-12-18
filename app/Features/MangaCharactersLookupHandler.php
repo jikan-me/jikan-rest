@@ -31,7 +31,7 @@ final class MangaCharactersLookupHandler extends RequestHandlerWithScraperCache
         $id = $requestParams->get("id");
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => $jikan->getMangaCharacters(new MangaCharactersRequest($id))
+            fn(MalClient $jikan, ?int $page = null) => ["characters" => $jikan->getMangaCharacters(new MangaCharactersRequest($id))]
         );
     }
 }
