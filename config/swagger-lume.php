@@ -206,7 +206,7 @@ return [
 
         # Information
 
-        ⚡ Jikan is powered by it's awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)
+        ⚡ Jikan is powered by its awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)
 
         ## Rate Limiting
 
