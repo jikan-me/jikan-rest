@@ -16,7 +16,7 @@ use Spatie\Enum\Laravel\Enum;
  *   schema="anime_search_query_type",
  *   description="Available Anime types",
  *   type="string",
- *   enum={"tv","movie","ova","special","ona","music"}
+ *   enum={"tv","movie","ova","special","ona","music","cm","pv","tv-special"}
  * )
  */
 final class AnimeTypeEnum extends Enum
@@ -29,7 +29,10 @@ final class AnimeTypeEnum extends Enum
             'ova' => 'OVA',
             'special' => 'Special',
             'ona' => 'ONA',
-            'music' => 'Music'
+            'music' => 'Music',
+            'cm' => 'CM',
+            'pv' => 'PV',
+            'tv-special' => 'TV Special'
         ];
     }
 }
