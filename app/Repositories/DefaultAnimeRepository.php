@@ -120,31 +120,33 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         ?string $premiered = null
     ): EloquentBuilder
     {
-//        $queryable = $this->queryable(true)->whereBetween("aired.from", [
-//            $from->toAtomString(),
-//            $to->modify("last day of this month")->toAtomString()
-//        ]);
-
         /** @noinspection PhpParamsInspection */
         $queryable = $this->queryable(true);
 
-        if ($premiered !== null) {
-            $queryable = $queryable
-                ->where("premiered", null)
-                ->orWhere("premiered", $premiered);
-        }
+        $airedFilter = ["aired.from" => [
+            '$gte' => $from->toAtomString(),
+            '$lte' => $to->modify("last day of this month")->toAtomString()
+        ]];
 
-        $queryable = $queryable
-            ->whereRaw([
-            "aired.from" => [
-                '$gte' => $from->toAtomString(),
-                '$lte' => $to->modify("last day of this month")->toAtomString()
-            ]
-        ]);
+        $finalFilter = [];
+
+        if ($premiered !== null) {
+            $finalFilter["$or"] = [
+                ["premiered" => $premiered],
+                [
+                    "premiered" => null,
+                    ...$airedFilter
+                ]
+            ];
+        } else {
+            $finalFilter = array_merge($finalFilter, $airedFilter);
+        }
 
         if (!is_null($type)) {
-            $queryable = $queryable->where("type", $type->label);
+            $finalFilter["type"] = $type->label;
         }
+
+        $queryable = $queryable->whereRaw($finalFilter);
 
         return $queryable->orderBy("members", "desc");
     }
