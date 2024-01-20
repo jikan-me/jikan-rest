@@ -9,7 +9,7 @@ use Spatie\LaravelData\Support\DataProperty;
 /**
  * A trait for preparing the incoming data before passing it through the data pipeline.
  * All preparation logic lives here.
- * https://spatie.be/docs/laravel-data/v2/advanced-usage/pipeline
+ * https://spatie.be/docs/laravel-data/v3/advanced-usage/pipeline
  */
 trait PreparesData
 {

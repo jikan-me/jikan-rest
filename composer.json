@@ -34,10 +34,10 @@
         "predis/predis": "^1.1",
         "pushrbx/lumen-roadrunner": "5.9.1",
         "sentry/sentry-laravel": "^2.8",
-        "spatie/laravel-data": "^2.2",
+        "spatie/laravel-data": "^3.11",
         "spatie/laravel-enum": "^3.0",
         "symfony/yaml": "^4.1",
-        "typesense/laravel-scout-typesense-driver": "^5.0",
+        "typesense/laravel-scout-typesense-driver": "^5.2",
         "vlucas/phpdotenv": "^5",
         "zircote/swagger-php": "3.*"
     },

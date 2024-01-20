@@ -68,3 +68,49 @@ if (!function_exists('text_match_buckets')) {
         return app()->make("jikan-config")->textMatchBuckets();
     }
 }
+
+if (!function_exists('app_path')) {
+    /**
+     * Get the path to the application folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function app_path(?string $path = ""): string {
+        if ($path == "") {
+            return base_path('app');
+        }
+        return base_path('app/' . $path);
+    }
+}
+
+if (! function_exists('cache')) {
+    /**
+     * Get / set the specified cache value.
+     *
+     * If an array is passed, we'll assume you want to put to the cache.
+     *
+     * @param  mixed  ...$arguments  key|key,default|data,expiration|null
+     * @return mixed|\Illuminate\Cache\CacheManager
+     *
+     * @throws \InvalidArgumentException
+     */
+    function cache(...$arguments)
+    {
+        if (empty($arguments)) {
+            return app('cache');
+        }
+
+        if (is_string($arguments[0])) {
+            return app('cache')->get(...$arguments);
+        }
+
+        if (! is_array($arguments[0])) {
+            throw new InvalidArgumentException(
+                'When setting a value in the cache, you must pass an array of key / value pairs.'
+            );
+        }
+
+        return app('cache')->put(key($arguments[0]), reset($arguments[0]), $arguments[1] ?? null);
+    }
+}
