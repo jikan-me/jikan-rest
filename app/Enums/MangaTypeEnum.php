@@ -17,7 +17,7 @@ use Spatie\Enum\Laravel\Enum;
  *   schema="manga_search_query_type",
  *   description="Available Manga types",
  *   type="string",
- *   enum={"manga","novel", "lightnovel", "oneshot","doujin","manhwa","manhua"}
+ *   enum={"manga","novel", "lightnovel", "oneshot","doujin","manhwa","manhua","one-shot"}
  * )
  */
 final class MangaTypeEnum extends Enum
@@ -31,7 +31,8 @@ final class MangaTypeEnum extends Enum
             'oneshot' => 'One-shot',
             'doujin' => 'Doujinshi',
             'manhwa' => 'Manhwa',
-            'manhua' => 'Manhua'
+            'manhua' => 'Manhua',
+            'one-shot' => 'One-shot'
         ];
     }
 }
