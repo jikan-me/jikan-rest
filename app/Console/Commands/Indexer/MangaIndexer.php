@@ -152,6 +152,7 @@ class MangaIndexer extends Command
         );
 
         $ids = array_merge($ids['sfw'], $ids['nsfw']);
+        sort($ids, SORT_NUMERIC);
         Storage::put('indexer/manga_mal_id.json', json_encode($ids));
 
         return json_decode(Storage::get('indexer/manga_mal_id.json'));
