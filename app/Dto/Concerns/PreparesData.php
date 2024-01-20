@@ -3,10 +3,8 @@
 namespace App\Dto\Concerns;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Env;
-use Illuminate\Support\Facades\App;
-use \ReflectionClass;
 use Spatie\LaravelData\Support\DataConfig;
+use Spatie\LaravelData\Support\DataProperty;
 
 /**
  * A trait for preparing the incoming data before passing it through the data pipeline.
@@ -29,22 +27,33 @@ trait PreparesData
         // collection, and if they are present have such a value, convert them.
         $dataClass = app(DataConfig::class)->getDataClass(static::class);
         foreach ($dataClass->properties as $property) {
-            if (!$property->type->acceptsType("bool")) {
-                continue;
-            }
+            /**
+             * @var DataProperty $property
+             */
             // the name can be different in the $properties variable, so let's check if there is an input name mapping
             // for the property and use that instead if present.
             $propertyRawName = $property->inputMappedName ?? $property->name;
             if ($properties->has($propertyRawName)) {
                 $propertyVal = $properties->get($propertyRawName);
-                if ($propertyVal === "true") {
-                    $propertyVal = true;
+                if ($property->type->acceptsType("bool")) {
+                    if ($propertyVal === "true") {
+                        $propertyVal = true;
+                    }
+                    if ($propertyVal === "false") {
+                        $propertyVal = false;
+                    }
                 }
-                if ($propertyVal === "false") {
-                    $propertyVal = false;
+                // if the property is optional and the value is an empty string, we want to ignore it.
+                if ($property->type->isOptional && $propertyVal === "") {
+                    $propertyVal = null;
                 }
-                $properties->put($propertyRawName, $propertyVal);
-            }
+
+                if (!is_null($propertyVal)) {
+                    $properties->put($propertyRawName, $propertyVal);
+                } else {
+                    $properties->forget($propertyRawName);
+                }
+            }            
         }
 
         return $properties;
