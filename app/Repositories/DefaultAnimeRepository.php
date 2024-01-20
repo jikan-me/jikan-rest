@@ -131,7 +131,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         $finalFilter = [];
 
         if ($premiered !== null) {
-            $finalFilter["$or"] = [
+            $finalFilter['$or'] = [
                 ["premiered" => $premiered],
                 [
                     "premiered" => null,
