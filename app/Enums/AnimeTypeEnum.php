@@ -11,6 +11,9 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self special()
  * @method static self ona()
  * @method static self music()
+ * @method static self cm()
+ * @method static self pv()
+ * @method static self tv_special()
  *
  * @OA\Schema(
  *   schema="anime_search_query_type",
