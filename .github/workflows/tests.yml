@@ -1,0 +1,109 @@
+name: "Tests"
+on:
+  push:
+    branches:
+      - master
+    
+  pull_request: {}
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    name: PHP v8.1 with MongoDB 6.0
+    concurrency: "ci-${{ github.ref }}"
+    env:
+      extensions: curl, intl, mbstring, mongodb-stable, redis, opcache, sockets, pcntl
+      key: jikan-rest-ci-cache-v1
+      phpversion: 8.1
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_DATABASE: jikan_test
+          options: >-
+            --setParameter transactionLifetimeLimitSeconds=5
+      typesense:
+        image: typesense/typesense:0.24.1
+        ports:
+          - 8108:8108
+        env:
+          TYPESENSE_API_KEY: jikan_testing
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Show MongoDB server status
+        run: |
+          docker exec --tty mongodb mongosh 127.0.0.1:27017 --eval "db.runCommand({ serverStatus: 1 })"
+      
+      - name: Setup extension cache
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ env.phpversion }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.phpversion }}
+          extensions: ${{ env.extensions }}
+      
+      - name: Setup dependency cache
+        id: composercache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: "${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "${{ runner.os }}-composer-"
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --no-suggest --no-scripts
+
+      - name: Run tests
+        env:
+          CI_ENV: true
+          APP_ENV: testing
+          APP_DEBUG: "true"
+          APP_KEY: "base64:em9ycm8="
+          APP_TIMEZONE: UTC
+          APP_URL: http://localhost:8080
+          LOG_CHANNEL: stack
+          LOG_LEVEL: debug
+          DB_HOST: localhost
+          DB_PORT: 27017
+          MAX_RESULTS_PER_PAGE: 25
+          TYPESENSE_API_KEY: jikan_testing
+          TYPESENSE_HOST: localhost
+          TYPESENSE_PORT: 8108
+          SCOUT_DRIVER: typesense
+          SCOUT_QUEUE: "false"
+          MICROCACHING: "false"
+          CACHING: "false"
+          CACHE_DRIVER: array
+          CACHE_DEFAULT_EXPIRE: 86400
+          CACHE_META_EXPIRE: 300
+          CACHE_USER_EXPIRE: 300
+          CACHE_USERLIST_EXPIRE: 3600
+          CACHE_404_EXPIRE: 604800
+          CACHE_SEARCH_EXPIRE: 432000
+          CACHE_PRODUCERS_EXPIRE: 432000
+          CACHE_MAGAZINES_EXPIRE: 432000
+          CACHE_MICROCACHE_EXPIRE: 60
+          GITHUB_REPORTING: "false"
+          REPORTING: "false"
+
+        run: ./vendor/bin/phpunit --coverage-clover coverage.xml
