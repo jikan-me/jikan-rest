@@ -215,14 +215,13 @@ class AnimeSearchEndpointTest extends TestCase
     /**
      * @dataProvider emptyDateRangeProvider
      */
-    public function testSearchByEmptyDatesShouldRaiseValidationError($params)
+    public function testSearchByEmptyDatesShouldNotRaiseValidationError($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $this->getJsonResponse($params);
 
-        $this->seeStatusCode(400);
-        $this->assertEquals("ValidationException", data_get($content, "type"));
+        $this->seeStatusCode(200);
     }
 
     /**

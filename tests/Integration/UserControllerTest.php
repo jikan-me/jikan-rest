@@ -13,6 +13,9 @@ use Jikan\Model\User\LastUpdates;
 use Jikan\Model\User\Profile as JikanProfile;
 use Jikan\Model\User\Reviews\UserReviews;
 use Jikan\MyAnimeList\MalClient;
+use Jikan\Parser\User\Profile\FavoritesParser;
+use Jikan\Parser\User\Profile\LastUpdatesParser;
+use Jikan\Parser\User\Profile\MangaStatsParser;
 use Jikan\Parser\User\Profile\UserProfileParser;
 use Jikan\Request\User\UserRecommendationsRequest;
 use Tests\TestCase;
@@ -103,8 +106,8 @@ class UserControllerTest extends TestCase
         $userProfileParser->allows()
             ->getJoinDate()
             ->andReturn(\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339, "2000-10-01T00:00:00+00:00"));
-        $animeStats = \Mockery::mock(AnimeStats::class)->makePartial();
-        $animeStats->allows([
+        $animeStatsParser = \Mockery::mock(\Jikan\Parser\User\Profile\AnimeStatsParser::class)->makePartial();
+        $animeStatsParser->allows([
             "getDaysWatched" => 0,
             "getMeanScore" => 0,
             "getWatching" => 0,
@@ -116,11 +119,12 @@ class UserControllerTest extends TestCase
             "getRewatched" => 0,
             "getEpisodesWatched" => 0
         ]);
+        $animeStats = AnimeStats::fromParser($animeStatsParser);
         $userProfileParser->allows()
             ->getAnimeStats()
             ->andReturn($animeStats);
-        $mangaStats = \Mockery::mock(MangaStats::class)->makePartial();
-        $mangaStats->allows([
+        $mangaStatsParser = \Mockery::mock(MangaStatsParser::class)->makePartial();
+        $mangaStatsParser->allows([
             "getDaysRead" => 0,
             "getMeanScore" => 0,
             "getReading" => 0,
@@ -133,16 +137,18 @@ class UserControllerTest extends TestCase
             "getChaptersRead" => 0,
             "getVolumesRead" => 0
         ]);
+        $mangaStats = MangaStats::fromParser($mangaStatsParser);
         $userProfileParser->allows()
             ->getMangaStats()
             ->andReturn($mangaStats);
-        $favorites = \Mockery::mock(\Jikan\Model\User\Favorites::class)->makePartial();
-        $favorites->allows([
+        $favoritesParser = \Mockery::mock(FavoritesParser::class)->makePartial();
+        $favoritesParser->allows([
             "getAnime" => [],
             "getManga" => [],
             "getCharacters" => [],
             "getPeople" => []
         ]);
+        $favorites = \Jikan\Model\User\Favorites::fromParser($favoritesParser);
         $userProfileParser->allows()
             ->getFavorites()
             ->andReturn($favorites);
@@ -155,22 +161,25 @@ class UserControllerTest extends TestCase
         $userProfileParser->allows()
             ->getAbout()
             ->andReturn(null);
-        $lastUpdates = \Mockery::mock(LastUpdates::class)->makePartial();
-        $lastUpdates->allows()
-            ->getAnime()
+        $lastUpdatesParser = \Mockery::mock(LastUpdatesParser::class)->makePartial();
+        $lastUpdatesParser->allows()
+            ->getLastAnimeUpdates()
             ->andReturn([]);
-        $lastUpdates->allows()
-            ->getManga()
+        $lastUpdatesParser->allows()
+            ->getLastMangaUpdates()
             ->andReturn([]);
+
+        $lastUpdates = LastUpdates::fromParser($lastUpdatesParser);
         $userProfileParser->allows()
             ->getUserLastUpdates()
             ->andReturn($lastUpdates);
 
 
+        $resultData = JikanProfile::fromParser($userProfileParser);
         /** @noinspection PhpParamsInspection */
         $jikanParser->allows()
             ->getUserProfile(\Mockery::any())
-            ->andReturn(JikanProfile::fromParser($userProfileParser));
+            ->andReturn($resultData);
 
         $this->app->instance('JikanParser', $jikanParser);
 
