@@ -23,10 +23,13 @@ jobs:
           - 27017:27017
         env:
           MONGO_INITDB_DATABASE: jikan_test
-        options: --name mongodb
+        options: >-
+          --health-cmd 'mongosh --eval "db.runCommand({ ping: 1 })"'
+          --health-interval 10s
+          --health-timeout 8s
+          --health-retries 5
       typesense:
         image: typesense/typesense:0.24.1
-        options: --name typesense
         ports:
           - 8108:8108
         volumes:
@@ -34,13 +37,18 @@ jobs:
         env:
           TYPESENSE_API_KEY: jikan_testing
           TYPESENSE_DATA_DIR: /data
+        options: >-
+          --health-cmd '{ ! [ -f "curl_created" ] && apt -qq update -y && apt -qq install -y curl && touch curl_created && curl -s -f http://localhost:8108/health; } || { curl -s -f http://localhost:8108/health; }'
+          --health-interval 10s
+          --health-timeout 8s
+          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Show MongoDB server status
         run: |
-          docker exec --tty mongodbtest mongosh 127.0.0.1:27017 --eval "db.runCommand({ serverStatus: 1 })"
+          docker run --rm -it mongo:6 mongosh mongodb:27017 --eval "db.runCommand({ serverStatus: 1 })"
 
       - name: Setup extension cache
         id: extcache
