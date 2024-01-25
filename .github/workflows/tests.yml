@@ -110,3 +110,9 @@ jobs:
           REPORTING: "false"
 
         run: ./vendor/bin/phpunit --coverage-clover coverage.xml
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
