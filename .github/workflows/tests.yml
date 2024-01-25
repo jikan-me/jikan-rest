@@ -23,11 +23,6 @@ jobs:
           - 27017:27017
         env:
           MONGO_INITDB_DATABASE: jikan_test
-        options: >-
-          --health-cmd 'mongosh --eval "db.runCommand({ ping: 1 })"'
-          --health-interval 10s
-          --health-timeout 8s
-          --health-retries 5
       typesense:
         image: typesense/typesense:0.24.1
         ports:
@@ -37,11 +32,6 @@ jobs:
         env:
           TYPESENSE_API_KEY: jikan_testing
           TYPESENSE_DATA_DIR: /data
-        options: >-
-          --health-cmd '{ ! [ -f "curl_created" ] && apt -qq update -y && apt -qq install -y curl && touch curl_created && curl -s -f http://localhost:8108/health; } || { curl -s -f http://localhost:8108/health; }'
-          --health-interval 10s
-          --health-timeout 8s
-          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
