@@ -23,10 +23,10 @@ jobs:
           - 27017:27017
         env:
           MONGO_INITDB_DATABASE: jikan_test
-          options: >-
-            --setParameter transactionLifetimeLimitSeconds=5
+        options: --name mongodb
       typesense:
         image: typesense/typesense:0.24.1
+        options: --name typesense
         ports:
           - 8108:8108
         volumes:
@@ -40,7 +40,7 @@ jobs:
 
       - name: Show MongoDB server status
         run: |
-          docker exec --tty mongodb mongosh 127.0.0.1:27017 --eval "db.runCommand({ serverStatus: 1 })"
+          docker exec --tty mongodbtest mongosh 127.0.0.1:27017 --eval "db.runCommand({ serverStatus: 1 })"
 
       - name: Setup extension cache
         id: extcache
