@@ -41,7 +41,7 @@ jobs:
           docker run --rm --network host mongo:6 mongosh localhost:27017 --eval "db.runCommand({ serverStatus: 1 })"
 
       - name: Show Typesense server status
-        run: curl -s -f http://localhost:8108/health
+        run: curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 1 --retry-max-time 5 -s -f http://localhost:8108/health
 
       - name: Setup extension cache
         id: extcache
