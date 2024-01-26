@@ -38,7 +38,7 @@ jobs:
 
       - name: Show MongoDB server status
         run: |
-          docker run --rm -it mongo:6 mongosh mongodb:27017 --eval "db.runCommand({ serverStatus: 1 })"
+          docker run --rm mongo:6 mongosh mongodb:27017 --eval "db.runCommand({ serverStatus: 1 })"
 
       - name: Setup extension cache
         id: extcache
