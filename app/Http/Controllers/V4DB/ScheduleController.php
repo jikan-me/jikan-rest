@@ -20,7 +20,7 @@ class ScheduleController extends Controller
      *          in="query",
      *          required=false,
      *          description="Filter by day",
-     *          @OA\Schema(type="string",enum={"monday", "tuesday", "wednesday", "thursday", "friday", "unknown", "other"})
+     *          @OA\Schema(type="string",enum={"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "unknown", "other"})
      *      ),
      *
      *      @OA\Parameter(
