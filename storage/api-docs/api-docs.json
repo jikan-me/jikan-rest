@@ -4263,7 +4263,7 @@
                     "music",
                     "cm",
                     "pv",
-                    "tv-special"
+                    "tv_special"
                 ]
             },
             "characters_search_query_orderby": {
@@ -4392,8 +4392,7 @@
                     "oneshot",
                     "doujin",
                     "manhwa",
-                    "manhua",
-                    "one-shot"
+                    "manhua"
                 ]
             },
             "people_search_query_orderby": {
