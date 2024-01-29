@@ -130,16 +130,25 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
         $finalFilter = [];
 
+        // if the premiered parameter for the filter is not null, look for those items which have a premiered attribute set,
+        // and equals to the parameter value, OR look for those items which doesn't have premired attribute set,
+        // they don't have a garbled aired string and their aired.from date is within the from-to parameters range
         if ($premiered !== null) {
             $finalFilter['$or'] = [
                 ["premiered" => $premiered],
                 [
                     "premiered" => null,
+                    "aired.string" => [
+                        '$not' => ['$regex' => "{$from->year} to ?"]
+                    ],
                     ...$airedFilter
                 ]
             ];
         } else {
             $finalFilter = array_merge($finalFilter, $airedFilter);
+            $finalFilter["aired.string"] = [
+                '$not' => ['$regex' => "{$from->year} to ?"]
+            ];
         }
 
         if (!is_null($type)) {
