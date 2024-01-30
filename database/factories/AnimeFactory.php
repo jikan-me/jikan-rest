@@ -26,6 +26,11 @@ class AnimeFactory extends JikanMediaModelFactory
         $status = $this->faker->randomElement(["Currently Airing", "Finished Airing", "Not yet aired"]);
         [$aired_from, $aired_to] = $this->createActiveDateRange($status, "Currently Airing");
 
+        $premiered = $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]) . " " . $this->faker->year();
+        if ($status === "Not yet aired") {
+            $premiered = null;
+        }
+
         return [
             "mal_id" => $mal_id,
             "url" => $this->createMalUrl($mal_id, "anime"),
@@ -68,7 +73,7 @@ class AnimeFactory extends JikanMediaModelFactory
             "synopsis" => "test",
             "approved" => true,
             "background" => "test",
-            "premiered" => $this->faker->randomElement(["Winter", "Spring", "Fall", "Summer"]) . " " . $this->faker->year(),
+            "premiered" => $premiered,
             "broadcast" => [
                 "day" => "",
                 "time" => "",
