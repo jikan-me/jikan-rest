@@ -23,7 +23,7 @@ class AnimeFactory extends JikanMediaModelFactory
     {
         $mal_id = $this->createMalId();
         $title = $this->createTitle();
-        $status = $this->faker->randomElement(["Currently Airing", "Completed", "Upcoming"]);
+        $status = $this->faker->randomElement(["Currently Airing", "Finished Airing", "Not yet aired"]);
         [$aired_from, $aired_to] = $this->createActiveDateRange($status, "Currently Airing");
 
         return [
