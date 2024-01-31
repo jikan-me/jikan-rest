@@ -82,6 +82,6 @@ class Producers extends JikanApiSearchableModel
 
     public function getTitleAttributeName(): string
     {
-        return 'titles_idx';
+        return 'titles';
     }
 }
