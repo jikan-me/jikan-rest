@@ -40,6 +40,8 @@ trait ScoutFlush
                         "filter_by" => "mal_id:>0",
                         "batch_size" => 500
                     ]);
+
+                    $typeSenseClient->deleteCollection($modelInstance->searchableAs());
                 }
             }
         }
