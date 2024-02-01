@@ -115,6 +115,10 @@ jobs:
 
         run: ./vendor/bin/phpunit --coverage-clover coverage.xml
 
+      - name: Show logs after test failure
+        if: failure()
+        run: find ./storage/logs/daily/*.log | head -n 1 | xargs cat
+
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:

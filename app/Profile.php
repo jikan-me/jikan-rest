@@ -75,4 +75,9 @@ class Profile extends JikanApiSearchableModel
             "username"
         ];
     }
+
+    public function getTitleAttributeName(): string
+    {
+        return "username";
+    }
 }
