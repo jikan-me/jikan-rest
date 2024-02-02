@@ -66,4 +66,23 @@ return [
      * which will only enable the caster locally.
      */
     'var_dumper_caster_mode' => 'development',
+
+    /**
+     * It is possible to skip the PHP reflection analysis of data objects
+     * when running in production. This will speed up the package. You
+     * can configure where data objects are stored and which cache
+     * store should be used.
+     */
+    'structure_caching' => [
+        'directories' => [app_path('Dto')],
+        'cache' => [
+            'store' => env('CACHE_DRIVER', 'file'),
+            'prefix' => 'laravel-data',
+        ],
+        'reflection_discovery' => [
+            'enabled' => false,
+            'base_path' => base_path(),
+            'root_namespace' => null,
+        ],
+    ],
 ];

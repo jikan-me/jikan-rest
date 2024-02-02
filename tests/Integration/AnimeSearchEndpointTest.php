@@ -120,24 +120,24 @@ class AnimeSearchEndpointTest extends TestCase
     public function commonParameterProvider(): array
     {
         return [
-            [["status" => "airing"]],
-            [["status" => "complete"]],
-            [["status" => "upcoming"]],
-            [["status" => "Airing"]],
-            [["status" => "Complete"]],
-            [["status" => "Upcoming"]],
-            [["max_score" => "8"]],
-            [["min_score" => "6"]],
-            [["max_score" => "7", "min_score" => "3"]],
-            [["rating" => "pg"]],
-            [["rating" => "rx"]],
-            [["rating" => "r"]],
-            [["rating" => "pg13"]],
-            [["rating" => "g"]],
-            [["rating" => "r17"]],
-            [["type" => "movie"]],
-            [["type" => "ova"]],
-            [["type" => "special"]],
+            "status = airing" => [["status" => "airing"]],
+            "status = complete" => [["status" => "complete"]],
+            "status = upcoming" => [["status" => "upcoming"]],
+            "status = Airing" => [["status" => "Airing"]],
+            "status = Complete" => [["status" => "Complete"]],
+            "status = Upcoming" => [["status" => "Upcoming"]],
+            "max_score = 8" => [["max_score" => "8"]],
+            "min_score = 6" => [["min_score" => "6"]],
+            "max_score = 7, min_score = 3" => [["max_score" => "7", "min_score" => "3"]],
+            "rating = pg" => [["rating" => "pg"]],
+            "rating = rx" => [["rating" => "rx"]],
+            "rating = r" => [["rating" => "r"]],
+            "rating = pg13" => [["rating" => "pg13"]],
+            "rating = g" => [["rating" => "g"]],
+            "rating = r17" => [["rating" => "r17"]],
+            "type = movie" => [["type" => "movie"]],
+            "type = ova" => [["type" => "ova"]],
+            "type = special" => [["type" => "special"]],
         ];
     }
 
@@ -215,14 +215,13 @@ class AnimeSearchEndpointTest extends TestCase
     /**
      * @dataProvider emptyDateRangeProvider
      */
-    public function testSearchByEmptyDatesShouldRaiseValidationError($params)
+    public function testSearchByEmptyDatesShouldNotRaiseValidationError($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $this->getJsonResponse($params);
 
-        $this->seeStatusCode(400);
-        $this->assertEquals("ValidationException", data_get($content, "type"));
+        $this->seeStatusCode(200);
     }
 
     /**

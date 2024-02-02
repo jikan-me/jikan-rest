@@ -32,6 +32,8 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
     {
         $requestParams = collect($request->all());
         $type = $requestParams->has("filter") ? $request->filter : null;
+        $season = $requestParams->has("season") ? $request->season : null;
+        $year = $requestParams->has("year") ? $request->year : null;
         $results = $this->getSeasonItems($request, $type);
         // apply sfw, kids and unapproved filters
         /** @noinspection PhpUndefinedMethodInspection */

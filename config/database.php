@@ -1,6 +1,6 @@
 <?php
 
-$db_username = env('DB_USERNAME', 'admin');
+$db_username = env('DB_USERNAME', env("APP_ENV") === "testing" ? "" : "admin");
 $dsn = "mongodb://";
 if (empty($db_username)) {
     $dsn .= env('DB_HOST', 'localhost').":".env('DB_PORT', 27017)."/".env('DB_ADMIN', 'admin');

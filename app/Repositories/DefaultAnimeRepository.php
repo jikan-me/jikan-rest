@@ -7,6 +7,7 @@ use App\Contracts\AnimeRepository;
 use App\Contracts\Repository;
 use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeScheduleFilterEnum;
+use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
@@ -115,25 +116,46 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     public function getAiredBetween(
         Carbon $from,
         Carbon $to,
-        ?AnimeTypeEnum $type = null
+        ?AnimeTypeEnum $type = null,
+        ?string $premiered = null
     ): EloquentBuilder
     {
-//        $queryable = $this->queryable(true)->whereBetween("aired.from", [
-//            $from->toAtomString(),
-//            $to->modify("last day of this month")->toAtomString()
-//        ]);
-
         /** @noinspection PhpParamsInspection */
-        $queryable = $this->queryable(true)->whereRaw([
-            "aired.from" => [
-                '$gte' => $from->toAtomString(),
-                '$lte' => $to->modify("last day of this month")->toAtomString()
-            ]
-        ]);
+        $queryable = $this->queryable(true);
+
+        $airedFilter = ["aired.from" => [
+            '$gte' => $from->toAtomString(),
+            '$lte' => $to->modify("last day of this month")->toAtomString()
+        ]];
+
+        $finalFilter = [];
+
+        // if the premiered parameter for the filter is not null, look for those items which have a premiered attribute set,
+        // and equals to the parameter value, OR look for those items which doesn't have premired attribute set,
+        // they don't have a garbled aired string and their aired.from date is within the from-to parameters range
+        if ($premiered !== null) {
+            $finalFilter['$or'] = [
+                ["premiered" => $premiered],
+                [
+                    "premiered" => null,
+                    "aired.string" => [
+                        '$not' => ['$regex' => "{$from->year} to ?"]
+                    ],
+                    ...$airedFilter
+                ]
+            ];
+        } else {
+            $finalFilter = array_merge($finalFilter, $airedFilter);
+            $finalFilter["aired.string"] = [
+                '$not' => ['$regex' => "{$from->year} to ?"]
+            ];
+        }
 
         if (!is_null($type)) {
-            $queryable = $queryable->where("type", $type->label);
+            $finalFilter["type"] = $type->label;
         }
+
+        $queryable = $queryable->whereRaw($finalFilter);
 
         return $queryable->orderBy("members", "desc");
     }

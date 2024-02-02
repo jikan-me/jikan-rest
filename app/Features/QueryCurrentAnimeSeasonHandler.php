@@ -52,6 +52,8 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
          * @var Carbon $to
          */
         [$from, $to] = $this->getSeasonRange($year, $season);
-        return $this->repository->getAiredBetween($from, $to, $type);
+        $premiered = ucfirst($season)." {$year}";
+
+        return $this->repository->getAiredBetween($from, $to, $type, $premiered);
     }
 }

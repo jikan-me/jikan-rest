@@ -29,17 +29,17 @@ class TopAnimeEndpointTest extends TestCase
     public function orderByFieldAndParamsData()
     {
         return [
-            ["rank", false, []],
-            ["rank", false, ["filter" => "airing"]],
-            ["rank", false, ["type" => "tv"]],
-            ["rank", false, ["type" => "movie"]],
-            ["rank", false, ["type" => "ova"]],
-            ["rank", false, ["type" => "ona"]],
-            ["rank", false, ["type" => "special"]],
-            ["rank", false, ["type" => "music"]],
-            ["rank", false, ["filter" => "upcoming"]],
-            ["members", true, ["filter" => "bypopularity"]],
-            ["favorites", true, ["filter" => "favorite"]]
+            "empty query string" => ["score", true, []],
+            "query string: ?filter=airing" => ["score", true, ["filter" => "airing"]],
+            "query string: ?type=tv" => ["score", true, ["type" => "tv"]],
+            "query string: ?type=movie" => ["score", true, ["type" => "movie"]],
+            "query string: ?type=ova" => ["score", true, ["type" => "ova"]],
+            "query string: ?type=ona" => ["score", true, ["type" => "ona"]],
+            "query string: ?type=special" => ["score", true, ["type" => "special"]],
+            "query string: ?type=music" => ["score", true, ["type" => "music"]],
+            "query string: ?filter=upcoming" => ["members", true, ["filter" => "upcoming"]],
+            "query string: ?filter=bypopularity" => ["members", true, ["filter" => "bypopularity"]],
+            "query string: ?filter=favorite" => ["favorites", true, ["filter" => "favorite"]]
         ];
     }
 
@@ -57,10 +57,10 @@ class TopAnimeEndpointTest extends TestCase
         /*
          * Test whether the API orders the items correctly. It has to return items in similar order as MAL would
          * their search results.
-         * No filters / query string parameters -> sorted by rank
-         * filter = airing                      -> sorted by rank
-         * type = tv/movie/ova/ona/special      -> sorted by rank
-         * filter = upcoming                    -> sorted by "members" attribute
+         * No filters / query string parameters -> sorted by score
+         * filter = airing                      -> sorted by score
+         * type = tv/movie/ova/ona/special      -> sorted by score
+         * filter = upcoming                    -> sorted by "popularity" attribute
          * filter = favorites                   -> sorted by "favorites" attribute
          * filter = bypopular                   -> sorted by "members" attribute
          */

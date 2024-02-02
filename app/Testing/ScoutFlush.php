@@ -18,7 +18,8 @@ trait ScoutFlush
         "App\\Person",
         "App\\Club",
         "App\\Magazine",
-        "App\\Producers"
+        "App\\Producers",
+        "App\\Profile",
     ];
 
     public function runScoutFlush(): void
@@ -39,6 +40,8 @@ trait ScoutFlush
                         "filter_by" => "mal_id:>0",
                         "batch_size" => 500
                     ]);
+
+                    $typeSenseClient->deleteCollection($modelInstance->searchableAs());
                 }
             }
         }

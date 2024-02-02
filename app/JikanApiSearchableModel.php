@@ -21,12 +21,20 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
      */
     public function getCollectionSchema(): array
     {
+        $titleAttributeName = $this->getTitleAttributeName();
+
         return [
             'name' => $this->searchableAs(),
             'fields' => [
                 [
                     'name' => '.*',
                     'type' => 'auto',
+                ],
+                [
+                    'name' => $titleAttributeName,
+                    'type' => 'string',
+                    'sort' => true,
+                    'optional' => false
                 ]
             ]
         ];
