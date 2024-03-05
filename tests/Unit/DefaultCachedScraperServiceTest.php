@@ -51,7 +51,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
     public function testIfFindListReturnsNotExpiredItems()
     {
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         Carbon::setTestNow($now);
         // the cached data in the database
         // this should be an array of arrays as builder->get() returns multiple items
@@ -76,14 +76,14 @@ final class DefaultCachedScraperServiceTest extends TestCase
     public function testIfFindListUpdatesCacheIfItemsExpired()
     {
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         Carbon::setTestNow($now);
 
         // the cached data in the database
         // this should be an array of arrays as builder->get() returns multiple items
         $dummyResults = collect([[
             "request_hash" => $testRequestHash,
-            "modifiedAt" => new UTCDateTime($now->sub("2 days")->getPreciseTimestamp(3)),
+            "modifiedAt" => new UTCDateTime($now->copy()->subDays(2)->getPreciseTimestamp(3)),
             "results" => [
                 ["dummy" => "dummy1"],
                 ["dummy" => "dummy2"]
@@ -128,7 +128,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
     public function testIfFindListUpdatesCacheIfCacheIsEmpty()
     {
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         Carbon::setTestNow($now);
 
         // the data returned by the scraper
@@ -175,7 +175,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
     {
         $malId = 1;
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         Carbon::setTestNow($now);
         $mockModel = Anime::factory()->makeOne([
             "mal_id" => $malId,
@@ -197,7 +197,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
     {
         $malId = 1;
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         Carbon::setTestNow($now);
         $mockModel = Anime::factory()->makeOne([
             "mal_id" => $malId,
@@ -224,11 +224,11 @@ final class DefaultCachedScraperServiceTest extends TestCase
     {
         $malId = 1;
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         $mockModel = Anime::factory()->makeOne([
             "mal_id" => $malId,
-            "modifiedAt" => new UTCDateTime($now->sub("3 days")->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->sub("3 days")->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime($now->copy()->sub("3 days")->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->copy()->sub("3 days")->getPreciseTimestamp(3))
         ]);
         $now = Carbon::now();
         Carbon::setTestNow($now);
@@ -264,7 +264,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
     {
         $username = "kompot";
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         Carbon::setTestNow($now);
         $mockModel = Profile::factory()->makeOne([
             "username" => $username,
@@ -287,7 +287,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
     {
         $username = "kompot";
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         Carbon::setTestNow($now);
         $mockModel = Profile::factory()->makeOne([
             "username" => $username,
@@ -319,12 +319,12 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $malId = 1;
         $username = "kompot";
         $testRequestHash = $this->requestHash();
-        $now = Carbon::now();
+        $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         $mockModel = Profile::factory()->makeOne([
             "mal_id" => $malId,
             "username" => $username,
-            "modifiedAt" => new UTCDateTime($now->sub("3 days")->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->sub("3 days")->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime($now->copy()->sub("3 days")->getPreciseTimestamp(3)),
+            "createdAt" => new UTCDateTime($now->copy()->sub("3 days")->getPreciseTimestamp(3))
         ]);
         $now = Carbon::now();
         Carbon::setTestNow($now);
