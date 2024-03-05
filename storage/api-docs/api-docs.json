@@ -2284,9 +2284,6 @@
                 "operationId": "getSchedules",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
                         "name": "filter",
                         "in": "query",
                         "description": "Filter by day",

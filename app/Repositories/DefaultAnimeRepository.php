@@ -5,15 +5,12 @@ namespace App\Repositories;
 use App\Anime;
 use App\Contracts\AnimeRepository;
 use App\Contracts\Repository;
-use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeScheduleFilterEnum;
-use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
-use Jikan\Helper\Constants;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -120,44 +117,49 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         ?string $premiered = null
     ): EloquentBuilder
     {
-        /** @noinspection PhpParamsInspection */
         $queryable = $this->queryable(true);
 
-        $airedFilter = ["aired.from" => [
+        $airedFilter = ['aired.from' => [
             '$gte' => $from->toAtomString(),
-            '$lte' => $to->modify("last day of this month")->toAtomString()
+            '$lte' => $to->modify('last day of this month')->toAtomString()
         ]];
 
         $finalFilter = [];
 
         // if the premiered parameter for the filter is not null, look for those items which have a premiered attribute set,
         // and equals to the parameter value, OR look for those items which doesn't have premired attribute set,
-        // they don't have a garbled aired string and their aired.from date is within the from-to parameters range
+        // they don't have a garbled aired string and their aired.from date is within the from-to parameters range.
+        // Additionally, we want to include all those items which are carry overs from previous seasons.
         if ($premiered !== null) {
             $finalFilter['$or'] = [
-                ["premiered" => $premiered],
+                ['premiered' => $premiered],
                 [
-                    "premiered" => null,
-                    "aired.string" => [
-                        '$not' => ['$regex' => "{$from->year} to ?"]
+                    'premiered' => null,
+                    'aired.string' => [
+                        '$nin' => ["{$from->year} to ?"]
                     ],
                     ...$airedFilter
+                ],
+                // this condition will include "continuing" items from previous seasons
+                [
+                    'aired.from' => ['$lte' => $from->toAtomString()],
+                    'airing' => true
                 ]
             ];
         } else {
             $finalFilter = array_merge($finalFilter, $airedFilter);
-            $finalFilter["aired.string"] = [
-                '$not' => ['$regex' => "{$from->year} to ?"]
+            $finalFilter['aired.string'] = [
+                '$nin' => ["{$from->year} to ?"]
             ];
         }
 
         if (!is_null($type)) {
-            $finalFilter["type"] = $type->label;
+            $finalFilter['type'] = $type->label;
         }
 
         $queryable = $queryable->whereRaw($finalFilter);
 
-        return $queryable->orderBy("members", "desc");
+        return $queryable->orderBy('members', 'desc');
     }
 
     public function getUpcomingSeasonItems(

@@ -3,6 +3,7 @@
 namespace App\Support;
 use Laravel\Scout\Builder as ScoutBuilder;
 use Illuminate\Contracts\Database\Query\Builder;
+use Jenssegers\Mongodb\Eloquent\Builder as MongoDbBuilder;
 
 class RepositoryQueryBase
 {
@@ -15,7 +16,7 @@ class RepositoryQueryBase
     {
     }
 
-    protected function queryable(bool $createNew = false): Builder
+    protected function queryable(bool $createNew = false): Builder|MongoDbBuilder
     {
         if ($createNew) {
             $callback = $this->getQueryable;
