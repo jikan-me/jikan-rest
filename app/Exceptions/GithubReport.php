@@ -122,7 +122,7 @@ class GithubReport
             "Jikan Parser Version**: ```{$this->jikanVersion}```\nPHP: ```{$this->phpVersion}```\nIs redis used: ```{$this->redisRunning}```"
         );
         $reproSteps = urlencode(
-            "Http Request: `{$this->requestMethod} {$this->requestUri}"
+            "Http Request: `{$this->requestMethod} {$this->requestUri}`"
         );
 
         return "https://github.com/{$this->repo}/issues/new?template=bug.yml&title={$title}&system_env={$env}&repro_steps={$reproSteps}&expected_behavior={$expectedBehavior}&current_behavior={$currentBehavior}";
