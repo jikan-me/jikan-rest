@@ -2330,9 +2330,6 @@
                         }
                     },
                     {
-                        "$ref": "#/components/parameters/sfw"
-                    },
-                    {
                         "$ref": "#/components/parameters/unapproved"
                     },
                     {
@@ -2366,9 +2363,6 @@
                 ],
                 "operationId": "getAnimeSearch",
                 "parameters": [
-                    {
-                        "$ref": "#/components/parameters/sfw"
-                    },
                     {
                         "$ref": "#/components/parameters/unapproved"
                     },
@@ -2524,9 +2518,6 @@
                 ],
                 "operationId": "getMangaSearch",
                 "parameters": [
-                    {
-                        "$ref": "#/components/parameters/sfw"
-                    },
                     {
                         "$ref": "#/components/parameters/unapproved"
                     },
