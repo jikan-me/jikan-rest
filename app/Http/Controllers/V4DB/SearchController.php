@@ -25,7 +25,6 @@ class SearchController extends Controller
      *     operationId="getAnimeSearch",
      *     tags={"anime"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/sfw"),
      *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
@@ -159,7 +158,6 @@ class SearchController extends Controller
      *     operationId="getMangaSearch",
      *     tags={"manga"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/sfw"),
      *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
