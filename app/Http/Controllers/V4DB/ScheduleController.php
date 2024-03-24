@@ -37,7 +37,6 @@ class ScheduleController extends Controller
      *          @OA\Schema(type="string",enum={"true", "false"})
      *      ),
      *
-     *     @OA\Parameter(ref="#/components/parameters/sfw"),
      *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
