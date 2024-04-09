@@ -2,21 +2,12 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
 use App\Dto\QueryAnimeSeasonListCommand;
 use App\Dto\QueryCurrentAnimeSeasonCommand;
 use App\Dto\QuerySpecificAnimeSeasonCommand;
 use App\Dto\QueryUpcomingAnimeSeasonCommand;
-use App\Http\HttpResponse;
-use App\Http\QueryBuilder\AnimeSearchQueryBuilder;
-use App\Http\Resources\V4\AnimeCollection;
-use App\Http\Resources\V4\ResultsResource;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Jikan\Request\SeasonList\SeasonListRequest;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use OpenApi\Annotations as OA;
 
 /**
  *
@@ -38,6 +29,7 @@ class SeasonController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/sfw"),
      *     @OA\Parameter(ref="#/components/parameters/unapproved"),
+     *     @OA\Parameter(ref="#/components/parameters/continuing"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
@@ -89,6 +81,7 @@ class SeasonController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/sfw"),
      *     @OA\Parameter(ref="#/components/parameters/unapproved"),
+     *     @OA\Parameter(ref="#/components/parameters/continuing"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
@@ -177,6 +170,7 @@ class SeasonController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/sfw"),
      *     @OA\Parameter(ref="#/components/parameters/unapproved"),
+     *     @OA\Parameter(ref="#/components/parameters/continuing"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *

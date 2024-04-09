@@ -110,11 +110,12 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         return $queryable;
     }
 
-    public function getAiredBetween(
+    public function getItemsBySeason(
         Carbon $from,
         Carbon $to,
         ?AnimeTypeEnum $type = null,
-        ?string $premiered = null
+        ?string $premiered = null,
+        bool $includeContinuingItems = false
     ): EloquentBuilder
     {
         $queryable = $this->queryable(true);
@@ -127,9 +128,10 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         $finalFilter = [];
 
         // if the premiered parameter for the filter is not null, look for those items which have a premiered attribute set,
-        // and equals to the parameter value, OR look for those items which doesn't have premired attribute set,
+        // and equals to the parameter value, OR look for those items which doesn't have premiered attribute set,
         // they don't have a garbled aired string and their aired.from date is within the from-to parameters range.
-        // Additionally, we want to include all those items which are carry overs from previous seasons.
+        // Additionally, we want to include all those items which are carry overs from previous seasons,
+        // if the includeContinuingItems argument is set to true.
         if ($premiered !== null) {
             $finalFilter['$or'] = [
                 ['premiered' => $premiered],
@@ -140,12 +142,14 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                     ],
                     ...$airedFilter
                 ],
+            ];
+            if ($includeContinuingItems) {
                 // this condition will include "continuing" items from previous seasons
-                [
+                $finalFilter['$or'][] = [
                     'aired.from' => ['$lte' => $from->toAtomString()],
                     'airing' => true
-                ]
-            ];
+                ];
+            }
         } else {
             $finalFilter = array_merge($finalFilter, $airedFilter);
             $finalFilter['aired.string'] = [

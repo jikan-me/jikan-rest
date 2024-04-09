@@ -53,7 +53,8 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
          */
         [$from, $to] = $this->getSeasonRange($year, $season);
         $premiered = ucfirst($season)." {$year}";
+        $includeContinuingItems = $request->continuing;
 
-        return $this->repository->getAiredBetween($from, $to, $type, $premiered);
+        return $this->repository->getItemsBySeason($from, $to, $type, $premiered, $includeContinuingItems);
     }
 }
