@@ -62,6 +62,8 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             return $this->state($this->serializeStateDefinition($this->getStateOverrides($additionalParams, $doOpposite)));
         }
 
+        // we want to generate overrides for each manufactured item, so all of them will call the faker for values,
+        // and they should have their own values, increasing the randomness of the generated data
         /** @noinspection PhpParamsInspection */
         return $this->state(new Sequence(fn(Sequence $_) => $this->serializeStateDefinition($this->getStateOverrides($additionalParams, $doOpposite))));
     }
