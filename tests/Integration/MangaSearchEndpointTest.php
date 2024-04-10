@@ -128,6 +128,7 @@ class MangaSearchEndpointTest extends TestCase
             [["type" => "novel"]],
             [["type" => "lightnovel"]],
             [["type" => "oneshot"]],
+            [["score" => "8", "magazines" => "83"]]
         ];
     }
 

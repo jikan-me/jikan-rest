@@ -138,6 +138,7 @@ class AnimeSearchEndpointTest extends TestCase
             "type = movie" => [["type" => "movie"]],
             "type = ova" => [["type" => "ova"]],
             "type = special" => [["type" => "special"]],
+            "score = 8 and producers = 11" => [["score" => "8", "producers" => "11"]],
         ];
     }
 
