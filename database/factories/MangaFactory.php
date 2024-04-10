@@ -4,6 +4,7 @@ namespace Database\Factories;
 use App\CarbonDateRange;
 use App\Testing\JikanDataGenerator;
 use App\Manga;
+use Illuminate\Support\Collection;
 use MongoDB\BSON\UTCDateTime;
 
 class MangaFactory extends JikanMediaModelFactory
@@ -97,5 +98,49 @@ class MangaFactory extends JikanMediaModelFactory
             "modifiedAt" => new UTCDateTime(),
             "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("manga", $mal_id))
         ];
+    }
+
+    protected function getOverridesFromQueryStringParameters(Collection $additionalParams): array
+    {
+        $overrides = parent::getOverridesFromQueryStringParameters($additionalParams);
+
+        if ($additionalParams->has("magazines")) {
+            $overrides["serializations"] = [];
+            $magazineIds = explode(",", $additionalParams["magazines"]);
+            foreach ($magazineIds as $magazineId) {
+                $overrides["serializations"][] = [
+                    "mal_id" => (int)$magazineId,
+                    "type" => "manga",
+                    "name" => "Magazine {$magazineId}",
+                    "url" => "https://myanimelist.net/manga/magazine/{$magazineId}/x"
+                ];
+            }
+        }
+
+        return $overrides;
+    }
+
+    protected function getOppositeOverridesFromQueryStringParameters(Collection $additionalParams): array
+    {
+        $overrides = parent::getOppositeOverridesFromQueryStringParameters($additionalParams);
+
+        if ($additionalParams->has("magazines")) {
+            $overrides["serializations"] = [];
+            $magazineIds = explode(",", $additionalParams["magazines"]);
+            do {
+                $randomEls = $this->faker->randomElements([11, 60, 89, 54, 32, 22, 108, 65], $this->faker->numberBetween(1, 3));
+            } while (count(array_intersect($randomEls, $magazineIds)) > 0);
+
+            foreach ($randomEls as $magazineId) {
+                $overrides["serializations"][] = [
+                    "mal_id" => (int)$magazineId,
+                    "type" => "manga",
+                    "name" => "Magazine {$magazineId}",
+                    "url" => "https://myanimelist.net/manga/magazine/{$magazineId}/x"
+                ];
+            }
+        }
+
+        return $overrides;
     }
 }
