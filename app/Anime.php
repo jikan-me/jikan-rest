@@ -103,7 +103,6 @@ class Anime extends JikanApiSearchableModel
             || !is_string($premiered)
             || !preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
         ) {
-            Log::warning("Invalid premiered value in Anime model[$this->mal_id]: " . $premiered);
             return null;
         }
 
