@@ -86,10 +86,14 @@ jobs:
           digest="${{ steps.build.outputs.digest }}"
           touch "/tmp/digests/${digest#sha256:}"
 
+      - name: Transform platform value
+        id: platform_transform
+        run: echo "platform=$(echo '${{ matrix.platform }}' | sed 's/\//_/g')" >> $GITHUB_OUTPUT
+
       - name: Upload digest
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: digests
+          name: digests-${{ steps.platform_transform.outputs.platform }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
@@ -101,9 +105,10 @@ jobs:
       - build-app-image
     steps:
       - name: Download digests
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: digests
+          name: digests-*
+          merge-multiple: true
           path: /tmp/digests
 
       - name: Set up Docker Buildx
