@@ -111,14 +111,10 @@ class Manga extends JikanApiSearchableModel
             return $query;
         }
 
+        /** @var \Illuminate\Support\Collection $magazines */
         $magazines = collect(explode(',', $value))->filter()->map(fn($x) => (int)$x)->toArray();
 
-        /** @noinspection PhpParamsInspection */
-        return $query->whereRaw([
-            "serializations.mal_id" => [
-                '$in' => $magazines
-            ]
-        ]);
+        return $query->whereIn("serializations.mal_id", $magazines);
     }
 
     /** @noinspection PhpUnused */

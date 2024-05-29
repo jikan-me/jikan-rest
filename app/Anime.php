@@ -103,7 +103,6 @@ class Anime extends JikanApiSearchableModel
             || !is_string($premiered)
             || !preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
         ) {
-            Log::warning("Invalid premiered value in Anime model[$this->mal_id]: " . $premiered);
             return null;
         }
 
@@ -182,14 +181,11 @@ class Anime extends JikanApiSearchableModel
         }
 
         $producer = (int)$value;
-        /** @noinspection PhpParamsInspection */
-        return $query->whereRaw([
-            '$or' => [
-                ['producers.mal_id' => $producer],
-                ['licensors.mal_id' => $producer],
-                ['studios.mal_id' => $producer]
-            ]
-        ]);
+        return $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producer) {
+            return $query->where('producers.mal_id', $producer)
+                ->orWhere('licensors.mal_id', $producer)
+                ->orWhere('studios.mal_id', $producer);
+        });
     }
 
     /** @noinspection PhpUnused */
@@ -199,16 +195,24 @@ class Anime extends JikanApiSearchableModel
             return $query;
         }
 
-        $producers = collect(explode(',', $value))->filter()->toArray();
-        $orFilters = [];
-        foreach ($producers as $producer) {
-            $producer = (int)$producer;
-            $orFilters[] = ['producers.mal_id' => $producer];
-            $orFilters[] = ['licensors.mal_id' => $producer];
-            $orFilters[] = ['studios.mal_id' => $producer];
-        }
-        /** @noinspection PhpParamsInspection */
-        return $query->whereRaw(['$or' => $orFilters]);
+        /* @var \Illuminate\Support\Collection $producers */
+        $producers = collect(explode(',', $value))->filter();
+
+        return $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producers) {
+            $firstProducer = (int)$producers->first();
+            $query = $query->where('producers.mal_id', $firstProducer)
+                ->orWhere('licensors.mal_id', $firstProducer)
+                ->orWhere('studios.mal_id', $firstProducer);
+
+            foreach ($producers->skip(1) as $producer) {
+                $producer = (int)$producer;
+                $query = $query->orWhere('producers.mal_id', $producer)
+                    ->orWhere('licensors.mal_id', $producer)
+                    ->orWhere('studios.mal_id', $producer);
+            }
+
+            return $query;
+        });
     }
 
     /** @noinspection PhpUnused */

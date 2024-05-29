@@ -128,6 +128,7 @@ class MangaSearchEndpointTest extends TestCase
             [["type" => "novel"]],
             [["type" => "lightnovel"]],
             [["type" => "oneshot"]],
+            [["score" => "8", "magazines" => "83"]]
         ];
     }
 
@@ -242,16 +243,16 @@ class MangaSearchEndpointTest extends TestCase
      */
     public function testSearchByEndDate($params)
     {
-        $overrides = $this->generateFiveSpecificAndTenRandomElementsInDb($params);
+        $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
         $content = $this->getJsonResponse($params);
 
         $actualEndDate = Carbon::parse(data_get($content, "data.0.published.to"));
-        $paramEndDate = Carbon::parse($overrides["published"]["to"]);
+        $paramEndDate = Carbon::parse($params["end_date"]);
 
         $this->seeStatusCode(200);
         $this->assertPaginationData(5);
-        $this->assertLessThanOrEqual(0, $actualEndDate->diff($paramEndDate)->days);
+        $this->assertGreaterThanOrEqual(1, $actualEndDate->diff($paramEndDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content["data"]);
     }
