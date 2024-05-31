@@ -312,14 +312,14 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
             $min_score = floatval($additionalParams["min_score"]);
             if ($this->isScoreValueValid($min_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]));
+                $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]) - 0.01);
             }
         }
 
         if (!$additionalParams->has("min_score") && $additionalParams->has("max_score")) {
             $max_score = $additionalParams["max_score"];
             if ($this->isScoreValueValid($max_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["max_score"]), 9.99);
+                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["max_score"]) + 0.01, 9.99);
             }
         }
 
@@ -330,8 +330,8 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             if ($this->isScoreValueValid($min_score) && $this->isScoreValueValid($max_score))
             {
                 $overrides["score"] = $this->faker->randomElement([
-                    $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"])),
-                    $this->faker->randomFloat(2, floatval($additionalParams["max_score"]), 9.99)
+                    $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]) - 0.01),
+                    $this->faker->randomFloat(2, floatval($additionalParams["max_score"]) + 0.01, 9.99)
                 ]);
             }
         }
