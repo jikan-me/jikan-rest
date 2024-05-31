@@ -244,7 +244,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         if ($additionalParams->has("start_date") && !empty($additionalParams["start_date"])
             && !$additionalParams->has("end_date")) {
             $startDate = $this->adaptDateString($additionalParams["start_date"]);
-            $dt = Carbon::parse($startDate)->addDays($this->faker->numberBetween(0, 25));
+            $dt = Carbon::parse($startDate)->addDays($this->faker->numberBetween(1, 25));
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($dt, null);
         }
 
