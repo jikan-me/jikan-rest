@@ -82,5 +82,6 @@ trait SyntheticMongoDbTransaction
         {
             DB::table($tableName)->truncate();
         }
+        usleep(35 * 1000);
     }
 }
