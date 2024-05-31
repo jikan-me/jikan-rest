@@ -253,7 +253,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             $endDate = $this->adaptDateString($additionalParams["end_date"]);
             $to = Carbon::parse($endDate);
             $from = $to->copy()->subDays($this->faker->randomElement([30, 60, 90, 120, 180]));
-            $overrides[$activityMarkerKeyName] = new CarbonDateRange($from, $to->subDays($this->faker->numberBetween(0, 25)));
+            $overrides[$activityMarkerKeyName] = new CarbonDateRange($from, $to->subDays($this->faker->numberBetween(1, 25)));
         }
 
         if ($additionalParams->has(["start_date", "end_date"])
