@@ -15,6 +15,14 @@ class SeasonControllerTest extends TestCase
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
+    private function continuingUrlProvider(): array
+    {
+        return [
+            "?continuing=true" => ["/v4/seasons/2024/winter?continuing=true"],
+            "?continuing" => ["/v4/seasons/2024/winter?continuing"],
+        ];
+    }
+
     public function testShouldFilterOutAnimeWithGarbledAiredString()
     {
         Carbon::setTestNow(Carbon::parse("2024-01-11"));
@@ -95,7 +103,11 @@ class SeasonControllerTest extends TestCase
         $this->assertCount(2, $content["data"]);
     }
 
-    public function testShouldNotFilterOutContinuingItemsFromPreviousSeasons()
+    /**
+     * @return void
+     * @dataProvider continuingUrlProvider
+     */
+    public function testShouldNotFilterOutContinuingItemsFromPreviousSeasons($requestUrl)
     {
         Carbon::setTestNow(Carbon::parse("2024-01-11"));
         // an item in the future airing
@@ -131,7 +143,7 @@ class SeasonControllerTest extends TestCase
         $state["airing"] = true;
         $f->create($state);
 
-        $content = $this->getJsonResponse([], "/v4/seasons/2024/winter?continuing=true");
+        $content = $this->getJsonResponse([], $requestUrl);
         $this->seeStatusCode(200);
         $this->assertIsArray($content["data"]);
         $this->assertCount(3, $content["data"]);
