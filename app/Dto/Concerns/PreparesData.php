@@ -43,7 +43,7 @@ trait PreparesData
                     }
                 }
                 // if the property is optional and the value is an empty string, we want to ignore it.
-                if ($property->type->isOptional && $propertyVal === "") {
+                if ($property->type->isOptional && $propertyVal === "" && !$property->type->acceptsType("bool")) {
                     $propertyVal = null;
                 }
 
