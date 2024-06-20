@@ -145,11 +145,11 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ];
             if ($includeContinuingItems) {
                 // these conditions will include "continuing" items from previous seasons
-                // We want to include those which are currently airing, and their aired.to is unknown, and their start
-                // date is before when the current season began.
+                // long running shows
                 $finalFilter['$or'][] = [
                     'aired.from' => ['$lte' => $from->toAtomString()],
                     'aired.to' => null,
+                    'episodes' => null,
                     'airing' => true
                 ];
                 // We want to include those which are currently airing, and  their aired.to is past the date of the
@@ -157,6 +157,16 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                 $finalFilter['$or'][] = [
                     'aired.from' => ['$lte' => $from->toAtomString()],
                     'aired.to' => ['$gte' => $from->toAtomString()],
+                    'airing' => true
+                ];
+                // In many cases MAL doesn't show the date until an airing show is going to be aired. So we need to get
+                // clever here.
+                // We want to include those shows which have started in previous season only (not before) and it's going
+                // to continue in the current season.
+                $finalFilter['$or'][] = [
+                    'aired.from' => ['$lte' => $from->toAtomString()],
+                    'aired.to' => null,
+                    'episodes' => ['$gte' => 14],
                     'airing' => true
                 ];
             }
