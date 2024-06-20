@@ -144,9 +144,19 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                 ],
             ];
             if ($includeContinuingItems) {
-                // this condition will include "continuing" items from previous seasons
+                // these conditions will include "continuing" items from previous seasons
+                // We want to include those which are currently airing, and their aired.to is unknown, and their start
+                // date is before when the current season began.
                 $finalFilter['$or'][] = [
                     'aired.from' => ['$lte' => $from->toAtomString()],
+                    'aired.to' => null,
+                    'airing' => true
+                ];
+                // We want to include those which are currently airing, and  their aired.to is past the date of the
+                // current season start.
+                $finalFilter['$or'][] = [
+                    'aired.from' => ['$lte' => $from->toAtomString()],
+                    'aired.to' => ['$gte' => $from->toAtomString()],
                     'airing' => true
                 ];
             }
