@@ -12,6 +12,7 @@ use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Laravel\Scout\Builder as ScoutBuilder;
+use MongoDB\BSON\Javascript;
 
 /**
  * @implements Repository<Anime>
@@ -164,7 +165,23 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                 // We want to include those shows which have started in previous season only (not before) and it's going
                 // to continue in the current season.
                 $finalFilter['$or'][] = [
-                    'aired.from' => ['$lte' => $from->toAtomString()],
+                    // note: this expression only works with mongodb version 5.0.0 or higher
+                    '$expr' => [
+                        '$lte' => [
+                            [
+                                '$dateDiff' => [
+                                    'startDate' => [
+                                        '$dateFromString' => [
+                                            'dateString' => '$aired.from'
+                                        ]
+                                    ],
+                                    'endDate' => new Javascript('new Date("' . $from->toAtomString() . '")'),
+                                    'unit' => 'month'
+                                ]
+                            ],
+                            3 // there are 3 months in a season, so anything that started in 3 months or less will be included
+                        ]
+                    ],
                     'aired.to' => null,
                     'episodes' => ['$gte' => 14],
                     'airing' => true
