@@ -12,7 +12,7 @@ use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Laravel\Scout\Builder as ScoutBuilder;
-use MongoDB\BSON\Javascript;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * @implements Repository<Anime>
@@ -175,7 +175,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                                             'dateString' => '$aired.from'
                                         ]
                                     ],
-                                    'endDate' => new Javascript('new Date("' . $from->toAtomString() . '")'),
+                                    'endDate' => new UTCDateTime($from),
                                     'unit' => 'month'
                                 ]
                             ],
