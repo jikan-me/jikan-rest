@@ -15,6 +15,7 @@ use Jikan\Helper\Constants;
 use Jikan\Jikan;
 use Jikan\Request\Anime\AnimeRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use MongoDB\Model\BSONDocument;
 
 class Anime extends JikanApiSearchableModel
 {
@@ -407,7 +408,7 @@ class Anime extends JikanApiSearchableModel
         ];
     }
 
-    private function adaptBroadcastValue(array|string|null $broadcast): array
+    private function adaptBroadcastValue(array|string|null|BSONDocument $broadcast): array
     {
         $null_value = [
             'day' => null,
@@ -421,6 +422,10 @@ class Anime extends JikanApiSearchableModel
 
         if (is_array($broadcast)) {
             return $broadcast;
+        }
+
+        if ($broadcast instanceof BSONDocument) {
+            return $broadcast->getArrayCopy();
         }
 
         if (!preg_match('~(.*) at (.*) \(~', $broadcast, $matches)) {
