@@ -65,7 +65,7 @@ final class CachedData implements ArrayAccess
 
         $expiry = $this->expiry();
 
-        return time() > $expiry;
+        return Carbon::now()->unix() > $expiry;
     }
 
     public function toArray(): array

@@ -7,12 +7,18 @@ use Jikan\Model\Common\DateRange;
 use JMS\Serializer\Serializer;
 use \Illuminate\Database\Eloquent\Factories\Factory;
 use Spatie\Enum\Laravel\Faker\FakerEnumProvider;
+use Illuminate\Support\Str;
 
 abstract class JikanModelFactory extends Factory
 {
     public function configure(): JikanModelFactory|static
     {
         $this->faker->addProvider(new FakerEnumProvider($this->faker));
+        if (array_key_exists("GITHUB_JOB", $_ENV) && $_ENV["GITHUB_JOB"] !== "") {
+            $this->faker->seed($_ENV["GITHUB_JOB"]);
+        } else {
+            $this->faker->seed(Str::random());
+        }
         return $this;
     }
 

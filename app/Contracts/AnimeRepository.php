@@ -39,11 +39,12 @@ interface AnimeRepository extends Repository
         ?AnimeScheduleFilterEnum $filter = null
     ): EloquentBuilder;
 
-    public function getAiredBetween(
+    public function getItemsBySeason(
         Carbon $from,
         Carbon $to,
         ?AnimeTypeEnum $type = null,
-        ?string $premiered = null
+        ?string $premiered = null,
+        bool $includeContinuingItems = false
     ): EloquentBuilder;
 
     public function getUpcomingSeasonItems(?AnimeTypeEnum $type = null): EloquentBuilder;

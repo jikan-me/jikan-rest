@@ -7,6 +7,7 @@ use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeTypeEnum;
 use App\Enums\MangaTypeEnum;
 use App\Testing\JikanDataGenerator;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -57,6 +58,18 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
      */
     public function overrideFromQueryStringParameters(array $additionalParams, bool $doOpposite = false): self
     {
+        if ($this->count === 1) {
+            return $this->state($this->serializeStateDefinition($this->getStateOverrides($additionalParams, $doOpposite)));
+        }
+
+        // we want to generate overrides for each manufactured item, so all of them will call the faker for values,
+        // and they should have their own values, increasing the randomness of the generated data
+        /** @noinspection PhpParamsInspection */
+        return $this->state(new Sequence(fn(Sequence $_) => $this->serializeStateDefinition($this->getStateOverrides($additionalParams, $doOpposite))));
+    }
+
+    private function getStateOverrides(array $additionalParams, bool $doOpposite = false): array
+    {
         $additionalParams = collect($additionalParams);
 
         if ($doOpposite) {
@@ -66,7 +79,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             $overrides = $this->getOverridesFromQueryStringParameters($additionalParams);
         }
 
-        return $this->state($this->serializeStateDefinition($overrides));
+        return $overrides;
     }
 
     /**
@@ -158,6 +171,10 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             $overrides = [...$overrides, ...$a];
         }
 
+        if ($additionalParams->has("score")) {
+            $overrides["score"] = floatval($additionalParams["score"]);
+        }
+
         if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
             $min_score = floatval($additionalParams["min_score"]);
             if ($this->isScoreValueValid($min_score)) {
@@ -227,7 +244,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         if ($additionalParams->has("start_date") && !empty($additionalParams["start_date"])
             && !$additionalParams->has("end_date")) {
             $startDate = $this->adaptDateString($additionalParams["start_date"]);
-            $dt = Carbon::parse($startDate)->addDays($this->faker->numberBetween(0, 25));
+            $dt = Carbon::parse($startDate)->addDays($this->faker->numberBetween(1, 25));
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($dt, null);
         }
 
@@ -236,7 +253,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             $endDate = $this->adaptDateString($additionalParams["end_date"]);
             $to = Carbon::parse($endDate);
             $from = $to->copy()->subDays($this->faker->randomElement([30, 60, 90, 120, 180]));
-            $overrides[$activityMarkerKeyName] = new CarbonDateRange($from, $to->subDays($this->faker->numberBetween(0, 25)));
+            $overrides[$activityMarkerKeyName] = new CarbonDateRange($from, $to->subDays($this->faker->numberBetween(1, 25)));
         }
 
         if ($additionalParams->has(["start_date", "end_date"])
@@ -283,17 +300,26 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             $overrides = [...$overrides, ...$a];
         }
 
+        if ($additionalParams->has("score")) {
+            $specifiedScore = floatval($additionalParams["score"]);
+            do {
+                $randomScore = $this->faker->randomFloat(2, 1.00, 9.99);
+            } while ($randomScore === $specifiedScore);
+
+            $overrides["score"] = $randomScore;
+        }
+
         if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
             $min_score = floatval($additionalParams["min_score"]);
             if ($this->isScoreValueValid($min_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]));
+                $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]) - 0.01);
             }
         }
 
         if (!$additionalParams->has("min_score") && $additionalParams->has("max_score")) {
             $max_score = $additionalParams["max_score"];
             if ($this->isScoreValueValid($max_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["max_score"]), 9.99);
+                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["max_score"]) + 0.01, 9.99);
             }
         }
 
@@ -304,8 +330,8 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             if ($this->isScoreValueValid($min_score) && $this->isScoreValueValid($max_score))
             {
                 $overrides["score"] = $this->faker->randomElement([
-                    $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"])),
-                    $this->faker->randomFloat(2, floatval($additionalParams["max_score"]), 9.99)
+                    $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]) - 0.01),
+                    $this->faker->randomFloat(2, floatval($additionalParams["max_score"]) + 0.01, 9.99)
                 ]);
             }
         }

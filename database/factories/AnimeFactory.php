@@ -4,6 +4,7 @@ namespace Database\Factories;
 use App\CarbonDateRange;
 use App\Anime;
 use App\Testing\JikanDataGenerator;
+use Illuminate\Support\Collection;
 use MongoDB\BSON\UTCDateTime;
 
 
@@ -138,5 +139,48 @@ class AnimeFactory extends JikanMediaModelFactory
             "modifiedAt" => new UTCDateTime(),
             "request_hash" => sprintf("request:%s:%s", "v4", $this->getItemTestUrl("anime", $mal_id))
         ];
+    }
+
+    protected function getOverridesFromQueryStringParameters(Collection $additionalParams): array
+    {
+        $overrides = parent::getOverridesFromQueryStringParameters($additionalParams);
+
+        if ($additionalParams->has("producers")) {
+            $overrides["producers"] = [];
+            $producerIds = explode(",", $additionalParams["producers"]);
+            foreach ($producerIds as $producerId) {
+                $overrides["producers"][] = [
+                    "mal_id" => (int)$producerId,
+                    "type" => "anime",
+                    "name" => "Producer ${producerId}",
+                    "url" => "https://myanimelist.net/anime/producer/${producerId}/x"
+                ];
+            }
+        }
+
+        return $overrides;
+    }
+
+    protected function getOppositeOverridesFromQueryStringParameters(Collection $additionalParams): array
+    {
+        $overrides = parent::getOppositeOverridesFromQueryStringParameters($additionalParams);
+
+        if ($additionalParams->has("producers")) {
+            $overrides["producers"] = [];
+            $producerIds = explode(",", $additionalParams["producers"]);
+            do {
+                $randomEls = $this->faker->randomElements([11, 60, 89, 54, 32, 22, 108, 65], $this->faker->numberBetween(1, 3));
+            } while (count(array_intersect($randomEls, $producerIds)) > 0);
+            foreach ($randomEls as $producerId) {
+                $overrides["produces"][] = [
+                    "mal_id" => (int)$producerId,
+                    "type" => "anime",
+                    "name" => "Producer ${producerId}",
+                    "url" => "https://myanimelist.net/anime/producer/${producerId}/x"
+                ];
+            }
+        }
+
+        return $overrides;
     }
 }

@@ -2284,9 +2284,6 @@
                 "operationId": "getSchedules",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/page"
-                    },
-                    {
                         "name": "filter",
                         "in": "query",
                         "description": "Filter by day",
@@ -2333,9 +2330,6 @@
                         }
                     },
                     {
-                        "$ref": "#/components/parameters/sfw"
-                    },
-                    {
                         "$ref": "#/components/parameters/unapproved"
                     },
                     {
@@ -2369,9 +2363,6 @@
                 ],
                 "operationId": "getAnimeSearch",
                 "parameters": [
-                    {
-                        "$ref": "#/components/parameters/sfw"
-                    },
                     {
                         "$ref": "#/components/parameters/unapproved"
                     },
@@ -2527,9 +2518,6 @@
                 ],
                 "operationId": "getMangaSearch",
                 "parameters": [
-                    {
-                        "$ref": "#/components/parameters/sfw"
-                    },
                     {
                         "$ref": "#/components/parameters/unapproved"
                     },
@@ -3059,6 +3047,9 @@
                         "$ref": "#/components/parameters/unapproved"
                     },
                     {
+                        "$ref": "#/components/parameters/continuing"
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -3126,6 +3117,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/unapproved"
+                    },
+                    {
+                        "$ref": "#/components/parameters/continuing"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -3202,6 +3196,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/unapproved"
+                    },
+                    {
+                        "$ref": "#/components/parameters/continuing"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -9039,6 +9036,15 @@
             }
         },
         "parameters": {
+            "continuing": {
+                "name": "continuing",
+                "in": "query",
+                "description": "This is a flag. When supplied it will include entries which are continuing from previous seasons. MAL includes these items on the seasons view in the &#8243;TV (continuing)&#8243; section. (Example: https://myanimelist.net/anime/season/2024/winter) <br />Example usage: `?continuing`",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                }
+            },
             "kids": {
                 "name": "kids",
                 "in": "query",

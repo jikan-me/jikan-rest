@@ -17,7 +17,6 @@ trait PreparesData
     {
         // let's always set the limit parameter to the globally configured default value
         if (property_exists(static::class, "limit") && !$properties->has("limit")) {
-            /** @noinspection PhpUndefinedFieldInspection */
             $properties->put("limit", max_results_per_page(
                 property_exists(static::class, "defaultLimit") ? static::$defaultLimit : null));
         }
@@ -44,7 +43,7 @@ trait PreparesData
                     }
                 }
                 // if the property is optional and the value is an empty string, we want to ignore it.
-                if ($property->type->isOptional && $propertyVal === "") {
+                if ($property->type->isOptional && $propertyVal === "" && !$property->type->acceptsType("bool")) {
                     $propertyVal = null;
                 }
 
@@ -53,7 +52,7 @@ trait PreparesData
                 } else {
                     $properties->forget($propertyRawName);
                 }
-            }            
+            }
         }
 
         return $properties;
