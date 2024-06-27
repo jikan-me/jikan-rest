@@ -3047,6 +3047,9 @@
                         "$ref": "#/components/parameters/unapproved"
                     },
                     {
+                        "$ref": "#/components/parameters/continuing"
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -3114,6 +3117,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/unapproved"
+                    },
+                    {
+                        "$ref": "#/components/parameters/continuing"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -3190,6 +3196,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/unapproved"
+                    },
+                    {
+                        "$ref": "#/components/parameters/continuing"
                     },
                     {
                         "$ref": "#/components/parameters/page"
@@ -9027,6 +9036,15 @@
             }
         },
         "parameters": {
+            "continuing": {
+                "name": "continuing",
+                "in": "query",
+                "description": "This is a flag. When supplied it will include entries which are continuing from previous seasons. MAL includes these items on the seasons view in the &#8243;TV (continuing)&#8243; section. (Example: https://myanimelist.net/anime/season/2024/winter) <br />Example usage: `?continuing`",
+                "required": false,
+                "schema": {
+                    "type": "boolean"
+                }
+            },
             "kids": {
                 "name": "kids",
                 "in": "query",

@@ -32,6 +32,7 @@ trait SyntheticMongoDbTransaction
         $tablesWithoutModels = [
             "anime_characters_staff",
             "anime_episodes",
+            "anime_episode",
             "anime_forum",
             "anime_moreinfo",
             "anime_news",
@@ -42,6 +43,7 @@ trait SyntheticMongoDbTransaction
             "anime_userupdates",
             "anime_videos",
             "character_pictures",
+            "characters_pictures",
             "clubs_members",
             "demographics_manga",
             "demographics_anime",

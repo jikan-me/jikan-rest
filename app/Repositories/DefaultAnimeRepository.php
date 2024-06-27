@@ -12,6 +12,7 @@ use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Laravel\Scout\Builder as ScoutBuilder;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * @implements Repository<Anime>
@@ -110,11 +111,12 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         return $queryable;
     }
 
-    public function getAiredBetween(
+    public function getItemsBySeason(
         Carbon $from,
         Carbon $to,
         ?AnimeTypeEnum $type = null,
-        ?string $premiered = null
+        ?string $premiered = null,
+        bool $includeContinuingItems = false
     ): EloquentBuilder
     {
         $queryable = $this->queryable(true);
@@ -127,9 +129,10 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         $finalFilter = [];
 
         // if the premiered parameter for the filter is not null, look for those items which have a premiered attribute set,
-        // and equals to the parameter value, OR look for those items which doesn't have premired attribute set,
+        // and equals to the parameter value, OR look for those items which doesn't have premiered attribute set,
         // they don't have a garbled aired string and their aired.from date is within the from-to parameters range.
-        // Additionally, we want to include all those items which are carry overs from previous seasons.
+        // Additionally, we want to include all those items which are carry overs from previous seasons,
+        // if the includeContinuingItems argument is set to true.
         if ($premiered !== null) {
             $finalFilter['$or'] = [
                 ['premiered' => $premiered],
@@ -140,12 +143,50 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                     ],
                     ...$airedFilter
                 ],
-                // this condition will include "continuing" items from previous seasons
-                [
-                    'aired.from' => ['$lte' => $from->toAtomString()],
-                    'airing' => true
-                ]
             ];
+            if ($includeContinuingItems) {
+                // these conditions will include "continuing" items from previous seasons
+                // long running shows
+                $finalFilter['$or'][] = [
+                    'aired.from' => ['$lte' => $from->toAtomString()],
+                    'aired.to' => null,
+                    'episodes' => null,
+                    'airing' => true
+                ];
+                // We want to include those which are currently airing, and  their aired.to is past the date of the
+                // current season start.
+                $finalFilter['$or'][] = [
+                    'aired.from' => ['$lte' => $from->toAtomString()],
+                    'aired.to' => ['$gte' => $from->toAtomString()],
+                    'airing' => true
+                ];
+                // In many cases MAL doesn't show the date until an airing show is going to be aired. So we need to get
+                // clever here.
+                // We want to include those shows which have started in previous season only (not before) and it's going
+                // to continue in the current season.
+                $finalFilter['$or'][] = [
+                    // note: this expression only works with mongodb version 5.0.0 or higher
+                    '$expr' => [
+                        '$lte' => [
+                            [
+                                '$dateDiff' => [
+                                    'startDate' => [
+                                        '$dateFromString' => [
+                                            'dateString' => '$aired.from'
+                                        ]
+                                    ],
+                                    'endDate' => new UTCDateTime($from),
+                                    'unit' => 'month'
+                                ]
+                            ],
+                            3 // there are 3 months in a season, so anything that started in 3 months or less will be included
+                        ]
+                    ],
+                    'aired.to' => null,
+                    'episodes' => ['$gte' => 14],
+                    'airing' => true
+                ];
+            }
         } else {
             $finalFilter = array_merge($finalFilter, $airedFilter);
             $finalFilter['aired.string'] = [
