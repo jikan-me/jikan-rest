@@ -15,7 +15,7 @@ use App\Dto\MangaRelationsLookupCommand;
 use App\Dto\MangaReviewsLookupCommand;
 use App\Dto\MangaStatsLookupCommand;
 use App\Dto\MangaUserUpdatesLookupCommand;
-use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 
 class MangaController extends Controller
 {
@@ -387,7 +387,7 @@ class MangaController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/preliminary"),
-     *     @OA\Parameter(ref="#/components/parameters/spoiler"),
+     *     @OA\Parameter(ref="#/components/parameters/spoilers"),
      *
      *     @OA\Response(
      *         response="200",
