@@ -7,6 +7,21 @@ use App\Person;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Carbon;
+use Jikan\Exception\BadResponseException;
+use Jikan\Exception\ParserException;
+use Jikan\Model\Anime\AnimeReview;
+use Jikan\Model\Anime\AnimeReviewScores;
+use Jikan\Model\Manga\MangaReview;
+use Jikan\Model\Manga\MangaReviewScores;
+use Jikan\Model\Resource\UserImageResource\UserImageResource;
+use Jikan\Model\Reviews\Reactions;
+use Jikan\Model\Reviews\Reviewer;
+use Jikan\Model\Reviews\Reviews;
+use Jikan\MyAnimeList\MalClient;
+use Jikan\Parser\Reviews\AnimeReviewParser;
+use Jikan\Parser\Reviews\MangaReviewParser;
+use Jikan\Parser\Reviews\ReviewsParser;
 use Tests\TestCase;
 
 class TopControllerTest extends TestCase
@@ -304,9 +319,21 @@ class TopControllerTest extends TestCase
      * @dataProvider topReviewTypeParametersProvider
      * @param $params
      * @return void
+     * @throws BadResponseException
+     * @throws ParserException
      */
     public function testTopReviews($params)
     {
+        $jikanParser = \Mockery::mock(MalClient::class)->makePartial();
+
+        $reviewsParser = \Mockery::mock(ReviewsParser::class)->makePartial();
+        $reviewsParser->allows()->getReviews()->andReturn([]);
+        $reviewsParser->allows()->hasNextPage()->andReturn(false);
+        $reviewsFacade = Reviews::fromParser($reviewsParser);
+
+        /** @noinspection PhpParamsInspection */
+        $jikanParser->allows()->getReviews(\Mockery::any())->andReturn($reviewsFacade);
+        $this->app->instance('JikanParser', $jikanParser);
         $this->getJsonResponse($params,"/v4/top/reviews");
         $this->seeStatusCode(200);
     }
