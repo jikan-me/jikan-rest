@@ -14,6 +14,15 @@ class TopControllerTest extends TestCase
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
+    public function topReviewTypeParametersProvider(): array
+    {
+        return [
+            "empty query string" => [[]],
+            "query string = `?type=anime`" => [["type" => "anime"]],
+            "query string = `?type=manga`" => [["type" => "manga"]],
+        ];
+    }
+
     public function testTopAnime()
     {
         Anime::factory(3)->state(new Sequence(
@@ -289,5 +298,16 @@ class TopControllerTest extends TestCase
     {
         $this->get('/v4/top/anime/999')
             ->seeStatusCode(404);
+    }
+
+    /**
+     * @dataProvider topReviewTypeParametersProvider
+     * @param $params
+     * @return void
+     */
+    public function testTopReviews($params)
+    {
+        $this->getJsonResponse($params,"/v4/top/reviews");
+        $this->seeStatusCode(200);
     }
 }
