@@ -23,6 +23,6 @@ final class QueryTopReviewsCommand extends QueryTopItemsCommand implements DataR
 {
     use HasRequestFingerprint, HasPreliminaryParameter, HasSpoilersParameter, PreparesData;
 
-    #[WithCast(EnumCast::class, TopAnimeFilterEnum::class), EnumValidation(TopReviewsTypeEnum::class)]
+    #[WithCast(EnumCast::class, TopReviewsTypeEnum::class), EnumValidation(TopReviewsTypeEnum::class)]
     public TopReviewsTypeEnum|Optional $type;
 }
