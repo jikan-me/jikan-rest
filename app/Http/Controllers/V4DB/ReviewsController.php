@@ -4,18 +4,20 @@ namespace App\Http\Controllers\V4DB;
 
 use App\Dto\QueryAnimeReviewsCommand;
 use App\Dto\QueryMangaReviewsCommand;
+use OpenApi\Annotations as OA;
 
 class ReviewsController extends Controller
 {
     /**
-     *  @OA\Get(
+     *  @OA\
+     * Get(
      *     path="/reviews/anime",
      *     operationId="getRecentAnimeReviews",
      *     tags={"reviews"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/preliminary"),
-     *     @OA\Parameter(ref="#/components/parameters/spoiler"),
+     *     @OA\Parameter(ref="#/components/parameters/spoilers"),
      *
      *
      *     @OA\Response(
@@ -70,7 +72,7 @@ class ReviewsController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/preliminary"),
-     *     @OA\Parameter(ref="#/components/parameters/spoiler"),
+     *     @OA\Parameter(ref="#/components/parameters/spoilers"),
      *
      *     @OA\Response(
      *         response="200",

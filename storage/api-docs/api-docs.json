@@ -587,7 +587,7 @@
                         "$ref": "#/components/parameters/preliminary"
                     },
                     {
-                        "$ref": "#/components/parameters/spoiler"
+                        "$ref": "#/components/parameters/spoilers"
                     }
                 ],
                 "responses": {
@@ -1605,7 +1605,7 @@
                         "$ref": "#/components/parameters/preliminary"
                     },
                     {
-                        "$ref": "#/components/parameters/spoiler"
+                        "$ref": "#/components/parameters/spoilers"
                     }
                 ],
                 "responses": {
@@ -2226,7 +2226,7 @@
                         "$ref": "#/components/parameters/preliminary"
                     },
                     {
-                        "$ref": "#/components/parameters/spoiler"
+                        "$ref": "#/components/parameters/spoilers"
                     }
                 ],
                 "responses": {
@@ -2258,7 +2258,7 @@
                         "$ref": "#/components/parameters/preliminary"
                     },
                     {
-                        "$ref": "#/components/parameters/spoiler"
+                        "$ref": "#/components/parameters/spoilers"
                     }
                 ],
                 "responses": {
@@ -9086,8 +9086,8 @@
                     "type": "boolean"
                 }
             },
-            "spoiler": {
-                "name": "spoiler",
+            "spoilers": {
+                "name": "spoilers",
                 "in": "query",
                 "description": "Any reviews that are tagged as a spoiler. Spoiler reviews are not returned by default. e.g usage: `?spoiler=true`",
                 "required": false,
