@@ -232,8 +232,8 @@ class AnimeController extends Controller
      *                   ),
      *                   @OA\Property(
      *                       property="score",
-     *                       type="number",
-     *                       description="Aggregated episode score based on MyAnimeList user voting",
+     *                       type="integer",
+     *                       description="Aggregated episode score (1.00 - 5.00) based on MyAnimeList user voting",
 *                            minimum="1",
 *                            maximum="5",
      *                       nullable=true

@@ -4486,8 +4486,8 @@
                                             "nullable": true
                                         },
                                         "score": {
-                                            "description": "Aggregated episode score based on MyAnimeList user voting",
-                                            "type": "number",
+                                            "description": "Aggregated episode score (1.00 - 5.00) based on MyAnimeList user voting",
+                                            "type": "integer",
                                             "maximum": "5",
                                             "minimum": "1",
                                             "nullable": true
