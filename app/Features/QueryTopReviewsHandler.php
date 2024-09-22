@@ -31,7 +31,7 @@ final class QueryTopReviewsHandler extends RequestHandlerWithScraperCache
         $preliminary = $requestParams->get("preliminary", true);
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn (MalClient $jikan, ?int $page = null) => $jikan->getReviews(new ReviewsRequest($type, $page, $spoilers, $preliminary)),
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getReviews(new ReviewsRequest($type->value, $page, $spoilers, $preliminary)),
             $requestParams->get("page"));
     }
 }
