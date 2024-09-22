@@ -225,15 +225,17 @@ class AnimeController extends Controller
      *                       nullable=true
      *                   ),
      *                   @OA\Property(
-     *                       property="duration",
-     *                       type="integer",
-     *                       description="Episode duration in seconds",
-     *                       nullable=true
-     *                   ),
-     *                   @OA\Property(
      *                       property="aired",
      *                       type="string",
      *                       description="Aired Date ISO8601",
+     *                       nullable=true
+     *                   ),
+     *                   @OA\Property(
+     *                       property="score",
+     *                       type="number",
+     *                       description="Aggregated episode score based on MyAnimeList user voting",
+*                            minimum="1",
+*                            maximum="5",
      *                       nullable=true
      *                   ),
      *                   @OA\Property(

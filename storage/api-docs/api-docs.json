@@ -4480,14 +4480,16 @@
                                             "type": "string",
                                             "nullable": true
                                         },
-                                        "duration": {
-                                            "description": "Episode duration in seconds",
-                                            "type": "integer",
-                                            "nullable": true
-                                        },
                                         "aired": {
                                             "description": "Aired Date ISO8601",
                                             "type": "string",
+                                            "nullable": true
+                                        },
+                                        "score": {
+                                            "description": "Aggregated episode score based on MyAnimeList user voting",
+                                            "type": "number",
+                                            "maximum": "5",
+                                            "minimum": "1",
                                             "nullable": true
                                         },
                                         "filler": {
