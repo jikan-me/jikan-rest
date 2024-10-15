@@ -114,3 +114,12 @@ if (! function_exists('cache')) {
         return app('cache')->put(key($arguments[0]), reset($arguments[0]), $arguments[1] ?? null);
     }
 }
+
+if (!function_exists("ensureEnumPrimitiveValue")) {
+    function ensureEnumPrimitiveValue(int|string|bool|float|null|\Spatie\Enum\Laravel\Enum $value): mixed {
+        if ($value instanceof \Spatie\Enum\Laravel\Enum) {
+            return $value->value;
+        }
+        return $value;
+    }
+}

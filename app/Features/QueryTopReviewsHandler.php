@@ -7,7 +7,6 @@ use App\Enums\TopReviewsTypeEnum;
 use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use Jikan\Helper\Constants;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Reviews\ReviewsRequest;
 
@@ -31,7 +30,7 @@ final class QueryTopReviewsHandler extends RequestHandlerWithScraperCache
         $preliminary = $requestParams->get("preliminary", true);
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn (MalClient $jikan, ?int $page = null) => $jikan->getReviews(new ReviewsRequest($type->value, $page, $spoilers, $preliminary)),
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getReviews(new ReviewsRequest(ensureEnumPrimitiveValue($type), $page, $spoilers, $preliminary)),
             $requestParams->get("page"));
     }
 }
