@@ -67,7 +67,7 @@ class MangaIndexer extends Command
         $index = (int)$index;
         $delay = (int)$delay;
 
-        $this->info("Info: MangaIndexer uses seanbreckenridge/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
+        $this->info("Info: MangaIndexer uses purarue/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
 
         if ($failed && Storage::exists('indexer/indexer_manga.save')) {
             $this->ids = $this->loadFailedMalIds();
@@ -140,14 +140,14 @@ class MangaIndexer extends Command
 
     /**
      * @return array
-     * @url https://github.com/seanbreckenridge/mal-id-cache
+     * @url https://github.com/purarue/mal-id-cache
      */
     private function fetchMalIds() : array
     {
-        $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/seanbreckenridge/mal-id-cache/master/cache/manga_cache.json...\n");
+        $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/manga_cache.json...\n");
 
         $ids = json_decode(
-            file_get_contents('https://raw.githubusercontent.com/seanbreckenridge/mal-id-cache/master/cache/manga_cache.json'),
+            file_get_contents('https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/manga_cache.json'),
             true
         );
 

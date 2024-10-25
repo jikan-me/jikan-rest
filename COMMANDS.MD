@@ -66,7 +66,7 @@ Example: `cache:method queue`
 Since v4 uses MongoDB as a means to index cache on some endpoints, having a built cache is important since it
 works best for endpoints like search or top.
 
-`Indexer:Anime` uses [https://github.com/seanbreckenridge/mal-id-cache](https://github.com/seanbreckenridge/mal-id-cache) to fetch available MAL IDs and indexes them.
+`Indexer:Anime` uses [https://github.com/purarue/mal-id-cache](https://github.com/purarue/mal-id-cache) to fetch available MAL IDs and indexes them.
 
 This function only needs to be run once. Any entry's cache updating will automatically be taken care of if it's expired, and a client makes a request for that entry.
 
@@ -90,7 +90,7 @@ This translates to running entries that previously failed to index or update, in
 Since v4 uses MongoDB as a means to index cache on some endpoints, having a built cache is important since it
 works best for endpoints like search or top.
 
-`Indexer:Manga` uses [https://github.com/seanbreckenridge/mal-id-cache](https://github.com/seanbreckenridge/mal-id-cache) to fetch available MAL IDs and indexes them.
+`Indexer:Manga` uses [https://github.com/purarue/mal-id-cache](https://github.com/purarue/mal-id-cache) to fetch available MAL IDs and indexes them.
 
 This function only needs to be run once. Any entry's cache updating will automatically be taken care of if it's expired, and a client makes a request for that entry.
 
