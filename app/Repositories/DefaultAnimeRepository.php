@@ -167,19 +167,39 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                 $finalFilter['$or'][] = [
                     // note: this expression only works with mongodb version 5.0.0 or higher
                     '$expr' => [
-                        '$lte' => [
+                        '$and' => [
                             [
-                                '$dateDiff' => [
-                                    'startDate' => [
-                                        '$dateFromString' => [
-                                            'dateString' => '$aired.from'
+                                '$lte' => [
+                                    [
+                                        '$dateDiff' => [
+                                            'startDate' => [
+                                                '$dateFromString' => [
+                                                    'dateString' => '$aired.from'
+                                                ]
+                                            ],
+                                            'endDate' => new UTCDateTime($from),
+                                            'unit' => 'month'
                                         ]
                                     ],
-                                    'endDate' => new UTCDateTime($from),
-                                    'unit' => 'month'
-                                ]
+                                    3 // there are 3 months in a season, so anything that started in 3 months or less will be included
+                                ],
                             ],
-                            3 // there are 3 months in a season, so anything that started in 3 months or less will be included
+                            [
+                                '$gt' => [
+                                    [
+                                        '$dateDiff' => [
+                                            'startDate' => [
+                                                '$dateFromString' => [
+                                                    'dateString' => '$aired.from'
+                                                ]
+                                            ],
+                                            'endDate' => new UTCDateTime($from),
+                                            'unit' => 'month'
+                                        ]
+                                    ],
+                                    0
+                                ]
+                            ]
                         ]
                     ],
                     'aired.to' => null,
