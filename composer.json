@@ -14,6 +14,7 @@
         "php": "^8.1",
         "ext-json": "*",
         "ext-mongodb": "*",
+        "ext-pcntl": "*",
         "amphp/http-client": "^4.6",
         "danielmewes/php-rql": "dev-master",
         "darkaonline/swagger-lume": "^9.0",
