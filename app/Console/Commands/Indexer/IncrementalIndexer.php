@@ -26,7 +26,7 @@ class IncrementalIndexer extends Command
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'mediaType' => ['The media type to index.', 'Valid values: anime, manga, characters, people']
+            'mediaType' => ['The media type to index.', 'Valid values: anime, manga']
         ];
     }
 
@@ -171,7 +171,7 @@ class IncrementalIndexer extends Command
                 'failed' => $this->option('failed') ?? false
             ],
             [
-                'mediaType' => 'required|in:anime,manga,characters,people',
+                'mediaType' => 'required|in:anime,manga',
                 'delay' => 'integer|min:1',
                 'resume' => 'bool|prohibited_with:failed',
                 'failed' => 'bool|prohibited_with:resume'
