@@ -26,7 +26,7 @@ class IncrementalIndexer extends Command
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'mediaType' => ['The media type to index.', 'Valid values: anime, manga, character, people']
+            'mediaType' => ['The media type to index.', 'Valid values: anime, manga, characters, people']
         ];
     }
 
@@ -123,7 +123,7 @@ class IncrementalIndexer extends Command
 
             $id = $ids[$index];
 
-            $url = env('APP_URL') . "/v4/anime/$id";
+            $url = env('APP_URL') . "/v4/$mediaType/$id";
             $this->info("Indexing/Updating " . ($i + 1) . "/$idCount $url [MAL ID: $id]");
 
             try
@@ -171,7 +171,7 @@ class IncrementalIndexer extends Command
                 'failed' => $this->option('failed') ?? false
             ],
             [
-                'mediaType' => 'required|in:anime,manga,character,people',
+                'mediaType' => 'required|in:anime,manga,characters,people',
                 'delay' => 'integer|min:1',
                 'resume' => 'bool|prohibited_with:failed',
                 'failed' => 'bool|prohibited_with:resume'

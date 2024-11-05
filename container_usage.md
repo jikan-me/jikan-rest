@@ -39,7 +39,7 @@ start                  Start Jikan API (mongodb, typesense, redis, jikan-api wor
 stop                   Stop Jikan API
 validate-prereqs       Validate pre-reqs installed (docker, docker-compose)
 execute-indexers       Execute the indexers, which will scrape and index data from MAL. (Notice: This can take days)
-index-incrementally    Executes the incremental indexers for each media type. (anime, manga, character, people)
+index-incrementally    Executes the incremental indexers for each media type. (anime, manga, characters, people)
 ```
 
 ### Running the indexer with the script

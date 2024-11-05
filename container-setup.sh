@@ -34,7 +34,7 @@ display_help() {
   echo "stop                   Stop Jikan API"
   echo "validate-prereqs       Validate pre-reqs installed (docker, docker-compose)"
   echo "execute-indexers       Execute the indexers, which will scrape and index data from MAL. (Notice: This can take days)"
-  echo "index-incrementally    Executes the incremental indexers for each media type. (anime, manga, character, people)"
+  echo "index-incrementally    Executes the incremental indexers for each media type. (anime, manga, characters, people)"
   echo ""
 }
 
