@@ -103,7 +103,9 @@ class IncrementalIndexer extends Command
             $this->info("Resuming from index: $index");
         }
 
-        if ($index > 0 && !isset($this->ids[$index]))
+        $ids = array_merge($idsToFetch['sfw'], $idsToFetch['nsfw']);
+
+        if ($index > 0 && !isset($ids[$index]))
         {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
@@ -112,7 +114,6 @@ class IncrementalIndexer extends Command
         Storage::put("indexer/incremental/{$mediaType}_resume.save", 0);
 
         $this->info("$idCount $mediaType entries available");
-        $ids = array_merge($idsToFetch['sfw'], $idsToFetch['nsfw']);
 
         for ($i = $index; $i <= ($idCount - 1); $i++)
         {
@@ -184,7 +185,7 @@ class IncrementalIndexer extends Command
         }
 
         // we want to handle signals from the OS
-        $this->trap(SIGTERM, fn () => $this->cancelled = true);
+        $this->trap([SIGTERM, SIGQUIT, SIGINT], fn () => $this->cancelled = true);
 
         $resume = $this->option('resume') ?? false;
         $onlyFailed = $this->option('failed') ?? false;
@@ -208,13 +209,14 @@ class IncrementalIndexer extends Command
                 $idsToFetch = $this->getIdsToFetch($mediaType);
             }
 
-            $idCount = count($idsToFetch);
-            if ($idCount == 0)
+            if ($this->cancelled)
             {
-                if ($this->cancelled)
-                {
-                    return 127;
-                }
+                return 127;
+            }
+
+            $idCount = count($idsToFetch);
+            if ($idCount === 0)
+            {
                 continue;
             }
 
