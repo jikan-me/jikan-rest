@@ -14,6 +14,7 @@ For an entire list of commands, you can run `php artisan list`
 - [Indexer](#indexer)
     - [Anime](#indexer-anime)
     - [Manga](#indexer-manga)
+    - [Incremental](#indexer-incremental)
 
 ## Commands
 
