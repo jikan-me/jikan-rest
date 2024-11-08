@@ -72,33 +72,6 @@ class Magazine extends JikanApiSearchableModel
         ];
     }
 
-    public function getCollectionSchema(): array
-    {
-        return [
-            'name' => $this->searchableAs(),
-            'fields' => [
-                [
-                    'name' => '.*',
-                    'type' => 'auto',
-                ],
-                [
-                    'name' => 'titles',
-                    'type' => 'string',
-                    'optional' => false,
-                    'infix' => true,
-                    'sort' => true
-                ],
-                [
-                    'name' => 'url',
-                    'type' => 'string',
-                    'optional' => false,
-                    'infix' => true,
-                    'sort' => true
-                ],
-            ]
-        ];
-    }
-
     public function typesenseQueryBy(): array
     {
         return [
