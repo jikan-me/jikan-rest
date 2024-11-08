@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
         Indexer\GenreIndexer::class,
         Indexer\ProducersIndexer::class,
         Indexer\AnimeSweepIndexer::class,
-        Indexer\MangaSweepIndexer::class
+        Indexer\MangaSweepIndexer::class,
+        Indexer\IncrementalIndexer::class
     ];
 
     /**

@@ -3,8 +3,6 @@
 namespace App\Features;
 
 use App\Dto\QuerySpecificAnimeSeasonCommand;
-use App\Enums\AnimeSeasonEnum;
-use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;

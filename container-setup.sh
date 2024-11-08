@@ -34,6 +34,7 @@ display_help() {
   echo "stop                   Stop Jikan API"
   echo "validate-prereqs       Validate pre-reqs installed (docker, docker-compose)"
   echo "execute-indexers       Execute the indexers, which will scrape and index data from MAL. (Notice: This can take days)"
+  echo "index-incrementally    Executes the incremental indexers for each media type. (anime, manga)"
   echo ""
 }
 
@@ -168,6 +169,10 @@ case "$1" in
       $DOCKER_COMPOSE_CMD -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:producers
       echo "Indexing done!"
       ;;
+   "index-incrementally")
+      echo "Indexing..."
+      $DOCKER_COMPOSE_CMD -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:incremental anime manga
+      echo "Indexing done!"
    *)
       echo "No command specified, displaying help"
       display_help

@@ -16,6 +16,9 @@ This will:
 > **Note**: The script supports both `docker` and `podman`. In case of `podman` please bare in mind that sometimes the container name resolution doesn't work on the container network. 
 > In those cases you might have to install `aardvark-dns` package. On `Arch Linux` podman uses `netavark` network by default (in 2023) so you will need to install the before mentioned package.
 
+> **Note 2**: The script will start the jikan API, but if you start it for the first  time, it won't have any data in it!
+> You will have to run the indexers through artisan to have data. See ["Running the indexer with the script"](#running-the-indexer-with-the-script) section.
+
 The script has the following prerequisites and will notify you if these are not present:
 
 - git
@@ -36,6 +39,7 @@ start                  Start Jikan API (mongodb, typesense, redis, jikan-api wor
 stop                   Stop Jikan API
 validate-prereqs       Validate pre-reqs installed (docker, docker-compose)
 execute-indexers       Execute the indexers, which will scrape and index data from MAL. (Notice: This can take days)
+index-incrementally    Executes the incremental indexers for each media type. (anime, manga)
 ```
 
 ### Running the indexer with the script
