@@ -190,4 +190,39 @@ class SeasonControllerTest extends TestCase
         $this->assertIsArray($content["data"]);
         $this->assertCount(2, $content["data"]);
     }
+
+    public function testShouldNotIncludeNewlyStartedSeasonOfAnimeInPreviousSeasons()
+    {
+        Carbon::setTestNow(Carbon::parse("2024-10-26"));
+        $f = Anime::factory(1);
+        $startDate = "2024-10-02";
+        $carbonStartDate = Carbon::parse($startDate);
+        $state = $f->serializeStateDefinition([
+            "aired" => new CarbonDateRange($carbonStartDate, null)
+        ]);
+        $state["aired"]["string"] = "Oct 2, 2024 to ?";
+        $state["airing"] = true;
+        $state["status"] = "Currently Airing";
+        $state["premiered"] = "Fall 2024";
+        $state["mal_id"] = 54857;
+        $state["title"] = "Re:Zero kara Hajimeru Isekai Seikatsu 3rd Season";
+        $state["episodes"] = 16;
+        $state["type"] = "TV";
+        $state["duration"] = "23 min per ep";
+        $state["score"] = 8.9;
+        $f->create($state);
+
+        $content = $this->getJsonResponse([], "/v4/seasons/now?filter=tv&continuing&page=1");
+        $this->seeStatusCode(200);
+        $this->assertCount(1, $content["data"]);
+
+        $content = $this->getJsonResponse([], "/v4/seasons/2024/summer?filter=tv&continuing&page=1");
+        $this->seeStatusCode(200);
+        $this->assertCount(0, $content["data"]);
+
+        $content = $this->getJsonResponse([], "/v4/seasons/2024/spring?filter=tv&continuing&page=1");
+        $this->seeStatusCode(200);
+        $this->assertCount(0, $content["data"]);
+        Carbon::setTestNow();
+    }
 }
