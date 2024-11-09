@@ -2022,9 +2022,14 @@
                     "random"
                 ],
                 "operationId": "getRandomAnime",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Returns a random anime resource",
+                        "description": "Returns a single random anime resource or multiple resources in an array when `limit` is supplied",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2050,9 +2055,14 @@
                     "random"
                 ],
                 "operationId": "getRandomManga",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Returns a random manga resource",
+                        "description": "Returns a single random manga resource or multiple resources in an array when `limit` is supplied",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2078,9 +2088,14 @@
                     "random"
                 ],
                 "operationId": "getRandomCharacters",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Returns a random character resource",
+                        "description": "Returns a single random character resource or multiple resources in an array when `limit` is supplied",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2106,9 +2121,14 @@
                     "random"
                 ],
                 "operationId": "getRandomPeople",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Returns a random person resource",
+                        "description": "Returns a single random person resource or multiple resources in an array when `limit` is supplied",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2134,9 +2154,14 @@
                     "random"
                 ],
                 "operationId": "getRandomUsers",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Returns a random user profile resource",
+                        "description": "Returns a single random user profile resource or multiple resources in an array when `limit` is supplied",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9059,6 +9084,8 @@
             "limit": {
                 "name": "limit",
                 "in": "query",
+                "description": "Maximum limit (and the default number of entries returned) is 25 for all endpoints except for Random endpoints where the maximum limit is 5 and the default number of entries returned is 1.",
+                "required": false,
                 "schema": {
                     "type": "integer"
                 }

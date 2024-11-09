@@ -40,9 +40,11 @@ class RandomController extends Controller
      *     operationId="getRandomAnime",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a random anime resource",
+     *         description="Returns a single random anime resource or multiple resources in an array when `limit` is supplied",
      *         @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
@@ -67,9 +69,11 @@ class RandomController extends Controller
      *     operationId="getRandomManga",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a random manga resource",
+     *         description="Returns a single random manga resource or multiple resources in an array when `limit` is supplied",
      *         @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
@@ -94,9 +98,11 @@ class RandomController extends Controller
      *     operationId="getRandomCharacters",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a random character resource",
+     *         description="Returns a single random character resource or multiple resources in an array when `limit` is supplied",
      *         @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
@@ -121,9 +127,11 @@ class RandomController extends Controller
      *     operationId="getRandomPeople",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a random person resource",
+     *         description="Returns a single random person resource or multiple resources in an array when `limit` is supplied",
      *         @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
@@ -148,9 +156,11 @@ class RandomController extends Controller
      *     operationId="getRandomUsers",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *
      *     @OA\Response(
      *         response="200",
-     *         description="Returns a random user profile resource",
+     *         description="Returns a single random user profile resource or multiple resources in an array when `limit` is supplied",
      *         @OA\JsonContent(
      *              @OA\Property(
      *                  property="data",
