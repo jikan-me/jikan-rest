@@ -173,6 +173,7 @@ case "$1" in
       echo "Indexing..."
       $DOCKER_COMPOSE_CMD -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:incremental anime manga
       echo "Indexing done!"
+      ;;
    *)
       echo "No command specified, displaying help"
       display_help
