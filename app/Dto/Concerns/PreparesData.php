@@ -16,7 +16,14 @@ trait PreparesData
     public static function prepareForPipeline(Collection $properties): Collection
     {
         // let's always set the limit parameter to the globally configured default value
-        if (property_exists(static::class, "limit") && !$properties->has("limit")) {
+        // // commented out to prevent override for backwards compatibility in /random
+        //if (property_exists(static::class, "limit") && !$properties->has("limit")) {
+        //    $properties->put("limit", max_results_per_page(
+        //        property_exists(static::class, "defaultLimit") ? static::$defaultLimit : null));
+        //}
+
+        // apply defaultLimit for endpoints that have `limit` supplied
+        if (property_exists(static::class, "limit") && $properties->has("limit")) {
             $properties->put("limit", max_results_per_page(
                 property_exists(static::class, "defaultLimit") ? static::$defaultLimit : null));
         }
