@@ -2,20 +2,33 @@
 
 namespace App\Features;
 
-use App\Contracts\PeopleRepository;
+use App\Contracts\RequestHandler;
 use App\Dto\QueryRandomPersonCommand;
+use App\Http\Resources\V4\PersonCollection;
 use App\Http\Resources\V4\PersonResource;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
+use App\Person;
+use Spatie\LaravelData\Optional;
 
 /**
- * @extends QueryRandomItemHandler<QueryRandomPersonCommand, PersonResource>
+ * @extends RequestHandler<QueryRandomPersonCommand, PersonResource|PersonCollection>
  */
-final class QueryRandomPersonHandler extends QueryRandomItemHandler
+final class QueryRandomPersonHandler implements RequestHandler
 {
-    public function __construct(PeopleRepository $repository)
+
+    /**
+     * @inheritDoc
+     */
+    public function handle($request): PersonResource|PersonCollection
     {
-        parent::__construct($repository);
+        $queryable = Person::query();
+
+        $limit = $request->limit instanceof Optional ? 1 : $request->limit;
+
+        $results = $queryable->random($limit);
+
+        return $results->count() === 1
+            ? new PersonResource($results->first())
+            : new PersonCollection($results, false);
     }
 
     /**
@@ -24,10 +37,5 @@ final class QueryRandomPersonHandler extends QueryRandomItemHandler
     public function requestClass(): string
     {
         return QueryRandomPersonCommand::class;
-    }
-
-    protected function resource(Collection $results): JsonResource
-    {
-        return new PersonResource($results->first());
     }
 }

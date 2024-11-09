@@ -2,20 +2,33 @@
 
 namespace App\Features;
 
-use App\Contracts\CharacterRepository;
+use App\Character;
+use App\Contracts\RequestHandler;
 use App\Dto\QueryRandomCharacterCommand;
+use App\Http\Resources\V4\CharacterCollection;
 use App\Http\Resources\V4\CharacterResource;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
+use Spatie\LaravelData\Optional;
 
 /**
- * @extends QueryRandomItemHandler<QueryRandomCharacterCommand, CharacterResource>
+ * @extends QueryRandomCharacterHandler<QueryRandomCharacterCommand, CharacterResource|CharacterCollection>
  */
-final class QueryRandomCharacterHandler extends QueryRandomItemHandler
+final class QueryRandomCharacterHandler implements RequestHandler
 {
-    public function __construct(CharacterRepository $repository)
+
+    /**
+     * @inheritDoc
+     */
+    public function handle($request): CharacterResource|CharacterCollection
     {
-        parent::__construct($repository);
+        $queryable = Character::query();
+
+        $limit = $request->limit instanceof Optional ? 1 : $request->limit;
+
+        $results = $queryable->random($limit);
+
+        return $results->count() === 1
+            ? new CharacterResource($results->first())
+            : new CharacterCollection($results, false);
     }
 
     /**
@@ -24,10 +37,5 @@ final class QueryRandomCharacterHandler extends QueryRandomItemHandler
     public function requestClass(): string
     {
         return QueryRandomCharacterCommand::class;
-    }
-
-    protected function resource(Collection $results): JsonResource
-    {
-        return new CharacterResource($results->first());
     }
 }

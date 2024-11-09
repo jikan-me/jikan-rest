@@ -2,27 +2,32 @@
 
 namespace App\Features;
 
-use App\Contracts\UserRepository;
+use App\Contracts\RequestHandler;
 use App\Dto\QueryRandomUserCommand;
 use App\Http\Resources\V4\ProfileResource;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
+use App\Http\Resources\V4\UserCollection;
+use App\Profile;
+use Spatie\LaravelData\Optional;
 
 /**
- * @extends QueryRandomItemHandler<QueryRandomUserCommand, ProfileResource>
+ * @extends RequestHandler<QueryRandomUserCommand, ProfileResource|UserCollection>
  */
-final class QueryRandomUserHandler extends QueryRandomItemHandler
+final class QueryRandomUserHandler implements RequestHandler
 {
-    public function __construct(UserRepository $repository)
+    /**
+     * @inheritDoc
+     */
+    public function handle($request): ProfileResource|UserCollection
     {
-        parent::__construct($repository);
-    }
+        $queryable = Profile::query();
 
-    protected function resource(Collection $results): JsonResource
-    {
-        return new ProfileResource(
-            $results->first()
-        );
+        $limit = $request->limit instanceof Optional ? 1 : $request->limit;
+
+        $results = $queryable->random($limit);
+
+        return $results->count() === 1
+            ? new ProfileResource($results->first())
+            : new UserCollection($results, false);
     }
 
     /**

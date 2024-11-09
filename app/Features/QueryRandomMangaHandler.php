@@ -4,29 +4,32 @@ namespace App\Features;
 
 use App\Contracts\RequestHandler;
 use App\Dto\QueryRandomMangaCommand;
+use App\Http\Resources\V4\MangaCollection;
 use App\Http\Resources\V4\MangaResource;
 use App\Manga;
 use Spatie\LaravelData\Optional;
 
 /**
- * @implements RequestHandler<QueryRandomMangaCommand, MangaResource>
+ * @implements RequestHandler<QueryRandomMangaCommand, MangaResource|MangaCollection>
  */
 final class QueryRandomMangaHandler implements RequestHandler
 {
     /**
      * @inheritDoc
      */
-    public function handle($request)
+    public function handle($request): MangaResource|MangaCollection
     {
         $queryable = Manga::query();
 
-        $o = Optional::create();
-        $sfwParam = $request->sfw === $o ? false : $request->sfw;
-        $unapprovedParam = $request->unapproved === $o ? false : $request->unapproved;
+        $sfwParam = $request->sfw instanceof Optional ? false : $request->sfw;
+        $unapprovedParam = $request->unapproved instanceof Optional ? false : $request->unapproved;
+        $limit = $request->limit instanceof Optional ? 1 : $request->limit;
 
-        return new MangaResource(
-            $queryable->random(1, $sfwParam, $unapprovedParam)->first()
-        );
+        $results = $queryable->random($limit, $sfwParam, $unapprovedParam);
+
+        return $results->count() === 1
+            ? new MangaResource($results->first())
+            : new MangaCollection($results, false);
     }
 
     /**

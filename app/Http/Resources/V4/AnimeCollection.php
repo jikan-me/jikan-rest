@@ -35,7 +35,7 @@ class AnimeCollection extends ResourceCollection
      */
     public $collects = 'App\Http\Resources\V4\AnimeResource';
 
-    private $pagination;
+    private ?array $pagination = null;
 
     public function __construct($resource, bool $paginated = true)
     {
