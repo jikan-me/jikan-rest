@@ -23,7 +23,7 @@ secrets:
 
 services:
   jikan_rest:
-    image: "jikanme/jikan-rest:${_JIKAN_API_VERSION:-latest}"
+    image: "docker.io/jikanme/jikan-rest:${_JIKAN_API_VERSION:-latest}"
     user: "${APP_UID:-10001}:${APP_GID:-10001}"
     networks:
       - jikan_network
@@ -116,7 +116,3 @@ services:
       - typesense-data:/data
     ports:
       - "8108/tcp"
-    healthcheck:
-      test: [ 'CMD-SHELL', '{ ! [ -f "curl_created" ] && apt -qq update -y && apt -qq install -y curl && touch curl_created && curl -s -f http://localhost:8108/health; } || { curl -s -f http://localhost:8108/health; }' ]
-      interval: 5s
-      timeout: 2s

@@ -22,7 +22,7 @@ use App\Dto\AnimeThemesLookupCommand;
 use App\Dto\AnimeUserUpdatesLookupCommand;
 use App\Dto\AnimeVideosEpisodesLookupCommand;
 use App\Dto\AnimeVideosLookupCommand;
-use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 
 class AnimeController extends Controller
 {
@@ -225,15 +225,17 @@ class AnimeController extends Controller
      *                       nullable=true
      *                   ),
      *                   @OA\Property(
-     *                       property="duration",
-     *                       type="integer",
-     *                       description="Episode duration in seconds",
-     *                       nullable=true
-     *                   ),
-     *                   @OA\Property(
      *                       property="aired",
      *                       type="string",
      *                       description="Aired Date ISO8601",
+     *                       nullable=true
+     *                   ),
+     *                   @OA\Property(
+     *                       property="score",
+     *                       type="float",
+     *                       description="Aggregated episode score (1.00 - 5.00) based on MyAnimeList user voting",
+*                            minimum="1",
+*                            maximum="5",
      *                       nullable=true
      *                   ),
      *                   @OA\Property(
@@ -669,7 +671,7 @@ class AnimeController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/preliminary"),
-     *     @OA\Parameter(ref="#/components/parameters/spoiler"),
+     *     @OA\Parameter(ref="#/components/parameters/spoilers"),
      *
      *     @OA\Response(
      *         response="200",

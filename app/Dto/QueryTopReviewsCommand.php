@@ -2,14 +2,12 @@
 
 namespace App\Dto;
 
-use App\Casts\ContextualBooleanCast;
 use App\Casts\EnumCast;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
 use App\Dto\Concerns\HasPreliminaryParameter;
 use App\Dto\Concerns\HasSpoilersParameter;
 use App\Dto\Concerns\PreparesData;
-use App\Enums\TopAnimeFilterEnum;
 use App\Enums\TopReviewsTypeEnum;
 use App\Rules\Attributes\EnumValidation;
 use Illuminate\Http\JsonResponse;
@@ -23,6 +21,6 @@ final class QueryTopReviewsCommand extends QueryTopItemsCommand implements DataR
 {
     use HasRequestFingerprint, HasPreliminaryParameter, HasSpoilersParameter, PreparesData;
 
-    #[WithCast(EnumCast::class, TopAnimeFilterEnum::class), EnumValidation(TopReviewsTypeEnum::class)]
+    #[WithCast(EnumCast::class, TopReviewsTypeEnum::class), EnumValidation(TopReviewsTypeEnum::class)]
     public TopReviewsTypeEnum|Optional $type;
 }

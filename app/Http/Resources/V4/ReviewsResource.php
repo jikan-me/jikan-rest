@@ -3,6 +3,7 @@
 namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Annotations as OA;
 
 class ReviewsResource extends JsonResource
 {

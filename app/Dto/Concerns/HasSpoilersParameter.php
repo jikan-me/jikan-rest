@@ -10,7 +10,7 @@ use Spatie\LaravelData\Optional;
 
 /**
  *  @OA\Parameter(
- *      name="spoiler",
+ *      name="spoilers",
  *      in="query",
  *      required=false,
  *      description="Any reviews that are tagged as a spoiler. Spoiler reviews are not returned by default. e.g usage: `?spoiler=true`",

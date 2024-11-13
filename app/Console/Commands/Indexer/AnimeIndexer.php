@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Indexer;
 
-use App\Exceptions\Console\CommandAlreadyRunningException;
 use App\Exceptions\Console\FileNotFoundException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
@@ -67,7 +66,7 @@ class AnimeIndexer extends Command
         $index = (int)$index;
         $delay = (int)$delay;
 
-        $this->info("Info: AnimeIndexer uses seanbreckenridge/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
+        $this->info("Info: AnimeIndexer uses purarue/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
 
         if ($failed && Storage::exists('indexer/indexer_anime.failed')) {
             $this->ids = $this->loadFailedMalIds();
@@ -140,14 +139,14 @@ class AnimeIndexer extends Command
 
     /**
      * @return array
-     * @url https://github.com/seanbreckenridge/mal-id-cache
+     * @url https://github.com/purarue/mal-id-cache
      */
     private function fetchMalIds() : array
     {
-        $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/seanbreckenridge/mal-id-cache/master/cache/anime_cache.json...\n");
+        $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/anime_cache.json...\n");
 
         $ids = json_decode(
-            file_get_contents('https://raw.githubusercontent.com/seanbreckenridge/mal-id-cache/master/cache/anime_cache.json'),
+            file_get_contents('https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/anime_cache.json'),
             true
         );
 
