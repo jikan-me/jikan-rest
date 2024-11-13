@@ -3,10 +3,11 @@
 namespace App\Console\Commands\Indexer;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class IncrementalIndexer extends Command
+class IncrementalIndexer extends Command implements PromptsForMissingInput
 {
     /**
      * @var bool
