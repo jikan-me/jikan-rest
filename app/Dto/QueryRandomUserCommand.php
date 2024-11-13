@@ -12,5 +12,4 @@ use Spatie\LaravelData\Data;
  */
 final class QueryRandomUserCommand extends Data implements DataRequest
 {
-    use HasLimitParameterWithSmallerMax;
 }

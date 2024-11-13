@@ -5,29 +5,22 @@ namespace App\Features;
 use App\Contracts\RequestHandler;
 use App\Dto\QueryRandomUserCommand;
 use App\Http\Resources\V4\ProfileResource;
-use App\Http\Resources\V4\UserCollection;
 use App\Profile;
-use Spatie\LaravelData\Optional;
 
 /**
- * @extends RequestHandler<QueryRandomUserCommand, ProfileResource|UserCollection>
+ * @extends RequestHandler<QueryRandomUserCommand, ProfileResource>
  */
 final class QueryRandomUserHandler implements RequestHandler
 {
     /**
      * @inheritDoc
      */
-    public function handle($request): ProfileResource|UserCollection
+    public function handle($request): ProfileResource
     {
         $queryable = Profile::query();
+        $results = $queryable->random(1);
 
-        $limit = $request->limit instanceof Optional ? 1 : $request->limit;
-
-        $results = $queryable->random($limit);
-
-        return $results->count() === 1
-            ? new ProfileResource($results->first())
-            : new UserCollection($results, false);
+        return new ProfileResource($results->first());
     }
 
     /**
