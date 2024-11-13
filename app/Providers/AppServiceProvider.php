@@ -48,6 +48,7 @@ use App\Support\CacheOptions;
 use App\Support\DefaultMediator;
 use App\Support\JikanConfig;
 use App\Support\JikanUnitOfWork;
+use Illuminate\Console\Signals;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
 use Laravel\Lumen\Application;
@@ -55,7 +56,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Env;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
-use Jikan\MyAnimeList\MalClient;
 use Laravel\Scout\Builder as ScoutBuilder;
 use Typesense\LaravelTypesense\Typesense;
 use App\Features;
@@ -96,6 +96,13 @@ class AppServiceProvider extends ServiceProvider
             $this->app->singleton(\App\Services\TypesenseCollectionDescriptor::class);
         }
         $this->registerModelRepositories();
+
+        // lumen hack for signal handling in artisan commands
+        Signals::resolveAvailabilityUsing(function () {
+            return $this->app->runningInConsole()
+                && ! $this->app->runningUnitTests()
+                && extension_loaded('pcntl');
+        });
     }
 
     private function getSearchService(Repository $repository): SearchService

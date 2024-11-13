@@ -30,6 +30,23 @@ class IncrementalIndexer extends Command
         ];
     }
 
+    private function sleep(int $milliseconds): void
+    {
+        $interval = 100; // check every 100 ms
+        $elapsed = 0;
+
+        while ($elapsed < $milliseconds)
+        {
+            if ($this->cancelled)
+            {
+                return;
+            }
+
+            usleep($interval * 1000);
+            $elapsed += $interval;
+        }
+    }
+
     private function getExistingIds(string $mediaType): array
     {
         $existingIdsHash = "";
@@ -91,12 +108,12 @@ class IncrementalIndexer extends Command
         return json_decode(Storage::get("indexer/incremental/{$mediaType}_failed.json"));
     }
 
-    private function fetchIds(string $mediaType, array $idsToFetch, bool $resume): void
+    private function fetchIds(string $mediaType, array $idsToFetch, int $delay, bool $resume): void
     {
         $index = 0;
         $success = [];
         $failedIds = [];
-        $idCount = count($idsToFetch);
+
         if ($resume && Storage::exists("indexer/incremental/{$mediaType}_resume.save"))
         {
             $index = (int)Storage::get("indexer/incremental/{$mediaType}_resume.save");
@@ -104,6 +121,7 @@ class IncrementalIndexer extends Command
         }
 
         $ids = array_merge($idsToFetch['sfw'], $idsToFetch['nsfw']);
+        $idCount = count($ids);
 
         if ($index > 0 && !isset($ids[$index]))
         {
@@ -119,10 +137,11 @@ class IncrementalIndexer extends Command
         {
             if ($this->cancelled)
             {
+                $this->info("Cancelling...");
                 return;
             }
 
-            $id = $ids[$index];
+            $id = $ids[$i];
 
             $url = env('APP_URL') . "/v4/$mediaType/$id";
             $this->info("Indexing/Updating " . ($i + 1) . "/$idCount $url [MAL ID: $id]");
@@ -142,6 +161,16 @@ class IncrementalIndexer extends Command
                 $this->warn("[SKIPPED] Failed to fetch $url");
                 $failedIds[] = $id;
                 Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
+                continue;
+            }
+            finally
+            {
+                $this->sleep($delay * 1000);
+                if ($this->cancelled)
+                {
+                    $this->info("Cancelling...");
+                    return;
+                }
             }
 
             $success[] = $id;
@@ -168,18 +197,20 @@ class IncrementalIndexer extends Command
             [
                 'mediaType' => $this->argument('mediaType'),
                 'delay' => $this->option('delay'),
-                'resume' => $this->option('resume') ?? false,
-                'failed' => $this->option('failed') ?? false
+                'resume' => $this->option('resume'),
+                'failed' => $this->option('failed')
             ],
             [
-                'mediaType' => 'required|in:anime,manga',
+                'mediaType' => 'required|array',
+                'mediaType.*' => 'in:anime,manga',
                 'delay' => 'integer|min:1',
-                'resume' => 'bool|prohibited_with:failed',
-                'failed' => 'bool|prohibited_with:resume'
+                'resume' => 'bool',
+                'failed' => 'bool'
             ]
         );
 
-        if ($validator->fails()) {
+        if ($validator->fails())
+        {
             $this->error($validator->errors()->toJson());
             return 1;
         }
@@ -189,6 +220,7 @@ class IncrementalIndexer extends Command
 
         $resume = $this->option('resume') ?? false;
         $onlyFailed = $this->option('failed') ?? false;
+        $delay = $this->option('delay') ?? 3;
 
         /**
          * @var $mediaTypes array
@@ -211,16 +243,18 @@ class IncrementalIndexer extends Command
 
             if ($this->cancelled)
             {
-                return 127;
+                $this->info("Cancelling...");
+                return 0;
             }
 
             $idCount = count($idsToFetch);
             if ($idCount === 0)
             {
+                $this->info("No $mediaType entries to index");
                 continue;
             }
 
-            $this->fetchIds($mediaType, $idsToFetch, $resume);
+            $this->fetchIds($mediaType, $idsToFetch, $delay, $resume);
         }
 
         return 0;
