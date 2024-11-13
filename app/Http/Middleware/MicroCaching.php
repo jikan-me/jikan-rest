@@ -64,10 +64,13 @@ class MicroCaching
 
         // if cache exists, return cache
         if (Cache::has($fingerprint)) {
+            $response = \json_decode(Cache::get($fingerprint), true);
+
+            unset($response['meta']);
+            unset($response['links']);
+
             return response()
-                ->json(
-                    \json_decode(Cache::get($fingerprint), true)
-                );
+                ->json($response);
         }
 
         // set cache
