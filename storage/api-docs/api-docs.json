@@ -2029,13 +2029,49 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns a single random anime resource or multiple resources in an array when `limit` is supplied",
+                        "description": "Returns a single random anime resource",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "data": {
                                             "$ref": "#/components/schemas/anime"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/random/list/anime": {
+            "get": {
+                "tags": [
+                    "random"
+                ],
+                "operationId": "getRandomAnimeList",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns multiple anime resources. You can use `limit` to control the number of items returned. By default it returns 1 and maximum 5",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/anime"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -2082,6 +2118,42 @@
                 }
             }
         },
+        "/random/list/manga": {
+            "get": {
+                "tags": [
+                    "random"
+                ],
+                "operationId": "getRandomMangaList",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns multiple manga resources. You can use `limit` to control the number of items returned. By default it returns 1 and maximum 5",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/manga"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/random/characters": {
             "get": {
                 "tags": [
@@ -2102,6 +2174,42 @@
                                     "properties": {
                                         "data": {
                                             "$ref": "#/components/schemas/character"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/random/list/characters": {
+            "get": {
+                "tags": [
+                    "random"
+                ],
+                "operationId": "getRandomCharactersList",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns multiple character resources. You can use `limit` to control the number of items returned. By default it returns 1 and maximum 5",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/character"
+                                            }
                                         }
                                     },
                                     "type": "object"
@@ -2148,6 +2256,42 @@
                 }
             }
         },
+        "/random/list/people": {
+            "get": {
+                "tags": [
+                    "random"
+                ],
+                "operationId": "getRandomPeopleList",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns multiple people resources. You can use `limit` to control the number of items returned. By default it returns 1 and maximum 5",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/person"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
         "/random/users": {
             "get": {
                 "tags": [
@@ -2168,6 +2312,42 @@
                                     "properties": {
                                         "data": {
                                             "$ref": "#/components/schemas/user_profile"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad request. When required parameters were not supplied."
+                    }
+                }
+            }
+        },
+        "/random/list/users": {
+            "get": {
+                "tags": [
+                    "random"
+                ],
+                "operationId": "getRandomUsersList",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns multiple user resources. You can use `limit` to control the number of items returned. By default it returns 1 and maximum 5",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/user_profile"
+                                            }
                                         }
                                     },
                                     "type": "object"
