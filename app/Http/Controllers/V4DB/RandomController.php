@@ -44,7 +44,8 @@ class RandomController extends Controller
      *     operationId="getRandomAnime",
      *     tags={"random"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *
      *     @OA\Response(
      *         response="200",
@@ -73,6 +74,8 @@ class RandomController extends Controller
      *     operationId="getRandomAnimeList",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
@@ -106,7 +109,8 @@ class RandomController extends Controller
      *     operationId="getRandomManga",
      *     tags={"random"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *
      *     @OA\Response(
      *         response="200",
@@ -135,6 +139,8 @@ class RandomController extends Controller
      *     operationId="getRandomMangaList",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
@@ -168,7 +174,8 @@ class RandomController extends Controller
      *     operationId="getRandomCharacters",
      *     tags={"random"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *
      *     @OA\Response(
      *         response="200",
@@ -197,6 +204,8 @@ class RandomController extends Controller
      *     operationId="getRandomCharactersList",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
@@ -230,7 +239,8 @@ class RandomController extends Controller
      *     operationId="getRandomPeople",
      *     tags={"random"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *
      *     @OA\Response(
      *         response="200",
@@ -259,6 +269,8 @@ class RandomController extends Controller
      *     operationId="getRandomPeopleList",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
@@ -292,7 +304,8 @@ class RandomController extends Controller
      *     operationId="getRandomUsers",
      *     tags={"random"},
      *
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *
      *     @OA\Response(
      *         response="200",
@@ -321,6 +334,8 @@ class RandomController extends Controller
      *     operationId="getRandomUsersList",
      *     tags={"random"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/sfw"),
+     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
      *
      *     @OA\Response(
