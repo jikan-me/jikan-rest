@@ -12,6 +12,7 @@ class IncrementalIndexer extends Command
      * @var bool
      */
     private bool $cancelled = false;
+    private int $receivedSignal = 0;
 
     /**
      * The name and signature of the console command.
@@ -28,23 +29,6 @@ class IncrementalIndexer extends Command
         return [
             'mediaType' => ['The media type to index.', 'Valid values: anime, manga']
         ];
-    }
-
-    private function sleep(int $milliseconds): void
-    {
-        $interval = 100; // check every 100 ms
-        $elapsed = 0;
-
-        while ($elapsed < $milliseconds)
-        {
-            if ($this->cancelled)
-            {
-                return;
-            }
-
-            usleep($interval * 1000);
-            $elapsed += $interval;
-        }
     }
 
     private function getExistingIds(string $mediaType): array
@@ -71,10 +55,10 @@ class IncrementalIndexer extends Command
             return [];
         }
 
+        $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/${mediaType}_cache.json...");
         $newIdsRaw = file_get_contents("https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/${mediaType}_cache.json");
         $newIdsHash = sha1($newIdsRaw);
 
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
         if ($this->cancelled)
         {
             return [];
@@ -165,7 +149,7 @@ class IncrementalIndexer extends Command
             }
             finally
             {
-                $this->sleep($delay * 1000);
+                cancellable_sleep($delay * 1000, fn() => $this->cancelled);
                 if ($this->cancelled)
                 {
                     $this->info("Cancelling...");
@@ -216,7 +200,12 @@ class IncrementalIndexer extends Command
         }
 
         // we want to handle signals from the OS
-        $this->trap([SIGTERM, SIGQUIT, SIGINT], fn () => $this->cancelled = true);
+        $this->trap([SIGTERM, SIGQUIT, SIGINT], function (int $signal) {
+            $this->cancelled = true;
+            $this->receivedSignal = $signal;
+        });
+
+        $this->info("Info: IncrementalIndexer uses purarue/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
 
         $resume = $this->option('resume') ?? false;
         $onlyFailed = $this->option('failed') ?? false;
@@ -244,7 +233,7 @@ class IncrementalIndexer extends Command
             if ($this->cancelled)
             {
                 $this->info("Cancelling...");
-                return 0;
+                return 128 + $this->receivedSignal;
             }
 
             $idCount = count($idsToFetch);
@@ -257,6 +246,10 @@ class IncrementalIndexer extends Command
             $this->fetchIds($mediaType, $idsToFetch, $delay, $resume);
         }
 
+        if ($this->cancelled && $this->receivedSignal > 0)
+        {
+            return 128 + $this->receivedSignal;
+        }
         return 0;
     }
 }
