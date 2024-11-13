@@ -123,3 +123,21 @@ if (!function_exists("ensureEnumPrimitiveValue")) {
         return $value;
     }
 }
+
+if (!function_exists("cancellable_sleep")) {
+    function cancellable_sleep(int $milliseconds, callable $isCancelled): void {
+        $interval = 100; // check every 100 ms
+        $elapsed = 0;
+
+        while ($elapsed < $milliseconds)
+        {
+            if ($isCancelled())
+            {
+                return;
+            }
+
+            usleep($interval * 1000);
+            $elapsed += $interval;
+        }
+    }
+}
