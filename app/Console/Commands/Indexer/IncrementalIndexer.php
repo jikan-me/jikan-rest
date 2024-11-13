@@ -247,10 +247,6 @@ class IncrementalIndexer extends Command implements PromptsForMissingInput
             $this->fetchIds($mediaType, $idsToFetch, $delay, $resume);
         }
 
-        if ($this->cancelled && $this->receivedSignal > 0)
-        {
-            return 128 + $this->receivedSignal;
-        }
-        return 0;
+        return $this->cancelled && $this->receivedSignal > 0 ? 128 + $this->receivedSignal : 0;
     }
 }
