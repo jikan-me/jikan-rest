@@ -9,8 +9,8 @@ use Spatie\LaravelData\Attributes\Validation\Rule;
 #[Attribute(Attribute::TARGET_PROPERTY)]
 final class MaxLimitWithFallback extends Rule
 {
-    public function __construct()
+    public function __construct(?int $fallbackLimit = null)
     {
-        parent::__construct(new MaxResultsPerPageRule(max_results_per_page()));
+        parent::__construct(new MaxResultsPerPageRule($fallbackLimit ?? max_results_per_page()));
     }
 }

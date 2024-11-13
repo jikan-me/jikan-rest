@@ -20,13 +20,12 @@ final class QueryRandomAnimeHandler implements RequestHandler
     {
         $queryable = Anime::query();
 
-        $o = Optional::create();
-        $sfwParam = $request->sfw === $o ? false : $request->sfw;
-        $unapprovedParam = $request->unapproved === $o ? false : $request->unapproved;
+        $sfwParam = $request->sfw instanceof Optional ? false : $request->sfw;
+        $unapprovedParam = $request->unapproved instanceof Optional ? false : $request->unapproved;
 
-        return new AnimeResource(
-            $queryable->random(1, $sfwParam, $unapprovedParam)->first()
-        );
+        $results = $queryable->random(1, $sfwParam, $unapprovedParam);
+
+        return new AnimeResource($results->first());
     }
 
     /**

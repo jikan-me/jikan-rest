@@ -556,6 +556,33 @@ $router->group(
         $router->get('/users', [
             'uses' => 'RandomController@users',
         ]);
+
+        $router->group(
+            [
+                'prefix' => '/list'
+            ],
+            function() use ($router) {
+                $router->get('/anime', [
+                    'uses' => 'RandomController@animeList',
+                ]);
+
+                $router->get('/manga', [
+                    'uses' => 'RandomController@mangaList',
+                ]);
+
+                $router->get('/characters', [
+                    'uses' => 'RandomController@charactersList',
+                ]);
+
+                $router->get('/people', [
+                    'uses' => 'RandomController@peopleList',
+                ]);
+
+                $router->get('/users', [
+                    'uses' => 'RandomController@usersList',
+                ]);
+            }
+        );
     }
 );
 

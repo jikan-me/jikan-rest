@@ -33,6 +33,4 @@ interface Repository extends RepositoryQuery
     public function scrape(int|string $id): array;
 
     public function insert(array $attributes): bool;
-
-    public function random(int $numberOfRandomItems = 1): Collection;
 }

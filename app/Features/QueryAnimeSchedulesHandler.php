@@ -8,6 +8,7 @@ use App\Dto\QueryAnimeSchedulesCommand;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Support\CachedData;
 use Illuminate\Support\Env;
+use Spatie\LaravelData\Optional;
 
 /**
  * @implements RequestHandler<QueryAnimeSchedulesCommand, AnimeCollection>
@@ -24,7 +25,7 @@ final class QueryAnimeSchedulesHandler implements RequestHandler
     public function handle($request)
     {
         $requestParams = collect($request->all());
-        $limit = $requestParams->get("limit");
+        $limit = $request->limit instanceof Optional ? max_results_per_page() : $request->limit;
         $results = $this->repository->getCurrentlyAiring($request->filter);
         // apply sfw, kids and unapproved filters
         /** @noinspection PhpUndefinedMethodInspection */
