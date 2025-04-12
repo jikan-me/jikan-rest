@@ -326,6 +326,10 @@ class CommonResource extends JsonResource
      *               property="has_next_page",
      *               type="boolean"
      *          ),
+     *          @OA\Property(
+     *               property="current_page",
+     *               type="integer"
+     *          ),
      *
      *          @OA\Property (
      *              property="items",

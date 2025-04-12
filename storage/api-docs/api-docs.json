@@ -6405,6 +6405,9 @@
                             "has_next_page": {
                                 "type": "boolean"
                             },
+                            "current_page": {
+                                "type": "integer"
+                            },
                             "items": {
                                 "properties": {
                                     "count": {
