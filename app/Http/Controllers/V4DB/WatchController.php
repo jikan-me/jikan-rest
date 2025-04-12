@@ -144,39 +144,26 @@ class WatchController extends Controller
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
-     *
-     *              allOf={
-     *                  @OA\Schema(
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="object",
      *                      @OA\Property(
      *                          property="title",
      *                          type="string",
      *                          description="Promo Title"
      *                      ),
-     *                  ),
-     *                  @OA\Schema (
      *                      @OA\Property(
-     *                           property="data",
-     *                           type="array",
-     *
-     *                           @OA\Items(
-     *                              type="object",
-     *                               @OA\Property(
-     *                                   property="entry",
-     *                                   type="object",
-     *                                   ref="#/components/schemas/anime_meta"
-     *                               ),
-     *                              @OA\Property(
-     *                                  property="trailer",
-     *                                  type="array",
-     *                                  @OA\Items(
-     *                                      type="object",
-     *                                      ref="#/components/schemas/trailer",
-     *                                  ),
-     *                              ),
-     *                          ),
+     *                          property="entry",
+     *                          ref="#/components/schemas/anime_meta"
+     *                      ),
+     *                      @OA\Property(
+     *                          property="trailer",
+     *                          ref="#/components/schemas/trailer",
      *                      ),
      *                  ),
-     *              },
+     *              ),
      *          ),
      *     },
      *  ),
