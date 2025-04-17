@@ -49,7 +49,7 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 | Java       | [Jikan4java](https://github.com/Doomsdayrs/Jikan4java) by Doomsdayrs<br>🆕 **(v4)** [reactive-jikan](https://github.com/SandroHc/reactive-jikan) by Sandro Marques<br>🆕 **(v4)** [Jaikan](https://github.com/ShindouMihou/Jaikan) by ShindouMihou |
 | Python     | **(v4)** [JikanPy](https://github.com/abhinavk99/jikanpy) by Abhinav Kasamsetty<br>🆕 **(v4)** [jikan4snek](https://github.com/ScathachGrip/jikan4snek) by Indrawan I. |
 | Node.js    | [jikan-node](https://github.com/xy137/jikan-node) by xy137<br>[jikan-nodejs](https://github.com/ribeirogab/jikan-nodejs) by ribeirogab<br>🆕 **(v4)** [Jikan4JS](https://github.com/rizzzigit/jikan4.js) by RizzziGit<br>🆕 **(v4)** [jikan-api.js](https://github.com/OpenianDevelopment/jikan-api.js) by OpenianDev |
-| TypeScript | [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard<br>[jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco<br>🆕 **(v4)** [jikan-ts](https://github.com/tutkli/jikan-ts) by Clara Castillo |
+| TypeScript | [jikants](https://github.com/Julien-Broyard/jikants) by Julien Broyard<br>[jikan-client](https://github.com/javi11/jikan-client) by Javier Blanco<br>🆕 **(v4)** [jikan-ts](https://github.com/tutkli/jikan-ts) by Clara Castillo<br>🆕 **(v4)** [jikan-api-lightweight-client](https://github.com/HRAshton/jikan-api-lightweight-client) by HRAshton |
 | PHP        | [jikan-php](https://github.com/janvernieuwe/jikan-jikanPHP) by Jan Vernieuwe |
 | .NET       | 🆕 **(v4)** [Jikan.net](https://github.com/Ervie/jikan.net) by Ervie |
 | Go         | 🆕 **(v4)** [jikan-go](https://github.com/darenliang/jikan-go) by Daren Liang<br>[jikan2go](https://github.com/nokusukun/jikan2go) by nokusukun |
@@ -57,7 +57,7 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 | Dart       | [jikan-dart](https://github.com/charafau/jikan-dart) by Rafal Wachol |
 | Kotlin     | [JikanKt](https://github.com/GSculerlor/JikanKt) by Ganedra Afrasya |
 
-[Add your wrapper here](https://github.com/jikan-me/jikan-rest/edit/master/readme.md)
+[Add your wrapper here](https://github.com/jikan-me/jikan-rest/edit/master/README.MD)
 
 ## Running Tests
 
