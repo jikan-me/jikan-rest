@@ -16,10 +16,13 @@ trait PreparesData
     public static function prepareForPipeline(Collection $properties): Collection
     {
         // let's always set the limit parameter to the globally configured default value
-        if (property_exists(static::class, "limit") && !$properties->has("limit")) {
-            $properties->put("limit", max_results_per_page(
-                property_exists(static::class, "defaultLimit") ? static::$defaultLimit : null));
-        }
+        // // BUG: this causes override and always sets the default limit to config value
+        //         even if the property `limit` does not exist
+        //         max_results_per_page never accepts $defaultLimit and will always return config value
+        // if (property_exists(static::class, "limit") && !$properties->has("limit")) {
+        //     $properties->put("limit", max_results_per_page(
+        //         property_exists(static::class, "defaultLimit") ? static::$defaultLimit : null));
+        // }
 
         // we want to cast "true" and "false" string values to boolean before validation, so let's take all properties
         // of the class which are bool or bool|Optional type, and using their name read the values from the incoming

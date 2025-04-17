@@ -74,11 +74,6 @@ class DatabaseRepository extends RepositoryQuery implements Repository
         return true;
     }
 
-    public function random(int $numberOfRandomItems = 1): Collection
-    {
-        return $this->queryable(true)->random($numberOfRandomItems);
-    }
-
     private function getModelClass(): string
     {
         return get_class($this->queryable(true)->newModelInstance());

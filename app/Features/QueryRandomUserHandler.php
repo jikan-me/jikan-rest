@@ -2,27 +2,25 @@
 
 namespace App\Features;
 
-use App\Contracts\UserRepository;
+use App\Contracts\RequestHandler;
 use App\Dto\QueryRandomUserCommand;
 use App\Http\Resources\V4\ProfileResource;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
+use App\Profile;
 
 /**
- * @extends QueryRandomItemHandler<QueryRandomUserCommand, ProfileResource>
+ * @extends RequestHandler<QueryRandomUserCommand, ProfileResource>
  */
-final class QueryRandomUserHandler extends QueryRandomItemHandler
+final class QueryRandomUserHandler implements RequestHandler
 {
-    public function __construct(UserRepository $repository)
+    /**
+     * @inheritDoc
+     */
+    public function handle($request): ProfileResource
     {
-        parent::__construct($repository);
-    }
+        $queryable = Profile::query();
+        $results = $queryable->random(1);
 
-    protected function resource(Collection $results): JsonResource
-    {
-        return new ProfileResource(
-            $results->first()
-        );
+        return new ProfileResource($results->first());
     }
 
     /**
