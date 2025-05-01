@@ -178,8 +178,8 @@ class IncrementalIndexer extends Command
             [
                 'mediaType' => 'required|in:anime,manga',
                 'delay' => 'integer|min:1',
-                'resume' => 'bool|prohibited_with:failed',
-                'failed' => 'bool|prohibited_with:resume'
+                'resume' => 'bool|prohibits:failed',
+                'failed' => 'bool|prohibits:resume'
             ]
         );
 
