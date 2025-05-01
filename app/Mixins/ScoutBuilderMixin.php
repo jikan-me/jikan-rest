@@ -28,30 +28,13 @@ class ScoutBuilderMixin
             $page = $page ?: Paginator::resolveCurrentPage($pageName);
 
             $perPage = $perPage ?: $this->model->getPerPage();
-
-            // custom pagination, where we only paginate on the db, not in the search engine
-            // we do chunked processing of hits from the search engine if the number of hits exceed 250
-            $searchEngineResultChunkSize = 250;
-            $rawResults = $engine->paginate($this, $searchEngineResultChunkSize, 1);
+            $rawResults = $engine->paginate($this, max_results_per_page(), $page);
             $found = $engine->getTotalCount($rawResults);
-            if ($found > 250) {
-                $additionalPages = $found / $searchEngineResultChunkSize;
-                $currentAdditionalPage = 1.0;
-                while ($currentAdditionalPage <= $additionalPages) {
-                    $temp = $engine->paginate($this, $searchEngineResultChunkSize, 1 + round($currentAdditionalPage));
-                    $rawResults = array_merge_recursive($rawResults, $temp);
-                    $currentAdditionalPage += 1.0;
-                }
-            }
-
-            // Notice forPage call here. We use that to only get the records for the current page from db.
-            $results = $this->model->newCollection($engine->map(
-                $this, $rawResults, $this->model
-            )->forPage($page, $perPage)->values()->all());
+            $results = $this->model->newCollection($engine->map($this, $rawResults, $this->model)->values()->all());
 
             return Container::getInstance()->makeWith(LengthAwarePaginator::class, [
                 'items' => $results,
-                'total' => $this->getTotalCount($rawResults),
+                'total' => $found,
                 'perPage' => $perPage,
                 'currentPage' => $page,
                 'options' => [

@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Indexer;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -12,6 +13,7 @@ class IncrementalIndexer extends Command
      * @var bool
      */
     private bool $cancelled = false;
+    private int $delay = 3;
 
     /**
      * The name and signature of the console command.
@@ -122,6 +124,7 @@ class IncrementalIndexer extends Command
                 return;
             }
 
+            sleep($this->delay);
             $id = $ids[$index];
 
             $url = env('APP_URL') . "/v4/$mediaType/$id";
@@ -142,10 +145,16 @@ class IncrementalIndexer extends Command
                 $this->warn("[SKIPPED] Failed to fetch $url");
                 $failedIds[] = $id;
                 Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
+                continue;
             }
 
             $success[] = $id;
             Storage::put("indexer/incremental/{$mediaType}_resume.save", $index);
+
+            // we want to sync to disk after every 300 items to avoid data loss.
+            if ($i % 300 == 0) {
+                mongoFsync();
+            }
         }
 
         Storage::delete("indexer/incremental/{$mediaType}_resume.save");
@@ -159,6 +168,7 @@ class IncrementalIndexer extends Command
 
         // finalize the latest state
         Storage::move("indexer/incremental/$mediaType.json.tmp", "indexer/incremental/$mediaType.json");
+        mongoFsync();
     }
 
     public function handle(): int
@@ -189,6 +199,7 @@ class IncrementalIndexer extends Command
 
         $resume = $this->option('resume') ?? false;
         $onlyFailed = $this->option('failed') ?? false;
+        $this->delay = (int)$this->option('delay') ?? 3;
 
         /**
          * @var $mediaTypes array

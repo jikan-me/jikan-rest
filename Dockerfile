@@ -29,6 +29,7 @@ RUN	set -ex \
 	# enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit>
 	&& echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1235\n" >> \
 	    ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
+  && echo -e "memory_limit = 256M\n" >> ${PHP_INI_DIR}/conf.d/docker-php-memory-limit-override.ini \
   # show php version
   && php -v \
 	# show installed modules
