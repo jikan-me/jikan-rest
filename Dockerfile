@@ -6,7 +6,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/
 ENV COMPOSER_HOME="/tmp/composer"
 RUN set -x \
-    && install-php-extensions intl mbstring mongodb-stable redis opcache sockets pcntl \
+    && install-php-extensions intl mbstring mongodb-1.21.0 redis opcache sockets pcntl \
     # install xdebug (for testing with code coverage), but do not enable it
     && IPE_DONT_ENABLE=1 install-php-extensions xdebug-3.2.0
 
