@@ -150,11 +150,6 @@ class IncrementalIndexer extends Command
 
             $success[] = $id;
             Storage::put("indexer/incremental/{$mediaType}_resume.save", $index);
-
-            // we want to sync to disk after every 300 items to avoid data loss.
-            if ($i % 300 == 0) {
-                mongoFsync();
-            }
         }
 
         Storage::delete("indexer/incremental/{$mediaType}_resume.save");
@@ -168,7 +163,6 @@ class IncrementalIndexer extends Command
 
         // finalize the latest state
         Storage::move("indexer/incremental/$mediaType.json.tmp", "indexer/incremental/$mediaType.json");
-        mongoFsync();
     }
 
     public function handle(): int

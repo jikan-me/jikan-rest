@@ -129,11 +129,6 @@ class AnimeIndexer extends Command
 
             $success[] = $id;
             Storage::put('indexer/indexer_anime.save', $i);
-
-            // we want to sync to disk after every 300 items to avoid data loss.
-            if ($i % 300 == 0) {
-                mongoFsync();
-            }
         }
 
         Storage::delete('indexer/indexer_anime.save');

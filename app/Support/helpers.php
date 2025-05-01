@@ -123,16 +123,3 @@ if (!function_exists("ensureEnumPrimitiveValue")) {
         return $value;
     }
 }
-
-if (!function_exists("mongoFsync")) {
-    function mongoFsync(bool $async = true): void {
-        $mongo = Illuminate\Support\Facades\DB::getMongoClient();
-        $adminDb = $mongo->selectDatabase('admin');
-        if ($async) {
-            $adminDb->command(['fsync' => 1]);
-        } else {
-            // sync journal too
-            $adminDb->command(['fsync' => 1, 'async' => false]);
-        }
-    }
-}
