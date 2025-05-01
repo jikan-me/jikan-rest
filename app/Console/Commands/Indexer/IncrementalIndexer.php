@@ -3,17 +3,17 @@
 namespace App\Console\Commands\Indexer;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class IncrementalIndexer extends Command
+class IncrementalIndexer extends Command implements PromptsForMissingInput
 {
     /**
      * @var bool
      */
     private bool $cancelled = false;
-    private int $delay = 3;
+    private int $receivedSignal = 0;
 
     /**
      * The name and signature of the console command.
@@ -56,10 +56,10 @@ class IncrementalIndexer extends Command
             return [];
         }
 
+        $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/${mediaType}_cache.json...");
         $newIdsRaw = file_get_contents("https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/${mediaType}_cache.json");
         $newIdsHash = sha1($newIdsRaw);
 
-        /** @noinspection PhpConditionAlreadyCheckedInspection */
         if ($this->cancelled)
         {
             return [];
@@ -93,12 +93,12 @@ class IncrementalIndexer extends Command
         return json_decode(Storage::get("indexer/incremental/{$mediaType}_failed.json"));
     }
 
-    private function fetchIds(string $mediaType, array $idsToFetch, bool $resume): void
+    private function fetchIds(string $mediaType, array $idsToFetch, int $delay, bool $resume): void
     {
         $index = 0;
         $success = [];
         $failedIds = [];
-        $idCount = count($idsToFetch);
+
         if ($resume && Storage::exists("indexer/incremental/{$mediaType}_resume.save"))
         {
             $index = (int)Storage::get("indexer/incremental/{$mediaType}_resume.save");
@@ -106,6 +106,7 @@ class IncrementalIndexer extends Command
         }
 
         $ids = array_merge($idsToFetch['sfw'], $idsToFetch['nsfw']);
+        $idCount = count($ids);
 
         if ($index > 0 && !isset($ids[$index]))
         {
@@ -121,11 +122,11 @@ class IncrementalIndexer extends Command
         {
             if ($this->cancelled)
             {
+                $this->info("Cancelling...");
                 return;
             }
 
-            sleep($this->delay);
-            $id = $ids[$index];
+            $id = $ids[$i];
 
             $url = env('APP_URL') . "/v4/$mediaType/$id";
             $this->info("Indexing/Updating " . ($i + 1) . "/$idCount $url [MAL ID: $id]");
@@ -146,6 +147,15 @@ class IncrementalIndexer extends Command
                 $failedIds[] = $id;
                 Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
                 continue;
+            }
+            finally
+            {
+                cancellable_sleep($delay * 1000, fn() => $this->cancelled);
+                if ($this->cancelled)
+                {
+                    $this->info("Cancelling...");
+                    return;
+                }
             }
 
             $success[] = $id;
@@ -172,28 +182,35 @@ class IncrementalIndexer extends Command
             [
                 'mediaType' => $this->argument('mediaType'),
                 'delay' => $this->option('delay'),
-                'resume' => $this->option('resume') ?? false,
-                'failed' => $this->option('failed') ?? false
+                'resume' => $this->option('resume'),
+                'failed' => $this->option('failed')
             ],
             [
-                'mediaType' => 'required|in:anime,manga',
+                'mediaType' => 'required|array',
+                'mediaType.*' => 'in:anime,manga',
                 'delay' => 'integer|min:1',
-                'resume' => 'bool|prohibits:failed',
-                'failed' => 'bool|prohibits:resume'
+                'resume' => 'bool|prohibited_if:failed,true',
+                'failed' => 'bool|prohibited_if:resume,true'
             ]
         );
 
         if ($validator->fails()) {
+            var_dump($this->option('resume'));
             $this->error($validator->errors()->toJson());
             return 1;
         }
 
         // we want to handle signals from the OS
-        $this->trap([SIGTERM, SIGQUIT, SIGINT], fn () => $this->cancelled = true);
+        $this->trap([SIGTERM, SIGQUIT, SIGINT], function (int $signal) {
+            $this->cancelled = true;
+            $this->receivedSignal = $signal;
+        });
+
+        $this->info("Info: IncrementalIndexer uses purarue/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
 
         $resume = $this->option('resume') ?? false;
         $onlyFailed = $this->option('failed') ?? false;
-        $this->delay = (int)$this->option('delay') ?? 3;
+        $delay = $this->option('delay') ?? 3;
 
         /**
          * @var $mediaTypes array
@@ -216,18 +233,20 @@ class IncrementalIndexer extends Command
 
             if ($this->cancelled)
             {
-                return 127;
+                $this->info("Cancelling...");
+                return 128 + $this->receivedSignal;
             }
 
             $idCount = count($idsToFetch);
             if ($idCount === 0)
             {
+                $this->info("No $mediaType entries to index");
                 continue;
             }
 
-            $this->fetchIds($mediaType, $idsToFetch, $resume);
+            $this->fetchIds($mediaType, $idsToFetch, $delay, $resume);
         }
 
-        return 0;
+        return $this->cancelled && $this->receivedSignal > 0 ? 128 + $this->receivedSignal : 0;
     }
 }
