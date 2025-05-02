@@ -13,7 +13,7 @@ jobs:
     name: PHP v8.1 with MongoDB 6.0
     concurrency: "ci-${{ github.ref }}"
     env:
-      extensions: curl,intl,mbstring,mongodb-stable,redis,opcache,sockets,pcntl,xdebug
+      extensions: curl,intl,mbstring,mongodb-1.21.0,redis,opcache,sockets,pcntl,xdebug
       key: jikan-rest-ci-cache-v1
       phpversion: 8.1
     services:
