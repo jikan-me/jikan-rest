@@ -29,7 +29,6 @@
         "laravel/lumen-framework": "^9.0",
         "laravel/scout": "^9.4",
         "league/flysystem": "^3.0",
-        "matchish/laravel-scout-elasticsearch": "^6.0",
         "mirazmac/dotenvwriter": "^0.1.0",
         "ocramius/package-versions": "^2.5",
         "predis/predis": "^1.1",

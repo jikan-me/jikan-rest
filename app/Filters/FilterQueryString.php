@@ -51,7 +51,7 @@ trait FilterQueryString
         return $filters;
     }
 
-    private function getFilters(Collection $queryParameters): Collection
+    public function getFilters(Collection $queryParameters): Collection
     {
         $filter = function ($key) {
 

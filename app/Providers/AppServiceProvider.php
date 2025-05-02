@@ -34,7 +34,6 @@ use App\Services\DefaultCachedScraperService;
 use App\Services\DefaultPrivateFieldMapperService;
 use App\Services\DefaultQueryBuilderService;
 use App\Services\DefaultScoutSearchService;
-use App\Services\ElasticScoutSearchService;
 use App\Services\EloquentBuilderPaginatorService;
 use App\Services\MongoSearchService;
 use App\Services\PrivateFieldMapperService;
@@ -51,6 +50,7 @@ use App\Support\JikanUnitOfWork;
 use Illuminate\Console\Signals;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Laravel\Lumen\Application;
 use Illuminate\Http\Response;
 use Illuminate\Support\Env;
@@ -106,14 +106,18 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * @throws \Exception
+     */
     private function getSearchService(Repository $repository): SearchService
     {
         if ($this->getSearchIndexesEnabledConfig($this->app)) {
             $scoutDriver = static::getSearchIndexDriver($this->app);
+            if (Str::contains($scoutDriver, "ElasticSearchEngine")) {
+                throw new \Exception("ElasticSearchEngine is not supported anymore. Please use Typesense instead.");
+            }
             $serviceClass = match ($scoutDriver) {
                 "typesense" => TypeSenseScoutSearchService::class,
-                // experimental
-                "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine" => ElasticScoutSearchService::class,
                 default => DefaultScoutSearchService::class
             };
 
@@ -378,9 +382,8 @@ class AppServiceProvider extends ServiceProvider
             $services[] = Typesense::class;
         }
 
-        // experimental
         if (Env::get("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
-            $services[] = \Elastic\Elasticsearch\Client::class;
+            throw new \Exception("ElasticSearchEngine is not supported anymore. Please use Typesense instead.");
         }
 
         if (Env::get("SCOUT_DRIVER") !== "none" && Env::get("SCOUT_DRIVER")) {

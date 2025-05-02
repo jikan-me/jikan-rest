@@ -1,9 +1,12 @@
 <?php
 namespace App\Mixins;
 
+use App\JikanApiModel;
 use Illuminate\Container\Container;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Contracts\PaginatesEloquentModels;
 use Typesense\LaravelTypesense\Engines\TypesenseEngine;
 
@@ -42,6 +45,25 @@ class ScoutBuilderMixin
                     'pageName' => $pageName,
                 ],
             ])->appends('query', $this->query);
+        };
+    }
+
+    public function filter(): \Closure {
+        return function(Collection $filterParameters): \Laravel\Scout\Builder {
+            /** @var \Laravel\Scout\Builder $this */
+            if ($this->model instanceof JikanApiModel) {
+                $model = $this->model;
+
+                $filters = $model->getFilters($filterParameters)->map(function ($values, $filter) use ($model) {
+                    return $model->resolve($filter, $values);
+                })->toArray();
+
+                return app(Pipeline::class)
+                    ->send($this)
+                    ->through($filters)
+                    ->thenReturn();
+            }
+            return $this;
         };
     }
 }
