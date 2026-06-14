@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -euo pipefail
 
 _JIKAN_API_VERSION=v4.0.0
 SUBSTITUTE_VERSION=$_JIKAN_API_VERSION
@@ -41,36 +42,35 @@ display_help() {
 }
 
 validate_prereqs() {
-  docker_exists=$(command -v docker)
-  podman_exists=$(command -v podman)
-
-  if [ ! -x "$docker_exists" ] && [ ! -x "$podman_exists" ]; then
-    echo -e "'docker' or 'podman' is not installed. \xE2\x9D\x8C"
+  if ! command -v docker >/dev/null 2>&1 && ! command -v podman >/dev/null 2>&1; then
+    printf "'docker' or 'podman' is not installed. ❌\n"
     exit 1
-  else
-    echo -e "Docker/Podman is Installed. \xE2\x9C\x94"
   fi
 
-  if [ -x "$docker_exists" ]; then
+  if command -v docker >/dev/null 2>&1; then
     DOCKER_CMD="docker"
     if ! docker -v >/dev/null 2>&1; then
-      echo -e "'docker' is not executable without sudo. \xE2\x9D\x8C"
+      printf "'docker' is not executable without sudo. ❌\n"
       exit 1
     fi
     if docker compose version >/dev/null 2>&1; then
       DOCKER_COMPOSE_CMD=(docker compose)
-      echo -e "Docker Compose is Installed. \xE2\x9C\x94"
+      printf "Docker Compose is Installed. ✔\n"
     else
-      echo -e "'docker compose' plugin is not installed. \xE2\x9D\x8C"
+      printf "'docker compose' plugin is not installed. ❌\n"
       exit 1
     fi
-  elif [ -x "$podman_exists" ]; then
+  elif command -v podman >/dev/null 2>&1; then
     DOCKER_CMD="podman"
+    if ! podman -v >/dev/null 2>&1; then
+      printf "'podman' is not executable without sudo. ❌\n"
+      exit 1
+    fi
     if podman compose version >/dev/null 2>&1; then
       DOCKER_COMPOSE_CMD=(podman compose)
-      echo -e "Podman Compose is Installed. \xE2\x9C\x94"
+      printf "Podman Compose is Installed. ✔\n"
     else
-      echo -e "'podman compose' is not available. \xE2\x9D\x8C"
+      printf "'podman compose' is not available. ❌\n"
       exit 1
     fi
   fi
@@ -80,11 +80,28 @@ build_image() {
   validate_prereqs
   if $DOCKER_CMD inspect jikanme/jikan-rest:"$JIKAN_API_VERSION" &>/dev/null; then
     if ! $DOCKER_CMD rmi jikanme/jikan-rest:"$JIKAN_API_VERSION"; then
-      echo -e "Warning: failed to remove existing image (it may be in use). \xE2\x9D\x8C"
+      printf "Warning: failed to remove existing image (it may be in use). ❌\n"
     fi
   fi
   $DOCKER_CMD build --rm -t jikanme/jikan-rest:"$JIKAN_API_VERSION" .
   $DOCKER_CMD tag jikanme/jikan-rest:"$JIKAN_API_VERSION" jikanme/jikan-rest:latest
+}
+
+ensure_username_secret() {
+  local file="$1"
+  local default_value="$2"
+  local value
+
+  if [ ! -f "$SECRETS_DIR/$file" ]; then
+    echo "$file not found, please provide a value [default is $default_value]:"
+    read -r value || true
+    if [ -z "$value" ]; then
+      value="$default_value"
+    fi
+    echo -n "$value" > "$SECRETS_DIR/$file"
+  else
+    printf '%s found, using its value. ✔\n' "$file"
+  fi
 }
 
 ensure_secrets() {
@@ -92,41 +109,22 @@ ensure_secrets() {
 
   declare -a secrets=("db_password" "db_admin_password" "redis_password" "typesense_api_key")
 
-  if [ ! -f "$SECRETS_DIR/db_username.txt" ]; then
-    echo "db_username.txt not found, please provide a db_username [default is jikan]:"
-    read -r db_username
-    if [ -z "$db_username" ]; then
-      db_username="jikan"
-    fi
-    echo -n "$db_username" > "$SECRETS_DIR/db_username.txt"
-  else
-    echo -e "db_username.txt found, using its value. \xE2\x9C\x94"
-  fi
-
-  if [ ! -f "$SECRETS_DIR/db_admin_username.txt" ]; then
-    echo "db_admin_username.txt not found, please provide a db_admin_username [default is jikan_admin]:"
-    read -r db_admin_username
-    if [ -z "$db_admin_username" ]; then
-      db_admin_username="jikan_admin"
-    fi
-    echo -n "$db_admin_username" > "$SECRETS_DIR/db_admin_username.txt"
-  else
-    echo -e "db_admin_username.txt found, using its value. \xE2\x9C\x94"
-  fi
+  ensure_username_secret "db_username.txt" "jikan"
+  ensure_username_secret "db_admin_username.txt" "jikan_admin"
 
   for secret_name in "${secrets[@]}"
   do
     if [ ! -f "$SECRETS_DIR/$secret_name.txt" ]; then
-      generated_secret=$(LC_ALL=c tr -dc 'A-Za-z0-9!()*+,;<=>_-' </dev/urandom | head -c 16; echo)
+      generated_secret=$(LC_ALL=C tr -dc 'A-Za-z0-9!()*+,;<=>_-' </dev/urandom | head -c 16) || true
       echo "$secret_name.txt not found, please provide a $secret_name [default is $generated_secret]:"
-      # prompt for secret and save it in file
-      read -r secret_value
+      read -rs secret_value || true
+      echo
       if [ -z "$secret_value" ]; then
         secret_value=$generated_secret
       fi
       echo -n "$secret_value" > "$SECRETS_DIR/$secret_name.txt"
     else
-      echo -e "$secret_name.txt found, using its value. \xE2\x9C\x94"
+      printf '%s.txt found, using its value. ✔\n' "$secret_name"
     fi
   done
 }
@@ -184,8 +182,13 @@ case "${1:-}" in
     "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:incremental anime manga
     echo "Indexing done!"
     ;;
-  *)
+  "")
     echo "No command specified, displaying help"
     display_help
+    ;;
+  *)
+    echo "Unknown command: $1"
+    display_help
+    exit 1
     ;;
 esac
