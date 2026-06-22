@@ -16,17 +16,15 @@ final class QueryRandomMangaHandler implements RequestHandler
     /**
      * @inheritDoc
      */
-    public function handle($request)
+    public function handle($request): MangaResource
     {
         $queryable = Manga::query();
 
-        $o = Optional::create();
-        $sfwParam = $request->sfw === $o ? false : $request->sfw;
-        $unapprovedParam = $request->unapproved === $o ? false : $request->unapproved;
+        $sfwParam = $request->sfw instanceof Optional ? false : $request->sfw;
+        $unapprovedParam = $request->unapproved instanceof Optional ? false : $request->unapproved;
+        $results = $queryable->random(1, $sfwParam, $unapprovedParam);
 
-        return new MangaResource(
-            $queryable->random(1, $sfwParam, $unapprovedParam)->first()
-        );
+        return new MangaResource($results->first());
     }
 
     /**

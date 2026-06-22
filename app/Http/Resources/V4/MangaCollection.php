@@ -36,22 +36,28 @@ class MangaCollection extends ResourceCollection
      */
     public $collects = 'App\Http\Resources\V4\MangaResource';
 
-    private $pagination;
+    private ?array $pagination = null;
 
-    public function __construct($resource)
+    public function __construct($resource, bool $paginated = true)
     {
-        $this->pagination = [
-            'last_visible_page' => $resource->lastPage(),
-            'has_next_page' => $resource->hasMorePages(),
-            'current_page' => $resource->currentPage(),
-            'items' => [
-                'count' => $resource->count(),
-                'total' => $resource->total(),
-                'per_page' => $resource->perPage(),
-            ],
-        ];
+        if ($paginated) {
+            $this->pagination = [
+                'last_visible_page' => $resource->lastPage(),
+                'has_next_page' => $resource->hasMorePages(),
+                'current_page' => $resource->currentPage(),
+                'items' => [
+                    'count' => $resource->count(),
+                    'total' => $resource->total(),
+                    'per_page' => $resource->perPage(),
+                ],
+            ];
 
-        $this->collection = $resource->getCollection();
+            $this->collection = $resource->getCollection();
+        }
+
+        if (!$paginated) {
+            $this->collection = $resource;
+        }
 
         parent::__construct($resource);
     }
@@ -64,6 +70,12 @@ class MangaCollection extends ResourceCollection
      */
     public function toArray($request)
     {
+        if ($this->pagination === null) {
+            return [
+                'data' => $this->collection
+            ];
+        }
+
         return [
             'pagination' => $this->pagination,
             'data' => $this->collection

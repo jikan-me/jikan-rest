@@ -307,10 +307,15 @@ class AppServiceProvider extends ServiceProvider
                 // automatically resolvable dependencies or no dependencies at all
                 $requestHandlersWithNoDependencies = [
                     Features\QueryRandomAnimeHandler::class,
+                    Features\QueryRandomAnimeListHandler::class,
                     Features\QueryRandomMangaHandler::class,
+                    Features\QueryRandomMangaListHandler::class,
                     Features\QueryRandomCharacterHandler::class,
+                    Features\QueryRandomCharacterListHandler::class,
                     Features\QueryRandomPersonHandler::class,
+                    Features\QueryRandomPersonListHandler::class,
                     Features\QueryRandomUserHandler::class,
+                    Features\QueryRandomUserListHandler::class,
                     Features\QueryAnimeSchedulesHandler::class,
                     Features\QueryCurrentAnimeSeasonHandler::class,
                     Features\QuerySpecificAnimeSeasonHandler::class,

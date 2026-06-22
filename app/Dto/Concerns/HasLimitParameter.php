@@ -13,6 +13,8 @@ use Spatie\LaravelData\Optional;
  *  @OA\Parameter(
  *    name="limit",
  *    in="query",
+ *    required=false,
+ *    description="Maximum limit (and the default number of entries returned) is 25 for all endpoints except for Random endpoints where the maximum limit is 5 and the default number of entries returned is 1.",
  *    @OA\Schema(type="integer")
  *  ),
  */

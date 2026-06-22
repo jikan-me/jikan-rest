@@ -24,8 +24,6 @@ final class QuerySpecificAnimeSeasonCommand extends QueryAnimeSeasonCommand
     #[WithCast(EnumCast::class, AnimeSeasonEnum::class), EnumValidation(AnimeSeasonEnum::class)]
     public AnimeSeasonEnum $season;
 
-    protected static int $defaultLimit = 30;
-
     public static function messages(...$args): array
     {
         return [

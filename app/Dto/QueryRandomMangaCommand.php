@@ -13,5 +13,6 @@ use Spatie\LaravelData\Data;
  */
 final class QueryRandomMangaCommand extends Data implements DataRequest
 {
-    use HasSfwParameter, HasUnapprovedParameter;
+    use HasSfwParameter,
+        HasUnapprovedParameter;
 }

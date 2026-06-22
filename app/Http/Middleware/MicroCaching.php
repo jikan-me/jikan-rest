@@ -5,18 +5,21 @@ namespace App\Http\Middleware;
 use App\Http\HttpHelper;
 use App\Support\JikanConfig;
 use Closure;
-use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Cache;
-use Jikan\Exception\BadResponseException;
 
 class MicroCaching
 {
     private const NO_CACHING = [
         'RandomController@anime',
+        'RandomController@animeList',
         'RandomController@manga',
+        'RandomController@mangaList',
         'RandomController@characters',
+        'RandomController@charactersList',
         'RandomController@people',
+        'RandomController@peopleList',
         'RandomController@users',
+        'RandomController@usersList',
         'InsightsController@main'
     ];
 
