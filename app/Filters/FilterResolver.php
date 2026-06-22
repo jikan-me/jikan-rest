@@ -5,7 +5,7 @@ use Illuminate\Support\Str;
 
 trait FilterResolver
 {
-    private function resolve($filterName, $values)
+    public function resolve($filterName, $values)
     {
         if($this->isCustomFilter($filterName)) {
             return $this->resolveCustomFilter($filterName, $values);

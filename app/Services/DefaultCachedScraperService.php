@@ -10,6 +10,7 @@ use App\Support\CachedData;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Jikan\Exception\BadResponseException;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\SerializerInterface;
 use MongoDB\BSON\UTCDateTime;
@@ -58,6 +59,8 @@ final class DefaultCachedScraperService implements CachedScraperService
      * @param string $cacheKey
      * @return CachedData
      * @throws NotFoundHttpException
+     * @throws BadResponseException
+     * @noinspection PhpRedundantCatchClauseInspection
      */
     public function find(int $id, string $cacheKey): CachedData
     {
@@ -65,7 +68,20 @@ final class DefaultCachedScraperService implements CachedScraperService
         $results = $this->dbResultSetToCachedData($dbResults);
 
         if ($results->isEmpty() || $results->isExpired()) {
-            $response = $this->repository->scrape($id);
+            try
+            {
+                $response = $this->repository->scrape($id);
+            }
+            catch (BadResponseException $ex)
+            {
+                if ($ex->getCode() == 405 && !$results->isEmpty() && $results->isExpired()) {
+                    // return stale
+                    return $results;
+                }
+
+                throw $ex;
+            }
+
 
             $this->raiseNotFoundIfErrors($response);
 
@@ -123,6 +139,23 @@ final class DefaultCachedScraperService implements CachedScraperService
         }
 
         return CachedData::from($item);
+    }
+
+    private function scrapeData(string $key, CachedData $results): array
+    {
+        try
+        {
+            return $this->repository->scrape($key);
+        }
+        catch (BadResponseException $ex)
+        {
+            if ($ex->getCode() == 405 && !$results->isEmpty() && $results->isExpired()) {
+                // return stale
+                return $results->toArray();
+            }
+
+            throw $ex;
+        }
     }
 
     private function dbRecordToCachedData(JikanApiModel|array $item): CachedData

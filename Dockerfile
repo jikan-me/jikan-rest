@@ -6,7 +6,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/
 ENV COMPOSER_HOME="/tmp/composer"
 RUN set -x \
-    && install-php-extensions intl mbstring mongodb-stable redis opcache sockets pcntl \
+    && install-php-extensions intl mbstring mongodb-1.21.0 redis opcache sockets pcntl \
     # install xdebug (for testing with code coverage), but do not enable it
     && IPE_DONT_ENABLE=1 install-php-extensions xdebug-3.2.0
 
@@ -29,6 +29,7 @@ RUN	set -ex \
 	# enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit>
 	&& echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1235\n" >> \
 	    ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
+  && echo -e "memory_limit = 256M\n" >> ${PHP_INI_DIR}/conf.d/docker-php-memory-limit-override.ini \
   # show php version
   && php -v \
 	# show installed modules

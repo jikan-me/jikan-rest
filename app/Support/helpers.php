@@ -123,3 +123,27 @@ if (!function_exists("ensureEnumPrimitiveValue")) {
         return $value;
     }
 }
+
+if (!function_exists("cancellable_sleep")) {
+    function cancellable_sleep(int $milliseconds, callable $isCancelled): void {
+        $interval = 100; // check every 100 ms
+        $elapsed = 0;
+
+        while ($elapsed < $milliseconds)
+        {
+            if ($isCancelled())
+            {
+                return;
+            }
+
+            usleep($interval * 1000);
+            $elapsed += $interval;
+        }
+    }
+}
+
+if (!function_exists("is_scout_query_builder")) {
+    function is_scout_query_builder(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $builder): bool {
+        return $builder instanceof \Laravel\Scout\Builder;
+    }
+}

@@ -153,12 +153,9 @@ if (env("SCOUT_DRIVER") === "typesense") {
     // in this case the TYPESENSE_HOST env var should be set too
     $app->register(\Typesense\LaravelTypesense\TypesenseServiceProvider::class);
 }
-// experimental support for ElasticSearch search index
 if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
-    // in this case the ELASTICSEARCH_HOST env var should be set too
-    $app->register(\Matchish\ScoutElasticSearch\ElasticSearchServiceProvider::class);
+    throw new \Exception("ElasticSearch is not supported");
 }
-
 
 /*
 |--------------------------------------------------------------------------

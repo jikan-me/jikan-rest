@@ -10,7 +10,6 @@ use App\Http\HttpHelper;
 use Carbon\CarbonImmutable;
 use Database\Factories\AnimeFactory;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Jikan\Helper\Constants;
 use Jikan\Jikan;
 use Jikan\Request\Anime\AnimeRequest;
@@ -154,25 +153,32 @@ class Anime extends JikanApiSearchableModel
     /** @noinspection PhpUnused */
     public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where("aired.from", ">=",
-                $value
-                    ->setTime(0, 0)
-                    ->setTimezone(new \DateTimeZone('UTC'))
-                    ->toAtomString()
-            );
+        $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
+        if (is_scout_query_builder($query)) {
+            $query = $query->where("start_date", [">=", $compareVal->getTimestamp()]);
+        } else {
+            $query = $query->where("aired.from", ">=", $compareVal->toAtomString());
+        }
+        return $query;
     }
 
     /** @noinspection PhpUnused */
     public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where("aired.to", "<=",
-                $value
-                    ->setTime(0, 0)
-                    ->setTimezone(new \DateTimeZone('UTC'))
-                    ->toAtomString()
-            );
+        $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
+        if (is_scout_query_builder($query)) {
+            $query = $query->where("(end_date", [
+                "<=", $compareVal->getTimestamp(),
+                " || end_date:=", "null",
+                ")"
+            ]);
+        } else {
+            $query = $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($compareVal) {
+                return $query->where("aired.to", "<=", $compareVal->toAtomString())
+                        ->orWhere("aired.to", null);
+            });
+        }
+        return $query;
     }
 
     public function filterByProducer(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
@@ -182,11 +188,21 @@ class Anime extends JikanApiSearchableModel
         }
 
         $producer = (int)$value;
-        return $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producer) {
-            return $query->where('producers.mal_id', $producer)
-                ->orWhere('licensors.mal_id', $producer)
-                ->orWhere('studios.mal_id', $producer);
-        });
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('(producers', [
+                "=", $producer,
+                " || licensors:=", $producer,
+                " || studios:=", $producer,
+                ")"
+            ]);
+        } else {
+            $query = $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producer) {
+                return $query->where('producers.mal_id', $producer)
+                    ->orWhere('licensors.mal_id', $producer)
+                    ->orWhere('studios.mal_id', $producer);
+            });
+        }
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -199,45 +215,74 @@ class Anime extends JikanApiSearchableModel
         /* @var \Illuminate\Support\Collection $producers */
         $producers = collect(explode(',', $value))->filter();
 
-        return $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producers) {
-            $firstProducer = (int)$producers->first();
-            $query = $query->where('producers.mal_id', $firstProducer)
-                ->orWhere('licensors.mal_id', $firstProducer)
-                ->orWhere('studios.mal_id', $firstProducer);
+        if (is_scout_query_builder($query)) {
+            $producerFilterList = '[' . $producers->implode(', ') . ']';
+            $query = $query->where('(producers', [
+                '=', $producerFilterList,
+                ' || licensors:=', $producerFilterList,
+                ' || studios:=', $producerFilterList,
+                ')'
+            ]);
+        } else {
+            $query = $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producers) {
+                $firstProducer = (int)$producers->first();
+                $query = $query->where('producers.mal_id', $firstProducer)
+                    ->orWhere('licensors.mal_id', $firstProducer)
+                    ->orWhere('studios.mal_id', $firstProducer);
 
-            foreach ($producers->skip(1) as $producer) {
-                $producer = (int)$producer;
-                $query = $query->orWhere('producers.mal_id', $producer)
-                    ->orWhere('licensors.mal_id', $producer)
-                    ->orWhere('studios.mal_id', $producer);
-            }
+                foreach ($producers->skip(1) as $producer) {
+                    $producer = (int)$producer;
+                    $query = $query->orWhere('producers.mal_id', $producer)
+                        ->orWhere('licensors.mal_id', $producer)
+                        ->orWhere('studios.mal_id', $producer);
+                }
 
-            return $query;
-        });
+                return $query;
+            });
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
     public function scopeExceptItemsWithAdultRating(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA)
-            ->where("rating", "!=", AnimeRatingEnum::rx()->label)
-            ->where("genres.mal_id", "!=", Constants::GENRE_ANIME_HENTAI);
+        if (is_scout_query_builder($query)) {
+            $query = $query
+                ->where("demographics", ["!=", Constants::GENRE_ANIME_HENTAI])
+                ->where("demographics", ["!=", Constants::GENRE_ANIME_EROTICA])
+                ->where("rating", ["!=", AnimeRatingEnum::rx()->label])
+                ->where("genres", ["!=", Constants::GENRE_ANIME_HENTAI]);
+        } else {
+            $query = $query
+                ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
+                ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA)
+                ->where("rating", "!=", AnimeRatingEnum::rx()->label)
+                ->where("genres.mal_id", "!=", Constants::GENRE_ANIME_HENTAI);
+        }
+        return $query;
     }
 
     /** @noinspection PhpUnused */
     public function scopeExceptKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_KIDS);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where("demographics", ["!=", Constants::GENRE_ANIME_KIDS]);
+        } else {
+            $query = $query->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_KIDS);
+        }
+        return $query;
     }
 
     /** @noinspection PhpUnused */
     public function scopeOnlyKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where("demographics.mal_id", Constants::GENRE_ANIME_KIDS);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where("demographics", Constants::GENRE_ANIME_KIDS);
+        } else {
+            $query = $query->where("demographics.mal_id", Constants::GENRE_ANIME_KIDS);
+        }
+        return $query;
     }
 
     public static function scrape(int $id)
@@ -295,7 +340,9 @@ class Anime extends JikanApiSearchableModel
             'studios' => $this->getMalIdsOfField($this->studios),
             'licensors' => $this->getMalIdsOfField($this->licensors),
             'genres' => $this->getMalIdsOfField($this->genres),
-            'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres)
+            'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres),
+            'themes' => $this->getMalIdsOfField($this->themes),
+            'demographics' => $this->getMalIdsOfField($this->demographics)
         ];
     }
 

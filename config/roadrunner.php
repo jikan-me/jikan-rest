@@ -47,6 +47,7 @@ return [
 
         Events\AfterRequestHandlingEvent::class => [
             ...Defaults::afterRequestHandling(),
+            \App\Listeners\AfterRequestHandlingEventListener::class,
         ],
 
         Events\AfterLoopIterationEvent::class => [
