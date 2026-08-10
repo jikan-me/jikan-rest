@@ -44,7 +44,7 @@ class Anime extends JikanApiSearchableModel
      *
      * @var array
      */
-    protected $appends = ['season', 'year', 'themes'];
+    protected $appends = ['season', 'year', 'themes', 'audio_languages', 'has_dub'];
 
     /**
      * The table associated with the model.
@@ -104,10 +104,121 @@ class Anime extends JikanApiSearchableModel
             || !is_string($premiered)
             || !preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
         ) {
+            // Fallback: extract year from aired.from if available
+            $aired = array_key_exists('aired', $this->attributes) ? $this->attributes['aired'] : null;
+            if (is_array($aired) && isset($aired['from']) && is_string($aired['from'])) {
+                if (preg_match('/^(\d{4})/', $aired['from'], $matches)) {
+                    return (int) $matches[1];
+                }
+            }
             return null;
         }
 
         return (int)explode(' ', $premiered)[1];
+    }
+
+    /**
+     * Normalize the images attribute to ensure all size variants exist.
+     * Prevents "undefined" URLs in srcset generation.
+     */
+    public function getImagesAttribute()
+    {
+        $images = array_key_exists('images', $this->attributes) ? $this->attributes['images'] : [];
+
+        if (!is_array($images)) {
+            return $images;
+        }
+
+        foreach (['jpg', 'webp'] as $format) {
+            if (!isset($images[$format]) || !is_array($images[$format])) {
+                continue;
+            }
+
+            $img = &$images[$format];
+
+            // Find any available URL
+            $baseUrl = $img['image_url'] ?? $img['large_image_url'] ?? $img['small_image_url'] ?? null;
+
+            if ($baseUrl === null) {
+                continue;
+            }
+
+            // Ensure all variants exist
+            if (!isset($img['image_url']) || $img['image_url'] === null) {
+                $img['image_url'] = $baseUrl;
+            }
+            if (!isset($img['small_image_url']) || $img['small_image_url'] === null) {
+                // MAL convention: small = 't' suffix before extension
+                $img['small_image_url'] = preg_replace('/(\.[a-z]+)$/i', 't$1', $baseUrl);
+            }
+            if (!isset($img['large_image_url']) || $img['large_image_url'] === null) {
+                // MAL convention: large = 'l' suffix before extension
+                $img['large_image_url'] = preg_replace('/(\.[a-z]+)$/i', 'l$1', $baseUrl);
+            }
+
+            unset($img);
+        }
+
+        return $images;
+    }
+
+    /**
+     * Known English-language licensors that indicate a dub is available.
+     */
+    private const DUB_LICENSORS = [
+        'funimation', 'crunchyroll', 'sentai filmworks', 'viz media',
+        'aniplex of america', 'bang zoom!', 'bandai entertainment',
+        'geneon', 'adv films', 'media blasters', 'nozomi entertainment',
+        'discotek media', 'nis america', 'ponycan usa', 'eleven arts',
+        'gkids', 'shout! factory', 'manga entertainment',
+    ];
+
+    /**
+     * Infer audio languages from licensors data.
+     * All anime default to Japanese; English is added if a known dub licensor is present.
+     */
+    public function setAudioLanguagesAttribute($value)
+    {
+        // noop - calculated attribute
+    }
+
+    public function getAudioLanguagesAttribute(): array
+    {
+        $languages = ['ja'];
+
+        $licensors = array_key_exists('licensors', $this->attributes) ? $this->attributes['licensors'] : [];
+        if (is_array($licensors)) {
+            foreach ($licensors as $licensor) {
+                $name = '';
+                if (is_array($licensor) && isset($licensor['name'])) {
+                    $name = strtolower($licensor['name']);
+                } elseif (is_string($licensor)) {
+                    $name = strtolower($licensor);
+                }
+
+                foreach (self::DUB_LICENSORS as $dubLicensor) {
+                    if (strpos($name, $dubLicensor) !== false) {
+                        $languages[] = 'en';
+                        return $languages;
+                    }
+                }
+            }
+        }
+
+        return $languages;
+    }
+
+    /**
+     * Whether an English dub is likely available.
+     */
+    public function setHasDubAttribute($value)
+    {
+        // noop - calculated attribute
+    }
+
+    public function getHasDubAttribute(): bool
+    {
+        return in_array('en', $this->getAudioLanguagesAttribute());
     }
 
     public function setBroadcastAttribute($value)
