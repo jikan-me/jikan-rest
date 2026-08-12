@@ -178,4 +178,3 @@ class RateLimitMiddleware
         return $request->ip() ?? '127.0.0.1';
     }
 }
-}

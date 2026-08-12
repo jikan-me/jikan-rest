@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -150,63 +153,63 @@ class ImageProxyController extends BaseController
     }
 
     /**
-     * Fetch an image from the upstream CDN.
+     * Fetch an image from the upstream CDN using Guzzle HTTP client.
      */
     private function fetchImage(string $url): ?array
     {
-        $ch = curl_init();
-        $maxSize = self::MAX_IMAGE_SIZE;
+        try {
+            $client = new Client([
+                RequestOptions::TIMEOUT => 10,
+                RequestOptions::CONNECT_TIMEOUT => 5,
+                RequestOptions::ALLOW_REDIRECTS => [
+                    'max' => 3,
+                    'referer' => false,
+                ],
+                RequestOptions::HTTP_ERRORS => false,
+                RequestOptions::HEADERS => [
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept' => 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+                    'Accept-Language' => 'en-US,en;q=0.9',
+                    'Referer' => '',
+                ],
+            ]);
 
-        curl_setopt_array($ch, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS => 3,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_CONNECTTIMEOUT => 5,
-            // Strip referrer to bypass CDN hotlink protection
-            CURLOPT_REFERER => '',
-            CURLOPT_HTTPHEADER => [
-                'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
-                'Accept-Language: en-US,en;q=0.9',
-            ],
-            // Don't send referrer
-            CURLOPT_AUTOREFERER => false,
-            // Size limit check
-            CURLOPT_MAXFILESIZE => $maxSize,
-            CURLOPT_NOPROGRESS => false,
-            CURLOPT_PROGRESSFUNCTION => function ($resource, $downloadSize, $downloaded) use ($maxSize) {
-                // Abort transfer (return non-zero) if downloaded bytes exceed MAX_IMAGE_SIZE
-                return ($downloaded > $maxSize) ? 1 : 0;
-            },
-        ]);
+            $response = $client->get($url);
 
-        $body = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-        $error = curl_error($ch);
+            $httpCode = $response->getStatusCode();
+            if ($httpCode !== 200) {
+                return null;
+            }
 
-        curl_close($ch);
+            $body = $response->getBody()->getContents();
 
-        if ($body === false || $httpCode !== 200 || !empty($error)) {
+            // Enforce size limit
+            if (strlen($body) > self::MAX_IMAGE_SIZE) {
+                return null;
+            }
+
+            // Get content type from response headers
+            $contentType = $response->getHeaderLine('Content-Type');
+
+            // Validate it's actually an image
+            if ($contentType && strpos($contentType, 'image') === false) {
+                return null;
+            }
+
+            // Fallback content type detection
+            if (empty($contentType) || strpos($contentType, 'image') === false) {
+                $contentType = $this->detectContentType($url, $body);
+            }
+
+            return [
+                'body' => base64_encode($body),
+                'content_type' => $contentType ?: 'image/jpeg',
+            ];
+        } catch (GuzzleException $e) {
+            return null;
+        } catch (\Exception $e) {
             return null;
         }
-
-        // Validate it's actually an image
-        if ($contentType && strpos($contentType, 'image') === false) {
-            return null;
-        }
-
-        // Fallback content type detection
-        if (empty($contentType) || strpos($contentType, 'image') === false) {
-            $contentType = $this->detectContentType($url, $body);
-        }
-
-        return [
-            'body' => base64_encode($body),
-            'content_type' => $contentType ?: 'image/jpeg',
-        ];
     }
 
     /**
