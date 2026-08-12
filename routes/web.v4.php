@@ -22,6 +22,11 @@ $router->get('/', function () use ($router) {
     ]);
 });
 
+// Image Proxy — bypasses MAL CDN hotlink blocks (Problem 5)
+$router->get('/proxy/image', [
+    'uses' => 'ImageProxyController@proxy'
+]);
+
 $router->get('/anime', [
     'uses' => 'SearchController@anime'
 ]);

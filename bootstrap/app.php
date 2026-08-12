@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\RateLimitMiddleware;
 use App\Http\Middleware\SourceHeartbeatMonitor;
+use App\Http\Middleware\StaleCacheMiddleware;
 use App\Providers\SerializerFactory;
 use PackageVersions\Versions;
 
@@ -87,12 +89,21 @@ if (env('CORS_MIDDLEWARE', false)) {
     $globalMiddleware[] = \App\Http\Middleware\CorsMiddleware::class;
 }
 
+// Rate limiting middleware (Problem 1)
+if (env('RATE_LIMIT_ENABLED', true)) {
+    $globalMiddleware[] = RateLimitMiddleware::class;
+}
+
+// Stale cache middleware (Problems 2 & 4)
+$globalMiddleware[] = StaleCacheMiddleware::class;
+
 $app->middleware($globalMiddleware);
 
 $app->routeMiddleware([
     'microcaching' => \App\Http\Middleware\MicroCaching::class,
     'source-health-monitor' => SourceHeartbeatMonitor::class,
-    'cache-ttl' => \App\Http\Middleware\EndpointCacheTtlMiddleware::class
+    'cache-ttl' => \App\Http\Middleware\EndpointCacheTtlMiddleware::class,
+    'response-normalizer' => \App\Http\Middleware\ResponseNormalizerMiddleware::class,
 ]);
 
 /*
@@ -174,7 +185,8 @@ if (env("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEn
 $commonMiddleware = [
     'source-health-monitor',
     'microcaching',
-    'cache-ttl'
+    'cache-ttl',
+    'response-normalizer'
 ];
 
 

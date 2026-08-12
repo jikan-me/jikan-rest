@@ -84,4 +84,56 @@ class SourceHeartbeatProvider extends ServiceProvider
 
         return "HEALTHY";
     }
+
+    /**
+     * Determine if scraping should be attempted based on current MAL health.
+     *
+     * Returns false (skip scraping) when:
+     * - Failover mode is active (lock file exists)
+     * - Health score is below the critical threshold (< 0.3)
+     *
+     * This implements the circuit breaker pattern to avoid hammering
+     * an already-struggling upstream.
+     */
+    public static function shouldAttemptScrape(): bool
+    {
+        if (self::isFailoverEnabled()) {
+            return false;
+        }
+
+        try {
+            $score = self::getHeartbeatScore();
+            // Below 30% success rate — MAL is likely down, skip scraping
+            return $score >= 0.3;
+        } catch (\Exception $e) {
+            // If we can't check health, default to allowing scrape attempts
+            return true;
+        }
+    }
+
+    /**
+     * Record a bad health event from the scraper.
+     * Convenience method for external callers.
+     */
+    public static function recordBadHealth(int $statusCode): void
+    {
+        try {
+            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::BAD_HEALTH, $statusCode));
+        } catch (\Exception $e) {
+            // Swallow - health recording should never break the caller
+        }
+    }
+
+    /**
+     * Record a good health event from the scraper.
+     * Convenience method for external callers.
+     */
+    public static function recordGoodHealth(): void
+    {
+        try {
+            event(new SourceHeartbeatEvent(SourceHeartbeatEvent::GOOD_HEALTH, 200));
+        } catch (\Exception $e) {
+            // Swallow
+        }
+    }
 }
