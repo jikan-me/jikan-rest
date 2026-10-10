@@ -1,0 +1,39 @@
+{
+    "data": {
+        "episodes": [
+            "@list",
+            {
+                "episode": "@string",
+                "images": {
+                    "jpg": {
+                        "image_url": "@null"
+                    }
+                },
+                "mal_id": "@int",
+                "title": "@string",
+                "url": "@string"
+            }
+        ],
+        "music_videos": [
+            "@list"
+        ],
+        "promo": [
+            "@list",
+            {
+                "title": "@string",
+                "trailer": {
+                    "embed_url": "@string",
+                    "images": {
+                        "image_url": "@null",
+                        "large_image_url": "@null",
+                        "maximum_image_url": "@null",
+                        "medium_image_url": "@null",
+                        "small_image_url": "@null"
+                    },
+                    "url": "@null",
+                    "youtube_id": "@null"
+                }
+            }
+        ]
+    }
+}

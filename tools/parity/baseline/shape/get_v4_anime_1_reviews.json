@@ -1,0 +1,46 @@
+{
+    "data": [
+        "@list",
+        {
+            "date": "@string",
+            "episodes_watched": "@null",
+            "is_preliminary": "@bool",
+            "is_spoiler": "@bool",
+            "mal_id": "@int",
+            "reactions": {
+                "confusing": "@int",
+                "creative": "@int",
+                "funny": "@int",
+                "informative": "@int",
+                "love_it": "@int",
+                "nice": "@int",
+                "overall": "@int",
+                "well_written": "@int"
+            },
+            "review": "@string",
+            "score": "@int",
+            "tags": [
+                "@list",
+                "@string"
+            ],
+            "type": "@string",
+            "url": "@string",
+            "user": {
+                "images": {
+                    "jpg": {
+                        "image_url": "@string"
+                    },
+                    "webp": {
+                        "image_url": "@string"
+                    }
+                },
+                "url": "@string",
+                "username": "@string"
+            }
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

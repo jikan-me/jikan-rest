@@ -1,1 +1,4 @@
 /candidate/
+# Raw responses are large (scraped MAL data). The comparator only needs
+# shape/ + meta.json, so raw captures stay local.
+/raw/

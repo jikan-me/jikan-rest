@@ -1,0 +1,84 @@
+{
+    "data": {
+        "about": "@string",
+        "anime": [
+            "@list",
+            {
+                "anime": {
+                    "images": {
+                        "jpg": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        },
+                        "webp": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        }
+                    },
+                    "mal_id": "@int",
+                    "title": "@string",
+                    "url": "@string"
+                },
+                "role": "@string"
+            }
+        ],
+        "favorites": "@int",
+        "images": {
+            "jpg": {
+                "image_url": "@string"
+            },
+            "webp": {
+                "image_url": "@string",
+                "small_image_url": "@string"
+            }
+        },
+        "mal_id": "@int",
+        "manga": [
+            "@list",
+            {
+                "manga": {
+                    "images": {
+                        "jpg": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        },
+                        "webp": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        }
+                    },
+                    "mal_id": "@int",
+                    "title": "@string",
+                    "url": "@string"
+                },
+                "role": "@string"
+            }
+        ],
+        "name": "@string",
+        "name_kanji": "@string",
+        "nicknames": [
+            "@list"
+        ],
+        "url": "@string",
+        "voices": [
+            "@list",
+            {
+                "language": "@string",
+                "person": {
+                    "images": {
+                        "jpg": {
+                            "image_url": "@string"
+                        }
+                    },
+                    "mal_id": "@int",
+                    "name": "@string",
+                    "url": "@string"
+                }
+            }
+        ]
+    }
+}

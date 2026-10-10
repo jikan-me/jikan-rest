@@ -1,0 +1,18 @@
+{
+    "data": {
+        "completed": "@int",
+        "dropped": "@int",
+        "on_hold": "@int",
+        "plan_to_watch": "@int",
+        "scores": [
+            "@list",
+            {
+                "percentage": "@float",
+                "score": "@int",
+                "votes": "@int"
+            }
+        ],
+        "total": "@int",
+        "watching": "@int"
+    }
+}

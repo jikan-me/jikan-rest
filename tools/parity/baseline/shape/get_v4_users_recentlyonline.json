@@ -1,0 +1,8 @@
+{
+    "error": "@string",
+    "message": "@string",
+    "report_url": "@string",
+    "status": "@int",
+    "trace": "@string",
+    "type": "@string"
+}

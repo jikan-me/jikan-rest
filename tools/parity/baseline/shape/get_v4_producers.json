@@ -1,0 +1,35 @@
+{
+    "data": [
+        "@list",
+        {
+            "about": "@string",
+            "count": "@int",
+            "established": "@string",
+            "favorites": "@int",
+            "images": {
+                "jpg": {
+                    "image_url": "@string"
+                }
+            },
+            "mal_id": "@int",
+            "titles": [
+                "@list",
+                {
+                    "title": "@string",
+                    "type": "@string"
+                }
+            ],
+            "url": "@string"
+        }
+    ],
+    "pagination": {
+        "current_page": "@int",
+        "has_next_page": "@bool",
+        "items": {
+            "count": "@int",
+            "per_page": "@int",
+            "total": "@int"
+        },
+        "last_visible_page": "@int"
+    }
+}

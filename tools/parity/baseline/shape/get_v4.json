@@ -1,0 +1,18 @@
+{
+    "author_url": "@string",
+    "discord_url": "@string",
+    "documentation_url": "@string",
+    "github_url": "@string",
+    "myanimelist_heartbeat": {
+        "down": "@bool",
+        "last_downtime": "@volatile",
+        "score": "@float",
+        "status": "@string"
+    },
+    "parser_github_url": "@string",
+    "parser_version": "@string",
+    "production_api_url": "@string",
+    "status_url": "@string",
+    "version": "@string",
+    "website_url": "@string"
+}

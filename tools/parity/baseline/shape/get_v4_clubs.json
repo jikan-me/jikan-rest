@@ -1,0 +1,9 @@
+{
+    "data": [
+        "@list"
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

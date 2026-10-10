@@ -1,0 +1,25 @@
+{
+    "data": [
+        "@list",
+        {
+            "author_url": "@string",
+            "author_username": "@string",
+            "comments": "@int",
+            "date": "@string",
+            "excerpt": "@string",
+            "forum_url": "@string",
+            "images": {
+                "jpg": {
+                    "image_url": "@string"
+                }
+            },
+            "mal_id": "@int",
+            "title": "@string",
+            "url": "@string"
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

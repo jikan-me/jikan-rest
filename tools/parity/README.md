@@ -38,7 +38,7 @@ php tools/parity/compare.php \
 | `endpoints.txt` | the endpoint set (method + path); edit to widen coverage |
 | `snapshot.php` | captures `raw/`, `shape/` and `meta.json` for a base URL |
 | `compare.php` | diffs two snapshots (status + shape), non-zero exit on failure |
-| `baseline/` | the reference snapshot (committed) |
+| `baseline/` | the reference snapshot — `shape/` + `meta.json` committed; `raw/` ignored (large) |
 | `candidate/` | scratch output for a run under test (not committed) |
 
 ## Notes

@@ -1,0 +1,142 @@
+{
+    "data": [
+        "@list",
+        {
+            "aired": {
+                "from": "@string",
+                "prop": {
+                    "from": {
+                        "day": "@int",
+                        "month": "@int",
+                        "year": "@int"
+                    },
+                    "to": {
+                        "day": "@null",
+                        "month": "@null",
+                        "year": "@null"
+                    }
+                },
+                "string": "@string",
+                "to": "@null"
+            },
+            "airing": "@bool",
+            "approved": "@bool",
+            "background": "@string",
+            "broadcast": {
+                "day": "@string",
+                "string": "@string",
+                "time": "@string",
+                "timezone": "@string"
+            },
+            "demographics": [
+                "@list",
+                {
+                    "mal_id": "@int",
+                    "name": "@string",
+                    "type": "@string",
+                    "url": "@string"
+                }
+            ],
+            "duration": "@string",
+            "episodes": "@null",
+            "explicit_genres": [
+                "@list"
+            ],
+            "favorites": "@int",
+            "genres": [
+                "@list",
+                {
+                    "mal_id": "@int",
+                    "name": "@string",
+                    "type": "@string",
+                    "url": "@string"
+                }
+            ],
+            "images": {
+                "jpg": {
+                    "image_url": "@string",
+                    "large_image_url": "@string",
+                    "small_image_url": "@string"
+                },
+                "webp": {
+                    "image_url": "@string",
+                    "large_image_url": "@string",
+                    "small_image_url": "@string"
+                }
+            },
+            "licensors": [
+                "@list"
+            ],
+            "mal_id": "@int",
+            "members": "@int",
+            "popularity": "@int",
+            "producers": [
+                "@list"
+            ],
+            "rank": "@int",
+            "rating": "@string",
+            "score": "@null",
+            "scored_by": "@null",
+            "season": "@string",
+            "source": "@string",
+            "status": "@string",
+            "studios": [
+                "@list",
+                {
+                    "mal_id": "@int",
+                    "name": "@string",
+                    "type": "@string",
+                    "url": "@string"
+                }
+            ],
+            "synopsis": "@string",
+            "themes": [
+                "@list",
+                {
+                    "mal_id": "@int",
+                    "name": "@string",
+                    "type": "@string",
+                    "url": "@string"
+                }
+            ],
+            "title": "@string",
+            "title_english": "@string",
+            "title_japanese": "@string",
+            "title_synonyms": [
+                "@list"
+            ],
+            "titles": [
+                "@list",
+                {
+                    "title": "@string",
+                    "type": "@string"
+                }
+            ],
+            "trailer": {
+                "embed_url": "@null",
+                "images": {
+                    "image_url": "@null",
+                    "large_image_url": "@null",
+                    "maximum_image_url": "@null",
+                    "medium_image_url": "@null",
+                    "small_image_url": "@null"
+                },
+                "url": "@null",
+                "youtube_id": "@null"
+            },
+            "type": "@string",
+            "url": "@string",
+            "year": "@int"
+        }
+    ],
+    "pagination": {
+        "current_page": "@int",
+        "has_next_page": "@bool",
+        "items": {
+            "count": "@int",
+            "per_page": "@int",
+            "total": "@int"
+        },
+        "last_visible_page": "@int"
+    }
+}
