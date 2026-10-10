@@ -373,39 +373,4 @@ class AppServiceProvider extends ServiceProvider
     {
         return $app["config"]->get("scout.driver");
     }
-
-    public static function servicesToWarm(): array
-    {
-        $services = [
-            ScoutSearchService::class
-        ];
-
-        if (Env::get("SCOUT_DRIVER") === "typesense") {
-            $services[] = Typesense::class;
-        }
-
-        // experimental
-        if (Env::get("SCOUT_DRIVER") === "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine") {
-            $services[] = \Elastic\Elasticsearch\Client::class;
-        }
-
-        if (Env::get("SCOUT_DRIVER") !== "none" && Env::get("SCOUT_DRIVER")) {
-            $services[] = ScoutBuilderPaginatorService::class;
-        } else {
-            $services[] = EloquentBuilderPaginatorService::class;
-        }
-
-        return $services;
-    }
-
-    public static function servicesToClear(): array
-    {
-        return [
-            // in RoadRunner we want to reset the repositories after each request, because we cache the query builders in them.
-            // todo: refactor repositories to avoid caching query builders, so this step is not necessary
-            JikanUnitOfWork::class,
-            Mediator::class,
-            SearchService::class
-        ];
-    }
 }
