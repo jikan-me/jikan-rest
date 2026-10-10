@@ -180,11 +180,18 @@ Route::get('/anime', [SearchController::class, 'anime']);
 
 ## 6. Execution phases
 
-### Phase A — Prep & safety net (0.5 wk)
-- [ ] Branch `laravel-12`; tag `master` reference.
-- [ ] Build the endpoint parity harness (snapshot JSON for ~40 representative routes).
-- [ ] Get the existing suite green on `master` (document known failures).
-- [ ] Freeze feature work on `master` during migration.
+### Phase A — Prep & safety net ✅ done
+- [x] Branch `laravel-12`; tag `master` as `pre-laravel-migration`.
+- [x] Parity harness built (`tools/parity/`) + baseline captured — 60 endpoints, committed `a335b7b`.
+- [x] Existing suite run on **unmodified** code: **280 tests, 2,673 assertions, 1 failure** (pre-existing).
+- [ ] Freeze feature work on `master` during migration (process item).
+
+**Baseline facts (Lumen 9, `pre-laravel-migration`)**
+- Parity statuses: 55× `200`, 3× `400` (`/v1`–`/v3` discontinued stubs), 1× `403` (`/v4/insights`, `INSIGHTS=false`), 1× `500` (`/v4/users/recentlyonline`).
+- Pre-existing bugs to track separately (not migration blockers):
+  - `/v4/users/recentlyonline` → `500`: `Call to undefined method App\Dto\QueryRecentlyOnlineUsersCommand::getFingerPrint()`.
+  - `SeasonControllerTest::testShouldNotIncludeNewlyStartedSeasonOfAnimeInPreviousSeasons` fails — time-dependent season/`continuing` logic.
+- The test suite does **not** wipe the seeded DB (synthetic fixtures are cleaned per-test).
 
 ### Phase B — Skeleton & bootstrap (1 wk)
 - [ ] Add `laravel/framework` ^12; remove `lumen-framework`.
