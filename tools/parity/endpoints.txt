@@ -1,0 +1,82 @@
+# Parity endpoint set for the Lumen -> Laravel migration.
+#
+# One endpoint per line: "METHOD /path" (METHOD optional, defaults to GET).
+# Lines starting with # are ignored.
+#
+# Choose endpoints that cover every controller/feature family. Prefer
+# concrete IDs over random/search endpoints where possible, because those are
+# deterministic. `snapshot.php` captures the response *shape* (keys + types,
+# volatile fields masked) plus the HTTP status, so the harness survives live
+# MyAnimeList data drift.
+
+# Static / meta
+GET /
+GET /v4
+GET /v1
+GET /v2
+GET /v3
+GET /docs
+
+# Anime
+GET /v4/anime/1
+GET /v4/anime/1/full
+GET /v4/anime/1/characters
+GET /v4/anime/1/staff
+GET /v4/anime/1/episodes
+GET /v4/anime/1/episodes/1
+GET /v4/anime/1/news
+GET /v4/anime/1/forum
+GET /v4/anime/1/videos
+GET /v4/anime/1/videos/episodes
+GET /v4/anime/1/pictures
+GET /v4/anime/1/statistics
+GET /v4/anime/1/moreinfo
+GET /v4/anime/1/recommendations
+GET /v4/anime/1/userupdates
+GET /v4/anime/1/reviews
+GET /v4/anime/1/relations
+GET /v4/anime/1/themes
+GET /v4/anime/1/external
+GET /v4/anime/1/streaming
+GET /v4/anime?q=cowboy&limit=3
+
+# Manga
+GET /v4/manga/1
+GET /v4/manga/1/full
+GET /v4/manga/1/characters
+GET /v4/manga/1/statistics
+GET /v4/manga/1/relations
+GET /v4/manga/1/external
+
+# Characters / people
+GET /v4/characters/1
+GET /v4/characters/1/full
+GET /v4/characters/1/anime
+GET /v4/characters/1/voices
+GET /v4/people/1
+GET /v4/people/1/full
+
+# Seasons / schedules
+GET /v4/seasons
+GET /v4/seasons/now
+GET /v4/seasons/upcoming
+GET /v4/seasons/2024/winter
+GET /v4/schedules
+
+# Catalogue / lookups
+GET /v4/producers
+GET /v4/magazines
+GET /v4/genres/anime
+GET /v4/genres/manga
+GET /v4/top/anime
+GET /v4/top/manga
+GET /v4/top/characters
+GET /v4/top/people
+GET /v4/top/reviews
+GET /v4/clubs
+GET /v4/reviews/anime
+GET /v4/recommendations/anime
+GET /v4/watch/episodes
+GET /v4/watch/promos
+GET /v4/users/recentlyonline
+GET /v4/insights
