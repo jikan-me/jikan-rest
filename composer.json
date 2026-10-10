@@ -37,6 +37,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "haydenpierce/class-finder": "^0.4.4",
+        "laravel/tinker": "^3.0",
         "mockery/mockery": "^1.6",
         "phpunit/phpunit": "^11.0"
     },
@@ -79,6 +80,11 @@
         "optimize-autoloader": true,
         "allow-plugins": {
             "php-http/discovery": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
         }
     }
 }

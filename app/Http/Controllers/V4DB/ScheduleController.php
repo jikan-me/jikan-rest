@@ -76,6 +76,7 @@ class ScheduleController extends Controller
      */
     public function main(QueryAnimeSchedulesCommand $command)
     {
+        \Log::info("ScheduleController::main called", ["filter" => request()->filter]);
         return $this->mediator->send($command);
     }
 

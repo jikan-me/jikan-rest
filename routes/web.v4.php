@@ -269,9 +269,9 @@ $router->group(
     }
 );
 
-$router->get('schedules[/{filter:[A-Za-z]+}]', [
+$router->get('schedules/{filter?}', [
     'uses' => 'ScheduleController@main'
-]);
+])->where('filter', '[A-Za-z]+');
 
 $router->group(
     [
