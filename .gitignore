@@ -17,6 +17,11 @@ composer.phar
 /coverage
 .DS_Store
 *.cache
+# Local dev-only helper (hardcoded Homebrew php@8.4 path)
+/tools/dev/
+# Local-only notes / dev config
+/LOCAL_SETUP.md
+/php.dev.ini
 db_username.txt
 db_admin_username.txt
 db_password.txt

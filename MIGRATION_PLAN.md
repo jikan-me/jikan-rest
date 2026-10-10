@@ -275,3 +275,20 @@ The intent is to contribute this back to `jikan-me/jikan-rest`, whose maintainer
   7. `chore: bump to Laravel 13`
 - **Rebase on `master` regularly**; keep the diff reviewable and avoid unrelated reformatting (Pint only on touched files during the migration).
 - **Offer to co-maintain** the migrated branch if upstream wants to defer the merge.
+
+## 12. Environment notes & Phase B deviations (as executed)
+
+**Runtime switched to Homebrew `php@8.4`.** Herd Lite's PHP 8.4.1 bundles `ext-mongodb` 1.20.0 inside a static binary (no `extension_dir`, no `phpize`), and it cannot be upgraded in place. Laravel 12 requires `mongodb/laravel-mongodb` 5.2+, which requires `ext-mongodb >= 1.21`. Resolution: installed Homebrew `php@8.4` (8.4.26) + `pecl install mongodb` (2.5.4), run via a project-local wrapper `tools/dev/php` (git-ignored) that unsets `PHP_INI_SCAN_DIR` (Herd Lite pins it in `.zshrc`). The global Herd setup is untouched.
+
+**Dependency swaps pulled forward from Phase E** (they cannot coexist with Lumen, so Phase B necessarily includes them):
+- `laravel/lumen-framework` → `laravel/framework` ^12 (12.69.3)
+- `jenssegers/mongodb` ^3.9 → `mongodb/laravel-mongodb` ^5 (5.11.0)
+- `pushrbx/lumen-roadrunner` → `laravel/octane` ^2 (2.21.0)
+- `laravel/scout` ^9 → ^11; `sentry/sentry-laravel` ^2 → ^4; `spatie/laravel-data` ^3 → ^4; `predis/predis` ^1 → ^2; `symfony/yaml` ^4 → ^7; `phpunit` ^9 → ^11
+- removed: `ocramius/package-versions`, `laravel/legacy-factories`, `matchish/laravel-scout-elasticsearch`, `flipbox/lumen-generator`, `darkaonline/swagger-lume`
+
+**Goutte replaced by a local shim.** `fabpot/goutte` (via `jikan-me/jikan` v4) caps `symfony/mime` at `^6.0`, which cannot coexist with Laravel 12's Symfony 7.2. Since Goutte 4's `Client` is a thin wrapper over Symfony's `HttpBrowser`, we add `app/Compat/Goutte/Client.php` and declare `"replace": {"fabpot/goutte": "4.0.3"}` in `composer.json`. The eventual clean fix is `jikan-me/jikan` v5 (which drops Goutte), but that is a major API change and out of scope for now.
+
+**Swagger deferred.** `darkaonline/l5-swagger` 11 requires `zircote/swagger-php` ^6, which is still RC. Reintroduced in Phase E once stable.
+
+**TypeSense driver** resolved to `typesense/laravel-scout-typesense-driver` 5.2.10 (the only version supporting Scout ^11), which pulls `typesense/typesense-php` 6.1.0-RC2. Pin to a stable release when available.
