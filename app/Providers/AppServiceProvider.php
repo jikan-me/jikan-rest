@@ -50,7 +50,7 @@ use App\Support\JikanConfig;
 use App\Support\JikanUnitOfWork;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
-use Laravel\Lumen\Application;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Response;
 use Illuminate\Support\Env;
 use Illuminate\Support\ServiceProvider;
@@ -82,6 +82,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // Custom exception handler (JSON rendering lives in App\Exceptions\Handler).
+        $this->app->singleton(
+            \Illuminate\Contracts\Debug\ExceptionHandler::class,
+            \App\Exceptions\Handler::class
+        );
+
+        // Scraper client + parser + serializer, previously bound in bootstrap/app.php.
+        $httpClient = \Symfony\Component\HttpClient\HttpClient::create([
+            'timeout' => env('SOURCE_TIMEOUT', 1),
+        ]);
+        $this->app->instance('HttpClient', $httpClient);
+        $this->app->instance('JikanParser', new MalClient($httpClient));
+        $this->app->instance('SerializerV4', SerializerFactory::createV4());
+
         $this->app->singleton(JikanConfig::class, fn() => new JikanConfig(config("jikan")));
         $this->app->singleton(\App\Contracts\SearchAnalyticsService::class,
             env("APP_ENV") !== "testing" ? \App\Services\DefaultSearchAnalyticsService::class :

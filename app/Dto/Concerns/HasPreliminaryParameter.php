@@ -19,8 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 trait HasPreliminaryParameter
 {
-    use PreparesData;
 
     #[BooleanType, WithCast(ContextualBooleanCast::class)]
-    public bool|Optional $preliminary;
+    public ?bool $preliminary = null;
 }

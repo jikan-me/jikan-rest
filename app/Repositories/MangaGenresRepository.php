@@ -4,10 +4,11 @@ namespace App\Repositories;
 
 use App\Contracts\GenreRepository;
 use App\GenreManga;
+use App\ExplicitGenresManga;
+use App\ThemeManga;
+use App\DemographicManga;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Laravel\Scout\Builder as ScoutBuilder;
 
 final class MangaGenresRepository extends DatabaseRepository implements GenreRepository
 {
@@ -23,17 +24,17 @@ final class MangaGenresRepository extends DatabaseRepository implements GenreRep
 
     public function getExplicitItems(): Collection
     {
-        return DB::table('explicit_genres_manga')->get();
+        return ExplicitGenresManga::query()->get();
     }
 
     public function getThemes(): Collection
     {
-        return DB::table('themes_manga')->get();
+        return ThemeManga::query()->get();
     }
 
     public function getDemographics(): Collection
     {
-        return DB::table('demographics_manga')->get();
+        return DemographicManga::query()->get();
     }
 
     public function all(): Collection

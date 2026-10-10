@@ -28,7 +28,7 @@ $router->get('/anime', [
 
 $router->group(
     [
-        'prefix' => 'anime/{id:[0-9]+}'
+        'prefix' => 'anime/{id:\d+}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -51,7 +51,7 @@ $router->group(
             'uses' => 'AnimeController@episodes'
         ]);
 
-        $router->get('/episodes/{episodeId:[0-9]+}', [
+        $router->get('/episodes/{episodeId:\d+}', [
             'uses' => 'AnimeController@episode'
         ]);
 
@@ -119,7 +119,7 @@ $router->get('/manga', [
 
 $router->group(
     [
-        'prefix' => 'manga/{id:[0-9]+}'
+        'prefix' => 'manga/{id:\d+}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -182,7 +182,7 @@ $router->get('/characters', [
 
 $router->group(
     [
-        'prefix' => 'characters/{id:[0-9]+}'
+        'prefix' => 'characters/{id:\d+}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -216,7 +216,7 @@ $router->get('/people', [
 ]);
 $router->group(
     [
-        'prefix' => 'people/{id:[0-9]+}'
+        'prefix' => 'people/{id:\d+}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -263,7 +263,7 @@ $router->group(
             'uses' => 'SeasonController@later'
         ]);
 
-        $router->get('/{year:[0-9]{4}}/{season:[A-Za-z]+}', [
+        $router->get('/{year}/{season}', [
             'uses' => 'SeasonController@main'
         ]);
     }
@@ -282,7 +282,7 @@ $router->group(
             'uses' => 'SearchController@producers',
         ]);
 
-        $router->get('/{id:[0-9]+}', [
+        $router->get('/{id:\d+}', [
             'uses' => 'ProducerController@main'
         ]);
     }
@@ -294,7 +294,7 @@ $router->get('/producers', [
 
 $router->group(
     [
-        'prefix' => 'producers/{id:[0-9]+}'
+        'prefix' => 'producers/{id:\d+}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -336,7 +336,7 @@ $router->group(
             'uses' => 'UserController@recentlyOnline'
         ]);
 
-        $router->get('/userbyid/{id:[0-9]+}', [
+        $router->get('/userbyid/{id:\d+}', [
             'uses' => 'SearchController@userById'
         ]);
 
@@ -460,19 +460,19 @@ $router->group(
     ],
     function () use ($router) {
 
-        $router->get('/{id:[0-9]+}', [
+        $router->get('/{id:\d+}', [
             'uses' => 'ClubController@main'
         ]);
 
-        $router->get('/{id:[0-9]+}/members', [
+        $router->get('/{id:\d+}/members', [
             'uses' => 'ClubController@members'
         ]);
 
-        $router->get('/{id:[0-9]+}/staff', [
+        $router->get('/{id:\d+}/staff', [
             'uses' => 'ClubController@staff'
         ]);
 
-        $router->get('/{id:[0-9]+}/relations', [
+        $router->get('/{id:\d+}/relations', [
             'uses' => 'ClubController@relations'
         ]);
     }

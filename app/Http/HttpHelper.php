@@ -70,9 +70,20 @@ class HttpHelper
 
     public static function getRouteName(Request $request) : string
     {
-        $route = explode('\\', $request->route()[1]['uses'] ?? 'App\Undefined');
+        $route = $request->route();
+        if (!$route) {
+            return 'App\Undefined';
+        }
 
-        return end($route);
+        $action = $route->getAction();
+        $uses = $action['uses'] ?? 'App\Undefined';
+
+        if (is_callable($uses)) {
+            return 'Closure';
+        }
+
+        $parts = explode('\\', $uses);
+        return end($parts);
     }
 
     public static function getRequestUriHash(Request $request) : string

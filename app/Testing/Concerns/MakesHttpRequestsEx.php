@@ -13,13 +13,13 @@ trait MakesHttpRequestsEx
 
     /**
      * Visit the given URI with a JSON GET request.
-     * @param string $uri
+     * @param $uri
      * @param array $headers
-     * @return self
+     * @param $options
      */
-    public function getJson(string $uri, array $headers = []): self
+    public function getJson($uri, array $headers = [], $options = 0)
     {
-        return $this->json('GET', $uri, [], $headers);
+        return $this->json('GET', $uri, [], $headers, $options);
     }
 
     /**

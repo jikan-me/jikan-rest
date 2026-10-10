@@ -19,8 +19,6 @@ use Spatie\LaravelData\Optional;
  */
 trait HasSfwParameter
 {
-    use PreparesData;
-
     #[BooleanType, WithCast(ContextualBooleanCast::class)]
     public bool|Optional $sfw = false;
 }

@@ -1,7 +1,7 @@
 <?php
 
 use App\JikanApiModel;
-use PackageVersions\Versions;
+use Composer\InstalledVersions;
 use HaydenPierce\ClassFinder\ClassFinder;
 
 require_once __DIR__.'/../vendor/autoload.php';
@@ -9,7 +9,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 /*
     Defines
 */
-defined('JIKAN_PARSER_VERSION') or define('JIKAN_PARSER_VERSION', Versions::getVersion('jikan-me/jikan'));
+defined('JIKAN_PARSER_VERSION') or define('JIKAN_PARSER_VERSION', InstalledVersions::getVersion('jikan-me/jikan'));
 
 
 $classNamesCachePath = __DIR__ . "/../storage/app";

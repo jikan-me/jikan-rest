@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 use Jikan\Request\Genre\AnimeGenresRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

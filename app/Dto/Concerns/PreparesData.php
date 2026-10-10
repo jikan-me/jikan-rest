@@ -13,8 +13,10 @@ use Spatie\LaravelData\Support\DataProperty;
  */
 trait PreparesData
 {
-    public static function prepareForPipeline(Collection $properties): Collection
+    public static function prepareForPipeline(array $properties): array
     {
+        $properties = collect($properties);
+
         // let's always set the limit parameter to the globally configured default value
         if (property_exists(static::class, "limit") && !$properties->has("limit")) {
             $properties->put("limit", max_results_per_page(
@@ -55,6 +57,6 @@ trait PreparesData
             }
         }
 
-        return $properties;
+        return $properties->all();
     }
 }

@@ -2,8 +2,7 @@
 
 namespace App\Providers;
 
-use Laravel\Lumen\Providers\EventServiceProvider as ServiceProvider;
-use pushrbx\LumenRoadRunner\Events\LoopErrorOccurredEvent;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -13,8 +12,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        LoopErrorOccurredEvent::class => [
-            \App\Listeners\PsrWorkerErrorListener::class
-        ]
+        // Loop-error handling previously came from pushrbx/lumen-roadrunner
+        // (removed during the Laravel migration). Add an Octane listener here
+        // if worker loop errors need handling again.
     ];
 }

@@ -125,10 +125,14 @@ final class DefaultCachedScraperService implements CachedScraperService
         return CachedData::from($item);
     }
 
-    private function dbRecordToCachedData(JikanApiModel|array $item): CachedData
+    private function dbRecordToCachedData(mixed $item): CachedData
     {
         if ($item instanceof JikanApiModel) {
             return CachedData::fromModel($item);
+        }
+
+        if (is_object($item)) {
+            return CachedData::fromArray((array) $item);
         }
 
         return CachedData::fromArray($item);

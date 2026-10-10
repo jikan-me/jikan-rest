@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Jikan\Exception\BadResponseException as JikanBadResponseException;
 use GuzzleHttp\Exception\BadResponseException;
 use Jikan\Exception\ParserException;
-use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Predis\Connection\ConnectionException;
 use Symfony\Component\HttpClient\Exception\TimeoutException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;

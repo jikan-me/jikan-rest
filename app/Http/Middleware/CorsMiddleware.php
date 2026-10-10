@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Middleware\HandleCors;
-use Laravel\Lumen\Http\ResponseFactory;
+use Illuminate\Routing\ResponseFactory;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class CorsMiddleware extends HandleCors

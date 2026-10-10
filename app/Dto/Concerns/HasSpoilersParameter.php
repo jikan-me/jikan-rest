@@ -19,8 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 trait HasSpoilersParameter
 {
-    use PreparesData;
 
     #[BooleanType, WithCast(ContextualBooleanCast::class)]
-    public bool|Optional $spoilers;
+    public ?bool $spoilers = null;
 }

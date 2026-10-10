@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 use Jikan\Jikan;
 
 class Episode extends Model

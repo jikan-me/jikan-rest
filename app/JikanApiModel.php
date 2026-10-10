@@ -6,10 +6,10 @@ use App\Enums\AnimeRatingEnum;
 use App\Enums\MangaTypeEnum;
 use App\Filters\FilterQueryString;
 use Illuminate\Support\Collection;
-use Jenssegers\Mongodb\Eloquent\Builder;
+use MongoDB\Laravel\Eloquent\Builder;
 use Jikan\Helper\Constants;
 
-class JikanApiModel extends \Jenssegers\Mongodb\Eloquent\Model
+class JikanApiModel extends \MongoDB\Laravel\Eloquent\Model
 {
     use FilterQueryString;
 

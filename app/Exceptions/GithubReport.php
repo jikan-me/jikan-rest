@@ -3,7 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Http\Request;
-use PackageVersions\Versions;
+use Composer\InstalledVersions;
 use Predis\Connection\ConnectionException;
 
 /**
@@ -80,7 +80,7 @@ class GithubReport
         $report->repo = $repo ?? env('GITHUB_REST', 'jikan-me/jikan-rest');
         $report->requestUri = $request->getRequestUri();
         $report->requestMethod = $request->getMethod();
-        $report->jikanVersion = Versions::getVersion('jikan-me/jikan');
+        $report->jikanVersion = InstalledVersions::getVersion('jikan-me/jikan');
         $report->phpVersion = PHP_VERSION;
 
         $report->redisRunning = false;

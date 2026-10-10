@@ -18,8 +18,7 @@ use Spatie\LaravelData\Optional;
  */
 trait HasLimitParameter
 {
-    use PreparesData;
 
     #[IntegerType, Min(1), MaxLimitWithFallback]
-    public int|Optional $limit;
+    public ?int $limit = null;
 }

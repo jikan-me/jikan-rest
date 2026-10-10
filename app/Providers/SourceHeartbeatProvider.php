@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Events\SourceHeartbeatEvent;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Lumen\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class SourceHeartbeatProvider extends ServiceProvider
 {

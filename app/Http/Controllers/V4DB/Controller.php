@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\Serializer;
-use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Routing\Controller as BaseController;
 use MongoDB\BSON\UTCDateTime;
 use OpenApi\Annotations as OA;
 
