@@ -38,11 +38,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/docs', function () {
-    return response()->json([
-        'message' => 'API documentation (Swagger UI) is not available in this build. See https://docs.api.jikan.moe/ for the official documentation.',
-    ], 200);
-});
+Route::redirect('/docs', '/v4/api/documentation', 301);
 
 foreach (['v1', 'v2', 'v3'] as $version) {
     Route::prefix($version)->get('/', function () {
