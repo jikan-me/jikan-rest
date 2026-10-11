@@ -336,6 +336,10 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   Redis/Queue, Session/Auth, Mail, Scout/TypeSense, Swagger, Sentry, Octane…), 12
   orphaned keys removed, 4 documented-but-commented keys (empty value would clobber a
   non-empty default).
+- **Anime compound indexes** (from `DB_INDEXES.md`) — new migration
+  `2026_10_11_000000_add_anime_compound_indexes.php` creates `schedule`
+  `{status,type,approved,broadcast,members}`, `season` `{aired.from,aired.to,airing,members:-1}`
+  and `top_airing` `{airing,score:-1}`; applied to the live `jikan.anime` and verified.
 
 ---
 

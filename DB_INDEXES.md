@@ -140,7 +140,11 @@ sort: { members: 1 }
 
 ---
 
-## 3. Proposed compound indexes (PROPOSAL ONLY — not applied)
+## 3. Compound indexes (APPLIED 2026-10-11)
+
+Migration `database/migrations/2026_10_11_000000_add_anime_compound_indexes.php`
+creates these; for the live (indexer-seeded) `jikan` DB they were created directly
+via `db.anime.createIndex(...)` and verified below.
 
 ### P1 — Schedule: `{ status: 1, type: 1, approved: 1, broadcast: 1, members: 1 }`
 Serves `getCurrentlyAiring` (`DefaultAnimeRepository.php:88-112`) in *all* variants:
@@ -174,7 +178,11 @@ Schema::table('anime', function (Blueprint $table) {
 });
 ```
 
-Each index creation on a populated collection: `db.anime.createIndex({...}, {name: "..."})` (or `ensureIndexes` via a migration). Run against `jikan` and re-verify with the §1 dump command. This file is intentionally **not** the migration — creating it was out of scope for this read-only audit.
+**DONE:** shipped as `database/migrations/2026_10_11_000000_add_anime_compound_indexes.php`
+and applied to the live `jikan.anime` (verified: `schedule`, `season`, `top_airing` are
+present with the keys above). For fresh/CI/upstream environments the migration covers
+it; for local indexer-seeded DBs the equivalent `db.anime.createIndex({...}, {name: ...})`
+calls are used.
 
 ---
 
