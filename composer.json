@@ -36,8 +36,11 @@
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "haydenpierce/class-finder": "^0.4.4",
+        "larastan/larastan": "^3.13",
+        "laravel/pint": "^1.32",
         "laravel/tinker": "^3.0",
         "mockery/mockery": "^1.6",
+        "phpstan/phpstan": "^2.3",
         "phpunit/phpunit": "^12.0",
         "spiral/roadrunner-cli": "^2.7"
     },
@@ -62,6 +65,9 @@
         ],
         "phpunit": "@php ./vendor/bin/phpunit --no-coverage",
         "phpunit-cover": "@php ./vendor/bin/phpunit",
+        "phpstan": "@php -d error_reporting=24575 vendor/bin/phpstan analyse --no-progress",
+        "pint": "@php ./vendor/bin/pint",
+        "pint:test": "@php ./vendor/bin/pint --test",
         "test": [
           "@phpunit --testsuite unit"
         ],

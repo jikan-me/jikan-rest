@@ -1,0 +1,26 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    paths:
+        - app
+
+    # Analysis level. Level 5 is this codebase's initial level (level 6 reports
+    # 1000+ issues against the Lumen-era code, mostly missing type hints on
+    # scrapers/models). The current findings are pinned in phpstan-baseline.neon
+    # so `vendor/bin/phpstan analyse` exits 0; when the code is type-lined, bump
+    # the level and regenerate the baseline.
+    level: 5
+
+    tmpDir: storage/framework/cache/phpstan
+
+    parallel:
+        # Keep memory bounded when running in CI (2 workers on small runners).
+        maximumNumberOfProcesses: 2
+
+    # Run with `-d error_reporting=24575` (see composer "phpstan" script / CI)
+    # to keep PHP 8.4 deprecation warnings from the legacy scraper stack out of
+    # the output — they are not analysis findings.
+    bootstrapFiles:
+        - vendor/autoload.php

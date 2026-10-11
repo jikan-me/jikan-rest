@@ -21,7 +21,6 @@ use MongoDB\Database;
  */
 class SourceHeartbeatProvider extends ServiceProvider
 {
-
     const BAD_HEALTH_STATUSES = [403, 500, 501, 502, 503, 504, 505];
 
     /**
@@ -35,12 +34,12 @@ class SourceHeartbeatProvider extends ServiceProvider
         ],
     ];
 
-    public static function isFailoverEnabled() : bool
+    public static function isFailoverEnabled(): bool
     {
         return self::failoverMetaCollection()->findOne(['_id' => 'lock']) !== null;
     }
 
-    public static function getLastDowntime() : int
+    public static function getLastDowntime(): int
     {
         $doc = self::failoverMetaCollection()->findOne(['_id' => 'last_downtime']);
 
@@ -125,7 +124,7 @@ class SourceHeartbeatProvider extends ServiceProvider
         self::heartbeatCollection()->deleteMany([]);
     }
 
-    public static function getHeartbeatScore() : float
+    public static function getHeartbeatScore(): float
     {
         $fails = self::getRecentEvents();
 
@@ -165,19 +164,19 @@ class SourceHeartbeatProvider extends ServiceProvider
         return $fails;
     }
 
-    public static function getHeartbeatStatus() : string
+    public static function getHeartbeatStatus(): string
     {
         $score = self::getHeartbeatScore();
 
         if ($score > 0.5 && $score < config('jikan.source_good_health_score')) {
-            return "LEARNING";
+            return 'LEARNING';
         }
 
         if ($score <= 0.5) {
-            return "UNHEALTHY";
+            return 'UNHEALTHY';
         }
 
-        return "HEALTHY";
+        return 'HEALTHY';
     }
 
     private static function heartbeatCollection(): Collection

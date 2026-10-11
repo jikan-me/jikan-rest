@@ -14,7 +14,6 @@ use Monolog\Logger;
  */
 class SourceHeartbeatListener
 {
-
     private Logger $logger;
 
     /**
@@ -45,7 +44,6 @@ class SourceHeartbeatListener
     /**
      * Handle the event.
      *
-     * @param  SourceHeartbeatEvent  $event
      * @return void
      */
     public function handle(SourceHeartbeatEvent $event)
@@ -65,7 +63,7 @@ class SourceHeartbeatListener
      * Atomically record the heartbeat event; returns the number of events
      * currently recorded within the recency window.
      */
-    private function insertFail(SourceHeartbeatEvent $event) : int
+    private function insertFail(SourceHeartbeatEvent $event): int
     {
         SourceHeartbeatProvider::recordEvent($event->status, $event->health);
 
@@ -113,7 +111,7 @@ class SourceHeartbeatListener
         return SourceHeartbeatProvider::getRecentEvents();
     }
 
-    private function getSuccessfulRequestsScore() : float
+    private function getSuccessfulRequestsScore(): float
     {
         $fails = $this->getRecentFails();
         $score = 0;
@@ -127,7 +125,7 @@ class SourceHeartbeatListener
 
         $scored = $score / max($totalFails, 1);
 
-        if(config('app.debug')) {
+        if (config('app.debug')) {
             $this->logger->debug('Failover successful requests score: '.$scored);
         }
 

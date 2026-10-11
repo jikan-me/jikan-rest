@@ -1,5 +1,7 @@
 <?php
+
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Unit;
 
 use App\Events\SourceHeartbeatEvent;
@@ -33,7 +35,7 @@ final class SourceHeartbeatProviderTest extends TestCase
         }
     }
 
-    public function testHeartbeatScoreIsRatioOfGoodToAllEventsWithinWindow(): void
+    public function test_heartbeat_score_is_ratio_of_good_to_all_events_within_window(): void
     {
         SourceHeartbeatProvider::recordEvent(200, SourceHeartbeatEvent::GOOD_HEALTH);
         SourceHeartbeatProvider::recordEvent(200, SourceHeartbeatEvent::GOOD_HEALTH);
@@ -44,13 +46,13 @@ final class SourceHeartbeatProviderTest extends TestCase
         $this->assertCount(4, SourceHeartbeatProvider::getRecentEvents());
     }
 
-    public function testHeartbeatScoreIsZeroWhenNoEventsRecorded(): void
+    public function test_heartbeat_score_is_zero_when_no_events_recorded(): void
     {
         // float 0.0 (the declared return type coerces; JSON encodes it as 0)
         $this->assertSame(0.0, SourceHeartbeatProvider::getHeartbeatScore());
     }
 
-    public function testPruneFailsDropsEventsOutsideRecencyWindow(): void
+    public function test_prune_fails_drops_events_outside_recency_window(): void
     {
         config()->set('jikan.source_bad_health_range', 30);
         config()->set('jikan.source_bad_health_max_store', 50);
@@ -70,7 +72,7 @@ final class SourceHeartbeatProviderTest extends TestCase
         $this->assertSame($now, (int) $pruned[2][0]);
     }
 
-    public function testPruneFailsCapsTheSampleAtMaxStore(): void
+    public function test_prune_fails_caps_the_sample_at_max_store(): void
     {
         config()->set('jikan.source_bad_health_range', 30);
         config()->set('jikan.source_bad_health_max_store', 5);
@@ -89,7 +91,7 @@ final class SourceHeartbeatProviderTest extends TestCase
         $this->assertSame($now, (int) $pruned[4][0]);
     }
 
-    public function testPruneFailsIsSafeWithMalformedEntries(): void
+    public function test_prune_fails_is_safe_with_malformed_entries(): void
     {
         config()->set('jikan.source_bad_health_range', 30);
 
@@ -105,7 +107,7 @@ final class SourceHeartbeatProviderTest extends TestCase
         $this->assertSame($now, (int) $pruned[0][0]);
     }
 
-    public function testHeartbeatStatusMapsScoreBuckets(): void
+    public function test_heartbeat_status_maps_score_buckets(): void
     {
         $this->assertSame('UNHEALTHY', SourceHeartbeatProvider::getHeartbeatStatus());
 
@@ -126,7 +128,7 @@ final class SourceHeartbeatProviderTest extends TestCase
         $this->assertSame('HEALTHY', SourceHeartbeatProvider::getHeartbeatStatus());
     }
 
-    public function testFailoverLockAndLastDowntimeRoundTripThroughMongo(): void
+    public function test_failover_lock_and_last_downtime_round_trip_through_mongo(): void
     {
         $this->assertFalse(SourceHeartbeatProvider::isFailoverEnabled());
         $this->assertSame(0, SourceHeartbeatProvider::getLastDowntime());

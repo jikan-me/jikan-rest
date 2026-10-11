@@ -1,5 +1,7 @@
 <?php
+
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Unit;
 
 use Illuminate\Routing\Route;
@@ -16,7 +18,7 @@ final class CacheTtlMapTest extends TestCase
 {
     private const V4DB_NAMESPACE = 'App\\Http\\Controllers\\V4DB\\';
 
-    public function testEveryRegisteredV4ControllerActionHasACacheTtlEntry(): void
+    public function test_every_registered_v4_controller_action_has_a_cache_ttl_entry(): void
     {
         $missing = array_values(array_diff_key(
             $this->registeredV4Actions(),
@@ -25,10 +27,10 @@ final class CacheTtlMapTest extends TestCase
 
         sort($missing);
 
-        $this->assertSame([], $missing, 'v4 controller actions missing per_endpoint_cache_ttl entries: ' . implode(', ', $missing));
+        $this->assertSame([], $missing, 'v4 controller actions missing per_endpoint_cache_ttl entries: '.implode(', ', $missing));
     }
 
-    public function testEveryCacheTtlEntryIsBackedByARegisteredV4Route(): void
+    public function test_every_cache_ttl_entry_is_backed_by_a_registered_v4_route(): void
     {
         $stale = array_values(array_diff_key(
             config('jikan.per_endpoint_cache_ttl', []),
@@ -37,12 +39,12 @@ final class CacheTtlMapTest extends TestCase
 
         sort($stale);
 
-        $this->assertSame([], $stale, 'per_endpoint_cache_ttl entries with no registered v4 route (dead keys): ' . implode(', ', $stale));
+        $this->assertSame([], $stale, 'per_endpoint_cache_ttl entries with no registered v4 route (dead keys): '.implode(', ', $stale));
     }
 
     /**
      * @return array<string, bool> map of "Controller@action" for every v4 route
-     *                              whose action lives under App\Http\Controllers\V4DB
+     *                             whose action lives under App\Http\Controllers\V4DB
      */
     private function registeredV4Actions(): array
     {
@@ -50,7 +52,7 @@ final class CacheTtlMapTest extends TestCase
 
         foreach (RouteFacade::getRoutes()->getRoutes() as $route) {
             /** @var Route $route */
-            if (!str_starts_with($route->uri(), 'v4')) {
+            if (! str_starts_with($route->uri(), 'v4')) {
                 continue;
             }
 
@@ -70,7 +72,7 @@ final class CacheTtlMapTest extends TestCase
     {
         $uses = $route->getAction('uses');
 
-        if (!is_string($uses) || !str_starts_with($uses, self::V4DB_NAMESPACE)) {
+        if (! is_string($uses) || ! str_starts_with($uses, self::V4DB_NAMESPACE)) {
             return null;
         }
 

@@ -1,0 +1,14 @@
+{
+    "preset": "laravel",
+    "paths": [
+        "app",
+        "bootstrap",
+        "config",
+        "database",
+        "routes",
+        "tests"
+    ],
+    "exclude": [
+        "app/Compat"
+    ]
+}
