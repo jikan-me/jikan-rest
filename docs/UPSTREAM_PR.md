@@ -105,7 +105,7 @@ in their own PRs). Suggested squash onto the local branch, then open in order:
 | # | PR title | Contents (local commits) | Notes |
 |---|---|---|---|
 | 1 | `test: add parity harness, PHPStan/Larastan + Pint + CI` | `tools/parity/*`, `phpstan.neon` + baseline, `pint.json`, `.github/workflows/ci.yml`, `UPSTREAM_ISSUES.md` | No behavior change; establishes the safety net first (T4 infra) |
-| 1b | `feat: developer tooling — laravel/boost + skills + backend-quality-suite` | `composer.json` (+`laravel/boost` ^2 dev), `.ai/skills/*`, `.backend-suite/*` (profile/arch-rules/docs.manifest, ratified) | Optional/subjective; dev-only tooling — maintainers may want it split or dropped |
+| 1b | `feat: developer tooling — laravel/boost + skills + backend-quality-suite` | `composer.json` (+`laravel/boost` ^2 dev), `.ai/skills/*`, `.backend-suite/*` (profile/arch-rules/docs.manifest, ratified), `install.sh` + `docs/SETUP.md` | Optional/subjective; dev-only tooling — maintainers may want it split or dropped |
 | 2 | `feat: Laravel 13 skeleton + bootstrap swap` | `bootstrap/app.php`, `public/index.php`, `artisan`, base classes, `routes/` split | App boots; v4 group still loads via `namespace` + string actions |
 | 3 | `fix: Symfony 7/8 route constraints` | `{id}` + `->where()` conversions | The 69→3 parity fix |
 | 4 | `feat: mongodb/laravel-mongodb v5 + spatie data v4` | driver swap, DTO/cast/`PreparesData` API adoption | |
