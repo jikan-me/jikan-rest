@@ -124,8 +124,14 @@ trait SyntheticMongoDbTransaction
                 'fields' => ['title' => 'text', 'title_japanese' => 'text'],
                 'weights' => ['title' => 50, 'title_japanese' => 5],
             ],
-            'characters' => ['fields' => ['name' => 'text', 'given_name' => 'text', 'family_name' => 'text']],
-            'people' => ['fields' => ['name' => 'text', 'name_kanji' => 'text']],
+            'characters' => [
+                'fields' => ['name' => 'text', 'name_kanji' => 'text'],
+                'weights' => ['name' => 50, 'name_kanji' => 5],
+            ],
+            'people' => [
+                'fields' => ['name' => 'text', 'given_name' => 'text', 'family_name' => 'text'],
+                'weights' => ['name' => 50, 'given_name' => 5, 'family_name' => 5],
+            ],
             'genres_anime' => ['fields' => ['name' => 'text']],
             'genres_manga' => ['fields' => ['name' => 'text']],
             'explicit_genres_anime' => ['fields' => ['name' => 'text']],
@@ -147,8 +153,21 @@ trait SyntheticMongoDbTransaction
             if (isset($def['weights'])) {
                 $options['weights'] = $def['weights'];
             }
+
             try {
-                $mongodb->selectCollection($collection)->createIndex($def['fields'], $options);
+                $mongoCollection = $mongodb->selectCollection($collection);
+
+                // Make the definition authoritative: truncate() does not drop the
+                // collection (and its indexes) here, and createIndex() with an
+                // existing 'search' index simply conflicts and is swallowed — so a
+                // stale/older index definition would silently survive. Drop it first.
+                try {
+                    $mongoCollection->dropIndex('search');
+                } catch (\Throwable $e) {
+                    // no 'search' index yet — nothing to drop
+                }
+
+                $mongoCollection->createIndex($def['fields'], $options);
             } catch (\Throwable $e) {
                 // index may already exist / collection issues - not fatal for tests
             }

@@ -185,3 +185,16 @@ Each index creation on a populated collection: `db.anime.createIndex({...}, {nam
 - **Bug:** `characters`/`people` `search` text indexes are swapped in `SyntheticMongoDbTransaction::ensureSearchIndexes()` (`app/Testing/SyntheticMongoDbTransaction.php:127-128`).
 - **Schedule query** filters `{status:"Currently Airing", type:"TV", approved:true}` (+ optional `broadcast` equality/prefix-regex), sorted by `members` — it does **not** use the boolean `airing` field.
 - **Proposed compound indexes**: `P1 {status, type, approved, broadcast, members}` (schedule), `P2 {aired.from, aired.to, airing, members:-1}` (season), `P3 {airing, score:-1}` (top airing).
+---
+
+## Resolution (2026-10-11)
+
+- **Characters/people text-index swap in the test DB** — fixed in
+  `app/Testing/SyntheticMongoDbTransaction::ensureSearchIndexes()`: `characters`
+  now recreates `{name, name_kanji}` (weights 50/5) and `people` `{name, given_name,
+  family_name}` (weights 50/5/5), matching the squash migration. Verified live in
+  `jikan_tests`.
+- `ensureSearchIndexes()` hardened to **drop-then-create** the `search` index per
+  collection, so a stale/older index definition can never silently survive
+  (truncate doesn't drop indexes here and a conflicting `createIndex` was swallowed).
+  Verified with an injected wrong index that self-healed.
