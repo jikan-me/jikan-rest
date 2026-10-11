@@ -316,3 +316,38 @@ Optional parameters use `{param?}` (trailing `?` inside the braces), not the `[/
 
 Parity harness went from **69 problems to 3** after this fix; the remaining 3 are the intentional `/docs`
 → Swagger UI redirect and a pre-existing `users.php` parser bug.
+
+### Phase F complete: test suite at Lumen baseline
+
+The PHPUnit suite (migrated from Lumen's API) now runs **280 tests / 2673 assertions with exactly 1
+failure** — the same time-dependent `SeasonControllerTest` test that failed on the original Lumen
+baseline. Key migration details for the test layer:
+
+- `tests/TestCase` extends Laravel's base (not Lumen's), `createApplication()` bootstraps via the
+  console kernel, and a `$response` + `assertStatus()` compat layer keeps the Lumen-era helpers working.
+- `Factory::new()` resolves via the container so contextual bindings (media descriptor) apply; Laravel
+  12 uses `new static` which cannot inject interface constructor args.
+- `setUpTraits()` override calls `beginDatabaseTransaction()` / `runScoutFlush()` explicitly (Laravel's
+  convention expects `begin` + trait-short-name, which doesn't match our trait methods).
+- The `mongodb` connection is purged after pointing config at the isolated `jikan_tests` DB, otherwise
+  truncations hit the production DB (this wiped seeded data during one test run).
+- Text indexes from the squash migration are recreated after truncate (the test DB is never migrated).
+- Data providers are `static` (PHPUnit 11), `seeStatusCode`→`assertStatus`, `seeJsonStructure`→
+  `assertJsonStructure`.
+- Bare boolean flags (`?sfw`, `?continuing`) normalise to `null`/`""` and mean `true` — converted in
+  `PreparesData`/`ContextualBooleanCast` *before* validation (casts run after validation).
+- `MediaSearchCommand` uses `PreparesData` so empty `start_date`/`end_date` are ignored.
+
+### Known upstream blockers (not migration issues)
+
+- **`jikan-me/jikan` anime/manga parsers break against current MAL markup.** MAL now serves the
+  opening/ending theme sections as a JS widget (a `<div>` containing a `<script>`, no `<table>`), but
+  `AnimeParser::getOpeningThemes()/getEndingThemes()` (and the manga equivalents) select
+  `div.theme-songs.../table/tr` → "current node list is empty" → `ParserException` → `500`. This makes
+  `indexer:anime`, `indexer:manga`, `indexer:anime-current-season` and `indexer:anime-schedule` fail,
+  and `/v4/anime/{id}` 500 for any scraped id. Producers/magazines/genres parse fine (different
+  parsers). Fix belongs upstream in `jikan-me/jikan` (or a fork).
+- `/v4/users/recentlyonline` calls `jikan`'s `users.php` scrape which also fails against current MAL
+  markup (pre-existing).
+- Seeding status: genres ✓, producers in progress (~25 ids/s over 932), magazines via `indexer:common`,
+  anime/manga blocked by the parser issue above.
