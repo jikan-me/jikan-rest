@@ -1567,12 +1567,6 @@ parameters:
 			path: app/Support/RepositoryQueryBase.php
 
 		-
-			message: '#^Function to_boolean\(\) has parameter \$booleable with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Support/helpers.php
-
-		-
 			message: '#^Trait App\\Testing\\Concerns\\MakesHttpRequestsEx is used zero times and is not analysed\.$#'
 			identifier: trait.unused
 			count: 1

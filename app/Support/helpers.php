@@ -6,17 +6,6 @@ use Spatie\Enum\Laravel\Enum;
 // cache, ... — were shimmed here during the Lumen days; Laravel provides them, so
 // only the genuinely custom functions remain.)
 
-if (! function_exists('to_boolean')) {
-
-    /**
-     * Convert to boolean
-     */
-    function to_boolean($booleable): bool
-    {
-        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-    }
-}
-
 if (! function_exists('max_results_per_page')) {
     function max_results_per_page(?int $fallbackLimit = null): int
     {

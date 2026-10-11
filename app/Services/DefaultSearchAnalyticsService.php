@@ -6,6 +6,7 @@ use App\Contracts\SearchAnalyticsService;
 use App\SearchMetric;
 use Illuminate\Support\Collection;
 use Typesense\Documents;
+use Typesense\Exceptions\TypesenseClientError;
 
 /**
  * The default search analytics service implementation, which saves the stats to the database and indexes it in Typesense.
@@ -19,16 +20,21 @@ final class DefaultSearchAnalyticsService implements SearchAnalyticsService
      */
     public function logSearch(string $searchTerm, int $hitsCount, Collection $hits, string $indexName): void
     {
-        /**
-         * @var Collection<int, SearchMetric> $existingMetrics
-         */
-        $existingMetrics = SearchMetric::search($searchTerm, function (Documents $documents, string $query, array $options) {
-            if (strlen($query) <= 3) {
-                $options['prioritize_token_position'] = 'true';
-            }
+        try {
+            /** @var Collection<int, SearchMetric> $existingMetrics */
+            $existingMetrics = SearchMetric::search($searchTerm, function (Documents $documents, string $query, array $options) {
+                if (strlen($query) <= 3) {
+                    $options['prioritize_token_position'] = 'true';
+                }
 
-            return $documents->search($options);
-        })->take(1)->get();
+                return $documents->search($options);
+            })->take(1)->get();
+        } catch (TypesenseClientError $e) {
+            // On the very first search against a fresh Typesense server the
+            // metrics collection does not exist yet — treat it as "no existing
+            // metrics"; SearchMetric::create() below bootstraps the collection.
+            $existingMetrics = collect();
+        }
 
         $hitList = $hits->pluck('id')->values()->map(fn ($x) => (int) $x)->all();
 
