@@ -156,7 +156,11 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 ## Verification
 
 - **Unit + integration**: `php vendor/bin/phpunit --no-coverage`
-  → **280 tests, 2673 assertions, 1 failure** (the pre-existing time-dependent season test)
+  → **280 tests, 2673 assertions**, with 1–2 failures — the time-dependent
+  `SeasonControllerTest` season tests (fail/flag intermittently against the
+  Mongo `$dateDiff` + `Carbon::setTestNow` season logic; one of them also failed on
+  the original Lumen baseline). A `tearDown()` reset was added so `Carbon::setTestNow`
+  doesn't leak between tests.
 - **Parity harness** (`tools/parity/{snapshot,compare}.php`, baseline committed):
   **69 → 3** differences; remaining 3 = `/docs` → Swagger redirect (intentional) +
   `users/recentlyonline` (pre-existing parser bug).

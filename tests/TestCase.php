@@ -175,6 +175,14 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
         $this->setUpTraits();
     }
 
+    protected function tearDown(): void
+    {
+        // Avoid Carbon::setTestNow() leaking between tests (the season tests fake "now").
+        \Illuminate\Support\Carbon::setTestNow();
+
+        parent::tearDown();
+    }
+
     protected function setUpTraits()
     {
         $uses = array_flip(class_uses_recursive(get_class($this)));
