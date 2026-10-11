@@ -296,11 +296,10 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 ## Verification
 
 - **Unit + integration**: `php vendor/bin/phpunit --no-coverage`
-  → **280 tests, 2673 assertions**, with 1–2 failures — the time-dependent
-  `SeasonControllerTest` season tests (fail/flag intermittently against the
-  Mongo `$dateDiff` + `Carbon::setTestNow` season logic; one of them also failed on
-  the original Lumen baseline). A `tearDown()` reset was added so `Carbon::setTestNow`
-  doesn't leak between tests.
+  → **292 tests, 2707 assertions, 0 failures** (first fully-green run). The
+  time-dependent `SeasonControllerTest` flake was removed (see follow-ups) and
+  the new random-endpoint regression tests (+3) pass. Earlier baseline while the
+  flake existed: 280–289 tests / 2673–2696 assertions with 1–2 season failures.
 - **Parity harness** (`tools/parity/{snapshot,compare}.php`, baseline committed):
   **69 → 3** differences at the green check; re-verified after the data wipe and the
   P0/P1/practice fixes — **21 endpoints match the baseline byte-for-byte, including the
@@ -314,6 +313,29 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `/v4/schedules?filter=...`, `/v4/producers/{id}`, `/v4/api/documentation` all `200`.
 - **Octane**: `php artisan octane:start --server=roadrunner` serves endpoints `200`;
   FrankenPHP available via `OCTANE_SERVER=frankenphp`.
+- **Octane soak (2026-10-11)**: 12 iterations × 10 endpoints (~130 requests) with
+  varied query strings against RoadRunner 2025.1.15 — identical status codes every
+  iteration, byte-identical repeated payloads, correct pagination across pages, zero
+  error/panic/worker-restart lines in the log, `/up` → 200. Confirms the flush set
+  (repos, `CacheOptions`, mediator, Mongo heartbeat) leaks no state between requests.
+
+### 14. Verification + hardening batch (2026-10-11, parallelised)
+- **Random endpoints fixed** — `QueryRandom{Anime,Manga}Handler` and the
+  `QueryRandomItemHandler` family passed a null `->first()` into a Resource when the
+  underlying collection was empty (visible only with no indexed data), crashing with
+  "Attempt to read property ... on null". Now `abort(404)` in the standard error shape;
+  regression tests cover empty → 404 (both families) and seeded → 200.
+- **Mongo index audit (`DB_INDEXES.md`)** — all 134 squash-migration indexes are
+  present in the live `jikan` DB (0 missing); proposed compound indexes for
+  schedule/season/top queries (decision pending).
+- **Test-DB `$text` index swap fixed** — `ensureSearchIndexes` had `characters`
+  (`{name,name_kanji}`) and `people` (`{name,given_name,family_name}`) swapped vs the
+  migration; corrected + made drop-then-create so a stale index definition can never
+  silently survive a test run.
+- **`.env.dist` env-key sync** — 68 config keys added (App/locales, Logging, Caching,
+  Redis/Queue, Session/Auth, Mail, Scout/TypeSense, Swagger, Sentry, Octane…), 12
+  orphaned keys removed, 4 documented-but-commented keys (empty value would clobber a
+  non-empty default).
 
 ---
 
