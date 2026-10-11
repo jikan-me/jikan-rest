@@ -17,10 +17,10 @@
 | Piece | State |
 |---|---|
 | RFC issue for `jikan-me/jikan-rest` | **Not written yet** — draft §4 below |
-| PR series | Proposed in §5; infra PRs (heartbeat→Mongo, TTL guard, Dockerfile) **committed locally**, PHPStan/Pint/CI in progress — **nothing pushed** |
-| Infra agent (T1–T4) | T1 heartbeat ✅ · T2 TTL guard ✅ · T3 Dockerfile ✅ · T4 PHPStan/Pint/CI 🔄 |
-| Local work in the tree (pending one reconciliation commit) | insights + CORS **removals**, **observability** (logs/Sentry/`/up`), `UPSTREAM_PR.md` |
-| Parity evidence | 21 endpoints byte-match the baseline; anime/manga/characters/people blocked by upstream parser (see `UPSTREAM_ISSUES.md`) |
+| PR series | Proposed in §5; infra + backend commits all **landed locally** — **nothing pushed** |
+| Infra agent (T1–T4) | T1 heartbeat ✅ · T2 TTL guard ✅ · T3 Dockerfile ✅ · T4 PHPStan/Pint/CI ✅ |
+| Local work committed at reconciliation | insights + CORS **removals** (`c858c3d`), **observability** (`41dd860`), `UPSTREAM_PR.md` (`8f94dfa`) |
+| Verification | **289 tests / 2696 assertions** (only known season flake) · PHPStan level 5 exit 0 · Parity 59 endpoints, zero new diffs · Docker logic verified locally (no Docker to build) |
 | `jikan-me/jikan` parser fixes | Parked (`UPSTREAM_ISSUES.md` UP-01…05); not targeting at the moment |
 | Decisions made | Laravel **13** (final), **Typesense-only** search (native Scout engine), Octane RoadRunner default, PHPUnit 12, security/config-cache hardening in scope |
 
@@ -49,10 +49,13 @@ proven by a committed parity harness.
   `/docs` redirect + 1 pre-existing `users.php` parser failure). Post-fixes re-verified:
   every change introduced **zero new shape/status diffs** — the remaining ~39 endpoint
   diffs are the documented upstream parser blockers (see `UPSTREAM_ISSUES.md`).
-- **Test suite**: 280 tests / 2673 assertions; only 1–2 failures, both the same
+- **Test suite**: 289 tests / 2696 assertions; only 1–2 failures, both the same
   time-dependent `SeasonControllerTest` season tests that failed on the Lumen baseline.
+  (280 at migration green; +9 from the heartbeat + TTL-guard tests.)
 - **Live smoke**: `/`, `/v4`, genres, producers, seasons, search, Swagger UI, `/up`,
   Octane (RoadRunner) — all 200.
+- **Static analysis**: PHPStan **level 5** + 816-entry baseline → exit 0; Pint passes
+  on the formatted subset (repo-wide formatting documented as a follow-up).
 - **Config-cache safety**: `php artisan config:cache` builds and the app boots fully
   from cached config (formerly `env()` calls outside config silently nulled values).
 
@@ -135,8 +138,8 @@ up, they ship as separate PRs to `jikan-me/jikan` before/independent of the migr
 - [ ] Parity: full green on the endpoints that can run (parser blockers documented)
 - [ ] Full suite green on a clean checkout (280/2673, known flake documented)
 - [ ] Composer: `name`/`description` finalized for the fork; `config.platform` pinned
-- [ ] Dockerfile (rewritten, T3) + CI (T4 in progress) green; drop local-only tooling references
-- [ ] Observability changes (log channels, Sentry defaults, `/up`) reconciled + verified in the suite
+- [ ] Dockerfile (T3 ✅) + CI matrix (T4 ✅) green on a runner; drop local-only tooling references
+- [ ] Observability changes (log channels, Sentry defaults, `/up`) reconciled + verified in the suite (done locally)
 - [ ] Secrets: no real `APP_KEY`/tokens in source; `.env.dist` sane defaults
 - [ ] Decide Goutte-shim stance with maintainers (§4 Q3)
 - [ ] Decide `insights` + CORS removal with maintainers (§8) — fold into the deciding PR
