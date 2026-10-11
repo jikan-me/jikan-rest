@@ -215,6 +215,21 @@ Wire the native-engine config for every searchable model:
 or provide `typesenseSearchParameters()` / `typesenseCollectionSchema()`
 methods on the models and keep the collections pre-created.
 
+### Resolution (implemented) — the two blockers are fixed at the source
+
+`app/JikanApiSearchableModel.php` now implements the native-engine model
+contract:
+- `typesenseSearchParameters(): array` → returns `query_by` (from each model's
+  existing `typesenseQueryBy()`), plus `query_by_weights`/`sort_by` when the
+  legacy per-model hooks return values (native `field:direction` format).
+- `typesenseCollectionSchema(): array` → returns the model's `getCollectionSchema()`.
+
+So `SCOUT_DRIVER=typesense` works out of the box **without** the
+`model-settings` config workaround (the option remains available only if a
+per-class override is ever needed). Re-verify with the §4/§5 commands against a
+running Typesense server.
+
+---
 ## 7. Cleanup
 
 ```bash
