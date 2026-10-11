@@ -54,6 +54,7 @@ Examples:
    (default DB `jikan`, test DB `jikan_tests`).
 3. **Deps** — `tools/dev/php /opt/homebrew/bin/composer install`
 4. **Env** — `cp .env.dist .env && tools/dev/php artisan key:generate`
+   `.env.dist` is the **canonical env reference** (all ~116 keys the app reads); only `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_KEY` should differ from it.
 5. **Runtime**
    - RoadRunner (default): `tools/dev/php artisan octane:install --server=roadrunner` then
      `OCTANE_SERVER=roadrunner tools/dev/php artisan octane:start --server=roadrunner --port=8000`

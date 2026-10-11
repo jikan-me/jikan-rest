@@ -140,6 +140,15 @@ every dynamic endpoint 404 on Symfony 7, and documented an upstream scraper brea
   (bootstrap/setup/update/server/test/cibuild). Added `docs/PROVIDERS.md` — a user- and
   LLM-friendly matrix of every supported service: batteries-included vs setup-needed, env keys,
   enable steps, verification.
+- **Audit sweep re-verified after fixes**: endpoint-parity, layer-boundaries (HttpHelper), and
+  route-coverage (controllerDirs) are all **clean**; residuals are documented false-positives
+  (api-consistency `compared` filter_by sentinel — no exemption channel; versioning — v4 group is
+  correctly prefixed; route-model-binding — DTO-command params by design). `form-request-validation`
+  crash fixed **upstream** (`backend-quality-suite` #22 closes #21) — the audit now exits clean.
+- **README updated** for the Laravel 13 stack (badges, native + Docker install, providers pointer,
+  canonical test command). — a user- and
+  LLM-friendly matrix of every supported service: batteries-included vs setup-needed, env keys,
+  enable steps, verification.
 
 **Removed**
 - Lumen-only / abandoned: `pushrbx/lumen-roadrunner`, `darkaonline/swagger-lume`,
