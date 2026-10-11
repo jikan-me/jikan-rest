@@ -97,22 +97,18 @@ class InsightsController extends Controller
             ], 400);
         }
 
-//        $results = DB::table('insights')
-//            ->where('url', 'regexp',"/\/v(\d)\/{$trend}\/(\d+).*/i")
-//            ->where('timestamp', '>', time() - config('jikan.insights_max_store_time') )
-//            ->orderBy('timestamp', 'desc')
-//            ->paginate(
-//                $limit,
-//                ['*'],
-//                null,
-//                $page
-//            );
+$trendRegex = new Regex("/\/v\d+\/{$trend}\/\d+.*/i");
+        $maxStoreTime = time() - config('jikan.insights_max_store_time');
 
         $results = DB::table('insights')
-//            ->where('url', 'regexp',"/\/v(\d)\/{$trend}\/(\d+).*/i")
-            ->where('timestamp', '>', time() - config('jikan.insights_max_store_time') )
-            ->orderBy('timestamp', 'desc')
+            ->where('timestamp', '>', $maxStoreTime)
             ->raw(fn($collection) => $collection->aggregate([
+                [
+                    '$match' => [
+                        'url' => $trendRegex,
+                        'timestamp' => ['$gt' => $maxStoreTime],
+                    ],
+                ],
                 [
                     '$group' => [
                         '_id' => [
@@ -131,23 +127,19 @@ class InsightsController extends Controller
                 [
                     '$sort' => [ 'count' =>  -1 ]
                 ],
-                ['$skip' => ($page - 1) * $maxResultsPerPage],
-                ['$limit' => $maxResultsPerPage],
+                ['$skip' => ($page - 1) * $limit],
+                ['$limit' => $limit],
             ]));
-//            ->raw(fn($collection) => $collection->aggregate([
-//                [
-//                    '$group' => [
-//                        '_id' => '$_id',
-//                        'url' => ['$first' => '$url'],
-//                        'count' => [ '$sum' => 1 ]
-//                    ]
-//                ]
-//            ]));
+
+        $totalItems = DB::table('insights')
+            ->whereRaw([
+                'url' => $trendRegex,
+                'timestamp' => ['$gt' => $maxStoreTime],
+            ])
+            ->count();
 
         return new TrendsCollection(
-            new LengthAwarePaginator(
-                $results, DB::table('insights')->count(), $maxResultsPerPage, $page
-            )
+            new LengthAwarePaginator($results, $totalItems, $limit, $page)
         );
     }
 

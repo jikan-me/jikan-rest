@@ -54,7 +54,7 @@ class IncrementalIndexer extends Command
             return [];
         }
 
-        $newIdsRaw = file_get_contents("https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/${mediaType}_cache.json");
+        $newIdsRaw = file_get_contents("https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/{$mediaType}_cache.json");
         $newIdsHash = sha1($newIdsRaw);
 
         /** @noinspection PhpConditionAlreadyCheckedInspection */
@@ -76,7 +76,7 @@ class IncrementalIndexer extends Command
             {
                 foreach (["sfw", "nsfw"] as $t)
                 {
-                    $idsToFetch[$t] = array_diff($existingIds[$t], $newIds[$t]);
+                    $idsToFetch[$t] = array_diff($newIds[$t], $existingIds[$t]);
                 }
             }
 
@@ -122,7 +122,7 @@ class IncrementalIndexer extends Command
                 return;
             }
 
-            $id = $ids[$index];
+            $id = $ids[$i];
 
             $url = config('app.url') . "/v4/$mediaType/$id";
             $this->info("Indexing/Updating " . ($i + 1) . "/$idCount $url [MAL ID: $id]");
@@ -130,12 +130,18 @@ class IncrementalIndexer extends Command
             try
             {
                 $response = json_decode(file_get_contents($url), true);
-                if (!isset($response['error']) || $response['status'] == 404)
-                {
-                    continue;
-                }
 
-                $this->error("[SKIPPED] Failed to fetch $url - {$response['error']}");
+                // a 404 means the entry no longer exists upstream: skip quietly
+                if (isset($response['error']) && (int) $response['status'] !== 404)
+                {
+                    $this->error("[SKIPPED] Failed to fetch $url - {$response['error']}");
+                    $failedIds[] = $id;
+                    Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
+                }
+                else
+                {
+                    $success[] = $id;
+                }
             }
             catch (\Exception)
             {
@@ -144,8 +150,7 @@ class IncrementalIndexer extends Command
                 Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
             }
 
-            $success[] = $id;
-            Storage::put("indexer/incremental/{$mediaType}_resume.save", $index);
+            Storage::put("indexer/incremental/{$mediaType}_resume.save", $i);
         }
 
         Storage::delete("indexer/incremental/{$mediaType}_resume.save");

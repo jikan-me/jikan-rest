@@ -218,6 +218,14 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   through `repository->filter()` → `scopeFilter`. Empirically confirmed the compiled
   Mongo query for `?q=…&type=tv&status=complete` contains `status`/`type` clauses plus
   the `$text` where. No code change needed.
+- **`IncrementalIndexer` correctness** (`indexer:incremental`): loop used the resume
+  `$index` constant instead of `$i` (re-scraped one id repeatedly) and never advanced
+  the resume offset; the id-diff direction was inverted (kept removed ids instead of
+  fetching new ones); success/failed bookkeeping was inverted too. All fixed.
+- **`/v4/insights/trends`** ignored `trend` (URL regexp filter was commented out) and
+  reported the raw-insights total. Restored the per-trend `$match`, made `$skip`/`$limit`
+  honour `?limit`, and computed a trend-filtered total. (Feature is INSIGHTS-gated/WIP
+  and untested locally — needs a test when enabled.)
 - **Lazy request-handler resolution.** `DefaultMediator` no longer receives all ~65
   constructed handlers per request. A `request (DTO) class => factory closure` map (101
   entries) is built once per worker; each request constructs only the handler it
