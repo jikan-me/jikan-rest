@@ -3,9 +3,22 @@
 namespace App\Providers;
 
 use App\Events\SourceHeartbeatEvent;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use MongoDB\Collection;
+use MongoDB\Database;
 
+/**
+ * Source-heartbeat (MAL availability) storage & scoring.
+ *
+ * Heartbeat events are stored in the MongoDB "failovers" collection with an
+ * atomic insertOne per request (previously a non-atomic read-modify-write of a
+ * failovers.json file, which raced under Octane multi-worker). The failover
+ * lock and the last-downtime marker live in the "failovers_meta" collection
+ * (one small doc per key). Reads apply the recency window + size cap through
+ * pruneFails(); every accessor goes to storage per call, so there is no
+ * in-memory state that could leak between Octane requests.
+ */
 class SourceHeartbeatProvider extends ServiceProvider
 {
 
@@ -24,28 +37,97 @@ class SourceHeartbeatProvider extends ServiceProvider
 
     public static function isFailoverEnabled() : bool
     {
-        return Storage::exists('source_failover.lock');
+        return self::failoverMetaCollection()->findOne(['_id' => 'lock']) !== null;
     }
 
     public static function getLastDowntime() : int
     {
-        try {
-            return Storage::lastModified('source_failover_last_downtime');
-        } catch (\Exception $e) {
-            return 0;
+        $doc = self::failoverMetaCollection()->findOne(['_id' => 'last_downtime']);
+
+        return $doc && isset($doc['timestamp']) ? (int) $doc['timestamp'] : 0;
+    }
+
+    /**
+     * Atomically record a single heartbeat event, then drop events outside the
+     * recency window so the collection cannot grow unbounded. The read path
+     * applies the same window again via pruneFails().
+     */
+    public static function recordEvent(int $status, int $health): void
+    {
+        self::heartbeatCollection()->insertOne([
+            'timestamp' => time(),
+            'status' => $status,
+            'health' => $health,
+        ]);
+
+        self::heartbeatCollection()->deleteMany([
+            'timestamp' => ['$lt' => time() - config('jikan.source_bad_health_range')],
+        ]);
+    }
+
+    /**
+     * Read recorded heartbeat events as [timestamp, status, health] arrays
+     * (recency window + size cap applied in-memory).
+     *
+     * @return array[]
+     */
+    public static function getRecentEvents(): array
+    {
+        $cursor = self::heartbeatCollection()->find(
+            [],
+            ['projection' => ['_id' => 0, 'timestamp' => 1, 'status' => 1, 'health' => 1]]
+        );
+
+        $events = [];
+        foreach ($cursor as $doc) {
+            $events[] = [
+                (int) ($doc['timestamp'] ?? 0),
+                (int) ($doc['status'] ?? 0),
+                (int) ($doc['health'] ?? SourceHeartbeatEvent::BAD_HEALTH),
+            ];
         }
+
+        return self::pruneFails($events);
+    }
+
+    public static function setFailoverLock(int $timestamp): void
+    {
+        self::failoverMetaCollection()->updateOne(
+            ['_id' => 'lock'],
+            ['$set' => ['timestamp' => $timestamp]],
+            ['upsert' => true]
+        );
+    }
+
+    public static function clearFailoverLock(): void
+    {
+        self::failoverMetaCollection()->deleteOne(['_id' => 'lock']);
+    }
+
+    public static function getFailoverLockTimestamp(): int
+    {
+        $doc = self::failoverMetaCollection()->findOne(['_id' => 'lock']);
+
+        return $doc && isset($doc['timestamp']) ? (int) $doc['timestamp'] : 0;
+    }
+
+    public static function setLastDowntime(int $timestamp): void
+    {
+        self::failoverMetaCollection()->updateOne(
+            ['_id' => 'last_downtime'],
+            ['$set' => ['timestamp' => $timestamp]],
+            ['upsert' => true]
+        );
+    }
+
+    public static function clearEvents(): void
+    {
+        self::heartbeatCollection()->deleteMany([]);
     }
 
     public static function getHeartbeatScore() : float
     {
-        try {
-            $failsJson = Storage::get('failovers.json');
-            $fails = $failsJson ? json_decode($failsJson, true) : [];
-        } catch (\Exception $e) {
-            $fails = [];
-        }
-
-        $fails = self::pruneFails($fails);
+        $fails = self::getRecentEvents();
 
         $score = 0;
         $totalFails = count($fails);
@@ -96,5 +178,20 @@ class SourceHeartbeatProvider extends ServiceProvider
         }
 
         return "HEALTHY";
+    }
+
+    private static function heartbeatCollection(): Collection
+    {
+        return self::database()->selectCollection('failovers');
+    }
+
+    private static function failoverMetaCollection(): Collection
+    {
+        return self::database()->selectCollection('failovers_meta');
+    }
+
+    private static function database(): Database
+    {
+        return DB::connection('mongodb')->getMongoDB();
     }
 }

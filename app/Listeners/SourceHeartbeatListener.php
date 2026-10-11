@@ -4,13 +4,14 @@ namespace App\Listeners;
 
 use App\Events\SourceHeartbeatEvent;
 use App\Providers\SourceHeartbeatProvider;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
-use League\Flysystem\FileNotFoundException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+/**
+ * Records source-health heartbeats into MongoDB (atomic insertOne per event,
+ * previously a non-atomic failovers.json read-modify-write) and manages the
+ * failover lock / last-downtime markers, which live in Mongo too.
+ */
 class SourceHeartbeatListener
 {
 
@@ -27,7 +28,7 @@ class SourceHeartbeatListener
         $this->logger->pushHandler(new StreamHandler(storage_path().'/logs/source-health-monitor.log'), config('app.debug') ? Logger::DEBUG : Logger::WARNING);
 
         if (SourceHeartbeatProvider::isFailoverEnabled()) {
-            $lastFailoverLockTimestamp = $this->getLastFailoverLockTimestamp();
+            $lastFailoverLockTimestamp = SourceHeartbeatProvider::getFailoverLockTimestamp();
 
             if (config('app.debug')) {
                 $this->logger->debug('Failover is RUNNING');
@@ -60,22 +61,22 @@ class SourceHeartbeatListener
         }
     }
 
+    /**
+     * Atomically record the heartbeat event; returns the number of events
+     * currently recorded within the recency window.
+     */
     private function insertFail(SourceHeartbeatEvent $event) : int
     {
-        $fails = $this->getRecentFails();
-        $fails[] = [time(), $event->status, $event->health];
+        SourceHeartbeatProvider::recordEvent($event->status, $event->health);
 
-        $failsJson = json_encode($fails);
-        Storage::put('failovers.json', $failsJson);
-
-        return count($fails);
+        return count(SourceHeartbeatProvider::getRecentEvents());
     }
 
     private function enableFailover()
     {
-        // create lock file
-        Storage::put('source_failover.lock', '');
-        Storage::put('source_failover_last_downtime', time());
+        // Atomically upsert the lock + last-downtime markers in Mongo.
+        SourceHeartbeatProvider::setFailoverLock(time());
+        SourceHeartbeatProvider::setLastDowntime(time());
 
         if (config('app.debug')) {
             $this->logger->debug('Failover ENABLED');
@@ -84,11 +85,10 @@ class SourceHeartbeatListener
 
     private function disableFailover()
     {
-        // delete lock file
-        Storage::delete('source_failover.lock');
-
-        // Delete meta
-        Storage::delete('failovers.json');
+        // Remove the lock and the recorded events (the old file scheme dropped
+        // both failovers.json and the lock file when failover was disabled).
+        SourceHeartbeatProvider::clearFailoverLock();
+        SourceHeartbeatProvider::clearEvents();
     }
 
     private function attemptDisableFailover(): bool
@@ -108,24 +108,9 @@ class SourceHeartbeatListener
         return false;
     }
 
-    private function getLastFailoverLockTimestamp(): int
-    {
-        try {
-            return Storage::lastModified('source_failover.lock');
-        } catch (\Exception $e) {
-            return 0;
-        }
-    }
-
     private function getRecentFails()
     {
-        try {
-            $failsJson = Storage::get('failovers.json');
-            $fails = json_decode($failsJson, true);
-        } catch (\Exception $e) {
-        }
-
-        return SourceHeartbeatProvider::pruneFails($fails ?? []);
+        return SourceHeartbeatProvider::getRecentEvents();
     }
 
     private function getSuccessfulRequestsScore() : float
