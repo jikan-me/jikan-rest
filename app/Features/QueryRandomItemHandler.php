@@ -27,6 +27,12 @@ abstract class QueryRandomItemHandler implements RequestHandler
     public function handle($request)
     {
         $results = $this->repository->random();
+
+        if ($results->isEmpty()) {
+            // no entries indexed -> 404 instead of a null-crash in the resource
+            abort(404);
+        }
+
         return $this->resource($results);
     }
 

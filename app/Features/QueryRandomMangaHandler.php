@@ -24,9 +24,14 @@ final class QueryRandomMangaHandler implements RequestHandler
         $sfwParam = $request->sfw === $o ? false : $request->sfw;
         $unapprovedParam = $request->unapproved === $o ? false : $request->unapproved;
 
-        return new MangaResource(
-            $queryable->random(1, $sfwParam, $unapprovedParam)->first()
-        );
+        $manga = $queryable->random(1, $sfwParam, $unapprovedParam)->first();
+
+        if ($manga === null) {
+            // no manga indexed -> 404 instead of a null-crash in the resource
+            abort(404);
+        }
+
+        return new MangaResource($manga);
     }
 
     /**
