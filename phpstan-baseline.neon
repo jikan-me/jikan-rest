@@ -1,108 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$aired\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$airing\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$episodes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$explicit_genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$licensors\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$producers\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$rating\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$source\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$studios\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$synopsis\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$title_english\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$title_japanese\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Anime.php
-
-		-
-			message: '#^Access to an undefined property App\\Anime\:\:\$type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Anime.php
-
-		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\|Laravel\\Scout\\Builder\:\:exceptItemsWithAdultRating\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -124,6 +22,126 @@ parameters:
 			message: '#^Call to function is_null\(\) with mixed will always evaluate to false\.$#'
 			identifier: function.impossibleType
 			count: 2
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$aired with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$broadcast with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$demographics with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$ending_themes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$explicit_genres with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$external_links with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$genres with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$images with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$licensors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$opening_themes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$producers with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$related with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$relations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$streaming with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$studios with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$theme with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$themes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$title_synonyms with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$titles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$trailer with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
 			path: app/Anime.php
 
 		-
@@ -735,18 +753,6 @@ parameters:
 		-
 			message: '#^Property App\\Anime\:\:\$hidden type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Unable to resolve the template type TKey in call to function collect$#'
-			identifier: argument.templateType
-			count: 1
-			path: app/Anime.php
-
-		-
-			message: '#^Unable to resolve the template type TValue in call to function collect$#'
-			identifier: argument.templateType
 			count: 1
 			path: app/Anime.php
 
@@ -5797,235 +5803,7 @@ parameters:
 			path: app/Http/Resources/V4/AnimeEpisodesResource.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$aired\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$airing\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$background\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$broadcast\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$demographics\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$duration\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$ending_themes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$episodes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$explicit_genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$external_links\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$licensors\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$members\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$opening_themes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$popularity\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$producers\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$rank\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$rating\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$related\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$score\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$scored_by\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$season\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$source\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
 			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$streaming_links\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$studios\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$synopsis\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$themes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$title_english\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$title_japanese\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$title_synonyms\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$trailer\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$year\.$#'
 			identifier: property.notFound
 			count: 1
 			path: app/Http/Resources/V4/AnimeFullResource.php
@@ -6041,210 +5819,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/AnimeRelationsResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$aired\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$airing\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$background\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$broadcast\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$demographics\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$duration\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$episodes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$explicit_genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$licensors\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$members\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$popularity\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$producers\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$rank\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$rating\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$score\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$scored_by\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$season\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$source\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$studios\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$synopsis\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$themes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$title_english\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$title_japanese\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$title_synonyms\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$trailer\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeResource\:\:\$year\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\AnimeResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6631,180 +6205,6 @@ parameters:
 			path: app/Http/Resources/V4/MangaCollection.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$authors\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$background\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$chapters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$demographics\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$explicit_genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$external_links\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$members\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$popularity\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$published\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$publishing\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$rank\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$related\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$score\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$scored_by\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$serializations\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$synopsis\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$themes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$title_english\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$title_japanese\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$title_synonyms\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaFullResource\:\:\$volumes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaFullResource.php
-
-		-
 			message: '#^Method App\\Http\\Resources\\V4\\MangaFullResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -6815,168 +6215,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/MangaRelationsResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$authors\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$background\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$chapters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$demographics\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$explicit_genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$members\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$popularity\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$published\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$publishing\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$rank\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$score\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$scored_by\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$serializations\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$synopsis\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$themes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$title_english\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$title_japanese\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$title_synonyms\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MangaResource\:\:\$volumes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MangaResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\MangaResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -7981,90 +7219,6 @@ parameters:
 			path: app/Magazine.php
 
 		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$chapters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$explicit_genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$genres\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$magazines\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$published\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$publishing\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$synopsis\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$title\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$title_english\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$title_japanese\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$type\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Access to an undefined property App\\Manga\:\:\$volumes\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Manga.php
-
-		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\|Laravel\\Scout\\Builder\:\:exceptItemsWithAdultRating\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -8079,6 +7233,78 @@ parameters:
 		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\|Laravel\\Scout\\Builder\:\:onlyKidsItems\(\)\.$#'
 			identifier: method.notFound
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$authors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$demographics with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$explicit_genres with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$external_links with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$genres with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$images with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$magazines with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$published with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$related with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$serializations with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$title_synonyms with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Class App\\Manga has PHPDoc tag @property for property \$titles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Manga.php
 
@@ -8595,18 +7821,6 @@ parameters:
 		-
 			message: '#^Property App\\Manga\:\:\$hidden type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Unable to resolve the template type TKey in call to function collect$#'
-			identifier: argument.templateType
-			count: 1
-			path: app/Manga.php
-
-		-
-			message: '#^Unable to resolve the template type TValue in call to function collect$#'
-			identifier: argument.templateType
 			count: 1
 			path: app/Manga.php
 

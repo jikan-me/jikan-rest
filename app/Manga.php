@@ -14,6 +14,45 @@ use Jikan\Jikan;
 use Jikan\Request\Manga\MangaRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Mongo-backed manga document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $url
+ * @property string $title
+ * @property string|null $title_english
+ * @property string|null $title_japanese
+ * @property array $title_synonyms
+ * @property array $titles
+ * @property array $images
+ * @property string $type
+ * @property string|null $source
+ * @property int|null $chapters
+ * @property int|null $volumes
+ * @property string $status
+ * @property bool|null $publishing
+ * @property array|null $published
+ * @property string|null $duration
+ * @property float|null $score
+ * @property int|null $scored_by
+ * @property int|null $rank
+ * @property int|null $popularity
+ * @property int|null $members
+ * @property int|null $favorites
+ * @property string|null $synopsis
+ * @property string|null $background
+ * @property array $related
+ * @property array $authors
+ * @property array $serializations
+ * @property array $magazines
+ * @property array $genres
+ * @property array $explicit_genres
+ * @property array $demographics
+ * @property array|null $external_links
+ * @property \MongoDB\BSON\UTCDateTime|null $createdAt
+ * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ */
 class Manga extends JikanApiSearchableModel
 {
     use HasFactory, MediaFilters, FilteredByLetter;

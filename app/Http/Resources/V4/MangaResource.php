@@ -4,6 +4,7 @@ namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/** @mixin \App\Manga */
 class MangaResource extends JsonResource
 {
     /**

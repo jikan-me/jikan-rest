@@ -16,6 +16,57 @@ use Jikan\Request\Anime\AnimeRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Model\BSONDocument;
 
+/**
+ * Mongo-backed anime document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $url
+ * @property string $title
+ * @property string|null $title_english
+ * @property string|null $title_japanese
+ * @property array $title_synonyms
+ * @property array $titles
+ * @property array $images
+ * @property string $type
+ * @property string|null $source
+ * @property int|null $episodes
+ * @property string $status
+ * @property bool|null $airing
+ * @property array|null $aired
+ * @property string|null $duration
+ * @property string|null $rating
+ * @property float|null $score
+ * @property int|null $scored_by
+ * @property int|null $rank
+ * @property int|null $popularity
+ * @property int|null $members
+ * @property int|null $favorites
+ * @property string|null $synopsis
+ * @property string|null $background
+ * @property string|null $premiered
+ * @property array|null $broadcast
+ * @property array $related
+ * @property array $producers
+ * @property array $licensors
+ * @property array $studios
+ * @property array $genres
+ * @property array $explicit_genres
+ * @property array $themes
+ * @property array $demographics
+ * @property array $opening_themes
+ * @property array $ending_themes
+ * @property array|null $trailer
+ * @property array|null $streaming
+ * @property array|null $external_links
+ * @property array|null $theme
+ * @property array|null $relations
+ * @property bool|null $approved
+ * @property string $season
+ * @property int|null $year
+ * @property \MongoDB\BSON\UTCDateTime|null $createdAt
+ * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ */
 class Anime extends JikanApiSearchableModel
 {
     use HasFactory, MediaFilters, FilteredByLetter;
