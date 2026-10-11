@@ -1,12 +1,15 @@
 {
-  "_readme": "Accepted, deliberate exceptions to the audits — never a place to silence a finding you have not actually decided to accept. Two shipped audits consult this file: audit_error_handling.py reads errorHandling.intentionalDeadStates, and audit_api_consistency.py reads apiConsistency (hardBakedStrings, semanticsExempt); check the relevant script's docstring before adding a category it does not expect. Keep this file small: an exceptions list that grows without review is an audit that has quietly stopped auditing.",
+  "_readme": "Accepted, deliberate exceptions to the audits \u2014 never a place to silence a finding you have not actually decided to accept. Two shipped audits consult this file: audit_error_handling.py reads errorHandling.intentionalDeadStates, and audit_api_consistency.py reads apiConsistency (hardBakedStrings, semanticsExempt); check the relevant script's docstring before adding a category it does not expect. Keep this file small: an exceptions list that grows without review is an audit that has quietly stopped auditing.",
   "errorHandling": {
-    "_comment": "Consumed by bin/audit_error_handling.py. intentionalDeadStates maps a failure-state CLASS NAME this project has retired on purpose to the reason — a dead state with a documented decision, not a finding to hide.",
+    "_comment": "Consumed by bin/audit_error_handling.py. intentionalDeadStates maps a failure-state CLASS NAME this project has retired on purpose to the reason \u2014 a dead state with a documented decision, not a finding to hide.",
     "intentionalDeadStates": {}
   },
   "apiConsistency": {
     "_comment": "Consumed by bin/audit_api_consistency.py. hardBakedStrings: hardcoded literal -> reason the audit must accept it. semanticsExempt: repo-relative path or file stem -> reason, for a file exempt from the semantics-provenance check. Every entry carries its reason; a bare name is not an exemption.",
-    "hardBakedStrings": {},
+    "hardBakedStrings": {
+      "This version is discontinued. Please check the documentation for supported version(s).": "Deliberate v1/v2/v3 discontinued-stub message (public API contract).",
+      " && ": "Typesense filter_by sentinel meaning 'no filter' \u2014 see TypeSenseScoutSearchService:50-53."
+    },
     "semanticsExempt": {}
   }
 }

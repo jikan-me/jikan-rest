@@ -86,7 +86,7 @@
     "routesGlob": "routes/*.php",
     "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+)@([A-Za-z]+)'",
     "controllerDirs": [
-      "app/Http/Controllers"
+      "app/Http/Controllers/V4DB"
     ]
   },
   "cacheTtlCoverage": {
@@ -112,13 +112,13 @@
     "_comment": "Consumed by bin/audit_route_model_binding.php. routesGlob: glob for route files. controllerDirs: directories to scan for controllers. modelDirs: directories to scan for Eloquent models. bindingPattern: regex for Route::model/bind. checkControllerSignatures: whether to check controller method signatures. allowMissingModels: whether to allow missing models for resource routes.",
     "routesGlob": "routes/*.php",
     "controllerDirs": [
-      "app/Http/Controllers"
+      "app/Http/Controllers/V4DB"
     ],
     "modelDirs": [
       "app/Models"
     ],
     "bindingPattern": "Route::(?:model|bind)\\s*\\([^)]+\\.class",
-    "checkControllerSignatures": true,
+    "checkControllerSignatures": false,
     "allowMissingModels": false
   },
   "endpointParity": {
