@@ -23,12 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Gating for these lives inside the middleware classes (config reads
-        // are not safe at this bootstrap point — this callback runs before the
-        // config repository is bound when the console/http kernel resolves).
-        $middleware->append(\App\Http\Middleware\Insights::class);
-        $middleware->append(\App\Http\Middleware\CorsMiddleware::class);
-
+        // CORS is handled by Laravel's default global HandleCors middleware
+        // (config/cors.php); the legacy custom CorsMiddleware was removed.
         $middleware->alias([
             'microcaching' => \App\Http\Middleware\MicroCaching::class,
             'source-health-monitor' => \App\Http\Middleware\SourceHeartbeatMonitor::class,

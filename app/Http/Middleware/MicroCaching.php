@@ -16,7 +16,6 @@ class MicroCaching
         'RandomController@characters',
         'RandomController@people',
         'RandomController@users',
-        'InsightsController@main'
     ];
 
     private readonly bool $isEnabled;

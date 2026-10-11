@@ -1,422 +1,415 @@
 {
-    "get_root": {
-        "method": "GET",
-        "path": "/",
-        "status": 200,
-        "bytes": 584,
-        "error": null
-    },
-    "get_v4": {
-        "method": "GET",
-        "path": "/v4",
-        "status": 200,
-        "bytes": 584,
-        "error": null
-    },
-    "get_v1": {
-        "method": "GET",
-        "path": "/v1",
-        "status": 400,
-        "bytes": 149,
-        "error": null
-    },
-    "get_v2": {
-        "method": "GET",
-        "path": "/v2",
-        "status": 400,
-        "bytes": 149,
-        "error": null
-    },
-    "get_v3": {
-        "method": "GET",
-        "path": "/v3",
-        "status": 400,
-        "bytes": 149,
-        "error": null
-    },
-    "get_docs": {
-        "method": "GET",
-        "path": "/docs",
-        "status": 200,
-        "bytes": 371678,
-        "error": null
-    },
-    "get_v4_anime_1": {
-        "method": "GET",
-        "path": "/v4/anime/1",
-        "status": 200,
-        "bytes": 5152,
-        "error": null
-    },
-    "get_v4_anime_1_full": {
-        "method": "GET",
-        "path": "/v4/anime/1/full",
-        "status": 200,
-        "bytes": 6283,
-        "error": null
-    },
-    "get_v4_anime_1_characters": {
-        "method": "GET",
-        "path": "/v4/anime/1/characters",
-        "status": 200,
-        "bytes": 225752,
-        "error": null
-    },
-    "get_v4_anime_1_staff": {
-        "method": "GET",
-        "path": "/v4/anime/1/staff",
-        "status": 200,
-        "bytes": 34220,
-        "error": null
-    },
-    "get_v4_anime_1_episodes": {
-        "method": "GET",
-        "path": "/v4/anime/1/episodes",
-        "status": 200,
-        "bytes": 10146,
-        "error": null
-    },
-    "get_v4_anime_1_episodes_1": {
-        "method": "GET",
-        "path": "/v4/anime/1/episodes/1",
-        "status": 200,
-        "bytes": 1891,
-        "error": null
-    },
-    "get_v4_anime_1_news": {
-        "method": "GET",
-        "path": "/v4/anime/1/news",
-        "status": 200,
-        "bytes": 6230,
-        "error": null
-    },
-    "get_v4_anime_1_forum": {
-        "method": "GET",
-        "path": "/v4/anime/1/forum",
-        "status": 200,
-        "bytes": 7219,
-        "error": null
-    },
-    "get_v4_anime_1_videos": {
-        "method": "GET",
-        "path": "/v4/anime/1/videos",
-        "status": 200,
-        "bytes": 4819,
-        "error": null
-    },
-    "get_v4_anime_1_videos_episodes": {
-        "method": "GET",
-        "path": "/v4/anime/1/videos/episodes",
-        "status": 200,
-        "bytes": 4529,
-        "error": null
-    },
-    "get_v4_anime_1_pictures": {
-        "method": "GET",
-        "path": "/v4/anime/1/pictures",
-        "status": 200,
-        "bytes": 6974,
-        "error": null
-    },
-    "get_v4_anime_1_statistics": {
-        "method": "GET",
-        "path": "/v4/anime/1/statistics",
-        "status": 200,
-        "bytes": 566,
-        "error": null
-    },
-    "get_v4_anime_1_moreinfo": {
-        "method": "GET",
-        "path": "/v4/anime/1/moreinfo",
-        "status": 200,
-        "bytes": 127,
-        "error": null
-    },
-    "get_v4_anime_1_recommendations": {
-        "method": "GET",
-        "path": "/v4/anime/1/recommendations",
-        "status": 200,
-        "bytes": 152433,
-        "error": null
-    },
-    "get_v4_anime_1_userupdates": {
-        "method": "GET",
-        "path": "/v4/anime/1/userupdates",
-        "status": 200,
-        "bytes": 33527,
-        "error": null
-    },
-    "get_v4_anime_1_reviews": {
-        "method": "GET",
-        "path": "/v4/anime/1/reviews",
-        "status": 200,
-        "bytes": 128550,
-        "error": null
-    },
-    "get_v4_anime_1_relations": {
-        "method": "GET",
-        "path": "/v4/anime/1/relations",
-        "status": 200,
-        "bytes": 835,
-        "error": null
-    },
-    "get_v4_anime_1_themes": {
-        "method": "GET",
-        "path": "/v4/anime/1/themes",
-        "status": 200,
-        "bytes": 259,
-        "error": null
-    },
-    "get_v4_anime_1_external": {
-        "method": "GET",
-        "path": "/v4/anime/1/external",
-        "status": 200,
-        "bytes": 11,
-        "error": null
-    },
-    "get_v4_anime_1_streaming": {
-        "method": "GET",
-        "path": "/v4/anime/1/streaming",
-        "status": 200,
-        "bytes": 11,
-        "error": null
-    },
-    "get_v4_anime_q_cowboy_limit_3": {
-        "method": "GET",
-        "path": "/v4/anime?q=cowboy&limit=3",
-        "status": 200,
-        "bytes": 9351,
-        "error": null
-    },
-    "get_v4_manga_1": {
-        "method": "GET",
-        "path": "/v4/manga/1",
-        "status": 200,
-        "bytes": 3915,
-        "error": null
-    },
-    "get_v4_manga_1_full": {
-        "method": "GET",
-        "path": "/v4/manga/1/full",
-        "status": 200,
-        "bytes": 4305,
-        "error": null
-    },
-    "get_v4_manga_1_characters": {
-        "method": "GET",
-        "path": "/v4/manga/1/characters",
-        "status": 200,
-        "bytes": 82696,
-        "error": null
-    },
-    "get_v4_manga_1_statistics": {
-        "method": "GET",
-        "path": "/v4/manga/1/statistics",
-        "status": 200,
-        "bytes": 547,
-        "error": null
-    },
-    "get_v4_manga_1_relations": {
-        "method": "GET",
-        "path": "/v4/manga/1/relations",
-        "status": 200,
-        "bytes": 370,
-        "error": null
-    },
-    "get_v4_manga_1_external": {
-        "method": "GET",
-        "path": "/v4/manga/1/external",
-        "status": 200,
-        "bytes": 11,
-        "error": null
-    },
-    "get_v4_characters_1": {
-        "method": "GET",
-        "path": "/v4/characters/1",
-        "status": 200,
-        "bytes": 2388,
-        "error": null
-    },
-    "get_v4_characters_1_full": {
-        "method": "GET",
-        "path": "/v4/characters/1/full",
-        "status": 200,
-        "bytes": 10047,
-        "error": null
-    },
-    "get_v4_characters_1_anime": {
-        "method": "GET",
-        "path": "/v4/characters/1/anime",
-        "status": 200,
-        "bytes": 2591,
-        "error": null
-    },
-    "get_v4_characters_1_voices": {
-        "method": "GET",
-        "path": "/v4/characters/1/voices",
-        "status": 200,
-        "bytes": 3345,
-        "error": null
-    },
-    "get_v4_people_1": {
-        "method": "GET",
-        "path": "/v4/people/1",
-        "status": 200,
-        "bytes": 472,
-        "error": null
-    },
-    "get_v4_people_1_full": {
-        "method": "GET",
-        "path": "/v4/people/1/full",
-        "status": 200,
-        "bytes": 777798,
-        "error": null
-    },
-    "get_v4_seasons": {
-        "method": "GET",
-        "path": "/v4/seasons",
-        "status": 200,
-        "bytes": 6713,
-        "error": null
-    },
-    "get_v4_seasons_now": {
-        "method": "GET",
-        "path": "/v4/seasons/now",
-        "status": 200,
-        "bytes": 90471,
-        "error": null
-    },
-    "get_v4_seasons_upcoming": {
-        "method": "GET",
-        "path": "/v4/seasons/upcoming",
-        "status": 200,
-        "bytes": 75269,
-        "error": null
-    },
-    "get_v4_seasons_2024_winter": {
-        "method": "GET",
-        "path": "/v4/seasons/2024/winter",
-        "status": 200,
-        "bytes": 131,
-        "error": null
-    },
-    "get_v4_schedules": {
-        "method": "GET",
-        "path": "/v4/schedules",
-        "status": 200,
-        "bytes": 58625,
-        "error": null
-    },
-    "get_v4_producers": {
-        "method": "GET",
-        "path": "/v4/producers",
-        "status": 200,
-        "bytes": 20107,
-        "error": null
-    },
-    "get_v4_magazines": {
-        "method": "GET",
-        "path": "/v4/magazines",
-        "status": 200,
-        "bytes": 3037,
-        "error": null
-    },
-    "get_v4_genres_anime": {
-        "method": "GET",
-        "path": "/v4/genres/anime",
-        "status": 200,
-        "bytes": 8444,
-        "error": null
-    },
-    "get_v4_genres_manga": {
-        "method": "GET",
-        "path": "/v4/genres/manga",
-        "status": 200,
-        "bytes": 8067,
-        "error": null
-    },
-    "get_v4_top_anime": {
-        "method": "GET",
-        "path": "/v4/top/anime",
-        "status": 200,
-        "bytes": 111711,
-        "error": null
-    },
-    "get_v4_top_manga": {
-        "method": "GET",
-        "path": "/v4/top/manga",
-        "status": 200,
-        "bytes": 102751,
-        "error": null
-    },
-    "get_v4_top_characters": {
-        "method": "GET",
-        "path": "/v4/top/characters",
-        "status": 200,
-        "bytes": 2510,
-        "error": null
-    },
-    "get_v4_top_people": {
-        "method": "GET",
-        "path": "/v4/top/people",
-        "status": 200,
-        "bytes": 594,
-        "error": null
-    },
-    "get_v4_top_reviews": {
-        "method": "GET",
-        "path": "/v4/top/reviews",
-        "status": 200,
-        "bytes": 201182,
-        "error": null
-    },
-    "get_v4_clubs": {
-        "method": "GET",
-        "path": "/v4/clubs",
-        "status": 200,
-        "bytes": 70,
-        "error": null
-    },
-    "get_v4_reviews_anime": {
-        "method": "GET",
-        "path": "/v4/reviews/anime",
-        "status": 200,
-        "bytes": 208844,
-        "error": null
-    },
-    "get_v4_recommendations_anime": {
-        "method": "GET",
-        "path": "/v4/recommendations/anime",
-        "status": 200,
-        "bytes": 171184,
-        "error": null
-    },
-    "get_v4_watch_episodes": {
-        "method": "GET",
-        "path": "/v4/watch/episodes",
-        "status": 200,
-        "bytes": 5734,
-        "error": null
-    },
-    "get_v4_watch_promos": {
-        "method": "GET",
-        "path": "/v4/watch/promos",
-        "status": 200,
-        "bytes": 28769,
-        "error": null
-    },
-    "get_v4_users_recentlyonline": {
-        "method": "GET",
-        "path": "/v4/users/recentlyonline",
-        "status": 500,
-        "bytes": 1175,
-        "error": null
-    },
-    "get_v4_insights": {
-        "method": "GET",
-        "path": "/v4/insights",
-        "status": 403,
-        "bytes": 102,
-        "error": null
-    }
+  "get_root": {
+    "method": "GET",
+    "path": "/",
+    "status": 200,
+    "bytes": 584,
+    "error": null
+  },
+  "get_v4": {
+    "method": "GET",
+    "path": "/v4",
+    "status": 200,
+    "bytes": 584,
+    "error": null
+  },
+  "get_v1": {
+    "method": "GET",
+    "path": "/v1",
+    "status": 400,
+    "bytes": 149,
+    "error": null
+  },
+  "get_v2": {
+    "method": "GET",
+    "path": "/v2",
+    "status": 400,
+    "bytes": 149,
+    "error": null
+  },
+  "get_v3": {
+    "method": "GET",
+    "path": "/v3",
+    "status": 400,
+    "bytes": 149,
+    "error": null
+  },
+  "get_docs": {
+    "method": "GET",
+    "path": "/docs",
+    "status": 200,
+    "bytes": 371678,
+    "error": null
+  },
+  "get_v4_anime_1": {
+    "method": "GET",
+    "path": "/v4/anime/1",
+    "status": 200,
+    "bytes": 5152,
+    "error": null
+  },
+  "get_v4_anime_1_full": {
+    "method": "GET",
+    "path": "/v4/anime/1/full",
+    "status": 200,
+    "bytes": 6283,
+    "error": null
+  },
+  "get_v4_anime_1_characters": {
+    "method": "GET",
+    "path": "/v4/anime/1/characters",
+    "status": 200,
+    "bytes": 225752,
+    "error": null
+  },
+  "get_v4_anime_1_staff": {
+    "method": "GET",
+    "path": "/v4/anime/1/staff",
+    "status": 200,
+    "bytes": 34220,
+    "error": null
+  },
+  "get_v4_anime_1_episodes": {
+    "method": "GET",
+    "path": "/v4/anime/1/episodes",
+    "status": 200,
+    "bytes": 10146,
+    "error": null
+  },
+  "get_v4_anime_1_episodes_1": {
+    "method": "GET",
+    "path": "/v4/anime/1/episodes/1",
+    "status": 200,
+    "bytes": 1891,
+    "error": null
+  },
+  "get_v4_anime_1_news": {
+    "method": "GET",
+    "path": "/v4/anime/1/news",
+    "status": 200,
+    "bytes": 6230,
+    "error": null
+  },
+  "get_v4_anime_1_forum": {
+    "method": "GET",
+    "path": "/v4/anime/1/forum",
+    "status": 200,
+    "bytes": 7219,
+    "error": null
+  },
+  "get_v4_anime_1_videos": {
+    "method": "GET",
+    "path": "/v4/anime/1/videos",
+    "status": 200,
+    "bytes": 4819,
+    "error": null
+  },
+  "get_v4_anime_1_videos_episodes": {
+    "method": "GET",
+    "path": "/v4/anime/1/videos/episodes",
+    "status": 200,
+    "bytes": 4529,
+    "error": null
+  },
+  "get_v4_anime_1_pictures": {
+    "method": "GET",
+    "path": "/v4/anime/1/pictures",
+    "status": 200,
+    "bytes": 6974,
+    "error": null
+  },
+  "get_v4_anime_1_statistics": {
+    "method": "GET",
+    "path": "/v4/anime/1/statistics",
+    "status": 200,
+    "bytes": 566,
+    "error": null
+  },
+  "get_v4_anime_1_moreinfo": {
+    "method": "GET",
+    "path": "/v4/anime/1/moreinfo",
+    "status": 200,
+    "bytes": 127,
+    "error": null
+  },
+  "get_v4_anime_1_recommendations": {
+    "method": "GET",
+    "path": "/v4/anime/1/recommendations",
+    "status": 200,
+    "bytes": 152433,
+    "error": null
+  },
+  "get_v4_anime_1_userupdates": {
+    "method": "GET",
+    "path": "/v4/anime/1/userupdates",
+    "status": 200,
+    "bytes": 33527,
+    "error": null
+  },
+  "get_v4_anime_1_reviews": {
+    "method": "GET",
+    "path": "/v4/anime/1/reviews",
+    "status": 200,
+    "bytes": 128550,
+    "error": null
+  },
+  "get_v4_anime_1_relations": {
+    "method": "GET",
+    "path": "/v4/anime/1/relations",
+    "status": 200,
+    "bytes": 835,
+    "error": null
+  },
+  "get_v4_anime_1_themes": {
+    "method": "GET",
+    "path": "/v4/anime/1/themes",
+    "status": 200,
+    "bytes": 259,
+    "error": null
+  },
+  "get_v4_anime_1_external": {
+    "method": "GET",
+    "path": "/v4/anime/1/external",
+    "status": 200,
+    "bytes": 11,
+    "error": null
+  },
+  "get_v4_anime_1_streaming": {
+    "method": "GET",
+    "path": "/v4/anime/1/streaming",
+    "status": 200,
+    "bytes": 11,
+    "error": null
+  },
+  "get_v4_anime_q_cowboy_limit_3": {
+    "method": "GET",
+    "path": "/v4/anime?q=cowboy&limit=3",
+    "status": 200,
+    "bytes": 9351,
+    "error": null
+  },
+  "get_v4_manga_1": {
+    "method": "GET",
+    "path": "/v4/manga/1",
+    "status": 200,
+    "bytes": 3915,
+    "error": null
+  },
+  "get_v4_manga_1_full": {
+    "method": "GET",
+    "path": "/v4/manga/1/full",
+    "status": 200,
+    "bytes": 4305,
+    "error": null
+  },
+  "get_v4_manga_1_characters": {
+    "method": "GET",
+    "path": "/v4/manga/1/characters",
+    "status": 200,
+    "bytes": 82696,
+    "error": null
+  },
+  "get_v4_manga_1_statistics": {
+    "method": "GET",
+    "path": "/v4/manga/1/statistics",
+    "status": 200,
+    "bytes": 547,
+    "error": null
+  },
+  "get_v4_manga_1_relations": {
+    "method": "GET",
+    "path": "/v4/manga/1/relations",
+    "status": 200,
+    "bytes": 370,
+    "error": null
+  },
+  "get_v4_manga_1_external": {
+    "method": "GET",
+    "path": "/v4/manga/1/external",
+    "status": 200,
+    "bytes": 11,
+    "error": null
+  },
+  "get_v4_characters_1": {
+    "method": "GET",
+    "path": "/v4/characters/1",
+    "status": 200,
+    "bytes": 2388,
+    "error": null
+  },
+  "get_v4_characters_1_full": {
+    "method": "GET",
+    "path": "/v4/characters/1/full",
+    "status": 200,
+    "bytes": 10047,
+    "error": null
+  },
+  "get_v4_characters_1_anime": {
+    "method": "GET",
+    "path": "/v4/characters/1/anime",
+    "status": 200,
+    "bytes": 2591,
+    "error": null
+  },
+  "get_v4_characters_1_voices": {
+    "method": "GET",
+    "path": "/v4/characters/1/voices",
+    "status": 200,
+    "bytes": 3345,
+    "error": null
+  },
+  "get_v4_people_1": {
+    "method": "GET",
+    "path": "/v4/people/1",
+    "status": 200,
+    "bytes": 472,
+    "error": null
+  },
+  "get_v4_people_1_full": {
+    "method": "GET",
+    "path": "/v4/people/1/full",
+    "status": 200,
+    "bytes": 777798,
+    "error": null
+  },
+  "get_v4_seasons": {
+    "method": "GET",
+    "path": "/v4/seasons",
+    "status": 200,
+    "bytes": 6713,
+    "error": null
+  },
+  "get_v4_seasons_now": {
+    "method": "GET",
+    "path": "/v4/seasons/now",
+    "status": 200,
+    "bytes": 90471,
+    "error": null
+  },
+  "get_v4_seasons_upcoming": {
+    "method": "GET",
+    "path": "/v4/seasons/upcoming",
+    "status": 200,
+    "bytes": 75269,
+    "error": null
+  },
+  "get_v4_seasons_2024_winter": {
+    "method": "GET",
+    "path": "/v4/seasons/2024/winter",
+    "status": 200,
+    "bytes": 131,
+    "error": null
+  },
+  "get_v4_schedules": {
+    "method": "GET",
+    "path": "/v4/schedules",
+    "status": 200,
+    "bytes": 58625,
+    "error": null
+  },
+  "get_v4_producers": {
+    "method": "GET",
+    "path": "/v4/producers",
+    "status": 200,
+    "bytes": 20107,
+    "error": null
+  },
+  "get_v4_magazines": {
+    "method": "GET",
+    "path": "/v4/magazines",
+    "status": 200,
+    "bytes": 3037,
+    "error": null
+  },
+  "get_v4_genres_anime": {
+    "method": "GET",
+    "path": "/v4/genres/anime",
+    "status": 200,
+    "bytes": 8444,
+    "error": null
+  },
+  "get_v4_genres_manga": {
+    "method": "GET",
+    "path": "/v4/genres/manga",
+    "status": 200,
+    "bytes": 8067,
+    "error": null
+  },
+  "get_v4_top_anime": {
+    "method": "GET",
+    "path": "/v4/top/anime",
+    "status": 200,
+    "bytes": 111711,
+    "error": null
+  },
+  "get_v4_top_manga": {
+    "method": "GET",
+    "path": "/v4/top/manga",
+    "status": 200,
+    "bytes": 102751,
+    "error": null
+  },
+  "get_v4_top_characters": {
+    "method": "GET",
+    "path": "/v4/top/characters",
+    "status": 200,
+    "bytes": 2510,
+    "error": null
+  },
+  "get_v4_top_people": {
+    "method": "GET",
+    "path": "/v4/top/people",
+    "status": 200,
+    "bytes": 594,
+    "error": null
+  },
+  "get_v4_top_reviews": {
+    "method": "GET",
+    "path": "/v4/top/reviews",
+    "status": 200,
+    "bytes": 201182,
+    "error": null
+  },
+  "get_v4_clubs": {
+    "method": "GET",
+    "path": "/v4/clubs",
+    "status": 200,
+    "bytes": 70,
+    "error": null
+  },
+  "get_v4_reviews_anime": {
+    "method": "GET",
+    "path": "/v4/reviews/anime",
+    "status": 200,
+    "bytes": 208844,
+    "error": null
+  },
+  "get_v4_recommendations_anime": {
+    "method": "GET",
+    "path": "/v4/recommendations/anime",
+    "status": 200,
+    "bytes": 171184,
+    "error": null
+  },
+  "get_v4_watch_episodes": {
+    "method": "GET",
+    "path": "/v4/watch/episodes",
+    "status": 200,
+    "bytes": 5734,
+    "error": null
+  },
+  "get_v4_watch_promos": {
+    "method": "GET",
+    "path": "/v4/watch/promos",
+    "status": 200,
+    "bytes": 28769,
+    "error": null
+  },
+  "get_v4_users_recentlyonline": {
+    "method": "GET",
+    "path": "/v4/users/recentlyonline",
+    "status": 500,
+    "bytes": 1175,
+    "error": null
+  }
 }

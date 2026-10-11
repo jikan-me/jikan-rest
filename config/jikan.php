@@ -14,10 +14,7 @@ return [
     'github_reporting' => (bool) env('GITHUB_REPORTING', true),
     'github_rest' => env('GITHUB_REST', 'jikan-me/jikan-rest'),
     'github_api' => env('GITHUB_API', 'jikan-me/jikan'),
-    'insights_enabled' => (bool) env('INSIGHTS', false),
-    'insights_max_store_time' => (int) env('INSIGHTS_MAX_STORE_TIME', 172800),
     'disable_user_lists' => env('DISABLE_USER_LISTS', false),
-    'cors_middleware_enabled' => (bool) env('CORS_MIDDLEWARE', false),
     // Dedicated token for the internal cache-bypass (jobs refreshing cached
     // responses). Empty by default — no bypass. Was previously env('APP_KEY').
     'cache_bypass_token' => env('CACHE_BYPASS_TOKEN', ''),

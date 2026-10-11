@@ -79,4 +79,3 @@ GET /v4/recommendations/anime
 GET /v4/watch/episodes
 GET /v4/watch/promos
 GET /v4/users/recentlyonline
-GET /v4/insights
