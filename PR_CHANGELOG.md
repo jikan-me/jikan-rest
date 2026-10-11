@@ -124,12 +124,6 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `config/octane.php` `warm`/`flush`.
 
 ### 7. API docs (Swagger)
-
-> **Removed by product decision (2026-10-11)** — the Swagger UI / l5-swagger feature
-> was deleted (provider, `config/l5-swagger.php`, `app/Swagger.php`, `/docs` redirect,
-> parity entries, env keys; packages dropped via `composer remove`). This section is
-> kept only as historical record of the migration-time state.
-
 - `darkaonline/l5-swagger` + `zircote/swagger-php` ^6 (stable).
 - `app/Swagger.php` uses **PHP 8 attributes** (`#[OA\Info]`, `#[OA\Server]`) —
   swagger-php 6 doesn't read docblock `@OA\Info` through the attribute analyser.
@@ -365,5 +359,3 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 - Patch or await upstream fix for the MAL theme-markup parser breakage.
 - Verify the native Typesense engine end-to-end against a real Typesense server
   (docker-compose) and reconcile search-index behavior/ranking parity.
-- **Swagger UI / l5-swagger removed (product decision, 2026-10-11)** — see §7 note;
-  the `@OA\` controller annotations were left in place (inert comments).

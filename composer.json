@@ -9,6 +9,7 @@
         "ext-json": "*",
         "ext-mongodb": "*",
         "ext-pcntl": "*",
+        "darkaonline/l5-swagger": "^11.0",
         "jikan-me/jikan": "^4",
         "jms/serializer": "^3.0",
         "laravel/framework": "^13.0",
@@ -26,7 +27,8 @@
         "symfony/dom-crawler": "^7.4 || ^8.0",
         "symfony/http-client": "^7.4 || ^8.0",
         "symfony/yaml": "^7.0",
-        "typesense/typesense-php": "^6.0"
+        "typesense/typesense-php": "^6.0",
+        "zircote/swagger-php": "^6.0"
     },
     "replace": {
         "fabpot/goutte": "4.0.3"
