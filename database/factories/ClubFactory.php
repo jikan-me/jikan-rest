@@ -160,7 +160,7 @@ final class ClubFactory extends JikanModelFactory
             })()),
             ClubOrderByEnum::created()->value => ((function() {
                 $randomDate = $this->createRandomDateTime("-5 years");
-                return fn($i) => new UTCDateTime($randomDate->copy()->addDays($i)->getPreciseTimestamp(3));
+                return fn($i) => new UTCDateTime($randomDate->copy()->addDays($i)->getTimestampMs());
             })()),
             default => fn($i) => $i,
         };

@@ -19,6 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 trait HasKidsParameter
 {
+    use PreparesData;
 
     #[BooleanType, WithCast(ContextualBooleanCast::class)]
     public ?bool $kids = null;

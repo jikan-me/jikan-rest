@@ -19,6 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 trait HasUnapprovedParameter
 {
+    use PreparesData;
 
     #[BooleanType, WithCast(ContextualBooleanCast::class)]
     public bool|Optional $unapproved = false;

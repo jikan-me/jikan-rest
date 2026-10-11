@@ -12,7 +12,7 @@ final class ContextualBooleanCast implements Cast
     {
         $propertyName = $property->name;
 
-        if (array_key_exists($propertyName, $properties) && $properties[$propertyName] === "") {
+        if (array_key_exists($propertyName, $properties) && ($properties[$propertyName] === "" || $properties[$propertyName] === null)) {
             return true;
         }
 

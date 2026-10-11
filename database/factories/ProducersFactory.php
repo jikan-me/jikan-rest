@@ -37,7 +37,7 @@ class ProducersFactory extends JikanModelFactory
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
             "favorites" => 535,
-            "established" => new UTCDateTime(Carbon::now()->sub($this->faker->randomNumber(2, true) . " days")->getPreciseTimestamp(3)),
+            "established" => new UTCDateTime(Carbon::now()->sub($this->faker->randomNumber(2, true) . " days")->getTimestampMs()),
             "about" => "",
             "external_links" => [
                 [

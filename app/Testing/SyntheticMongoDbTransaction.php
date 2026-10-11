@@ -82,5 +82,56 @@ trait SyntheticMongoDbTransaction
         {
             DB::table($tableName)->truncate();
         }
+
+        // The test DB is never migrated, but keyword search uses Mongo $text queries
+        // (locally SCOUT_DRIVER is null). Recreate the text indexes the migration defines.
+        self::ensureSearchIndexes();
+    }
+
+    /**
+     * Recreate the text indexes defined in database/migrations/..._squash.php.
+     * Truncate() on a Mongo collection drops it (and its indexes), so this must
+     * run after each truncation for $text search to keep working.
+     */
+    private static function ensureSearchIndexes(): void
+    {
+        $definitions = [
+            'anime' => [
+                'fields' => ['title' => 'text', 'title_japanese' => 'text'],
+                'weights' => ['title' => 50, 'title_japanese' => 5],
+            ],
+            'manga' => [
+                'fields' => ['title' => 'text', 'title_japanese' => 'text'],
+                'weights' => ['title' => 50, 'title_japanese' => 5],
+            ],
+            'characters' => ['fields' => ['name' => 'text', 'given_name' => 'text', 'family_name' => 'text']],
+            'people' => ['fields' => ['name' => 'text', 'name_kanji' => 'text']],
+            'genres_anime' => ['fields' => ['name' => 'text']],
+            'genres_manga' => ['fields' => ['name' => 'text']],
+            'explicit_genres_anime' => ['fields' => ['name' => 'text']],
+            'explicit_genres_manga' => ['fields' => ['name' => 'text']],
+            'themes_anime' => ['fields' => ['name' => 'text']],
+            'themes_manga' => ['fields' => ['name' => 'text']],
+            'demographics_anime' => ['fields' => ['name' => 'text']],
+            'demographics_manga' => ['fields' => ['name' => 'text']],
+            'clubs' => ['fields' => ['name' => 'text']],
+            'magazines' => ['fields' => ['name' => 'text']],
+            'producers' => ['fields' => ['name' => 'text']],
+            'users' => ['fields' => ['internal_username' => 'text']],
+        ];
+
+        $mongodb = DB::connection('mongodb')->getMongoDB();
+
+        foreach ($definitions as $collection => $def) {
+            $options = ['name' => 'search'];
+            if (isset($def['weights'])) {
+                $options['weights'] = $def['weights'];
+            }
+            try {
+                $mongodb->selectCollection($collection)->createIndex($def['fields'], $options);
+            } catch (\Throwable $e) {
+                // index may already exist / collection issues - not fatal for tests
+            }
+        }
     }
 }

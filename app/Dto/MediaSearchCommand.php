@@ -24,7 +24,7 @@ use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 
 class MediaSearchCommand extends SearchCommand
 {
-    use HasSfwParameter, HasUnapprovedParameter;
+    use HasSfwParameter, HasUnapprovedParameter, \App\Dto\Concerns\PreparesData;
 
     #[MapInputName("min_score"), MapOutputName("min_score"), Between(0.00, 10.00), Numeric]
     public float|Optional $minScore;

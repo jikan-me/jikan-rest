@@ -19,6 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 trait HasContinuingParameter
 {
+    use PreparesData;
 
     #[BooleanType, WithCast(ContextualBooleanCast::class)]
     public bool|Optional $continuing = false;

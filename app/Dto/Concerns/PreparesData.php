@@ -43,6 +43,12 @@ trait PreparesData
                     if ($propertyVal === "false") {
                         $propertyVal = false;
                     }
+                    // ContextualBooleanCast semantics: a bare flag (`?sfw`, `?continuing`)
+                    // normalises to "" or null and means true. Casts run after validation,
+                    // so do the conversion here as well.
+                    if ($propertyVal === "" || $propertyVal === null) {
+                        $propertyVal = true;
+                    }
                 }
                 // if the property is optional (or nullable) and the value is an empty
                 // string, we want to ignore it.

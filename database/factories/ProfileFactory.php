@@ -32,11 +32,11 @@ final class ProfileFactory extends JikanModelFactory
                     "image_url" => $this->faker->url()
                 ]
             ],
-            "last_online" => new UTCDateTime($this->faker->dateTimeBetween('-5 years')->format('Uv')),
+            "last_online" => new UTCDateTime(\Illuminate\Support\Carbon::parse($this->faker->dateTimeBetween('-5 years'))->getTimestampMs()),
             "gender" => $this->faker->randomElement(["Male", "Female", "Other"]),
-            "birthday" => new UTCDateTime($this->faker->dateTimeBetween('-60 years')->format('Uv')),
+            "birthday" => new UTCDateTime(\Illuminate\Support\Carbon::parse($this->faker->dateTimeBetween('-60 years'))->getTimestampMs()),
             "location" => $this->faker->country(),
-            "joined" => new UTCDateTime($this->faker->dateTimeBetween('-5 years')->format('Uv')),
+            "joined" => new UTCDateTime(\Illuminate\Support\Carbon::parse($this->faker->dateTimeBetween('-5 years'))->getTimestampMs()),
             "createdAt" => new UTCDateTime(),
             "modifiedAt" => new UTCDateTime(),
             "anime_stats" => [

@@ -168,7 +168,39 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
         $this->app['config']->set('database.connections.mongodb.database', $database === 'jikan' ? 'jikan_tests' : $database);
         $this->app['config']->set('jikan.micro_caching_enabled', false);
 
+        // The connection may already be resolved (cached) from bootstrap against the
+        // default DB; force a re-resolve so tests hit the isolated DB.
+        \Illuminate\Support\Facades\DB::purge('mongodb');
+
         $this->setUpTraits();
+    }
+
+    protected function setUpTraits()
+    {
+        $uses = array_flip(class_uses_recursive(get_class($this)));
+
+        parent::setUpTraits();
+
+        // Laravel's setUpTraits() looks for `begin` + trait short name, which doesn't
+        // match our Lumen-era trait methods; invoke them explicitly.
+        if (isset($uses[ScoutFlush::class])) {
+            $this->runScoutFlush();
+        }
+
+        if (isset($uses[SyntheticMongoDbTransaction::class])) {
+            $this->beginDatabaseTransaction();
+        }
+    }
+
+    /**
+     * Lumen exposed assertStatus() on the TestCase; Laravel only has it on the
+     * TestResponse. Keep a delegating compat method.
+     */
+    public function assertStatus(int $status): static
+    {
+        $this->response->assertStatus($status);
+
+        return $this;
     }
 
     public function assertPaginationData(int $expectedCount, ?int $expectedTotal = null, ?int $perPage = null): TestResponse
