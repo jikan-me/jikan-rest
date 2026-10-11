@@ -289,6 +289,30 @@ The intent is to contribute this back to `jikan-me/jikan-rest`, whose maintainer
 
 **Goutte replaced by a local shim.** `fabpot/goutte` (via `jikan-me/jikan` v4) caps `symfony/mime` at `^6.0`, which cannot coexist with Laravel 12's Symfony 7.2. Since Goutte 4's `Client` is a thin wrapper over Symfony's `HttpBrowser`, we add `app/Compat/Goutte/Client.php` and declare `"replace": {"fabpot/goutte": "4.0.3"}` in `composer.json`. The eventual clean fix is `jikan-me/jikan` v5 (which drops Goutte), but that is a major API change and out of scope for now.
 
-**Swagger deferred.** `darkaonline/l5-swagger` 11 requires `zircote/swagger-php` ^6, which is still RC. Reintroduced in Phase E once stable.
+**Swagger implemented** (the earlier RC blocker is resolved — `zircote/swagger-php` ^6 is now stable at 6.12.0):
+- `darkaonline/l5-swagger` ^11 + `zircote/swagger-php` ^6.
+- `app/Swagger.php` uses **PHP 8 attributes** (`#[OA\Info]`). swagger-php 6 does not read docblock
+  annotations through the attribute analyser, so a docblock `@OA\Info` alone yields
+  "Required @OA\Info() not found". The pre-existing `@OA\Get` docblocks in the controllers still work.
+- Route prefix must go in `defaults.routes.group_options.prefix`.
+- `/docs` redirects to the live Swagger UI at `/v4/api/documentation`.
+- Regenerate after annotation changes: `php artisan l5-swagger:generate`.
 
 **TypeSense driver** resolved to `typesense/laravel-scout-typesense-driver` 5.2.10 (the only version supporting Scout ^11), which pulls `typesense/typesense-php` 6.1.0-RC2. Pin to a stable release when available.
+
+### Critical fix: route parameter constraints
+
+Symfony 7 (used by Laravel 12) only accepts **word characters** in inline route patterns. `{id:\d+}` fails to
+parse and compiles as a literal string, producing a regex with *zero* variables — so the route never
+matches despite appearing in `route:list`. This 404'd every lookup endpoint.
+
+Correct Laravel 12 idiom is a bare parameter plus a `where()` constraint:
+```php
+// BEFORE (broken on Symfony 7)              // AFTER (works)
+'anime/{id:[0-9]+}'                          'anime/{id}'  + ->where('id', '[0-9]+')
+'/history[/{type:[A-Za-z]+}]'                '/history/{type?}' + ->where('type', '[A-Za-z]+')
+```
+Optional parameters use `{param?}` (trailing `?` inside the braces), not the `[/{param}]` bracket syntax.
+
+Parity harness went from **69 problems to 3** after this fix; the remaining 3 are the intentional `/docs`
+→ Swagger UI redirect and a pre-existing `users.php` parser bug.
