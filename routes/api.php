@@ -39,7 +39,11 @@ Route::get('/', function () {
     ]);
 });
 
-Route::redirect('/docs', '/v4/api/documentation', 301);
+// Scalar API reference — rendered from the l5-swagger OpenAPI JSON (/v4/api-docs).
+Route::get('/v4/documentation', fn () => view('scalar.reference'));
+
+// Point the alias at the Scalar page instead of the disabled Swagger UI.
+Route::redirect('/docs', '/v4/documentation', 301);
 
 // Health/liveness endpoint. Registered explicitly: withRouting(health:) only works
 // when no custom `using` closure is provided (we load the v4 routes ourselves).

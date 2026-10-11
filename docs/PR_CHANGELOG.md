@@ -913,3 +913,20 @@ browser-kit/css-selector/http-client). This closes the last big external gate:
   re-import, endpoint smoke, container demo, hygiene/record).
 - route-model-binding re-checked under the newer suite: **unchanged** (0 critical,
   103 should-fix — all DTO-command params by design; no exemption mechanism).
+
+
+## 19. Scalar API reference replaces the (disabled) Swagger UI (2026-10-12)
+
+- New `GET /v4/documentation` renders the **Scalar** API reference from the
+  existing l5-swagger OpenAPI JSON (`/v4/api-docs`) — no new composer deps, no
+  Node: `resources/views/scalar/reference.blade.php` loads the pinned
+  `@scalar/api-reference@1.73.1` esm build from the jsdelivr CDN
+  (`createApiReference('#app', { url })`), same-origin against the spec.
+- `/docs` now 301 → `/v4/documentation` (previously redirected into the
+  deliberately-disabled Swagger UI → 404). `DisableSwaggerUi` + spec
+  generation untouched. Docs viewer is read-only: test-request button + dev
+  tools hidden, Scalar's hosted Agent AI chat disabled (no spec upload).
+  Verification: spec 200 JSON, page 200, /docs 301, swagger-ui path 404.
+- Scalar is a spec renderer (paths/schemas/code-samples generated from the
+  OpenAPI doc) — it does not write endpoint prose; summaries/descriptions
+  would come from the `@OA` annotations (currently sparse).
