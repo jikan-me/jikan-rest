@@ -27,7 +27,10 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
      */
     private function getCurrentSeason() : array
     {
-        $date = new \DateTime('now', new \DateTimeZone('Asia/Tokyo'));
+        // Use Carbon::now() (which honors Carbon::setTestNow() in tests) rather than
+        // `new \DateTime('now')`, which reads the raw wall clock and made the
+        // `/seasons/now` endpoint untestable/deterministic-failing outside the faked window.
+        $date = Carbon::now(new \DateTimeZone('Asia/Tokyo'));
 
         $year = (int) $date->format('Y');
         $month = (int) $date->format('n');

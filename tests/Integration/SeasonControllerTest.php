@@ -139,6 +139,10 @@ class SeasonControllerTest extends TestCase
         $state["premiered"] = "Fall 2023";
         $state["status"] = "Currently Airing";
         $state["airing"] = true;
+        // episodes must be null so this item matches the "long running show"
+        // branch in getItemsBySeason(); the factory default is a random non-null
+        // value, which made this test flaky (only matched ~2/3 of the time).
+        $state["episodes"] = null;
         $f->create($state);
 
         $content = $this->getJsonResponse([], $requestUrl);

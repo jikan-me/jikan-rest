@@ -158,8 +158,11 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `indexer:manga`. Producers/magazines/genres parse fine. Fix belongs in `jikan-me/jikan`.
 - `/v4/users/recentlyonline` — `jikan` fails to parse `myanimelist.net/users.php`
   (pre-existing).
-- Time-dependent `SeasonControllerTest::testShouldNotIncludeNewlyStartedSeason...`
-  fails today (failed on the Lumen baseline too).
+- ~~Time-dependent `SeasonControllerTest::testShouldNotIncludeNewlyStartedSeason...`~~ —
+  **fixed 2026-10-11**: `getCurrentSeason()` now reads `Carbon::now()` (honours the
+  tests' `Carbon::setTestNow()`), the continuing-item fixture pins `episodes = null`
+  (was flapping on the factory's random non-null default), and `getItemsBySeason()`
+  no longer mutates the caller's `$to`. `--filter SeasonControllerTest` green 20×.
 
 ### 10. Config-cache safety + security hardening (from the audit's P0 batch)
 - **`env()` → `config()` everywhere outside config** (`grep env(` in `app/ routes/ bootstrap/`
@@ -316,6 +319,14 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 
 ## Not done / follow-ups
 - Rector config (not requested here) + repo-wide Pint formatting (see §13 policy).
+- **`SeasonControllerTest` de-flaked (2026-10-11)** — no more wall-clock dependence or
+  seeded-data flakiness: `QueryCurrentAnimeSeasonHandler::getCurrentSeason()` honours
+  `Carbon::setTestNow()` via `Carbon::now('Asia/Tokyo')`; the continuing-item fixture
+  now pins `episodes = null` (deterministic "long-running" branch match instead of the
+  factory's random `episodes` coin-flip); `DefaultAnimeRepository::getItemsBySeason()`
+  computes "last day of this month" on a clone instead of mutating the caller's `$to`.
+  Verified `--filter SeasonControllerTest` green 20× (incl. random order). Baseline
+  suite target: 289 tests / 2696 assertions, all green.
 - CI: Renovate/Dependabot; validate the PHP 8.3 matrix + Mongo service on GitHub
   Actions (runner-level; logic verified locally), and a full Typesense integration
   run once a server is available.

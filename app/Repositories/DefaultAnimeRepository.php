@@ -123,7 +123,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
         $airedFilter = ['aired.from' => [
             '$gte' => $from->toAtomString(),
-            '$lte' => $to->modify('last day of this month')->toAtomString()
+            '$lte' => (clone $to)->modify('last day of this month')->toAtomString()
         ]];
 
         $finalFilter = [];

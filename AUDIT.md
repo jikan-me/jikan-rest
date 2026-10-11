@@ -225,4 +225,5 @@ Overall: controllers are thin (good). Validation is centralized in DTO attribute
 | P1 #10 heartbeat storage | ✅ done | `d1df28f` — Mongo `failovers`/`failovers_meta`, atomic inserts; flat files gone; `/`+`/v4` heartbeat SHAPE unchanged |
 | P1 #11 TTL map + guard | ✅ done | `fd59cb2` — `per_endpoint_cache_ttl` re-synced (dead keys removed), `CacheTtlMapTest` guards both directions |
 | P2 #16 PHPStan/Pint/CI | ✅ done | `4b780d8` — Larastan ^3.13 (Laravel-13 ok) @ level 5 + baseline, Pint (Laravel preset, scoped `--test`), ci.yml matrix |
+| SeasonControllerTest flakiness | ✅ done | `getCurrentSeason()` honours `Carbon::setTestNow()` (`Carbon::now('Asia/Tokyo')`); continuing fixture pins `episodes=null`; `getItemsBySeason()` stops mutating caller's `$to`. `--filter SeasonControllerTest` green 20× (incl. random order) |
 | P1 … | ⏳ | see phase-2 audit + backlog |
