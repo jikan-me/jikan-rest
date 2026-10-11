@@ -300,6 +300,8 @@ The intent is to contribute this back to `jikan-me/jikan-rest`, whose maintainer
 
 **TypeSense driver** resolved to `typesense/laravel-scout-typesense-driver` 5.2.10 (the only version supporting Scout ^11), which pulls `typesense/typesense-php` 6.1.0-RC2. Pin to a stable release when available.
 
+**Developer tooling (executed later):** `laravel/boost` ^2 (dev, first-party) added to power the Laravel marketplace skills integration — `php artisan boost:add-skill …` installed four skills under `.ai/skills/` (`laravel-specialist`, `php-pro`, `laravel-security`, `laravel-patterns`). Pure dev tooling; excluded from the runtime image (`composer install --no-dev`).
+
 ### Critical fix: route parameter constraints
 
 Symfony 7 (used by Laravel 12) only accepts **word characters** in inline route patterns. `{id:\d+}` fails to

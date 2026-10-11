@@ -63,6 +63,9 @@ every dynamic endpoint 404 on Symfony 7, and documented an upstream scraper brea
 - `darkaonline/l5-swagger` ^11 + `zircote/swagger-php` ^6
 - `symfony/browser-kit/css-selector/dom-crawler/http-client` ^7, `predis/predis` ^2.3
 - `spiral/roadrunner-cli` + `spiral/roadrunner-http` (dev / Octane)
+- `laravel/boost` ^2 (dev; first-party agent/skills CLI) — powers the four installed
+  Laravel marketplace skills under `.ai/skills/` (`laravel-specialist`, `php-pro`,
+  `laravel-security`, `laravel-patterns`)
 
 **Removed**
 - Lumen-only / abandoned: `pushrbx/lumen-roadrunner`, `darkaonline/swagger-lume`,

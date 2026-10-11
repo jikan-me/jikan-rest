@@ -38,7 +38,9 @@ Move `jikan-me/jikan-rest` from the archived Lumen 9 (Laravel 9, security-EOL) o
 v5, Laravel Scout's **native Typesense engine** (replacing the third-party driver),
 PHPUnit 12, `l5-swagger` docs, Octane (RoadRunner default) in place of the old
 `lumen-roadrunner` package — while preserving the public v4 JSON contract byte-for-byte,
-proven by a committed parity harness.
+proven by a committed parity harness. Developer tooling is first-party too:
+`laravel/boost` (agent/skills CLI) with four Laravel marketplace skills
+(`laravel-specialist`, `php-pro`, `laravel-security`, `laravel-patterns`) under `.ai/skills/`.
 
 ---
 
@@ -103,6 +105,7 @@ in their own PRs). Suggested squash onto the local branch, then open in order:
 | # | PR title | Contents (local commits) | Notes |
 |---|---|---|---|
 | 1 | `test: add parity harness, PHPStan/Larastan + Pint + CI` | `tools/parity/*`, `phpstan.neon` + baseline, `pint.json`, `.github/workflows/ci.yml`, `UPSTREAM_ISSUES.md` | No behavior change; establishes the safety net first (T4 infra) |
+| 1b | `feat: developer tooling — laravel/boost + marketplace skills` | `composer.json` (+`laravel/boost` ^2 dev), `.ai/skills/*` (specialist/php-pro/security/patterns) | Optional/subjective; maintainers may want it in its own PR or dropped |
 | 2 | `feat: Laravel 13 skeleton + bootstrap swap` | `bootstrap/app.php`, `public/index.php`, `artisan`, base classes, `routes/` split | App boots; v4 group still loads via `namespace` + string actions |
 | 3 | `fix: Symfony 7/8 route constraints` | `{id}` + `->where()` conversions | The 69→3 parity fix |
 | 4 | `feat: mongodb/laravel-mongodb v5 + spatie data v4` | driver swap, DTO/cast/`PreparesData` API adoption | |
@@ -138,7 +141,7 @@ locally — when they (or we) pick them up, they ship as separate PRs to
 - [ ] Maintainer buy-in via the RFC (§4) — target version 13 confirmed
 - [ ] Parity: full green on the endpoints that can run (parser blockers documented)
 - [ ] Full suite green on a clean checkout (280/2673, known flake documented)
-- [ ] Composer: `name`/`description` finalized for the fork; `config.platform` pinned
+- [ ] Composer: `name`/`description` finalized for the fork; `config.platform` pinned; `laravel/boost` (+ `.ai/skills/`) stance decided (§5 PR 1b)
 - [ ] Dockerfile (T3 ✅) + CI matrix (T4 ✅) green on a runner; drop local-only tooling references
 - [ ] Observability changes (log channels, Sentry defaults, `/up`) reconciled + verified in the suite (done locally)
 - [ ] Secrets: no real `APP_KEY`/tokens in source; `.env.dist` sane defaults
