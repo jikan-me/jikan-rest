@@ -831,3 +831,26 @@ Effectively resolves the changelog follow-up "Verify the native Typesense
 engine end-to-end against a real Typesense server and reconcile search-index
 behavior/ranking parity" for the import/search/pagination paths. Ranking
 parity for anime/manga still awaits data (UP-01/UP-02).
+
+
+## 16. Context layer — completed + suite upgraded (2026-10-12)
+
+- **backend-quality-suite upgraded to main HEAD** (reinstalled from
+  `irfan-dahir/backend-quality-suite`; carries the 0.2.0 line + the merged
+  `capabilities(ctx=None)` fix + the new Node adapter). Verified: same audit
+  posture as v0.1.0 (endpoint-parity / layer-boundaries / route-coverage /
+  form-request-validation clean; api-consistency + versioning residuals
+  unchanged), `backend-suite doctor: profile healthy`.
+- **Doc-role layer fully established**: `.backend-suite/docs.manifest.json`
+  now maps **7 roles** (`decisions`→MIGRATION_PLAN, `backlog`+`changelog`→
+  PR_CHANGELOG, `deployment`→DOCKER, `entry-point`→README, `rfc`→RFC,
+  `production-readiness`→PRODUCTION-READINESS) and **declines the other 11**
+  (api, api-standard, brief, builds, common-mistakes, contributing,
+  deprecations, documentation-rules, postmortem, public-roadmap, release).
+  `resolve.py` exits 0 for every mapped role (no stub debt).
+- **New authored docs**: `docs/RFC.md` (RFC-0001 — the Laravel 13 migration,
+  accepted, decision trail), `docs/PRODUCTION-READINESS.md` (13 gates,
+  evidence-backed), plus `docs/ARCHITECTURE.md` and `docs/DESIGN.md` authored
+  to the suite's `architecture`/`design` doc roles — those two roles are
+  **not yet shipped in the released suite** (transcript/`main` gap), so they
+  live as plain authored docs until upstream ships the roles, then map in.
