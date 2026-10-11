@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'mongodb'),
+    'default' => env('QUEUE_CONNECTION', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
     */
 
     'failed' => [
-        'driver' => env('QUEUE_CONNECTION', 'mongodb'),
+        'driver' => env('QUEUE_CONNECTION', 'database'),
         'database' => env('DB_DATABASE', 'jikan'),
         'table' => env('QUEUE_FAILED_TABLE', 'failed_jobs'),
     ],

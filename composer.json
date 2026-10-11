@@ -1,7 +1,7 @@
 {
-    "name": "laravel/lumen",
-    "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
+    "name": "jikan-rest/laravel",
+    "description": "Jikan - Unofficial MyAnimeList PHP API (Laravel 13 modernization fork).",
+    "keywords": ["framework", "laravel", "anime", "myanimelist"],
     "license": "MIT",
     "type": "project",
     "require": {
@@ -9,8 +9,6 @@
         "ext-json": "*",
         "ext-mongodb": "*",
         "ext-pcntl": "*",
-        "amphp/http-client": "^4.6",
-        "danielmewes/php-rql": "dev-master",
         "darkaonline/l5-swagger": "^11.0",
         "jikan-me/jikan": "^4",
         "jms/serializer": "^3.0",
@@ -18,20 +16,18 @@
         "laravel/octane": "^2.0",
         "laravel/scout": "^11.0",
         "league/flysystem": "^3.0",
-        "mirazmac/dotenvwriter": "^0.1.0",
         "mongodb/laravel-mongodb": "^5.0",
         "predis/predis": "^2.3",
         "sentry/sentry-laravel": "^4.0",
         "spatie/laravel-data": "^4.0",
         "spatie/laravel-enum": "^3.3",
         "spiral/roadrunner-http": "^4.1",
-        "symfony/browser-kit": "^7.0",
-        "symfony/css-selector": "^7.0",
-        "symfony/dom-crawler": "^7.0",
-        "symfony/http-client": "^7.0",
+        "symfony/browser-kit": "^7.4 || ^8.0",
+        "symfony/css-selector": "^7.4 || ^8.0",
+        "symfony/dom-crawler": "^7.4 || ^8.0",
+        "symfony/http-client": "^7.4 || ^8.0",
         "symfony/yaml": "^7.0",
         "typesense/typesense-php": "^6.0",
-        "vlucas/phpdotenv": "^5",
         "zircote/swagger-php": "^6.0"
     },
     "replace": {
@@ -76,12 +72,15 @@
           "@phpunit-cover"
         ]
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true,
+        "platform": {
+            "php": "8.4.26"
+        },
         "allow-plugins": {
             "php-http/discovery": true
         }

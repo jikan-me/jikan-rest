@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Events\ExampleEvent;
 use App\Events\SourceHeartbeatEvent;
 use App\Providers\SourceHeartbeatProvider;
 use Illuminate\Queue\InteractsWithQueue;
@@ -45,7 +44,7 @@ class SourceHeartbeatListener
     /**
      * Handle the event.
      *
-     * @param  ExampleEvent  $event
+     * @param  SourceHeartbeatEvent  $event
      * @return void
      */
     public function handle(SourceHeartbeatEvent $event)
