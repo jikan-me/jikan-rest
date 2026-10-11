@@ -128,9 +128,13 @@ every dynamic endpoint 404 on Symfony 7, and documented an upstream scraper brea
 - `darkaonline/l5-swagger` ^11 + `zircote/swagger-php` ^6
 - `symfony/browser-kit/css-selector/dom-crawler/http-client` ^7, `predis/predis` ^2.3
 - `spiral/roadrunner-cli` + `spiral/roadrunner-http` (dev / Octane)
-- placeholder
+- `laravel/boost` ^2 (dev; first-party agent/skills CLI) — powers the four installed
   Laravel marketplace skills under `.ai/skills/` (`laravel-specialist`, `php-pro`,
   `laravel-security`, `laravel-patterns`)
+- **Native installer + setup guide** — `install.sh` (options: `--server roadrunner|frankenphp|serve`,
+  `--no-dev`, `--with-redis`, `--with-typesense`, `--with-backend-suite`, `--with-skills`, `--seed`,
+  `--env=`, `--check`) plus `docs/SETUP.md` (general non-Docker guide with an agent prompt).
+  FrankenPHP is now actually runnable (opt-in static binary download; previously config-only).
 
 **Removed**
 - Lumen-only / abandoned: `pushrbx/lumen-roadrunner`, `darkaonline/swagger-lume`,
