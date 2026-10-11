@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Indexer;
 
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Genre\AnimeGenresRequest;

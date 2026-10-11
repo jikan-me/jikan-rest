@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Contracts\CachedScraperService;
 use App\Contracts\Repository;
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use App\JikanApiModel;
 use App\Support\CachedData;
 use Illuminate\Contracts\Database\Query\Builder;

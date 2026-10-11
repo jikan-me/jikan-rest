@@ -805,12 +805,6 @@ parameters:
 			path: app/GenreManga.php
 
 		-
-			message: '#^Method App\\Http\\HttpHelper\:\:hasError\(\) has parameter \$response with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: app/Http/HttpHelper.php
-
-		-
 			message: '#^Property App\\Http\\Resources\\V4\\AnimeCollection\:\:\$pagination has no type specified\.$#'
 			identifier: missingType.property
 			count: 1

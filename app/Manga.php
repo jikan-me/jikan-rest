@@ -5,7 +5,7 @@ namespace App;
 use App\Concerns\FilteredByLetter;
 use App\Concerns\MediaFilters;
 use App\Enums\MangaTypeEnum;
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use Carbon\CarbonImmutable;
 use Database\Factories\MangaFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;

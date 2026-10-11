@@ -2,7 +2,7 @@
 
 namespace App\Concerns;
 
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use Illuminate\Http\Request;
 use Spatie\LaravelData\Resolvers\DataFromSomethingResolver;
 use Spatie\LaravelData\Support\Creation\CreationContext;

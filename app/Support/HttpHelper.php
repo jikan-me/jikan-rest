@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http;
+namespace App\Support;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Env;
@@ -12,7 +12,7 @@ class HttpHelper
         return sprintf('request:%s:%s', self::requestType($request), self::getRequestUriHash($request));
     }
 
-    public static function hasError($response): bool
+    public static function hasError(mixed $response): bool
     {
         return isset($response->original['error']);
     }

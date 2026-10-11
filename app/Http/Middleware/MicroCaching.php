@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use App\Support\JikanConfig;
 use Closure;
 use Illuminate\Http\Request;
