@@ -10,7 +10,7 @@
         "ext-mongodb": "*",
         "ext-pcntl": "*",
         "darkaonline/l5-swagger": "^11.0",
-        "jikan-me/jikan": "^4",
+        "jikan-me/jikan": "^5.0@beta",
         "jms/serializer": "^3.0",
         "laravel/framework": "^13.0",
         "laravel/octane": "^2.0",
@@ -29,9 +29,6 @@
         "symfony/yaml": "^7.0",
         "typesense/typesense-php": "^6.0",
         "zircote/swagger-php": "^6.0"
-    },
-    "replace": {
-        "fabpot/goutte": "4.0.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

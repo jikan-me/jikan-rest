@@ -29,16 +29,10 @@
                 "timezone": "@string"
             },
             "demographics": [
-                "@list",
-                {
-                    "mal_id": "@int",
-                    "name": "@string",
-                    "type": "@string",
-                    "url": "@string"
-                }
+                "@list"
             ],
             "duration": "@string",
-            "episodes": "@null",
+            "episodes": "@int",
             "explicit_genres": [
                 "@list"
             ],
@@ -75,32 +69,20 @@
             ],
             "rank": "@int",
             "rating": "@string",
-            "score": "@null",
+            "score": "@volatile",
             "scored_by": "@null",
             "season": "@string",
             "source": "@string",
             "status": "@string",
             "studios": [
-                "@list",
-                {
-                    "mal_id": "@int",
-                    "name": "@string",
-                    "type": "@string",
-                    "url": "@string"
-                }
+                "@list"
             ],
             "synopsis": "@string",
             "themes": [
-                "@list",
-                {
-                    "mal_id": "@int",
-                    "name": "@string",
-                    "type": "@string",
-                    "url": "@string"
-                }
+                "@list"
             ],
             "title": "@string",
-            "title_english": "@string",
+            "title_english": "@null",
             "title_japanese": "@string",
             "title_synonyms": [
                 "@list"

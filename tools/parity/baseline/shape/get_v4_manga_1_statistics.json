@@ -8,8 +8,8 @@
         "scores": [
             "@list",
             {
-                "percentage": "@float",
-                "score": "@int",
+                "percentage": "@int",
+                "score": "@volatile",
                 "votes": "@int"
             }
         ],

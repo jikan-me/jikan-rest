@@ -13,7 +13,7 @@
                 }
             ],
             "background": "@string",
-            "chapters": "@null",
+            "chapters": "@int",
             "demographics": [
                 "@list",
                 {
@@ -60,17 +60,17 @@
                         "year": "@int"
                     },
                     "to": {
-                        "day": "@null",
-                        "month": "@null",
-                        "year": "@null"
+                        "day": "@int",
+                        "month": "@int",
+                        "year": "@int"
                     }
                 },
                 "string": "@string",
-                "to": "@null"
+                "to": "@string"
             },
             "publishing": "@bool",
             "rank": "@int",
-            "score": "@float",
+            "score": "@volatile",
             "scored": "@float",
             "scored_by": "@int",
             "serializations": [
@@ -97,8 +97,7 @@
             "title_english": "@string",
             "title_japanese": "@string",
             "title_synonyms": [
-                "@list",
-                "@string"
+                "@list"
             ],
             "titles": [
                 "@list",
@@ -109,7 +108,7 @@
             ],
             "type": "@string",
             "url": "@string",
-            "volumes": "@null"
+            "volumes": "@int"
         }
     ],
     "pagination": {

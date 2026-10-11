@@ -1,25 +1,6 @@
 {
     "data": [
-        "@list",
-        {
-            "date": "@string",
-            "episodes_seen": "@int",
-            "episodes_total": "@int",
-            "score": "@int",
-            "status": "@string",
-            "user": {
-                "images": {
-                    "jpg": {
-                        "image_url": "@string"
-                    },
-                    "webp": {
-                        "image_url": "@string"
-                    }
-                },
-                "url": "@string",
-                "username": "@string"
-            }
-        }
+        "@list"
     ],
     "pagination": {
         "has_next_page": "@bool",

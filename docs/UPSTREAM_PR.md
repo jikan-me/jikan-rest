@@ -20,9 +20,9 @@
 | PR series | Proposed in §5; infra + backend commits all **landed locally** — **nothing pushed** |
 | Infra agent (T1–T4) | T1 heartbeat ✅ · T2 TTL guard ✅ · T3 Dockerfile ✅ · T4 PHPStan/Pint/CI ✅ |
 | Local work committed at reconciliation | insights + CORS **removals** (`c858c3d`), **observability** (`41dd860`), `UPSTREAM_PR.md` (`8f94dfa`) |
-| Verification | **292 tests / 2707 assertions — fully green** (season flake defused) · PHPStan level 6 baseline-pinned exit 0 · Parity: 21 endpoints byte-match, zero new shape/status diffs · **Docker: first real build + full compose stack validated locally via Colima (2026-10-12)** · **Typesense E2E verified** against the Docker server (import + search + chunked pagination, no config) |
+| Verification | **292 tests / 2707 assertions — fully green** · PHPStan level 6 baseline-pinned exit 0 · **Parity: 59 endpoints match, 0 diffs** (baseline ratcheted 2026-10-12 after **jikan v5 adoption** cleared the parser blockers — anime/manga/characters/people/recentlyonline now serve live data) · Docker build + stack validated locally (Colima) · Typesense E2E verified (Docker server) |
 | Docker / CI | Image builds clean on a real runtime; `app`/`mongo`/`redis`/`typesense` healthy, `/up` 200, `rr --version` 2025.1.15 (arm64). CI matrix first-green still parked for a GitHub runner |
-| `jikan-me/jikan` parser fixes | Parked (`UPSTREAM_ISSUES.md` UP-01…05); not targeting at the moment |
+| `jikan-me/jikan` parser fixes | **Resolved by adopting jikan v5.0.0-beta** (2026-10-12): UP-01…06 all cleared, verified live; Goutte shim removed |
 | Decisions made | Laravel **13** (final), **Typesense-only** search (native Scout engine), Octane RoadRunner default, PHPUnit 12, security/config-cache hardening in scope |
 
 Upstream context from `MIGRATION_PLAN.md` §11: maintainers are **conservative and
@@ -127,7 +127,7 @@ in their own PRs). Suggested squash onto the local branch, then open in order:
 
 ---
 
-## 6. `jikan-me/jikan` contribution sequence (parked)
+## 6. `jikan-me/jikan` contribution sequence — **resolved by v5 adoption**
 
 UP-01…05 were **filed upstream on 2026-10-11** (`jikan-me/jikan` #598–#602, links in
 `UPSTREAM_ISSUES.md`); UP-06 (goutte→v5) is already tracked upstream and will be

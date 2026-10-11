@@ -18,7 +18,7 @@
                 "well_written": "@int"
             },
             "review": "@string",
-            "score": "@int",
+            "score": "@volatile",
             "tags": [
                 "@list",
                 "@string"

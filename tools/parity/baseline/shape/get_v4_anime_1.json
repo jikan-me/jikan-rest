@@ -79,7 +79,7 @@
         ],
         "rank": "@int",
         "rating": "@string",
-        "score": "@float",
+        "score": "@volatile",
         "scored_by": "@int",
         "season": "@string",
         "source": "@string",
@@ -119,14 +119,14 @@
         "trailer": {
             "embed_url": "@string",
             "images": {
-                "image_url": "@null",
-                "large_image_url": "@null",
-                "maximum_image_url": "@null",
-                "medium_image_url": "@null",
-                "small_image_url": "@null"
+                "image_url": "@string",
+                "large_image_url": "@string",
+                "maximum_image_url": "@string",
+                "medium_image_url": "@string",
+                "small_image_url": "@string"
             },
-            "url": "@null",
-            "youtube_id": "@null"
+            "url": "@string",
+            "youtube_id": "@string"
         },
         "type": "@string",
         "url": "@string",

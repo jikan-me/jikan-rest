@@ -1,8 +1,22 @@
 {
-    "error": "@string",
-    "message": "@string",
-    "report_url": "@string",
-    "status": "@int",
-    "trace": "@string",
-    "type": "@string"
+    "data": [
+        "@list",
+        {
+            "images": {
+                "jpg": {
+                    "image_url": "@string"
+                },
+                "webp": {
+                    "image_url": "@string"
+                }
+            },
+            "last_online": "@string",
+            "url": "@string",
+            "username": "@string"
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
 }

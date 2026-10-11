@@ -84,7 +84,7 @@
                 "relation": "@string"
             }
         ],
-        "score": "@float",
+        "score": "@volatile",
         "scored": "@float",
         "scored_by": "@int",
         "serializations": [

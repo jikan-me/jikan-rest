@@ -7,7 +7,7 @@
             "forum_url": "@string",
             "mal_id": "@int",
             "recap": "@bool",
-            "score": "@float",
+            "score": "@volatile",
             "title": "@string",
             "title_japanese": "@string",
             "title_romanji": "@string",

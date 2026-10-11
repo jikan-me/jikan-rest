@@ -23,16 +23,16 @@
             "approved": "@bool",
             "background": "@string",
             "broadcast": {
-                "day": "@null",
-                "string": "@null",
-                "time": "@null",
-                "timezone": "@null"
+                "day": "@string",
+                "string": "@string",
+                "time": "@string",
+                "timezone": "@string"
             },
             "demographics": [
                 "@list"
             ],
             "duration": "@string",
-            "episodes": "@int",
+            "episodes": "@null",
             "explicit_genres": [
                 "@list"
             ],
@@ -65,13 +65,19 @@
             "members": "@int",
             "popularity": "@int",
             "producers": [
-                "@list"
+                "@list",
+                {
+                    "mal_id": "@int",
+                    "name": "@string",
+                    "type": "@string",
+                    "url": "@string"
+                }
             ],
             "rank": "@null",
             "rating": "@string",
-            "score": "@null",
+            "score": "@volatile",
             "scored_by": "@null",
-            "season": "@null",
+            "season": "@string",
             "source": "@string",
             "status": "@string",
             "studios": [
@@ -97,7 +103,8 @@
             "title_english": "@string",
             "title_japanese": "@string",
             "title_synonyms": [
-                "@list"
+                "@list",
+                "@string"
             ],
             "titles": [
                 "@list",
@@ -109,18 +116,18 @@
             "trailer": {
                 "embed_url": "@string",
                 "images": {
-                    "image_url": "@null",
-                    "large_image_url": "@null",
-                    "maximum_image_url": "@null",
-                    "medium_image_url": "@null",
-                    "small_image_url": "@null"
+                    "image_url": "@string",
+                    "large_image_url": "@string",
+                    "maximum_image_url": "@string",
+                    "medium_image_url": "@string",
+                    "small_image_url": "@string"
                 },
-                "url": "@null",
-                "youtube_id": "@null"
+                "url": "@string",
+                "youtube_id": "@string"
             },
             "type": "@string",
             "url": "@string",
-            "year": "@null"
+            "year": "@int"
         }
     ],
     "pagination": {

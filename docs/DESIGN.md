@@ -15,7 +15,7 @@ official MyAnimeList API alternative for developers. Scope on the v4 surface
 - **Catalogs / lists** — produces, producers, magazines, genres, top lists,
   seasons, schedules, random
 - **Community (limited)** — user profile lookups; `users/recentlyonline`
-  (currently a documented pre-existing parser failure)
+  (live-verified working on jikan v5, 2026-10-12)
 - **Meta** — API root heartbeat (`/`), `/v4` heartbeat, generated docs
   (l5-swagger), `/up` liveness
 
@@ -57,7 +57,8 @@ MongoDB, served by Laravel 13.
 ## 5. Non-features explicitly accepted
 
 - Elasticsearch search engine removed — Typesense-only decision (2026-10-10).
-- Goutte→jikan v5 upgrade deferred (local shim).
+- ~~Goutte→jikan v5 upgrade deferred (local shim)~~ — **resolved**: jikan v5.0.0-beta
+  integrated 2026-10-12 (Goutte dropped; shim + composer `replace` removed).
 - Multi-language/i18n beyond existing title types: out of scope.
 
 ---

@@ -1,6 +1,12 @@
 # Upstream Issues (parking lot)
 
-> **We are NOT targetING these at the moment.** This file exists so
+> **RESOLVED 2026-10-12** — jikan **v5.0.0-beta** shipped and was adopted into the fork
+> (`jikan-me/jikan:^5.0@beta`): **UP-01…UP-05 are fixed by v5** (verified live — Cowboy Bebop
+> incl. themes, Monster w/ status, characters, people, and `users/recentlyonline`) and **UP-06
+> is moot** (v5 dropped Goutte; the local shim + composer `replace` were removed). This file is
+> kept as the historical record.
+>
+> Prior note — we were **NOT targetING these at the moment** locally; this file existed so
 > upstream `jikan-me/*` defects that block or degrade this fork stay documented
 > and searchable, separate from our local remediation work.
 >
@@ -16,12 +22,12 @@
 
 | ID | Repo | Endpoints / commands affected | Symptom (exact) | Root cause | Status |
 |---|---|---|---|---|---|
-| UP-01 | jikan-me/jikan | `/v4/anime/{id}` + subs, `indexer:anime`, `indexer:anime-current-season`, `indexer:anime-schedule` | `ParserException` — "Failed to parse 'https://myanimelist.net/anime/{id}/'" | **Confirmed.** MAL now serves the opening/ending-theme section as a JS widget (no `<table>`); `AnimeParser::getOpeningThemes()/getEndingThemes()` select `div.theme-songs ... table/tr` → empty node list | **Filed → [#598](https://github.com/jikan-me/jikan/issues/598)** (related: [#593](https://github.com/jikan-me/jikan/issues/593)) |
-| UP-02 | jikan-me/jikan | `/v4/manga/{id}` + subs, `indexer:manga` | `TypeError` — "Cannot assign null to property Jikan\Model\Manga\Manga::$status of type string" (`src/Model/Manga/Manga.php:207`) | Typed-property strictness on PHP 8.x; MAL's current manga page yields a null `status` the model refuses | **Filed → [#599](https://github.com/jikan-me/jikan/issues/599)** (related: [#597](https://github.com/jikan-me/jikan/issues/597)) |
-| UP-03 | jikan-me/jikan | `/v4/characters/{id}` + subs | `ParserException` — "Failed to parse '.../character/{id}'" | MAL character-page markup change; exact parser method not yet isolated | **Filed → [#600](https://github.com/jikan-me/jikan/issues/600)** |
-| UP-04 | jikan-me/jikan | `/v4/people/{id}` + subs | `ParserException` — "Failed to parse '.../people/{id}'" | MAL people-page markup change; exact parser method not yet isolated | **Filed → [#601](https://github.com/jikan-me/jikan/issues/601)** |
-| UP-05 | jikan-me/jikan | `/v4/users/recentlyonline` | `ParserException` — "Failed to parse 'https://myanimelist.net/users.php'" | Pre-existing parser failure against `users.php`; not migration-introduced | **Filed → [#602](https://github.com/jikan-me/jikan/issues/602)** |
-| UP-06 | jikan-me/jikan | whole library on Symfony ≥ 7 | Composer cannot install `jikan-me/jikan` v4 with modern Symfony | v4 requires `fabpot/goutte` (abandoned; caps `symfony/mime` ≤ 6). **Working around locally** with `app/Compat/Goutte/Client.php` + `"replace": {"fabpot/goutte": "4.0.3"}` (see `PR_CHANGELOG.md` §2) | Local shim; long-term fix = `jikan-me/jikan` v5 (drops Goutte) |
+| UP-01 | jikan-me/jikan | `/v4/anime/{id}` + subs, `indexer:anime`, `indexer:anime-current-season`, `indexer:anime-schedule` | `ParserException` — "Failed to parse 'https://myanimelist.net/anime/{id}/'" | **Confirmed.** MAL now serves the opening/ending-theme section as a JS widget (no `<table>`); `AnimeParser::getOpeningThemes()/getEndingThemes()` select `div.theme-songs ... table/tr` → empty node list | **Resolved — v5.0.0-beta** (theme parser null-safe, verified live 2026-10-12) |
+| UP-02 | jikan-me/jikan | `/v4/manga/{id}` + subs, `indexer:manga` | `TypeError` — "Cannot assign null to property Jikan\Model\Manga\Manga::$status of type string" (`src/Model/Manga/Manga.php:207`) | Typed-property strictness on PHP 8.x; MAL's current manga page yields a null `status` the model refuses | **Resolved — v5.0.0-beta** (`?string $status`, verified live 2026-10-12) |
+| UP-03 | jikan-me/jikan | `/v4/characters/{id}` + subs | `ParserException` — "Failed to parse '.../character/{id}'" | MAL character-page markup change; exact parser method not yet isolated | **Resolved — v5.0.0-beta** (null-safe parser, verified live 2026-10-12) |
+| UP-04 | jikan-me/jikan | `/v4/people/{id}` + subs | `ParserException` — "Failed to parse '.../people/{id}'" | MAL people-page markup change; exact parser method not yet isolated | **Resolved — v5.0.0-beta** (null-safe parser, verified live 2026-10-12) |
+| UP-05 | jikan-me/jikan | `/v4/users/recentlyonline` | `ParserException` — "Failed to parse 'https://myanimelist.net/users.php'" | Pre-existing parser failure against `users.php`; not migration-introduced | **Resolved — v5.0.0-beta** (endpoint live-verified 200, 2026-10-12) |
+| UP-06 | jikan-me/jikan | whole library on Symfony ≥ 7 | Composer cannot install `jikan-me/jikan` v4 with modern Symfony | v4 requires `fabpot/goutte` (abandoned; caps `symfony/mime` ≤ 6). **Working around locally** with `app/Compat/Goutte/Client.php` + `"replace": {"fabpot/goutte": "4.0.3"}` (see `PR_CHANGELOG.md` §2) | **Resolved — v5 drops Goutte; shim (`app/Compat/Goutte/`) + composer `replace` removed 2026-10-12** |
 
 ---
 

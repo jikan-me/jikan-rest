@@ -55,8 +55,8 @@ verification that a user-facing flow works, and neither is "should work".
 
 | Risk | Impact | Accepted by | Date |
 |---|---|---|---|
-| Detail endpoints 500 (`ParserException`) until upstream parser lands | Data-gated 4xx-able surface | Irfan (upstream-blocked) | 2026-10-11 |
-| Goutte shim (`"replace": {"fabpot/goutte": …}` + `app/Compat/Goutte/`) | Long-term Symfony cap; fix = jikan v5 | Irfan | 2026-10-11 |
+| Detail endpoints gated on anime/manga **data** (parser is fixed in jikan v5; schedule index + full indexers populate) | Data-gated 4xx-able surface until indexed | Irfan | 2026-10-12 |
+| ~~Goutte shim~~ — **resolved**: jikan v5.0.0-beta drops Goutte; shim + replace removed 2026-10-12 | — | — | — |
 | Typesense-only search (Elasticsearch path removed) | Single engine dependency | Irfan (decision) | 2026-10-10 |
 | Typesense image pinned `27.0` + no-curl healthcheck | Upgrade path minor | Irfan | 2026-10-12 |
 

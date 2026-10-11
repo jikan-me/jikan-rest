@@ -11,22 +11,22 @@
                         "year": "@int"
                     },
                     "to": {
-                        "day": "@null",
-                        "month": "@null",
-                        "year": "@null"
+                        "day": "@int",
+                        "month": "@int",
+                        "year": "@int"
                     }
                 },
                 "string": "@string",
-                "to": "@null"
+                "to": "@string"
             },
             "airing": "@bool",
             "approved": "@bool",
             "background": "@string",
             "broadcast": {
-                "day": "@null",
-                "string": "@null",
-                "time": "@null",
-                "timezone": "@null"
+                "day": "@string",
+                "string": "@string",
+                "time": "@string",
+                "timezone": "@string"
             },
             "demographics": [
                 "@list",
@@ -38,7 +38,7 @@
                 }
             ],
             "duration": "@string",
-            "episodes": "@null",
+            "episodes": "@int",
             "explicit_genres": [
                 "@list"
             ],
@@ -81,9 +81,9 @@
             ],
             "rank": "@int",
             "rating": "@string",
-            "score": "@float",
+            "score": "@volatile",
             "scored_by": "@int",
-            "season": "@null",
+            "season": "@string",
             "source": "@string",
             "status": "@string",
             "studios": [
@@ -97,13 +97,7 @@
             ],
             "synopsis": "@string",
             "themes": [
-                "@list",
-                {
-                    "mal_id": "@int",
-                    "name": "@string",
-                    "type": "@string",
-                    "url": "@string"
-                }
+                "@list"
             ],
             "title": "@string",
             "title_english": "@string",
@@ -122,18 +116,18 @@
             "trailer": {
                 "embed_url": "@string",
                 "images": {
-                    "image_url": "@null",
-                    "large_image_url": "@null",
-                    "maximum_image_url": "@null",
-                    "medium_image_url": "@null",
-                    "small_image_url": "@null"
+                    "image_url": "@string",
+                    "large_image_url": "@string",
+                    "maximum_image_url": "@string",
+                    "medium_image_url": "@string",
+                    "small_image_url": "@string"
                 },
-                "url": "@null",
-                "youtube_id": "@null"
+                "url": "@string",
+                "youtube_id": "@string"
             },
             "type": "@string",
             "url": "@string",
-            "year": "@null"
+            "year": "@int"
         }
     ],
     "pagination": {

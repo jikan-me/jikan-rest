@@ -19,20 +19,7 @@
             "favorites": "@int",
             "role": "@string",
             "voice_actors": [
-                "@list",
-                {
-                    "language": "@string",
-                    "person": {
-                        "images": {
-                            "jpg": {
-                                "image_url": "@string"
-                            }
-                        },
-                        "mal_id": "@int",
-                        "name": "@string",
-                        "url": "@string"
-                    }
-                }
+                "@list"
             ]
         }
     ]

@@ -854,3 +854,31 @@ parity for anime/manga still awaits data (UP-01/UP-02).
   to the suite's `architecture`/`design` doc roles — those two roles are
   **not yet shipped in the released suite** (transcript/`main` gap), so they
   live as plain authored docs until upstream ships the roles, then map in.
+
+
+## 17. jikan v5.0.0-beta adopted (2026-10-12) — parser blockers cleared
+
+Upgraded `jikan-me/jikan` **^4 → ^5.0@beta** (PHP ^8.4; deps now Symfony
+browser-kit/css-selector/http-client). This closes the last big external gate:
+
+- **Goutte (UP-06) resolved** — v5 dropped `fabpot/goutte`; removed the
+  `app/Compat/Goutte/` shim and the composer `replace`. No app-side wiring
+  change was needed (MalClient already received a Symfony HttpClientInterface).
+- **UP-01…UP-05 verified fixed live** (2026-10-12): `/anime/1` Cowboy Bebop with
+  OP/ED themes, `/manga/1` Monster with `status`, character + person parses,
+  and `/v4/users/recentlyonline` now **200** end-to-end (was a documented
+  pre-existing failure). The v5 `getRecentOnlineUsers(): array` flows through the
+  existing `documents('users_recently_online')` repo unchanged.
+- **Suite**: 292 / 2707 green, 0 failures on v5.
+- **Heartbeat** `parser_version` auto-reports **v5.0.0-beta** (from composer
+  `InstalledVersions`).
+- **Seeding demo**: `indexer:anime-schedule` run populates the 120 currently-
+  airing anime (parser works against current MAL markup).
+- Docs updated: `UPSTREAM_ISSUES.md` (resolutions), `PRODUCTION-READINESS.md`
+  (risks cleared), `DESIGN.md`, `UPSTREAM_PR.md` (§1 + §6).
+- **Parity baseline ratcheted (2026-10-12)** after the adoption — old baseline still
+  recorded the blocked/500 era; regenerated and re-verified: **59 endpoints match,
+  0 diffs** (fresh capture vs baseline). `/docs` 301 remains the only intentional
+  status baseline; `users/recentlyonline` is now 200.
+- A full `indexer:anime` / `indexer:manga` run populates the rest (schedule-only
+  index currently seeds the 120 airing anime — enough to prove the pipeline).
