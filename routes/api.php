@@ -39,11 +39,24 @@ Route::get('/', function () {
     ]);
 });
 
-// Scalar API reference — rendered from the l5-swagger OpenAPI JSON (/v4/api-docs).
-Route::get('/v4/documentation', fn () => view('scalar.reference'));
+// Scalar API reference — rendered from the l5-swagger OpenAPI JSON.
+Route::get('/v4/docs', fn () => view('scalar.reference'));
 
-// Point the alias at the Scalar page instead of the disabled Swagger UI.
-Route::redirect('/docs', '/v4/documentation', 301);
+// Canonical OpenAPI spec endpoint. Serves the l5-swagger-generated JSON
+// (storage/api-docs/api-docs.json); /v4/api-docs stays as the l5-swagger-native
+// route for workflows/tooling that already reference it.
+Route::get('/v4/docs/openapi', function () {
+    $spec = storage_path('api-docs/api-docs.json');
+
+    return is_file($spec)
+        ? response()->file($spec, ['Content-Type' => 'application/json'])
+        : response()->json(['error' => 'OpenAPI spec not generated — run php artisan l5-swagger:generate'], 404);
+});
+
+// Aliases: point the history and the plain /docs at the Scalar page (instead of
+// the disabled Swagger UI).
+Route::redirect('/docs', '/v4/docs', 301);
+Route::redirect('/v4/documentation', '/v4/docs', 301);
 
 // Health/liveness endpoint. Registered explicitly: withRouting(health:) only works
 // when no custom `using` closure is provided (we load the v4 routes ourselves).

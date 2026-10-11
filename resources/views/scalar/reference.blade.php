@@ -13,7 +13,7 @@
 
         createApiReference('#app', {
             // The existing l5-swagger OpenAPI JSON (same origin as this page)
-            url: {{ Js::from(url('v4/api-docs')) }},
+            url: {{ Js::from(url('v4/docs/openapi')) }},
             theme: 'default',
             // Docs-only viewer: no in-browser requests hitting the rate-limited API
             hideTestRequestButton: true,

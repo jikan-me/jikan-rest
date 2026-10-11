@@ -930,3 +930,18 @@ browser-kit/css-selector/http-client). This closes the last big external gate:
 - Scalar is a spec renderer (paths/schemas/code-samples generated from the
   OpenAPI doc) — it does not write endpoint prose; summaries/descriptions
   would come from the `@OA` annotations (currently sparse).
+
+
+## 20. Scalar becomes the docs UI at /v4/docs; OpenAPI spec at /v4/docs/openapi (2026-10-12)
+
+Per request, the canonical URLs are now:
+- **`GET /v4/docs`** — the Scalar API reference (replaces the disabled Swagger UI).
+- **`GET /v4/docs/openapi`** — the OpenAPI spec JSON, served from the
+  l5-swagger-generated file (byte-identical to l5-swagger's `/v4/api-docs`,
+  verified). `/v4/api-docs` remains as the l5-swagger-native route for tooling
+  that already references it.
+- Aliases: `/docs` and `/v4/documentation` → 301 `/v4/docs`; Swagger UI path
+  `/v4/api/documentation` stays 404 (disabled).
+- The Scalar view now points at `/v4/docs/openapi`. Docs updated
+  (PROVIDERS/SETUP). Audit posture unchanged (endpoint-parity + route-coverage
+  clean; closure routes not in the action-parity set).
