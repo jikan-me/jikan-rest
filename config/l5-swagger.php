@@ -10,7 +10,7 @@ return [
 
             'routes' => [
                 'api' => 'api/documentation',
-                'docs' => 'api-docs',
+                'docs' => 'docs/openapi',
             ],
 
             'paths' => [

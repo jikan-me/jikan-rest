@@ -945,3 +945,14 @@ Per request, the canonical URLs are now:
 - The Scalar view now points at `/v4/docs/openapi`. Docs updated
   (PROVIDERS/SETUP). Audit posture unchanged (endpoint-parity + route-coverage
   clean; closure routes not in the action-parity set).
+
+
+## 21. /v4/api-docs retired via 301; l5-swagger serves the spec at /v4/docs/openapi (2026-10-12)
+
+- l5-swagger now serves the OpenAPI JSON **at `/v4/docs/openapi`** directly
+  (`config/l5-swagger.php` → `routes.docs = 'docs/openapi'`); the App-level
+  closure route for it was dropped (no duplicate route).
+- **`/v4/api-docs` → 301 `/v4/docs/openapi`** — single canonical spec URL.
+  Parity harness only tracks `/docs` (still 301), so no ratchet needed.
+- Verified: `/v4/docs` 200 (Scalar), `/v4/docs/openapi` 200 `application/json`
+  (100 paths), `/v4/api-docs` 301, Swagger UI path 404. endpoint-parity clean.

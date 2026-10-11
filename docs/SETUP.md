@@ -78,7 +78,7 @@ Examples:
 | Cache | `array` (local) | Redis in prod (`CACHE_DRIVER=redis`) |
 | Runtime | RoadRunner | FrankenPHP (`OCTANE_SERVER=frankenphp`), `php artisan serve`, or Docker |
 | Static analysis | PHPStan level 6 (baseline-pinned) + Pint | `composer phpstan` · `composer pint` |
-| API docs | Scalar reference at `v4/docs`; OpenAPI spec at `v4/docs/openapi` (l5-swagger-generated) | Swagger UI endpoint disabled by design |
+| API docs | Scalar reference at `v4/docs`; OpenAPI spec at `v4/docs/openapi` (l5-swagger-generated; legacy `/v4/api-docs` 301s there) | Swagger UI endpoint disabled by design |
 | Audits | `backend-quality-suite` (`.backend-suite/`) | CLI from `/tmp/bsq-venv` (or `pip install git+…@main`) |
 | Agent skills | `laravel/boost` + `.ai/skills/*` | dev-only |
 

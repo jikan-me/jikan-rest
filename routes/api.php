@@ -42,16 +42,10 @@ Route::get('/', function () {
 // Scalar API reference — rendered from the l5-swagger OpenAPI JSON.
 Route::get('/v4/docs', fn () => view('scalar.reference'));
 
-// Canonical OpenAPI spec endpoint. Serves the l5-swagger-generated JSON
-// (storage/api-docs/api-docs.json); /v4/api-docs stays as the l5-swagger-native
-// route for workflows/tooling that already reference it.
-Route::get('/v4/docs/openapi', function () {
-    $spec = storage_path('api-docs/api-docs.json');
-
-    return is_file($spec)
-        ? response()->file($spec, ['Content-Type' => 'application/json'])
-        : response()->json(['error' => 'OpenAPI spec not generated — run php artisan l5-swagger:generate'], 404);
-});
+// Canonical OpenAPI spec is served by l5-swagger itself at /v4/docs/openapi
+// (routes > docs: 'docs/openapi' in config/l5-swagger.php). The old spec URL
+// retains backwards compatibility via 301.
+Route::redirect('/v4/api-docs', '/v4/docs/openapi', 301);
 
 // Aliases: point the history and the plain /docs at the Scalar page (instead of
 // the disabled Swagger UI).
