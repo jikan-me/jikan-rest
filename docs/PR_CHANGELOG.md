@@ -757,3 +757,49 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 - Patch or await upstream fix for the MAL theme-markup parser breakage.
 - Verify the native Typesense engine end-to-end against a real Typesense server
   (docker-compose) and reconcile search-index behavior/ranking parity.
+
+
+## Docker: first real build validated locally (2026-10-12)
+
+Set up **Colima** (free CLI Docker on macOS; no Docker Desktop). First actual
+`docker compose build` + `up` ran clean and found six real issues the static
+validation couldn't:
+
+1. **`composer install` deps stage failed** — composer image has no
+   `ext-mongodb`/`ext-pcntl`/`ext-sockets`. Fix: `--ignore-platform-reqs` on the
+   deps-stage install (runtime stage has the extensions and does the authoritative
+   `dump-autoload`).
+2. **`docker-php-ext-install sockets` failed** — Alpine needs `linux-headers`
+   for `sock_diag.h`. Fix: add it to the `apk add` line.
+3. **RR binary stage — `COPY --from=${RR_STAGE}` doesn't expand under BuildKit**
+   ("invalid reference format"). Fix: dropped the `FROM scratch` + build-arg
+   dance entirely; the Dockerfile now detects the arch at build time
+   (`uname -m` → `amd64`/`arm64`) and fetches the correct 2025.1.15 asset. The
+   `RR_STAGE` build arg, compose arg and all docs references were removed.
+4. **`/app/docker-entrypoint.sh` — `#!/bin/bash` but the base is Alpine (no
+   bash)** → "no such file or directory" crash-loop. Fix: converted to POSIX sh.
+5. **`docker-entrypoint.php` — `MirazMac\DotEnv\Writer` (unpublished package)** →
+   fatal at boot. Fix: rewrote the .env writer inline (self-contained, preserved
+   behaviour, also fixed a latent hardcoded `'SCOUT_DRIVER'` key bug).
+6. **Typesense service**: `typesense/typesense:0.26.0` does not exist on Docker
+   Hub (pinned `27.0`), and the `27.0` image has no `curl` for its healthcheck
+   (rewrote the probe with bash `/dev/tcp`).
+
+Plus two config/type bugs surfaced by the container env (both also reachable
+natively):
+
+- `config/scout.php` used `env('SCOUT_DRIVER', 'null')` as the "disabled"
+  sentinel — but Laravel's `env()` coerces the literal string `"null"` to PHP
+  `null`, so `App\Providers\AppServiceProvider::getSearchIndexDriver(): string`
+  crashed whenever `SCOUT_DRIVER=null` was actually set (exactly the compose
+  default). Fix: `?? 'null'`.
+- `App\Support\JikanConfig` read `typesense_options.*` (env strings) into typed
+  `int` properties; blank/string values (e.g. `.env.dist`'s empty
+  `TYPESENSE_TYPO_TOKENS_THRESHOLD=`) bypassed the `?? maxResultsPerPage()`
+  guard and TypeError'd. Fix: treat blank as default, then `(int)` cast.
+
+**Verified on the wire (Colima, arm64, compose stack all healthy):** image
+builds, `rr --version` = 2025.1.15, `GET /up` = 200, `GET /` = v4 heartbeat JSON,
+empty-DB index endpoints return proper pagination (count 0). Data-backed detail
+endpoints (`/v4/anime/:id`) currently 500 `ParserException` on an **empty** DB —
+data-gated on the jikan v5 parser upstream blockers, not the app shell.

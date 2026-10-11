@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 set -eo pipefail
 
 status=0
-if [[ $# -eq 0 ]] ; then
+if [ $# -eq 0 ] ; then
   php /app/docker-entrypoint.php
   status=$?
 else
@@ -10,14 +10,14 @@ else
   status=$?
 fi
 
-[[ $status -ne 0 ]] && exit $status
+[ $status -ne 0 ] && exit $status
 
 # Cache config now that runtime env + (optionally) injected secrets are in the
 # .env file — baking it at image build time would freeze per-deployment values.
 php /app/artisan config:cache
 
 # Run the Laravel scheduler in the background (supercronic).
-if [[ -f /etc/supercronic/laravel ]] ; then
+if [ -f /etc/supercronic/laravel ] ; then
   /usr/bin/supercronic /etc/supercronic/laravel &
   SUPERVISOR_PID=$!
   trap 'kill "$SUPERVISOR_PID" 2>/dev/null || true' TERM INT EXIT

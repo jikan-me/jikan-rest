@@ -2,9 +2,68 @@
 <?php
 
 use Dotenv\Dotenv;
-use MirazMac\DotEnv\Writer;
 
 require_once __DIR__.'/vendor/autoload.php';
+
+/**
+ * Minimal .env writer used by the container entrypoint.
+ *
+ * The original script relied on MirazMac\DotEnv\Writer, a package that is not
+ * published on Packagist, so the image could never autoload it. This keeps the
+ * same behaviour (upsert the given keys, preserve formatting of every other
+ * line) with no extra dependency, and returns how many keys were newly added.
+ */
+function env_file_set(string $path, array $values): int
+{
+    $previous = [];
+    $lines = file_exists($path) ? file($path, FILE_IGNORE_NEW_LINES) : [];
+    $kept = [];
+    foreach ($lines as $line) {
+        if (preg_match('/^([A-Za-z_][A-Za-z0-9_]*)\s*=/', $line, $m)) {
+            $previous[] = $m[1];
+            if (array_key_exists($m[1], $values)) {
+                continue; // replaced below
+            }
+        }
+        if (trim($line) !== '') {
+            $kept[] = $line;
+        }
+    }
+
+    $added = 0;
+    foreach ($values as $key => $value) {
+        if (! in_array($key, $previous, true)) {
+            $added++;
+        }
+        $kept[] = $key.'='.env_quote((string) $value);
+    }
+    file_put_contents($path, implode(PHP_EOL, $kept).PHP_EOL);
+
+    return $added;
+}
+
+/** Write a value in a form phpdotenv can read back. */
+function env_quote(string $value): string
+{
+    if ($value === '') {
+        return "''";
+    }
+
+    return preg_match('/^[A-Za-z0-9_.\-:,;@\/]+$/', $value)
+        ? $value
+        : '"'.str_replace(['\\', '"'], ['\\\\', '\\"'], $value).'"';
+}
+
+/** Container env read, with the same inheritance shape the app itself uses. */
+function env_value(string $key, $default = null)
+{
+    $v = getenv($key);
+    if ($v === false) {
+        $v = $_ENV[$key] ?? $_SERVER[$key] ?? $default;
+    }
+
+    return $v;
+}
 
 $safe_defaults = [
     // mongodb regex search by default
@@ -20,59 +79,54 @@ $safe_defaults = [
     'DB_PASSWORD' => '',
 ];
 
-// get a copy of the current env vars.
-// these are the ones that are set during the container creation
-$current_env = $_ENV;
+// The env vars set on the container itself (Docker --env / Compose environment).
+$current_env = getenv();
 
+// First boot of a pristine image: materialise .env from .env.dist and overlay
+// the safe defaults from the container environment.
 if (! file_exists('.env')) {
     copy('.env.dist', '.env');
-    $writer = new Writer(__DIR__.'/'.'.env');
-
+    $values = [];
     foreach ($safe_defaults as $env_var_name => $env_var_default) {
-        $writer->set('SCOUT_DRIVER', env($env_var_name, $env_var_default));
+        $values[$env_var_name] = env_value($env_var_name, $env_var_default);
     }
-    $writer->write();
+    env_file_set('.env', $values);
 }
 
-// We'd like to support Container secrets. So we'll check if any of the env vars has a __FILE suffix
-// then we'll try to load the file and set the env var to the contents of the file.
-// https://docs.docker.com/engine/swarm/secrets/
-// Additionally we need to write the secrets to the .env file so the workers in roadrunner can access them.
-// (it might just pass down the global env vars, but haven't tested that yet)
-$envWriter = new Writer(__DIR__.'/'.'.env');
-$itemsWritten = 0;
-foreach (array_keys($current_env) as $env_key) {
+// Support Docker Swarm-style secrets: an env var ending in __FILE points at a
+// file whose contents become the value of the stripped key. Write them into
+// .env so the Octane workers (which may not inherit the environment) see them.
+$secrets = [];
+foreach ($current_env as $env_key => $env_value_raw) {
     if (! str_contains($env_key, '__FILE')) {
         continue;
     }
-    if (! file_exists($current_env[$env_key])) {
-        echo "Couldn't load secret: ".$_ENV[$env_key].PHP_EOL;
-
+    $secret_path = $env_value_raw;
+    if (! is_string($secret_path) || ! file_exists($secret_path)) {
+        echo "Couldn't load secret: ".$secret_path.PHP_EOL;
         continue;
     }
-    $originalKey = str_replace('__FILE', '', $env_key);
-    $secretsFileContents = file_get_contents($current_env[$env_key]);
-    $envWriter->set($originalKey, str_replace(["\n", "\r"], '', $secretsFileContents));
-    $itemsWritten++;
+    $original_key = str_replace('__FILE', '', $env_key);
+    $secrets[$original_key] = str_replace(["\n", "\r"], '', file_get_contents($secret_path));
 }
 
-if ($itemsWritten > 0) {
-    $envWriter->write();
+if ($secrets !== []) {
+    env_file_set('.env', $secrets);
     echo "Secrets loaded successfully.\n";
 }
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$current_env = $_ENV;
+$current_env = array_merge(getenv(), $_ENV, $_SERVER);
 
-if ($current_env['SCOUT_DRIVER'] === 'typesense' && empty($current_env['TYPESENSE_API_KEY'])) {
+if (($current_env['SCOUT_DRIVER'] ?? null) === 'typesense' && empty($current_env['TYPESENSE_API_KEY'] ?? '')) {
     echo 'Please set the TYPESENSE_API_KEY environment variable when setting SCOUT_DRIVER to typesense.';
     exit(1);
 }
 
 $periodical_full_indexer_key = 'JIKAN_ENABLE_PERIODICAL_FULL_INDEXER';
-if (array_key_exists($periodical_full_indexer_key, $current_env) && in_array($current_env[$periodical_full_indexer_key], [1, '1', 'true', 'True', 'TRUE'])) {
+if (isset($current_env[$periodical_full_indexer_key]) && in_array($current_env[$periodical_full_indexer_key], [1, '1', 'true', 'True', 'TRUE'], true)) {
     $supercronic_schedule = file_get_contents('/etc/supercronic/laravel');
     $supercronic_schedule .= PHP_EOL;
     $supercronic_schedule .= '0 1 * * 1 php /app/artisan indexer:anime --fail && php /app/artisan indexer:anime --resume && php /app/artisan indexer:manga --fail && php /app/artisan indexer:manga --resume';
@@ -81,5 +135,5 @@ if (array_key_exists($periodical_full_indexer_key, $current_env) && in_array($cu
     $current_time = time();
     echo json_encode(['level' => 'info', 'ts' => "$current_time.0", 'logger' => 'container_entrypoint', 'msg' => 'Full anime/manga indexer is enabled. They will run every Monday at 1am.']).PHP_EOL;
 }
-// Note: Octane/ModeRunner owns the RoadRunner .rr.yaml (overridden via -o
+// Note: Octane/RoadRunner owns the RoadRunner .rr.yaml (overridden via -o
 // flags at start time), so no RR v2 YAML preprocessing is performed here.

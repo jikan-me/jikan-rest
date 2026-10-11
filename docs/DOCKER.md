@@ -24,51 +24,47 @@ served by the RoadRunner binary on port 8080.
   omitted).
 - Compose interpolates `${VAR:-default}` from your shell environment or a
   `.env` file placed at the repo root.
-- Apple Silicon (M1/M2/M3/M4): builds target `linux/arm64` by default, so set
-  `RR_STAGE=rr-arm64` when building (see §2).
+- Apple Silicon (M1–M4) builds `linux/arm64` natively; the Dockerfile detects
+  the architecture at build time and fetches the matching RoadRunner binary, so
+  no build arg is needed (see §2).
 
 ---
 
 ## 2. Build
 
-The Dockerfile downloads the RoadRunner server binary inside a `FROM scratch`
-stage selected by the `RR_STAGE` build arg (see the header comment in
-`Dockerfile`): default `rr-amd64`, or `rr-arm64` for ARM builds.
+The Dockerfile downloads the RoadRunner server binary (2025.1.15) inside the
+app stage, detecting the build platform from `uname -m` — so a plain
+`docker compose build` fetches the correct `linux-amd64`/`linux-arm64` asset
+with no build arg (see the header comment in `Dockerfile`).
 
 ### 2.1 Compose (recommended)
 
 ```bash
-# AMD64 / Intel / CI
 docker compose up -d --build
-
-# Apple Silicon / ARM64 — must fetch the ARM64 RoadRunner binary:
-RR_STAGE=rr-arm64 docker compose up -d --build
 ```
-
-`RR_STAGE` can also be set once in a root `.env` file (`RR_STAGE=rr-arm64`).
 
 ### 2.2 Build the image directly with `docker buildx`
 
 ```bash
-# AMD64
-docker buildx build --platform linux/amd64 --build-arg RR_STAGE=rr-amd64 -t jikan-rest:local .
+# AMD64 / Intel / CI
+docker buildx build --platform linux/amd64 -t jikan-rest:local .
 
 # ARM64 (Apple Silicon, or cross-building for arm64 runners)
-docker buildx build --platform linux/arm64 --build-arg RR_STAGE=rr-arm64 -t jikan-rest:local .
+docker buildx build --platform linux/arm64 -t jikan-rest:local .
 
-# Inspect the binary stage that got baked in
+# Inspect the baked-in binary
 docker run --rm --entrypoint /usr/local/bin/rr jikan-rest:local --version
 ```
 
-> Building with the wrong `RR_STAGE` for your platform produces
-> `exec format error` when the container starts (RoadRunner for the wrong arch).
+> Cross-builds work automatically: under emulation the build container sees the
+> target architecture, so the matching RoadRunner binary is fetched.
 
 ---
 
 ## 3. Run
 
 ```bash
-docker compose up -d --build     # or: RR_STAGE=rr-arm64 docker compose up -d --build
+docker compose up -d --build
 docker compose ps                # app/mongo/redis/typesense all "healthy"
 docker compose logs -f app       # Octane + supercronic output
 docker compose down              # stop (keeps volumes)
@@ -194,11 +190,17 @@ validated without a daemon:
 
 **Validation checklist for a Docker host (CI or a runner) before pushing:**
 
-- [ ] `RR_STAGE=rr-arm64 docker compose up -d --build` on Apple Silicon, or
-      default (amd64) on x86_64 — app image builds, `rr --version` prints
-      2025.1.15.
-- [ ] `docker compose ps` shows `app`, `mongo`, `redis`, `typesense` healthy.
-- [ ] `curl -fsS http://localhost:8080/up` returns `200 OK`.
-- [ ] `curl -fsS http://localhost:8080/` returns `200` JSON with the heartbeat block.
-- [ ] `docker compose exec app php artisan about` boots Octane container fine.
-- [ ] Seed minimally + smoke `GET /v4/anime/:id` (200).
+> Status: **the full build + stack was validated locally (2026-10-12) via Colima
+> on macOS/arm64** — image builds, `rr --version` prints 2025.1.15, and all four
+> services come up healthy. Checklist items below up to "Seed minimally" are
+> confirmed; the last one needs data (upstream-blocked).
+
+- [x] `docker compose up -d --build` — app image builds, `rr --version` prints
+      2025.1.15 (arch auto-detected).
+- [x] `docker compose ps` shows `app`, `mongo`, `redis`, `typesense` healthy.
+- [x] `curl -fsS http://localhost:8080/up` returns `200 OK`.
+- [x] `curl -fsS http://localhost:8080/` returns `200` JSON with the heartbeat block.
+- [x] `docker compose exec app php artisan about` boots Octane container fine.
+- [ ] Seed minimally + smoke `GET /v4/anime/:id` (200) — blocked: empty DB
+      returns a `ParserException` 500 until anime data exists (upstream parser
+      blockers, see `UPSTREAM_ISSUES.md`).

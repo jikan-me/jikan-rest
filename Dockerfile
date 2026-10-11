@@ -36,19 +36,16 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 # --no-scripts keeps post-root-package-install from copying .env (the entrypoint
 # prepares .env from .env.dist at startup). --no-autoloader: dumped later.
+# --ignore-platform-reqs: the composer image has no ext-mongodb/pcntl/sockets;
+# the runtime stage (which has them) does the authoritative dump-autoload.
 RUN composer install -n --no-dev --no-interaction --no-progress \
-    --no-scripts --no-autoloader --prefer-dist
+    --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
 
 #################################
 # 2) RoadRunner server binary   #
 #################################
-# Version 2025.1.15 (see header). Pick the asset matching the build platform by
-# setting --build-arg RR_STAGE=rr-arm64 when cross-building; default amd64.
-FROM scratch AS rr-amd64
-ADD https://github.com/roadrunner-server/roadrunner/releases/download/v2025.1.15/roadrunner-2025.1.15-linux-amd64.tar.gz /rr.tar.gz
-
-FROM scratch AS rr-arm64
-ADD https://github.com/roadrunner-server/roadrunner/releases/download/v2025.1.15/roadrunner-2025.1.15-linux-arm64.tar.gz /rr.tar.gz
+# Downloaded inside the app stage with arch detection (amalgamated below) —
+# avoids the ARG-in-COPY --from quirk and builds correctly on both arches.
 
 #################################
 # 3) Application image          #
@@ -60,7 +57,7 @@ FROM php:8.4-cli-alpine AS app
 # Requests from the app are served by Octane workers; opcache+JIT are tuned for
 # a long-lived CLI worker.
 RUN set -eux \
-    && apk add --no-cache git curl ca-certificates $PHPIZE_DEPS \
+    && apk add --no-cache git curl ca-certificates $PHPIZE_DEPS linux-headers \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
     && docker-php-ext-install pcntl sockets opcache \
@@ -86,9 +83,11 @@ RUN set -eux \
 WORKDIR /app
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
-ARG RR_STAGE=rr-amd64
-COPY --from=${RR_STAGE} /rr.tar.gz /tmp/rr.tar.gz
+# RoadRunner binary 2025.1.15 (arch detected at build time).
 RUN set -eux \
+    && ARCH="$(uname -m | sed 's/x86_64/amd64/; s/aarch64/arm64/')" \
+    && wget -q "https://github.com/roadrunner-server/roadrunner/releases/download/v2025.1.15/roadrunner-2025.1.15-linux-${ARCH}.tar.gz" \
+        -O /tmp/rr.tar.gz \
     && mkdir -p /tmp/rr \
     && tar -xzf /tmp/rr.tar.gz -C /tmp/rr --strip-components=1 \
     && mv /tmp/rr/rr /usr/local/bin/rr \

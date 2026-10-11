@@ -14,9 +14,8 @@
 #   curl -fsS http://localhost:8080/up           # -> 200 "OK"
 #   docker compose ps                            # all services healthy
 #
-# Apple Silicon: the app stage must fetch the ARM64 RoadRunner binary — run
-#   RR_STAGE=rr-arm64 docker compose up -d --build
-# (default is rr-amd64; see ./Dockerfile header + DOCKER.md).
+# The app image fetches the RoadRunner binary with arch detection inside the
+# Dockerfile, so no build arg is needed on any platform (see Dockerfile + docs).
 # Full build/run/env/seed/health documentation: DOCKER.md
 # ---------------------------------------------------------------------------
 
@@ -29,10 +28,7 @@ services:
   app:
     build:
       context: .
-      # RoadRunner binary stage to fetch, matching the build platform.
-      # x86_64 / CI: rr-amd64 (default). Apple Silicon / ARM64: rr-arm64.
-      args:
-        RR_STAGE: "${RR_STAGE:-rr-amd64}"
+      # (RoadRunner binary is fetched with arch detection inside the Dockerfile.)
     image: jikan-rest:local
     container_name: jikan-rest
     restart: unless-stopped

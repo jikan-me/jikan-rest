@@ -30,7 +30,7 @@
 # "Pre-create collections".
 services:
   typesense:
-    image: typesense/typesense:0.26.0
+    image: typesense/typesense:27.0
     container_name: jikan-typesense
     restart: unless-stopped
     ports:
@@ -47,8 +47,8 @@ services:
       - --port=8108
       - --enable-cors
     healthcheck:
-      # The official image ships curl; drop the healthcheck if your base image lacks it.
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8108/health || exit 1"]
+      # typesense:27.0 has no curl; probe with bash's built-in /dev/tcp.
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8108 || exit 1; printf \"GET /health HTTP/1.0\\r\\n\\r\\n\" >&3; grep -q \"200 OK\" <&3'"]
       interval: 10s
       timeout: 3s
       retries: 5
