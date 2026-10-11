@@ -125,10 +125,11 @@ in their own PRs). Suggested squash onto the local branch, then open in order:
 
 ## 6. `jikan-me/jikan` contribution sequence (parked)
 
-These belong upstream in the parser library and are **not being targeted at the moment**
-(see `UPSTREAM_ISSUES.md`): UP-01 anime theme parser, UP-02 manga `$status` TypeError,
-UP-03 characters, UP-04 people, UP-05 `users.php`, UP-06 goutte→v5. When we pick these
-up, they ship as separate PRs to `jikan-me/jikan` before/independent of the migration.
+UP-01…05 were **filed upstream on 2026-10-11** (`jikan-me/jikan` #598–#602, links in
+`UPSTREAM_ISSUES.md`); UP-06 (goutte→v5) is already tracked upstream and will be
+targeted *after* the Laravel migration lands. We are **not** actively fixing them
+locally — when they (or we) pick them up, they ship as separate PRs to
+`jikan-me/jikan` before/independent of the migration.
 
 ---
 
