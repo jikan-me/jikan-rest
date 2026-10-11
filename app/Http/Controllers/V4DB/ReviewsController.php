@@ -66,6 +66,46 @@ class ReviewsController extends Controller
      *     ),
      * ),
      */
+    /**
+     *  @OA\Get(
+     *     path="/reviews/anime",
+     *     operationId="getRecentAnimeReviews",
+     *     tags={"reviews"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/page"),
+     *     @OA\Parameter(ref="#/components/parameters/preliminary"),
+     *     @OA\Parameter(ref="#/components/parameters/spoilers"),
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns recent anime reviews",
+     *
+     *         @OA\JsonContent(
+     *
+     *              @OA\Schema(ref="#/components/schemas/pagination"),
+     *              @OA\Schema(
+     *
+     *                  @OA\Property(
+     *                       property="data",
+     *                       type="array",
+     *
+     *                       @OA\Items(
+     *                           allOf={
+     *
+     *                               @OA\Schema(ref="#/components/schemas/anime_review"),
+     *                           }
+     *                       )
+     *                  )
+     *              )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response="400",
+     *         description="Error: Bad request. When required parameters were not supplied.",
+     *     ),
+     * ),
+     */
     public function anime(QueryAnimeReviewsCommand $command): mixed
     {
         return $this->mediator->send($command);

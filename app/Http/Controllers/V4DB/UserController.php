@@ -686,6 +686,33 @@ class UserController extends Controller
         return $this->mediator->send($command);
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/users/recentlyonline",
+     *     operationId="getRecentlyOnlineUsers",
+     *     tags={"users"},
+     *
+     *     @OA\Response(
+     *         response="200",
+     *         description="Returns recently online users",
+     *
+     *         @OA\JsonContent(
+     *             type="object",
+     *
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="data",
+     *                     type="array",
+     *
+     *                     @OA\Items(
+     *                         @OA\Schema(ref="#/components/schemas/basic_user")
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     * ),
+     */
     public function recentlyOnline(QueryRecentlyOnlineUsersCommand $command): mixed
     {
         return $this->mediator->send($command);
