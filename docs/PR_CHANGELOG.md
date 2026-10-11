@@ -882,3 +882,34 @@ browser-kit/css-selector/http-client). This closes the last big external gate:
   status baseline; `users/recentlyonline` is now 200.
 - A full `indexer:anime` / `indexer:manga` run populates the rest (schedule-only
   index currently seeds the 120 airing anime — enough to prove the pipeline).
+
+
+## 18. Meanwhile batch while the full index runs (2026-10-12)
+
+- **Full audit catalog re-run on the upgraded suite** (backend-quality-suite main,
+  19 audits): **clean** — cache-ttl-coverage, claude-md-drift (N/A), contract-headers
+  (N/A), doc-staleness, endpoint-parity, error-handling, error-shape, form-request-
+  validation, layer-boundaries, proposal-status (N/A), prose-flags, rate-limit,
+  route-coverage, route-model-binding (0 critical / 103 should-fix — unchanged
+  false-positives, re-confirmed on the newer suite), safe-repairers, **toolchain-gates
+  (now wired + clean)**, skill-paths (inert), versioning (known false-positive),
+  api-consistency (known sentinel false-positive).
+  - **toolchain-gates wired**: added `toolchainGates` to `.backend-suite/arch-rules.json`
+    (composer.json manifest, phpunit.xml runner, required `test` script, `--testsuite`) —
+    runs clean: all composer `--testsuite` flags point at declared suites.
+  - **Recorded N/A**: claude-md-drift (no project CLAUDE.md; agent instructions are
+    docs/SETUP.md + `.ai/`), contract-headers (that banner convention targets a
+    screen→adapter UI architecture; our contract = parity + swagger), proposal-status
+    (no `docs/proposals/`; our RFC.md uses its own Status table), skill-paths
+    (git-ls-files inert; 0 plugin refs anyway). Not exemptions — deliberate, documented.
+- **DB index proposals finalized** (`docs/DB_INDEXES.md`): found the compound-index
+  migration `2026_10_11_000000_add_anime_compound_indexes.php` was an **empty stub**
+  (indexes had only been applied live) — re-wrote it with the real
+  `schedule`/`season`/`top_airing` definitions; added the pending companion P4 as
+  **`2026_10_12_000000_add_anime_top_upcoming_index.php`** (`{status,type,members:-1}`)
+  and **applied+verified all four** on the live `jikan.anime`.
+- **Post-full-index runbook** added: `docs/POST_FULL_INDEX.md` — step-by-step for
+  when the run completes (drain failures, parity re-verify + ratchet, Typesense
+  re-import, endpoint smoke, container demo, hygiene/record).
+- route-model-binding re-checked under the newer suite: **unchanged** (0 critical,
+  103 should-fix — all DTO-command params by design; no exemption mechanism).

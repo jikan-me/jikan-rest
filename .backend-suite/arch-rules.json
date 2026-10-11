@@ -1,168 +1,177 @@
 {
-  "_readme": "Laravel-specific architecture rules template. Copy to .backend-suite/arch-rules.json and fill in the TODO values. See the main arch-rules.json.template for the base template with all available sections.",
-  "errorHandling": {
-    "_comment": "Consumed by bin/audit_error_handling.php. Every key is this project's name for its own error machinery; the audit refuses rather than guessing them, because a wrong name matches nothing and reports a confident zero.",
-    "exception_type": "AppException",
-    "guard_call": "guarded",
-    "client_call_pattern": "Http::(?:get|post|put|patch|delete)",
-    "error_state_widget": "ErrorResponse",
-    "error_message_field": "errorMessage",
-    "state_class_pattern": "^class (\\w+Failed)\\b",
-    "state_file_suffix": "_Failure.php",
-    "pages_marker": "/Http/"
-  },
-  "contractHeaders": {
-    "_comment": "Consumed by bin/audit_contract_headers.php. Optional keys the script also reads, each documented at its top: namePrefix, sectionLabels, ignoreFields, checks, screenTreeDepth, receiverPattern, receiverName, screenClassPattern, scope, adapterGlob, excludeGlobs, outputPrefixes, baseline.",
-    "headerMarker": "// CONTRACT:",
-    "receiverPattern": "private\\s+(\\w+)\\s+\\$contract\\s*;",
-    "receiverName": "contract",
-    "screenClassPattern": "class\\s+(\\w+Controller)\\b",
-    "scope": "app/Http/Controllers/*.php",
-    "adapterGlob": "app/Services/*.php",
-    "outputPrefixes": [
-      "on"
-    ]
-  },
-  "layerBoundaries": {
-    "_comment": "Consumed by bin/audit_layer_boundaries.py. Every rule in rules[] is enforced (an earlier version read rules[0] only); baseline is the recorded oracle the ratchet compares against. On a PHP project mustNotImport may name a namespace root (App\\Http\\) or a repo-rooted path \u2014 both compare by prefix, and one rule may ban both.",
-    "rules": [
-      {
-        "label": "HTTP layer must not import Service layer",
-        "fromGlob": "app/Http/**",
-        "mustNotImport": [
-          "app/Services/**",
-          "App\\Services\\"
-        ]
-      },
-      {
-        "label": "Service layer must not import HTTP layer",
-        "fromGlob": "app/Services/**",
-        "mustNotImport": [
-          "app/Http/**",
-          "App\\Http\\"
-        ]
-      }
-    ],
-    "baseline": ".backend-suite/baselines/layer-boundaries.json"
-  },
-  "apiConsistency": {
-    "_comment": "Consumed by bin/audit_api_consistency.py. checks: each of the four (loadBearingCopy, hardBakedCopy, authoredSemantics, vocabulary) is true or {\"enabled\": false, \"why\": \"...\"} \u2014 an unconfigured check refuses rather than passes. authoredSemantics is a client-UI-provenance check (an interaction must author a named semantics node); on a server-side tree the interaction surface lives in the client app, so turn it off with a why rather than letting every route report as an unnamed interaction. vocabularyRules: this project's own naming rules, [{message, classPattern?, classNotPattern?, has, hasNot?}] \u2014 a class whose name matches, whose members all match has, and whose members match none of hasNot is a finding; vocabulary on with zero rules refuses rather than sweeping clean.",
-    "semanticsWrappers": [
-      "Semantics"
-    ],
-    "scope": [
-      "routes/**/*.php",
-      "app/Http/Controllers/**/*.php",
-      "app/Services/**/*.php"
-    ],
-    "checks": {
-      "loadBearingCopy": true,
-      "hardBakedCopy": true,
-      "authoredSemantics": {
-        "enabled": false,
-        "why": "server-side tree; interaction surfaces live in the client app"
-      },
-      "vocabulary": true
+    "_readme": "Laravel-specific architecture rules template. Copy to .backend-suite/arch-rules.json and fill in the TODO values. See the main arch-rules.json.template for the base template with all available sections.",
+    "errorHandling": {
+        "_comment": "Consumed by bin/audit_error_handling.php. Every key is this project's name for its own error machinery; the audit refuses rather than guessing them, because a wrong name matches nothing and reports a confident zero.",
+        "exception_type": "AppException",
+        "guard_call": "guarded",
+        "client_call_pattern": "Http::(?:get|post|put|patch|delete)",
+        "error_state_widget": "ErrorResponse",
+        "error_message_field": "errorMessage",
+        "state_class_pattern": "^class (\\w+Failed)\\b",
+        "state_file_suffix": "_Failure.php",
+        "pages_marker": "/Http/"
     },
-    "vocabularyRules": [
-      {
-        "message": "uses fetch, where the codebase names this find",
-        "classPattern": "Repository",
-        "has": [
-          "function fetch\\("
+    "contractHeaders": {
+        "_comment": "Consumed by bin/audit_contract_headers.php. Optional keys the script also reads, each documented at its top: namePrefix, sectionLabels, ignoreFields, checks, screenTreeDepth, receiverPattern, receiverName, screenClassPattern, scope, adapterGlob, excludeGlobs, outputPrefixes, baseline.",
+        "headerMarker": "// CONTRACT:",
+        "receiverPattern": "private\\s+(\\w+)\\s+\\$contract\\s*;",
+        "receiverName": "contract",
+        "screenClassPattern": "class\\s+(\\w+Controller)\\b",
+        "scope": "app/Http/Controllers/*.php",
+        "adapterGlob": "app/Services/*.php",
+        "outputPrefixes": [
+            "on"
         ]
-      },
-      {
-        "message": "uses find, where the codebase names this fetch",
-        "classPattern": "Repository",
-        "has": [
-          "function find\\("
+    },
+    "layerBoundaries": {
+        "_comment": "Consumed by bin/audit_layer_boundaries.py. Every rule in rules[] is enforced (an earlier version read rules[0] only); baseline is the recorded oracle the ratchet compares against. On a PHP project mustNotImport may name a namespace root (App\\Http\\) or a repo-rooted path \u2014 both compare by prefix, and one rule may ban both.",
+        "rules": [
+            {
+                "label": "HTTP layer must not import Service layer",
+                "fromGlob": "app/Http/**",
+                "mustNotImport": [
+                    "app/Services/**",
+                    "App\\Services\\"
+                ]
+            },
+            {
+                "label": "Service layer must not import HTTP layer",
+                "fromGlob": "app/Services/**",
+                "mustNotImport": [
+                    "app/Http/**",
+                    "App\\Http\\"
+                ]
+            }
+        ],
+        "baseline": ".backend-suite/baselines/layer-boundaries.json"
+    },
+    "apiConsistency": {
+        "_comment": "Consumed by bin/audit_api_consistency.py. checks: each of the four (loadBearingCopy, hardBakedCopy, authoredSemantics, vocabulary) is true or {\"enabled\": false, \"why\": \"...\"} \u2014 an unconfigured check refuses rather than passes. authoredSemantics is a client-UI-provenance check (an interaction must author a named semantics node); on a server-side tree the interaction surface lives in the client app, so turn it off with a why rather than letting every route report as an unnamed interaction. vocabularyRules: this project's own naming rules, [{message, classPattern?, classNotPattern?, has, hasNot?}] \u2014 a class whose name matches, whose members all match has, and whose members match none of hasNot is a finding; vocabulary on with zero rules refuses rather than sweeping clean.",
+        "semanticsWrappers": [
+            "Semantics"
+        ],
+        "scope": [
+            "routes/**/*.php",
+            "app/Http/Controllers/**/*.php",
+            "app/Services/**/*.php"
+        ],
+        "checks": {
+            "loadBearingCopy": true,
+            "hardBakedCopy": true,
+            "authoredSemantics": {
+                "enabled": false,
+                "why": "server-side tree; interaction surfaces live in the client app"
+            },
+            "vocabulary": true
+        },
+        "vocabularyRules": [
+            {
+                "message": "uses fetch, where the codebase names this find",
+                "classPattern": "Repository",
+                "has": [
+                    "function fetch\\("
+                ]
+            },
+            {
+                "message": "uses find, where the codebase names this fetch",
+                "classPattern": "Repository",
+                "has": [
+                    "function find\\("
+                ]
+            }
         ]
-      }
-    ]
-  },
-  "routeCoverage": {
-    "_comment": "Consumed by bin/audit_route_coverage.php. routesGlob: glob for route files. actionPattern: regex to extract controller@method from 'uses' => 'Controller@method'. controllerDirs: directories to scan for controllers.",
-    "routesGlob": "routes/*.php",
-    "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+)@([A-Za-z]+)'",
-    "controllerDirs": [
-      "app/Http/Controllers/V4DB"
-    ]
-  },
-  "cacheTtlCoverage": {
-    "_comment": "Consumed by bin/audit_cache_ttl_coverage.php. routesGlob: glob for route files. actionPattern: regex to extract action key from 'uses' => 'Controller@method'. ttlConfigGlob: glob for TTL config file. ttlKeyPattern: regex to extract action key from TTL config.",
-    "routesGlob": "routes/*.php",
-    "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+@[A-Za-z]+)'",
-    "ttlConfigGlob": "config/jikan.php",
-    "ttlKeyPattern": "'([A-Za-z]+@[A-Za-z]+)'\\s*=>"
-  },
-  "formRequestValidation": {
-    "_comment": "Consumed by bin/audit_form_request_validation.py. requestDirs: directories containing FormRequest classes. requireRules: require rules() method. requireAuthorize: require authorize() method. requireMessages: require messages() method. requireAttributes: require attributes() method. forbidDuplicateRules: forbid duplicate field rules. forbidEmptyRules: forbid empty rules array.",
-    "requestDirs": [
-      "app/Http/Requests"
-    ],
-    "requireRules": true,
-    "requireAuthorize": true,
-    "requireMessages": false,
-    "requireAttributes": false,
-    "forbidDuplicateRules": true,
-    "forbidEmptyRules": true
-  },
-  "routeModelBinding": {
-    "_comment": "Consumed by bin/audit_route_model_binding.php. routesGlob: glob for route files. controllerDirs: directories to scan for controllers. modelDirs: directories to scan for Eloquent models. bindingPattern: regex for Route::model/bind. checkControllerSignatures: whether to check controller method signatures. allowMissingModels: whether to allow missing models for resource routes.",
-    "routesGlob": "routes/*.php",
-    "controllerDirs": [
-      "app/Http/Controllers/V4DB"
-    ],
-    "modelDirs": [
-      "app/Models"
-    ],
-    "bindingPattern": "Route::(?:model|bind)\\s*\\([^)]+\\.class",
-    "checkControllerSignatures": false,
-    "allowMissingModels": false
-  },
-  "endpointParity": {
-    "_comment": "verifies route/controller-action parity for string-action routes; no extra config needed",
-    "docMarkers": [
-      "@OA\\Get",
-      "@OA\\Post",
-      "@OA\\PathItem"
-    ],
-    "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+)@([A-Za-z]+)'",
-    "controllerDirs": [
-      "app/Http/Controllers/V4DB"
-    ],
-    "routesGlob": "routes/*.php"
-  },
-  "rateLimit": {
-    "_comment": "public v4 API is globally throttled via the v4 group + RateLimiter::for('v4')",
-    "globalProtectionFiles": [
-      "routes/api.php",
-      "bootstrap/app.php",
-      "app/Providers/AppServiceProvider.php"
-    ],
-    "globalProtectionPattern": "throttle:v4",
-    "protectionPattern": "throttle:[A-Za-z0-9:._-]+",
-    "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+)@([A-Za-z]+)'",
-    "routesGlob": "routes/*.php"
-  },
-  "versioning": {
-    "routeFilePattern": "web\\.v(\\d+)\\.php$",
-    "prefixPattern": "'prefix'\\s*=>\\s*'v([0-9]+)'",
-    "namespacePattern": "'namespace'\\s*=>\\s*'([\\w\\\\]+)'",
-    "namespaceVersionPattern": "V(\\\\d+)",
-    "bootstrapGlob": "routes/*.php"
-  },
-  "errorShape": {
-    "envelopeKeys": [
-      "status",
-      "type",
-      "message",
-      "error",
-      "report_url"
-    ],
-    "handlerGlob": "app/Exceptions/Handler.php",
-    "sourceGlob": "app/Http/Controllers/**/*.php",
-    "bypassPattern": "abort\\((\\d+)\\)"
-  }
+    },
+    "routeCoverage": {
+        "_comment": "Consumed by bin/audit_route_coverage.php. routesGlob: glob for route files. actionPattern: regex to extract controller@method from 'uses' => 'Controller@method'. controllerDirs: directories to scan for controllers.",
+        "routesGlob": "routes/*.php",
+        "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+)@([A-Za-z]+)'",
+        "controllerDirs": [
+            "app/Http/Controllers/V4DB"
+        ]
+    },
+    "cacheTtlCoverage": {
+        "_comment": "Consumed by bin/audit_cache_ttl_coverage.php. routesGlob: glob for route files. actionPattern: regex to extract action key from 'uses' => 'Controller@method'. ttlConfigGlob: glob for TTL config file. ttlKeyPattern: regex to extract action key from TTL config.",
+        "routesGlob": "routes/*.php",
+        "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+@[A-Za-z]+)'",
+        "ttlConfigGlob": "config/jikan.php",
+        "ttlKeyPattern": "'([A-Za-z]+@[A-Za-z]+)'\\s*=>"
+    },
+    "formRequestValidation": {
+        "_comment": "Consumed by bin/audit_form_request_validation.py. requestDirs: directories containing FormRequest classes. requireRules: require rules() method. requireAuthorize: require authorize() method. requireMessages: require messages() method. requireAttributes: require attributes() method. forbidDuplicateRules: forbid duplicate field rules. forbidEmptyRules: forbid empty rules array.",
+        "requestDirs": [
+            "app/Http/Requests"
+        ],
+        "requireRules": true,
+        "requireAuthorize": true,
+        "requireMessages": false,
+        "requireAttributes": false,
+        "forbidDuplicateRules": true,
+        "forbidEmptyRules": true
+    },
+    "routeModelBinding": {
+        "_comment": "Consumed by bin/audit_route_model_binding.php. routesGlob: glob for route files. controllerDirs: directories to scan for controllers. modelDirs: directories to scan for Eloquent models. bindingPattern: regex for Route::model/bind. checkControllerSignatures: whether to check controller method signatures. allowMissingModels: whether to allow missing models for resource routes.",
+        "routesGlob": "routes/*.php",
+        "controllerDirs": [
+            "app/Http/Controllers/V4DB"
+        ],
+        "modelDirs": [
+            "app/Models"
+        ],
+        "bindingPattern": "Route::(?:model|bind)\\s*\\([^)]+\\.class",
+        "checkControllerSignatures": false,
+        "allowMissingModels": false
+    },
+    "endpointParity": {
+        "_comment": "verifies route/controller-action parity for string-action routes; no extra config needed",
+        "docMarkers": [
+            "@OA\\Get",
+            "@OA\\Post",
+            "@OA\\PathItem"
+        ],
+        "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+)@([A-Za-z]+)'",
+        "controllerDirs": [
+            "app/Http/Controllers/V4DB"
+        ],
+        "routesGlob": "routes/*.php"
+    },
+    "rateLimit": {
+        "_comment": "public v4 API is globally throttled via the v4 group + RateLimiter::for('v4')",
+        "globalProtectionFiles": [
+            "routes/api.php",
+            "bootstrap/app.php",
+            "app/Providers/AppServiceProvider.php"
+        ],
+        "globalProtectionPattern": "throttle:v4",
+        "protectionPattern": "throttle:[A-Za-z0-9:._-]+",
+        "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+)@([A-Za-z]+)'",
+        "routesGlob": "routes/*.php"
+    },
+    "versioning": {
+        "routeFilePattern": "web\\.v(\\d+)\\.php$",
+        "prefixPattern": "'prefix'\\s*=>\\s*'v([0-9]+)'",
+        "namespacePattern": "'namespace'\\s*=>\\s*'([\\w\\\\]+)'",
+        "namespaceVersionPattern": "V(\\\\d+)",
+        "bootstrapGlob": "routes/*.php"
+    },
+    "errorShape": {
+        "envelopeKeys": [
+            "status",
+            "type",
+            "message",
+            "error",
+            "report_url"
+        ],
+        "handlerGlob": "app/Exceptions/Handler.php",
+        "sourceGlob": "app/Http/Controllers/**/*.php",
+        "bypassPattern": "abort\\((\\d+)\\)"
+    },
+    "toolchainGates": {
+        "_comment": "Consumed by bin/audit_toolchain_gates.py. Declares the manifest(s) and runner(s) that define the project's toolchain, so test-suite declarations and runner directories cannot silently drift.",
+        "manifestGlob": "composer.json",
+        "runnerGlob": "phpunit.xml",
+        "requiredScripts": [
+            "test"
+        ],
+        "testsuiteFlag": "--testsuite"
+    }
 }

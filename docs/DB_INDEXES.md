@@ -140,7 +140,7 @@ sort: { members: 1 }
 
 ---
 
-## 3. Compound indexes (APPLIED 2026-10-11)
+## 3. Compound indexes (APPLIED — P1–P3 2026-10-11, P4 2026-10-12)
 
 Migration `database/migrations/2026_10_11_000000_add_anime_compound_indexes.php`
 creates these; for the live (indexer-seeded) `jikan` DB they were created directly
@@ -162,7 +162,12 @@ Serves `getItemsBySeason` (`DefaultAnimeRepository.php:114-224`):
 ### P3 — Top airing: `{ airing: 1, score: -1 }`
 Serves `getTopAiringItems` (`DefaultAnimeRepository.php:27-32`) — `airing = true` equality + `orderByScore()` (`:239-244`) descending sort, fully index-covered (add a leading `approved` only if the unapproval post-filter proves hot).
 
-Companion (not part of the 3, for priority): top / upcoming-season queries filter `status = "Not yet aired"` and sort by `members` desc (`getTopUpcomingItems` `:34-39`, `getUpcomingSeasonItems` `:226-237`) → `{ status: 1, type: 1, members: -1 }`; the existing `status` and `members_1` single-field indexes already provide a baseline.
+### P4 — Top/upcoming: `{ status: 1, type: 1, members: -1 }` (APPLIED 2026-10-12)
+Serves `getTopUpcomingItems` (`:34-39`) and `getUpcomingSeasonItems` (`:226-237`)—
+filters `status = "Not yet aired"` and sorts `members` desc. Shipped as migration
+`2026_10_12_000000_add_anime_top_upcoming_index.php` and applied to the live
+`jikan.anime` (verified). Previously only covered by the single-field
+`status`/`members_1` indexes.
 
 ---
 
@@ -178,11 +183,12 @@ Schema::table('anime', function (Blueprint $table) {
 });
 ```
 
-**DONE:** shipped as `database/migrations/2026_10_11_000000_add_anime_compound_indexes.php`
-and applied to the live `jikan.anime` (verified: `schedule`, `season`, `top_airing` are
-present with the keys above). For fresh/CI/upstream environments the migration covers
-it; for local indexer-seeded DBs the equivalent `db.anime.createIndex({...}, {name: ...})`
-calls are used.
+**DONE (fixed 2026-10-12):** the `2026_10_11_000000_add_anime_compound_indexes.php`
+file was an **empty stub** (indexes had only ever been applied live) — it has been
+re-written with the real `schedule`/`season`/`top_airing` definitions so fresh/CI/upstream
+environments get them from the migration. **P4** ships separately as
+`2026_10_12_000000_add_anime_top_upcoming_index.php`. All four verified present on the
+live `jikan.anime`.
 
 ---
 
@@ -192,7 +198,7 @@ calls are used.
 - **`jikan_tests` DB: 118 of 118 non-text migration indexes missing** — expected (tests never run migrations; only the 16 text `search` indexes are recreated post-truncate).
 - **Bug:** `characters`/`people` `search` text indexes are swapped in `SyntheticMongoDbTransaction::ensureSearchIndexes()` (`app/Testing/SyntheticMongoDbTransaction.php:127-128`).
 - **Schedule query** filters `{status:"Currently Airing", type:"TV", approved:true}` (+ optional `broadcast` equality/prefix-regex), sorted by `members` — it does **not** use the boolean `airing` field.
-- **Proposed compound indexes**: `P1 {status, type, approved, broadcast, members}` (schedule), `P2 {aired.from, aired.to, airing, members:-1}` (season), `P3 {airing, score:-1}` (top airing).
+- **Applied compound indexes**: `P1 {status, type, approved, broadcast, members}` (schedule), `P2 {aired.from, aired.to, airing, members:-1}` (season), `P3 {airing, score:-1}` (top airing), `P4 {status, type, members:-1}` (top/upcoming, 2026-10-12). No proposals remain pending.
 ---
 
 ## Resolution (2026-10-11)
