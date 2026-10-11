@@ -130,6 +130,13 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 - Route prefix configured via `defaults.routes.group_options.prefix`; `/docs` redirects
   to the live UI at `/v4/api/documentation`.
 
+### 7a. Swagger UI endpoint disabled (feature kept, 2026-10-11)
+- `/v4/api/documentation` (the self-served Swagger UI under `/v4`) is **disabled** via
+  `App\Http\Middleware\DisableSwaggerUi` (product decision — don't expose the UI viewer
+  on the public API). l5-swagger + `@OA` annotations + spec generation remain; the spec
+  stays available at `v4/api-docs`, and `/docs` still redirects. (A broad removal was
+  attempted and reverted — see git history.)
+
 ### 8. Tests (Lumen → PHPUnit 11/12)
 - Moved off `Laravel\Lumen\Testing\TestCase`; `createApplication()` bootstraps via the
   console kernel; added `$response` + `assertStatus()` compat shims.
