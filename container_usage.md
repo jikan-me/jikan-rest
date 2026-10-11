@@ -106,26 +106,24 @@ docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikan-rest:nigh
 
 ### Docker compose usage
 
+```bash
+docker compose up -d --build
 ```
-docker-compose up
-```
 
-This does the same thing as the `container-setup.sh` script mostly, but you will have to create the secret files yourself. The following secret files are required for credentials (put them next to the `docker-compose.yml` file):
+This builds the app from the local `Dockerfile` and starts MongoDB, Redis and
+Typesense alongside it. Unlike the `container-setup.sh` flow it needs **no secret
+files**: the local MongoDB/Redis run without authentication by default (drop the
+`ports:` stanzas if you already run those services on the host).
 
-- db_admin_password.txt
-- db_admin_username.txt
-- db_password.txt
-- db_username.txt
-- redis_password.txt
-- typesense_api_key.txt
+Full build / run / env (`APP_KEY`, `TYPESENSE_API_KEY`, `SCOUT_DRIVER`,
+`CACHE_DRIVER`) / seeding / health instructions are in
+[`DOCKER.md`](DOCKER.md). On Apple Silicon, build with
+`RR_STAGE=rr-arm64 docker compose up -d --build`.
 
-You can customise the Jikan API config through `./docker/config/.env.compose` file. (E.g. you don't want CORS headers)
-
-> **Please note**: The syntax rules of docker compose for `.env` applies
-> here: https://docs.docker.com/compose/env-file/#syntax-rules
-
-> **Additional configuration**: You can change the mongodb memory usage via `MONGO_CACHE_SIZE_GB` environment variable. 
-> It sets how many gigabytes of memory is available for wired tiger. Default is `1`. This is useful for systems with low memory capacity.
+> The old secret-file flow (db_username.txt / redis_password.txt /
+> typesense_api_key.txt + `docker/config/.env.compose`) is kept for the
+> `container-setup.sh` script and the published image; it is no longer used by
+> the root `docker-compose.yml`.
 
 ### Note for Podman
 

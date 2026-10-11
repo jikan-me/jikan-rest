@@ -1,10 +1,21 @@
 # Typesense service for local Jikan-REST development with Laravel Scout's
 # native Typesense engine.
 #
-# Host config in config/scout.php: host localhost, port 8108, api key from
-# TYPESENSE_API_KEY (defaults to "abcd").
+# This file is the single source of truth for the Typesense service. It is
+#   - INCLUDED by the root docker-compose.yml via the top-level `include:`
+#     (full stack: `docker compose up -d --build`), and
+#   - usable standalone for a typesense-only instance:
+#       docker compose -f docker-compose.typesense.yml up -d
 #
-# Usage:
+# The API key is shared with the app: override it ONCE via the TYPESENSE_API_KEY
+# variable and both services pick it up, e.g.
+#   TYPESENSE_API_KEY=my-key docker compose up -d
+#
+# Host config in config/scout.php: host "typesense" (compose network) or
+# "localhost" (standalone), port 8108, api key from TYPESENSE_API_KEY
+# (defaults to "abcd").
+#
+# Usage (standalone):
 #   docker compose -f docker-compose.typesense.yml up -d     # start
 #   curl -sS http://localhost:8108/health                    # -> {"ok":true}
 #   docker compose -f docker-compose.typesense.yml down      # stop (keeps volume)
@@ -23,18 +34,18 @@ services:
     container_name: jikan-typesense
     restart: unless-stopped
     ports:
-      - "8108:8108"
+      - "127.0.0.1:8108:8108"
     volumes:
       - typesense-data:/data
     environment:
       # Must stay in sync with TYPESENSE_API_KEY used by the app.
-      TYPESENSE_API_KEY: abcd
+      TYPESENSE_API_KEY: "${TYPESENSE_API_KEY:-abcd}"
       TYPESENSE_DATA_DIR: /data
-    command: >
-      --data-dir=/data
-      --api-key=abcd
-      --port=8108
-      --enable-cors
+    command:
+      - --data-dir=/data
+      - --api-key=${TYPESENSE_API_KEY:-abcd}
+      - --port=8108
+      - --enable-cors
     healthcheck:
       # The official image ships curl; drop the healthcheck if your base image lacks it.
       test: ["CMD-SHELL", "curl -fsS http://localhost:8108/health || exit 1"]
