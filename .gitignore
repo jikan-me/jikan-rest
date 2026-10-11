@@ -32,3 +32,6 @@ typesense_api_key.txt
 **/caddy
 frankenphp
 frankenphp-worker.php
+
+# Octane RoadRunner binary (downloaded dev tool)
+/rr

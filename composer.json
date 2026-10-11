@@ -24,6 +24,7 @@
         "sentry/sentry-laravel": "^4.0",
         "spatie/laravel-data": "^4.0",
         "spatie/laravel-enum": "^3.3",
+        "spiral/roadrunner-http": "^4.1",
         "symfony/browser-kit": "^7.0",
         "symfony/css-selector": "^7.0",
         "symfony/dom-crawler": "^7.0",
@@ -41,7 +42,8 @@
         "haydenpierce/class-finder": "^0.4.4",
         "laravel/tinker": "^3.0",
         "mockery/mockery": "^1.6",
-        "phpunit/phpunit": "^11.0"
+        "phpunit/phpunit": "^11.0",
+        "spiral/roadrunner-cli": "^2.7"
     },
     "autoload": {
         "psr-4": {
