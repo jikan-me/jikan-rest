@@ -214,12 +214,14 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   the original Lumen baseline). A `tearDown()` reset was added so `Carbon::setTestNow`
   doesn't leak between tests.
 - **Parity harness** (`tools/parity/{snapshot,compare}.php`, baseline committed):
-  **69 → 3** differences at the green check; after the later DB wipe, re-verified that
-  every remaining diff is DB-state/upstream (anime/manga/characters/people → 500
-  `ParserException` from the MAL markup change; `/docs` redirect; `users/recentlyonline`;
-  `producers` empty until re-seeded). Seeded endpoints (genres/magazines) match baseline
-  byte-for-byte in shape, and the P0 removed-fields/rate-limit changes introduced **no
-  new shape or status diffs**.
+  **69 → 3** differences at the green check; re-verified after the data wipe and the
+  P0/P1/practice fixes — **21 endpoints match the baseline byte-for-byte, including the
+  seeded genres/magazines/producers**, and the changes introduced **no new shape or
+  status diffs**. Every remaining difference is explained by documented blockers:
+  anime/manga/characters/people → 500 `ParserException` (upstream MAL markup change),
+  list endpoints empty without anime data, `/docs` 301 redirect, `users/recentlyonline`
+  pre-existing failure. The harness now masks the heartbeat `score` (int/float
+  depending on recorded events).
 - **Live smoke** (native runtime): `/`, `/v4`, `/v4/genres/anime`, `/v4/seasons/now`,
   `/v4/schedules?filter=...`, `/v4/producers/{id}`, `/v4/api/documentation` all `200`.
 - **Octane**: `php artisan octane:start --server=roadrunner` serves endpoints `200`;

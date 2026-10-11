@@ -217,3 +217,4 @@ Status at time of writing: the P0 correctness batch (env()→config centralizati
 - `UpdateCacheJob` / `UpdateDatabaseJob` — deleted (unreferenced, unbound client, wrong pattern); cache-warm redesign tracked. ✅
 - Heartbeat pruning no-op + score overflow — fixed via `SourceHeartbeatProvider::pruneFails()`; denominator uses real event count. ✅
 - Remaining phase-2 items (mind you): Symfony 7/8 pin alignment (`^7.4 || ^8`), `config/queue.php` mongodb default, `insights/trends` filter, `IncrementalIndexer` resume/id-diff, `CorsMiddleware` response wrapping, `pub`/dead files removal — still open.
+- `SyntheticMongoDbTransaction` production-DB truncation hazard — **fixed** (`b4c206d`): `beginDatabaseTransaction()` now refuses to truncate unless the resolved database is the isolated test DB. Sentinel-verified across a full suite run. ✅

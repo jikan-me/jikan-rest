@@ -36,6 +36,8 @@ $volatile = [
     'createdAt', 'modifiedAt', 'updatedAt',
     'created_at', 'modified_at', 'updated_at',
     'request_hash', 'cached_at', 'last_downtime', 'timestamp',
+    // heartbeat score is int when no events recorded, float otherwise
+    'score',
 ];
 
 /**

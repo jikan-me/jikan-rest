@@ -6,7 +6,7 @@
     "myanimelist_heartbeat": {
         "down": "@bool",
         "last_downtime": "@volatile",
-        "score": "@float",
+        "score": "@volatile",
         "status": "@string"
     },
     "parser_github_url": "@string",
