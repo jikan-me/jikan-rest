@@ -22,8 +22,9 @@
 #     (verified: closures are serialisable on Laravel 13 and the DISABLE_USER_LISTS
 #     user-list routes are cached correctly — keep DISABLE_USER_LISTS=false, or
 #     warm the route cache with your target value).
-#   - HEALTHCHECK hits the app root (there is no /up route yet) on the
-#     octane/http port, which returns 200 JSON incl. the source-heartbeat block.
+#   - HEALTHCHECK hits GET /up (routes/api.php — a bare 200 "OK" closure with no
+#     DB dependency) on the octane/http port, so liveness only requires the
+#     Octane worker to be serving, not MongoDB.
 # ---------------------------------------------------------------------------
 
 #################################
@@ -118,10 +119,9 @@ USER jikanapi:jikanapi
 EXPOSE 8080
 EXPOSE 2114
 
-# The app has no /up route; health-check the root endpoint (200 JSON, includes
-# myanimelist_heartbeat). Requires MongoDB to be reachable from the container —
-# the same requirement as serving real traffic.
+# GET /up (routes/api.php) returns a bare 200 "OK" with no DB dependency —
+# verifies the Octane worker is serving without coupling readiness to MongoDB.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-    CMD wget -q -O /dev/null http://127.0.0.1:8080/ || exit 1
+    CMD wget -q -O /dev/null http://127.0.0.1:8080/up || exit 1
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
