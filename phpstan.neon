@@ -6,12 +6,12 @@ parameters:
     paths:
         - app
 
-    # Analysis level. Level 5 is this codebase's initial level (level 6 reports
-    # 1000+ issues against the Lumen-era code, mostly missing type hints on
-    # scrapers/models). The current findings are pinned in phpstan-baseline.neon
-    # so `vendor/bin/phpstan analyse` exits 0; when the code is type-lined, bump
-    # the level and regenerate the baseline.
-    level: 5
+    # Analysis level. Level 6 is now the standing level; the Lumen-era missing
+    # type hints/generics surfaced by level 6 (1000+ findings) are pinned in
+    # phpstan-baseline.neon so `vendor/bin/phpstan analyse` exits 0. Burn the
+    # baseline down as code is type-lined (regenerate with
+    # `--generate-baseline`), then target level 7+.
+    level: 6
 
     tmpDir: storage/framework/cache/phpstan
 
