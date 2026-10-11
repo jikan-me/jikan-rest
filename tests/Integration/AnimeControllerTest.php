@@ -14,12 +14,12 @@ class AnimeControllerTest extends TestCase
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-        $this->searchIndexModelCleanupList = ["App\\Anime"];
-    }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->searchIndexModelCleanupList = ['App\\Anime'];
+    }
     public function testMain()
     {
         Anime::factory(1)->createOne([

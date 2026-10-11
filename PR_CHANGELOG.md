@@ -22,7 +22,7 @@ every dynamic endpoint 404 on Symfony 7, and documented an upstream scraper brea
 | Framework | Lumen 9.1.5 | Laravel **13.35.0** |
 | PHP | 8.4.1 (Herd-Lite, cannot upgrade `ext-mongodb`) | 8.4.26 (Homebrew `php@8.4` + `pecl mongodb` 2.5.4) |
 | Mongo driver | `jenssegers/mongodb` 3.9 | `mongodb/laravel-mongodb` 5.11 |
-| Test suite | 280 tests / 2673 asserts / **1 pre-existing failure** | same baseline after migration (PHPUnit 11) |
+| Test suite | 280 tests / 2673 asserts / **1 pre-existing failure** | same baseline after migration (PHPUnit **12**) |
 | Parity harness | 60 endpoints baseline | **69 → 3** diffs (3 = 2 intentional + 1 pre-existing) |
 | Search | 3rd-party Typesense driver pinned to an RC | **Laravel Scout's native Typesense engine** (`typesense-php` stable 6.0.0) |
 
@@ -41,11 +41,17 @@ every dynamic endpoint 404 on Symfony 7, and documented an upstream scraper brea
   middleware response factory).
 - `PackageVersions\Versions` → `Composer\InstalledVersions`.
 - PHP constraint raised to `^8.3` (Laravel 13 requirement; runtime is 8.4.26).
-- **PHPUnit stays at ^11** — Laravel 13's skeleton uses ^12, but PHPUnit 12 removed
-  docblock `@dataProvider`/`@test` annotations (must become `#[DataProvider]`/
-  `#[Test]` attributes) and made `TestCase::__construct()` final. Keeping ^11 keeps the
-  existing suite green unchanged; migrating the ~32 annotations to attributes is a
-  follow-up so the suite can move to PHPUnit 12.
+- **PHPUnit bumped `^11` → `^12`** (matches Laravel 13's skeleton):
+  - PHPUnit 12 removed docblock metadata — migrated all ~34 `@dataProvider` /
+    `@test` annotations to `#[DataProvider]` / `#[Test]` attributes (incl. docblocks
+    that mixed prose with `@dataProvider`, which moved to an attribute above the
+    docblock) and added the `PHPUnit\Framework\Attributes\*` imports.
+  - PHPUnit 12 made `TestCase::__construct()` final — moved the
+    `searchIndexModelCleanupList` per-test setup out of constructors into `setUp()`.
+  - Removed the dead `Tests\IntegrationTestListener` (implemented the PHPUnit-10-era
+    `TestListener` API and type-hinted the removed `\Laravel\Lumen\Application`) and
+    its ignored `<listeners>` node in `phpunit.xml`; DB isolation is provided by the
+    `SyntheticMongoDbTransaction` trait.
 
 ### 2. Dependencies
 **Added**
@@ -172,10 +178,6 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 ---
 
 ## Not done / follow-ups
-- **PHPUnit 12**: migrate the ~32 `@dataProvider`/`@test` docblock annotations to
-  `#[DataProvider]`/`#[Test]` attributes, and move the `searchIndexModelCleanupList`
-  assignment out of `TestCase::__construct()` (final in PHPUnit 12), then bump
-  `phpunit/phpunit` to `^12`.
 - PHPStan/Larastan + Pint + Rector config.
 - CI matrix (PHP 8.3/8.4, Mongo 8, current Typesense) + Renovate/Dependabot.
 - `Dockerfile` rework from `php:8.1.27-bullseye` + RR 2.12.3 to the new runtime.

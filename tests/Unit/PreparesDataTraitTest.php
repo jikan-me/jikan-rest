@@ -7,6 +7,7 @@ use App\Dto\Concerns\PreparesData;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class PreparesDataFixture extends Data
 {
@@ -33,9 +34,7 @@ final class PreparesDataTraitTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider paramsDataProvider
-     */
+    #[DataProvider('paramsDataProvider')]
     public function testShouldIgnoreEmptyParams($actual, $expected)
     {
         // Spatie Laravel Data v4's prepareForPipeline() operates on arrays (not

@@ -7,6 +7,7 @@ use App\Support\CacheOptions;
 use Illuminate\Support\Carbon;
 use MongoDB\BSON\UTCDateTime;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class CachedDataTest extends TestCase
 {
@@ -50,18 +51,14 @@ final class CachedDataTest extends TestCase
         $this->assertNull($sut->lastModified());
     }
 
-    /**
-     * @dataProvider invalidModifiedAtValuesProvider
-     */
+    #[DataProvider('invalidModifiedAtValuesProvider')]
     public function testLastModifiedReturnsNullIfModifiedAtIsUnknownFormat(array $contents)
     {
         $sut = CachedData::from(collect($contents));
         $this->assertNull($sut->lastModified());
     }
 
-    /**
-     * @dataProvider dateTimeProvider
-     */
+    #[DataProvider('dateTimeProvider')]
     public function testLastModifiedReturnsModifiedTime($now, $dateTime)
     {
         $sut = CachedData::from(collect(["modifiedAt" => $dateTime]));

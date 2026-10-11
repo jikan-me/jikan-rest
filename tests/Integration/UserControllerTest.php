@@ -19,6 +19,7 @@ use Jikan\Parser\User\Profile\MangaStatsParser;
 use Jikan\Parser\User\Profile\UserProfileParser;
 use Jikan\Request\User\UserRecommendationsRequest;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UserControllerTest extends TestCase
 {
@@ -33,10 +34,7 @@ class UserControllerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider userNameProvider
-     * @param string $username
-     */
+    #[DataProvider('userNameProvider')]
     public function testUserProfile(string $username)
     {
         Profile::factory()->createOne([
@@ -65,9 +63,9 @@ class UserControllerTest extends TestCase
             ]]);
     }
 
+    #[DataProvider('userNameProvider')]
     /**
      * Tests if the scraped item from upstream is inserted correctly in the database.
-     * @dataProvider userNameProvider
      * @param string $username
      * @throws \Exception
      */

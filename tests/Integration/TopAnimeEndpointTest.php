@@ -9,18 +9,19 @@ use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TopAnimeEndpointTest extends TestCase
 {
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-        $this->searchIndexModelCleanupList = ["App\\Anime"];
-    }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->searchIndexModelCleanupList = ['App\\Anime'];
+    }
     protected function getBaseUri(): string
     {
         return "/v4/top/anime";
@@ -49,9 +50,7 @@ class TopAnimeEndpointTest extends TestCase
             ->assertStatus(405);
     }
 
-    /**
-     * @dataProvider orderByFieldAndParamsData
-     */
+    #[DataProvider('orderByFieldAndParamsData')]
     public function testShouldBeOrderedCorrectly(string $fieldToOrderBy, bool $descendingOrder, array $params)
     {
         /*

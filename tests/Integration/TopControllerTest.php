@@ -13,6 +13,7 @@ use Jikan\Model\Reviews\Reviews;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Parser\Reviews\ReviewsParser;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TopControllerTest extends TestCase
 {
@@ -305,13 +306,7 @@ class TopControllerTest extends TestCase
             ->assertStatus(404);
     }
 
-    /**
-     * @dataProvider topReviewTypeParametersProvider
-     * @param $params
-     * @return void
-     * @throws BadResponseException
-     * @throws ParserException
-     */
+    #[DataProvider('topReviewTypeParametersProvider')]
     public function testTopReviews($params)
     {
         $jikanParser = \Mockery::mock(MalClient::class)->makePartial();

@@ -9,18 +9,20 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 class AnimeSearchEndpointTest extends TestCase
 {
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-        $this->searchIndexModelCleanupList = ["App\\Anime"];
-    }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->searchIndexModelCleanupList = ['App\\Anime'];
+    }
     protected function getBaseUri(): string
     {
         return "/v4/anime";
@@ -184,18 +186,14 @@ class AnimeSearchEndpointTest extends TestCase
         return $result;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnMethodNotAllowedResponseIfMethodNotAllowed()
     {
         $this->json("POST", "/v4/anime", ["title" => "Dum"])
             ->assertStatus(405);
     }
 
-    /**
-     * @dataProvider limitParameterCombinationsProvider
-     */
+    #[DataProvider('limitParameterCombinationsProvider')]
     public function testLimitParameter(int $limitCount, array $additionalParams)
     {
         Anime::factory( 25)
@@ -213,9 +211,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount($limitCount, $content["data"]);
     }
 
-    /**
-     * @dataProvider emptyDateRangeProvider
-     */
+    #[DataProvider('emptyDateRangeProvider')]
     public function testSearchByEmptyDatesShouldNotRaiseValidationError($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -225,9 +221,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertStatus(200);
     }
 
-    /**
-     * @dataProvider partialDatesParameterProvider
-     */
+    #[DataProvider('partialDatesParameterProvider')]
     public function testSearchByStartDateShouldRaiseIfPartialDate($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -237,9 +231,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
-    /**
-     * @dataProvider startDatesParameterProvider
-     */
+    #[DataProvider('startDatesParameterProvider')]
     public function testSearchByStartDate($params)
     {
         $overrides = $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -256,9 +248,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount(5, $content["data"]);
     }
 
-    /**
-     * @dataProvider endDatesParameterProvider
-     */
+    #[DataProvider('endDatesParameterProvider')]
     public function testSearchByEndDate($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -275,9 +265,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount(5, $content["data"]);
     }
 
-    /**
-     * @dataProvider startAndEndDatesParameterProvider
-     */
+    #[DataProvider('startAndEndDatesParameterProvider')]
     public function testSearchByStartAndEndDate($params)
     {
         $overrides = $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -349,9 +337,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount(1, $content["data"]);
     }
 
-    /**
-     * @dataProvider genresParameterCombinationsProvider
-     */
+    #[DataProvider('genresParameterCombinationsProvider')]
     public function testSearchByGenres($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -377,9 +363,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
-    /**
-     * @dataProvider invalidScoreParameterProvider
-     */
+    #[DataProvider('invalidScoreParameterProvider')]
     public function testSearchByInvalidScoreParameters($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -389,9 +373,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
-    /**
-     * @dataProvider commonParameterProvider
-     */
+    #[DataProvider('commonParameterProvider')]
     public function testSearchByCommonParams($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -431,9 +413,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount(5, $content["data"]);
     }
 
-    /**
-     * @dataProvider orderByFieldMappingProvider
-     */
+    #[DataProvider('orderByFieldMappingProvider')]
     public function testOrderByQueryStringParameter(string $paramName, string $orderByField)
     {
         $expectedCount = 3;
@@ -504,9 +484,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCollectionsStrictlyEqual($expectedItems, $actualItems);
     }
 
-    /**
-     * @dataProvider invalidRatingParameterProvider
-     */
+    #[DataProvider('invalidRatingParameterProvider')]
     public function testSearchByInvalidRatingParameters($params, $expectedCount)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
@@ -516,9 +494,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
-    /**
-     * @dataProvider letterParameterProvider
-     */
+    #[DataProvider('letterParameterProvider')]
     public function testSearchByLetter($params, $expectedCount)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);

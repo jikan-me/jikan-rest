@@ -8,6 +8,7 @@ use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 
 class SeasonControllerTest extends TestCase
@@ -103,10 +104,7 @@ class SeasonControllerTest extends TestCase
         $this->assertCount(2, $content["data"]);
     }
 
-    /**
-     * @return void
-     * @dataProvider continuingUrlProvider
-     */
+    #[DataProvider('continuingUrlProvider')]
     public function testShouldNotFilterOutContinuingItemsFromPreviousSeasons($requestUrl)
     {
         Carbon::setTestNow(Carbon::parse("2024-01-11"));

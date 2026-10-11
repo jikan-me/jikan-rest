@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class JikanApiSearchableModelFixture extends \App\JikanApiSearchableModel
 {
@@ -30,9 +31,7 @@ final class JikanApiSearchableModelTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider titleFieldDataProvider
-     */
+    #[DataProvider('titleFieldDataProvider')]
     public function testGetCollectionSchemaShouldReturnSortableTitleFieldInSchemaConfig($titleAttributeNameFixture)
     {
         $fixture = new JikanApiSearchableModelFixture();
