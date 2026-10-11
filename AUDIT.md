@@ -211,7 +211,7 @@ Overall: controllers are thin (good). Validation is centralized in DTO attribute
 
 | P-item | Status | Where |
 |---|---|---|
-| P0 #1 Dockerfile | ⏳ not started | follow-up (upstream PR) |
+| P0 #1 Dockerfile | ✅ done | `9bd115c` — php:8.4-cli-alpine + RR 2025.1.15 multi-stage Dockerfile + entrypoint/HEALTHCHECK rework (§13) |
 | P0 #2 env()→config | ✅ done | commit "P0 correctness batch"; `config:cache` verified booting |
 | P0 #3 rate limiting | ✅ done | `throttle:v4` + `RateLimiter::for('v4')` (240/min; 10k/min testing) |
 | P0 #4 error/trace redaction | ✅ done | `Handler` gates behind `config('app.debug')` |
@@ -220,4 +220,9 @@ Overall: controllers are thin (good). Validation is centralized in DTO attribute
 | P1 #7 lazy handlers | ✅ done | mediator DTO→factory map built once/worker |
 | P1 #8 Scout chunked total | ✅ done | array_merge hits, scalar found |
 | P1 #9 Mongo `$text` filters | ✅ verified not a bug | filters applied via `scopeFilter` (empirically confirmed) |
+| insights feature | ✅ removed (unused; `/v4/insights*` → 404) |
+| CORS middleware re-wrap | ✅ removed (framework `HandleCors` + `config/cors.php`) |
+| P1 #10 heartbeat storage | ✅ done | `d1df28f` — Mongo `failovers`/`failovers_meta`, atomic inserts; flat files gone; `/`+`/v4` heartbeat SHAPE unchanged |
+| P1 #11 TTL map + guard | ✅ done | `fd59cb2` — `per_endpoint_cache_ttl` re-synced (dead keys removed), `CacheTtlMapTest` guards both directions |
+| P2 #16 PHPStan/Pint/CI | ✅ done | `4b780d8` — Larastan ^3.13 (Laravel-13 ok) @ level 5 + baseline, Pint (Laravel preset, scoped `--test`), ci.yml matrix |
 | P1 … | ⏳ | see phase-2 audit + backlog |

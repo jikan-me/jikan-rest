@@ -2,6 +2,8 @@
 
 > **Living document.** Updated as work progresses. This is the accumulated summary
 > for the eventual upstream PR(s) to [jikan-me/jikan-rest](https://github.com/jikan-me/jikan-rest).
+> The push plan/playbook lives in [`UPSTREAM_PR.md`](UPSTREAM_PR.md); upstream
+> blockers live in [`UPSTREAM_ISSUES.md`](UPSTREAM_ISSUES.md).
 >
 > - Branch: `laravel-12` (local fork; nothing has been pushed upstream)
 > - Proof points: parity harness, PHPUnit suite, live endpoint checks
@@ -224,14 +226,67 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `$index` constant instead of `$i` (re-scraped one id repeatedly) and never advanced
   the resume offset; the id-diff direction was inverted (kept removed ids instead of
   fetching new ones); success/failed bookkeeping was inverted too. All fixed.
-- **`/v4/insights/trends`** ignored `trend` (URL regexp filter was commented out) and
-  reported the raw-insights total. Restored the per-trend `$match`, made `$skip`/`$limit`
-  honour `?limit`, and computed a trend-filtered total. (Feature is INSIGHTS-gated/WIP
-  and untested locally — needs a test when enabled.)
+- **`/v4/insights` + `/v4/insights/trends` feature removed** (product decision — unused).
+  Deleted `InsightsController`, the global `Insights` recording middleware, the
+  `Insights*`/`Trends*` resources, the routes, the `insights_*` config/env keys, the
+  `MicroCaching` NO_CACHING entry, and its parity baseline entry. `/v4/insights*` now
+  returns 404.
+- **Custom `CorsMiddleware` removed.** It was a Lumen leftover (re-wrapped Symfony
+  responses into plain `Response`s) layered on top of Laravel 13's default global
+  `HandleCors`, which already serves CORS from `config/cors.php`. Deleted the class +
+  its bootstrap append + the `cors_middleware_enabled`/`CORS_MIDDLEWARE` config/env;
+  CORS now works via the framework default (single-pass).
+- **Observability polish** (audit-1 §9): log channels renamed off `lumen.log`
+  (`jikan.log` / `daily/jikan.log`), deprecations now recorded to `daily` instead of
+  `null`, stale config comment removed; Sentry `release` derives from
+  `config('app.version')` and `traces_sample_rate` defaults to 0.1 (env-overridable);
+  added an `/up` health/liveness route (the `withRouting(health:)` option is ignored
+  when a custom `using` closure is used, so it's registered explicitly).
 - **Lazy request-handler resolution.** `DefaultMediator` no longer receives all ~65
   constructed handlers per request. A `request (DTO) class => factory closure` map (101
   entries) is built once per worker; each request constructs only the handler it
   dispatches. `DefaultMediatorTest` updated to the factory-map contract.
+
+### 13. Backlog batch (heartbeat storage, TTL map, Dockerfile, static analysis/CI)
+- **Source-heartbeat storage moved from flat files to MongoDB (audit-1 P1 #10).**
+  The per-request `failovers.json` + `source_failover.lock` / `_last_downtime`
+  read-modify-write scheme (multi-worker race-prone under Octane) is replaced by
+  atomic storage in the Mongo `failovers` / `failovers_meta` collections
+  (`insertOne` per event; lock + last-downtime as one doc per key). The recency
+  window + size cap still run through `SourceHeartbeatProvider::pruneFails()`
+  (now on in-memory arrays); enable/disable semantics unchanged. The `/` and `/v4`
+  `myanimelist_heartbeat` SHAPE is preserved (verified live + via Octane). New
+  `Tests\Unit\SourceHeartbeatProviderTest` covers the window/cap/score/lock logic.
+- **`per_endpoint_cache_ttl` re-synced + stale-key guard test (audit-1 P1 #11).**
+  Dead keys removed (`AnimeController@characters_staff`, `PersonController@seiyuu`,
+  `MagazineController@resource`, `GenreController@mainAnime/mainManga`); every
+  registered v4 `V4DB` controller action now has an entry (added the previously
+  missing `full`/`relations`/`themes`/`external`/`streaming`/`now`/`Random*`… keys).
+  `Tests\Unit\CacheTtlMapTest` derives the expected `Controller@action` set from the
+  route table (matching `HttpHelper::getRouteName()`) and asserts completeness in
+  both directions, so a future route addition fails the suite instead of silently
+  falling back to `CACHE_DEFAULT_EXPIRE`.
+- **Docker image reworked for the native runtime (audit-1 P0 #1).** New multi-stage
+  Dockerfile: `php:8.4-cli-alpine` (Octane workers are CLI processes) + pecl
+  `ext-mongodb` + `pcntl`/`sockets`/`opcache`; RoadRunner binary **2025.1.15**
+  (amd64/arm64) — the version `spiral/roadrunner-cli ^2.7` fetches via
+  `octane:install`; `composer install --no-dev`; `route:cache` baked at build
+  (verified safe incl. the closure + user-list routes), `config:cache` deferred to
+  the entrypoint so per-deployment env applies; HEALTHCHECK on the `/` app root
+  (no `/up` route at the time — see §11's observability follow-up which adds one);
+  entrypoint launches `octane:start`. `.dockerignore` refreshed. **Not built on this
+  machine** (no Docker) — see the commit's verification checklist.
+- **PHPStan/Larastan + Pint + CI matrix (audit-1 P2 #16).** `require-dev` gains
+  `larastan/larastan ^3.13` (Laravel-13 compatible), `phpstan/phpstan ^2.3`,
+  `laravel/pint ^1.32`. `phpstan.neon` scans `app/` at **level 5** (level 6 → 1000+
+  issues on the Lumen-era code; 5 settles at 748) with an 816-entry
+  `phpstan-baseline.neon` so analysis exits 0 — bump + regenerate as code is
+  type-lined. `pint.json` = Laravel preset. **Pint policy:** the whole tree is not
+  Pint-clean (≈400-file diff), so this batch formats only the files it touches and
+  CI's `pint --test` is scoped to those paths; the repo-wide format is an explicit
+  follow-up. `.github/workflows/ci.yml` adds a PHP 8.3/8.4 matrix with a Mongo
+  service, lint, phpstan, pint, and `phpunit --no-coverage`
+  (`DB_DATABASE=jikan_tests`, `CACHE_DRIVER=array`, `SCOUT_DRIVER` unset).
 
 ---
 
@@ -260,9 +315,10 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 ---
 
 ## Not done / follow-ups
-- PHPStan/Larastan + Pint + Rector config.
-- CI matrix (PHP 8.3/8.4, Mongo 8, current Typesense) + Renovate/Dependabot.
-- `Dockerfile` rework from `php:8.1.27-bullseye` + RR 2.12.3 to the new runtime.
+- Rector config (not requested here) + repo-wide Pint formatting (see §13 policy).
+- CI: Renovate/Dependabot; validate the PHP 8.3 matrix + Mongo service on GitHub
+  Actions (runner-level; logic verified locally), and a full Typesense integration
+  run once a server is available.
 - Patch or await upstream fix for the MAL theme-markup parser breakage.
 - Verify the native Typesense engine end-to-end against a real Typesense server
   (docker-compose) and reconcile search-index behavior/ranking parity.
