@@ -1,0 +1,47 @@
+# Typesense service for local Jikan-REST development with Laravel Scout's
+# native Typesense engine.
+#
+# Host config in config/scout.php: host localhost, port 8108, api key from
+# TYPESENSE_API_KEY (defaults to "abcd").
+#
+# Usage:
+#   docker compose -f docker-compose.typesense.yml up -d     # start
+#   curl -sS http://localhost:8108/health                    # -> {"ok":true}
+#   docker compose -f docker-compose.typesense.yml down      # stop (keeps volume)
+#   docker compose -f docker-compose.typesense.yml down -v   # stop + wipe data volume
+#
+# IMPORTANT (see TYPESENSE_SPIKE.md):
+# The native Scout TypesenseEngine requires a *pre-existing* collection with a
+# valid schema (or `scout.typesense.model-settings.*.collection-schema`
+# configured) — it cannot auto-create one from an empty schema. Create the
+# collections before importing, e.g. with `artisan typesense:ensure-collections`
+# if available, or the curl calls documented in TYPESENSE_SPIKE.md section
+# "Pre-create collections".
+services:
+  typesense:
+    image: typesense/typesense:0.26.0
+    container_name: jikan-typesense
+    restart: unless-stopped
+    ports:
+      - "8108:8108"
+    volumes:
+      - typesense-data:/data
+    environment:
+      # Must stay in sync with TYPESENSE_API_KEY used by the app.
+      TYPESENSE_API_KEY: abcd
+      TYPESENSE_DATA_DIR: /data
+    command: >
+      --data-dir=/data
+      --api-key=abcd
+      --port=8108
+      --enable-cors
+    healthcheck:
+      # The official image ships curl; drop the healthcheck if your base image lacks it.
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8108/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  typesense-data:
