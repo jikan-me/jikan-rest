@@ -1,0 +1,180 @@
+{
+  "$schema": "../plugins/backend-suite/templates/profile.schema.json",
+  "_readme": "The only place project-specific facts live. Every field here is explained in profile.schema.json (canonical) \u2014 read that file alongside this one. Fill in every TODO, delete sections you genuinely do not have (only 'project', 'adapters', 'source' and 'docs' are required), then run `python3 \"${CLAUDE_PLUGIN_ROOT}/bin/doctor.py\"` before trusting anything else. Never put an absolute path, a client name, or a hostname in this file.",
+  "profileVersion": 1,
+  "project": {
+    "name": "jikan-rest",
+    "audience": "technical users consuming read-only MyAnimeList data via JSON; also developers/ops of the API itself",
+    "framework": "Laravel 13 (PHP 8.4, MongoDB via laravel-mongodb, Octane/RoadRunner, Scout native Typesense optional). Read-only JSON API by design: no auth, no sessions, no CSRF, no Blade.",
+    "singleLocale": "en-US"
+  },
+  "adapters": {
+    "lang": "php"
+  },
+  "source": {
+    "root": "app",
+    "fileGlob": "**/*.php",
+    "screensGlob": "app/Http/Controllers/V4DB/**",
+    "otherSharedDirs": [],
+    "testRoot": "tests"
+  },
+  "audits": {
+    "exceptionsFile": ".backend-suite/exceptions.json",
+    "archRulesFile": ".backend-suite/arch-rules.json",
+    "baselineDir": ".backend-suite/baselines"
+  },
+  "docs": {
+    "manifest": ".backend-suite/docs.manifest.json"
+  },
+  "provenance": {
+    "_readme": "How each field above got its value: 'inferred' (a survey or a skill proposed it \u2014 authoritative for nothing), 'declared' (a human wrote it), 'approved' (a human reviewed an inferred value and ratified it). Optional, and starting empty is honest: doctor.py reports every field with no entry here as UNTRUSTED and prints the ratified-of-total count on every run, so an empty block reads as '0 of N ratified' rather than as approval. There is no 'contradicted' state to write \u2014 doctor computes it when an approved or declared field stops matching the tree. Add `verifiedAgainst.commit` (a git SHA) when you ratify a field: staleness is measured in diffs, not days, and there is deliberately no expiry date.",
+    "fields": {
+      "adapters.lang": {
+        "state": "approved",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": "php",
+        "evidence": "inferred by survey.py (survey of a2b71b57489f): survey.py read a root manifest (composer.json) and this plugin ships that adapter",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "project.framework": {
+        "state": "approved",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": "Laravel 13 (PHP 8.4, MongoDB via laravel-mongodb, Octane/RoadRunner, Scout native Typesense optional). Read-only JSON API by design: no auth, no sessions, no CSRF, no Blade.",
+        "evidence": "inferred by survey.py (survey of a2b71b57489f): root manifest identified the packaging stack; the design framework itself is not something a manifest states",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "source.fileGlob": {
+        "state": "inferred",
+        "evidence": "inferred by survey.py (survey of a2b71b57489f): the only source extension a php manifest implies on its own"
+      },
+      "source.root": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": "app",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "source.testRoot": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": "tests",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "project.name": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": "jikan-rest",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "project.audience": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": "technical users consuming read-only MyAnimeList data via JSON; also developers/ops of the API itself",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "project.singleLocale": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": "en-US",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "source.screensGlob": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": "app/Http/Controllers/V4DB/**",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "source.otherSharedDirs": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": [],
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "audits.exceptionsFile": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": ".backend-suite/exceptions.json",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "audits.archRulesFile": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": ".backend-suite/arch-rules.json",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "audits.baselineDir": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": ".backend-suite/baselines",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "docs.manifest": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": ".backend-suite/docs.manifest.json",
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      },
+      "profileVersion": {
+        "state": "declared",
+        "by": "Irfan Dahir",
+        "on": "2026-10-11",
+        "value": 1,
+        "verifiedAgainst": {
+          "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+          "dirty": true
+        }
+      }
+    }
+  }
+}
