@@ -6,6 +6,13 @@ use Jikan\Helper\Constants as JikanConstants;
 use Spatie\Enum\Laravel\Enum;
 use OpenApi\Attributes as OA;
 
+/**
+ * @method static self any()
+ * @method static self male()
+ * @method static self female()
+ * @method static self nonbinary()
+ */
+
 #[OA\Schema(schema: 'users_search_query_gender', description: 'Users Search Query Gender.', type: 'string', enum: ['any', 'male', 'female', 'nonbinary'])]
 final class GenderEnum extends Enum
 {

@@ -985,3 +985,21 @@ Per request, the canonical URLs are now:
 - Docs nuance: Scalar renders the enriched prose now. Follow-up if desired:
   migrate remaining integration-test environmental breakage (Typesense-running
   + missing cached MAL fixtures) so the suite returns to fully green locally.
+
+
+## 23. Fix: enums lost their spatie value docblocks in the attribute migration; suite green again (2026-10-12)
+
+- **Regression fixed (from §22):** the `@OA\Schema` docblock→attribute conversion on
+  `app/Enums/*` also deleted the spatie/laravel-enum value declarations
+  (`@method static self value()`), so filters like `TopAnimeFilterEnum::airing()`
+  threw `BadMethodCallException` (integration tests red: 49 errors/25 failures).
+  Re-injected the `@method` docblocks into all 22 value enums while keeping the
+  `#[OA\Schema(...)]` attributes — **full suite green again: 292 / 2707, 0
+  failures/errors**.
+- **Test-DB hermeticity:** `SyntheticMongoDbTransaction` never truncated the
+  model-less scraper-cache tables `watch` and `manga_forum`, so stale cache docs
+  accumulated across runs and broke cache lookups (`CustomTestException` on
+  5 watch/forum tests). Added both to the truncation list — no more manual wipe.
+- Verified: `l5-swagger:generate` still exit 0 (101 ops/127 schemas);
+  endpoint-parity + route-coverage clean; the failing integration slices now
+  pass with the standard CI-style env (`SCOUT_DRIVER=null CACHE_DRIVER=array`).

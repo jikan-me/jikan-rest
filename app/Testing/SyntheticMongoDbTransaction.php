@@ -83,6 +83,8 @@ trait SyntheticMongoDbTransaction
             'users_recommendations',
             'users_reviews',
             'users_clubs',
+            'watch',
+            'manga_forum',
         ];
 
         foreach ($jikanModels as $jikanModel) {
