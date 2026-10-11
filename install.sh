@@ -14,6 +14,7 @@
 #   --with-redis|--with-typesense|--with-backend-suite|--with-skills|--seed
 #   --yes | -y                             accept all defaults, no prompts
 #   --check                                prerequisites only, then exit
+#   --dry-run                              preview every step without executing or downloading
 #   --version                              print version, exit
 #   --help                                 this help
 #
@@ -28,14 +29,26 @@ VERSION="1.0.0"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 
-PHP="${PHP_BIN:-$ROOT/tools/dev/php}"
-COMPOSER="${COMPOSER_BIN:-$(command -v composer || echo /opt/homebrew/bin/composer)}"
+if [[ -n "${PHP_BIN:-}" ]]; then
+  PHP="$PHP_BIN"
+elif [[ -x "$ROOT/tools/dev/php" ]]; then
+  # Local macOS wrapper (gitignored, not in fresh checkouts).
+  PHP="$ROOT/tools/dev/php"
+else
+  # Linux / fresh checkout: distro PHP from PATH.
+  PHP="$(command -v php || true)"
+fi
+if [[ -z "$PHP" ]]; then
+  die "no PHP found — install php8.4 + ext-mongodb + ext-pcntl, or set PHP_BIN"
+fi
+COMPOSER="${COMPOSER_BIN:-$(command -v composer || true)}"
 
 SERVER="${SERVER:-roadrunner}"
 APP_ENV_MODE="local"
 DEV_DEPS=1
 REDIS=0; TYPESENSE=0; BACKEND_SUITE=0; SKILLS=0; SEED=0
 CHECK_ONLY=0
+DRY=0
 YES=0
 SHOWN_FLAGS=0
 
@@ -44,6 +57,7 @@ ok()   { printf '\033[1;32m  ✓ %s\033[0m\n' "$*"; }
 warn() { printf '\033[1;33m  ! %s\033[0m\n' "$*"; }
 die()  { printf '\033[1;31mERROR: %s\033[0m\n' "$*" >&2; exit 1; }
 have() { command -v "$1" >/dev/null 2>&1; }
+run()  { if [[ "$DRY" == "1" ]]; then printf '\033[2m  [dry-run] %s\033[0m\n' "$*"; return 0; fi; "$@"; }
 
 is_tty() { [[ -t 0 && -t 1 ]]; }
 
@@ -89,6 +103,7 @@ while [[ $# -gt 0 ]]; do
     --seed)          SEED=1; shift ;;
     --yes|-y)        YES=1; shift ;;
     --check)         CHECK_ONLY=1; shift ;;
+    --dry-run)       DRY=1; shift ;;
     --version)       echo "install.sh $VERSION"; exit 0 ;;
     --help|-h)       sed -n '/^# jikan-rest install.sh/,/^[^#]/p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "unknown option: $1 (see ./install.sh --help)" ;;
@@ -121,33 +136,48 @@ check_prereqs() {
   if have mongosh && mongosh --quiet --eval 'db.runCommand({ping:1}).ok' >/dev/null 2>&1; then
     ok "MongoDB reachable"
   else
-    warn "MongoDB not reachable — brew services start mongodb-community"
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+      warn "MongoDB not reachable — brew services start mongodb-community"
+    else
+      warn "MongoDB not reachable — systemctl start mongod (or your distro service)"
+    fi
   fi
   ok "PHP $( "$PHP" -v | head -1 | awk '{print $2}')"
-  ok "Composer: $COMPOSER"
+  if [[ -z "$COMPOSER" ]]; then
+    warn "composer not found on PATH — install it or set COMPOSER_BIN"
+  else
+    ok "Composer: $COMPOSER"
+  fi
+  ok "OS: $(uname -s) $(uname -m)"
 }
 if [[ "$CHECK_ONLY" == "1" ]]; then check_prereqs; exit 0; fi
 check_prereqs
 
 # ----------------------------------------------------------------- env + keys
-if [[ ! -f .env ]]; then cp .env.dist .env; say "Created .env from .env.dist"; fi
+if [[ ! -f .env ]]; then run cp .env.dist .env; say "Created .env from .env.dist"; fi
 if ! grep -q '^APP_KEY=' .env || [[ -z "$(grep '^APP_KEY=' .env | cut -d= -f2-)" ]]; then
-  "$PHP" artisan key:generate --force; say "Generated APP_KEY"
+  run "$PHP" artisan key:generate --force; say "Generated APP_KEY"
 fi
-sed -i.bak "s/^APP_ENV=.*/APP_ENV=$APP_ENV_MODE/" .env && rm -f .env.bak
+if [[ "$DRY" == "1" ]]; then printf '  [dry-run] set APP_ENV=%s in .env\n' "$APP_ENV_MODE"; else sed -i.bak "s/^APP_ENV=.*/APP_ENV=$APP_ENV_MODE/" .env && rm -f .env.bak; fi
 
 # --------------------------------------------------------------------- deps
 say "Composer install"
 if [[ "$DEV_DEPS" == "1" ]]; then
-  "$PHP" "$COMPOSER" install --no-interaction
+  run "$PHP" "$COMPOSER" install --no-interaction
 else
-  "$PHP" "$COMPOSER" install --no-interaction --no-dev --optimize-autoloader
+  run "$PHP" "$COMPOSER" install --no-interaction --no-dev --optimize-autoloader
 fi
 
 # ------------------------------------------------------------------ services
 if [[ "$REDIS" == "1" ]]; then
   say "Redis"
-  have redis-server && ok "redis-server present" || { brew install redis >/dev/null 2>&1 && ok "installed via Homebrew"; }
+  if have redis-server; then
+    ok "redis-server present"
+  elif [[ "$(uname -s)" == "Darwin" ]]; then
+    run brew install redis
+  else
+    warn "redis-server missing — install via your distro (e.g. apt install redis-server)"
+  fi
   grep -q '^REDIS_HOST' .env || printf 'REDIS_HOST=127.0.0.1\nREDIS_PORT=6379\n' >> .env
 fi
 
@@ -156,9 +186,9 @@ if [[ "$TYPESENSE" == "1" ]]; then
   TDIR="${TYPESENSE_DIR:-/tmp/typesense}"
   if [[ ! -x "$TDIR/typesense-server" ]]; then
     mkdir -p "$TDIR"
-    ARCH="$(uname -m)"; OS="$(uname | tr '[:upper:]' '[:lower:]')"
-    curl -fsSL -o /tmp/typesense.tar.gz "https://dl.typesense.org/releases/26.0/typesense-server-26.0-${OS}-${ARCH}.tar.gz"
-    tar -xzf /tmp/typesense.tar.gz -C "$TDIR"
+    ARCH="$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')"; OS="$(uname | tr '[:upper:]' '[:lower:]')"
+    run curl -fsSL -o /tmp/typesense.tar.gz "https://dl.typesense.org/releases/26.0/typesense-server-26.0-${OS}-${ARCH}.tar.gz"
+    run tar -xzf /tmp/typesense.tar.gz -C "$TDIR"
   fi
   ok "binary at $TDIR/typesense-server"
   grep -q '^TYPESENSE_API_KEY' .env || printf 'TYPESENSE_API_KEY=abcd\nSCOUT_DRIVER=typesense\n' >> .env
@@ -167,26 +197,26 @@ fi
 
 if [[ "$BACKEND_SUITE" == "1" ]]; then
   say "backend-quality-suite CLI"
-  python3 -m venv /tmp/bsq-venv 2>/dev/null || die "python3 -m venv unavailable"
-  /tmp/bsq-venv/bin/pip install -q "git+https://github.com/irfan-dahir/backend-quality-suite.git@main"
+  run python3 -m venv /tmp/bsq-venv
+  run /tmp/bsq-venv/bin/pip install -q "git+https://github.com/irfan-dahir/backend-quality-suite.git@main"
   ok "backend-suite at /tmp/bsq-venv/bin/backend-suite"
 fi
 
 if [[ "$SKILLS" == "1" ]]; then
   say "Laravel skills (laravel/boost)"
-  "$PHP" "$COMPOSER" require --dev laravel/boost --no-interaction >/dev/null
-  "$PHP" artisan package:discover >/dev/null 2>&1 || true
-  "$PHP" artisan boost:add-skill jeffallan/claude-skills --skill laravel-specialist >/dev/null 2>&1 || true
-  "$PHP" artisan boost:add-skill jeffallan/claude-skills --skill php-pro >/dev/null 2>&1 || true
-  "$PHP" artisan boost:add-skill affaan-m/ecc --skill laravel-security >/dev/null 2>&1 || true
-  "$PHP" artisan boost:add-skill affaan-m/everything-claude-code --skill laravel-patterns >/dev/null 2>&1 || true
+  run "$PHP" "$COMPOSER" require --dev laravel/boost
+  run "$PHP" artisan package:discover
+  run "$PHP" artisan boost:add-skill jeffallan/claude-skills --skill laravel-specialist
+  run "$PHP" artisan boost:add-skill jeffallan/claude-skills --skill php-pro
+  run "$PHP" artisan boost:add-skill affaan-m/ecc --skill laravel-security
+  run "$PHP" artisan boost:add-skill affaan-m/everything-claude-code --skill laravel-patterns
   ok "skills installed under .ai/skills/"
 fi
 
 if [[ "$SEED" == "1" ]]; then
   say "Seeding (genres + magazines; anime/manga wait on jikan v5)"
-  "$PHP" artisan indexer:genres >/dev/null 2>&1 || true
-  "$PHP" artisan indexer:common >/dev/null 2>&1 || true
+  run "$PHP" artisan indexer:genres
+  run "$PHP" artisan indexer:common
   ok "genres/magazines seeded"
 fi
 
@@ -204,16 +234,24 @@ case "$SERVER" in
   roadrunner)
     if [[ ! -x ./rr ]]; then
       say "Downloading RoadRunner binary"
-      "$PHP" artisan octane:install --server=roadrunner >/dev/null 2>&1 || true
+      run "$PHP" artisan octane:install --server=roadrunner
     fi
     [[ -x ./rr ]] && ok "rr binary ($(./rr --version 2>/dev/null | head -1))" || warn "rr binary missing — run octane:install or install.sh again"
     ;;
   frankenphp)
     say "FrankenPHP (opt-in — binary not shipped in-repo)"
     FDIR="${FPHP_DIR:-/tmp/frankenphp}"; mkdir -p "$FDIR"
-    ARCH="$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')"; OS="$(uname | tr '[:upper:]' '[:lower:]')"
+    # FrankenPHP lives under php/frankenphp; asset names are
+    # frankenphp-{mac|linux}-{arm64|aarch64|x86_64}.
+    case "$(uname -s)" in
+      Darwin) FOS="mac";;
+      Linux)  FOS="linux";;
+      *) die "unsupported OS for frankenphp binary" ;;
+    esac
+    ARCH="$(uname -m | sed 's/arm64/aarch64/')"
     if [[ ! -x "$FDIR/frankenphp" ]]; then
-      curl -fsSL -o "$FDIR/frankenphp" "https://github.com/dunglas/frankenphp/releases/latest/download/frankenphp-${OS}-${ARCH}"; chmod +x "$FDIR/frankenphp"
+      run curl -fsSL -o "$FDIR/frankenphp" "https://github.com/php/frankenphp/releases/latest/download/frankenphp-${FOS}-${ARCH}"
+      run chmod +x "$FDIR/frankenphp"
     fi
     ok "binary at $FDIR/frankenphp"
     ;;

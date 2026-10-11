@@ -35,3 +35,4 @@ frankenphp-worker.php
 
 # Laravel bootstrap cache (generated)
 bootstrap/cache/*.php
+.rr.yaml

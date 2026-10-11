@@ -20,7 +20,7 @@ Installer: `./install.sh` (interactive) or the `${FLAG}`s below. Wrappers:
 | **Queue** | ✅ via Mongo driver | none (config `QUEUE_CONNECTION=database`) | — | `php artisan queue:work --once` |
 | **Runtime: `php artisan serve`** | ✅ | PHP 8.4 | `--server serve` | `/up` → 200 |
 | **Runtime: Octane RoadRunner** | ✅ default | `rr` binary (auto-downloaded `octane:install`) | `--server roadrunner` / `OCTANE_SERVER=roadrunner` | `/up` under `:8000` |
-| **Runtime: Octane FrankenPHP** | ⚠️ opt-in | static binary (auto-downloaded) | `--server frankenphp` / `OCTANE_SERVER=frankenphp` | `/up` |
+| **Runtime: Octane FrankenPHP** | ⚠️ opt-in | static binary (auto-downloaded) | `--server frankenphp` / `OCTANE_SERVER=frankenphp` | `/up`; Mongo-backed endpoints need ext-mongodb in the embedded PHP — use a container image (php + mongodb ext + FrankenPHP) for them |
 | **API docs (l5-swagger)** | ✅ spec at `/v4/api-docs` | none (regenerate on annotation change) | `php artisan l5-swagger:generate` | `curl localhost:8000/v4/api-docs` |
 | **Error reporting (Sentry)** | No — needs DSN | `SENTRY_LARAVEL_DSN` | set DSN (traces default 0.1) | Sentry UI |
 | **Logs** | ✅ daily channel | none | `LOG_CHANNEL` default `stack`→`daily`; deprecations→`daily` | `storage/logs/daily/jikan.log` |
