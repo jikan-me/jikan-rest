@@ -1,70 +1,127 @@
-FROM docker.io/spiralscout/roadrunner:2.12.3 as roadrunner
-FROM docker.io/composer:2.6.6 as composer
-FROM docker.io/mlocati/php-extension-installer:2.1.77 as php-ext-installer
-FROM php:8.1.27-bullseye
-COPY --from=composer /usr/bin/composer /usr/bin/composer
-COPY --from=php-ext-installer /usr/bin/install-php-extensions /usr/local/bin/
-ENV COMPOSER_HOME="/tmp/composer"
-RUN set -x \
-    && install-php-extensions intl mbstring mongodb-stable redis opcache sockets pcntl \
-    # install xdebug (for testing with code coverage), but do not enable it
-    && IPE_DONT_ENABLE=1 install-php-extensions xdebug-3.2.0
+# syntax=docker/dockerfile:1
 
-# install roadrunner
-COPY --from=roadrunner /usr/bin/rr /usr/bin/rr
-LABEL org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
-RUN	set -ex \
-    && apt-get update && apt-get install -y --no-install-recommends \
-	openssl \
-	git \
-    wget \
-	unzip \
-  # install supercronic (for laravel task scheduling), project page: <https://github.com/aptible/supercronic>
-	&& wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-$(dpkg --print-architecture)" \
-	   -O /usr/bin/supercronic \
-	&& chmod +x /usr/bin/supercronic \
-	&& mkdir /etc/supercronic \
-	&& echo '*/1 * * * * php /app/artisan schedule:run' > /etc/supercronic/laravel \
-	&& rm -rf /var/lib/apt/lists/* \
-	# enable opcache for CLI and JIT, docs: <https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit>
-	&& echo -e "\nopcache.enable=1\nopcache.enable_cli=1\nopcache.jit_buffer_size=32M\nopcache.jit=1235\n" >> \
-	    ${PHP_INI_DIR}/conf.d/docker-php-ext-opcache.ini \
-  # show php version
-  && php -v \
-	# show installed modules
-	&& php -m \
-  && composer --version \
-	# create unpriviliged user
-	&& adduser --disabled-password --shell "/sbin/nologin" --home "/nonexistent" --no-create-home --uid "10001" --gecos "" "jikanapi" \
-	&& mkdir /app /var/run/rr \
-	&& chown -R jikanapi:jikanapi /app /var/run/rr /etc/supercronic/laravel \
-	&& chmod -R 777 /var/run/rr
+# ---------------------------------------------------------------------------
+# jikan-rest — Laravel 13 on Octane (RoadRunner), PHP 8.4 (Alpine)
+#
+# Replaces the old php:8.1.27-bullseye + RoadRunner 2.12.3 image, which could
+# not satisfy the project's composer platform requirements (php ^8.3,
+# mongodb/laravel-mongodb ^5 needs the modern MongoDB driver).
+#
+#   - Base: php:8.4-cli-alpine — Octane/RoadRunner workers are *CLI* processes,
+#     not php-fpm, so the CLI variant is the correct runtime (a float on the
+#     8.4 line; composer.json pins "config.platform.php" to 8.4.26 so the lock
+#     resolves identically regardless of the container's patch level).
+#   - ext-mongodb via pecl (recent stable), plus pcntl + sockets + opcache.
+#     ext-json is compiled in on PHP 8.4; ctype/curl/mbstring/openssl/etc. are
+#     bundled in the official Alpine images.
+#   - RoadRunner binary 2025.1.15 — the current stable that spiral/roadrunner-cli
+#     (dev requirement ^2.7) downloads through `php artisan octane:install`
+#     (vendor/bin/rr get-binary), and >= Octane's required 2023.3.0.
+#   - config:cache runs at container start (after .env/secrets are prepared) so
+#     per-deployment env vars are honoured; route:cache is baked at build time
+#     (verified: closures are serialisable on Laravel 13 and the DISABLE_USER_LISTS
+#     user-list routes are cached correctly — keep DISABLE_USER_LISTS=false, or
+#     warm the route cache with your target value).
+#   - HEALTHCHECK hits the app root (there is no /up route yet) on the
+#     octane/http port, which returns 200 JSON incl. the source-heartbeat block.
+# ---------------------------------------------------------------------------
+
+#################################
+# 1) Composer dependencies      #
+#################################
+FROM composer:2 AS vendor
+WORKDIR /app
+# Copy the manifests first so dependency layers are cached across builds.
+COPY composer.json composer.lock ./
+# --no-scripts keeps post-root-package-install from copying .env (the entrypoint
+# prepares .env from .env.dist at startup). --no-autoloader: dumped later.
+RUN composer install -n --no-dev --no-interaction --no-progress \
+    --no-scripts --no-autoloader --prefer-dist
+
+#################################
+# 2) RoadRunner server binary   #
+#################################
+# Version 2025.1.15 (see header). Pick the asset matching the build platform by
+# setting --build-arg RR_STAGE=rr-arm64 when cross-building; default amd64.
+FROM scratch AS rr-amd64
+ADD https://github.com/roadrunner-server/roadrunner/releases/download/v2025.1.15/roadrunner-2025.1.15-linux-amd64.tar.gz /rr.tar.gz
+
+FROM scratch AS rr-arm64
+ADD https://github.com/roadrunner-server/roadrunner/releases/download/v2025.1.15/roadrunner-2025.1.15-linux-arm64.tar.gz /rr.tar.gz
+
+#################################
+# 3) Application image          #
+#################################
+FROM php:8.4-cli-alpine AS app
+
+# --- PHP extensions ---------------------------------------------------------
+# $PHPIZE_DEPS is provided by the official image (build toolchain for pecl).
+# Requests from the app are served by Octane workers; opcache+JIT are tuned for
+# a long-lived CLI worker.
+RUN set -eux \
+    && apk add --no-cache git curl ca-certificates $PHPIZE_DEPS \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
+    && docker-php-ext-install pcntl sockets opcache \
+    && apk del --purge $PHPIZE_DEPS
+
+RUN { \
+        echo 'opcache.enable=1'; \
+        echo 'opcache.enable_cli=1'; \
+        echo 'opcache.jit_buffer_size=32M'; \
+        echo 'opcache.jit=1235'; \
+    } > "${PHP_INI_DIR}/conf.d/zz-app-opcache.ini"
+
+# --- supercronic (Laravel scheduler) ----------------------------------------
+RUN set -eux \
+    && ARCH="$(uname -m | sed 's/x86_64/amd64/; s/aarch64/arm64/')" \
+    && wget -q "https://github.com/aptible/supercronic/releases/download/v0.1.12/supercronic-linux-${ARCH}" \
+        -O /usr/bin/supercronic \
+    && chmod +x /usr/bin/supercronic \
+    && mkdir -p /etc/supercronic \
+    && echo '*/1 * * * * php /app/artisan schedule:run' > /etc/supercronic/laravel
+
+# --- Copy code + binary artifacts -------------------------------------------
+WORKDIR /app
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+
+ARG RR_STAGE=rr-amd64
+COPY --from=${RR_STAGE} /rr.tar.gz /tmp/rr.tar.gz
+RUN set -eux \
+    && mkdir -p /tmp/rr \
+    && tar -xzf /tmp/rr.tar.gz -C /tmp/rr --strip-components=1 \
+    && mv /tmp/rr/rr /usr/local/bin/rr \
+    && chmod +x /usr/local/bin/rr \
+    && rm -rf /tmp/rr /tmp/rr.tar.gz
+
+COPY --from=vendor /app/vendor /app/vendor
+COPY . /app
+
+# --- Optimize ----------------------------------------------------------------
+# route:cache is safe on this app (Laravel 13 serialises the handful of closure
+# routes; the DISABLE_USER_LISTS-gated user-list routes are baked in — keep the
+# runtime value in sync with the build, i.e. false). config:cache is deferred to
+# the entrypoint so runtime env vars (DB_HOST & co) apply to the cached config.
+RUN set -eux \
+    && composer dump-autoload -n --optimize --no-dev --classmap-authoritative \
+    && php artisan route:cache
+
+# --- Non-root user + storage ------------------------------------------------
+RUN set -eux \
+    && adduser -D -s /sbin/nologin -u 10001 -h /nonexistent jikanapi \
+    && chown -R jikanapi:jikanapi /app \
+    && chmod -R a+w storage/ bootstrap/cache \
+    && chmod +x /app/docker-entrypoint.sh
 
 USER jikanapi:jikanapi
-
-WORKDIR /app
-
-# copy composer (json|lock) files for dependencies layer caching
-COPY --chown=jikanapi:jikanapi ./composer.* /app/
-
-# install composer dependencies (autoloader MUST be generated later!)
-RUN composer install -n --no-dev --no-cache --no-ansi --no-autoloader --no-scripts --prefer-dist
-
-# copy application sources into image (completely)
-COPY --chown=jikanapi:jikanapi . /app/
-
-RUN set -ex \
-    && composer dump-autoload -n --optimize --no-ansi --no-dev  \
-    && chmod -R 777 ${COMPOSER_HOME}/cache \
-    && chmod -R a+w storage/ \
-    && chown -R jikanapi:jikanapi /app \
-    && chmod +x docker-entrypoint.php \
-    && chmod +x docker-entrypoint.sh
 
 EXPOSE 8080
 EXPOSE 2114
 
-HEALTHCHECK CMD curl --fail http://localhost:2114/health?plugin=http || exit 1
+# The app has no /up route; health-check the root endpoint (200 JSON, includes
+# myanimelist_heartbeat). Requires MongoDB to be reachable from the container —
+# the same requirement as serving real traffic.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD wget -q -O /dev/null http://127.0.0.1:8080/ || exit 1
 
-# unset default image entrypoint.
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

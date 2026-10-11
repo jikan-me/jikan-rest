@@ -69,10 +69,6 @@ if ($current_env["SCOUT_DRIVER"] === "typesense" && empty($current_env["TYPESENS
     exit(1);
 }
 
-$rrConfig = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(".rr.yaml"));
-$rrConfig["http"]["pool"]["supervisor"]["max_worker_memory"] = (int) env("RR_MAX_WORKER_MEMORY", 128);
-$rrConfig["http"]["max_request_size"] = (int) env("RR_MAX_REQUEST_SIZE_MB", 256);
-$rrConfig["service"]["laravel_queue_worker_1"]["process_num"] = (int) env("JIKAN_QUEUE_WORKER_PROCESS_NUM", 1);
 $periodical_full_indexer_key = "JIKAN_ENABLE_PERIODICAL_FULL_INDEXER";
 if (array_key_exists($periodical_full_indexer_key, $current_env) && in_array($current_env[$periodical_full_indexer_key], [1, '1', 'true', 'True', 'TRUE'])) {
     $supercronic_schedule = file_get_contents("/etc/supercronic/laravel");
@@ -83,4 +79,5 @@ if (array_key_exists($periodical_full_indexer_key, $current_env) && in_array($cu
     $current_time = time();
     echo json_encode(["level" => "info", "ts" => "$current_time.0", "logger" => "container_entrypoint", "msg" => "Full anime/manga indexer is enabled. They will run every Monday at 1am."]) . PHP_EOL;
 }
-file_put_contents(".rr.yaml", \Symfony\Component\Yaml\Yaml::dump($rrConfig, 8));
+// Note: Octane/ModeRunner owns the RoadRunner .rr.yaml (overridden via -o
+// flags at start time), so no RR v2 YAML preprocessing is performed here.
