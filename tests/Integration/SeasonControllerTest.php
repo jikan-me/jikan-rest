@@ -15,7 +15,7 @@ class SeasonControllerTest extends TestCase
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
-    private function continuingUrlProvider(): array
+    public static function continuingUrlProvider(): array
     {
         return [
             "?continuing=true" => ["/v4/seasons/2024/winter?continuing=true"],
@@ -53,7 +53,7 @@ class SeasonControllerTest extends TestCase
 
         Carbon::setTestNow();
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertIsArray($content["data"]);
         $this->assertCount(1, $content["data"]);
     }
@@ -98,7 +98,7 @@ class SeasonControllerTest extends TestCase
         $f->create($state);
 
         $content = $this->getJsonResponse([], "/v4/seasons/2024/winter");
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertIsArray($content["data"]);
         $this->assertCount(2, $content["data"]);
     }
@@ -144,7 +144,7 @@ class SeasonControllerTest extends TestCase
         $f->create($state);
 
         $content = $this->getJsonResponse([], $requestUrl);
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertIsArray($content["data"]);
         $this->assertCount(3, $content["data"]);
     }
@@ -186,7 +186,7 @@ class SeasonControllerTest extends TestCase
         $f->create($state);
 
         $content = $this->getJsonResponse([], "/v4/seasons/2024/winter");
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertIsArray($content["data"]);
         $this->assertCount(2, $content["data"]);
     }
@@ -213,15 +213,15 @@ class SeasonControllerTest extends TestCase
         $f->create($state);
 
         $content = $this->getJsonResponse([], "/v4/seasons/now?filter=tv&continuing&page=1");
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertCount(1, $content["data"]);
 
         $content = $this->getJsonResponse([], "/v4/seasons/2024/summer?filter=tv&continuing&page=1");
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertCount(0, $content["data"]);
 
         $content = $this->getJsonResponse([], "/v4/seasons/2024/spring?filter=tv&continuing&page=1");
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertCount(0, $content["data"]);
         Carbon::setTestNow();
     }

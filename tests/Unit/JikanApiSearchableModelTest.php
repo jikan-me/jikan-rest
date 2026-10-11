@@ -21,7 +21,7 @@ final class JikanApiSearchableModelFixture extends \App\JikanApiSearchableModel
 
 final class JikanApiSearchableModelTest extends TestCase
 {
-    public function titleFieldDataProvider()
+    public static function titleFieldDataProvider()
     {
         return [
             ["name"],

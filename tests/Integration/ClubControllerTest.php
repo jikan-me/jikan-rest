@@ -17,8 +17,8 @@ class ClubControllerTest extends TestCase
             "mal_id" => 1
         ]);
         $this->get('/v4/clubs/1')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'mal_id',
                 'name',
                 'url',
@@ -53,8 +53,8 @@ class ClubControllerTest extends TestCase
         ]);
         DB::table("clubs_members")->insert($document);
         $this->get('/v4/clubs/1/members')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -80,6 +80,6 @@ class ClubControllerTest extends TestCase
     {
         $this->mockJikanParserWith404RespondingUpstream();
         $this->get('/v4/clubs/1000000')
-            ->seeStatusCode(404);
+            ->assertStatus(404);
     }
 }

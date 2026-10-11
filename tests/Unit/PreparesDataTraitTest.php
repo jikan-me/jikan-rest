@@ -17,7 +17,7 @@ final class PreparesDataFixture extends Data
 
 final class PreparesDataTraitTest extends TestCase
 {
-    public function paramsDataProvider(): array
+    public static function paramsDataProvider(): array
     {
         return [
             'limit = empty, page = empty, filter = empty' => [['limit' => '', 'page' => '', 'filter' => ''], []],
@@ -38,7 +38,9 @@ final class PreparesDataTraitTest extends TestCase
      */
     public function testShouldIgnoreEmptyParams($actual, $expected)
     {
-        $sut = PreparesDataFixture::prepareForPipeline(collect($actual));
+        // Spatie Laravel Data v4's prepareForPipeline() operates on arrays (not
+        // Collections like v3), so adapt the result for the loose assertions.
+        $sut = collect(PreparesDataFixture::prepareForPipeline($actual));
 
         $this->assertCollectionsStrictlyEqual(collect($expected), $sut);
     }

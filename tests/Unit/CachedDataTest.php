@@ -10,12 +10,12 @@ use Tests\TestCase;
 
 final class CachedDataTest extends TestCase
 {
-    public function dateTimeProvider(): array
+    public static function dateTimeProvider(): array
     {
         $now = Carbon::now();
         return [
             "mongodb bson date time" => [
-                $now, new UTCDateTime($now->getPreciseTimestamp(3))
+                $now, new UTCDateTime($now->getTimestampMs())
             ],
             "built-in datetime" => [
                 $now, $now->toDateTime()
@@ -26,7 +26,7 @@ final class CachedDataTest extends TestCase
         ];
     }
 
-    public function invalidModifiedAtValuesProvider(): array
+    public static function invalidModifiedAtValuesProvider(): array
     {
         return [
             "number value" => [

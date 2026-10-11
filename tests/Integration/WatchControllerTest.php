@@ -50,8 +50,8 @@ class WatchControllerTest extends TestCase
         ]);
         DB::table("watch")->insert($document);
         $this->get('/v4/watch/episodes')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -129,8 +129,8 @@ class WatchControllerTest extends TestCase
         DB::table("watch")->insert($document);
 
         $this->get('/v4/watch/episodes/popular')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -206,8 +206,8 @@ class WatchControllerTest extends TestCase
         DB::table("watch")->insert($document);
 
         $this->get('/v4/watch/promos')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -288,8 +288,8 @@ class WatchControllerTest extends TestCase
         DB::table("watch")->insert($document);
 
         $this->get('/v4/watch/promos/popular')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',

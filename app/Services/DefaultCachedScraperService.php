@@ -191,14 +191,14 @@ final class DefaultCachedScraperService implements CachedScraperService
         if ($resultsEmpty) {
             $meta = [
                 // Using Carbon here for testability
-                'createdAt' => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3)),
+                'createdAt' => new UTCDateTime(Carbon::now()->getTimestampMs()),
                 'request_hash' => $cacheKey
             ];
         }
 
         // Update `modifiedAt` meta
         // Using Carbon here for testability
-        $meta['modifiedAt'] = new UTCDateTime(Carbon::now()->getPreciseTimestamp(3));
+        $meta['modifiedAt'] = new UTCDateTime(Carbon::now()->getTimestampMs());
 
         // join meta data with response
         return $meta + $scraperResponse;

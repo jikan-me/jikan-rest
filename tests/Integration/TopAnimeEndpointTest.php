@@ -26,7 +26,7 @@ class TopAnimeEndpointTest extends TestCase
         return "/v4/top/anime";
     }
 
-    public function orderByFieldAndParamsData()
+    public static function orderByFieldAndParamsData()
     {
         return [
             "empty query string" => ["score", true, []],
@@ -46,7 +46,7 @@ class TopAnimeEndpointTest extends TestCase
     public function testShouldReturnMethodNotAllowedResponseIfMethodNotAllowed()
     {
         $this->json("POST", "/v4/top/anime", ["title" => "Dum"])
-            ->seeStatusCode(405);
+            ->assertStatus(405);
     }
 
     /**
@@ -107,7 +107,7 @@ class TopAnimeEndpointTest extends TestCase
         $expectedItems = $items->map(fn($elem) => data_get($elem, $fieldToOrderBy))->values();
         $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, $fieldToOrderBy))->values();
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData($expectedCount);
         $this->assertIsArray($content["data"]);
         $this->assertCount($expectedCount, $content["data"]);

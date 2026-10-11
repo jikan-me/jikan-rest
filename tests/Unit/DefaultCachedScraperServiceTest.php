@@ -7,7 +7,7 @@ use App\Contracts\Repository;
 use App\Profile;
 use App\Services\DefaultCachedScraperService;
 use Illuminate\Support\Carbon;
-use Jenssegers\Mongodb\Eloquent\Builder;
+use MongoDB\Laravel\Eloquent\Builder;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\SerializerInterface;
 use Mockery;
@@ -57,7 +57,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
         // this should be an array of arrays as builder->get() returns multiple items
         $dummyResults = collect([[
             "request_hash" => $testRequestHash,
-            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "modifiedAt" => new UTCDateTime($now->getTimestampMs()),
             "results" => [
                 ["dummy" => "dummy1"],
                 ["dummy" => "dummy2"]
@@ -83,7 +83,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
         // this should be an array of arrays as builder->get() returns multiple items
         $dummyResults = collect([[
             "request_hash" => $testRequestHash,
-            "modifiedAt" => new UTCDateTime($now->copy()->subDays(2)->getPreciseTimestamp(3)),
+            "modifiedAt" => new UTCDateTime($now->copy()->subDays(2)->getTimestampMs()),
             "results" => [
                 ["dummy" => "dummy1"],
                 ["dummy" => "dummy2"]
@@ -117,7 +117,7 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $result = $target->findList($testRequestHash, fn() => []);
 
         $this->assertEquals([
-            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "modifiedAt" => new UTCDateTime($now->getTimestampMs()),
             "results" => [
                 ["dummy" => "dummy1"],
                 ["dummy" => "dummy2"]
@@ -143,8 +143,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
         // this should be an array of arrays as builder->get() returns multiple items
         $cacheData = collect([[
             "request_hash" => $testRequestHash,
-            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
+            "modifiedAt" => new UTCDateTime($now->getTimestampMs()),
+            "createdAt" => new UTCDateTime($now->getTimestampMs()),
             "results" => [
                 ["dummy" => "dummy1"],
                 ["dummy" => "dummy2"]
@@ -179,8 +179,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
         Carbon::setTestNow($now);
         $mockModel = Anime::factory()->makeOne([
             "mal_id" => $malId,
-            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime($now->getTimestampMs()),
+            "createdAt" => new UTCDateTime($now->getTimestampMs())
         ]);
         [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
         $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect([
@@ -201,8 +201,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
         Carbon::setTestNow($now);
         $mockModel = Anime::factory()->makeOne([
             "mal_id" => $malId,
-            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime($now->getTimestampMs()),
+            "createdAt" => new UTCDateTime($now->getTimestampMs())
         ]);
         [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
         // nothing in db:
@@ -227,8 +227,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $now = Carbon::createFromDate(2022, 1, 11, "UTC")->addHours(8)->addMinutes(12);
         $mockModel = Anime::factory()->makeOne([
             "mal_id" => $malId,
-            "modifiedAt" => new UTCDateTime($now->copy()->sub("3 days")->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->copy()->sub("3 days")->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime($now->copy()->sub("3 days")->getTimestampMs()),
+            "createdAt" => new UTCDateTime($now->copy()->sub("3 days")->getTimestampMs())
         ]);
         $now = Carbon::now();
         Carbon::setTestNow($now);
@@ -236,8 +236,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $updatedMockModel = Anime::factory()->makeOne([
             ...$mockModel->toArray(),
             "mal_id" => $malId,
-            "modifiedAt" => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime(Carbon::now()->getTimestampMs()),
+            "createdAt" => new UTCDateTime(Carbon::now()->getTimestampMs())
         ]);
 
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
@@ -268,8 +268,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
         Carbon::setTestNow($now);
         $mockModel = Profile::factory()->makeOne([
             "username" => $username,
-            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime($now->getTimestampMs()),
+            "createdAt" => new UTCDateTime($now->getTimestampMs())
         ]);
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
         $repositoryMock->expects()->where("username", $username)->andReturns($queryBuilderMock);
@@ -291,8 +291,8 @@ final class DefaultCachedScraperServiceTest extends TestCase
         Carbon::setTestNow($now);
         $mockModel = Profile::factory()->makeOne([
             "username" => $username,
-            "modifiedAt" => new UTCDateTime($now->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime($now->getTimestampMs()),
+            "createdAt" => new UTCDateTime($now->getTimestampMs())
         ]);
 
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
@@ -323,16 +323,16 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $mockModel = Profile::factory()->makeOne([
             "mal_id" => $malId,
             "username" => $username,
-            "modifiedAt" => new UTCDateTime($now->copy()->sub("3 days")->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime($now->copy()->sub("3 days")->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime($now->copy()->sub("3 days")->getTimestampMs()),
+            "createdAt" => new UTCDateTime($now->copy()->sub("3 days")->getTimestampMs())
         ]);
         $now = Carbon::now();
         Carbon::setTestNow($now);
         $updatedMockModel = Profile::factory()->makeOne([
             ...$mockModel->toArray(),
             "location" => "North Pole",
-            "modifiedAt" => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3)),
-            "createdAt" => new UTCDateTime(Carbon::now()->getPreciseTimestamp(3))
+            "modifiedAt" => new UTCDateTime(Carbon::now()->getTimestampMs()),
+            "createdAt" => new UTCDateTime(Carbon::now()->getTimestampMs())
         ]);
         [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
         // stale record in db

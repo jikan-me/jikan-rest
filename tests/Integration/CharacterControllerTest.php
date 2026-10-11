@@ -18,8 +18,8 @@ class CharacterControllerTest extends TestCase
             "mal_id" => 1
         ]);
         $this->get('/v4/characters/1')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'mal_id',
                 'url',
                 'images' => [
@@ -65,8 +65,8 @@ class CharacterControllerTest extends TestCase
             ]
         ]);
         $this->get('/v4/characters/1/anime')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 [
                     'role',
                     'anime' => [
@@ -118,8 +118,8 @@ class CharacterControllerTest extends TestCase
             ]
         ]);
         $this->get('/v4/characters/1/manga')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 [
                     'role',
                     'manga' => [
@@ -149,8 +149,8 @@ class CharacterControllerTest extends TestCase
             "mal_id" => 1
         ]);
         $this->get('/v4/characters/1/voices')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 [
                     'language',
                     'person' => [
@@ -180,8 +180,8 @@ class CharacterControllerTest extends TestCase
         ]);
         DB::table("characters_pictures")->insert($document);
         $this->get('/v4/characters/1/pictures')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'jpg' => [
@@ -196,6 +196,6 @@ class CharacterControllerTest extends TestCase
     {
         $this->mockJikanParserWith404RespondingUpstream();
         $this->get('/v4/characters/1000000')
-            ->seeStatusCode(404);
+            ->assertStatus(404);
     }
 }

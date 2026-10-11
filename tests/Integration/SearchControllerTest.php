@@ -17,8 +17,8 @@ class SearchControllerTest extends TestCase
     {
         Anime::factory(3)->create();
         $this->get('/v4/anime?order_by=mal_id&sort=asc')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -143,8 +143,8 @@ class SearchControllerTest extends TestCase
     {
         Manga::factory(3)->create();
         $this->get('/v4/manga?order_by=mal_id&sort=asc')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -241,8 +241,8 @@ class SearchControllerTest extends TestCase
             "name" => "Sawano Kuma"
         ]);
         $this->get('/v4/people?q=Sawano')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -282,8 +282,8 @@ class SearchControllerTest extends TestCase
             "name" => "Okabe"
         ]);
         $this->get('/v4/characters?q=Okabe')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',

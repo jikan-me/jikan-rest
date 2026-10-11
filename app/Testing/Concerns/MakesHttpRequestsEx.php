@@ -1,6 +1,8 @@
 <?php
 namespace App\Testing\Concerns;
 
+use Illuminate\Testing\TestResponse;
+
 /**
  * @codeCoverageIgnore
  */
@@ -30,7 +32,13 @@ trait MakesHttpRequestsEx
     {
         $parameters = http_build_query($params);
         $uri = $baseUri ?? $this->getBaseUri() . "?" . $parameters;
-        $this->getJson($uri);
-        return $this->response->json();
+
+        /** @var TestResponse $response */
+        $response = $this->getJson($uri);
+
+        // Lumen exposed the last response via $this->response; Laravel returns it.
+        $this->response = $response;
+
+        return $response->json();
     }
 }

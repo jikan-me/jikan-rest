@@ -182,7 +182,7 @@ class Anime extends JikanApiSearchableModel
         }
 
         $producer = (int)$value;
-        return $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producer) {
+        return $query->where(function (\MongoDB\Laravel\Eloquent\Builder $query) use ($producer) {
             return $query->where('producers.mal_id', $producer)
                 ->orWhere('licensors.mal_id', $producer)
                 ->orWhere('studios.mal_id', $producer);
@@ -199,7 +199,7 @@ class Anime extends JikanApiSearchableModel
         /* @var \Illuminate\Support\Collection $producers */
         $producers = collect(explode(',', $value))->filter();
 
-        return $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producers) {
+        return $query->where(function (\MongoDB\Laravel\Eloquent\Builder $query) use ($producers) {
             $firstProducer = (int)$producers->first();
             $query = $query->where('producers.mal_id', $firstProducer)
                 ->orWhere('licensors.mal_id', $firstProducer)

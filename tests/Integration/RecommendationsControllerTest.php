@@ -60,8 +60,8 @@ class RecommendationsControllerTest extends TestCase
         ]]);
         DB::table("recommendations")->insert($document);
         $this->get('/v4/recommendations/anime')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',

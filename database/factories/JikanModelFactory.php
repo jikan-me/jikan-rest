@@ -8,9 +8,31 @@ use JMS\Serializer\Serializer;
 use \Illuminate\Database\Eloquent\Factories\Factory;
 use Spatie\Enum\Laravel\Faker\FakerEnumProvider;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\App;
 
 abstract class JikanModelFactory extends Factory
 {
+    /**
+     * Resolve via the container so contextual bindings apply.
+     *
+     * Laravel 12's Factory::new() uses `new static`, which bypasses the container
+     * and cannot inject interface constructor arguments (e.g. the
+     * MediaModelFactoryDescriptor required by JikanMediaModelFactory).
+     */
+    public static function new($attributes = [])
+    {
+        return App::makeWith(static::class, [
+            'count' => null,
+            'states' => null,
+            'has' => null,
+            'for' => null,
+            'afterMaking' => null,
+            'afterCreating' => null,
+            'connection' => null,
+            'recycle' => null,
+        ])->state($attributes)->configure();
+    }
+
     public function configure(): JikanModelFactory|static
     {
         $this->faker->addProvider(new FakerEnumProvider($this->faker));

@@ -19,7 +19,7 @@ class TopControllerTest extends TestCase
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
-    public function topReviewTypeParametersProvider(): array
+    public static function topReviewTypeParametersProvider(): array
     {
         return [
             "empty query string" => [[]],
@@ -36,8 +36,8 @@ class TopControllerTest extends TestCase
             ["rank" => 12]
         ))->create();
         $this->get('/v4/top/anime')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'mal_id',
@@ -155,8 +155,8 @@ class TopControllerTest extends TestCase
             ["rank" => 12]
         ))->create();
         $this->get('/v4/top/manga')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'mal_id',
@@ -244,8 +244,8 @@ class TopControllerTest extends TestCase
             ["member_favorites" => 224],
         ))->create();
         $this->get('/v4/top/people')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'mal_id',
@@ -276,8 +276,8 @@ class TopControllerTest extends TestCase
             ["member_favorites" => 224],
         ))->create();
         $this->get('/v4/top/characters')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'mal_id',
@@ -302,7 +302,7 @@ class TopControllerTest extends TestCase
     public function test404()
     {
         $this->get('/v4/top/anime/999')
-            ->seeStatusCode(404);
+            ->assertStatus(404);
     }
 
     /**
@@ -325,6 +325,6 @@ class TopControllerTest extends TestCase
         $jikanParser->allows()->getReviews(\Mockery::any())->andReturn($reviewsFacade);
         $this->app->instance('JikanParser', $jikanParser);
         $this->getJsonResponse($params,"/v4/top/reviews");
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
     }
 }

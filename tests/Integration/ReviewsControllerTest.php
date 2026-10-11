@@ -76,8 +76,8 @@ class ReviewsControllerTest extends TestCase
         ]);
         DB::table("reviews")->insert($document);
         $this->get('/v4/reviews/anime')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -187,8 +187,8 @@ class ReviewsControllerTest extends TestCase
         ]);
         DB::table("reviews")->insert($document);
         $this->get('/v4/reviews/manga')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',

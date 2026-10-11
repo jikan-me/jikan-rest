@@ -25,8 +25,8 @@ class ScheduleControllerTest extends TestCase
             "airing" => true,
         ])->create();
         $this->get('/v4/schedules')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'mal_id',
@@ -111,6 +111,6 @@ class ScheduleControllerTest extends TestCase
     public function test400()
     {
         $this->get('/v4/schedules/asdjkhas')
-            ->seeStatusCode(400);
+            ->assertStatus(400);
     }
 }

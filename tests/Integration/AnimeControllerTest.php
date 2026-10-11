@@ -50,8 +50,8 @@ class AnimeControllerTest extends TestCase
             ]
         ]);
         $this->getJson('/v4/anime/1')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data' => [
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => [
                 'mal_id',
                 'url',
                 'images' => [
@@ -163,8 +163,8 @@ class AnimeControllerTest extends TestCase
         $this->givenDummyCharactersStaffData("/v4/anime/1/characters", "anime");
 
         $this->getJson('/v4/anime/1/characters')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data' => [
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => [
                 [
                     'character' => [
                         'mal_id',
@@ -204,8 +204,8 @@ class AnimeControllerTest extends TestCase
     {
         $this->givenDummyCharactersStaffData('/v4/anime/1/staff', "anime");
         $this->getJson('/v4/anime/1/staff')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 [
                     'person' => [
                         'mal_id',
@@ -245,8 +245,8 @@ class AnimeControllerTest extends TestCase
             ])
         );
         $this->get('/v4/anime/1/episodes')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -280,8 +280,8 @@ class AnimeControllerTest extends TestCase
             )
         );
         $this->get('/v4/anime/21/episodes?page=2')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -319,8 +319,8 @@ class AnimeControllerTest extends TestCase
         ]);
         DB::table("anime_episode")->insert($document);
         $this->get('/v4/anime/21/episodes/1')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     'mal_id',
                     'url',
@@ -357,8 +357,8 @@ class AnimeControllerTest extends TestCase
         ]]);
         DB::table("anime_news")->insert($document);
         $this->get('/v4/anime/1/news')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -405,8 +405,8 @@ class AnimeControllerTest extends TestCase
         );
         DB::table("anime_pictures")->insert($document);
         $this->get('/v4/anime/1/pictures')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'jpg' => [
@@ -485,8 +485,8 @@ class AnimeControllerTest extends TestCase
         );
         DB::table('anime_videos')->insert($document);
         $this->get('/v4/anime/1/videos')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'promo' => [
                     [
                         'title',
@@ -567,8 +567,8 @@ class AnimeControllerTest extends TestCase
         );
         DB::table("anime_stats")->insert($document);
         $this->get('/v4/anime/21/statistics')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'watching',
                 'completed',
                 'on_hold',
@@ -606,8 +606,8 @@ class AnimeControllerTest extends TestCase
         ], "topics");
         DB::table("anime_forum")->insert($document);
         $this->get('/v4/anime/1/forum')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'mal_id',
@@ -633,8 +633,8 @@ class AnimeControllerTest extends TestCase
         $document = $this->dummyScraperResultDocument('/v4/anime/1/moreinfo', "anime", ["moreinfo" => "asd"]);
         DB::table("anime_moreinfo")->insert($document);
         $this->get('/v4/anime/1/moreinfo')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'moreinfo'
             ]]);
     }
@@ -681,8 +681,8 @@ class AnimeControllerTest extends TestCase
         ]);
         DB::table("anime_reviews")->insert($document);
         $this->get('/v4/anime/1/reviews')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -721,8 +721,8 @@ class AnimeControllerTest extends TestCase
     {
         $this->mockJikanParserWith404RespondingUpstream();
         $this->get('/v4/anime/1/reviews?page=100')
-            ->seeStatusCode(404)
-            ->seeJsonStructure([
+            ->assertStatus(404)
+            ->assertJsonStructure([
                 'status',
                 'type',
                 'message',
@@ -759,8 +759,8 @@ class AnimeControllerTest extends TestCase
         ]);
         DB::table('anime_recommendations')->insert($document);
         $this->get('/v4/anime/1/recommendations')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'entry' => [
@@ -812,8 +812,8 @@ class AnimeControllerTest extends TestCase
         ]);
         DB::table("anime_userupdates")->insert($document);
         $this->get('/v4/anime/1/userupdates')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -846,7 +846,7 @@ class AnimeControllerTest extends TestCase
     {
         $this->mockJikanParserWith404RespondingUpstream();
         $this->get('/v4/anime/1/userupdates?page=200')
-            ->seeStatusCode(404);
+            ->assertStatus(404);
     }
 
     public function testAnimeRelations()
@@ -874,8 +874,8 @@ class AnimeControllerTest extends TestCase
             ]
         ]);
         $this->get('/v4/anime/1/relations')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'relation',
@@ -906,8 +906,8 @@ class AnimeControllerTest extends TestCase
             ]
         ]);
         $this->get('/v4/anime/1/themes')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     'openings',
                     'endings',
@@ -919,6 +919,6 @@ class AnimeControllerTest extends TestCase
     {
         $this->mockJikanParserWith404RespondingUpstream();
         $this->get('/v4/anime/2')
-            ->seeStatusCode(404);
+            ->assertStatus(404);
     }
 }

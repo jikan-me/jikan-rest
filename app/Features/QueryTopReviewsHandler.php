@@ -25,12 +25,21 @@ final class QueryTopReviewsHandler extends RequestHandlerWithScraperCache
 
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $type = $requestParams->get("type", TopReviewsTypeEnum::anime()->value);
-        $spoilers = $requestParams->get("spoilers", true);
-        $preliminary = $requestParams->get("preliminary", true);
+        // Note: `?? default` (not get($k, $default)) because a nullable DTO property
+        // is present with a null value which would otherwise override the default.
+        $type = $requestParams->get("type") ?? TopReviewsTypeEnum::anime()->value;
+        $spoilers = (bool) ($requestParams->get("spoilers") ?? true);
+        $preliminary = (bool) ($requestParams->get("preliminary") ?? true);
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn (MalClient $jikan, ?int $page = null) => $jikan->getReviews(new ReviewsRequest(ensureEnumPrimitiveValue($type), $page, $spoilers, $preliminary)),
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getReviews(new ReviewsRequest(
+                ensureEnumPrimitiveValue($type),
+                $page,
+                \Jikan\Helper\Constants::REVIEWS_SORT_MOST_VOTED,
+                $spoilers,
+                $preliminary
+            )),
             $requestParams->get("page"));
     }
 }

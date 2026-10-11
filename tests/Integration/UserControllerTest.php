@@ -25,7 +25,7 @@ class UserControllerTest extends TestCase
     use SyntheticMongoDbTransaction;
     use ScoutFlush;
 
-    public function userNameProvider(): array
+    public static function userNameProvider(): array
     {
         return [
             "nekomata1037" => ["nekomata1037"],
@@ -44,8 +44,8 @@ class UserControllerTest extends TestCase
             "internal_username" => $username
         ]);
         $this->get('/v4/users/'.$username)
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'mal_id',
                 'username',
                 'url',
@@ -184,8 +184,8 @@ class UserControllerTest extends TestCase
         $this->app->instance('JikanParser', $jikanParser);
 
         $this->get('/v4/users/'.$username)
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'mal_id',
                 'username',
                 'url',
@@ -213,8 +213,8 @@ class UserControllerTest extends TestCase
             "internal_username" => $username
         ]);
         $this->get('/v4/users/nekomata1037/statistics')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
 
                 'anime' => [
                      'days_watched',
@@ -252,8 +252,8 @@ class UserControllerTest extends TestCase
             "internal_username" => $username
         ]);
         $this->get('/v4/users/nekomata1037/about')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'about',
             ]]);
     }
@@ -266,8 +266,8 @@ class UserControllerTest extends TestCase
             "internal_username" => $username
         ]);
         $this->get('/v4/users/nekomata1037/favorites')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'anime' => [
                     [
                         'mal_id',
@@ -361,8 +361,8 @@ class UserControllerTest extends TestCase
         ]);
         DB::table("users_history")->insert($document);
         $this->get('/v4/users/purplepinapples/history/anime')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'entry' => [
@@ -396,8 +396,8 @@ class UserControllerTest extends TestCase
         ]);
         DB::table("users_history")->insert($document);
         $this->get('/v4/users/nekomata1037/history/manga')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
 
                 ]
@@ -424,8 +424,8 @@ class UserControllerTest extends TestCase
         ]]);
         DB::table("users_friends")->insert($document);
         $this->get('/v4/users/nekomata1037/friends')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -461,7 +461,7 @@ class UserControllerTest extends TestCase
         $this->app->instance('JikanParser', $jikanParser);
 
         $this->get('/v4/users/nekomata1037/friends?page=200')
-            ->seeStatusCode(200);
+            ->assertStatus(200);
     }
 
     public function testUserRecommendations()
@@ -498,8 +498,8 @@ class UserControllerTest extends TestCase
         ]);
         DB::table("users_recommendations")->insert($document);
         $this->get('/v4/users/xinil/recommendations')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -545,8 +545,8 @@ class UserControllerTest extends TestCase
         $this->app->instance('JikanParser', $jikanParser);
 
         $this->get('/v4/users/xinil/recommendations?page=200')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -607,8 +607,8 @@ class UserControllerTest extends TestCase
         ]]);
         DB::table("users_reviews")->insert($document);
         $this->get('/v4/users/xinil/reviews')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -657,7 +657,7 @@ class UserControllerTest extends TestCase
         $this->app->instance('JikanParser', $jikanParser);
 
         $this->get('/v4/users/xinil/reviews?page=200')
-            ->seeStatusCode(200);
+            ->assertStatus(200);
     }
 
     public function testUserClubs()
@@ -669,8 +669,8 @@ class UserControllerTest extends TestCase
         ]]);
         DB::table('users_clubs')->insert($document);
         $this->get('/v4/users/nekomata1037/clubs')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',

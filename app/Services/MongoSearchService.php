@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Jenssegers\Mongodb\Query\Builder as MongoBuilder;
+use MongoDB\Laravel\Query\Builder as MongoBuilder;
 
 final class MongoSearchService extends SearchServiceBase
 {

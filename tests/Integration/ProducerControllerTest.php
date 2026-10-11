@@ -14,8 +14,8 @@ class ProducerControllerTest extends TestCase
     {
         Producers::factory()->createOne();
         $this->get('/v4/producers')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 [
                     'mal_id',
                     'url',

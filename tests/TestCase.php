@@ -26,6 +26,12 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
     protected Generator $faker;
     protected int $maxResultsPerPage;
 
+    /**
+     * The last JSON response. Lumen's TestCase exposed this; Laravel's does not,
+     * so we keep a compatible property for the existing test helpers.
+     */
+    protected ?\Illuminate\Testing\TestResponse $response = null;
+
     protected function dummyScraperResultDocument(string $uri, string $mediaType, array $content, ?string $wrapKey = null): array
     {
         return [
@@ -115,6 +121,39 @@ abstract class TestCase extends \Illuminate\Foundation\Testing\TestCase
                 ] : []
             )
         ]);
+    }
+
+    /**
+     * Creates the application.
+     *
+     * @return \Illuminate\Foundation\Application
+     */
+    public function createApplication()
+    {
+        /**
+         * @var \Illuminate\Foundation\Application $app
+         */
+        $app = require __DIR__.'/../bootstrap/app.php';
+
+        // Bootstrap (env, config, providers) the same way the HTTP/console kernel does.
+        // Lumen built a fully-bootable app in bootstrap/app.php; Laravel 12 does not.
+        $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+
+        // a http client which fails the tests if requests are leaking to MAL.
+        $mockHttpClient = \Mockery::mock(HttpClientInterface::class);
+        /** @noinspection PhpParamsInspection */
+        $mockHttpClient->allows()
+            ->request(\Mockery::any(), \Mockery::any(), \Mockery::any())
+            ->andThrow(new CustomTestException("Http Request to MAL server was attempted during testing. By default we throw this exception to indicate a buggy test."));
+        $jikan = new \Jikan\MyAnimeList\MalClient($mockHttpClient);
+        $app->instance('JikanParser', $jikan);
+        $app->singleton(ExceptionHandler::class, TestExceptionsHandler::class);
+        $app->register(TestServiceProvider::class);
+        Container::setInstance($app);
+        /** @noinspection PhpParamsInspection */
+        Facade::setFacadeApplication($app);
+
+        return $app;
     }
 
     protected function setUp(): void

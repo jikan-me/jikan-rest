@@ -14,8 +14,8 @@ class MagazineControllerTest extends TestCase
     {
         Magazine::factory(1)->create();
         $this->get('/v4/magazines')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data' => [
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => [
                 [
                     'mal_id',
                     'name',

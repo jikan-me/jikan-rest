@@ -17,8 +17,8 @@ class PersonControllerTest extends TestCase
             "mal_id" => 1
         ]);
         $this->get('/v4/people/1')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 'mal_id',
                 'url',
                 'website_url',
@@ -66,8 +66,8 @@ class PersonControllerTest extends TestCase
             ]
         ]);
         $this->get('/v4/people/1/anime')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 [
                     'position',
                     'anime' => [
@@ -119,8 +119,8 @@ class PersonControllerTest extends TestCase
             ]
         ]);
         $this->get('/v4/people/1/manga')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 [
                     'position',
                     'manga' => [
@@ -186,8 +186,8 @@ class PersonControllerTest extends TestCase
             ]
         ]);
         $this->get('/v4/people/1/voices')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data'=>[
                 [
                     'role',
                     'anime' => [
@@ -238,8 +238,8 @@ class PersonControllerTest extends TestCase
         ]);
         DB::table("people_pictures")->insert($document);
         $this->get('/v4/people/1/pictures')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'jpg' => [
@@ -254,6 +254,6 @@ class PersonControllerTest extends TestCase
     {
         $this->mockJikanParserWith404RespondingUpstream();
         $this->get('/v4/people/1000000')
-            ->seeStatusCode(404);
+            ->assertStatus(404);
     }
 }

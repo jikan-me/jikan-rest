@@ -41,7 +41,7 @@ class AnimeSearchEndpointTest extends TestCase
         return $f->raw()[0];
     }
 
-    public function limitParameterCombinationsProvider(): array
+    public static function limitParameterCombinationsProvider(): array
     {
         return [
             "query string = `?limit=5`" => [
@@ -63,7 +63,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function partialDatesParameterProvider(): array
+    public static function partialDatesParameterProvider(): array
     {
         return [
             [["start_date" => "2012"]],
@@ -73,7 +73,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function startDatesParameterProvider(): array
+    public static function startDatesParameterProvider(): array
     {
         return [
             [["start_date" => "2012-05-12"]],
@@ -83,7 +83,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function endDatesParameterProvider(): array
+    public static function endDatesParameterProvider(): array
     {
         return [
             [["end_date" => "2012-05-12"]],
@@ -91,7 +91,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function startAndEndDatesParameterProvider(): array
+    public static function startAndEndDatesParameterProvider(): array
     {
         return [
             [["start_date" => "2021-01-01", "end_date" => "2021-03-22"]],
@@ -99,7 +99,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function genresParameterCombinationsProvider(): array
+    public static function genresParameterCombinationsProvider(): array
     {
         return [
             [["genres" => "1,2"]],
@@ -108,7 +108,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function emptyDateRangeProvider(): array
+    public static function emptyDateRangeProvider(): array
     {
         return [
             [["start_date" => ""]],
@@ -117,7 +117,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function commonParameterProvider(): array
+    public static function commonParameterProvider(): array
     {
         return [
             "status = airing" => [["status" => "airing"]],
@@ -142,7 +142,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function invalidScoreParameterProvider(): array
+    public static function invalidScoreParameterProvider(): array
     {
         return [
             [["max_score" => "634638"]],
@@ -152,7 +152,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function invalidRatingParameterProvider(): array
+    public static function invalidRatingParameterProvider(): array
     {
         return [
             [["rating" => "6263ssd"], 0],
@@ -161,7 +161,7 @@ class AnimeSearchEndpointTest extends TestCase
         ];
     }
 
-    public function orderByFieldMappingProvider(): array
+    public static function orderByFieldMappingProvider(): array
     {
         $orderByFieldMappings = AnimeOrderByEnum::toArray();
         $params = [];
@@ -173,7 +173,7 @@ class AnimeSearchEndpointTest extends TestCase
         return $params;
     }
 
-    public function letterParameterProvider(): array
+    public static function letterParameterProvider(): array
     {
         $letters = range("a", "f");
         $result = [];
@@ -190,7 +190,7 @@ class AnimeSearchEndpointTest extends TestCase
     public function shouldReturnMethodNotAllowedResponseIfMethodNotAllowed()
     {
         $this->json("POST", "/v4/anime", ["title" => "Dum"])
-            ->seeStatusCode(405);
+            ->assertStatus(405);
     }
 
     /**
@@ -207,7 +207,7 @@ class AnimeSearchEndpointTest extends TestCase
             ...$additionalParams
         ]);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData($limitCount, 25, $limitCount);
         $this->assertIsArray($content["data"]);
         $this->assertCount($limitCount, $content["data"]);
@@ -222,7 +222,7 @@ class AnimeSearchEndpointTest extends TestCase
 
         $this->getJsonResponse($params);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
     }
 
     /**
@@ -233,7 +233,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(400);
+        $this->assertStatus(400);
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
@@ -249,7 +249,7 @@ class AnimeSearchEndpointTest extends TestCase
         $actualStartDate = Carbon::parse(data_get($content, "data.0.aired.from"));
         $paramStartDate = Carbon::parse($overrides["aired"]["from"]);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(5);
         $this->assertGreaterThanOrEqual(0, $paramStartDate->diff($actualStartDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
@@ -268,7 +268,7 @@ class AnimeSearchEndpointTest extends TestCase
         $actualEndDate = Carbon::parse(data_get($content, "data.0.aired.to"));
         $paramEndDate = Carbon::parse($params['end_date']);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(5);
         $this->assertGreaterThanOrEqual(1, $actualEndDate->diff($paramEndDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
@@ -289,7 +289,7 @@ class AnimeSearchEndpointTest extends TestCase
         $actualEndDate = Carbon::parse(data_get($content, "data.0.aired.to"));
         $paramEndDate = Carbon::parse($overrides["aired"]["to"]);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(5);
         $this->assertGreaterThanOrEqual(0, $paramStartDate->diff($actualStartDate)->days);
         $this->assertLessThanOrEqual(0, $actualEndDate->diff($paramEndDate)->days);
@@ -317,7 +317,7 @@ class AnimeSearchEndpointTest extends TestCase
         $content = $this->getJsonResponse(["start_date" => $startDate]);
         $actualStartDate = Carbon::parse(data_get($content, "data.0.aired.from"));
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(1);
         $this->assertEquals(0, $carbonStartDate->diff($actualStartDate)->days);
         $this->assertCount(1, $content["data"]);
@@ -343,7 +343,7 @@ class AnimeSearchEndpointTest extends TestCase
         $content = $this->getJsonResponse(["end_date" => $endDate]);
         $actualEndDate = Carbon::parse(data_get($content, "data.0.aired.to"));
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(1);
         $this->assertEquals(0, $carbonEndDate->diff($actualEndDate)->days);
         $this->assertCount(1, $content["data"]);
@@ -358,7 +358,7 @@ class AnimeSearchEndpointTest extends TestCase
 
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(5);
         $this->assertIsArray($content["data"]);
         // we created 5 elements according to parameters, so we expect 5 of them.
@@ -373,7 +373,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(400);
+        $this->assertStatus(400);
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
@@ -385,7 +385,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(400);
+        $this->assertStatus(400);
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
@@ -398,7 +398,7 @@ class AnimeSearchEndpointTest extends TestCase
 
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(5);
         $this->assertIsArray($content["data"]);
         // we created 5 elements according to parameters, so we expect 5 of them.
@@ -425,7 +425,7 @@ class AnimeSearchEndpointTest extends TestCase
             "min_score" => "0.0",
             "max_score" => "10.0"
         ]);
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(5);
         $this->assertIsArray($content["data"]);
         $this->assertCount(5, $content["data"]);
@@ -454,7 +454,7 @@ class AnimeSearchEndpointTest extends TestCase
             $actualItems = $actualItems->map(fn(Carbon $elem) => $elem->getTimestamp());
         }
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData($expectedCount);
         $this->assertIsArray($content["data"]);
         $this->assertCount($expectedCount, $content["data"]);
@@ -512,7 +512,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(400);
+        $this->assertStatus(400);
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
@@ -524,7 +524,7 @@ class AnimeSearchEndpointTest extends TestCase
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
         $content = $this->getJsonResponse($params);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData($expectedCount);
         $this->assertIsArray($content["data"]);
         $this->assertCount($expectedCount, $content["data"]);
@@ -539,7 +539,7 @@ class AnimeSearchEndpointTest extends TestCase
             "letter" => "asd"
         ]);
 
-        $this->seeStatusCode(400);
+        $this->assertStatus(400);
         $this->assertEquals("ValidationException", data_get($content, "type"));
     }
 
@@ -567,7 +567,7 @@ class AnimeSearchEndpointTest extends TestCase
             "page" => 2
         ]);
 
-        $this->seeStatusCode(200);
+        $this->assertStatus(200);
         $this->assertPaginationData(25, 255);
         $this->assertIsArray($content["data"]);
         $this->assertCount(25, $content["data"]);

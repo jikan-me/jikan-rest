@@ -3,7 +3,7 @@
 namespace App\Support;
 use Laravel\Scout\Builder as ScoutBuilder;
 use Illuminate\Contracts\Database\Query\Builder;
-use Jenssegers\Mongodb\Eloquent\Builder as MongoDbBuilder;
+use MongoDB\Laravel\Eloquent\Builder as MongoDbBuilder;
 
 class RepositoryQueryBase
 {

@@ -24,7 +24,7 @@ class JikanApiModel extends \MongoDB\Laravel\Eloquent\Model
     /** @noinspection PhpUnused */
     public function scopeRandom(Builder $query, int $numberOfRandomItems = 1, bool $sfw = false, bool $unapproved = false): Collection
     {
-        return $query->raw(function(\Jenssegers\Mongodb\Collection $collection) use ($numberOfRandomItems, $sfw, $unapproved) {
+        return $query->raw(function(\MongoDB\Collection $collection) use ($numberOfRandomItems, $sfw, $unapproved) {
             $sfwFilter = [
                 'demographics.mal_id' => [
                     '$nin' => [
