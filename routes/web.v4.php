@@ -28,7 +28,7 @@ $router->get('/anime', [
 
 $router->group(
     [
-        'prefix' => 'anime/{id:\d+}'
+        'prefix' => 'anime/{id}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -51,9 +51,9 @@ $router->group(
             'uses' => 'AnimeController@episodes'
         ]);
 
-        $router->get('/episodes/{episodeId:\d+}', [
+        $router->get('/episodes/{episodeId}', [
             'uses' => 'AnimeController@episode'
-        ]);
+        ])->where('episodeId', '[0-9]+');
 
         $router->get('/news', [
             'uses' => 'AnimeController@news'
@@ -111,7 +111,7 @@ $router->group(
             'uses' => 'AnimeController@streaming'
         ]);
     }
-);
+)->where('id', '[0-9]+');
 
 $router->get('/manga', [
     'uses' => 'SearchController@manga'
@@ -119,7 +119,7 @@ $router->get('/manga', [
 
 $router->group(
     [
-        'prefix' => 'manga/{id:\d+}'
+        'prefix' => 'manga/{id}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -174,7 +174,7 @@ $router->group(
             'uses' => 'MangaController@external'
         ]);
     }
-);
+)->where('id', '[0-9]+');
 
 $router->get('/characters', [
     'uses' => 'SearchController@character'
@@ -182,7 +182,7 @@ $router->get('/characters', [
 
 $router->group(
     [
-        'prefix' => 'characters/{id:\d+}'
+        'prefix' => 'characters/{id}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -209,14 +209,14 @@ $router->group(
             'uses' => 'CharacterController@pictures'
         ]);
     }
-);
+)->where('id', '[0-9]+');
 
 $router->get('/people', [
     'uses' => 'SearchController@people'
 ]);
 $router->group(
     [
-        'prefix' => 'people/{id:\d+}'
+        'prefix' => 'people/{id}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -243,7 +243,7 @@ $router->group(
             'uses' => 'PersonController@pictures'
         ]);
     }
-);
+)->where('id', '[0-9]+');
 
 
 $router->group(
@@ -282,7 +282,7 @@ $router->group(
             'uses' => 'SearchController@producers',
         ]);
 
-        $router->get('/{id:\d+}', [
+        $router->get('/{id}', [
             'uses' => 'ProducerController@main'
         ]);
     }
@@ -294,7 +294,7 @@ $router->get('/producers', [
 
 $router->group(
     [
-        'prefix' => 'producers/{id:\d+}'
+        'prefix' => 'producers/{id}'
     ],
     function () use ($router) {
         $router->get('/', [
@@ -309,7 +309,7 @@ $router->group(
             'uses' => 'ProducerController@external'
         ]);
     }
-);
+)->where('id', '[0-9]+');
 
 $router->group(
     [
@@ -336,13 +336,13 @@ $router->group(
             'uses' => 'UserController@recentlyOnline'
         ]);
 
-        $router->get('/userbyid/{id:\d+}', [
+        $router->get('/userbyid/{id}', [
             'uses' => 'SearchController@userById'
-        ]);
+        ])->where('id', '[0-9]+');
 
         $router->group(
             [
-                'prefix' => '/{username:[\w\-]+}'
+                'prefix' => '/{username}'
             ],
             function () use ($router) {
                 $router->get('/', [
@@ -369,22 +369,22 @@ $router->group(
                     'uses' => 'UserController@about'
                 ]);
 
-                $router->get('/history[/{type:[A-Za-z]+}]', [
+                $router->get('/history/{type?}', [
                     'uses' => 'UserController@history'
-                ]);
+                ])->where('type', '[A-Za-z]+');
 
                 $router->get('/friends', [
                     'uses' => 'UserController@friends'
                 ]);
 
                 if (env('DISABLE_USER_LISTS') === false) {
-                    $router->get('/animelist[/{status:[A-Za-z]+}]', [
+                    $router->get('/animelist/{status?}', [
                         'uses' => 'UserController@animelist'
-                    ]);
+                    ])->where('status', '[A-Za-z]+');
 
-                    $router->get('/mangalist[/{status:[A-Za-z]+}]', [
+                    $router->get('/mangalist/{status?}', [
                         'uses' => 'UserController@mangalist'
-                    ]);
+                    ])->where('status', '[A-Za-z]+');
                 }
 
                 $router->get('/recommendations', [
@@ -460,21 +460,21 @@ $router->group(
     ],
     function () use ($router) {
 
-        $router->get('/{id:\d+}', [
+        $router->get('/{id}', [
             'uses' => 'ClubController@main'
-        ]);
+        ])->where('id', '[0-9]+');
 
-        $router->get('/{id:\d+}/members', [
+        $router->get('/{id}/members', [
             'uses' => 'ClubController@members'
-        ]);
+        ])->where('id', '[0-9]+');
 
-        $router->get('/{id:\d+}/staff', [
+        $router->get('/{id}/staff', [
             'uses' => 'ClubController@staff'
-        ]);
+        ])->where('id', '[0-9]+');
 
-        $router->get('/{id:\d+}/relations', [
+        $router->get('/{id}/relations', [
             'uses' => 'ClubController@relations'
-        ]);
+        ])->where('id', '[0-9]+');
     }
 );
 
