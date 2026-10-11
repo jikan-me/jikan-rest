@@ -2,7 +2,7 @@
 
 namespace App\Testing;
 
-use Typesense\LaravelTypesense\Typesense;
+use Typesense\Client;
 
 /**
  * @codeCoverageIgnore
@@ -25,27 +25,25 @@ trait ScoutFlush
     public function runScoutFlush(): void
     {
         if (config("scout.driver") === "typesense") {
-            /**
-             * @var Typesense $typeSenseClient
-             */
-            $typeSenseClient = app(Typesense::class);
-            // more optimized approach for quicker tests.
+            /** @var Client $typeSenseClient */
+            $typeSenseClient = app(Client::class);
+
             foreach ($this->searchIndexModelCleanupList as $model) {
                 $modelInstance = new $model;
-                $collection = $typeSenseClient->getCollectionIndex($modelInstance);
+                $collection = $typeSenseClient->getCollections()->{$modelInstance->searchableAs()};
+
                 // we count items by exporting
-                $items = $collection->documents->export();
+                $items = $collection->getDocuments()->export();
                 if (strlen($items) > 1) {
-                    $typeSenseClient->deleteDocuments($collection, [
+                    $collection->getDocuments()->delete([
                         "filter_by" => "mal_id:>0",
-                        "batch_size" => 500
+                        "batch_size" => 500,
                     ]);
 
-                    $typeSenseClient->deleteCollection($modelInstance->searchableAs());
+                    $collection->delete();
                 }
             }
-        }
-        else {
+        } else {
             foreach ($this->searchIndexModelCleanupList as $model) {
                 $this->artisan("scout:flush", ["model" => $model]);
             }

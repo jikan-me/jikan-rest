@@ -1,12 +1,13 @@
 <?php
 namespace App\Services;
-use Typesense\LaravelTypesense\Typesense;
 use App\JikanApiSearchableModel;
-use Typesense\Collection as TypesenseCollection;
 use Illuminate\Support\Collection;
+use Typesense\Client as Typesense;
 
 /**
- * A service which helps to describe a collection in Typesense based on an eloquent model
+ * A service which helps to describe a collection in Typesense based on an eloquent model.
+ *
+ * Uses Laravel Scout's native Typesense engine client (first-party since Laravel 13).
  */
 final class TypesenseCollectionDescriptor
 {
@@ -14,7 +15,7 @@ final class TypesenseCollectionDescriptor
 
     public function __construct(private readonly Typesense $typesense)
     {
-        $this->cache = collect();   
+        $this->cache = collect();
     }
 
     public function getSearchableAttributes(JikanApiSearchableModel $model): array
@@ -23,10 +24,8 @@ final class TypesenseCollectionDescriptor
         if ($this->cache->has($modelSearchableAs)) {
             return $this->cache->get($modelSearchableAs);
         }
-        /**
-         * @var TypesenseCollection $collection
-         */
-        $collection = $this->typesense->getCollectionIndex($model);
+
+        $collection = $this->typesense->getCollections()->{$modelSearchableAs};
         $collectionDetails = $collection->retrieve();
         $fields = collect($collectionDetails["fields"]);
         $searchableAttributeNames = $fields->pluck("name")->all();

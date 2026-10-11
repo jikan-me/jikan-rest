@@ -35,3 +35,6 @@ frankenphp-worker.php
 
 # Octane RoadRunner binary (downloaded dev tool)
 /rr
+
+# Laravel bootstrap cache (generated)
+bootstrap/cache/*.php

@@ -57,7 +57,6 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
 use Jikan\MyAnimeList\MalClient;
 use Laravel\Scout\Builder as ScoutBuilder;
-use Typesense\LaravelTypesense\Typesense;
 use App\Features;
 
 class AppServiceProvider extends ServiceProvider
@@ -107,6 +106,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PrivateFieldMapperService::class, DefaultPrivateFieldMapperService::class);
         $this->app->bind(QueryBuilderPaginatorService::class, DefaultBuilderPaginatorService::class);
         if (static::getSearchIndexDriver($this->app) === "typesense") {
+            $this->app->singleton(
+                \Typesense\Client::class,
+                fn () => new \Typesense\Client(config('scout.typesense.client-settings'))
+            );
             $this->app->singleton(\App\Services\TypesenseCollectionDescriptor::class);
         }
         $this->registerModelRepositories();

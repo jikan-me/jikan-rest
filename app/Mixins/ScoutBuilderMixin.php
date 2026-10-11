@@ -5,7 +5,7 @@ use Illuminate\Container\Container;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Laravel\Scout\Contracts\PaginatesEloquentModels;
-use Typesense\LaravelTypesense\Engines\TypesenseEngine;
+use Laravel\Scout\Engines\TypesenseEngine;
 
 /** @mixin \Laravel\Scout\Builder */
 class ScoutBuilderMixin
