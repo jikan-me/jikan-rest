@@ -2,9 +2,6 @@
 
 namespace App\Events;
 
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class SourceHeartbeatEvent

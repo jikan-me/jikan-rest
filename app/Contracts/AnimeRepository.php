@@ -4,7 +4,6 @@ namespace App\Contracts;
 
 use App\Anime;
 use App\Enums\AnimeScheduleFilterEnum;
-use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Support\Carbon;

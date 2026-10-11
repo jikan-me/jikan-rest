@@ -4,8 +4,6 @@ namespace App\Console\Commands\Indexer;
 
 use App\Http\HttpHelper;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Jikan\Request\Schedule\ScheduleRequest;
 use Jikan\Request\Seasonal\SeasonalRequest;
 
 

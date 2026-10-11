@@ -4,11 +4,8 @@ namespace App\Repositories;
 
 use App\Contracts\MangaRepository;
 use App\Enums\MangaStatusEnum;
-use App\Enums\MangaTypeEnum;
 use App\Manga;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
-use Illuminate\Database\Eloquent\Collection;
-use Jikan\Helper\Constants;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 final class DefaultMangaRepository extends DatabaseRepository implements MangaRepository

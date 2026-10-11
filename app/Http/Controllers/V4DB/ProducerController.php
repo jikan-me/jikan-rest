@@ -5,7 +5,6 @@ namespace App\Http\Controllers\V4DB;
 use App\Dto\ProducerExternalLookupCommand;
 use App\Dto\ProducerFullLookupCommand;
 use App\Dto\ProducerLookupCommand;
-use Illuminate\Http\Request;
 
 class ProducerController extends Controller
 {

@@ -17,7 +17,6 @@ use App\Rules\Attributes\EnumValidation;
 use Illuminate\Http\JsonResponse;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Attributes\MapOutputName;
 
 /**
  * @implements DataRequest<JsonResponse>

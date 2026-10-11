@@ -2,22 +2,12 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
 use App\Club;
 use App\Dto\ClubLookupCommand;
 use App\Dto\ClubMembersLookupCommand;
 use App\Dto\ClubRelationLookupCommand;
 use App\Dto\ClubStaffLookupCommand;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\Resources\V4\AnimeCharactersResource;
-use App\Http\Resources\V4\ResultsResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\Request\Anime\AnimeCharactersAndStaffRequest;
-use Jikan\Request\Club\ClubRequest;
-use Jikan\Request\Club\UserListRequest;
-use MongoDB\BSON\UTCDateTime;
 
 class ClubController extends Controller
 {

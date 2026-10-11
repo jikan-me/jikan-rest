@@ -3,10 +3,8 @@
 namespace App\Features;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
 use App\Support\CachedData;
-use Jikan\MyAnimeList\MalClient;
 
 /**
  * @template TRequest

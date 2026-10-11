@@ -3,14 +3,9 @@
 namespace App\Console\Commands\Indexer;
 
 use App\Http\HttpHelper;
-use App\Http\HttpResponse;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Jikan\Request\Genre\AnimeGenresRequest;
-use Jikan\Request\Genre\MangaGenresRequest;
 use Jikan\Request\Magazine\MagazinesRequest;
-use Jikan\Request\Producer\ProducersRequest;
-use Jikan\Request\SeasonList\SeasonListRequest;
 
 class CommonIndexer extends Command
 {

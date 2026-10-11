@@ -3,7 +3,6 @@
 namespace App\Dto;
 
 use App\Contracts\DataRequest;
-use App\Dto\Concerns\HasSfwParameter;
 use App\Enums\AnimeOrderByEnum;
 use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeStatusEnum;

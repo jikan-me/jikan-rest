@@ -7,7 +7,6 @@ use App\GenreAnime;
 use App\ExplicitGenresAnime;
 use App\ThemeAnime;
 use App\DemographicAnime;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Collection;
 
 final class AnimeGenresRepository extends DatabaseRepository implements GenreRepository

@@ -8,7 +8,6 @@ use App\Dto\PersonLookupCommand;
 use App\Dto\PersonMangaLookupCommand;
 use App\Dto\PersonPicturesLookupCommand;
 use App\Dto\PersonVoicesLookupCommand;
-use Illuminate\Http\Request;
 
 class PersonController extends Controller
 {

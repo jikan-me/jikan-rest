@@ -11,7 +11,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
-use Spatie\Enum\Laravel\Enum;
 
 /**
  * @template TRequest of DataRequest<TResponse>

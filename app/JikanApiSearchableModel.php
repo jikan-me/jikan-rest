@@ -2,7 +2,6 @@
 
 namespace App;
 
-use MongoDB\Laravel\Eloquent\Model;
 
 abstract class JikanApiSearchableModel extends JikanApiModel
 {

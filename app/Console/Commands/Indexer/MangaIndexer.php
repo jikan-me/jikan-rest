@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Indexer;
 
-use App\Exceptions\Console\CommandAlreadyRunningException;
 use App\Exceptions\Console\FileNotFoundException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;

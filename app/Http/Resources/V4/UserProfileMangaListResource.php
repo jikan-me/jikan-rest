@@ -5,8 +5,6 @@ namespace App\Http\Resources\V4;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Jikan\Helper\Constants as JikanConstants;
 use Jikan\Model\Common\DateRange;
-use Jikan\Model\Resource\CommonImageResource\CommonImageResource;
-use JMS\Serializer\Serializer;
 
 class UserProfileMangaListResource extends JsonResource
 {

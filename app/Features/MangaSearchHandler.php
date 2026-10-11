@@ -3,10 +3,8 @@
 namespace App\Features;
 
 use App\Dto\MangaSearchCommand;
-use App\Enums\MangaOrderByEnum;
 use App\Http\Resources\V4\MangaCollection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 /**
  * @extends SearchRequestHandler<MangaSearchCommand, MangaCollection>

@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 final class DefaultQueryBuilderService implements QueryBuilderService

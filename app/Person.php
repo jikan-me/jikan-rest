@@ -5,7 +5,6 @@ namespace App;
 use App\Concerns\FilteredByLetter;
 use Jikan\Jikan;
 use Jikan\Request\Person\PersonRequest;
-use function Symfony\Component\Translation\t;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Person extends JikanApiSearchableModel

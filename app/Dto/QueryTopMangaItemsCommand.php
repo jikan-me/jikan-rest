@@ -10,7 +10,6 @@ use App\Enums\MangaTypeEnum;
 use App\Enums\TopMangaFilterEnum;
 use App\Http\Resources\V4\MangaCollection;
 use App\Rules\Attributes\EnumValidation;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
 

@@ -6,7 +6,6 @@ use App\Http\HttpHelper;
 use App\Support\JikanConfig;
 use Closure;
 use Illuminate\Support\Facades\Cache;
-use Jikan\Exception\BadResponseException;
 
 class MicroCaching
 {

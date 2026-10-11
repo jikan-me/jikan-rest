@@ -3,14 +3,7 @@
 namespace App\Http\Controllers\V4DB;
 
 use App\Contracts\Mediator;
-use App\Http\HttpHelper;
-use App\Providers\SerializerFactory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\MyAnimeList\MalClient;
-use JMS\Serializer\Serializer;
 use Illuminate\Routing\Controller as BaseController;
-use MongoDB\BSON\UTCDateTime;
 use OpenApi\Annotations as OA;
 
 /**
@@ -48,16 +41,6 @@ class Controller extends BaseController
      * )
      */
 
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var array
-     */
-    private array $response;
-
     protected Mediator $mediator;
 
     /**
@@ -68,52 +51,6 @@ class Controller extends BaseController
     public function __construct(Mediator $mediator)
     {
         $this->mediator = $mediator;
-    }
-
-    /**
-     * @param array $response
-     * @return array
-     */
-//    protected function prepareResponse(Request $request, array $response) : array
-//    {
-//        $this->request = $request;
-//        $this->response = $response;
-//
-//        unset($this->response['_id']);
-//
-//        $this->mutation();
-//
-//        $this->response = ['data' => $this->response];
-//        return $this->response;
-//    }
-
-    /**
-     * @param Request $request
-     * @param array $response
-     * @return array
-     */
-    private function mutation() : void
-    {
-        $requestType = HttpHelper::requestType($this->request);
-
-        if (($requestType === 'anime' || $requestType === 'manga')) {
-
-            // Fix JSON response for empty related object
-            if (isset($this->response['related']) && \count($this->response['related']) === 0) {
-                $this->response['related'] = new \stdClass();
-            }
-
-            if (isset($this->response['related']) && !is_object($this->response['related']) && !empty($this->response['related'])) {
-                $relation = [];
-                foreach ($this->response['related'] as $relationType => $related) {
-                    $relation[] = [
-                        'relation' => $relationType,
-                        'entry' => $related
-                    ];
-                }
-                $this->response['related'] = $relation;
-            }
-        }
     }
 
 }

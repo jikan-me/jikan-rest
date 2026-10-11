@@ -2,8 +2,6 @@
 
 namespace App\Testing;
 
-use App\JikanApiModel;
-use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Support\Facades\DB;
 
 /**

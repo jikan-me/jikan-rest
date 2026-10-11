@@ -2,7 +2,6 @@
 
 namespace App\Dto\Concerns;
 
-use Illuminate\Support\Collection;
 use Spatie\LaravelData\Support\DataConfig;
 use Spatie\LaravelData\Support\DataProperty;
 

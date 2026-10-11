@@ -10,10 +10,7 @@ use App\Dto\PeopleSearchCommand;
 use App\Dto\ProducersSearchCommand;
 use App\Dto\UserByIdLookupCommand;
 use App\Dto\UsersSearchCommand;
-use App\Http\Resources\V4\ResultsResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\Request\User\UsernameByIdRequest;
 use OpenApi\Annotations as OA;
 
 class SearchController extends Controller

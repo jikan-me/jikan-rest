@@ -11,7 +11,6 @@ use App\Enums\AnimeTypeEnum;
 use App\Enums\TopAnimeFilterEnum;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Rules\Attributes\EnumValidation;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
 

@@ -10,7 +10,6 @@ use App\Http\HttpHelper;
 use Carbon\CarbonImmutable;
 use Database\Factories\AnimeFactory;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Jikan\Helper\Constants;
 use Jikan\Jikan;
 use Jikan\Request\Anime\AnimeRequest;

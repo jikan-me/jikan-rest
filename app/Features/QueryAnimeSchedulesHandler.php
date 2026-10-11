@@ -7,7 +7,6 @@ use App\Contracts\RequestHandler;
 use App\Dto\QueryAnimeSchedulesCommand;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Support\CachedData;
-use Illuminate\Support\Env;
 
 /**
  * @implements RequestHandler<QueryAnimeSchedulesCommand, AnimeCollection>

@@ -7,7 +7,6 @@ use App\GenreManga;
 use App\ExplicitGenresManga;
 use App\ThemeManga;
 use App\DemographicManga;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Collection;
 
 final class MangaGenresRepository extends DatabaseRepository implements GenreRepository

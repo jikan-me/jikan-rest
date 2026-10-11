@@ -9,7 +9,6 @@ use App\Enums\MangaStatusEnum;
 use App\Enums\MangaTypeEnum;
 use App\Http\Resources\V4\MangaCollection;
 use App\Rules\Attributes\EnumValidation;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Attributes\Validation\StringType;

@@ -4,7 +4,6 @@
 namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class MangaCollection extends ResourceCollection
 {

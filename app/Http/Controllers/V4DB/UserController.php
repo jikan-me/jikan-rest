@@ -17,7 +17,6 @@ use App\Dto\UserRecommendationsLookupCommand;
 use App\Dto\UserReviewsLookupCommand;
 use App\Dto\UserStatisticsLookupCommand;
 use App\Dto\UserUpdatesLookupCommand;
-use Illuminate\Http\Request;
 
 /**
  * Class Controller

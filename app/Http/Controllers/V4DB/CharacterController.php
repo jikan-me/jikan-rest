@@ -10,21 +10,7 @@ use App\Dto\CharacterLookupCommand;
 use App\Dto\CharacterMangaLookupCommand;
 use App\Dto\CharacterPicturesLookupCommand;
 use App\Dto\CharacterVoicesLookupCommand;
-use App\Http\HttpHelper;
-use App\Http\HttpResponse;
-use App\Http\Resources\V4\CharacterAnimeCollection;
-use App\Http\Resources\V4\CharacterMangaCollection;
-use App\Http\Resources\V4\CharacterMangaResource;
-use App\Http\Resources\V4\CharacterSeiyuuCollection;
-use App\Http\Resources\V4\PersonMangaCollection;
-use App\Http\Resources\V4\PicturesResource;
-use App\Person;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Jikan\Request\Anime\AnimePicturesRequest;
-use Jikan\Request\Character\CharacterRequest;
-use Jikan\Request\Character\CharacterPicturesRequest;
-use MongoDB\BSON\UTCDateTime;
 
 class CharacterController extends Controller
 {

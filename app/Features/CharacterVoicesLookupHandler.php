@@ -7,7 +7,6 @@ use App\Http\Resources\V4\CharacterSeiyuuCollection;
 use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @extends ItemLookupHandler<CharacterVoicesLookupCommand, JsonResponse>

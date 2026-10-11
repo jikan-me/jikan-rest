@@ -6,7 +6,6 @@ use App\Casts\ContextualBooleanCast;
 use OpenApi\Annotations as OA;
 use Spatie\LaravelData\Attributes\Validation\BooleanType;
 use Spatie\LaravelData\Attributes\WithCast;
-use Spatie\LaravelData\Optional;
 
 /**
  *  @OA\Parameter(

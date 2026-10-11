@@ -3,7 +3,6 @@
 namespace App\Features;
 
 use App\Dto\AnimeReviewsLookupCommand;
-use App\Enums\MediaReviewsSortEnum;
 use App\Features\Concerns\ResolvesMediaReviewParams;
 use App\Http\Resources\V4\ReviewsResource;
 use App\Support\CachedData;

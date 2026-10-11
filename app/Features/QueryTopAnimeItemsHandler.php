@@ -8,7 +8,6 @@ use App\Dto\QueryTopAnimeItemsCommand;
 use App\Enums\TopAnimeFilterEnum;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Services\QueryBuilderPaginatorService;
-use Spatie\LaravelData\Optional;
 
 /**
  * @implements RequestHandler<QueryTopAnimeItemsCommand, AnimeCollection>
