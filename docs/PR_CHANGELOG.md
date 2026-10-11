@@ -1003,3 +1003,14 @@ Per request, the canonical URLs are now:
 - Verified: `l5-swagger:generate` still exit 0 (101 ops/127 schemas);
   endpoint-parity + route-coverage clean; the failing integration slices now
   pass with the standard CI-style env (`SCOUT_DRIVER=null CACHE_DRIVER=array`).
+
+
+## 24. Upstream: endpoint-parity attribute support (backend-quality-suite #24)
+
+The `backend-quality-suite` endpoint-parity audit only detected docblock
+`@OA\Get` markers, which swagger-php 6 no longer parses — after our attribute
+migration it would flag every controller action as undocumented on a fresh
+venv. Shipped upstream as **backend-quality-suite#24** (bracket-aware
+`#[OA\...]` attribute-chain detection + `docMarkers` backwards-compat:
+`@OA\Get(` matches `#[OA\Get(`). The local venv patch used until then:
+`/tmp/audit_endpoint_parity.py.patched`.
