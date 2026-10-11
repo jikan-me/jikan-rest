@@ -34,7 +34,6 @@ use App\Services\DefaultCachedScraperService;
 use App\Services\DefaultPrivateFieldMapperService;
 use App\Services\DefaultQueryBuilderService;
 use App\Services\DefaultScoutSearchService;
-use App\Services\ElasticScoutSearchService;
 use App\Services\EloquentBuilderPaginatorService;
 use App\Services\MongoSearchService;
 use App\Services\PrivateFieldMapperService;
@@ -132,8 +131,6 @@ class AppServiceProvider extends ServiceProvider
             $scoutDriver = static::getSearchIndexDriver($this->app);
             $serviceClass = match ($scoutDriver) {
                 "typesense" => TypeSenseScoutSearchService::class,
-                // experimental
-                "Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine" => ElasticScoutSearchService::class,
                 default => DefaultScoutSearchService::class
             };
 
