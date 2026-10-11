@@ -4,5 +4,17 @@
     "decisions": "MIGRATION_PLAN.md",
     "backlog": "PR_CHANGELOG.md"
   },
-  "externalRoles": {}
+  "externalRoles": {},
+  "declinedRoles": {
+    "api": {
+      "declined": "No handwritten API spec maintained; the v4 contract is the parity harness + generated swagger (config/cors-l5-swagger at build).",
+      "by": "Irfan Dahir",
+      "on": "2026-10-11"
+    },
+    "api-standard": {
+      "declined": "No separate API-standard doc; convention is enforced by the parity harness and DTO validation.",
+      "by": "Irfan Dahir",
+      "on": "2026-10-11"
+    }
+  }
 }
