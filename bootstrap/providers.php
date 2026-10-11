@@ -7,5 +7,4 @@ return [
     App\Providers\SourceHeartbeatProvider::class,
     App\Providers\EventServiceProvider::class,
     App\Providers\JikanEnumServiceProvider::class,
-    \L5Swagger\L5SwaggerServiceProvider::class,
 ];

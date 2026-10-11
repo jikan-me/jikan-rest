@@ -15,7 +15,6 @@ GET /v4
 GET /v1
 GET /v2
 GET /v3
-GET /docs
 
 # Anime
 GET /v4/anime/1

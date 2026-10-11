@@ -38,8 +38,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::redirect('/docs', '/v4/api/documentation', 301);
-
 // Health/liveness endpoint. Registered explicitly: withRouting(health:) only works
 // when no custom `using` closure is provided (we load the v4 routes ourselves).
 Route::get('/up', fn () => response('OK', 200));

@@ -227,3 +227,4 @@ Overall: controllers are thin (good). Validation is centralized in DTO attribute
 | P2 #16 PHPStan/Pint/CI | ✅ done | `4b780d8` — Larastan ^3.13 (Laravel-13 ok) @ level 5 + baseline, Pint (Laravel preset, scoped `--test`), ci.yml matrix |
 | SeasonControllerTest flakiness | ✅ done | `getCurrentSeason()` honours `Carbon::setTestNow()` (`Carbon::now('Asia/Tokyo')`); continuing fixture pins `episodes=null`; `getItemsBySeason()` stops mutating caller's `$to`. `--filter SeasonControllerTest` green 20× (incl. random order) |
 | P1 … | ⏳ | see phase-2 audit + backlog |
+| Swagger UI / l5-swagger | ✅ removed | product decision (2026-10-11) — §7 kept as historical record |
