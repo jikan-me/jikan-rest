@@ -5,18 +5,22 @@ namespace App\Support;
 use App\Contracts\DataRequest;
 use App\Contracts\Mediator;
 use App\Contracts\RequestHandler;
-use Illuminate\Support\Collection;
 
 final class DefaultMediator implements Mediator
 {
     /**
-     * @var Collection<string, RequestHandler> $requestHandlers
+     * Handlers resolved lazily on first use, per mediator instance.
+     *
+     * @var array<string, RequestHandler>
      */
-    private readonly Collection $requestHandlers;
+    private array $resolvedHandlers = [];
 
-    public function __construct(RequestHandler ...$requestHandlers)
+    /**
+     * @param  array<string, \Closure(): RequestHandler>  $handlerFactories
+     *        keyed by the request (DTO) class name.
+     */
+    public function __construct(private readonly array $handlerFactories)
     {
-        $this->requestHandlers = collect($requestHandlers)->flatMap(fn ($x) => [$x->requestClass() => $x]);
     }
 
     /**
@@ -26,16 +30,13 @@ final class DefaultMediator implements Mediator
     {
         $className = get_class($requestData);
 
-        if (!$this->requestHandlers->has($className)) {
+        if (!isset($this->handlerFactories[$className])) {
             return response()->json([
                 "message" => "Programmer error: Request handler not found for request."
             ], 500);
         }
 
-        /**
-         * @var RequestHandler $handler
-         */
-        $handler = $this->requestHandlers->get($className);
+        $handler = $this->resolvedHandlers[$className] ??= ($this->handlerFactories[$className])();
 
         return $handler->handle($requestData);
     }

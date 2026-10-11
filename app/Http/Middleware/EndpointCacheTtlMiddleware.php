@@ -25,9 +25,12 @@ final class EndpointCacheTtlMiddleware
         $ttl = $this->jikanConfig->cacheTtlForEndpoint($routeName);
         $this->cacheOptions->setTtl($ttl);
 
-        $response = $next($request);
-
-        $this->cacheOptions->setTtl(null);
-        return $response;
+        // Always clear the request-scoped TTL, even when the request throws —
+        // otherwise a stale TTL leaks into the next request on the same worker.
+        try {
+            return $next($request);
+        } finally {
+            $this->cacheOptions->setTtl(null);
+        }
     }
 }

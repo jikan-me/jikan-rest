@@ -216,5 +216,8 @@ Overall: controllers are thin (good). Validation is centralized in DTO attribute
 | P0 #3 rate limiting | ✅ done | `throttle:v4` + `RateLimiter::for('v4')` (240/min; 10k/min testing) |
 | P0 #4 error/trace redaction | ✅ done | `Handler` gates behind `config('app.debug')` |
 | P0 #5 APP_KEY bypass | ✅ done | `CACHE_BYPASS_TOKEN` (empty = no bypass), jobs updated |
-| P1 #6 Octane flush gaps | ⏳ not started | backlog |
-| P1 … | ⏳ | see phase-2 audit (`audit-phase2.md`) + backlog |
+| P1 #6 Octane flush gaps | ✅ done | repos + CacheOptions flushed; TTL finally-reset |
+| P1 #7 lazy handlers | ✅ done | mediator DTO→factory map built once/worker |
+| P1 #8 Scout chunked total | ✅ done | array_merge hits, scalar found |
+| P1 #9 Mongo `$text` filters | ✅ verified not a bug | filters applied via `scopeFilter` (empirically confirmed) |
+| P1 … | ⏳ | see phase-2 audit + backlog |

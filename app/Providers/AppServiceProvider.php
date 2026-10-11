@@ -178,186 +178,201 @@ class AppServiceProvider extends ServiceProvider
     {
         /*
          * This bit is about a "mediator" pattern for handling requests.
+         * Handlers are resolved lazily: we build a map of
+         *   request (DTO) class => factory closure
+         * once per worker process and inject it into the mediator. A single
+         * request only ever constructs the handler it dispatches, instead of
+         * all ~65 handler graphs per request.
          */
         $this->app->bind(Mediator::class, DefaultMediator::class);
-        /*
-         * Contextual binding for the mediator.
-         * Each request is represented as a data transfer object, and spatie/laravel-data package's service provider
-         * registers them in the ioc container. For each request there is a request handler.
-         * Validation for requests is specified in the DTOs.
-         * Querying/Filtering entirely happens on the model side.
-         * The lines below explicitly define the mapping between request handlers and repositories.
-         * Repositories are just a bit of abstraction over models. They are making unit testing easier.
-         */
+
+        $this->app->singleton(
+            'jikan-mediator-handler-factories',
+            fn (Application $app) => $this->buildRequestHandlerFactories($app)
+        );
+
         $this->app->when(DefaultMediator::class)
-            ->needs(RequestHandler::class)
-            ->give(function (Application $app) {
-                /**
-                 * @var UnitOfWork $unitOfWorkInstance
-                 */
-                $unitOfWorkInstance = $app->make(UnitOfWork::class);
-                $searchRequestHandlersDescriptors = [
-                    Features\AnimeSearchHandler::class => $unitOfWorkInstance->anime(),
-                    Features\MangaSearchHandler::class => $unitOfWorkInstance->manga(),
-                    Features\CharacterSearchHandler::class => $unitOfWorkInstance->characters(),
-                    Features\PeopleSearchHandler::class => $unitOfWorkInstance->people(),
-                    Features\ClubSearchHandler::class => $unitOfWorkInstance->clubs(),
-                    Features\MagazineSearchHandler::class => $unitOfWorkInstance->magazines(),
-                    Features\ProducerSearchHandler::class => $unitOfWorkInstance->producers(),
-                ];
-                $requestHandlers = [];
-                foreach ($searchRequestHandlersDescriptors as $handlerClass => $repositoryInstance) {
-                    $requestHandlers[] = $app->make($handlerClass, [
-                        "queryBuilderService" => $app->make(DefaultQueryBuilderService::class, [
-                            "searchService" => $this->getSearchService($repositoryInstance)
-                        ]),
-                    ]);
-                }
-
-                $queryTopItemsDescriptors = [
-                    Features\QueryTopAnimeItemsHandler::class => $unitOfWorkInstance->anime(),
-                    Features\QueryTopMangaItemsHandler::class => $unitOfWorkInstance->manga(),
-                    Features\QueryTopCharactersHandler::class => $unitOfWorkInstance->characters(),
-                    Features\QueryTopPeopleHandler::class => $unitOfWorkInstance->people(),
-                ];
-
-                foreach ($queryTopItemsDescriptors as $handlerClass => $repositoryInstance) {
-                    $requestHandlers[] = $app->make($handlerClass, [
-                        $repositoryInstance,
-                        // top queries don't use the search engine, so it's enough for them to use eloquent paginator
-                        $app->make(EloquentBuilderPaginatorService::class)
-                    ]);
-                }
-
-                // request handlers which only depend on a repository instance
-                $requestHandlersWithOnlyRepositoryDependency = [
-                    Features\AnimeGenreListHandler::class => $unitOfWorkInstance->animeGenres(),
-                    Features\MangaGenreListHandler::class => $unitOfWorkInstance->mangaGenres(),
-                ];
-
-                foreach ($requestHandlersWithOnlyRepositoryDependency as $handlerClass => $repositoryInstance) {
-                    $requestHandlers[] = $app->make($handlerClass, ["repository" => $repositoryInstance]);
-                }
-
-                // request handlers which are fetching data through the jikan library from MAL, and caching the result.
-                $requestHandlersWithScraperService = [
-                    Features\AnimeFullLookupHandler::class => $unitOfWorkInstance->anime(),
-                    Features\AnimeLookupHandler::class => $unitOfWorkInstance->anime(),
-                    Features\UserSearchHandler::class => $unitOfWorkInstance->documents("common"),
-                    Features\QueryTopReviewsHandler::class => $unitOfWorkInstance->documents("common"),
-                    Features\UserByIdLookupHandler::class => $unitOfWorkInstance->documents("common"),
-                    Features\AnimeCharactersLookupHandler::class => $unitOfWorkInstance->documents("anime_characters_staff"),
-                    Features\AnimeStaffLookupHandler::class => $unitOfWorkInstance->documents("anime_characters_staff"),
-                    Features\AnimeEpisodesLookupHandler::class => $unitOfWorkInstance->documents("anime_episodes"),
-                    Features\AnimeEpisodeLookupHandler::class => $unitOfWorkInstance->documents("anime_episode"),
-                    Features\AnimeNewsLookupHandler::class => $unitOfWorkInstance->documents("anime_news"),
-                    Features\AnimeForumLookupHandler::class => $unitOfWorkInstance->documents("anime_forum"),
-                    Features\AnimeVideosLookupHandler::class => $unitOfWorkInstance->documents("anime_videos"),
-                    Features\AnimeVideosEpisodesLookupHandler::class => $unitOfWorkInstance->documents("anime_videos_episodes"),
-                    Features\AnimePicturesLookupHandler::class => $unitOfWorkInstance->documents("anime_pictures"),
-                    Features\AnimeStatsLookupHandler::class => $unitOfWorkInstance->documents("anime_stats"),
-                    Features\AnimeMoreInfoLookupHandler::class => $unitOfWorkInstance->documents("anime_moreinfo"),
-                    Features\AnimeRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("anime_recommendations"),
-                    Features\AnimeReviewsLookupHandler::class => $unitOfWorkInstance->documents("anime_reviews"),
-                    Features\AnimeRelationsLookupHandler::class => $unitOfWorkInstance->anime(),
-                    Features\AnimeExternalLookupHandler::class => $unitOfWorkInstance->anime(),
-                    Features\AnimeStreamingLookupHandler::class => $unitOfWorkInstance->anime(),
-                    Features\AnimeThemesLookupHandler::class => $unitOfWorkInstance->anime(),
-                    Features\AnimeUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents("anime_userupdates"),
-                    Features\CharacterLookupHandler::class => $unitOfWorkInstance->characters(),
-                    Features\CharacterFullLookupHandler::class => $unitOfWorkInstance->characters(),
-                    Features\CharacterAnimeLookupHandler::class => $unitOfWorkInstance->characters(),
-                    Features\CharacterMangaLookupHandler::class => $unitOfWorkInstance->characters(),
-                    Features\CharacterVoicesLookupHandler::class => $unitOfWorkInstance->characters(),
-                    Features\CharacterPicturesLookupHandler::class => $unitOfWorkInstance->documents("characters_pictures"),
-                    Features\ClubLookupHandler::class => $unitOfWorkInstance->clubs(),
-                    Features\ClubMembersLookupHandler::class => $unitOfWorkInstance->documents("clubs_members"),
-                    Features\ClubStaffLookupHandler::class => $unitOfWorkInstance->clubs(),
-                    Features\ClubRelationsLookupHandler::class => $unitOfWorkInstance->clubs(),
-                    Features\MangaCharactersLookupHandler::class => $unitOfWorkInstance->documents("manga_characters"),
-                    Features\MangaNewsLookupHandler::class => $unitOfWorkInstance->documents("manga_news"),
-                    Features\MangaForumLookupHandler::class => $unitOfWorkInstance->documents("manga_forum"),
-                    Features\MangaPicturesLookupHandler::class => $unitOfWorkInstance->documents("manga_pictures"),
-                    Features\MangaStatsLookupHandler::class => $unitOfWorkInstance->documents("manga_stats"),
-                    Features\MangaMoreInfoLookupHandler::class => $unitOfWorkInstance->documents("manga_moreinfo"),
-                    Features\MangaRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("manga_recommendations"),
-                    Features\MangaUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents("manga_userupdates"),
-                    Features\MangaReviewsLookupHandler::class => $unitOfWorkInstance->documents("manga_reviews"),
-                    Features\MangaLookupHandler::class => $unitOfWorkInstance->manga(),
-                    Features\MangaFullLookupHandler::class => $unitOfWorkInstance->manga(),
-                    Features\MangaRelationsLookupHandler::class => $unitOfWorkInstance->manga(),
-                    Features\MangaExternalLookupHandler::class => $unitOfWorkInstance->manga(),
-                    Features\PersonLookupHandler::class => $unitOfWorkInstance->people(),
-                    Features\PersonAnimeLookupHandler::class => $unitOfWorkInstance->people(),
-                    Features\PersonFullLookupHandler::class => $unitOfWorkInstance->people(),
-                    Features\PersonMangaLookupHandler::class => $unitOfWorkInstance->people(),
-                    Features\PersonVoicesLookupHandler::class => $unitOfWorkInstance->people(),
-                    Features\PersonPicturesLookupHandler::class => $unitOfWorkInstance->documents("people_pictures"),
-                    Features\ProducerLookupHandler::class => $unitOfWorkInstance->producers(),
-                    Features\ProducerFullLookupHandler::class => $unitOfWorkInstance->producers(),
-                    Features\ProducerExternalLookupHandler::class => $unitOfWorkInstance->producers(),
-                    Features\QueryAnimeRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
-                    Features\QueryMangaRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
-                    Features\QueryAnimeReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
-                    Features\QueryMangaReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
-                    Features\QueryAnimeSeasonListHandler::class => $unitOfWorkInstance->documents("season_archive"),
-                    Features\UserFullLookupHandler::class => $unitOfWorkInstance->users(),
-                    Features\UserProfileLookupHandler::class => $unitOfWorkInstance->users(),
-                    Features\UserStatisticsLookupHandler::class => $unitOfWorkInstance->users(),
-                    Features\UserFavoritesLookupHandler::class => $unitOfWorkInstance->users(),
-                    Features\UserUpdatesLookupHandler::class => $unitOfWorkInstance->users(),
-                    Features\UserAboutLookupHandler::class => $unitOfWorkInstance->users(),
-                    Features\UserHistoryLookupHandler::class => $unitOfWorkInstance->documents("users_history"),
-                    Features\UserFriendsLookupHandler::class => $unitOfWorkInstance->documents("users_friends"),
-                    Features\UserReviewsLookupHandler::class => $unitOfWorkInstance->documents("users_reviews"),
-                    Features\UserRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("users_recommendations"),
-                    Features\UserClubsLookupHandler::class => $unitOfWorkInstance->documents("users_clubs"),
-                    Features\UserExternalLookupHandler::class => $unitOfWorkInstance->users(),
-                    Features\QueryRecentlyOnlineUsersHandler::class => $unitOfWorkInstance->documents("users_recently_online"),
-                    Features\QueryRecentlyAddedEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
-                    Features\QueryPopularEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
-                    Features\QueryRecentlyAddedPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
-                    Features\QueryPopularPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
-                    Features\QueryAnimeListOfUserHandler::class => $unitOfWorkInstance->documents("users_animelist"),
-                    Features\QueryMangaListOfUserHandler::class => $unitOfWorkInstance->documents("users_mangalist")
-                ];
-
-                foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
-                    $jikan = $app->get("JikanParser");
-                    $serializer = $app->get("SerializerV4");
-                    $scraperService = $app->make(DefaultCachedScraperService::class,
-                        ["repository" => $repositoryInstance, "jikan" => $jikan, "serializer" => $serializer]);
-                    $requestHandlers[] = $app->make($handlerClass, [
-                        "scraperService" => $scraperService
-                    ]);
-                }
-
-                // automatically resolvable dependencies or no dependencies at all
-                $requestHandlersWithNoDependencies = [
-                    Features\QueryRandomAnimeHandler::class,
-                    Features\QueryRandomMangaHandler::class,
-                    Features\QueryRandomCharacterHandler::class,
-                    Features\QueryRandomPersonHandler::class,
-                    Features\QueryRandomUserHandler::class,
-                    Features\QueryAnimeSchedulesHandler::class,
-                    Features\QueryCurrentAnimeSeasonHandler::class,
-                    Features\QuerySpecificAnimeSeasonHandler::class,
-                    Features\QueryUpcomingAnimeSeasonHandler::class
-                ];
-
-                foreach ($requestHandlersWithNoDependencies as $handlerClass) {
-                    $requestHandlers[] = $this->app->make($handlerClass);
-                }
-
-                return $requestHandlers;
-            });
+            ->needs('$handlerFactories')
+            ->give(fn () => $this->app->make('jikan-mediator-handler-factories'));
     }
 
     /**
-     * @throws \ReflectionException
-     * @throws BindingResolutionException
-     * @return void
+     * Build the request DTO class => handler factory map.
+     *
+     * Each factory builds a *fresh* handler on every call (handlers hold
+     * request-scoped state), so it must be executed per request, not shared.
+     *
+     * @return array<string, \Closure>
      */
+    private function buildRequestHandlerFactories(Application $app): array
+    {
+        $unitOfWorkInstance = $app->make(UnitOfWork::class);
+        $factories = [];
+
+        $register = function (string $handlerClass, callable $argsBuilder) use (&$factories, $app) {
+            // requestClass() is an instance method, so peek at one throwaway
+            // instance to learn the DTO this handler dispatches, then keep only
+            // a lazy factory for real (per-request) construction.
+            $requestClass = $app->make($handlerClass, $argsBuilder())->requestClass();
+            $factories[$requestClass] = fn () => $app->make($handlerClass, $argsBuilder());
+        };
+
+        $searchRequestHandlersDescriptors = [
+            Features\AnimeSearchHandler::class => $unitOfWorkInstance->anime(),
+            Features\MangaSearchHandler::class => $unitOfWorkInstance->manga(),
+            Features\CharacterSearchHandler::class => $unitOfWorkInstance->characters(),
+            Features\PeopleSearchHandler::class => $unitOfWorkInstance->people(),
+            Features\ClubSearchHandler::class => $unitOfWorkInstance->clubs(),
+            Features\MagazineSearchHandler::class => $unitOfWorkInstance->magazines(),
+            Features\ProducerSearchHandler::class => $unitOfWorkInstance->producers(),
+        ];
+
+        foreach ($searchRequestHandlersDescriptors as $handlerClass => $repositoryInstance) {
+            $register($handlerClass, fn () => [
+                "queryBuilderService" => $app->make(DefaultQueryBuilderService::class, [
+                    "searchService" => $this->getSearchService($repositoryInstance)
+                ]),
+            ]);
+        }
+
+        $queryTopItemsDescriptors = [
+            Features\QueryTopAnimeItemsHandler::class => $unitOfWorkInstance->anime(),
+            Features\QueryTopMangaItemsHandler::class => $unitOfWorkInstance->manga(),
+            Features\QueryTopCharactersHandler::class => $unitOfWorkInstance->characters(),
+            Features\QueryTopPeopleHandler::class => $unitOfWorkInstance->people(),
+        ];
+
+        foreach ($queryTopItemsDescriptors as $handlerClass => $repositoryInstance) {
+            $register($handlerClass, fn () => [
+                $repositoryInstance,
+                // top queries don't use the search engine, so it's enough for them to use eloquent paginator
+                $app->make(EloquentBuilderPaginatorService::class),
+            ]);
+        }
+
+        // request handlers which only depend on a repository instance
+        $requestHandlersWithOnlyRepositoryDependency = [
+            Features\AnimeGenreListHandler::class => $unitOfWorkInstance->animeGenres(),
+            Features\MangaGenreListHandler::class => $unitOfWorkInstance->mangaGenres(),
+        ];
+
+        foreach ($requestHandlersWithOnlyRepositoryDependency as $handlerClass => $repositoryInstance) {
+            $register($handlerClass, fn () => ["repository" => $repositoryInstance]);
+        }
+
+        // request handlers which are fetching data through the jikan library from MAL, and caching the result.
+        $requestHandlersWithScraperService = [
+            Features\AnimeFullLookupHandler::class => $unitOfWorkInstance->anime(),
+            Features\AnimeLookupHandler::class => $unitOfWorkInstance->anime(),
+            Features\UserSearchHandler::class => $unitOfWorkInstance->documents("common"),
+            Features\QueryTopReviewsHandler::class => $unitOfWorkInstance->documents("common"),
+            Features\UserByIdLookupHandler::class => $unitOfWorkInstance->documents("common"),
+            Features\AnimeCharactersLookupHandler::class => $unitOfWorkInstance->documents("anime_characters_staff"),
+            Features\AnimeStaffLookupHandler::class => $unitOfWorkInstance->documents("anime_characters_staff"),
+            Features\AnimeEpisodesLookupHandler::class => $unitOfWorkInstance->documents("anime_episodes"),
+            Features\AnimeEpisodeLookupHandler::class => $unitOfWorkInstance->documents("anime_episode"),
+            Features\AnimeNewsLookupHandler::class => $unitOfWorkInstance->documents("anime_news"),
+            Features\AnimeForumLookupHandler::class => $unitOfWorkInstance->documents("anime_forum"),
+            Features\AnimeVideosLookupHandler::class => $unitOfWorkInstance->documents("anime_videos"),
+            Features\AnimeVideosEpisodesLookupHandler::class => $unitOfWorkInstance->documents("anime_videos_episodes"),
+            Features\AnimePicturesLookupHandler::class => $unitOfWorkInstance->documents("anime_pictures"),
+            Features\AnimeStatsLookupHandler::class => $unitOfWorkInstance->documents("anime_stats"),
+            Features\AnimeMoreInfoLookupHandler::class => $unitOfWorkInstance->documents("anime_moreinfo"),
+            Features\AnimeRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("anime_recommendations"),
+            Features\AnimeReviewsLookupHandler::class => $unitOfWorkInstance->documents("anime_reviews"),
+            Features\AnimeRelationsLookupHandler::class => $unitOfWorkInstance->anime(),
+            Features\AnimeExternalLookupHandler::class => $unitOfWorkInstance->anime(),
+            Features\AnimeStreamingLookupHandler::class => $unitOfWorkInstance->anime(),
+            Features\AnimeThemesLookupHandler::class => $unitOfWorkInstance->anime(),
+            Features\AnimeUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents("anime_userupdates"),
+            Features\CharacterLookupHandler::class => $unitOfWorkInstance->characters(),
+            Features\CharacterFullLookupHandler::class => $unitOfWorkInstance->characters(),
+            Features\CharacterAnimeLookupHandler::class => $unitOfWorkInstance->characters(),
+            Features\CharacterMangaLookupHandler::class => $unitOfWorkInstance->characters(),
+            Features\CharacterVoicesLookupHandler::class => $unitOfWorkInstance->characters(),
+            Features\CharacterPicturesLookupHandler::class => $unitOfWorkInstance->documents("characters_pictures"),
+            Features\ClubLookupHandler::class => $unitOfWorkInstance->clubs(),
+            Features\ClubMembersLookupHandler::class => $unitOfWorkInstance->documents("clubs_members"),
+            Features\ClubStaffLookupHandler::class => $unitOfWorkInstance->clubs(),
+            Features\ClubRelationsLookupHandler::class => $unitOfWorkInstance->clubs(),
+            Features\MangaCharactersLookupHandler::class => $unitOfWorkInstance->documents("manga_characters"),
+            Features\MangaNewsLookupHandler::class => $unitOfWorkInstance->documents("manga_news"),
+            Features\MangaForumLookupHandler::class => $unitOfWorkInstance->documents("manga_forum"),
+            Features\MangaPicturesLookupHandler::class => $unitOfWorkInstance->documents("manga_pictures"),
+            Features\MangaStatsLookupHandler::class => $unitOfWorkInstance->documents("manga_stats"),
+            Features\MangaMoreInfoLookupHandler::class => $unitOfWorkInstance->documents("manga_moreinfo"),
+            Features\MangaRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("manga_recommendations"),
+            Features\MangaUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents("manga_userupdates"),
+            Features\MangaReviewsLookupHandler::class => $unitOfWorkInstance->documents("manga_reviews"),
+            Features\MangaLookupHandler::class => $unitOfWorkInstance->manga(),
+            Features\MangaFullLookupHandler::class => $unitOfWorkInstance->manga(),
+            Features\MangaRelationsLookupHandler::class => $unitOfWorkInstance->manga(),
+            Features\MangaExternalLookupHandler::class => $unitOfWorkInstance->manga(),
+            Features\PersonLookupHandler::class => $unitOfWorkInstance->people(),
+            Features\PersonAnimeLookupHandler::class => $unitOfWorkInstance->people(),
+            Features\PersonFullLookupHandler::class => $unitOfWorkInstance->people(),
+            Features\PersonMangaLookupHandler::class => $unitOfWorkInstance->people(),
+            Features\PersonVoicesLookupHandler::class => $unitOfWorkInstance->people(),
+            Features\PersonPicturesLookupHandler::class => $unitOfWorkInstance->documents("people_pictures"),
+            Features\ProducerLookupHandler::class => $unitOfWorkInstance->producers(),
+            Features\ProducerFullLookupHandler::class => $unitOfWorkInstance->producers(),
+            Features\ProducerExternalLookupHandler::class => $unitOfWorkInstance->producers(),
+            Features\QueryAnimeRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
+            Features\QueryMangaRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
+            Features\QueryAnimeReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
+            Features\QueryMangaReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
+            Features\QueryAnimeSeasonListHandler::class => $unitOfWorkInstance->documents("season_archive"),
+            Features\UserFullLookupHandler::class => $unitOfWorkInstance->users(),
+            Features\UserProfileLookupHandler::class => $unitOfWorkInstance->users(),
+            Features\UserStatisticsLookupHandler::class => $unitOfWorkInstance->users(),
+            Features\UserFavoritesLookupHandler::class => $unitOfWorkInstance->users(),
+            Features\UserUpdatesLookupHandler::class => $unitOfWorkInstance->users(),
+            Features\UserAboutLookupHandler::class => $unitOfWorkInstance->users(),
+            Features\UserHistoryLookupHandler::class => $unitOfWorkInstance->documents("users_history"),
+            Features\UserFriendsLookupHandler::class => $unitOfWorkInstance->documents("users_friends"),
+            Features\UserReviewsLookupHandler::class => $unitOfWorkInstance->documents("users_reviews"),
+            Features\UserRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("users_recommendations"),
+            Features\UserClubsLookupHandler::class => $unitOfWorkInstance->documents("users_clubs"),
+            Features\UserExternalLookupHandler::class => $unitOfWorkInstance->users(),
+            Features\QueryRecentlyOnlineUsersHandler::class => $unitOfWorkInstance->documents("users_recently_online"),
+            Features\QueryRecentlyAddedEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
+            Features\QueryPopularEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
+            Features\QueryRecentlyAddedPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
+            Features\QueryPopularPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
+            Features\QueryAnimeListOfUserHandler::class => $unitOfWorkInstance->documents("users_animelist"),
+            Features\QueryMangaListOfUserHandler::class => $unitOfWorkInstance->documents("users_mangalist")
+        ];
+
+        foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
+            $register($handlerClass, fn () => [
+                "scraperService" => $app->make(DefaultCachedScraperService::class, [
+                    "repository" => $repositoryInstance,
+                    "jikan" => $app->get("JikanParser"),
+                    "serializer" => $app->get("SerializerV4"),
+                ]),
+            ]);
+        }
+
+        // automatically resolvable dependencies or no dependencies at all
+        $requestHandlersWithNoDependencies = [
+            Features\QueryRandomAnimeHandler::class,
+            Features\QueryRandomMangaHandler::class,
+            Features\QueryRandomCharacterHandler::class,
+            Features\QueryRandomPersonHandler::class,
+            Features\QueryRandomUserHandler::class,
+            Features\QueryAnimeSchedulesHandler::class,
+            Features\QueryCurrentAnimeSeasonHandler::class,
+            Features\QuerySpecificAnimeSeasonHandler::class,
+            Features\QueryUpcomingAnimeSeasonHandler::class
+        ];
+
+        foreach ($requestHandlersWithNoDependencies as $handlerClass) {
+            $register($handlerClass, fn () => []);
+        }
+
+        return $factories;
+    }
+
     private function registerMacros(): void
     {
         Collection::make($this->collectionMacros())

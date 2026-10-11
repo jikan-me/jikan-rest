@@ -203,6 +203,26 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   (recency window + size cap, malformed-entry safe) used by provider and listener; score
   denominator is now the real event count (no `-1`).
 
+### 12. Audit-1 P1 batch (Octane correctness, search bugs, lazy handlers)
+- **Octane flush set completed** (`config/octane.php`): repository contracts +
+  `AnimeGenresRepository`/`MangaGenresRepository` + request-scoped `CacheOptions` and
+  `TypesenseCollectionDescriptor` are now flushed per request so cached query builders /
+  TTLs can't leak between workers. `EndpointCacheTtlMiddleware` now clears the TTL in a
+  `finally` (was skipped when the request threw). Dropped the unused Swoole example table.
+- **Scout native-engine chunked pagination corrupted totals.** `jikanPaginate()` merged
+  engine pages with `array_merge_recursive`, which turned the scalar `found` (and nested
+  hits) into nested arrays → bogus `total` and mangled hit lists for >250-hit queries.
+  Rewritten to `array_merge` over `hits` only, keeping `found` scalar.
+- **Mongo `$text` fallback + filters: verified, not a bug.** Audited claim that
+  `MongoSearchService` drops `filterParameters` was a false positive — both paths go
+  through `repository->filter()` → `scopeFilter`. Empirically confirmed the compiled
+  Mongo query for `?q=…&type=tv&status=complete` contains `status`/`type` clauses plus
+  the `$text` where. No code change needed.
+- **Lazy request-handler resolution.** `DefaultMediator` no longer receives all ~65
+  constructed handlers per request. A `request (DTO) class => factory closure` map (101
+  entries) is built once per worker; each request constructs only the handler it
+  dispatches. `DefaultMediatorTest` updated to the factory-map contract.
+
 ---
 
 ## Verification

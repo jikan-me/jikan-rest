@@ -142,10 +142,25 @@ return [
     'flush' => [
         // In RoadRunner we want to reset the repositories after each request,
         // because we cache the query builders in them.
-        // Ported from AppServiceProvider::servicesToClear()
+        // Ported from AppServiceProvider::servicesToClear().
         \App\Support\JikanUnitOfWork::class,
         \App\Contracts\Mediator::class,
         \App\Services\SearchService::class,
+        // Repository singletons cache query builders (RepositoryQueryBase) and
+        // must be rebuilt per request under persistent workers.
+        \App\Contracts\AnimeRepository::class,
+        \App\Contracts\MangaRepository::class,
+        \App\Contracts\CharacterRepository::class,
+        \App\Contracts\ClubRepository::class,
+        \App\Contracts\MagazineRepository::class,
+        \App\Contracts\ProducerRepository::class,
+        \App\Contracts\PeopleRepository::class,
+        \App\Contracts\UserRepository::class,
+        \App\Repositories\AnimeGenresRepository::class,
+        \App\Repositories\MangaGenresRepository::class,
+        // Request-scoped cache TTL + in-memory collection descriptor cache.
+        \App\Support\CacheOptions::class,
+        \App\Services\TypesenseCollectionDescriptor::class,
     ],
 
     /*
@@ -159,12 +174,7 @@ return [
     |
     */
 
-    'tables' => [
-        'example:1000' => [
-            'name' => 'string:1000',
-            'votes' => 'int',
-        ],
-    ],
+    'tables' => [],
 
     /*
     |--------------------------------------------------------------------------
