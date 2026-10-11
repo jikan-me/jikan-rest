@@ -13,13 +13,16 @@ FrankenPHP opt-in), search is Laravel Scout (Typesense **or** the Mongo `$text` 
 
 ```bash
 ./install.sh --check                # verify prerequisites (safe)
-./install.sh                        # minimal: Mongo + RoadRunner, local env
+./install.sh                        # INTERACTIVE: guided with defaults
+./install.sh --yes                  # accept every default, non-interactive
+# normalized wrappers (github/scripts-to-rule-them-all):
+#   script/bootstrap · script/setup · script/update · script/server · script/test
 # then:
 curl http://127.0.0.1:8000/up       # 200 OK
 tools/dev/php vendor/bin/phpunit --no-coverage
 ```
 
-### Options
+### Options (also selectable interactively)
 
 | Flag | What it does |
 |---|---|
@@ -109,6 +112,8 @@ Examples:
 
 ## Related
 - `docs/DOCKER.md` — full Docker Compose stack (app + Mongo + Redis + Typesense).
+- `docs/PROVIDERS.md` — providers/services: what's included vs needs setup (LLM-friendly digest).
+- `script/` — normalized install wrappers (`setup` · `bootstrap` · `update` · `server` · `test` · `cibuild`).
 - `docs/LOCAL_SETUP.md` — machine-specific notes for the original dev box.
 - `docs/TROUBLESHOOTING.md` · `docs/UPSTREAM_ISSUES.md` (what waits on jikan v5) ·
   `.backend-suite/` (quality audits) · `.ai/skills/` (agent skills).

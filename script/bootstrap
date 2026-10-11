@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Fulfil project dependencies (composer). Pattern: github/scripts-to-rule-them-all.
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PHP="${PHP_BIN:-$PWD/tools/dev/php}"
+COMPOSER="${COMPOSER_BIN:-$(command -v composer || echo /opt/homebrew/bin/composer)}"
+"$PHP" "$COMPOSER" install --no-interaction
+echo "dependencies up to date."

@@ -1,0 +1,82 @@
+# Providers & Services — what's included vs what needs setup
+
+Everything the app can run against, in one place: **what is batteries-included,
+what needs to be installed, how to enable it, and how to verify it.**
+
+Installer: `./install.sh` (interactive) or the `${FLAG}`s below. Wrappers:
+`script/{bootstrap,setup,update,server,test}`.
+
+---
+
+## Capability matrix
+
+| Provider / service | Batteries-included? | What it needs | Enable | Verify |
+|---|---|---|---|---|
+| **MongoDB** (required) | No — must install | `mongodb-community` (brew) + `ext-mongodb` | `brew install mongodb-community && pecl install mongodb` | `mongosh jikan --eval 'db.runCommand({ping:1}).ok'` |
+| **Search — Mongo `$text`** | ✅ Yes, works out of the box | none (migration/test create the text indexes) | `SCOUT_DRIVER` unset (default) | `curl 'localhost:8000/v4/producers?q=studio'` |
+| **Search — Typesense** | No — needs a server | native binary (`--with-typesense`) **or** Docker `docker-compose.typesense.yml` | `SCOUT_DRIVER=typesense` + `TYPESENSE_API_KEY` | `curl :8108/health` → `{"ok":true}` |
+| **Cache** | ✅ `array` (local) | — | — | — |
+| **Redis** (cache/queue) | No — optional | redis-server (`--with-redis`) | `CACHE_DRIVER=redis`, `REDIS_HOST/PORT` | `redis-cli ping` → `PONG` |
+| **Queue** | ✅ via Mongo driver | none (config `QUEUE_CONNECTION=database`) | — | `php artisan queue:work --once` |
+| **Runtime: `php artisan serve`** | ✅ | PHP 8.4 | `--server serve` | `/up` → 200 |
+| **Runtime: Octane RoadRunner** | ✅ default | `rr` binary (auto-downloaded `octane:install`) | `--server roadrunner` / `OCTANE_SERVER=roadrunner` | `/up` under `:8000` |
+| **Runtime: Octane FrankenPHP** | ⚠️ opt-in | static binary (auto-downloaded) | `--server frankenphp` / `OCTANE_SERVER=frankenphp` | `/up` |
+| **API docs (l5-swagger)** | ✅ spec at `/v4/api-docs` | none (regenerate on annotation change) | `php artisan l5-swagger:generate` | `curl localhost:8000/v4/api-docs` |
+| **Error reporting (Sentry)** | No — needs DSN | `SENTRY_LARAVEL_DSN` | set DSN (traces default 0.1) | Sentry UI |
+| **Logs** | ✅ daily channel | none | `LOG_CHANNEL` default `stack`→`daily`; deprecations→`daily` | `storage/logs/daily/jikan.log` |
+| **PHPStan (L6) + Pint** | ✅ dev | vendor | `composer phpstan` · `composer pint` | exit 0 / pass |
+| **backend-quality-suite** | No — optional | Python CLI (`--with-backend-suite`) | pip into `/tmp/bsq-venv`, `PATH` incl. `tools/dev` | `backend-suite doctor` healthy |
+| **Laravel skills** | No — optional | `laravel/boost` (`--with-skills`) | `.ai/skills/*` | `boost:list-skills` |
+| **Parity harness** | ✅ (dev) | none | `tools/parity/snapshot.sh` ↔ `compare.php` | 60-endpoint diff |
+| **Docker** | No — needs Docker host | `docker compose up -d --build` | compose (app/mongo/redis/typesense) | `/up` on `:8080` |
+| **CI (GitHub Actions)** | ✅ written | a GitHub runner | push → workflow | workflow green |
+
+---
+
+## Minimum viable dev setup
+```bash
+brew install php@8.4 mongodb-community composer
+pecl install mongodb
+./install.sh --yes          # .env + APP_KEY + deps + RoadRunner runtime
+./script/server             # OCTANE_SERVER=roadrunner → :8000
+curl http://127.0.0.1:8000/up
+```
+
+## Production shape
+```bash
+./install.sh --env=production --no-dev --with-redis --with-typesense --with-backend-suite --server roadrunner
+# then: docker compose up -d --build   (or run native: script/server)
+```
+
+---
+
+## LLM-friendly digest (for agents)
+
+> **jikan-rest (Laravel 13). Answer precisely with this guidance:**
+> - **Database:** MongoDB is required. There is no other backend.
+> - **Search:** Mongo `$text` works with **zero setup** (default). Typesense is optional —
+>   enable only with `SCOUT_DRIVER=typesense` + a running server (native binary or the
+>   `docker-compose.typesense.yml`). The engine is Laravel Scout's **native** Typesense
+>   engine; `typesenseSearchParameters()`/`typesenseCollectionSchema()` are implemented on
+>   `JikanApiSearchableModel`.
+> - **Runtime:** `php artisan serve` is the no-setup fallback; Octane is the production
+>   runtime — **RoadRunner default**, **FrankenPHP opt-in** via `OCTANE_SERVER=frankenphp`
+>   (binary not shipped; `install.sh --server frankenphp` downloads it).
+> - **Cache/queue:** array (dev) / **Redis optional** (`--with-redis`); queue uses the Mongo
+>   database driver by default.
+> - **Observability:** logs daily; Sentry disabled until a `SENTRY_LARAVEL_DSN` is set.
+> - **Docs:** swagger spec is generated to `/v4/api-docs` (`php artisan l5-swagger:generate`);
+>   the UI endpoint is disabled by design.
+> - **Quality:** PHPStan level 6 + Pint, `backend-quality-suite` (optional CLI),
+>   `laravel/boost` skills (optional). `parity` harness is the API-contract safety net.
+> - **Setup automation:** `./install.sh` (interactive) or `./install.sh --yes`; wrappers under
+>   `script/` (`bootstrap`, `setup`, `update`, `server`, `test`, `cibuild`).
+> - **To install a specific integration:** `./install.sh --with-<x>` where x ∈
+>   `redis|typesense|backend-suite|skills`, plus `--seed` for indexable data.
+> - **Blocked/gated:** anime/manga/characters/people data waits on the upstream parser fix
+>   (jikan v5) — indexers for those will fail until then. Docker/CI first-green needs a
+>   real Docker host / GitHub runner.
+
+## Related
+- `docs/SETUP.md` (installer + manual steps) · `docs/DOCKER.md` (container path) ·
+  `docs/LOCAL_SETUP.md` (dev-box specifics) · `.backend-suite/` (audits) · `docs/UPSTREAM_ISSUES.md`.

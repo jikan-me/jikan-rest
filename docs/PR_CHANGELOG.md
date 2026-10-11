@@ -135,6 +135,11 @@ every dynamic endpoint 404 on Symfony 7, and documented an upstream scraper brea
   `--no-dev`, `--with-redis`, `--with-typesense`, `--with-backend-suite`, `--with-skills`, `--seed`,
   `--env=`, `--check`) plus `docs/SETUP.md` (general non-Docker guide with an agent prompt).
   FrankenPHP is now actually runnable (opt-in static binary download; previously config-only).
+  The installer is **interactive** (prompts with defaults when on a terminal; `--yes`/flags for CI),
+  idempotent, prerequisite-gated, and ships normalized `script/` wrappers
+  (bootstrap/setup/update/server/test/cibuild). Added `docs/PROVIDERS.md` — a user- and
+  LLM-friendly matrix of every supported service: batteries-included vs setup-needed, env keys,
+  enable steps, verification.
 
 **Removed**
 - Lumen-only / abandoned: `pushrbx/lumen-roadrunner`, `darkaonline/swagger-lume`,

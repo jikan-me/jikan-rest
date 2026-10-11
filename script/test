@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Run the test suite (optionally a single file).
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+"$PWD/tools/dev/php" vendor/bin/phpunit --no-coverage "$@"
