@@ -126,34 +126,14 @@ class SourceHeartbeatListener
         } catch (\Exception $e) {
         }
 
-        $fails = $fails ?? [];
-
-        // remove any fails greater than SOURCE_BAD_HEALTH_RANGE
-        foreach ($fails as $fail) {
-
-            if (!isset($fail[0])) {
-                unset($fail);
-                continue;
-            }
-
-            if ($fail[0] >= (time()-config('jikan.source_bad_health_range'))) {
-                unset($fail);
-            }
-        }
-
-        // slice
-        if (count($fails) > config('jikan.source_bad_health_max_store')) {
-            $fails = array_slice($fails, 0 - config('jikan.source_bad_health_max_store'));
-        }
-
-        return $fails;
+        return SourceHeartbeatProvider::pruneFails($fails ?? []);
     }
 
     private function getSuccessfulRequestsScore() : float
     {
         $fails = $this->getRecentFails();
         $score = 0;
-        $totalFails = count($fails) - 1;
+        $totalFails = count($fails);
 
         foreach ($fails as $fail) {
             if ((int) $fail[2] === SourceHeartbeatEvent::GOOD_HEALTH) {

@@ -38,9 +38,14 @@ class MicroCaching
         if (!$this->isEnabled) {
             return $next($request);
         }
-        if (isset($request->route()[1]['uses'])) {
-            $route = explode('\\', $request->route()[1]['uses']);
+        // Laravel 13: Route is no longer array-accessible (Lumen used to return one).
+        // Read the controller action (e.g. "App\Http\Controllers\V4DB\RandomController@anime")
+        // and compare the last segment so the NO_CACHING bypass applies again.
+        if ($request->route()) {
+            $action = $request->route()->getActionName();
+            $route = explode('\\', $action);
             $route = end($route);
+
             if (\in_array($route, self::NO_CACHING)) {
                 return $next($request);
             }

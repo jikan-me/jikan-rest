@@ -176,6 +176,23 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 - **`APP_KEY` no longer doubles as a cache-bypass header** — replaced with a dedicated
   `CACHE_BYPASS_TOKEN` (empty by default = no bypass); the cache-refresh jobs send it.
 
+### 11. Phase-2 audit P1 batch (Laravel-13 regressions + latent bugs)
+- **MicroCaching `NO_CACHING` bypass was dead on Laravel 13** — Lumen's
+  `$request->route()[1]['uses']` no longer works (Route isn't array-accessible), so
+  `RandomController@*` / `InsightsController@main` were never excluded from micro-caching.
+  Rewired to `$request->route()->getActionName()` (verified: resolves to
+  `RandomController@anime` etc., matching the list).
+- **Removed dead/broken cache-refresh jobs.** `UpdateCacheJob`/`UpdateDatabaseJob`
+  resolved an unbound `app('GuzzleClient')`, `UpdateDatabaseJob` used an unassigned
+  `$requestUri`, and nothing dispatched either; deleting them (the self-HTTP +
+  `sleep()` + token-header pattern is Octane-hostile anyway). Cache warming should be
+  re-designed as an in-process command if revived.
+- **Source-heartbeat pruning was a no-op + score could exceed 1.** `unset($fail)` in a
+  value-copy `foreach` removed nothing, and the `>=` condition was inverted, so
+  `failovers.json` never dropped stale events. Added `SourceHeartbeatProvider::pruneFails()`
+  (recency window + size cap, malformed-entry safe) used by provider and listener; score
+  denominator is now the real event count (no `-1`).
+
 ---
 
 ## Verification

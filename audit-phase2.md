@@ -211,3 +211,9 @@ Why it matters: the four `^7.0` pins keep the scraper stack permanently on a dif
 ## Resolution status (living; updated as fixes land)
 
 Status at time of writing: the P0 correctness batch (env()→config centralization, rate limiting, error redaction, APP_KEY→CACHE_BYPASS_TOKEN) is in progress/in the same commit cycle as this audit. New phase-2 findings (MicroCaching route-introspection regression, dead/broken update jobs, heartbeat pruning no-op, IncrementalIndexer resume bug, insights/trends) are triaged in the backlog.
+
+### Phase-2 P1 batch (resolved)
+- `MicroCaching` NO_CACHING regression — fixed (route introspection via `getActionName()`), verified against the live route table. ✅
+- `UpdateCacheJob` / `UpdateDatabaseJob` — deleted (unreferenced, unbound client, wrong pattern); cache-warm redesign tracked. ✅
+- Heartbeat pruning no-op + score overflow — fixed via `SourceHeartbeatProvider::pruneFails()`; denominator uses real event count. ✅
+- Remaining phase-2 items (mind you): Symfony 7/8 pin alignment (`^7.4 || ^8`), `config/queue.php` mongodb default, `insights/trends` filter, `IncrementalIndexer` resume/id-diff, `CorsMiddleware` response wrapping, `pub`/dead files removal — still open.

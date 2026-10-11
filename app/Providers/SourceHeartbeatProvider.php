@@ -45,21 +45,10 @@ class SourceHeartbeatProvider extends ServiceProvider
             $fails = [];
         }
 
-        // remove any fails greater than SOURCE_BAD_HEALTH_RANGE
-        foreach ($fails as $fail) {
-
-            if ($fail[0] >= (time()-config('jikan.source_bad_health_range'))) {
-                unset($fail);
-            }
-        }
-
-        // slice
-        if (count($fails) > config('jikan.source_bad_health_max_store')) {
-            $fails = array_slice($fails, 0 - config('jikan.source_bad_health_max_store'));
-        }
+        $fails = self::pruneFails($fails);
 
         $score = 0;
-        $totalFails = count($fails) - 1;
+        $totalFails = count($fails);
 
         foreach ($fails as $fail) {
             if ((int) $fail[2] === SourceHeartbeatEvent::GOOD_HEALTH) {
@@ -68,6 +57,30 @@ class SourceHeartbeatProvider extends ServiceProvider
         }
 
         return $score / max($totalFails, 1);
+    }
+
+    /**
+     * Drop heartbeats outside the recency window and cap the stored sample.
+     *
+     * @param  array[]  $fails  entries as [timestamp, status, health]
+     * @return array[]
+     */
+    public static function pruneFails(array $fails): array
+    {
+        // remove events older than SOURCE_BAD_HEALTH_RANGE (keeps recent ones)
+        $cutoff = time() - config('jikan.source_bad_health_range');
+
+        $fails = array_values(array_filter(
+            $fails,
+            fn ($fail): bool => is_array($fail) && isset($fail[0]) && (int) $fail[0] >= $cutoff
+        ));
+
+        // cap the sample at SOURCE_BAD_HEALTH_MAX_STORE
+        if (count($fails) > config('jikan.source_bad_health_max_store')) {
+            $fails = array_slice($fails, 0 - config('jikan.source_bad_health_max_store'));
+        }
+
+        return $fails;
     }
 
     public static function getHeartbeatStatus() : string
