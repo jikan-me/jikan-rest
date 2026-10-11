@@ -9,6 +9,12 @@ use Illuminate\Support\Collection;
 use MongoDB\Laravel\Eloquent\Builder;
 use Jikan\Helper\Constants;
 
+/**
+ * Mongo-backed base model. Attributes are magic (from the collection);
+ * documented below are the shared ones the app reads.
+ *
+ * @property bool|null $unguardFilters
+ */
 class JikanApiModel extends \MongoDB\Laravel\Eloquent\Model
 {
     use FilterQueryString;

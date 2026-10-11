@@ -8,6 +8,22 @@ use App\Enums\ClubTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Club\ClubRequest;
 
+/**
+ * Mongo-backed club document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $url
+ * @property array $images
+ * @property string $name
+ * @property int $members
+ * @property string $category
+ * @property string $type
+ * @property string $access
+ * @property \MongoDB\BSON\UTCDateTime|null $created
+ * @property \MongoDB\BSON\UTCDateTime|null $createdAt
+ * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ */
 class Club extends JikanApiSearchableModel
 {
     use FilteredByLetter, HasFactory;

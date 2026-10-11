@@ -7,6 +7,25 @@ use Jikan\Jikan;
 use Jikan\Request\Character\CharacterRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Mongo-backed character document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $url
+ * @property array $images
+ * @property string $name
+ * @property string|null $name_kanji
+ * @property array $nicknames
+ * @property int $favorites
+ * @property int $member_favorites
+ * @property string|null $about
+ * @property array $animeography
+ * @property array $mangaography
+ * @property array $voice_actors
+ * @property \MongoDB\BSON\UTCDateTime|null $createdAt
+ * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ */
 class Character extends JikanApiSearchableModel
 {
     use HasFactory, FilteredByLetter;

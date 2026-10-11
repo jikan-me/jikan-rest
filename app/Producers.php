@@ -6,6 +6,22 @@ use App\Concerns\FilteredByLetter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Producer\ProducerRequest;
 
+/**
+ * Mongo-backed producer document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $url
+ * @property array $images
+ * @property array|null $titles
+ * @property \MongoDB\BSON\UTCDateTime|null $established
+ * @property int $favorites
+ * @property string|null $about
+ * @property int $count
+ * @property array|null $external_links
+ * @property \MongoDB\BSON\UTCDateTime|null $createdAt
+ * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ */
 class Producers extends JikanApiSearchableModel
 {
     use FilteredByLetter, HasFactory;

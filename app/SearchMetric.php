@@ -3,6 +3,16 @@ namespace App;
 use MongoDB\BSON\ObjectId;
 use Laravel\Scout\Builder;
 
+/**
+ * Metrics document for search analytics. Attributes are magic (from the collection); the
+ * documented ones are those the app/services actually read.
+ *
+ * @property string $search_term
+ * @property int $request_count
+ * @property array $hits
+ * @property int $hits_count
+ * @property string $index_name
+ */
 class SearchMetric extends JikanApiSearchableModel
 {
     protected $table = 'search_metrics';

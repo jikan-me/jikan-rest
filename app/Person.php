@@ -7,6 +7,28 @@ use Jikan\Jikan;
 use Jikan\Request\Person\PersonRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Mongo-backed person document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $url
+ * @property array $images
+ * @property string|null $website_url
+ * @property string $name
+ * @property string|null $given_name
+ * @property string|null $family_name
+ * @property array $alternate_names
+ * @property \MongoDB\BSON\UTCDateTime|null $birthday
+ * @property int $favorites
+ * @property int $member_favorites
+ * @property string|null $about
+ * @property array $voice_acting_roles
+ * @property array $anime_staff_positions
+ * @property array $published_manga
+ * @property \MongoDB\BSON\UTCDateTime|null $createdAt
+ * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ */
 class Person extends JikanApiSearchableModel
 {
     use HasFactory, FilteredByLetter;

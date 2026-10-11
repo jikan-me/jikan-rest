@@ -6,6 +6,28 @@ use App\Concerns\FilteredByLetter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\User\UserProfileRequest;
 
+/**
+ * Mongo-backed user profile document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $username
+ * @property string $url
+ * @property array $images
+ * @property \MongoDB\BSON\UTCDateTime|null $last_online
+ * @property string|null $gender
+ * @property \MongoDB\BSON\UTCDateTime|null $birthday
+ * @property string|null $location
+ * @property \MongoDB\BSON\UTCDateTime|null $joined
+ * @property array $anime_stats
+ * @property array $manga_stats
+ * @property array $favorites
+ * @property array|null $last_updates
+ * @property string|null $about
+ * @property array|null $external_links
+ * @property \MongoDB\BSON\UTCDateTime|null $createdAt
+ * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ */
 class Profile extends JikanApiSearchableModel
 {
     use FilteredByLetter, HasFactory;

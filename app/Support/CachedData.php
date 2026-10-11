@@ -13,6 +13,11 @@ use MongoDB\BSON\UTCDateTime;
 /**
  * A class to represent cached scraper results. This is just a fancy collection which knows about
  * cache ttl and whether the data is expired in the cache or not.
+ *
+ * The documented attributes are those the resources wrappers actually read.
+ *
+ * @property array $external_links
+ * @property array $streaming_links
  */
 final class CachedData implements ArrayAccess
 {

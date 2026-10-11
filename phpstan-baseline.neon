@@ -109,6 +109,12 @@ parameters:
 			path: app/Anime.php
 
 		-
+			message: '#^Class App\\Anime has PHPDoc tag @property for property \$streaming_links with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Anime.php
+
+		-
 			message: '#^Class App\\Anime has PHPDoc tag @property for property \$studios with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -775,20 +781,32 @@ parameters:
 			path: app/Casts/EnumCast.php
 
 		-
-			message: '#^Access to an undefined property App\\Character\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Character.php
-
-		-
-			message: '#^Access to an undefined property App\\Character\:\:\$member_favorites\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Character has PHPDoc tag @property for property \$animeography with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Character.php
 
 		-
-			message: '#^Access to an undefined property App\\Character\:\:\$name\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Character has PHPDoc tag @property for property \$images with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Character.php
+
+		-
+			message: '#^Class App\\Character has PHPDoc tag @property for property \$mangaography with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Character.php
+
+		-
+			message: '#^Class App\\Character has PHPDoc tag @property for property \$nicknames with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Character.php
+
+		-
+			message: '#^Class App\\Character has PHPDoc tag @property for property \$voice_actors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Character.php
 
@@ -883,32 +901,8 @@ parameters:
 			path: app/Character.php
 
 		-
-			message: '#^Access to an undefined property App\\Club\:\:\$category\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Club.php
-
-		-
-			message: '#^Access to an undefined property App\\Club\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Club.php
-
-		-
-			message: '#^Access to an undefined property App\\Club\:\:\$members\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Club.php
-
-		-
-			message: '#^Access to an undefined property App\\Club\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Club.php
-
-		-
-			message: '#^Access to an undefined property App\\Club\:\:\$type\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Club has PHPDoc tag @property for property \$images with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Club.php
 
@@ -1591,12 +1585,6 @@ parameters:
 			path: app/DataPipes/MapRouteParametersDataPipe.php
 
 		-
-			message: '#^Access to an undefined property App\\DemographicAnime\:\:\$unguardFilters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/DemographicAnime.php
-
-		-
 			message: '#^Method App\\DemographicAnime\:\:_normalizeOrderBy\(\) has parameter \$filters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
@@ -1721,12 +1709,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/DemographicAnime.php
-
-		-
-			message: '#^Access to an undefined property App\\DemographicManga\:\:\$unguardFilters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/DemographicManga.php
 
 		-
 			message: '#^Method App\\DemographicManga\:\:_normalizeOrderBy\(\) has parameter \$filters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
@@ -2983,12 +2965,6 @@ parameters:
 			path: app/Exceptions/Handler.php
 
 		-
-			message: '#^Access to an undefined property App\\ExplicitGenresAnime\:\:\$unguardFilters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/ExplicitGenresAnime.php
-
-		-
 			message: '#^Method App\\ExplicitGenresAnime\:\:_normalizeOrderBy\(\) has parameter \$filters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
@@ -3113,12 +3089,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/ExplicitGenresAnime.php
-
-		-
-			message: '#^Access to an undefined property App\\ExplicitGenresManga\:\:\$unguardFilters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/ExplicitGenresManga.php
 
 		-
 			message: '#^Method App\\ExplicitGenresManga\:\:_normalizeOrderBy\(\) has parameter \$filters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
@@ -5011,24 +4981,6 @@ parameters:
 			path: app/Filters/WhereClause.php
 
 		-
-			message: '#^Access to an undefined property App\\GenreAnime\:\:\$count\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/GenreAnime.php
-
-		-
-			message: '#^Access to an undefined property App\\GenreAnime\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/GenreAnime.php
-
-		-
-			message: '#^Access to an undefined property App\\GenreAnime\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/GenreAnime.php
-
-		-
 			message: '#^Class App\\GenreAnime uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
 			identifier: missingType.generics
 			count: 1
@@ -5069,24 +5021,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/GenreAnime.php
-
-		-
-			message: '#^Access to an undefined property App\\GenreManga\:\:\$count\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/GenreManga.php
-
-		-
-			message: '#^Access to an undefined property App\\GenreManga\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/GenreManga.php
-
-		-
-			message: '#^Access to an undefined property App\\GenreManga\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/GenreManga.php
 
 		-
 			message: '#^Class App\\GenreManga uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
@@ -5803,12 +5737,6 @@ parameters:
 			path: app/Http/Resources/V4/AnimeEpisodesResource.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\AnimeFullResource\:\:\$streaming_links\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/AnimeFullResource.php
-
-		-
 			message: '#^Method App\\Http\\Resources\\V4\\AnimeFullResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -5881,72 +5809,6 @@ parameters:
 			path: app/Http/Resources/V4/CharacterCollection.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$about\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$animeography\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$mangaography\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$name_kanji\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$nicknames\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterFullResource\:\:\$voice_actors\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterFullResource.php
-
-		-
 			message: '#^Method App\\Http\\Resources\\V4\\CharacterFullResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -5963,54 +5825,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/CharacterMangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterResource\:\:\$about\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterResource\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterResource\:\:\$name_kanji\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterResource\:\:\$nicknames\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\CharacterResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/CharacterResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\CharacterResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6055,54 +5869,6 @@ parameters:
 			path: app/Http/Resources/V4/ClubRelationsResource.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ClubResource\:\:\$access\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ClubResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ClubResource\:\:\$category\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ClubResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ClubResource\:\:\$created\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ClubResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ClubResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ClubResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ClubResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ClubResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ClubResource\:\:\$members\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ClubResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ClubResource\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ClubResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ClubResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ClubResource.php
-
-		-
 			message: '#^Method App\\Http\\Resources\\V4\\ClubResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -6113,12 +5879,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/ClubStaffResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ExternalLinksResource\:\:\$external_links\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ExternalLinksResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\ExternalLinksResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6155,30 +5915,6 @@ parameters:
 			identifier: missingType.property
 			count: 1
 			path: app/Http/Resources/V4/MagazineCollection.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MagazineResource\:\:\$count\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MagazineResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MagazineResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MagazineResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MagazineResource\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MagazineResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\MagazineResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/MagazineResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\MagazineResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6271,90 +6007,6 @@ parameters:
 			path: app/Http/Resources/V4/PersonCollection.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$about\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$alternate_names\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$anime_staff_positions\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$birthday\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$family_name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$given_name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$published_manga\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$voice_acting_roles\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonFullResource\:\:\$website_url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonFullResource.php
-
-		-
 			message: '#^Method App\\Http\\Resources\\V4\\PersonFullResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -6371,72 +6023,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/PersonMangaResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$about\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$alternate_names\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$birthday\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$family_name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$given_name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\PersonResource\:\:\$website_url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/PersonResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\PersonResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6481,58 +6067,10 @@ parameters:
 			path: app/Http/Resources/V4/ProducerCollection.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProducerFullResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProducerFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProducerFullResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProducerFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProducerFullResource\:\:\$titles\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProducerFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProducerFullResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProducerFullResource.php
-
-		-
 			message: '#^Method App\\Http\\Resources\\V4\\ProducerFullResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/ProducerFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProducerResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProducerResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProducerResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProducerResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProducerResource\:\:\$titles\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProducerResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProducerResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProducerResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\ProducerResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6541,112 +6079,10 @@ parameters:
 			path: app/Http/Resources/V4/ProducerResource.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileAboutResource\:\:\$about\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileAboutResource.php
-
-		-
 			message: '#^Method App\\Http\\Resources\\V4\\ProfileAboutResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/ProfileAboutResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFavoritesResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFavoritesResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$about\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$anime_stats\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$birthday\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$external_links\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$favorites\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$gender\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$joined\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$last_online\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$last_updates\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$location\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$manga_stats\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileFullResource\:\:\$username\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileFullResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\ProfileFullResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6661,82 +6097,10 @@ parameters:
 			path: app/Http/Resources/V4/ProfileHistoryResource.php
 
 		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileLastUpdatesResource\:\:\$last_updates\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileLastUpdatesResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$birthday\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$gender\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$images\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$joined\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$last_online\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$location\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$url\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileResource\:\:\$username\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
 			message: '#^Method App\\Http\\Resources\\V4\\ProfileResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/ProfileResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileStatisticsResource\:\:\$anime_stats\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileStatisticsResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\ProfileStatisticsResource\:\:\$manga_stats\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/ProfileStatisticsResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\ProfileStatisticsResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6761,12 +6125,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/Http/Resources/V4/ReviewsResource.php
-
-		-
-			message: '#^Access to an undefined property App\\Http\\Resources\\V4\\StreamingLinksResource\:\:\$streaming_links\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Resources/V4/StreamingLinksResource.php
 
 		-
 			message: '#^Method App\\Http\\Resources\\V4\\StreamingLinksResource\:\:toArray\(\) return type has no value type specified in iterable type array\.$#'
@@ -6815,12 +6173,6 @@ parameters:
 			identifier: trait.unused
 			count: 1
 			path: app/IsoDateFormatter.php
-
-		-
-			message: '#^Access to an undefined property App\\JikanApiModel\:\:\$unguardFilters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/JikanApiModel.php
 
 		-
 			message: '#^Method App\\JikanApiModel\:\:_normalizeOrderBy\(\) has parameter \$filters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
@@ -6959,12 +6311,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/JikanApiModel.php
-
-		-
-			message: '#^Access to an undefined property App\\JikanApiSearchableModel\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/JikanApiSearchableModel.php
 
 		-
 			message: '#^Call to an undefined method App\\JikanApiSearchableModel\:\:withTrashed\(\)\.$#'
@@ -7133,24 +6479,6 @@ parameters:
 			identifier: varTag.nativeType
 			count: 1
 			path: app/Macros/To2dArrayWithDottedKeys.php
-
-		-
-			message: '#^Access to an undefined property App\\Magazine\:\:\$count\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Magazine.php
-
-		-
-			message: '#^Access to an undefined property App\\Magazine\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Magazine.php
-
-		-
-			message: '#^Access to an undefined property App\\Magazine\:\:\$name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Magazine.php
 
 		-
 			message: '#^Class App\\Magazine uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
@@ -7849,26 +7177,32 @@ parameters:
 			path: app/Mixins/ScoutBuilderMixin.php
 
 		-
-			message: '#^Access to an undefined property App\\Person\:\:\$alternate_names\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Person has PHPDoc tag @property for property \$alternate_names with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Person.php
 
 		-
-			message: '#^Access to an undefined property App\\Person\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Person.php
-
-		-
-			message: '#^Access to an undefined property App\\Person\:\:\$member_favorites\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Person has PHPDoc tag @property for property \$anime_staff_positions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Person.php
 
 		-
-			message: '#^Access to an undefined property App\\Person\:\:\$name\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Person has PHPDoc tag @property for property \$images with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Person.php
+
+		-
+			message: '#^Class App\\Person has PHPDoc tag @property for property \$published_manga with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Person.php
+
+		-
+			message: '#^Class App\\Person has PHPDoc tag @property for property \$voice_acting_roles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Person.php
 
@@ -7963,38 +7297,26 @@ parameters:
 			path: app/Person.php
 
 		-
-			message: '#^Access to an undefined property App\\Producers\:\:\$count\.$#'
-			identifier: property.notFound
+			message: '#^Call to function is_null\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: app/Producers.php
 
 		-
-			message: '#^Access to an undefined property App\\Producers\:\:\$established\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Producers has PHPDoc tag @property for property \$external_links with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Producers.php
 
 		-
-			message: '#^Access to an undefined property App\\Producers\:\:\$favorites\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Producers has PHPDoc tag @property for property \$images with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Producers.php
 
 		-
-			message: '#^Access to an undefined property App\\Producers\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Producers.php
-
-		-
-			message: '#^Access to an undefined property App\\Producers\:\:\$titles\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Producers.php
-
-		-
-			message: '#^Access to an undefined property App\\Producers\:\:\$url\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Producers has PHPDoc tag @property for property \$titles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Producers.php
 
@@ -8071,26 +7393,38 @@ parameters:
 			path: app/Producers.php
 
 		-
-			message: '#^Unable to resolve the template type TKey in call to function collect$#'
-			identifier: argument.templateType
+			message: '#^Class App\\Profile has PHPDoc tag @property for property \$anime_stats with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
-			path: app/Producers.php
-
-		-
-			message: '#^Unable to resolve the template type TValue in call to function collect$#'
-			identifier: argument.templateType
-			count: 1
-			path: app/Producers.php
-
-		-
-			message: '#^Access to an undefined property App\\Profile\:\:\$mal_id\.$#'
-			identifier: property.notFound
-			count: 2
 			path: app/Profile.php
 
 		-
-			message: '#^Access to an undefined property App\\Profile\:\:\$username\.$#'
-			identifier: property.notFound
+			message: '#^Class App\\Profile has PHPDoc tag @property for property \$external_links with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Profile.php
+
+		-
+			message: '#^Class App\\Profile has PHPDoc tag @property for property \$favorites with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Profile.php
+
+		-
+			message: '#^Class App\\Profile has PHPDoc tag @property for property \$images with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Profile.php
+
+		-
+			message: '#^Class App\\Profile has PHPDoc tag @property for property \$last_updates with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Profile.php
+
+		-
+			message: '#^Class App\\Profile has PHPDoc tag @property for property \$manga_stats with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/Profile.php
 
@@ -8701,38 +8035,14 @@ parameters:
 			path: app/Rules/MaxResultsPerPageRule.php
 
 		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$hits\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/SearchMetric.php
-
-		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$hits_count\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/SearchMetric.php
-
-		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$index_name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/SearchMetric.php
-
-		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$request_count\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/SearchMetric.php
-
-		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$search_term\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/SearchMetric.php
-
-		-
 			message: '#^Call to an undefined method App\\SearchMetric\:\:withTrashed\(\)\.$#'
 			identifier: method.notFound
+			count: 1
+			path: app/SearchMetric.php
+
+		-
+			message: '#^Class App\\SearchMetric has PHPDoc tag @property for property \$hits with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: app/SearchMetric.php
 
@@ -8969,30 +8279,6 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/DefaultScoutSearchService.php
-
-		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$hits\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DefaultSearchAnalyticsService.php
-
-		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$hits_count\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DefaultSearchAnalyticsService.php
-
-		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$index_name\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/DefaultSearchAnalyticsService.php
-
-		-
-			message: '#^Access to an undefined property App\\SearchMetric\:\:\$request_count\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Services/DefaultSearchAnalyticsService.php
 
 		-
 			message: '#^Method App\\Services\\DefaultSearchAnalyticsService\:\:logSearch\(\) has parameter \$hits with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
@@ -9409,6 +8695,18 @@ parameters:
 			path: app/Services/TypesenseCollectionDescriptor.php
 
 		-
+			message: '#^Class App\\Support\\CachedData has PHPDoc tag @property for property \$external_links with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Support/CachedData.php
+
+		-
+			message: '#^Class App\\Support\\CachedData has PHPDoc tag @property for property \$streaming_links with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: app/Support/CachedData.php
+
+		-
 			message: '#^Class App\\Support\\CachedData implements generic interface ArrayAccess but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
@@ -9547,12 +8845,6 @@ parameters:
 			path: app/Testing/SyntheticMongoDbTransaction.php
 
 		-
-			message: '#^Access to an undefined property App\\ThemeAnime\:\:\$unguardFilters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/ThemeAnime.php
-
-		-
 			message: '#^Method App\\ThemeAnime\:\:_normalizeOrderBy\(\) has parameter \$filters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
@@ -9677,12 +8969,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: app/ThemeAnime.php
-
-		-
-			message: '#^Access to an undefined property App\\ThemeManga\:\:\$unguardFilters\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/ThemeManga.php
 
 		-
 			message: '#^Method App\\ThemeManga\:\:_normalizeOrderBy\(\) has parameter \$filters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'

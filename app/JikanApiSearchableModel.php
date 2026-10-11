@@ -3,6 +3,12 @@
 namespace App;
 
 
+/**
+ * Mongo-backed searchable model base. Attributes are magic (from the collection);
+ * documented below are the shared ones the app reads.
+ *
+ * @property int $mal_id
+ */
 abstract class JikanApiSearchableModel extends JikanApiModel
 {
     use JikanSearchable;

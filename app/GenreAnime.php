@@ -6,8 +6,13 @@ use Jikan\Request\Genre\AnimeGenresRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class Magazine
- * @package App
+ * Mongo-backed anime genre document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $name
+ * @property string $url
+ * @property int $count
  */
 class GenreAnime extends JikanApiSearchableModel
 {

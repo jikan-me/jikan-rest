@@ -58,6 +58,7 @@ use MongoDB\Model\BSONDocument;
  * @property array $ending_themes
  * @property array|null $trailer
  * @property array|null $streaming
+ * @property array|null $streaming_links
  * @property array|null $external_links
  * @property array|null $theme
  * @property array|null $relations
