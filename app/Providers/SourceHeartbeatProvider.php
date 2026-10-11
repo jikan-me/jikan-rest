@@ -145,9 +145,11 @@ class SourceHeartbeatProvider extends ServiceProvider
 
     /**
      * Drop heartbeats outside the recency window and cap the stored sample.
+     * Entries may be malformed in storage (null/strings) and are filtered out,
+     * so the input type is deliberately loose.
      *
-     * @param array<int, array{0: int, 1: int, 2: int}> $fails  entries as [timestamp, status, health]
-     * @return array<int, array{0: int, 1: int, 2: int}>
+     * @param array<int, mixed> $fails  entries as [timestamp, status, health] (may be malformed)
+     * @return array<int, array<mixed>>
      */
     public static function pruneFails(array $fails): array
     {
@@ -156,7 +158,7 @@ class SourceHeartbeatProvider extends ServiceProvider
 
         $fails = array_values(array_filter(
             $fails,
-            fn (array $fail): bool => (int) $fail[0] >= $cutoff
+            fn ($fail): bool => is_array($fail) && isset($fail[0]) && (int) $fail[0] >= $cutoff
         ));
 
         // cap the sample at SOURCE_BAD_HEALTH_MAX_STORE
