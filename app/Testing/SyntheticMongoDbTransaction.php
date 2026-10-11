@@ -28,6 +28,26 @@ trait SyntheticMongoDbTransaction
 
     public function beginDatabaseTransaction(): void
     {
+        $database = env('DB_DATABASE', 'jikan_tests');
+        $testDatabase = $database === 'jikan' ? 'jikan_tests' : $database;
+
+        $connection = DB::connection('mongodb');
+        $resolvedDatabase = $connection->getMongoDB()->getDatabaseName();
+
+        /*
+         * Safety net: only ever truncate the isolated test database.
+         *
+         * Laravel's setUpTheTestEnvironment() calls our overridden setUpTraits()
+         * (dynamic dispatch) during parent::setUp() — BEFORE this TestCase's own
+         * setUp() has swapped the mongodb connection to the test DB. So
+         * beginDatabaseTransaction() can run against the production database
+         * (e.g. "jikan") first, truncating real data. Any mismatch now skips
+         * the truncation instead.
+         */
+        if ($resolvedDatabase !== $testDatabase) {
+            return;
+        }
+
         $jikanModels = self::getJikanModels();
         $tablesWithoutModels = [
             "anime_characters_staff",

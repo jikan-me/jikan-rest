@@ -187,6 +187,16 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `$requestUri`, and nothing dispatched either; deleting them (the self-HTTP +
   `sleep()` + token-header pattern is Octane-hostile anyway). Cache warming should be
   re-designed as an in-process command if revived.
+- **CRITICAL test-isolation fix: tests were truncating the *production* `jikan` DB.**
+  Our overridden `setUpTraits()` is invoked by Laravel's `setUpTheTestEnvironment()`
+  (dynamic dispatch) during `parent::setUp()` — before the TestCase's own `setUp()`
+  swaps the mongodb connection to `jikan_tests` — so `beginDatabaseTransaction()`
+  truncated real data once per test, on top of the intended test-DB truncation.
+  Fixed with a hard guard in `SyntheticMongoDbTransaction`: truncation now refuses to
+  run unless the resolved database equals the isolated test DB (`jikan_tests`).
+  Verified with sentinel documents across a full suite run (production doc survives,
+  test DB truncated). This had caused repeated "re-seed needed" DB loss during local
+  development (producers/magazines/genres/anime).
 - **Source-heartbeat pruning was a no-op + score could exceed 1.** `unset($fail)` in a
   value-copy `foreach` removed nothing, and the `>=` condition was inverted, so
   `failovers.json` never dropped stale events. Added `SourceHeartbeatProvider::pruneFails()`
