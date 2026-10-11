@@ -4,36 +4,29 @@ namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: 'person_manga',
+    description: 'Person\'s mangaography',
+    properties: [
+        new OA\Property(
+            property: 'data',
+            type: 'array',
+            items: new OA\Items(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'position', type: 'string', description: 'Person\'s position'),
+                    new OA\Property(property: 'manga', type: 'object', ref: '#/components/schemas/manga_meta'),
+                ],
+            ),
+        ),
+    ],
+)]
 class PersonMangaCollection extends ResourceCollection
 {
     /**
      * The resource that this resource collects.
-     *
-     *  @OA\Schema(
-     *      schema="person_manga",
-     *      description="Person's mangaography",
-     *
-     *     @OA\Property(
-     *          property="data",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *
-     *              @OA\Property(
-     *                  property="position",
-     *                  type="string",
-     *                  description="Person's position"
-     *              ),
-     *              @OA\Property(
-     *                  property="manga",
-     *                  type="object",
-     *                  ref="#/components/schemas/manga_meta"
-     *              ),
-     *          ),
-     *     ),
-     *  )
      */
     public $collects = 'App\Http\Resources\V4\PersonMangaResource';
 

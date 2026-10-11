@@ -5,7 +5,9 @@ namespace App\Http\Resources\V4;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(schema: 'clubs_search', description: 'Clubs Search Resource', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/club'))])])]
 class ClubCollection extends ResourceCollection
 {
     /**
@@ -20,26 +22,6 @@ class ClubCollection extends ResourceCollection
      *
      * @param  Request  $request
      * @return array
-     *
-     *  @OA\Schema(
-     *      schema="clubs_search",
-     *      description="Clubs Search Resource",
-     *
-     *      allOf={
-     *          @OA\Schema(ref="#/components/schemas/pagination"),
-     *          @OA\Schema(
-     *
-     *              @OA\Property(
-     *                   property="data",
-     *                   type="array",
-     *
-     *                   @OA\Items(
-     *                          ref="#/components/schemas/club"
-     *                   )
-     *              ),
-     *          )
-     *      }
-     *  )
      */
     private $pagination;
 

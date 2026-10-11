@@ -23,6 +23,7 @@ return [
                     base_path('app/Http/Controllers'),
                     base_path('app/Dto'),
                     base_path('app/Http/Resources'),
+                    base_path('app/Enums'),
                     base_path('app/Swagger.php'),
                 ],
                 'excludes' => [],

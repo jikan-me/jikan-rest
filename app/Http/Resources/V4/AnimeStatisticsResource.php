@@ -4,7 +4,38 @@ namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: 'anime_statistics',
+    description: 'Anime Statistics Resource',
+    properties: [
+        new OA\Property(
+            property: 'data',
+            type: 'object',
+            properties: [
+                new OA\Property(property: 'watching', type: 'integer', description: 'Number of users watching the resource'),
+                new OA\Property(property: 'completed', type: 'integer', description: 'Number of users who have completed the resource'),
+                new OA\Property(property: 'on_hold', type: 'integer', description: 'Number of users who have put the resource on hold'),
+                new OA\Property(property: 'dropped', type: 'integer', description: 'Number of users who have dropped the resource'),
+                new OA\Property(property: 'plan_to_watch', type: 'integer', description: 'Number of users who have planned to watch the resource'),
+                new OA\Property(property: 'total', type: 'integer', description: 'Total number of users who have the resource added to their lists'),
+                new OA\Property(
+                    property: 'scores',
+                    type: 'array',
+                    items: new OA\Items(
+                        type: 'object',
+                        properties: [
+                            new OA\Property(property: 'score', type: 'integer', description: 'Scoring value'),
+                            new OA\Property(property: 'votes', type: 'integer', description: 'Number of votes for this score'),
+                            new OA\Property(property: 'percentage', type: 'number', format: 'float', description: 'Percentage of votes for this score'),
+                        ],
+                    ),
+                ),
+            ],
+        ),
+    ],
+)]
 class AnimeStatisticsResource extends JsonResource
 {
     /**
@@ -12,71 +43,6 @@ class AnimeStatisticsResource extends JsonResource
      *
      * @param  Request  $request
      * @return array
-     *
-     *  @OA\Schema(
-     *      schema="anime_statistics",
-     *      description="Anime Statistics Resource",
-     *
-     *     @OA\Property(
-     *          property="data",
-     *          type="object",
-     *          @OA\Property(
-     *              property="watching",
-     *              type="integer",
-     *              description="Number of users watching the resource"
-     *          ),
-     *          @OA\Property(
-     *              property="completed",
-     *              type="integer",
-     *              description="Number of users who have completed the resource"
-     *          ),
-     *          @OA\Property(
-     *              property="on_hold",
-     *              type="integer",
-     *              description="Number of users who have put the resource on hold"
-     *          ),
-     *          @OA\Property(
-     *              property="dropped",
-     *              type="integer",
-     *              description="Number of users who have dropped the resource"
-     *          ),
-     *          @OA\Property(
-     *              property="plan_to_watch",
-     *              type="integer",
-     *              description="Number of users who have planned to watch the resource"
-     *          ),
-     *          @OA\Property(
-     *              property="total",
-     *              type="integer",
-     *              description="Total number of users who have the resource added to their lists"
-     *          ),
-     *          @OA\Property(
-     *               property="scores",
-     *               type="array",
-     *
-     *               @OA\Items(
-     *                   type="object",
-     *
-     *                   @OA\Property(
-     *                       property="score",
-     *                       type="integer",
-     *                       description="Scoring value"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="votes",
-     *                       type="integer",
-     *                       description="Number of votes for this score"
-     *                   ),
-     *                   @OA\Property(
-     *                       property="percentage",
-     *                       type="number",
-     *                       format="float",
-     *                       description="Percentage of votes for this score"
-     *                   ),
-     *              ),
-     *          ),
-     *     ),
-     *  )
      */
     /**
      * @return array<string, mixed>

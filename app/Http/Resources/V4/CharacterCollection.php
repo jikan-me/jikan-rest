@@ -5,33 +5,15 @@ namespace App\Http\Resources\V4;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(schema: 'characters_search', description: 'Characters Search Resource', allOf: [new OA\Schema(ref: '#/components/schemas/pagination_plus'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/character'))])])]
 class CharacterCollection extends ResourceCollection
 {
     /**
      * The resource that this resource collects.
      *
      * @var string
-     *
-     *  @OA\Schema(
-     *      schema="characters_search",
-     *      description="Characters Search Resource",
-     *
-     *      allOf={
-     *          @OA\Schema(ref="#/components/schemas/pagination_plus"),
-     *          @OA\Schema(
-     *
-     *              @OA\Property(
-     *                   property="data",
-     *                   type="array",
-     *
-     *                   @OA\Items(
-     *                          ref="#/components/schemas/character"
-     *                   )
-     *              ),
-     *          )
-     *      }
-     *  )
      */
     public $collects = 'App\Http\Resources\V4\CharacterResource';
 

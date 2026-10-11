@@ -4,7 +4,18 @@ namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: 'genre',
+    description: 'Genre Resource',
+    properties: [
+        new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
+        new OA\Property(property: 'name', type: 'string', description: 'Genre Name'),
+        new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
+        new OA\Property(property: 'count', type: 'integer', description: 'Genre\'s entry count'),
+    ],
+)]
 class GenreResource extends JsonResource
 {
     /**
@@ -12,32 +23,6 @@ class GenreResource extends JsonResource
      *
      * @param  Request  $request
      * @return array
-     *
-     *  @OA\Schema(
-     *      schema="genre",
-     *      description="Genre Resource",
-     *
-     *      @OA\Property(
-     *          property="mal_id",
-     *          type="integer",
-     *          description="MyAnimeList ID"
-     *      ),
-     *      @OA\Property(
-     *          property="name",
-     *          type="string",
-     *          description="Genre Name"
-     *      ),
-     *      @OA\Property(
-     *          property="url",
-     *          type="string",
-     *          description="MyAnimeList URL"
-     *      ),
-     *      @OA\Property(
-     *          property="count",
-     *          type="integer",
-     *          description="Genre's entry count"
-     *      ),
-     *  ),
      */
     /**
      * @return array<string, mixed>

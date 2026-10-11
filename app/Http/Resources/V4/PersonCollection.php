@@ -5,36 +5,15 @@ namespace App\Http\Resources\V4;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(schema: 'people_search', description: 'People Search', allOf: [new OA\Schema(ref: '#/components/schemas/pagination_plus'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(allOf: [new OA\Schema(ref: '#/components/schemas/person')]))])])]
 class PersonCollection extends ResourceCollection
 {
     /**
      * The resource that this resource collects.
      *
      * @var string
-     *
-     *  @OA\Schema(
-     *      schema="people_search",
-     *      description="People Search",
-     *
-     *      allOf={
-     *          @OA\Schema(ref="#/components/schemas/pagination_plus"),
-     *          @OA\Schema(
-     *
-     *              @OA\Property(
-     *                   property="data",
-     *                   type="array",
-     *
-     *                   @OA\Items(
-     *                       allOf={
-     *
-     *                           @OA\Schema(ref="#/components/schemas/person"),
-     *                       }
-     *                   )
-     *              ),
-     *          )
-     *      }
-     *  )
      */
     public $collects = 'App\Http\Resources\V4\PersonResource';
 

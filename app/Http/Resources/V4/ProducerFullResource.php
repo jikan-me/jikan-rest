@@ -5,8 +5,39 @@ namespace App\Http\Resources\V4;
 use App\Producers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Attributes as OA;
 
 /** @mixin Producers */
+#[OA\Schema(
+    schema: 'producer_full',
+    description: 'Producers Resource',
+    properties: [
+        new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
+        new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
+        new OA\Property(
+            property: 'titles',
+            type: 'array',
+            description: 'All titles',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/title'),
+        ),
+        new OA\Property(property: 'images', type: 'object', ref: '#/components/schemas/common_images'),
+        new OA\Property(property: 'favorites', type: 'integer', description: 'Producers\'s member favorites count'),
+        new OA\Property(property: 'count', type: 'integer', description: 'Producers\'s anime count'),
+        new OA\Property(property: 'established', type: 'string', description: 'Established Date ISO8601', nullable: true),
+        new OA\Property(property: 'about', type: 'string', description: 'About the Producer', nullable: true),
+        new OA\Property(
+            property: 'external',
+            type: 'array',
+            items: new OA\Items(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'name', type: 'string'),
+                    new OA\Property(property: 'url', type: 'string'),
+                ],
+            ),
+        ),
+    ],
+)]
 class ProducerFullResource extends JsonResource
 {
     /**
@@ -14,77 +45,6 @@ class ProducerFullResource extends JsonResource
      *
      * @param  Request  $request
      * @return array
-     *
-     *  @OA\Schema(
-     *      schema="producer_full",
-     *      description="Producers Resource",
-     *
-     *      @OA\Property(
-     *          property="mal_id",
-     *          type="integer",
-     *          description="MyAnimeList ID"
-     *      ),
-     *      @OA\Property(
-     *          property="url",
-     *          type="string",
-     *          description="MyAnimeList URL"
-     *      ),
-     *      @OA\Property(
-     *          property="titles",
-     *          type="array",
-     *          description="All titles",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/title",
-     *          ),
-     *      ),
-     *
-     *     @OA\Property(
-     *         property="images",
-     *         type="object",
-     *         ref="#/components/schemas/common_images",
-     *     ),
-     *      @OA\Property(
-     *          property="favorites",
-     *          type="integer",
-     *          description="Producers's member favorites count"
-     *      ),
-     *      @OA\Property(
-     *          property="count",
-     *          type="integer",
-     *          description="Producers's anime count"
-     *      ),
-     *     @OA\Property(
-     *         property="established",
-     *         type="string",
-     *         description="Established Date ISO8601",
-     *         nullable=true
-     *     ),
-     *     @OA\Property(
-     *         property="about",
-     *         type="string",
-     *         description="About the Producer",
-     *         nullable=true
-     *     ),
-     *      @OA\Property(
-     *          property="external",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *
-     *              @OA\Property(
-     *                   property="name",
-     *                   type="string",
-     *              ),
-     *              @OA\Property(
-     *                   property="url",
-     *                   type="string",
-     *              ),
-     *          ),
-     *      ),
-     *  ),
      */
     /**
      * @return array<string, mixed>

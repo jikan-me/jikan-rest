@@ -126,7 +126,13 @@
         "docMarkers": [
             "@OA\\Get",
             "@OA\\Post",
-            "@OA\\PathItem"
+            "@OA\\PathItem",
+            "#[OA\\Get",
+            "#[OA\\Post",
+            "#[OA\\Delete",
+            "#[OA\\Put",
+            "#[OA\\Patch",
+            "#[OA\\PathItem"
         ],
         "actionPattern": "'uses'\\s*=>\\s*'([A-Za-z]+)@([A-Za-z]+)'",
         "controllerDirs": [

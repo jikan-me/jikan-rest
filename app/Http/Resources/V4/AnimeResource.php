@@ -5,267 +5,95 @@ namespace App\Http\Resources\V4;
 use App\Anime;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Attributes as OA;
 
 /**
  * @mixin Anime
  */
+#[OA\Schema(
+    schema: 'anime',
+    description: 'Anime Resource',
+    properties: [
+        new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
+        new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
+        new OA\Property(property: 'images', ref: '#/components/schemas/anime_images'),
+        new OA\Property(property: 'trailer', ref: '#/components/schemas/trailer_base'),
+        new OA\Property(property: 'approved', type: 'boolean', description: 'Whether the entry is pending approval on MAL or not'),
+        new OA\Property(
+            property: 'titles',
+            type: 'array',
+            description: 'All titles',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/title'),
+        ),
+        new OA\Property(property: 'title', type: 'string', description: 'Title', deprecated: true),
+        new OA\Property(property: 'title_english', type: 'string', description: 'English Title', nullable: true, deprecated: true),
+        new OA\Property(property: 'title_japanese', type: 'string', description: 'Japanese Title', nullable: true, deprecated: true),
+        new OA\Property(
+            property: 'title_synonyms',
+            type: 'array',
+            description: 'Other Titles',
+            deprecated: true,
+            items: new OA\Items(type: 'string'),
+        ),
+        new OA\Property(property: 'type', type: 'string', enum: ['TV', 'OVA', 'Movie', 'Special', 'ONA', 'Music'], description: 'Anime Type', nullable: true),
+        new OA\Property(property: 'source', type: 'string', description: 'Original Material/Source adapted from', nullable: true),
+        new OA\Property(property: 'episodes', type: 'integer', description: 'Episode count', nullable: true),
+        new OA\Property(property: 'status', type: 'string', enum: ['Finished Airing', 'Currently Airing', 'Not yet aired'], description: 'Airing status', nullable: true),
+        new OA\Property(property: 'airing', type: 'boolean', description: 'Airing boolean'),
+        new OA\Property(property: 'aired', ref: '#/components/schemas/daterange'),
+        new OA\Property(property: 'duration', type: 'string', description: 'Parsed raw duration', nullable: true),
+        new OA\Property(property: 'rating', type: 'string', enum: ['G - All Ages', 'PG - Children', 'PG-13 - Teens 13 or older', 'R - 17+ (violence & profanity)', 'R+ - Mild Nudity', 'Rx - Hentai'], description: 'Anime audience rating', nullable: true),
+        new OA\Property(property: 'score', type: 'number', format: 'float', description: 'Score', nullable: true),
+        new OA\Property(property: 'scored_by', type: 'integer', description: 'Number of users', nullable: true),
+        new OA\Property(property: 'rank', type: 'integer', description: 'Ranking', nullable: true),
+        new OA\Property(property: 'popularity', type: 'integer', description: 'Popularity', nullable: true),
+        new OA\Property(property: 'members', type: 'integer', description: 'Number of users who have added this entry to their list', nullable: true),
+        new OA\Property(property: 'favorites', type: 'integer', description: 'Number of users who have favorited this entry', nullable: true),
+        new OA\Property(property: 'synopsis', type: 'string', description: 'Synopsis', nullable: true),
+        new OA\Property(property: 'background', type: 'string', description: 'Background', nullable: true),
+        new OA\Property(property: 'season', type: 'string', enum: ['summer', 'winter', 'spring', 'fall'], description: 'Season', nullable: true),
+        new OA\Property(property: 'year', type: 'integer', description: 'Year', nullable: true),
+        new OA\Property(property: 'broadcast', ref: '#/components/schemas/broadcast'),
+        new OA\Property(
+            property: 'producers',
+            type: 'array',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/mal_url'),
+        ),
+        new OA\Property(
+            property: 'licensors',
+            type: 'array',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/mal_url'),
+        ),
+        new OA\Property(
+            property: 'studios',
+            type: 'array',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/mal_url'),
+        ),
+        new OA\Property(
+            property: 'genres',
+            type: 'array',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/mal_url'),
+        ),
+        new OA\Property(
+            property: 'explicit_genres',
+            type: 'array',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/mal_url'),
+        ),
+        new OA\Property(
+            property: 'themes',
+            type: 'array',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/mal_url'),
+        ),
+        new OA\Property(
+            property: 'demographics',
+            type: 'array',
+            items: new OA\Items(type: 'object', ref: '#/components/schemas/mal_url'),
+        ),
+    ],
+)]
 class AnimeResource extends JsonResource
 {
-    /**
-     *  @OA\Schema(
-     *      schema="anime",
-     *      description="Anime Resource",
-     *
-     *      @OA\Property(
-     *          property="mal_id",
-     *          type="integer",
-     *          description="MyAnimeList ID"
-     *      ),
-     *      @OA\Property(
-     *          property="url",
-     *          type="string",
-     *          description="MyAnimeList URL"
-     *      ),
-     *      @OA\Property(
-     *          property="images",
-     *          ref="#/components/schemas/anime_images"
-     *      ),
-     *      @OA\Property(
-     *          property="trailer",
-     *          ref="#/components/schemas/trailer_base"
-     *      ),
-     *      @OA\Property(
-     *          property="approved",
-     *          type="boolean",
-     *          description="Whether the entry is pending approval on MAL or not"
-     *      ),
-     *      @OA\Property(
-     *          property="titles",
-     *          type="array",
-     *          description="All titles",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/title",
-     *          ),
-     *      ),
-     *
-     *      @OA\Property(
-     *          property="title",
-     *          type="string",
-     *          description="Title",
-     *          deprecated=true
-     *      ),
-     *      @OA\Property(
-     *          property="title_english",
-     *          type="string",
-     *          description="English Title",
-     *          nullable=true,
-     *          deprecated=true
-     *      ),
-     *      @OA\Property(
-     *          property="title_japanese",
-     *          type="string",
-     *          description="Japanese Title",
-     *          nullable=true,
-     *          deprecated=true
-     *      ),
-     *      @OA\Property(
-     *          property="title_synonyms",
-     *          type="array",
-     *          description="Other Titles",
-     *
-     *          @OA\Items(
-     *              type="string"
-     *          ),
-     *          deprecated=true
-     *      ),
-     *
-     *      @OA\Property(
-     *          property="type",
-     *          type="string",
-     *          enum={"TV","OVA","Movie","Special","ONA","Music"},
-     *          description="Anime Type",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="source",
-     *          type="string",
-     *          description="Original Material/Source adapted from",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="episodes",
-     *          type="integer",
-     *          description="Episode count",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="status",
-     *          type="string",
-     *          enum={"Finished Airing", "Currently Airing", "Not yet aired"},
-     *          description="Airing status",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="airing",
-     *          type="boolean",
-     *          description="Airing boolean"
-     *      ),
-     *      @OA\Property(
-     *          property="aired",
-     *          ref="#/components/schemas/daterange"
-     *      ),
-     *      @OA\Property(
-     *          property="duration",
-     *          type="string",
-     *          description="Parsed raw duration",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="rating",
-     *          type="string",
-     *          enum={"G - All Ages", "PG - Children", "PG-13 - Teens 13 or older", "R - 17+ (violence & profanity)", "R+ - Mild Nudity", "Rx - Hentai" },
-     *          description="Anime audience rating",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="score",
-     *          type="number",
-     *          format="float",
-     *          description="Score",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="scored_by",
-     *          type="integer",
-     *          description="Number of users",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="rank",
-     *          type="integer",
-     *          description="Ranking",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="popularity",
-     *          type="integer",
-     *          description="Popularity",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="members",
-     *          type="integer",
-     *          description="Number of users who have added this entry to their list",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="favorites",
-     *          type="integer",
-     *          description="Number of users who have favorited this entry",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="synopsis",
-     *          type="string",
-     *          description="Synopsis",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="background",
-     *          type="string",
-     *          description="Background",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="season",
-     *          type="string",
-     *          enum={"summer", "winter", "spring", "fall"},
-     *          description="Season",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="year",
-     *          type="integer",
-     *          description="Year",
-     *          nullable=true
-     *      ),
-     *      @OA\Property(
-     *          property="broadcast",
-     *          ref="#/components/schemas/broadcast"
-     *      ),
-     *      @OA\Property(
-     *          property="producers",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/mal_url"
-     *          ),
-     *      ),
-     *
-     *      @OA\Property(
-     *          property="licensors",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/mal_url"
-     *          ),
-     *      ),
-     *
-     *      @OA\Property(
-     *          property="studios",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/mal_url"
-     *          ),
-     *      ),
-     *
-     *      @OA\Property(
-     *          property="genres",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/mal_url"
-     *          ),
-     *      ),
-     *
-     *      @OA\Property(
-     *          property="explicit_genres",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/mal_url"
-     *          ),
-     *      ),
-     *
-     *      @OA\Property(
-     *          property="themes",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/mal_url"
-     *          ),
-     *      ),
-     *
-     *      @OA\Property(
-     *          property="demographics",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/mal_url"
-     *          ),
-     *      ),
-     *  )
-     */
+
 
     /**
      * Transform the resource into an array.

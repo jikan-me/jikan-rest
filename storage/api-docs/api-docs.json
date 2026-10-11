@@ -1,18 +1,17 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Jikan API",
-        "description": "[Jikan](https://jikan.moe) is an **Unofficial** MyAnimeList API.\nIt scrapes the website to satisfy the need for a complete API - which MyAnimeList lacks.\n\n# Information\n\n⚡ Jikan is powered by its awesome backers - 🙏 [Become a backer](https://www.patreon.com/jikan)\n\n## Rate Limiting\n\n| Duration | Requests |\n|----|----|\n| Daily | **Unlimited** |\n| Per Minute | 60 requests |\n| Per Second | 3 requests |\n\nNote: It's still possible to get rate limited from MyAnimeList.net instead.\n\n\n## JSON Notes\n- Any property (except arrays or objects) whose value does not exist or is undetermined, will be `null`.\n- Any array or object property whose value does not exist or is undetermined, will be empty.\n- Any `score` property whose value does not exist or is undetermined, will be `0`.\n- All dates and timestamps are returned in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) format and in UTC timezone\n\n## Caching\nBy **CACHING**, we refer to the data parsed from MyAnimeList which is stored temporarily on our servers to provide better API performance.\n\nAll requests are cached for **24 hours**.\n\nThe following response headers will detail cache information.\n\n| Header | Remarks |\n| ---- | ---- |\n| `Expires` | Cache expiry date |\n| `Last-Modified` | Cache set date |\n| `X-Request-Fingerprint` | Unique request fingerprint (only for cachable requests, not queries) |\n\n\nNote: `X-Request-Fingerprint` will only be available on single resource requests and their child endpoints. e.g `/anime/1`, `/anime/1/relations`.\nThey won't be available on pages which perform queries, like /anime, or /top/anime, etc.\n\n## Allowed HTTP(s) requests\n\n**Jikan REST API does not provide authenticated requests for MyAnimeList.** This means you can not use it to update your anime/manga list.\nOnly GET requests are supported which return READ-ONLY data.\n\n## HTTP Responses\n\nAll error responses are accompanied by a JSON Error response.\n\n| Exception | HTTP Status | Remarks |\n| ---- | ---- | ---- |\n| N/A | `200 - OK` | The request was successful |\n| N/A | `304 - Not Modified` | You have the latest data (Cache Validation response) |\n| `BadRequestException`,`ValidationException` | `400 - Bad Request` | You've made an invalid request. Recheck documentation |\n| `BadResponseException` | `404 - Not Found` | The resource was not found or MyAnimeList responded with a `404` |\n| `BadRequestException` | `405 - Method Not Allowed` | Requested Method is not supported for resource. Only `GET` requests are allowed |\n| `RateLimitException` | `429 - Too Many Request` | You are being rate limited by Jikan or MyAnimeList is rate-limiting our servers (specified in the error response) |\n| `UpstreamException`,`ParserException`,etc. | `500 - Internal Server Error` | Something didn't work. Try again later. If you see an error response with a `report_url` URL, please click on it to open an auto-generated GitHub issue |\n| `ServiceUnavailableException` | `503 - Service Unavailable` | In most cases this is intentionally done if the service is down for maintenance. |\n\n## JSON Error Response\n\n```json\n {\n     \"status\": 500,\n     \"type\": \"InternalException\",\n     \"message\": \"Exception Message\",\n     \"error\": \"Exception Trace\",\n     \"report_url\": \"https://github.com...\"\n  }\n```\n\n| Property | Remarks |\n| ---- | ---- |\n| `status` | Returned HTTP Status Code |\n| `type` | Thrown Exception |\n| `message` | Human-readable error message |\n| `error` | Error response and trace from the API |\n| `report_url` | Clicking this would redirect you to a generated GitHub issue |\n\n\n## Cache Validation\n\n- All requests return a `ETag` header which is an MD5 hash of the response\n- You can use this hash to verify if there's new or updated content by suppliying it as the value for the `If-None-Match` in your next request header\n- You will get a HTTP `304 - Not Modified` response if the content has not changed\n- If the content has changed, you'll get a HTTP `200 - OK` response with the updated JSON response\n\n![Cache Validation](https://i.imgur.com/925ozVn.png 'Cache Validation')\n\n## Disclaimer\n\n- Jikan is not affiliated with MyAnimeList.net.\n- Jikan is a free, open-source API. Please use it responsibly.\n\n----\n\nBy using the API, you are agreeing to Jikan's [terms of use](https://jikan.moe/terms) policy.\n\n[v3 Documentation](https://jikan.docs.apiary.io/) - [Wrappers/SDKs](https://github.com/jikan-me/jikan#wrappers) - [Report an issue](https://github.com/jikan-me/jikan-rest/issues/new) - [Host your own server](https://github.com/jikan-me/jikan-rest)",
-        "termsOfService": "https://jikan.moe/terms",
+        "title": "Jikan REST API v4",
+        "description": "Unofficial MyAnimeList.net REST API",
         "contact": {
-            "name": "API Support (Discord)",
+            "name": "API Support",
             "url": "http://discord.jikan.moe"
         },
         "license": {
             "name": "MIT",
             "url": "https://github.com/jikan-me/jikan-rest/blob/master/LICENSE"
         },
-        "version": "4.0.0"
+        "version": "4.2.2"
     },
     "servers": [
         {
@@ -26,6 +25,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Complete anime resource",
+                "description": "Returns the complete anime resource — primary data plus related sub-resources — in one response for the given **id**.",
                 "operationId": "getAnimeFullById",
                 "parameters": [
                     {
@@ -64,6 +65,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime details",
+                "description": "Retrieves the details for the given **id**.",
                 "operationId": "getAnimeById",
                 "parameters": [
                     {
@@ -102,6 +105,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime characters",
+                "description": "Retrieves the anime characters for the anime identified by **id**.",
                 "operationId": "getAnimeCharacters",
                 "parameters": [
                     {
@@ -135,6 +140,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime staff",
+                "description": "Retrieves the anime staff for the anime identified by **id**.",
                 "operationId": "getAnimeStaff",
                 "parameters": [
                     {
@@ -168,6 +175,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime episodes",
+                "description": "Retrieves the anime episodes for the anime identified by **id**.",
                 "operationId": "getAnimeEpisodes",
                 "parameters": [
                     {
@@ -204,6 +213,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime episode",
+                "description": "Retrieves the anime episode for the anime identified by **id**.",
                 "operationId": "getAnimeEpisodeById",
                 "parameters": [
                     {
@@ -250,6 +261,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime news",
+                "description": "Retrieves the anime news for the anime identified by **id**.",
                 "operationId": "getAnimeNews",
                 "parameters": [
                     {
@@ -286,6 +299,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime forum topics",
+                "description": "Retrieves the anime forum topics for the anime identified by **id**.",
                 "operationId": "getAnimeForum",
                 "parameters": [
                     {
@@ -333,6 +348,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime videos",
+                "description": "Retrieves the anime videos for the anime identified by **id**.",
                 "operationId": "getAnimeVideos",
                 "parameters": [
                     {
@@ -366,6 +383,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime video episodes",
+                "description": "Retrieves the anime video episodes for the anime identified by **id**.",
                 "operationId": "getAnimeVideosEpisodes",
                 "parameters": [
                     {
@@ -402,6 +421,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime pictures",
+                "description": "Retrieves the anime pictures for the anime identified by **id**.",
                 "operationId": "getAnimePictures",
                 "parameters": [
                     {
@@ -435,6 +456,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime statistics",
+                "description": "Retrieves the anime statistics for the anime identified by **id**.",
                 "operationId": "getAnimeStatistics",
                 "parameters": [
                     {
@@ -468,6 +491,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime more info",
+                "description": "Retrieves the anime more info for the anime identified by **id**.",
                 "operationId": "getAnimeMoreInfo",
                 "parameters": [
                     {
@@ -501,6 +526,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime recommendations",
+                "description": "Retrieves the anime recommendations for the anime identified by **id**.",
                 "operationId": "getAnimeRecommendations",
                 "parameters": [
                     {
@@ -534,6 +561,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime user updates",
+                "description": "Retrieves the anime user updates for the anime identified by **id**.",
                 "operationId": "getAnimeUserUpdates",
                 "parameters": [
                     {
@@ -570,6 +599,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime reviews",
+                "description": "Retrieves the anime reviews for the anime identified by **id**.",
                 "operationId": "getAnimeReviews",
                 "parameters": [
                     {
@@ -612,6 +643,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime relations",
+                "description": "Retrieves the anime relations for the anime identified by **id**.",
                 "operationId": "getAnimeRelations",
                 "parameters": [
                     {
@@ -650,6 +683,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime themes",
+                "description": "Retrieves the anime themes for the anime identified by **id**.",
                 "operationId": "getAnimeThemes",
                 "parameters": [
                     {
@@ -683,6 +718,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime external links",
+                "description": "Retrieves the anime external links for the anime identified by **id**.",
                 "operationId": "getAnimeExternal",
                 "parameters": [
                     {
@@ -716,6 +753,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime streaming links",
+                "description": "Retrieves the anime streaming links for the anime identified by **id**.",
                 "operationId": "getAnimeStreaming",
                 "parameters": [
                     {
@@ -749,6 +788,8 @@
                 "tags": [
                     "characters"
                 ],
+                "summary": "Complete character resource",
+                "description": "Returns the complete character resource — primary data plus related sub-resources — in one response for the given **id**.",
                 "operationId": "getCharacterFullById",
                 "parameters": [
                     {
@@ -787,6 +828,8 @@
                 "tags": [
                     "characters"
                 ],
+                "summary": "Character details",
+                "description": "Retrieves a particular character for the given **id**.",
                 "operationId": "getCharacterById",
                 "parameters": [
                     {
@@ -825,6 +868,8 @@
                 "tags": [
                     "characters"
                 ],
+                "summary": "Character anime roles",
+                "description": "Retrieves the character anime roles for the character identified by **id**.",
                 "operationId": "getCharacterAnime",
                 "parameters": [
                     {
@@ -858,6 +903,8 @@
                 "tags": [
                     "characters"
                 ],
+                "summary": "Character manga roles",
+                "description": "Retrieves the character manga roles for the character identified by **id**.",
                 "operationId": "getCharacterManga",
                 "parameters": [
                     {
@@ -891,6 +938,8 @@
                 "tags": [
                     "characters"
                 ],
+                "summary": "Character voice actors",
+                "description": "Retrieves the character voice actors for the character identified by **id**.",
                 "operationId": "getCharacterVoiceActors",
                 "parameters": [
                     {
@@ -924,6 +973,8 @@
                 "tags": [
                     "characters"
                 ],
+                "summary": "Character pictures",
+                "description": "Retrieves the character pictures for the character identified by **id**.",
                 "operationId": "getCharacterPictures",
                 "parameters": [
                     {
@@ -957,6 +1008,8 @@
                 "tags": [
                     "clubs"
                 ],
+                "summary": "Club details",
+                "description": "Retrieves the club details for the club identified by **id**.",
                 "operationId": "getClubsById",
                 "parameters": [
                     {
@@ -995,6 +1048,8 @@
                 "tags": [
                     "clubs"
                 ],
+                "summary": "Club members",
+                "description": "Retrieves the club members for a club.",
                 "operationId": "getClubMembers",
                 "parameters": [
                     {
@@ -1038,6 +1093,8 @@
                 "tags": [
                     "clubs"
                 ],
+                "summary": "Club staff",
+                "description": "Retrieves the club staff for a club.",
                 "operationId": "getClubStaff",
                 "parameters": [
                     {
@@ -1071,6 +1128,8 @@
                 "tags": [
                     "clubs"
                 ],
+                "summary": "Club relations",
+                "description": "Retrieves the club relations for a club.",
                 "operationId": "getClubRelations",
                 "parameters": [
                     {
@@ -1104,6 +1163,8 @@
                 "tags": [
                     "genres"
                 ],
+                "summary": "Anime genres",
+                "description": "Retrieves the anime genres for the anime identified by **id**.",
                 "operationId": "getAnimeGenres",
                 "parameters": [
                     {
@@ -1136,6 +1197,8 @@
                 "tags": [
                     "genres"
                 ],
+                "summary": "Manga genres",
+                "description": "Retrieves the manga genres for the manga identified by **id**.",
                 "operationId": "getMangaGenres",
                 "parameters": [
                     {
@@ -1168,6 +1231,8 @@
                 "tags": [
                     "magazines"
                 ],
+                "summary": "Magazines list",
+                "description": "Lists magazines from the indexed catalog using the MyAnimeList filters **q, **order_by, **sort, **letter**. Pageable; joins MyAnimeList rate limiting.",
                 "operationId": "getMagazines",
                 "parameters": [
                     {
@@ -1228,6 +1293,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Complete manga resource",
+                "description": "Returns the complete manga resource — primary data plus related sub-resources — in one response for the given **id**.",
                 "operationId": "getMangaFullById",
                 "parameters": [
                     {
@@ -1266,6 +1333,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga details",
+                "description": "Retrieves a particular manga for the given **id**.",
                 "operationId": "getMangaById",
                 "parameters": [
                     {
@@ -1304,6 +1373,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga characters",
+                "description": "Retrieves the manga characters for the manga identified by **id**.",
                 "operationId": "getMangaCharacters",
                 "parameters": [
                     {
@@ -1337,6 +1408,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga news",
+                "description": "Retrieves the manga news for the manga identified by **id**.",
                 "operationId": "getMangaNews",
                 "parameters": [
                     {
@@ -1373,6 +1446,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga forum topics",
+                "description": "Retrieves the manga forum topics for the manga identified by **id**.",
                 "operationId": "getMangaTopics",
                 "parameters": [
                     {
@@ -1420,6 +1495,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga pictures",
+                "description": "Retrieves the manga pictures for the manga identified by **id**.",
                 "operationId": "getMangaPictures",
                 "parameters": [
                     {
@@ -1453,6 +1530,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga statistics",
+                "description": "Retrieves the manga statistics for the manga identified by **id**.",
                 "operationId": "getMangaStatistics",
                 "parameters": [
                     {
@@ -1486,6 +1565,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga more info",
+                "description": "Retrieves the manga more info for the manga identified by **id**.",
                 "operationId": "getMangaMoreInfo",
                 "parameters": [
                     {
@@ -1519,6 +1600,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga recommendations",
+                "description": "Retrieves the manga recommendations for the manga identified by **id**.",
                 "operationId": "getMangaRecommendations",
                 "parameters": [
                     {
@@ -1552,6 +1635,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga user updates",
+                "description": "Retrieves the manga user updates for the manga identified by **id**.",
                 "operationId": "getMangaUserUpdates",
                 "parameters": [
                     {
@@ -1588,6 +1673,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga reviews",
+                "description": "Retrieves the manga reviews for the manga identified by **id**.",
                 "operationId": "getMangaReviews",
                 "parameters": [
                     {
@@ -1630,6 +1717,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga relations",
+                "description": "Retrieves the manga relations for the manga identified by **id**.",
                 "operationId": "getMangaRelations",
                 "parameters": [
                     {
@@ -1671,6 +1760,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga external links",
+                "description": "Retrieves the manga external links for the manga identified by **id**.",
                 "operationId": "getMangaExternal",
                 "parameters": [
                     {
@@ -1704,6 +1795,8 @@
                 "tags": [
                     "people"
                 ],
+                "summary": "Complete person resource",
+                "description": "Returns the complete person resource — primary data plus related sub-resources — in one response for the given **id**.",
                 "operationId": "getPersonFullById",
                 "parameters": [
                     {
@@ -1742,6 +1835,8 @@
                 "tags": [
                     "people"
                 ],
+                "summary": "Person details",
+                "description": "Retrieves a particular person for the given **id**.",
                 "operationId": "getPersonById",
                 "parameters": [
                     {
@@ -1780,6 +1875,8 @@
                 "tags": [
                     "people"
                 ],
+                "summary": "Person anime roles",
+                "description": "Retrieves the person anime roles for the person identified by **id**.",
                 "operationId": "getPersonAnime",
                 "parameters": [
                     {
@@ -1813,6 +1910,8 @@
                 "tags": [
                     "people"
                 ],
+                "summary": "Person voice acting roles",
+                "description": "Retrieves the person voice acting roles for the person identified by **id**.",
                 "operationId": "getPersonVoices",
                 "parameters": [
                     {
@@ -1846,6 +1945,8 @@
                 "tags": [
                     "people"
                 ],
+                "summary": "Person manga roles",
+                "description": "Retrieves the person manga roles for the person identified by **id**.",
                 "operationId": "getPersonManga",
                 "parameters": [
                     {
@@ -1879,6 +1980,8 @@
                 "tags": [
                     "people"
                 ],
+                "summary": "Person pictures",
+                "description": "Retrieves the person pictures for the person identified by **id**.",
                 "operationId": "getPersonPictures",
                 "parameters": [
                     {
@@ -1912,6 +2015,8 @@
                 "tags": [
                     "producers"
                 ],
+                "summary": "Producer details",
+                "description": "Retrieves the producer details for the producer identified by **id**.",
                 "operationId": "getProducerById",
                 "parameters": [
                     {
@@ -1950,6 +2055,8 @@
                 "tags": [
                     "producers"
                 ],
+                "summary": "Complete producer resource",
+                "description": "Returns the complete producer resource — primary data plus related sub-resources — in one response for the given **id**.",
                 "operationId": "getProducerFullById",
                 "parameters": [
                     {
@@ -1988,6 +2095,8 @@
                 "tags": [
                     "producers"
                 ],
+                "summary": "Producer external links",
+                "description": "Retrieves the producer external links for a producer.",
                 "operationId": "getProducerExternal",
                 "parameters": [
                     {
@@ -2021,6 +2130,8 @@
                 "tags": [
                     "random"
                 ],
+                "summary": "Random anime",
+                "description": "Returns a random anime from the indexed catalog. Outcome varies per request.",
                 "operationId": "getRandomAnime",
                 "responses": {
                     "200": {
@@ -2049,6 +2160,8 @@
                 "tags": [
                     "random"
                 ],
+                "summary": "Random manga",
+                "description": "Returns a random manga from the indexed catalog. Outcome varies per request.",
                 "operationId": "getRandomManga",
                 "responses": {
                     "200": {
@@ -2077,6 +2190,8 @@
                 "tags": [
                     "random"
                 ],
+                "summary": "Random characters",
+                "description": "Returns a random characters from the indexed catalog. Outcome varies per request.",
                 "operationId": "getRandomCharacters",
                 "responses": {
                     "200": {
@@ -2105,6 +2220,8 @@
                 "tags": [
                     "random"
                 ],
+                "summary": "Random people",
+                "description": "Returns a random people from the indexed catalog. Outcome varies per request.",
                 "operationId": "getRandomPeople",
                 "responses": {
                     "200": {
@@ -2133,6 +2250,8 @@
                 "tags": [
                     "random"
                 ],
+                "summary": "Random users",
+                "description": "Returns a random users from the indexed catalog. Outcome varies per request.",
                 "operationId": "getRandomUsers",
                 "responses": {
                     "200": {
@@ -2161,6 +2280,8 @@
                 "tags": [
                     "recommendations"
                 ],
+                "summary": "Recent anime recommendations",
+                "description": "Retrieves the most recent recent anime recommendations from MyAnimeList.",
                 "operationId": "getRecentAnimeRecommendations",
                 "parameters": [
                     {
@@ -2189,6 +2310,8 @@
                 "tags": [
                     "recommendations"
                 ],
+                "summary": "Recent manga recommendations",
+                "description": "Retrieves the most recent recent manga recommendations from MyAnimeList.",
                 "operationId": "getRecentMangaRecommendations",
                 "parameters": [
                     {
@@ -2217,6 +2340,8 @@
                 "tags": [
                     "reviews"
                 ],
+                "summary": "Recent anime reviews",
+                "description": "Retrieves the most recent recent anime reviews.",
                 "operationId": "getRecentAnimeReviews",
                 "parameters": [
                     {
@@ -2234,7 +2359,28 @@
                         "description": "Returns recent anime reviews",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/pagination"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "allOf": [
+                                                            {
+                                                                "$ref": "#/components/schemas/anime_review"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
                             }
                         }
                     },
@@ -2249,6 +2395,8 @@
                 "tags": [
                     "reviews"
                 ],
+                "summary": "Recent manga reviews",
+                "description": "Retrieves the most recent recent manga reviews.",
                 "operationId": "getRecentMangaReviews",
                 "parameters": [
                     {
@@ -2266,7 +2414,44 @@
                         "description": "Returns recent manga reviews",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/pagination"
+                                        },
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "allOf": [
+                                                            {
+                                                                "$ref": "#/components/schemas/manga_review"
+                                                            },
+                                                            {
+                                                                "properties": {
+                                                                    "anime": {
+                                                                        "$ref": "#/components/schemas/manga_meta"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            {
+                                                                "properties": {
+                                                                    "user": {
+                                                                        "$ref": "#/components/schemas/user_meta"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
                             }
                         }
                     },
@@ -2281,6 +2466,8 @@
                 "tags": [
                     "schedules"
                 ],
+                "summary": "Anime schedule",
+                "description": "Returns the airing anime schedule. The **filter** parameter pins a weekday (**monday**..**sunday**); **kids** and **sfw** toggle child-safe listings.",
                 "operationId": "getSchedules",
                 "parameters": [
                     {
@@ -2361,6 +2548,8 @@
                 "tags": [
                     "anime"
                 ],
+                "summary": "Anime search",
+                "description": "Retrieves the anime search for the anime identified by **id**.",
                 "operationId": "getAnimeSearch",
                 "parameters": [
                     {
@@ -2516,6 +2705,8 @@
                 "tags": [
                     "manga"
                 ],
+                "summary": "Manga search",
+                "description": "Retrieves the manga search for the manga identified by **id**.",
                 "operationId": "getMangaSearch",
                 "parameters": [
                     {
@@ -2664,6 +2855,8 @@
                 "tags": [
                     "people"
                 ],
+                "summary": "People search",
+                "description": "Searches the people catalog using the MyAnimeList filters **q, **order_by, **sort, **letter**. Pageable; joins MyAnimeList rate limiting.",
                 "operationId": "getPeopleSearch",
                 "parameters": [
                     {
@@ -2724,6 +2917,8 @@
                 "tags": [
                     "characters"
                 ],
+                "summary": "Characters search",
+                "description": "Retrieves the characters search for the character identified by **id**.",
                 "operationId": "getCharactersSearch",
                 "parameters": [
                     {
@@ -2784,6 +2979,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "Users search",
+                "description": "Searches the users catalog using the MyAnimeList filters **q, **gender, **location, **maxAge, **minAge**. Pageable; joins MyAnimeList rate limiting.",
                 "operationId": "getUsersSearch",
                 "parameters": [
                     {
@@ -2850,6 +3047,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User by ID",
+                "description": "Retrieves the user by id for the user identified by **username**.",
                 "operationId": "getUserById",
                 "parameters": [
                     {
@@ -2888,6 +3087,8 @@
                 "tags": [
                     "clubs"
                 ],
+                "summary": "Clubs search",
+                "description": "Retrieves the clubs search for a club.",
                 "operationId": "getClubsSearch",
                 "parameters": [
                     {
@@ -2962,6 +3163,8 @@
                 "tags": [
                     "producers"
                 ],
+                "summary": "Producers list",
+                "description": "Retrieves the producers list for a producer.",
                 "operationId": "getProducers",
                 "parameters": [
                     {
@@ -3022,6 +3225,8 @@
                 "tags": [
                     "seasons"
                 ],
+                "summary": "Current anime season",
+                "description": "Returns the anime currently airing this season. Accepts an optional **filter**.",
                 "operationId": "getSeasonNow",
                 "parameters": [
                     {
@@ -3078,6 +3283,8 @@
                 "tags": [
                     "seasons"
                 ],
+                "summary": "Seasonal anime",
+                "description": "Returns the anime for a specific year and season, filtered by the **filter** parameter.",
                 "operationId": "getSeason",
                 "parameters": [
                     {
@@ -3150,6 +3357,8 @@
                 "tags": [
                     "seasons"
                 ],
+                "summary": "Seasons list",
+                "description": "Lists the available seasonal anime indexes.",
                 "operationId": "getSeasonsList",
                 "responses": {
                     "200": {
@@ -3173,6 +3382,8 @@
                 "tags": [
                     "seasons"
                 ],
+                "summary": "Upcoming anime season",
+                "description": "Returns the upcoming anime season. Accepts an optional **filter**.",
                 "operationId": "getSeasonUpcoming",
                 "parameters": [
                     {
@@ -3229,6 +3440,8 @@
                 "tags": [
                     "top"
                 ],
+                "summary": "Top anime",
+                "description": "Returns the top-ranked anime. Query parameters: **type, **filter, **rating, **sfw**.",
                 "operationId": "getTopAnime",
                 "parameters": [
                     {
@@ -3291,6 +3504,8 @@
                 "tags": [
                     "top"
                 ],
+                "summary": "Top manga",
+                "description": "Returns the top-ranked manga. Query parameters: **type, **filter**.",
                 "operationId": "getTopManga",
                 "parameters": [
                     {
@@ -3338,6 +3553,8 @@
                 "tags": [
                     "top"
                 ],
+                "summary": "Top people",
+                "description": "Returns the top-ranked people.",
                 "operationId": "getTopPeople",
                 "parameters": [
                     {
@@ -3369,6 +3586,8 @@
                 "tags": [
                     "top"
                 ],
+                "summary": "Top characters",
+                "description": "Returns the top-ranked characters.",
                 "operationId": "getTopCharacters",
                 "parameters": [
                     {
@@ -3400,6 +3619,8 @@
                 "tags": [
                     "top"
                 ],
+                "summary": "Top reviews",
+                "description": "Returns the top-ranked reviews. Query parameters: **type, **preliminary, **spoilers**.",
                 "operationId": "getTopReviews",
                 "parameters": [
                     {
@@ -3442,6 +3663,9 @@
                                         "data": {
                                             "allOf": [
                                                 {
+                                                    "$ref": "#/components/schemas/pagination"
+                                                },
+                                                {
                                                     "properties": {
                                                         "data": {
                                                             "type": "array",
@@ -3450,12 +3674,7 @@
                                                                     {
                                                                         "allOf": [
                                                                             {
-                                                                                "properties": {
-                                                                                    "user": {
-                                                                                        "$ref": "#/components/schemas/user_meta"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
+                                                                                "$ref": "#/components/schemas/anime_review"
                                                                             },
                                                                             {
                                                                                 "properties": {
@@ -3466,19 +3685,19 @@
                                                                                 "type": "object"
                                                                             },
                                                                             {
-                                                                                "$ref": "#/components/schemas/anime_review"
-                                                                            }
-                                                                        ]
-                                                                    },
-                                                                    {
-                                                                        "allOf": [
-                                                                            {
                                                                                 "properties": {
                                                                                     "user": {
                                                                                         "$ref": "#/components/schemas/user_meta"
                                                                                     }
                                                                                 },
                                                                                 "type": "object"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "#/components/schemas/manga_review"
                                                                             },
                                                                             {
                                                                                 "properties": {
@@ -3489,7 +3708,12 @@
                                                                                 "type": "object"
                                                                             },
                                                                             {
-                                                                                "$ref": "#/components/schemas/manga_review"
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "$ref": "#/components/schemas/user_meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
                                                                             }
                                                                         ]
                                                                     }
@@ -3498,9 +3722,6 @@
                                                         }
                                                     },
                                                     "type": "object"
-                                                },
-                                                {
-                                                    "$ref": "#/components/schemas/pagination"
                                                 }
                                             ]
                                         }
@@ -3521,6 +3742,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "Complete user profile",
+                "description": "Retrieves the complete user profile for the user identified by **username**.",
                 "operationId": "getUserFullProfile",
                 "parameters": [
                     {
@@ -3559,6 +3782,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User profile",
+                "description": "Retrieves the user profile for the user identified by **username**.",
                 "operationId": "getUserProfile",
                 "parameters": [
                     {
@@ -3597,6 +3822,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User statistics",
+                "description": "Retrieves the user statistics for the user identified by **username**.",
                 "operationId": "getUserStatistics",
                 "parameters": [
                     {
@@ -3630,6 +3857,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User favorites",
+                "description": "Retrieves the user favorites for the user identified by **username**.",
                 "operationId": "getUserFavorites",
                 "parameters": [
                     {
@@ -3668,6 +3897,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User updates",
+                "description": "Retrieves the user updates for the user identified by **username**.",
                 "operationId": "getUserUpdates",
                 "parameters": [
                     {
@@ -3701,6 +3932,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User about",
+                "description": "Retrieves the user about for the user identified by **username**.",
                 "operationId": "getUserAbout",
                 "parameters": [
                     {
@@ -3734,6 +3967,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User history",
+                "description": "Retrieves the user history for the user identified by **username**. Filters: **type**.",
                 "operationId": "getUserHistory",
                 "parameters": [
                     {
@@ -3779,6 +4014,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User friends",
+                "description": "Retrieves the user friends for the user identified by **username**.",
                 "operationId": "getUserFriends",
                 "parameters": [
                     {
@@ -3815,7 +4052,8 @@
                 "tags": [
                     "users"
                 ],
-                "description": "User Anime lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+                "summary": "User animelist",
+                "description": "Retrieves the user animelist for the user identified by **username**. Filters: **status**.\n\nUser Anime lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
                 "operationId": "getUserAnimelist",
                 "parameters": [
                     {
@@ -3855,7 +4093,8 @@
                 "tags": [
                     "users"
                 ],
-                "description": "User Manga lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+                "summary": "User manga list",
+                "description": "Retrieves the user manga list for the user identified by **username**. Filters: **status**.\n\nUser Manga lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
                 "operationId": "getUserMangaList",
                 "parameters": [
                     {
@@ -3895,6 +4134,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User reviews",
+                "description": "Retrieves the user reviews for the user identified by **username**.",
                 "operationId": "getUserReviews",
                 "parameters": [
                     {
@@ -3919,6 +4160,9 @@
                                         "data": {
                                             "allOf": [
                                                 {
+                                                    "$ref": "#/components/schemas/pagination"
+                                                },
+                                                {
                                                     "properties": {
                                                         "data": {
                                                             "type": "array",
@@ -3927,12 +4171,7 @@
                                                                     {
                                                                         "allOf": [
                                                                             {
-                                                                                "properties": {
-                                                                                    "user": {
-                                                                                        "$ref": "#/components/schemas/user_meta"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
+                                                                                "$ref": "#/components/schemas/anime_review"
                                                                             },
                                                                             {
                                                                                 "properties": {
@@ -3943,19 +4182,19 @@
                                                                                 "type": "object"
                                                                             },
                                                                             {
-                                                                                "$ref": "#/components/schemas/anime_review"
-                                                                            }
-                                                                        ]
-                                                                    },
-                                                                    {
-                                                                        "allOf": [
-                                                                            {
                                                                                 "properties": {
                                                                                     "user": {
                                                                                         "$ref": "#/components/schemas/user_meta"
                                                                                     }
                                                                                 },
                                                                                 "type": "object"
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "#/components/schemas/manga_review"
                                                                             },
                                                                             {
                                                                                 "properties": {
@@ -3966,7 +4205,12 @@
                                                                                 "type": "object"
                                                                             },
                                                                             {
-                                                                                "$ref": "#/components/schemas/manga_review"
+                                                                                "properties": {
+                                                                                    "user": {
+                                                                                        "$ref": "#/components/schemas/user_meta"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
                                                                             }
                                                                         ]
                                                                     }
@@ -3975,9 +4219,6 @@
                                                         }
                                                     },
                                                     "type": "object"
-                                                },
-                                                {
-                                                    "$ref": "#/components/schemas/pagination"
                                                 }
                                             ]
                                         }
@@ -3998,6 +4239,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User recommendations",
+                "description": "Retrieves the user recommendations for the user identified by **username**.",
                 "operationId": "getUserRecommendations",
                 "parameters": [
                     {
@@ -4034,6 +4277,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User clubs",
+                "description": "Retrieves the user clubs for the user identified by **username**.",
                 "operationId": "getUserClubs",
                 "parameters": [
                     {
@@ -4070,6 +4315,8 @@
                 "tags": [
                     "users"
                 ],
+                "summary": "User external links",
+                "description": "Retrieves the user external links for the user identified by **username**.",
                 "operationId": "getUserExternal",
                 "parameters": [
                     {
@@ -4098,11 +4345,52 @@
                 }
             }
         },
+        "/users/recentlyonline": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Recently online users",
+                "description": "Returns the users currently online or recently online.",
+                "operationId": "getRecentlyOnlineUsers",
+                "responses": {
+                    "200": {
+                        "description": "Returns recently online users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "allOf": [
+                                        {
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "allOf": [
+                                                            {
+                                                                "$ref": "#/components/schemas/basic_user"
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/watch/episodes": {
             "get": {
                 "tags": [
                     "watch"
                 ],
+                "summary": "Recently added episodes",
+                "description": "Returns recently added episodes currently trending on MyAnimeList.",
                 "operationId": "getWatchRecentEpisodes",
                 "responses": {
                     "200": {
@@ -4126,6 +4414,8 @@
                 "tags": [
                     "watch"
                 ],
+                "summary": "Popular episodes",
+                "description": "Returns popular episodes currently trending on MyAnimeList.",
                 "operationId": "getWatchPopularEpisodes",
                 "responses": {
                     "200": {
@@ -4149,6 +4439,8 @@
                 "tags": [
                     "watch"
                 ],
+                "summary": "Recently added promotional videos",
+                "description": "Returns recently added promotional videos currently trending on MyAnimeList.",
                 "operationId": "getWatchRecentPromos",
                 "parameters": [
                     {
@@ -4177,6 +4469,8 @@
                 "tags": [
                     "watch"
                 ],
+                "summary": "Popular promotional videos",
+                "description": "Returns popular promotional videos currently trending on MyAnimeList.",
                 "operationId": "getWatchPopularPromos",
                 "responses": {
                     "200": {
@@ -4249,12 +4543,34 @@
                 ]
             },
             "anime_search_query_type": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/anime_types"
-                    }
-                ],
-                "description": "Available Anime types"
+                "description": "Available Anime types",
+                "type": "string",
+                "enum": [
+                    "tv",
+                    "movie",
+                    "ova",
+                    "special",
+                    "ona",
+                    "music",
+                    "cm",
+                    "pv",
+                    "tv_special"
+                ]
+            },
+            "anime_types": {
+                "description": "Anime Type",
+                "type": "string",
+                "enum": [
+                    "TV",
+                    "OVA",
+                    "Movie",
+                    "Special",
+                    "ONA",
+                    "Music",
+                    "CM",
+                    "PV",
+                    "TV Special"
+                ]
             },
             "characters_search_query_orderby": {
                 "description": "Available Character order_by properties",
@@ -4445,6 +4761,9 @@
                 "description": "Anime Episodes Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -4480,10 +4799,11 @@
                                         },
                                         "score": {
                                             "description": "Aggregated episode score (1.00 - 5.00) based on MyAnimeList user voting",
-                                            "type": "float",
-                                            "maximum": "5",
-                                            "minimum": "1",
-                                            "nullable": true
+                                            "type": "number",
+                                            "format": "float",
+                                            "nullable": true,
+                                            "maximum": 5,
+                                            "minimum": 1
                                         },
                                         "filler": {
                                             "description": "Filler episode",
@@ -4504,9 +4824,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -4524,6 +4841,9 @@
             "anime_videos_episodes": {
                 "description": "Anime Videos Episodes Resource",
                 "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
                     {
                         "properties": {
                             "data": {
@@ -4555,9 +4875,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -4675,6 +4992,9 @@
                 "description": "Anime resources currently airing",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination_plus"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -4684,15 +5004,15 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
             "users_search": {
                 "description": "User Results",
                 "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
                     {
                         "properties": {
                             "data": {
@@ -4720,9 +5040,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -4775,6 +5092,9 @@
                 "description": "User Friends",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -4807,15 +5127,15 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
             "user_clubs": {
                 "description": "User Clubs",
                 "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
                     {
                         "properties": {
                             "data": {
@@ -4840,15 +5160,29 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
+            },
+            "basic_user": {
+                "description": "Basic user meta data",
+                "properties": {
+                    "username": {
+                        "description": "MyAnimeList Username",
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "MyAnimeList URL",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
             },
             "watch_episodes": {
                 "description": "Watch Episodes",
                 "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
                     {
                         "properties": {
                             "data": {
@@ -4893,9 +5227,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -4906,12 +5237,10 @@
                         "$ref": "#/components/schemas/pagination"
                     },
                     {
-                        "type": "object",
                         "properties": {
                             "data": {
                                 "type": "array",
                                 "items": {
-                                    "type": "object",
                                     "properties": {
                                         "title": {
                                             "description": "Promo Title",
@@ -4923,10 +5252,12 @@
                                         "trailer": {
                                             "$ref": "#/components/schemas/trailer"
                                         }
-                                    }
+                                    },
+                                    "type": "object"
                                 }
                             }
-                        }
+                        },
+                        "type": "object"
                     }
                 ]
             },
@@ -5001,6 +5332,9 @@
                 "description": "Anime Collection Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination_plus"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -5010,9 +5344,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
@@ -5121,12 +5452,17 @@
                         "deprecated": true
                     },
                     "type": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/anime_types"
-                            }
-                        ],
-                        "nullable": true
+                        "description": "Anime Type",
+                        "type": "string",
+                        "nullable": true,
+                        "enum": [
+                            "TV",
+                            "OVA",
+                            "Movie",
+                            "Special",
+                            "ONA",
+                            "Music"
+                        ]
                     },
                     "source": {
                         "description": "Original Material/Source adapted from",
@@ -5141,12 +5477,12 @@
                     "status": {
                         "description": "Airing status",
                         "type": "string",
+                        "nullable": true,
                         "enum": [
                             "Finished Airing",
                             "Currently Airing",
                             "Not yet aired"
-                        ],
-                        "nullable": true
+                        ]
                     },
                     "airing": {
                         "description": "Airing boolean",
@@ -5163,6 +5499,7 @@
                     "rating": {
                         "description": "Anime audience rating",
                         "type": "string",
+                        "nullable": true,
                         "enum": [
                             "G - All Ages",
                             "PG - Children",
@@ -5170,8 +5507,7 @@
                             "R - 17+ (violence & profanity)",
                             "R+ - Mild Nudity",
                             "Rx - Hentai"
-                        ],
-                        "nullable": true
+                        ]
                     },
                     "score": {
                         "description": "Score",
@@ -5217,13 +5553,13 @@
                     "season": {
                         "description": "Season",
                         "type": "string",
+                        "nullable": true,
                         "enum": [
                             "summer",
                             "winter",
                             "spring",
                             "fall"
-                        ],
-                        "nullable": true
+                        ]
                     },
                     "year": {
                         "description": "Year",
@@ -5419,12 +5755,17 @@
                         "deprecated": true
                     },
                     "type": {
-                        "allOf": [
-                            {
-                                "$ref": "#/components/schemas/anime_types"
-                            }
-                        ],
-                        "nullable": true
+                        "description": "Anime Type",
+                        "type": "string",
+                        "nullable": true,
+                        "enum": [
+                            "TV",
+                            "OVA",
+                            "Movie",
+                            "Special",
+                            "ONA",
+                            "Music"
+                        ]
                     },
                     "source": {
                         "description": "Original Material/Source adapted from",
@@ -5439,12 +5780,12 @@
                     "status": {
                         "description": "Airing status",
                         "type": "string",
+                        "nullable": true,
                         "enum": [
                             "Finished Airing",
                             "Currently Airing",
                             "Not yet aired"
-                        ],
-                        "nullable": true
+                        ]
                     },
                     "airing": {
                         "description": "Airing boolean",
@@ -5461,6 +5802,7 @@
                     "rating": {
                         "description": "Anime audience rating",
                         "type": "string",
+                        "nullable": true,
                         "enum": [
                             "G - All Ages",
                             "PG - Children",
@@ -5468,8 +5810,7 @@
                             "R - 17+ (violence & profanity)",
                             "R+ - Mild Nudity",
                             "Rx - Hentai"
-                        ],
-                        "nullable": true
+                        ]
                     },
                     "score": {
                         "description": "Score",
@@ -5515,13 +5856,13 @@
                     "season": {
                         "description": "Season",
                         "type": "string",
+                        "nullable": true,
                         "enum": [
                             "summer",
                             "winter",
                             "spring",
                             "fall"
-                        ],
-                        "nullable": true
+                        ]
                     },
                     "year": {
                         "description": "Year",
@@ -5778,21 +6119,6 @@
                 },
                 "type": "object"
             },
-            "anime_types": {
-                "description": "Anime Type",
-                "type": "string",
-                "enum": [
-                    "TV",
-                    "OVA",
-                    "Movie",
-                    "Special",
-                    "ONA",
-                    "Music",
-                    "CM",
-                    "PV",
-                    "TV Special"
-                ]
-            },
             "character_anime": {
                 "description": "Character casted in anime",
                 "properties": {
@@ -5818,6 +6144,9 @@
                 "description": "Characters Search Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination_plus"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -5827,9 +6156,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
@@ -6008,6 +6334,9 @@
                 "description": "Clubs Search Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -6017,9 +6346,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -6862,6 +7188,9 @@
                 "description": "Magazine Collection Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -6871,9 +7200,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -6924,6 +7250,9 @@
                 "description": "Manga Search Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination_plus"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -6933,9 +7262,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
@@ -6992,6 +7318,7 @@
                     "type": {
                         "description": "Manga Type",
                         "type": "string",
+                        "nullable": true,
                         "enum": [
                             "Manga",
                             "Novel",
@@ -7001,8 +7328,7 @@
                             "Manhua",
                             "Manhwa",
                             "OEL"
-                        ],
-                        "nullable": true
+                        ]
                     },
                     "chapters": {
                         "description": "Chapter count",
@@ -7189,6 +7515,7 @@
                     "type": {
                         "description": "Manga Type",
                         "type": "string",
+                        "nullable": true,
                         "enum": [
                             "Manga",
                             "Novel",
@@ -7198,8 +7525,7 @@
                             "Manhua",
                             "Manhwa",
                             "OEL"
-                        ],
-                        "nullable": true
+                        ]
                     },
                     "chapters": {
                         "description": "Chapter count",
@@ -7458,6 +7784,9 @@
                 "description": "People Search",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination_plus"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -7471,9 +7800,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination_plus"
                     }
                 ]
             },
@@ -7722,6 +8048,9 @@
                 "description": "Producers Collection Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -7731,9 +8060,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -7862,6 +8188,9 @@
                             "type": "object",
                             "allOf": [
                                 {
+                                    "$ref": "#/components/schemas/anime_meta"
+                                },
+                                {
                                     "properties": {
                                         "type": {
                                             "type": "string"
@@ -7871,9 +8200,6 @@
                                         }
                                     },
                                     "type": "object"
-                                },
-                                {
-                                    "$ref": "#/components/schemas/anime_meta"
                                 }
                             ]
                         }
@@ -7885,6 +8211,9 @@
                             "type": "object",
                             "allOf": [
                                 {
+                                    "$ref": "#/components/schemas/manga_meta"
+                                },
+                                {
                                     "properties": {
                                         "type": {
                                             "type": "string"
@@ -7894,9 +8223,6 @@
                                         }
                                     },
                                     "type": "object"
-                                },
-                                {
-                                    "$ref": "#/components/schemas/manga_meta"
                                 }
                             ]
                         }
@@ -7927,7 +8253,6 @@
                 "type": "object"
             },
             "user_profile_full": {
-                "description": "Transform the resource into an array.",
                 "properties": {
                     "mal_id": {
                         "description": "MyAnimeList ID",
@@ -8104,7 +8429,6 @@
                 "type": "object"
             },
             "history": {
-                "description": "Transform the resource into an array.",
                 "properties": {
                     "entry": {
                         "$ref": "#/components/schemas/mal_url"
@@ -8267,7 +8591,6 @@
                 "type": "object"
             },
             "users_temp": {
-                "description": "Transform the resource into an array.",
                 "properties": {
                     "data": {
                         "type": "array",
@@ -8590,6 +8913,9 @@
                 "description": "Recommendations",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -8627,9 +8953,6 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -8840,6 +9163,9 @@
                 "description": "Anime Reviews Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -8847,24 +9173,21 @@
                                     "type": "object",
                                     "allOf": [
                                         {
+                                            "$ref": "#/components/schemas/anime_review"
+                                        },
+                                        {
                                             "properties": {
                                                 "user": {
                                                     "$ref": "#/components/schemas/user_meta"
                                                 }
                                             },
                                             "type": "object"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/anime_review"
                                         }
                                     ]
                                 }
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -8872,6 +9195,9 @@
                 "description": "Manga Reviews Resource",
                 "allOf": [
                     {
+                        "$ref": "#/components/schemas/pagination"
+                    },
+                    {
                         "properties": {
                             "data": {
                                 "type": "array",
@@ -8879,24 +9205,21 @@
                                     "type": "object",
                                     "allOf": [
                                         {
+                                            "$ref": "#/components/schemas/manga_review"
+                                        },
+                                        {
                                             "properties": {
                                                 "user": {
                                                     "$ref": "#/components/schemas/user_meta"
                                                 }
                                             },
                                             "type": "object"
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/manga_review"
                                         }
                                     ]
                                 }
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
@@ -8923,6 +9246,9 @@
             "anime_userupdates": {
                 "description": "Anime User Updates Resource",
                 "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
                     {
                         "properties": {
                             "data": {
@@ -8961,15 +9287,15 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
             },
             "manga_userupdates": {
                 "description": "Manga User Updates Resource",
                 "allOf": [
+                    {
+                        "$ref": "#/components/schemas/pagination"
+                    },
                     {
                         "properties": {
                             "data": {
@@ -9014,16 +9340,8 @@
                             }
                         },
                         "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/pagination"
                     }
                 ]
-            }
-        },
-        "responses": {
-            "400": {
-                "description": "Error: Bad request. When required parameters were not supplied."
             }
         },
         "parameters": {
@@ -9097,6 +9415,72 @@
             }
         }
     },
+    "tags": [
+        {
+            "name": "anime",
+            "description": "anime"
+        },
+        {
+            "name": "characters",
+            "description": "characters"
+        },
+        {
+            "name": "clubs",
+            "description": "clubs"
+        },
+        {
+            "name": "genres",
+            "description": "genres"
+        },
+        {
+            "name": "magazines",
+            "description": "magazines"
+        },
+        {
+            "name": "manga",
+            "description": "manga"
+        },
+        {
+            "name": "people",
+            "description": "people"
+        },
+        {
+            "name": "producers",
+            "description": "producers"
+        },
+        {
+            "name": "random",
+            "description": "random"
+        },
+        {
+            "name": "recommendations",
+            "description": "recommendations"
+        },
+        {
+            "name": "reviews",
+            "description": "reviews"
+        },
+        {
+            "name": "schedules",
+            "description": "schedules"
+        },
+        {
+            "name": "users",
+            "description": "users"
+        },
+        {
+            "name": "seasons",
+            "description": "seasons"
+        },
+        {
+            "name": "top",
+            "description": "top"
+        },
+        {
+            "name": "watch",
+            "description": "watch"
+        }
+    ],
     "externalDocs": {
         "description": "About",
         "url": "https://jikan.moe"

@@ -956,3 +956,32 @@ Per request, the canonical URLs are now:
   Parity harness only tracks `/docs` (still 301), so no ratchet needed.
 - Verified: `/v4/docs` 200 (Scalar), `/v4/docs/openapi` 200 `application/json`
   (100 paths), `/v4/api-docs` 301, Swagger UI path 404. endpoint-parity clean.
+
+
+## 22. Richer generated docs: @OA prose + docblock→attribute migration (2026-10-12)
+
+- **Every operation now carries `summary` + `description`** (curated per
+  endpoint; param-aware descriptions). Previously 0/100 had a summary.
+- **Cause found:** `l5-swagger:generate` was silently broken — swagger-php 6.13
+  does not parse legacy docblock `@OA\` annotations anymore (structurally
+  verified: even a canonical docblock fixture yields zero operations);
+  generation was failing to exit 0 on the pristine tree.
+- **Fixed by migrating the docblock annotations to PHP 8 attributes**:
+  `app/Http/Controllers/V4DB/*` (101 `#[OA\Get(...)]` on owning methods),
+  `app/Http/Resources/V4/*` + `app/Enums/*` (class-level `#[OA\Schema(...)]`),
+  `app/Dto/Concerns/*` (`#[OA\Parameter(...)]`). Only annotation syntax
+  changed — zero runtime effect (verified: pristine tree fails the same
+  integration tests, so the suite state is environmental, not this change).
+- **Result:** `l5-swagger:generate` exit 0; spec = **101 operations, 101 with
+  summaries, 127 component schemas** (+`basic_user`), 8 reusable parameter
+  components restored; `storage/api-docs/api-docs.json` regenerated.
+- Config: `config/l5-swagger.php` adds `app/Enums` to the scan paths (the
+  enum-filter schemas were referenced but never scanned).
+- Audits: `endpoint-parity` + `route-coverage` still clean after adding
+  `#[OA\Get/Post/...]` markers to `.backend-suite/arch-rules.json`
+  (`docMarkers`). The audit plugin itself also needs attribute support — a
+  local patch lives at `/tmp/audit_endpoint_parity.py.patched` (candidate
+  upstream backend-quality-suite PR).
+- Docs nuance: Scalar renders the enriched prose now. Follow-up if desired:
+  migrate remaining integration-test environmental breakage (Typesense-running
+  + missing cached MAL fixtures) so the suite returns to fully green locally.
