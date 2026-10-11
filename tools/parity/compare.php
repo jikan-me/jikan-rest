@@ -16,8 +16,8 @@
 declare(strict_types=1);
 
 $options = getopt('', ['baseline::', 'candidate::']);
-$base = rtrim($options['baseline'] ?? __DIR__ . '/baseline', '/');
-$cand = rtrim($options['candidate'] ?? __DIR__ . '/candidate', '/');
+$base = rtrim($options['baseline'] ?? __DIR__.'/baseline', '/');
+$cand = rtrim($options['candidate'] ?? __DIR__.'/candidate', '/');
 
 function loadJson(string $file): mixed
 {
@@ -36,9 +36,10 @@ $problems = 0;
 
 // 1. Presence + status parity.
 foreach ($baseMeta as $slug => $bm) {
-    if (!isset($candMeta[$slug])) {
+    if (! isset($candMeta[$slug])) {
         echo "MISSING      {$slug}\n";
         $problems++;
+
         continue;
     }
     if ((int) $bm['status'] !== (int) $candMeta[$slug]['status']) {
@@ -48,7 +49,7 @@ foreach ($baseMeta as $slug => $bm) {
 }
 
 foreach ($candMeta as $slug => $cm) {
-    if (!isset($baseMeta[$slug])) {
+    if (! isset($baseMeta[$slug])) {
         echo "EXTRA        {$slug}\n";
         $problems++;
     }
@@ -60,9 +61,10 @@ sort($shapeFiles);
 foreach ($shapeFiles as $baseFile) {
     $slug = basename($baseFile, '.json');
     $candFile = "{$cand}/shape/{$slug}.json";
-    if (!is_file($candFile)) {
+    if (! is_file($candFile)) {
         echo "SHAPE MISSING {$slug}\n";
         $problems++;
+
         continue;
     }
     $bs = json_encode(loadJson($baseFile));

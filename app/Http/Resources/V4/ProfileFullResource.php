@@ -2,17 +2,18 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Profile;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Profile */
+/** @mixin Profile */
 class ProfileFullResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
-     *
      *
      * @OA\Schema(
      *     schema="user_profile_full",
@@ -228,13 +229,13 @@ class ProfileFullResource extends JsonResource
             'location' => $this->location,
             'joined' => $this->joined,
             'statistics' => [
-                'anime'=> $this->anime_stats,
-                'manga'=> $this->manga_stats,
+                'anime' => $this->anime_stats,
+                'manga' => $this->manga_stats,
             ],
             'favorites' => $this->favorites,
             'updates' => $this->last_updates,
             'about' => $this->about,
-            'external' => $this->external_links
+            'external' => $this->external_links,
         ];
     }
 }

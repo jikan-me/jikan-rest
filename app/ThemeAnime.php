@@ -6,7 +6,6 @@ use App\Filters\FilterQueryString;
 
 /**
  * Class ThemeAnime
- * @package App
  */
 class ThemeAnime extends JikanApiModel
 {
@@ -16,12 +15,12 @@ class ThemeAnime extends JikanApiModel
 
     protected $fillable = [
         'mal_id', 'name', 'url', 'count',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     protected $table = 'themes_anime';
 
     protected $hidden = [
-        '_id', 'expiresAt'
+        '_id', 'expiresAt',
     ];
 }

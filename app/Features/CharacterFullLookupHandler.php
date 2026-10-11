@@ -19,7 +19,7 @@ final class CharacterFullLookupHandler extends ItemLookupHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

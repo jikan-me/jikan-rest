@@ -5,8 +5,11 @@ namespace App;
 use App\Concerns\FilteredByLetter;
 use App\Enums\ClubCategoryEnum;
 use App\Enums\ClubTypeEnum;
+use Database\Factories\ClubFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Club\ClubRequest;
+use Laravel\Scout\Builder;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Mongo-backed club document. Attributes are magic (from the collection); the
@@ -20,16 +23,17 @@ use Jikan\Request\Club\ClubRequest;
  * @property string $category
  * @property string $type
  * @property string $access
- * @property \MongoDB\BSON\UTCDateTime|null $created
- * @property \MongoDB\BSON\UTCDateTime|null $createdAt
- * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
- * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\ClubFactory>
+ * @property UTCDateTime|null $created
+ * @property UTCDateTime|null $createdAt
+ * @property UTCDateTime|null $modifiedAt
+ *
+ * @use HasFactory<ClubFactory>
  */
 class Club extends JikanApiSearchableModel
 {
     use FilteredByLetter, HasFactory;
 
-    protected array $filters = ["order_by", "sort", "letter", "category", "type"];
+    protected array $filters = ['order_by', 'sort', 'letter', 'category', 'type'];
 
     /**
      * The attributes that are mass assignable.
@@ -37,7 +41,7 @@ class Club extends JikanApiSearchableModel
      * @var list<string>
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'name', 'members', 'category', 'created', 'access', 'anime', 'manga', 'created_at', 'updated_at', 'characters', 'staff'
+        'mal_id', 'url', 'images', 'name', 'members', 'category', 'created', 'access', 'anime', 'manga', 'created_at', 'updated_at', 'characters', 'staff',
     ];
 
     /**
@@ -60,33 +64,33 @@ class Club extends JikanApiSearchableModel
      * @var list<string>
      */
     protected $hidden = [
-        '_id', 'request_hash', 'expiresAt'
+        '_id', 'request_hash', 'expiresAt',
     ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->displayNameFieldName = "name";
+        $this->displayNameFieldName = 'name';
     }
 
     /** @noinspection PhpUnused */
     /**
-     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
-     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
      */
-    public function filterByCategory(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubCategoryEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    public function filterByCategory(Builder|\Illuminate\Database\Eloquent\Builder $query, ClubCategoryEnum $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("category", $value->label);
+        return $query->where('category', $value->label);
     }
 
     /** @noinspection PhpUnused */
     /**
-     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
-     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
      */
-    public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    public function filterByType(Builder|\Illuminate\Database\Eloquent\Builder $query, ClubTypeEnum $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("access", $value->label);
+        return $query->where('access', $value->label);
     }
 
     /** @noinspection PhpUnused */
@@ -124,7 +128,7 @@ class Club extends JikanApiSearchableModel
             'category' => $this->category,
             'created' => $this->convertToTimestamp($this->created),
             'access' => $this->type,
-            'members' => $this->members
+            'members' => $this->members,
         ];
     }
 

@@ -31,14 +31,14 @@ final class QueryMangaListOfUserCommand extends QueryListOfUserCommand
 
     #[
         WithCast(EnumCast::class, UserMangaListOrderByEnum::class),
-        MapInputName("order_by"),
+        MapInputName('order_by'),
         EnumValidation(UserMangaListOrderByEnum::class)
     ]
     public UserMangaListOrderByEnum|Optional $orderBy;
 
     #[
         WithCast(EnumCast::class, UserMangaListOrderByEnum::class),
-        MapInputName("order_by2"),
+        MapInputName('order_by2'),
         EnumValidation(UserMangaListOrderByEnum::class)
     ]
     public UserMangaListOrderByEnum|Optional $orderBy2;
@@ -47,38 +47,38 @@ final class QueryMangaListOfUserCommand extends QueryListOfUserCommand
     public int|Optional $magazine;
 
     #[
-        BeforeOrEqual("published_to"),
-        DateFormat("Y-m-d"),
+        BeforeOrEqual('published_to'),
+        DateFormat('Y-m-d'),
         Sometimes,
         Required,
         WithCast(DateTimeInterfaceCast::class),
         WithTransformer(DateTimeInterfaceTransformer::class),
-        MapInputName("published_from")
+        MapInputName('published_from')
     ]
     public CarbonImmutable|Optional $publishedFrom;
 
     #[
-        AfterOrEqual("published_from"),
-        DateFormat("Y-m-d"),
+        AfterOrEqual('published_from'),
+        DateFormat('Y-m-d'),
         Sometimes,
         Required,
         WithCast(DateTimeInterfaceCast::class),
         WithTransformer(DateTimeInterfaceTransformer::class),
-        MapInputName("published_to")
+        MapInputName('published_to')
     ]
     public CarbonImmutable|Optional $publishedTo;
 
     #[
         WithCast(EnumCast::class, UserMangaListStatusFilterEnum::class),
         EnumValidation(UserMangaListStatusFilterEnum::class),
-        MapInputName("publishing_status")
+        MapInputName('publishing_status')
     ]
     public UserMangaListStatusFilterEnum|Optional $publishingStatus;
-
 
     public function toJikanParserRequest(): UserMangaListRequest
     {
         $mapper = app(JikanUserListRequestMapperService::class);
+
         return $mapper->map($this, UserListTypeEnum::manga());
     }
 }

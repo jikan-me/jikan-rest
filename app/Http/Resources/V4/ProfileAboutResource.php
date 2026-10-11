@@ -2,14 +2,15 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Profile;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Profile */
+/** @mixin Profile */
 class ProfileAboutResource extends JsonResource
 {
-
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      *
      * @OA\Schema(
@@ -19,8 +20,10 @@ class ProfileAboutResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
+     *
      *              @OA\Property(
      *                  property="about",
      *                  type="string",
@@ -37,7 +40,7 @@ class ProfileAboutResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'about' => $this->about
+            'about' => $this->about,
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\SourceHeartbeatProvider;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,10 +31,10 @@ Route::get('/', function () {
         'production_api_url' => 'https://api.jikan.moe/v4/',
         'status_url' => 'https://status.jikan.moe',
         'myanimelist_heartbeat' => [
-            'status' => \App\Providers\SourceHeartbeatProvider::getHeartbeatStatus(),
-            'score' => \App\Providers\SourceHeartbeatProvider::getHeartbeatScore(),
-            'down' => \App\Providers\SourceHeartbeatProvider::isFailoverEnabled(),
-            'last_downtime' => \App\Providers\SourceHeartbeatProvider::getLastDowntime(),
+            'status' => SourceHeartbeatProvider::getHeartbeatStatus(),
+            'score' => SourceHeartbeatProvider::getHeartbeatScore(),
+            'down' => SourceHeartbeatProvider::isFailoverEnabled(),
+            'last_downtime' => SourceHeartbeatProvider::getLastDowntime(),
         ],
     ]);
 });

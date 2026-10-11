@@ -2,6 +2,7 @@
 
 namespace App\Dto;
 
+use App\Casts\EnumCast;
 use App\Contracts\DataRequest;
 use App\Enums\AnimeOrderByEnum;
 use App\Enums\AnimeRatingEnum;
@@ -16,7 +17,6 @@ use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Prohibits;
 use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
-use App\Casts\EnumCast;
 use Spatie\LaravelData\Optional;
 
 /**
@@ -36,12 +36,12 @@ final class AnimeSearchCommand extends MediaSearchCommand implements DataRequest
     #[IntegerType, Min(1)]
     public int|Optional $producer;
 
-    #[Prohibits("producer"), StringType]
+    #[Prohibits('producer'), StringType]
     public string|Optional $producers;
 
     #[
-        MapInputName("order_by"),
-        MapOutputName("order_by"),
+        MapInputName('order_by'),
+        MapOutputName('order_by'),
         WithCast(EnumCast::class, AnimeOrderByEnum::class),
         EnumValidation(AnimeOrderByEnum::class)
     ]

@@ -15,7 +15,7 @@ use Jikan\Request\Anime\AnimeRecentlyUpdatedByUsersRequest;
 final class AnimeUserUpdatesLookupHandler extends RequestHandlerWithScraperCache
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -23,18 +23,18 @@ final class AnimeUserUpdatesLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
+        $id = $requestParams->get('id');
 
         return $this->scraperService->findList(
             $requestFingerPrint,
             fn (MalClient $jikan, ?int $page = null) => $jikan->getAnimeRecentlyUpdatedByUsers(
                 new AnimeRecentlyUpdatedByUsersRequest($id, $page)
             ),
-            $requestParams->get("page", 1)
+            $requestParams->get('page', 1)
         );
     }
 }

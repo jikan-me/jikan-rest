@@ -2,17 +2,18 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Profile;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Profile */
+/** @mixin Profile */
 class ProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
-     *
      *
      * @OA\Schema(
      *     schema="user_profile",
@@ -70,6 +71,7 @@ class ProfileResource extends JsonResource
      *          nullable=true
      *      ),
      *  ),
+     *
      * @OA\Schema(
      *     schema="users_temp",
      *     type="object",
@@ -77,6 +79,7 @@ class ProfileResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *
@@ -272,39 +275,47 @@ class ProfileResource extends JsonResource
      *                      property="anime",
      *                      type="array",
      *                      description="Favorite Anime",
+     *
      *                      @OA\Items(
      *                           type="object",
      *                           ref="#/components/schemas/entry_meta",
      *                      ),
      *                  ),
+     *
      *                  @OA\Property(
      *                      property="manga",
      *                      type="array",
      *                      description="Favorite Manga",
+     *
      *                      @OA\Items(
      *                           type="object",
      *                           ref="#/components/schemas/entry_meta",
      *                      ),
      *                  ),
+     *
      *                  @OA\Property(
      *                      property="characters",
      *                      type="array",
      *                      description="Favorite Characters",
+     *
      *                      @OA\Items(
      *                           type="object",
      *                           ref="#/components/schemas/entry_meta",
      *                      ),
      *                  ),
+     *
      *                  @OA\Property(
      *                      property="people",
      *                      type="array",
      *                      description="Favorite People",
+     *
      *                      @OA\Items(
      *                           type="object",
      *                           ref="#/components/schemas/entry_meta",
      *                      ),
      *                  ),
      *              ),
+     *
      *              @OA\Property(
      *                  property="about",
      *                  type="string",

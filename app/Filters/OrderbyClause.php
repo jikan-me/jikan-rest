@@ -1,12 +1,14 @@
 <?php
+
 namespace App\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class OrderbyClause extends BaseClause
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
+     * @return Builder<Model>
      */
     protected function apply($query): Builder
     {
@@ -19,7 +21,7 @@ class OrderbyClause extends BaseClause
 
     protected function validate(mixed $value): bool
     {
-        return !in_array(null, (array)$value);
+        return ! in_array(null, (array) $value);
     }
 
     /**
@@ -29,12 +31,13 @@ class OrderbyClause extends BaseClause
     {
         $normalized = [];
 
-        foreach ((array)$this->values as $value) {
+        foreach ((array) $this->values as $value) {
 
             $exploded = explode(',', $value);
 
-            if (!empty($exploded[1]) and in_array($exploded[1], ['asc', 'desc'])) {
+            if (! empty($exploded[1]) and in_array($exploded[1], ['asc', 'desc'])) {
                 $normalized[$exploded[0]] = $exploded[1];
+
                 continue;
             }
 

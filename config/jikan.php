@@ -30,7 +30,7 @@ return [
         'typo_tokens_threshold' => env('TYPESENSE_TYPO_TOKENS_THRESHOLD'),
         'drop_tokens_threshold' => env('TYPESENSE_DROP_TOKENS_THRESHOLD'),
         'search_cutoff_ms' => env('TYPESENSE_SEARCH_CUTOFF_MS', 450),
-        'exhaustive_search' => env('TYPESENSE_ENABLE_EXHAUSTIVE_SEARCH', 'false')
+        'exhaustive_search' => env('TYPESENSE_ENABLE_EXHAUSTIVE_SEARCH', 'false'),
     ],
     'per_endpoint_cache_ttl' => [
         /**
@@ -198,5 +198,5 @@ return [
         'RandomController@characters' => env('CACHE_DEFAULT_EXPIRE'),
         'RandomController@people' => env('CACHE_DEFAULT_EXPIRE'),
         'RandomController@users' => env('CACHE_DEFAULT_EXPIRE'),
-    ]
+    ],
 ];

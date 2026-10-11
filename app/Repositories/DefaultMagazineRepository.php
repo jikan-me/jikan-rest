@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Contracts\MagazineRepository;
-use App\Contracts\Repository;
 use App\Magazine;
 
 final class DefaultMagazineRepository extends DatabaseRepository implements MagazineRepository

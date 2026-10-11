@@ -4,6 +4,7 @@ namespace App\Contracts;
 
 use App\Person;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -12,7 +13,7 @@ use Laravel\Scout\Builder as ScoutBuilder;
 interface PeopleRepository extends Repository
 {
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Person>
+     * @return EloquentBuilder|Builder<Person>
      */
     public function topPeople(): EloquentBuilder|ScoutBuilder;
 }

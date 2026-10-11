@@ -12,6 +12,7 @@ class CommonIndexer extends Command
     /**
      * The name and signature of the console command.
      *`
+     *
      * @var string
      */
     protected $signature = 'indexer:common';
@@ -50,7 +51,7 @@ class CommonIndexer extends Command
         $results = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getMagazines(new MagazinesRequest()),
+                    ->getMagazines(new MagazinesRequest),
                 'json'
             ),
             true
@@ -58,6 +59,7 @@ class CommonIndexer extends Command
 
         if (HttpHelper::hasError($results)) {
             echo "FAILED: {$results->original['error']}\n";
+
             return;
         }
 
@@ -67,18 +69,18 @@ class CommonIndexer extends Command
             $result = DB::table('magazines')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
-        echo str_pad("Indexing complete", 10).PHP_EOL;
+        echo str_pad('Indexing complete', 10).PHP_EOL;
     }
 }

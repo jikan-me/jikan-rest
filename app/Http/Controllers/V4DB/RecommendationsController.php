@@ -7,7 +7,6 @@ use App\Dto\QueryMangaRecommendationsCommand;
 
 class RecommendationsController extends Controller
 {
-
     /**
      *  @OA\Get(
      *     path="/recommendations/anime",
@@ -19,16 +18,17 @@ class RecommendationsController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns recent anime recommendations",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/recommendations"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
-     *
      */
     public function anime(QueryAnimeRecommendationsCommand $command): mixed
     {
@@ -46,16 +46,17 @@ class RecommendationsController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns recent manga recommendations",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/recommendations"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
-     *
      */
     public function manga(QueryMangaRecommendationsCommand $command): mixed
     {

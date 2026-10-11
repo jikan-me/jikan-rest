@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * Class MangaSweepIndexer
- *
- * @package App\Console\Commands\Indexer
  */
 class MangaSweepIndexer extends Command
 {
@@ -43,6 +41,7 @@ class MangaSweepIndexer extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws FileNotFoundException
      */
     public function handle()
@@ -59,7 +58,7 @@ class MangaSweepIndexer extends Command
         $remove = [];
 
         foreach ($results as $result) {
-            if (!array_key_exists($result['mal_id'], $malIds)) {
+            if (! array_key_exists($result['mal_id'], $malIds)) {
                 $remove[] = $result['_id'];
             }
         }
@@ -69,7 +68,6 @@ class MangaSweepIndexer extends Command
     }
 
     /**
-     * @return array
      * @url https://github.com/purarue/mal-id-cache
      */
     /**

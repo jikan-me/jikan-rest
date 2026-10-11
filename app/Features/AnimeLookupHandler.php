@@ -19,7 +19,7 @@ final class AnimeLookupHandler extends ItemLookupHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

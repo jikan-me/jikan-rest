@@ -14,7 +14,7 @@ use Spatie\LaravelData\Optional;
 final class QueryRandomAnimeHandler implements RequestHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle($request): AnimeResource
     {
@@ -36,7 +36,7 @@ final class QueryRandomAnimeHandler implements RequestHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

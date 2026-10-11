@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @template T of JikanApiModel
+ *
  * @extends RepositoryQuery<T>
  */
 interface Repository extends RepositoryQuery
@@ -36,11 +37,10 @@ interface Repository extends RepositoryQuery
     /**
      * @return array<string, mixed>
      */
-    
     public function scrape(int|string $id): array;
 
     /**
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public function insert(array $attributes): bool;
 

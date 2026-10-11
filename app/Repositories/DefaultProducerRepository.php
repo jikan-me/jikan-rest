@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Contracts\ProducerRepository;
-use App\Contracts\Repository;
 use App\Producers;
 
 final class DefaultProducerRepository extends DatabaseRepository implements ProducerRepository

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnimeVideosResource extends JsonResource
@@ -9,7 +10,7 @@ class AnimeVideosResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
@@ -19,10 +20,10 @@ class AnimeVideosResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="object",
-     *
      *          @OA\Property(
      *               property="promo",
      *               type="array",
+     *
      *               @OA\Items(
      *                   type="object",
      *
@@ -43,6 +44,7 @@ class AnimeVideosResource extends JsonResource
      *
      *               @OA\Items(
      *                   type="object",
+     *
      *                   @OA\Property(
      *                       property="mal_id",
      *                       type="integer",
@@ -73,6 +75,7 @@ class AnimeVideosResource extends JsonResource
      *          @OA\Property(
      *               property="music_videos",
      *               type="array",
+     *
      *               @OA\Items(
      *                   type="object",
      *
@@ -88,7 +91,6 @@ class AnimeVideosResource extends JsonResource
      *                  @OA\Property (
      *                      type="object",
      *                      property="meta",
-     *
      *                      @OA\Property (
      *                          property="title",
      *                          type="string",

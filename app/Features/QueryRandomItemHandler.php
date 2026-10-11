@@ -2,9 +2,9 @@
 
 namespace App\Features;
 
+use App\Contracts\DataRequest;
 use App\Contracts\Repository;
 use App\Contracts\RequestHandler;
-use App\Contracts\DataRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -14,16 +14,15 @@ use Illuminate\Support\Collection;
 /**
  * @template TRequest of DataRequest
  * @template TResponse of ResourceCollection|JsonResource|JsonResponse|Response
+ *
  * @implements RequestHandler<TRequest, TResponse>
  */
 abstract class QueryRandomItemHandler implements RequestHandler
 {
-    protected function __construct(protected readonly Repository $repository)
-    {
-    }
+    protected function __construct(protected readonly Repository $repository) {}
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle($request)
     {
@@ -37,5 +36,5 @@ abstract class QueryRandomItemHandler implements RequestHandler
         return $this->resource($results);
     }
 
-    protected abstract function resource(Collection $results): JsonResource;
+    abstract protected function resource(Collection $results): JsonResource;
 }

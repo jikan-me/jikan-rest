@@ -21,7 +21,7 @@ final class CharacterOrderByEnum extends Enum
     protected static function labels(): array
     {
         return [
-            "favorites" => "member_favorites"
+            'favorites' => 'member_favorites',
         ];
     }
 }

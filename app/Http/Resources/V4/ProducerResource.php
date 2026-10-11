@@ -2,20 +2,23 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Producers;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Producers */
+/** @mixin Producers */
 class ProducerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
      *      schema="producer",
      *      description="Producers Resource",
+     *
      *      @OA\Property(
      *          property="mal_id",
      *          type="integer",
@@ -30,11 +33,13 @@ class ProducerResource extends JsonResource
      *          property="titles",
      *          type="array",
      *          description="All titles",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/title",
      *          ),
      *      ),
+     *
      *     @OA\Property(
      *         property="images",
      *         type="object",
@@ -77,7 +82,7 @@ class ProducerResource extends JsonResource
             'favorites' => $this->favorites ?? null,
             'established' => $this->established ?? null,
             'about' => $this->about ?? null,
-            'count' => $this->count ?? null
+            'count' => $this->count ?? null,
         ];
     }
 }

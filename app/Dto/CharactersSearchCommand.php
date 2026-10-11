@@ -17,7 +17,7 @@ use Spatie\LaravelData\Optional;
  */
 final class CharactersSearchCommand extends SearchCommand implements DataRequest
 {
-    #[MapInputName("order_by"), MapOutputName("order_by"),
+    #[MapInputName('order_by'), MapOutputName('order_by'),
         WithCast(EnumCast::class, CharacterOrderByEnum::class), EnumValidation(CharacterOrderByEnum::class)]
     public CharacterOrderByEnum|Optional $orderBy;
 }

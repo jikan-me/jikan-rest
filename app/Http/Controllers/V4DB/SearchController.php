@@ -15,7 +15,6 @@ use OpenApi\Annotations as OA;
 
 class SearchController extends Controller
 {
-
     /**
      *  @OA\Get(
      *     path="/anime",
@@ -25,22 +24,24 @@ class SearchController extends Controller
      *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/anime_search_query_type")
      *     ),
      *
      *     @OA\Parameter(
      *       name="score",
      *       in="query",
+     *
      *       @OA\Schema(type="number")
      *     ),
      *
@@ -48,6 +49,7 @@ class SearchController extends Controller
      *       name="min_score",
      *       description="Set a minimum score for results.",
      *       in="query",
+     *
      *       @OA\Schema(type="number")
      *     ),
      *
@@ -55,18 +57,21 @@ class SearchController extends Controller
      *       name="max_score",
      *       description="Set a maximum score for results",
      *       in="query",
+     *
      *       @OA\Schema(type="number")
      *     ),
      *
      *     @OA\Parameter(
      *       name="status",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/anime_search_query_status")
      *     ),
      *
      *     @OA\Parameter(
      *       name="rating",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/anime_search_query_rating")
      *     ),
      *
@@ -74,6 +79,7 @@ class SearchController extends Controller
      *       name="sfw",
      *       in="query",
      *       description="Filter out Adult entries",
+     *
      *       @OA\Schema(type="boolean")
      *     ),
      *
@@ -81,6 +87,7 @@ class SearchController extends Controller
      *       name="genres",
      *       in="query",
      *       description="Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -88,18 +95,21 @@ class SearchController extends Controller
      *       name="genres_exclude",
      *       in="query",
      *       description="Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/anime_search_query_orderby")
      *     ),
      *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
@@ -107,6 +117,7 @@ class SearchController extends Controller
      *       name="letter",
      *       in="query",
      *       description="Return entries starting with the given letter",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -114,6 +125,7 @@ class SearchController extends Controller
      *       name="producers",
      *       in="query",
      *       description="Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -121,6 +133,7 @@ class SearchController extends Controller
      *       name="start_date",
      *       in="query",
      *       description="Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -128,16 +141,19 @@ class SearchController extends Controller
      *       name="end_date",
      *       in="query",
      *       description="Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for anime",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_search"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -158,22 +174,24 @@ class SearchController extends Controller
      *     @OA\Parameter(ref="#/components/parameters/unapproved"),
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/manga_search_query_type")
      *     ),
      *
      *     @OA\Parameter(
      *       name="score",
      *       in="query",
+     *
      *       @OA\Schema(type="number")
      *     ),
      *
@@ -181,6 +199,7 @@ class SearchController extends Controller
      *       name="min_score",
      *       description="Set a minimum score for results.",
      *       in="query",
+     *
      *       @OA\Schema(type="number")
      *     ),
      *
@@ -188,12 +207,14 @@ class SearchController extends Controller
      *       name="max_score",
      *       description="Set a maximum score for results",
      *       in="query",
+     *
      *       @OA\Schema(type="number")
      *     ),
      *
      *     @OA\Parameter(
      *       name="status",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/manga_search_query_status")
      *     ),
      *
@@ -201,6 +222,7 @@ class SearchController extends Controller
      *       name="sfw",
      *       in="query",
      *       description="Filter out Adult entries",
+     *
      *       @OA\Schema(type="boolean")
      *     ),
      *
@@ -208,6 +230,7 @@ class SearchController extends Controller
      *       name="genres",
      *       in="query",
      *       description="Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -215,18 +238,21 @@ class SearchController extends Controller
      *       name="genres_exclude",
      *       in="query",
      *       description="Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/manga_search_query_orderby")
      *     ),
      *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
@@ -234,6 +260,7 @@ class SearchController extends Controller
      *       name="letter",
      *       in="query",
      *       description="Return entries starting with the given letter",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -241,6 +268,7 @@ class SearchController extends Controller
      *       name="magazines",
      *       in="query",
      *       description="Filter by magazine(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -248,6 +276,7 @@ class SearchController extends Controller
      *       name="start_date",
      *       in="query",
      *       description="Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -255,16 +284,19 @@ class SearchController extends Controller
      *       name="end_date",
      *       in="query",
      *       description="Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for manga",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/manga_search"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -284,22 +316,24 @@ class SearchController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/people_search_query_orderby")
      *     ),
      *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
@@ -307,14 +341,17 @@ class SearchController extends Controller
      *       name="letter",
      *       in="query",
      *       description="Return entries starting with the given letter",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for people",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/people_search")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -334,22 +371,24 @@ class SearchController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/characters_search_query_orderby")
      *     ),
      *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
@@ -357,16 +396,19 @@ class SearchController extends Controller
      *       name="letter",
      *       in="query",
      *       description="Return entries starting with the given letter",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for characters",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/characters_search"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -386,44 +428,50 @@ class SearchController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="gender",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/users_search_query_gender")
      *     ),
      *
      *     @OA\Parameter(
      *       name="location",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="maxAge",
      *       in="query",
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Parameter(
      *       name="minAge",
      *       in="query",
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for users",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/users_search"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -437,12 +485,14 @@ class SearchController extends Controller
      *      allOf={
      *           @OA\Schema(ref="#/components/schemas/pagination"),
      *           @OA\Schema(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  type="array",
      *
      *                  @OA\Items(
      *                      type="object",
+     *
      *                      @OA\Property(
      *                          property="url",
      *                          type="string",
@@ -484,26 +534,28 @@ class SearchController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns username by ID search",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/user_by_id"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
-     *
-     *
      */
     public function userById(UserByIdLookupCommand $command): mixed
     {
@@ -518,34 +570,38 @@ class SearchController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="type",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/club_search_query_type")
      *     ),
      *
      *     @OA\Parameter(
      *       name="category",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/club_search_query_category")
      *     ),
      *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/club_search_query_orderby")
      *     ),
      *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
@@ -553,16 +609,19 @@ class SearchController extends Controller
      *       name="letter",
      *       in="query",
      *       description="Return entries starting with the given letter",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns search results for clubs",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/clubs_search"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -582,22 +641,24 @@ class SearchController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/producers_query_orderby")
      *     ),
      *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
@@ -605,12 +666,14 @@ class SearchController extends Controller
      *       name="letter",
      *       in="query",
      *       description="Return entries starting with the given letter",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns producers collection",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/producers"
      *         )

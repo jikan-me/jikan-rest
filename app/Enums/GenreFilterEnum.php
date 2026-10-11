@@ -17,6 +17,4 @@ use Spatie\Enum\Laravel\Enum;
  *    enum={"genres","explicit_genres", "themes", "demographics"}
  *  )
  */
-final class GenreFilterEnum extends Enum
-{
-}
+final class GenreFilterEnum extends Enum {}

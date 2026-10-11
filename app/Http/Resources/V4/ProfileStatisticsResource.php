@@ -2,14 +2,15 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Profile;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Profile */
+/** @mixin Profile */
 class ProfileStatisticsResource extends JsonResource
 {
-
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
      *
      * @OA\Schema(

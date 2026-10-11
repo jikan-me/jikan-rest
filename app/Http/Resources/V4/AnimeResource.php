@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Anime;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Anime
+ * @mixin Anime
  */
 class AnimeResource extends JsonResource
 {
@@ -41,11 +43,13 @@ class AnimeResource extends JsonResource
      *          property="titles",
      *          type="array",
      *          description="All titles",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/title",
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="title",
      *          type="string",
@@ -70,11 +74,13 @@ class AnimeResource extends JsonResource
      *          property="title_synonyms",
      *          type="array",
      *          description="Other Titles",
+     *
      *          @OA\Items(
      *              type="string"
      *          ),
      *          deprecated=true
      *      ),
+     *
      *      @OA\Property(
      *          property="type",
      *          type="string",
@@ -192,54 +198,67 @@ class AnimeResource extends JsonResource
      *      @OA\Property(
      *          property="producers",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="licensors",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="studios",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="genres",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="explicit_genres",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="themes",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="demographics",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
@@ -251,7 +270,7 @@ class AnimeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)

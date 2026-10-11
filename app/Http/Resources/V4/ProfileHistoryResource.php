@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProfileHistoryResource extends JsonResource
@@ -9,7 +10,7 @@ class ProfileHistoryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      * @OA\Schema(
@@ -19,15 +20,18 @@ class ProfileHistoryResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/history",
      *          ),
      *      ),
      *  ),
+     *
      * @OA\Schema(
      *     schema="history",
      *     type="object",
+     *
      *       @OA\Property(
      *           property="entry",
      *           type="object",

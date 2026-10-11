@@ -17,12 +17,12 @@ final class CharacterMangaLookupHandler extends ItemLookupHandler
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return new CharacterMangaCollection(
-            $results->get("mangaography")
+            $results->get('mangaography')
         );
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

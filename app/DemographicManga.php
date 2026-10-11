@@ -6,7 +6,6 @@ use App\Filters\FilterQueryString;
 
 /**
  * Class DemographicManga
- * @package App
  */
 class DemographicManga extends JikanApiModel
 {
@@ -16,12 +15,12 @@ class DemographicManga extends JikanApiModel
 
     protected $fillable = [
         'mal_id', 'name', 'url', 'count',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     protected $table = 'demographics_manga';
 
     protected $hidden = [
-        '_id', 'expiresAt'
+        '_id', 'expiresAt',
     ];
 }

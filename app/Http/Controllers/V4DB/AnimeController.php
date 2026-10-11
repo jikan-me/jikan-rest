@@ -36,19 +36,23 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns complete anime resource data",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  ref="#/components/schemas/anime_full"
      *              )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -70,19 +74,23 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime resource",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/anime"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -104,16 +112,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime characters resource",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_characters"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -135,16 +146,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *          response="200",
      *          description="Returns anime staff resource",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/anime_staff"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -166,6 +180,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -174,10 +189,12 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of anime episodes",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_episodes"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -191,11 +208,14 @@ class AnimeController extends Controller
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
+     *
      *          @OA\Property(
      *               property="data",
      *               type="array",
+     *
      *               @OA\Items(
      *                   type="object",
+     *
      *                   @OA\Property(
      *                       property="mal_id",
      *                       type="integer",
@@ -234,8 +254,8 @@ class AnimeController extends Controller
      *                       property="score",
      *                       type="float",
      *                       description="Aggregated episode score (1.00 - 5.00) based on MyAnimeList user voting",
-*                            minimum="1",
-*                            maximum="5",
+     *                            minimum="1",
+     *                            maximum="5",
      *                       nullable=true
      *                   ),
      *                   @OA\Property(
@@ -275,6 +295,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -282,19 +303,23 @@ class AnimeController extends Controller
      *       name="episode",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a single anime episode resource",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/anime_episode"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -316,6 +341,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -324,10 +350,12 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of news articles related to the entry",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_news"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -361,6 +389,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -369,16 +398,19 @@ class AnimeController extends Controller
      *          in="query",
      *          required=false,
      *          description="Filter topics",
+     *
      *          @OA\Schema(type="string",enum={"all", "episode", "other"})
      *      ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of forum topics related to the entry",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/forum"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -400,16 +432,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns videos related to the entry",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_videos"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -431,6 +466,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -439,16 +475,17 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns episode videos related to the entry",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_videos_episodes"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      *  ),
-     *
      *
      *  @OA\Schema(
      *      schema="anime_videos_episodes",
@@ -457,11 +494,14 @@ class AnimeController extends Controller
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
+     *
      *               @OA\Property(
      *                    property="data",
      *                    type="array",
+     *
      *                    @OA\Items(
      *                        type="object",
+     *
      *                        @OA\Property(
      *                            property="mal_id",
      *                            type="integer",
@@ -507,12 +547,14 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns pictures related to the entry",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/pictures_variants"
      *         )
@@ -523,7 +565,6 @@ class AnimeController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
-     *
      */
     public function pictures(AnimePicturesLookupCommand $command): mixed
     {
@@ -540,16 +581,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime statistics",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_statistics"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -571,16 +615,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime statistics",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/moreinfo"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -602,16 +649,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime recommendations",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/entry_recommendations"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -633,6 +683,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -641,10 +692,12 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of users who have added/updated/removed the entry on their list",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_userupdates"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -666,6 +719,7 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -676,10 +730,12 @@ class AnimeController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime reviews",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_reviews"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -691,7 +747,6 @@ class AnimeController extends Controller
         return $this->mediator->send($command);
     }
 
-
     /**
      *  @OA\Get(
      *     path="/anime/{id}/relations",
@@ -702,13 +757,16 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime relations",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                   property="data",
      *                   type="array",
@@ -720,6 +778,7 @@ class AnimeController extends Controller
      *         ),
      *     ),
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -741,16 +800,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime themes",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/anime_themes"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -772,16 +834,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime external links",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/external_links"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -803,16 +868,19 @@ class AnimeController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime streaming links",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/external_links"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

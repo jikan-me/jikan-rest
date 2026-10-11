@@ -2,15 +2,17 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Club;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Club */
+/** @mixin Club */
 class ClubResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      * @OA\Schema(

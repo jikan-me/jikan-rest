@@ -19,7 +19,7 @@ final class ClubLookupHandler extends ItemLookupHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

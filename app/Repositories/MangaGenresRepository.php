@@ -3,10 +3,10 @@
 namespace App\Repositories;
 
 use App\Contracts\GenreRepository;
-use App\GenreManga;
-use App\ExplicitGenresManga;
-use App\ThemeManga;
 use App\DemographicManga;
+use App\ExplicitGenresManga;
+use App\GenreManga;
+use App\ThemeManga;
 use Illuminate\Support\Collection;
 
 final class MangaGenresRepository extends DatabaseRepository implements GenreRepository

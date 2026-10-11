@@ -3,8 +3,8 @@
 namespace App\Features;
 
 use App\Contracts\CachedScraperService;
-use App\Contracts\RequestHandler;
 use App\Contracts\DataRequest;
+use App\Contracts\RequestHandler;
 use App\Http\Resources\V4\ResultsResource;
 use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
@@ -16,16 +16,15 @@ use Illuminate\Support\Collection;
 /**
  * @template TRequest of DataRequest
  * @template TResponse of ResourceCollection|JsonResource|JsonResponse|Response
+ *
  * @implements RequestHandler<TRequest, TResponse>
  */
 abstract class RequestHandlerWithScraperCache implements RequestHandler
 {
-    public function __construct(protected readonly CachedScraperService $scraperService)
-    {
-    }
+    public function __construct(protected readonly CachedScraperService $scraperService) {}
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle($request)
     {
@@ -37,25 +36,24 @@ abstract class RequestHandlerWithScraperCache implements RequestHandler
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
-    protected abstract function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData;
+    abstract protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData;
 
     protected function resource(CachedData $results): JsonResource
     {
         return new ResultsResource(
-            $results->isEmpty() ? ["results" => []] : $results->toArray()
+            $results->isEmpty() ? ['results' => []] : $results->toArray()
         );
     }
 
     /**
-     * @param string $requestFingerPrint
-     * @param CachedData $results
      * @return TResponse
      */
     protected function renderResponse(string $requestFingerPrint, CachedData $results)
     {
         $response = $this->resource($results)->response();
+
         return $response->addJikanCacheFlags($requestFingerPrint, $results);
     }
 }

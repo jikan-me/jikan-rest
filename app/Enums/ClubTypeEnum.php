@@ -16,6 +16,4 @@ use Spatie\Enum\Laravel\Enum;
  *   enum={"public","private","secret"}
  * )
  */
-final class ClubTypeEnum extends Enum
-{
-}
+final class ClubTypeEnum extends Enum {}

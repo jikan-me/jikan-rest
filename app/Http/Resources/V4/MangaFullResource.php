@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Manga;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Manga */
+/** @mixin Manga */
 class MangaFullResource extends JsonResource
 {
     /**
@@ -35,11 +37,13 @@ class MangaFullResource extends JsonResource
      *          property="titles",
      *          type="array",
      *          description="All Titles",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/title",
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="title",
      *          type="string",
@@ -64,11 +68,13 @@ class MangaFullResource extends JsonResource
      *          property="title_synonyms",
      *          type="array",
      *          description="Other Titles",
+     *
      *          @OA\Items(
      *              type="string"
      *          ),
      *          deprecated=true
      *      ),
+     *
      *      @OA\Property(
      *          property="type",
      *          type="string",
@@ -155,46 +161,57 @@ class MangaFullResource extends JsonResource
      *      @OA\Property(
      *          property="authors",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="serializations",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="genres",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="explicit_genres",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="themes",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
      *          ),
      *      ),
+     *
      *      @OA\Property(
      *          property="demographics",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/mal_url"
@@ -204,6 +221,7 @@ class MangaFullResource extends JsonResource
      *     @OA\Property(
      *          property="relations",
      *          type="array",
+     *
      *          @OA\Items(
      *              type="object",
      *
@@ -215,6 +233,7 @@ class MangaFullResource extends JsonResource
      *              @OA\Property(
      *                  property="entry",
      *                  type="array",
+     *
      *                  @OA\Items(
      *                      type="object",
      *                      ref="#/components/schemas/mal_url"
@@ -246,7 +265,7 @@ class MangaFullResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)

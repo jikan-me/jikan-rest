@@ -7,11 +7,11 @@ use OpenApi\Annotations as OA;
 use Spatie\LaravelData\Attributes\Validation\IntegerType;
 use Spatie\LaravelData\Attributes\Validation\Min;
 
-
 /**
  *  @OA\Parameter(
  *    name="limit",
  *    in="query",
+ *
  *    @OA\Schema(type="integer")
  *  ),
  */

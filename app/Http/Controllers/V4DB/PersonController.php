@@ -21,13 +21,16 @@ class PersonController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns complete character resource data",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/person_full"
@@ -56,13 +59,16 @@ class PersonController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns pictures related to the entry",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/person"
@@ -91,14 +97,17 @@ class PersonController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's anime staff positions",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/person_anime")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -120,14 +129,17 @@ class PersonController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's voice acting roles",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/person_voice_acting_roles")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -149,14 +161,17 @@ class PersonController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns person's published manga works",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/person_manga")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -178,16 +193,19 @@ class PersonController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of pictures of the person",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/person_pictures"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -197,6 +215,7 @@ class PersonController extends Controller
      *  @OA\Schema(
      *      schema="person_pictures",
      *      description="Character Pictures",
+     *
      *      @OA\Property(
      *          property="data",
      *          type="array",

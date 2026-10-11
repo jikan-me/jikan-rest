@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ClubStaffResource extends JsonResource
 {
-
     /**
      *  @OA\Schema(
      *      schema="club_staff",
@@ -37,7 +37,7 @@ class ClubStaffResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)

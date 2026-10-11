@@ -23,11 +23,11 @@ final class MangaStatusEnum extends Enum
     protected static function labels(): array
     {
         return [
-            "publishing" => "Publishing",
-            "complete" => "Finished",
-            "hiatus" => "On Hiatus",
-            "discontinued" => "Discontinued",
-            "upcoming" => "Not yet published"
+            'publishing' => 'Publishing',
+            'complete' => 'Finished',
+            'hiatus' => 'On Hiatus',
+            'discontinued' => 'Discontinued',
+            'upcoming' => 'Not yet published',
         ];
     }
 }

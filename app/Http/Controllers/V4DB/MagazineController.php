@@ -15,22 +15,24 @@ class MagazineController extends Controller
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
      *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
      *     @OA\Parameter(
      *       name="q",
      *       in="query",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="order_by",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/magazines_query_orderby")
      *     ),
      *
      *     @OA\Parameter(
      *       name="sort",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/search_query_sort")
      *     ),
      *
@@ -38,12 +40,14 @@ class MagazineController extends Controller
      *       name="letter",
      *       in="query",
      *       description="Return entries starting with the given letter",
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns magazines collection",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/magazines"
      *         )
@@ -54,7 +58,6 @@ class MagazineController extends Controller
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
-     *
      */
     public function main(MagazineSearchCommand $command): MagazineCollection
     {

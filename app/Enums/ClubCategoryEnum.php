@@ -45,7 +45,7 @@ final class ClubCategoryEnum extends Enum
             'japan' => 'Japan',
             'music' => 'Music',
             'other' => 'Other',
-            'schools' => 'Schools'
+            'schools' => 'Schools',
         ];
     }
 }

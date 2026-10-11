@@ -2,16 +2,17 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Profile;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Profile */
+/** @mixin Profile */
 class ProfileFavoritesResource extends JsonResource
 {
-
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable|mixed
-     *
+     * @param  Request  $request
+     * @return array|Arrayable|\JsonSerializable|mixed
      *
      * @OA\Schema(
      *     schema="user_favorites",
@@ -26,8 +27,10 @@ class ProfileFavoritesResource extends JsonResource
      *             type="object",
      *
      *             allOf={
+     *
      *                 @OA\Schema (ref="#/components/schemas/anime_meta"),
      *                 @OA\Schema (
+     *
      *                     @OA\Property (
      *                         property="type",
      *                         type="string"
@@ -48,8 +51,10 @@ class ProfileFavoritesResource extends JsonResource
      *         @OA\Items (
      *             type="object",
      *             allOf={
+     *
      *                 @OA\Schema (ref="#/components/schemas/manga_meta"),
      *                 @OA\Schema (
+     *
      *                     @OA\Property (
      *                         property="type",
      *                         type="string"
@@ -68,18 +73,22 @@ class ProfileFavoritesResource extends JsonResource
      *         property="characters",
      *         type="array",
      *         description="Favorite Characters",
+     *
      *         @OA\Items (
      *             type="object",
      *             allOf={
+     *
      *                 @OA\Schema (ref="#/components/schemas/character_meta"),
      *                 @OA\Schema (ref="#/components/schemas/mal_url_2"),
      *             },
      *         ),
      *     ),
+     *
      *     @OA\Property(
      *         property="people",
      *         type="array",
      *         description="Favorite People",
+     *
      *         @OA\Items (
      *             ref="#/components/schemas/character_meta",
      *         ),

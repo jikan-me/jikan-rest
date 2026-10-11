@@ -8,7 +8,7 @@ use Spatie\LaravelData\Optional;
 final class DefaultPrivateFieldMapperService implements PrivateFieldMapperService
 {
     /**
-     * @param array<string, mixed> $values
+     * @param  array<string, mixed>  $values
      */
     public function map($instance, array $values): mixed
     {
@@ -23,7 +23,7 @@ final class DefaultPrivateFieldMapperService implements PrivateFieldMapperServic
                 $fieldValue = $fieldValue->label;
             }
 
-            if (!property_exists($cls, $fieldName)) {
+            if (! property_exists($cls, $fieldName)) {
                 continue;
             }
 

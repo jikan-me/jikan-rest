@@ -2,8 +2,9 @@
 
 namespace App;
 
-use Jikan\Request\Genre\AnimeGenresRequest;
+use Database\Factories\GenreMangaFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Jikan\Request\Genre\AnimeGenresRequest;
 
 /**
  * Mongo-backed manga genre document. Attributes are magic (from the collection); the
@@ -13,7 +14,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $name
  * @property string $url
  * @property int $count
- * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\GenreMangaFactory>
+ *
+ * @use HasFactory<GenreMangaFactory>
  */
 class GenreManga extends JikanApiSearchableModel
 {
@@ -28,7 +30,7 @@ class GenreManga extends JikanApiSearchableModel
      */
     protected $fillable = [
         'mal_id', 'name', 'url', 'count',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     /**
@@ -44,15 +46,15 @@ class GenreManga extends JikanApiSearchableModel
      * @var list<string>
      */
     protected $hidden = [
-        '_id', 'expiresAt'
+        '_id', 'expiresAt',
     ];
 
     /**
      * @return array<string, mixed>
      */
-    public static function scrape() : array
+    public static function scrape(): array
     {
-        $data = app('JikanParser')->getAnimeGenres(new AnimeGenresRequest());
+        $data = app('JikanParser')->getAnimeGenres(new AnimeGenresRequest);
 
         return json_decode(
             app('SerializerV4')
@@ -70,14 +72,14 @@ class GenreManga extends JikanApiSearchableModel
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
             'name' => $this->name,
-            'count' => $this->count
+            'count' => $this->count,
         ];
     }
 
     public function typesenseQueryBy(): array
     {
         return [
-            'name'
+            'name',
         ];
     }
 

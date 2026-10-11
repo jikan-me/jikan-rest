@@ -24,7 +24,7 @@ final class AnimeEpisodeLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -32,12 +32,12 @@ final class AnimeEpisodeLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
-        $episodeId = $requestParams->get("episodeId");
+        $id = $requestParams->get('id');
+        $episodeId = $requestParams->get('episodeId');
 
         return $this->scraperService->findList(
             $requestFingerPrint,

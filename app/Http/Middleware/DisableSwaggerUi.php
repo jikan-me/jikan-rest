@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Removes the self-served Swagger UI endpoint `/v4/api/documentation` from the
@@ -16,7 +17,7 @@ use Illuminate\Http\Request;
  */
 final class DisableSwaggerUi
 {
-    public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
+    public function handle(Request $request, Closure $next): Response
     {
         if ($request->path() === 'v4/api/documentation') {
             abort(404);

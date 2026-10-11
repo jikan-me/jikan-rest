@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Enums;
+
 use Spatie\Enum\Laravel\Enum;
 
 /**
@@ -20,9 +21,9 @@ final class AnimeStatusEnum extends Enum
     protected static function labels(): array
     {
         return [
-            "airing" => "Currently Airing",
-            "complete" => "Finished Airing",
-            "upcoming" => "Not yet aired",
+            'airing' => 'Currently Airing',
+            'complete' => 'Finished Airing',
+            'upcoming' => 'Not yet aired',
         ];
     }
 }

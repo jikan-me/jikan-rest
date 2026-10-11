@@ -2,7 +2,6 @@
 
 namespace App\Dto;
 
-
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
 use App\Dto\Concerns\HasPageParameter;
@@ -14,5 +13,5 @@ use Spatie\LaravelData\Data;
  */
 final class QueryRecentlyAddedPromoVideosCommand extends Data implements DataRequest
 {
-    use HasRequestFingerprint, HasPageParameter;
+    use HasPageParameter, HasRequestFingerprint;
 }

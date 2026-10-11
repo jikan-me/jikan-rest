@@ -1,11 +1,16 @@
 <?php
+
 namespace App\Filters;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseClause
 {
     protected $query;
+
     protected $filter;
+
     protected $values;
 
     public function __construct(mixed $values, mixed $filter)
@@ -15,15 +20,13 @@ abstract class BaseClause
     }
 
     /**
-     * @param mixed $query
-     * @param \Closure(mixed): mixed $nextFilter
-     * @return mixed
+     * @param  \Closure(mixed): mixed  $nextFilter
      */
     public function handle(mixed $query, \Closure $nextFilter): mixed
     {
         $query = $nextFilter($query);
 
-        if(static::validate($this->values) === false) {
+        if (static::validate($this->values) === false) {
             return $query;
         }
 
@@ -31,8 +34,8 @@ abstract class BaseClause
     }
 
     /**
-     * @param mixed $query
-     * @return \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
+     * @param  mixed  $query
+     * @return Builder<Model>
      */
     abstract protected function apply($query): Builder;
 

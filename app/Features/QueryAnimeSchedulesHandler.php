@@ -13,31 +13,29 @@ use App\Support\CachedData;
  */
 final class QueryAnimeSchedulesHandler implements RequestHandler
 {
-    public function __construct(private readonly AnimeRepository $repository)
-    {
-    }
+    public function __construct(private readonly AnimeRepository $repository) {}
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle($request)
     {
-        \Log::info("QueryAnimeSchedulesHandler::handle called", ["filter" => $request->filter]);
+        \Log::info('QueryAnimeSchedulesHandler::handle called', ['filter' => $request->filter]);
         $requestParams = collect($request->all());
-        $limit = $requestParams->get("limit");
+        $limit = $requestParams->get('limit');
         $results = $this->repository->getCurrentlyAiring($request->filter);
-        \Log::info("QueryAnimeSchedulesHandler: results count", ["count" => $results->count()]);
+        \Log::info('QueryAnimeSchedulesHandler: results count', ['count' => $results->count()]);
         // apply sfw, kids and unapproved filters
         /** @noinspection PhpUndefinedMethodInspection */
         $results = $results->filter($requestParams);
-        \Log::info("QueryAnimeSchedulesHandler: after filter count", ["count" => $results->count()]);
+        \Log::info('QueryAnimeSchedulesHandler: after filter count', ['count' => $results->count()]);
         $results = $results->paginate(
             $limit,
-            ["*"],
+            ['*'],
             null,
             $request->page
         );
-        \Log::info("QueryAnimeSchedulesHandler: paginated", ["count" => $results->count(), "total" => $results->total()]);
+        \Log::info('QueryAnimeSchedulesHandler: paginated', ['count' => $results->count(), 'total' => $results->total()]);
 
         $animeCollection = new AnimeCollection(
             $results
@@ -48,7 +46,7 @@ final class QueryAnimeSchedulesHandler implements RequestHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

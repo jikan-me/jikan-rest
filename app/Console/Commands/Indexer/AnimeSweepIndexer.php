@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * Class AnimeSweepIndexer
- *
- * @package App\Console\Commands\Indexer
  */
 class AnimeSweepIndexer extends Command
 {
@@ -43,6 +41,7 @@ class AnimeSweepIndexer extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws FileNotFoundException
      */
     public function handle()
@@ -59,8 +58,8 @@ class AnimeSweepIndexer extends Command
         $remove = [];
 
         foreach ($results as $result) {
-            if (!array_key_exists($result['mal_id'], $malIds)) {
-                echo "Removing https://myanimelist.net/anime/".$result['mal_id']."\n";
+            if (! array_key_exists($result['mal_id'], $malIds)) {
+                echo 'Removing https://myanimelist.net/anime/'.$result['mal_id']."\n";
                 $remove[] = $result['_id'];
             }
         }
@@ -72,7 +71,6 @@ class AnimeSweepIndexer extends Command
     }
 
     /**
-     * @return array
      * @url https://github.com/purarue/mal-id-cache
      */
     /**

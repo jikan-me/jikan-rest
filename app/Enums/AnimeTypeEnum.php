@@ -35,7 +35,7 @@ final class AnimeTypeEnum extends Enum
             'music' => 'Music',
             'cm' => 'CM',
             'pv' => 'PV',
-            'tv_special' => 'TV Special'
+            'tv_special' => 'TV Special',
         ];
     }
 }

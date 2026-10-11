@@ -11,6 +11,7 @@ use Spatie\LaravelData\Optional;
  *  @OA\Parameter(
  *    name="page",
  *    in="query",
+ *
  *    @OA\Schema(type="integer")
  *  ),
  */

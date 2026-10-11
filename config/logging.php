@@ -1,7 +1,8 @@
 <?php
 
-use Monolog\Handler\StreamHandler;
+use Monolog\Handler\NullHandler;
 use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Processor\PsrLogMessageProcessor;
 
 return [
 
@@ -30,7 +31,6 @@ return [
     */
 
     'deprecations' => env('LOG_DEPRECATIONS_CHANNEL', 'daily'),
-
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
                 'port' => env('PAPERTRAIL_PORT'),
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
-            'processors' => [Monolog\Processor\PsrLogMessageProcessor::class],
+            'processors' => [PsrLogMessageProcessor::class],
         ],
 
         'syslog' => [
@@ -103,7 +103,7 @@ return [
 
         'null' => [
             'driver' => 'monolog',
-            'handler' => \Monolog\Handler\NullHandler::class,
+            'handler' => NullHandler::class,
         ],
 
         'emergency' => [

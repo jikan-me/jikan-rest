@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Facades\DB;
@@ -7,8 +11,8 @@ use Tests\TestCase;
 
 class WatchControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testWatchEpisodes()
     {
@@ -46,9 +50,9 @@ class WatchControllerTest extends TestCase
                     ],
                 ],
                 'region_locked' => false,
-            ]
+            ],
         ]);
-        DB::table("watch")->insert($document);
+        DB::table('watch')->insert($document);
         $this->get('/v4/watch/episodes')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -65,26 +69,26 @@ class WatchControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
                         'episodes' => [
                             [
                                 'mal_id',
                                 'url',
                                 'title',
-                                'premium'
-                            ]
+                                'premium',
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -124,9 +128,9 @@ class WatchControllerTest extends TestCase
                     ],
                 ],
                 'region_locked' => false,
-            ]
+            ],
         ]);
-        DB::table("watch")->insert($document);
+        DB::table('watch')->insert($document);
 
         $this->get('/v4/watch/episodes/popular')
             ->assertStatus(200)
@@ -144,26 +148,26 @@ class WatchControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
                         'episodes' => [
                             [
                                 'mal_id',
                                 'url',
                                 'title',
-                                'premium'
-                            ]
+                                'premium',
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -201,9 +205,9 @@ class WatchControllerTest extends TestCase
                         'maximum_image_url' => 'https:\\/\\/img.youtube.com\\/vi\\/t0d7_6WCls8\\/maxresdefault.jpg',
                     ],
                 ],
-            ]
+            ],
         ]);
-        DB::table("watch")->insert($document);
+        DB::table('watch')->insert($document);
 
         $this->get('/v4/watch/promos')
             ->assertStatus(200)
@@ -222,15 +226,15 @@ class WatchControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
                         'trailer' => [
                             'youtube_id',
@@ -242,10 +246,10 @@ class WatchControllerTest extends TestCase
                                 'medium_image_url',
                                 'large_image_url',
                                 'maximum_image_url',
-                            ]
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -283,9 +287,9 @@ class WatchControllerTest extends TestCase
                         'maximum_image_url' => 'https:\\/\\/img.youtube.com\\/vi\\/t0d7_6WCls8\\/maxresdefault.jpg',
                     ],
                 ],
-            ]
+            ],
         ]);
-        DB::table("watch")->insert($document);
+        DB::table('watch')->insert($document);
 
         $this->get('/v4/watch/promos/popular')
             ->assertStatus(200)
@@ -304,15 +308,15 @@ class WatchControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
                         'trailer' => [
                             'youtube_id',
@@ -324,11 +328,10 @@ class WatchControllerTest extends TestCase
                                 'medium_image_url',
                                 'large_image_url',
                                 'maximum_image_url',
-                            ]
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
-
 }

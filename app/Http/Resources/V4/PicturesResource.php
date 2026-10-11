@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PicturesResource extends JsonResource
@@ -9,7 +10,7 @@ class PicturesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
@@ -22,6 +23,7 @@ class PicturesResource extends JsonResource
      *
      *          @OA\Items(
      *              type="object",
+     *
      *              @OA\Property(
      *                  property="images",
      *                  ref="#/components/schemas/anime_images"
@@ -40,6 +42,7 @@ class PicturesResource extends JsonResource
      *
      *          @OA\Items(
      *              type="object",
+     *
      *              @OA\Property(
      *                  property="images",
      *                  ref="#/components/schemas/common_images"

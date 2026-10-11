@@ -3,9 +3,9 @@
 namespace App\Features;
 
 use App\Dto\QueryRecentlyAddedPromoVideosCommand;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use App\Support\CachedData;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Watch\RecentPromotionalVideosRequest;
 
@@ -20,14 +20,14 @@ final class QueryRecentlyAddedPromoVideosHandler extends RequestHandlerWithScrap
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => $jikan->getRecentPromotionalVideos(new RecentPromotionalVideosRequest($page)),
-            $requestParams->get("page", 1)
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getRecentPromotionalVideos(new RecentPromotionalVideosRequest($page)),
+            $requestParams->get('page', 1)
         );
     }
 }

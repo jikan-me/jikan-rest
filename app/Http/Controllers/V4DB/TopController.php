@@ -10,7 +10,6 @@ use App\Dto\QueryTopReviewsCommand;
 
 class TopController extends Controller
 {
-
     /**
      *  @OA\Get(
      *     path="/top/anime",
@@ -21,6 +20,7 @@ class TopController extends Controller
      *          name="type",
      *          in="query",
      *          required=false,
+     *
      *          @OA\Schema(ref="#/components/schemas/anime_search_query_type")
      *     ),
      *
@@ -28,12 +28,14 @@ class TopController extends Controller
      *          name="filter",
      *          in="query",
      *          required=false,
+     *
      *          @OA\Schema(ref="#/components/schemas/top_anime_filter")
      *      ),
      *
      *     @OA\Parameter(
      *       name="rating",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/anime_search_query_rating")
      *     ),
      *
@@ -41,6 +43,7 @@ class TopController extends Controller
      *       name="sfw",
      *       in="query",
      *       description="Filter out Adult entries",
+     *
      *       @OA\Schema(type="boolean")
      *     ),
      *
@@ -50,10 +53,12 @@ class TopController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns top anime",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/anime_search"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -75,6 +80,7 @@ class TopController extends Controller
      *       name="type",
      *       in="query",
      *       required=false,
+     *
      *       @OA\Schema(ref="#/components/schemas/manga_search_query_type")
      *     ),
      *
@@ -82,6 +88,7 @@ class TopController extends Controller
      *          name="filter",
      *          in="query",
      *          required=false,
+     *
      *          @OA\Schema(ref="#/components/schemas/top_manga_filter")
      *      ),
      *
@@ -91,10 +98,12 @@ class TopController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns top manga",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/manga_search"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -118,10 +127,12 @@ class TopController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns top people",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/people_search"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -145,10 +156,12 @@ class TopController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns top characters",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/characters_search"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -167,11 +180,11 @@ class TopController extends Controller
      *     tags={"top"},
      *
      *     @OA\Parameter(ref="#/components/parameters/page"),
-     *
      *     @OA\Parameter(
      *          name="type",
      *          in="query",
      *          required=false,
+     *
      *          @OA\Schema(ref="#/components/schemas/top_reviews_type_enum")
      *     ),
      *
@@ -180,6 +193,7 @@ class TopController extends Controller
      *          in="query",
      *          required=false,
      *          description="Whether the results include preliminary reviews or not. Defaults to true.",
+     *
      *          @OA\Schema(type="boolean")
      *     ),
      *
@@ -188,35 +202,44 @@ class TopController extends Controller
      *          in="query",
      *          required=false,
      *          description="Whether the results include reviews with spoilers or not. Defaults to true.",
+     *
      *          @OA\Schema(type="boolean")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns top reviews",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  allOf={
+     *
      *                      @OA\Schema(ref="#/components/schemas/pagination"),
      *                      @OA\Schema(
+     *
      *                          @OA\Property(
      *                               property="data",
      *                               type="array",
      *
      *                               @OA\Items(
      *                                   anyOf={
+     *
      *                                       @OA\Schema(
      *                                          allOf={
      *                                              @OA\Schema(ref="#/components/schemas/anime_review"),
      *                                              @OA\Schema(
+     *
      *                                                 @OA\Property(
      *                                                     property="anime",
      *                                                     type="object",
      *                                                     ref="#/components/schemas/anime_meta",
      *                                                 ),
      *                                             ),
+     *
      *                                              @OA\Schema(
+     *
      *                                                 @OA\Property(
      *                                                     property="user",
      *                                                     type="object",
@@ -225,17 +248,21 @@ class TopController extends Controller
      *                                             ),
      *                                          },
      *                                       ),
+     *
      *                                       @OA\Schema(
      *                                          allOf={
      *                                              @OA\Schema(ref="#/components/schemas/manga_review"),
      *                                              @OA\Schema(
+     *
      *                                                 @OA\Property(
      *                                                     property="manga",
      *                                                     type="object",
      *                                                     ref="#/components/schemas/manga_meta",
      *                                                 ),
      *                                             ),
+     *
      *                                              @OA\Schema(
+     *
      *                                                 @OA\Property(
      *                                                     property="user",
      *                                                     type="object",
@@ -252,6 +279,7 @@ class TopController extends Controller
      *              )
      *          ),
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -269,6 +297,7 @@ class TopController extends Controller
      *          @OA\Items(
      *              type="object",
      *              anyOf = {
+     *
      *                  @OA\Schema(ref="#/components/schemas/anime_review"),
      *                  @OA\Schema(ref="#/components/schemas/manga_review"),
      *              },

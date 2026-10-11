@@ -2,11 +2,12 @@
 
 namespace App;
 
+use Database\Factories\EpisodeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
 
 /**
- * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\EpisodeFactory>
+ * @use HasFactory<EpisodeFactory>
  */
 class Episode extends Model
 {
@@ -19,7 +20,7 @@ class Episode extends Model
      */
     protected $fillable = [
         'mal_id', 'title', 'title_japanese', 'title_romanji', 'aired', 'filler', 'recap', 'video_url', 'forum_url', 'synopsis',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     /**
@@ -42,7 +43,6 @@ class Episode extends Model
      * @var list<string>
      */
     protected $hidden = [
-        '_id', 'request_hash'
+        '_id', 'request_hash',
     ];
-
 }

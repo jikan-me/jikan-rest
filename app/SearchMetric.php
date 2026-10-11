@@ -1,7 +1,9 @@
 <?php
+
 namespace App;
-use MongoDB\BSON\ObjectId;
+
 use Laravel\Scout\Builder;
+use MongoDB\BSON\ObjectId;
 
 /**
  * Metrics document for search analytics. Attributes are magic (from the collection); the
@@ -19,13 +21,13 @@ class SearchMetric extends JikanApiSearchableModel
 
     protected $appends = ['hits'];
 
-    protected $fillable = ["search_term", "request_count", "hits", "hits_count", "index_name"];
+    protected $fillable = ['search_term', 'request_count', 'hits', 'hits_count', 'index_name'];
 
-    protected $hidden = ["_id"];
+    protected $hidden = ['_id'];
 
     public function searchableAs(): string
     {
-        return "jikan_search_metrics";
+        return 'jikan_search_metrics';
     }
 
     /**
@@ -34,12 +36,12 @@ class SearchMetric extends JikanApiSearchableModel
     public function toSearchableArray()
     {
         return [
-            "id" => $this->_id,
-            "search_term" => $this->search_term,
-            "request_count" => $this->request_count,
-            "hits" => $this->hits,
-            "hits_count" => $this->hits_count,
-            "index_name" => $this->index_name
+            'id' => $this->_id,
+            'search_term' => $this->search_term,
+            'request_count' => $this->request_count,
+            'hits' => $this->hits,
+            'hits_count' => $this->hits_count,
+            'index_name' => $this->index_name,
         ];
     }
 
@@ -49,52 +51,52 @@ class SearchMetric extends JikanApiSearchableModel
     public function getCollectionSchema(): array
     {
         return [
-            "name" => $this->searchableAs(),
-            "fields" => [
+            'name' => $this->searchableAs(),
+            'fields' => [
                 [
-                    "name" => "id",
-                    "type" => "string",
-                    "optional" => false
+                    'name' => 'id',
+                    'type' => 'string',
+                    'optional' => false,
                 ],
                 [
-                    "name" => "search_term",
-                    "type" => "string",
-                    "optional" => false,
-                    "sort" => false,
-                    "infix" => true
+                    'name' => 'search_term',
+                    'type' => 'string',
+                    'optional' => false,
+                    'sort' => false,
+                    'infix' => true,
                 ],
                 [
-                    "name" => "request_count",
-                    "type" => "int64",
-                    "sort" => true,
-                    "optional" => false,
+                    'name' => 'request_count',
+                    'type' => 'int64',
+                    'sort' => true,
+                    'optional' => false,
                 ],
                 [
-                    "name" => "hits",
-                    "type" => "int64[]",
-                    "sort" => false,
-                    "optional" => false,
+                    'name' => 'hits',
+                    'type' => 'int64[]',
+                    'sort' => false,
+                    'optional' => false,
                 ],
                 [
-                    "name" => "hits_count",
-                    "type" => "int64",
-                    "sort" => true,
-                    "optional" => false,
+                    'name' => 'hits_count',
+                    'type' => 'int64',
+                    'sort' => true,
+                    'optional' => false,
                 ],
                 [
-                    "name" => "index_name",
-                    "type" => "string",
-                    "sort" => false,
-                    "optional" => false,
-                    "facet" => true
-                ]
-            ]
+                    'name' => 'index_name',
+                    'type' => 'string',
+                    'sort' => false,
+                    'optional' => false,
+                    'facet' => true,
+                ],
+            ],
         ];
     }
 
-    public function getTypeSenseQueryByWeights(): string|null
+    public function getTypeSenseQueryByWeights(): ?string
     {
-        return "1";
+        return '1';
     }
 
     public function getScoutKey(): mixed
@@ -114,10 +116,10 @@ class SearchMetric extends JikanApiSearchableModel
 
     public function typesenseQueryBy(): array
     {
-        return ["search_term"];
+        return ['search_term'];
     }
 
-    public function queryScoutModelsByIds(Builder $builder, array $ids): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    public function queryScoutModelsByIds(Builder $builder, array $ids): Builder|\Illuminate\Database\Eloquent\Builder
     {
         $query = static::usesSoftDelete()
             ? $this->withTrashed() : $this->newQuery();

@@ -29,13 +29,16 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns complete manga resource data",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/manga_full"
@@ -64,13 +67,16 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns pictures related to the entry",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/manga"
@@ -99,16 +105,19 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga characters resource",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/manga_characters"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -130,6 +139,7 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -138,10 +148,12 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of manga news topics",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/manga_news"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -173,6 +185,7 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -181,16 +194,19 @@ class MangaController extends Controller
      *          in="query",
      *          required=false,
      *          description="Filter topics",
+     *
      *          @OA\Schema(type="string",enum={"all", "episode", "other"})
      *      ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of manga forum topics",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/forum"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -212,24 +228,29 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns a list of manga pictures",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/manga_pictures"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
+     *
      * @OA\Schema(
      *     schema="manga_pictures",
      *     description="Manga Pictures",
+     *
      *     @OA\Property(
      *         property="data",
      *         type="array",
@@ -256,16 +277,19 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime statistics",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/manga_statistics"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -287,16 +311,19 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga moreinfo",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/moreinfo"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -318,16 +345,19 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga recommendations",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/entry_recommendations"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -349,6 +379,7 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -357,10 +388,12 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga user updates",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/manga_userupdates"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -382,6 +415,7 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -392,15 +426,18 @@ class MangaController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga reviews",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/manga_reviews"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * )
+     *
      * @throws \Exception
      */
     public function reviews(MangaReviewsLookupCommand $command): mixed
@@ -418,13 +455,16 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga relations",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                   property="data",
      *                   type="array",
@@ -435,6 +475,7 @@ class MangaController extends Controller
      *              ),
      *         ),
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -456,16 +497,19 @@ class MangaController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga external links",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/external_links"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

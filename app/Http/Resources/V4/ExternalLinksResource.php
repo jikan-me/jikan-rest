@@ -2,12 +2,13 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Support\CachedData;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Support\CachedData */
+/** @mixin CachedData */
 class ExternalLinksResource extends JsonResource
 {
-
     /**
      *  @OA\Schema(
      *      schema="external_links",
@@ -36,7 +37,7 @@ class ExternalLinksResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)

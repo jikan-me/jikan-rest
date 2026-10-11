@@ -22,7 +22,7 @@ final class PeopleOrderByEnum extends Enum
     protected static function labels()
     {
         return [
-            "favorites" => "member_favorites"
+            'favorites' => 'member_favorites',
         ];
     }
 }

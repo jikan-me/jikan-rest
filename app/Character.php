@@ -3,9 +3,10 @@
 namespace App;
 
 use App\Concerns\FilteredByLetter;
-use Jikan\Jikan;
-use Jikan\Request\Character\CharacterRequest;
+use Database\Factories\CharacterFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Jikan\Request\Character\CharacterRequest;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Mongo-backed character document. Attributes are magic (from the collection); the
@@ -23,15 +24,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property array<string, mixed> $animeography
  * @property array<string, mixed> $mangaography
  * @property array<string, mixed> $voice_actors
- * @property \MongoDB\BSON\UTCDateTime|null $createdAt
- * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
- * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\CharacterFactory>
+ * @property UTCDateTime|null $createdAt
+ * @property UTCDateTime|null $modifiedAt
+ *
+ * @use HasFactory<CharacterFactory>
  */
 class Character extends JikanApiSearchableModel
 {
-    use HasFactory, FilteredByLetter;
+    use FilteredByLetter, HasFactory;
 
-    protected array $filters = ["order_by", "sort", "letter"];
+    protected array $filters = ['order_by', 'sort', 'letter'];
 
     /**
      * The attributes that are mass assignable.
@@ -41,7 +43,7 @@ class Character extends JikanApiSearchableModel
     protected $fillable = [
         'mal_id', 'url', 'name', 'name_kanji', 'nicknames', 'about', 'member_favorites',
         'images', 'animeography', 'mangaography', 'voice_actors',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     /**
@@ -64,13 +66,13 @@ class Character extends JikanApiSearchableModel
      * @var list<string>
      */
     protected $hidden = [
-        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'member_favorites'
+        '_id', 'trailer_url', 'premiered', 'opening_themes', 'ending_themes', 'member_favorites',
     ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->displayNameFieldName = "name";
+        $this->displayNameFieldName = 'name';
     }
 
     /** @noinspection PhpUnused */
@@ -94,6 +96,7 @@ class Character extends JikanApiSearchableModel
     public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getCharacter(new CharacterRequest($id));
+
         return json_decode(
             app('SerializerV4')
                 ->serialize($data, 'json'),
@@ -111,7 +114,7 @@ class Character extends JikanApiSearchableModel
             'mal_id' => (int) $this->mal_id,
             'name' => $this->name,
             'name_kanji' => $this->name_kanji,
-            'member_favorites' => $this->member_favorites
+            'member_favorites' => $this->member_favorites,
         ];
     }
 
@@ -119,7 +122,7 @@ class Character extends JikanApiSearchableModel
     {
         return [
             'name',
-            'name_kanji'
+            'name_kanji',
         ];
     }
 

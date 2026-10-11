@@ -1,5 +1,7 @@
 <?php
+
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
 
 use App\Anime;
@@ -17,8 +19,8 @@ use Tests\TestCase;
  */
 class RandomEndpointTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     protected function setUp(): void
     {
@@ -29,7 +31,7 @@ class RandomEndpointTest extends TestCase
     public function testRandomAnimeIsNotFoundWhenNothingIsIndexed(): void
     {
         // test DB is truncated per test → empty anime collection
-        $this->get("/v4/random/anime")
+        $this->get('/v4/random/anime')
             ->assertStatus(404)
             ->assertJsonStructure(['status', 'type']);
     }
@@ -37,7 +39,7 @@ class RandomEndpointTest extends TestCase
     public function testRandomCharacterIsNotFoundWhenNothingIsIndexed(): void
     {
         // covers QueryRandomItemHandler (collection-based) family
-        $this->get("/v4/random/characters")
+        $this->get('/v4/random/characters')
             ->assertStatus(404);
     }
 
@@ -45,7 +47,7 @@ class RandomEndpointTest extends TestCase
     {
         Anime::factory()->create();
 
-        $this->get("/v4/random/anime")
+        $this->get('/v4/random/anime')
             ->assertStatus(200)
             ->assertJsonPath('data.mal_id', fn ($v) => is_int($v))
             ->assertJsonPath('data.title', fn ($v) => is_string($v));

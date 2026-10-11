@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Club;
 use App\Contracts\ClubRepository;
-use App\Contracts\Repository;
 
 final class DefaultClubRepository extends DatabaseRepository implements ClubRepository
 {

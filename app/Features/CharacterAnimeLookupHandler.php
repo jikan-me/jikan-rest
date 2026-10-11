@@ -17,12 +17,12 @@ final class CharacterAnimeLookupHandler extends ItemLookupHandler
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return new CharacterAnimeCollection(
-            $results->get("animeography")
+            $results->get('animeography')
         );
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

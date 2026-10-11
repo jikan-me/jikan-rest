@@ -12,7 +12,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 final class MagazineSearchHandler extends SearchRequestHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -20,8 +20,7 @@ final class MagazineSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @param LengthAwarePaginator<int, mixed> $paginator
-     * @return MagazineCollection
+     * @param  LengthAwarePaginator<int, mixed>  $paginator
      */
     protected function renderResponse(LengthAwarePaginator $paginator): MagazineCollection
     {

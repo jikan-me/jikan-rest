@@ -13,6 +13,7 @@ class GenreIndexer extends Command
     /**
      * The name and signature of the console command.
      *`
+     *
      * @var string
      */
     protected $signature = 'indexer:genres';
@@ -51,7 +52,7 @@ class GenreIndexer extends Command
         $results = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getAnimeGenres(new AnimeGenresRequest()),
+                    ->getAnimeGenres(new AnimeGenresRequest),
                 'json'
             ),
             true
@@ -59,6 +60,7 @@ class GenreIndexer extends Command
 
         if (HttpHelper::hasError($results)) {
             echo "FAILED: {$results->original['error']}\n";
+
             return;
         }
 
@@ -68,13 +70,13 @@ class GenreIndexer extends Command
             $result = DB::table('genres_anime')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -86,13 +88,13 @@ class GenreIndexer extends Command
             $result = DB::table('explicit_genres_anime')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -104,13 +106,13 @@ class GenreIndexer extends Command
             $result = DB::table('themes_anime')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -122,13 +124,13 @@ class GenreIndexer extends Command
             $result = DB::table('demographics_anime')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -141,7 +143,7 @@ class GenreIndexer extends Command
         $results = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getMangaGenres(new MangaGenresRequest()),
+                    ->getMangaGenres(new MangaGenresRequest),
                 'json'
             ),
             true
@@ -149,6 +151,7 @@ class GenreIndexer extends Command
 
         if (HttpHelper::hasError($results)) {
             echo "FAILED: {$results->original['error']}\n";
+
             return;
         }
 
@@ -158,13 +161,13 @@ class GenreIndexer extends Command
             $result = DB::table('genres_manga')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -176,13 +179,13 @@ class GenreIndexer extends Command
             $result = DB::table('explicit_genres_manga')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -194,13 +197,13 @@ class GenreIndexer extends Command
             $result = DB::table('themes_manga')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -212,19 +215,18 @@ class GenreIndexer extends Command
             $result = DB::table('demographics_manga')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
-
-        echo str_pad("Indexing complete", 10).PHP_EOL;
+        echo str_pad('Indexing complete', 10).PHP_EOL;
     }
 }

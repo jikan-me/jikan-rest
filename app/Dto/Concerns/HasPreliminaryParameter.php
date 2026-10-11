@@ -13,6 +13,7 @@ use Spatie\LaravelData\Attributes\WithCast;
  *      in="query",
  *      required=false,
  *      description="Any reviews left during an ongoing anime/manga, those reviews are tagged as preliminary. NOTE: Preliminary reviews are not returned by default so if the entry is airing/publishing you need to add this otherwise you will get an empty list. e.g usage: `?preliminary=true`",
+ *
  *      @OA\Schema(type="boolean")
  * ),
  */

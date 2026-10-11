@@ -18,7 +18,7 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryTopMangaItemsCommand extends QueryTopItemsCommand implements DataRequest
 {
-    use PreparesData, HasSfwParameter;
+    use HasSfwParameter, PreparesData;
 
     #[WithCast(EnumCast::class, MangaTypeEnum::class), EnumValidation(MangaTypeEnum::class)]
     public MangaTypeEnum|Optional $type;

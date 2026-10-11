@@ -7,16 +7,15 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Jikan\Request\Producer\ProducersRequest;
 
-
 /**
  * Class ProducersIndexer
- * @package App\Console\Commands\Indexer
  */
 class ProducersIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
+     *
      * @var string
      */
     protected $signature = 'indexer:producers
@@ -52,6 +51,7 @@ class ProducersIndexer extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws FileNotFoundException
      */
     public function handle()
@@ -63,8 +63,8 @@ class ProducersIndexer extends Command
         $delay = $this->option('delay') ?? 3;
         $index = $this->option('index') ?? 0;
 
-        $index = (int)$index;
-        $delay = (int)$delay;
+        $index = (int) $index;
+        $delay = (int) $delay;
 
         $this->info("Info: ProducersIndexer scrapes available MAL IDs and updates/indexes them\n\n");
 
@@ -72,7 +72,7 @@ class ProducersIndexer extends Command
             $this->ids = $this->loadFailedMalIds();
         }
 
-        if (!$failed) {
+        if (! $failed) {
             $this->ids = $this->fetchMalIds();
         }
 
@@ -83,13 +83,13 @@ class ProducersIndexer extends Command
 
         // Resume
         if ($resume && Storage::exists('indexer/indexer_producers.save')) {
-            $index = (int)Storage::get('indexer/indexer_producers.save');
+            $index = (int) Storage::get('indexer/indexer_producers.save');
 
             $this->info("Resuming from index: {$index}");
         }
 
         // check if index even exists
-        if ($index > 0 && !isset($this->ids[$index])) {
+        if ($index > 0 && ! isset($this->ids[$index])) {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
         }
@@ -106,9 +106,9 @@ class ProducersIndexer extends Command
         for ($i = $index; $i <= ($count - 1); $i++) {
             $id = $this->ids[$i];
 
-            $url = config('app.url') . "/v4/producers/{$id}";
+            $url = config('app.url')."/v4/producers/{$id}";
 
-            echo "Indexing/Updating " . ($i + 1) . "/{$count} {$url} [MAL ID: {$id}] \n";
+            echo 'Indexing/Updating '.($i + 1)."/{$count} {$url} [MAL ID: {$id}] \n";
 
             try {
                 $response = json_decode(file_get_contents($url), true);
@@ -133,24 +133,21 @@ class ProducersIndexer extends Command
         Storage::delete('indexer/indexer_producers.save');
 
         echo "---------\nIndexing complete\n";
-        echo count($success) . " entries indexed or updated\n";
-        echo count($failedIds) . " entries failed to index or update. Re-run with --failed to requeue failed entries only\n";
+        echo count($success)." entries indexed or updated\n";
+        echo count($failedIds)." entries failed to index or update. Re-run with --failed to requeue failed entries only\n";
     }
 
     /**
-     * @return array
-     */
-    /**
      * @return array<int, int>
      */
-    private function fetchMalIds() : array
+    private function fetchMalIds(): array
     {
         $this->info("Scraping Producer MAL IDs from https://myanimelist.net/anime/producer...\n");
 
         $producers = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getProducers(new ProducersRequest()),
+                    ->getProducers(new ProducersRequest),
                 'json'
             ),
             true
@@ -166,19 +163,17 @@ class ProducersIndexer extends Command
     }
 
     /**
-     * @return array
      * @throws FileNotFoundException
      */
     /**
      * @return array<int, int>
      */
-    private function loadFailedMalIds() : array
+    private function loadFailedMalIds(): array
     {
-        if (!Storage::exists('indexer/indexer_producers.failed')) {
+        if (! Storage::exists('indexer/indexer_producers.failed')) {
             throw new FileNotFoundException('"indexer/indexer_producers.failed" does not exist');
         }
 
         return json_decode(Storage::get('indexer/indexer_producers.failed'));
     }
-
 }

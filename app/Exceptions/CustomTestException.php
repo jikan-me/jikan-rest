@@ -5,6 +5,4 @@ namespace App\Exceptions;
 /**
  * @codeCoverageIgnore
  */
-class CustomTestException extends \Exception
-{
-}
+class CustomTestException extends \Exception {}

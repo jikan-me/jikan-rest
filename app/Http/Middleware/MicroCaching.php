@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Http\HttpHelper;
 use App\Support\JikanConfig;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class MicroCaching
@@ -27,13 +28,12 @@ class MicroCaching
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if (!$this->isEnabled) {
+        if (! $this->isEnabled) {
             return $next($request);
         }
         // Laravel 13: Route is no longer array-accessible (Lumen used to return one).
@@ -60,7 +60,7 @@ class MicroCaching
         // cache /v*/* paths only
         if (
             empty($request->segments())
-            || !isset($request->segments()[1])
+            || ! isset($request->segments()[1])
         ) {
             return $next($request);
         }
@@ -97,5 +97,4 @@ class MicroCaching
 
         return $response;
     }
-
 }

@@ -6,13 +6,8 @@ use App\Providers\SerializerFactory;
 
 class ScraperHelper
 {
-
     /**
-     * @param object|array $response
-     * @return array
-     */
-    /**
-     * @param object|array<string, mixed> $response
+     * @param  object|array<string, mixed>  $response
      * @return array<string, mixed>
      */
     public static function getSerializedJSON(object|array $response): array

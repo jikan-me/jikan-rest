@@ -7,7 +7,4 @@ use App\Producers;
 /**
  * @extends Repository<Producers>
  */
-interface ProducerRepository extends Repository
-{
-
-}
+interface ProducerRepository extends Repository {}

@@ -26,15 +26,16 @@ final class UserHistoryLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $type = $requestParams->get("type");
-        $username = $requestParams->get("username");
+        $type = $requestParams->get('type');
+        $username = $requestParams->get('username');
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => ["history" => $jikan->getUserHistory(new UserHistoryRequest(
+            fn (MalClient $jikan, ?int $page = null) => ['history' => $jikan->getUserHistory(new UserHistoryRequest(
                 $username, $type
             ))]
         );

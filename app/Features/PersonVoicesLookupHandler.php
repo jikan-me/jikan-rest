@@ -20,6 +20,6 @@ final class PersonVoicesLookupHandler extends ItemLookupHandler
 
     protected function resource(CachedData $results): JsonResource
     {
-        return new PersonVoicesCollection($results->get("voice_acting_roles"));
+        return new PersonVoicesCollection($results->get('voice_acting_roles'));
     }
 }

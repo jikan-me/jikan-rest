@@ -17,16 +17,20 @@ class GenreController extends Controller
      *     @OA\Parameter(
      *       name="filter",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/genre_query_filter")
      *     ),
 
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns entry genres, explicit_genres, themes and demographics",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/genres"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -47,12 +51,15 @@ class GenreController extends Controller
      *     @OA\Parameter(
      *       name="filter",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/genre_query_filter")
      *     ),
 
+     *
      *     @OA\Response(
      *         response="200",
      *         description="Returns entry genres, explicit_genres, themes and demographics",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/genres"
      *         )

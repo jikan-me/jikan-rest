@@ -10,7 +10,7 @@ use App\Dto\AnimeGenreListCommand;
 final class AnimeGenreListHandler extends GenreListHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

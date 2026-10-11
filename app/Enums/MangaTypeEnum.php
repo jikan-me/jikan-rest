@@ -31,7 +31,7 @@ final class MangaTypeEnum extends Enum
             'oneshot' => 'One-shot',
             'doujin' => 'Doujinshi',
             'manhwa' => 'Manhwa',
-            'manhua' => 'Manhua'
+            'manhua' => 'Manhua',
         ];
     }
 }

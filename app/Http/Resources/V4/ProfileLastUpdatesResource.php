@@ -2,15 +2,17 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Profile;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Profile */
+/** @mixin Profile */
 class ProfileLastUpdatesResource extends JsonResource
 {
-
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable|mixed
+     * @param  Request  $request
+     * @return array|Arrayable|\JsonSerializable|mixed
      *
      * @OA\Schema(
      *     schema="user_updates",
@@ -19,7 +21,6 @@ class ProfileLastUpdatesResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="object",
-     *
      *          @OA\Property (
      *              property="anime",
      *              type="array",
@@ -29,14 +30,18 @@ class ProfileLastUpdatesResource extends JsonResource
      *                  type="object",
      *
      *                  allOf={
+     *
      *                      @OA\Schema (
+     *
      *                          @OA\Property (
      *                               property="entry",
      *                               type="object",
      *                               ref="#/components/schemas/anime_meta",
      *                          ),
      *                      ),
+     *
      *                      @OA\Schema (
+     *
      *                          @OA\Property (
      *                              property="score",
      *                              type="integer",
@@ -74,14 +79,18 @@ class ProfileLastUpdatesResource extends JsonResource
      *                  type="object",
      *
      *                  allOf={
+     *
      *                      @OA\Schema (
+     *
      *                          @OA\Property (
      *                               property="entry",
      *                               type="object",
      *                               ref="#/components/schemas/manga_meta",
      *                          ),
      *                      ),
+     *
      *                      @OA\Schema (
+     *
      *                          @OA\Property (
      *                              property="score",
      *                              type="integer",

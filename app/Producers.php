@@ -3,8 +3,10 @@
 namespace App;
 
 use App\Concerns\FilteredByLetter;
+use Database\Factories\ProducersFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Producer\ProducerRequest;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Mongo-backed producer document. Attributes are magic (from the collection); the
@@ -14,19 +16,21 @@ use Jikan\Request\Producer\ProducerRequest;
  * @property string $url
  * @property array<string, mixed> $images
  * @property array<string, mixed>|null $titles
- * @property \MongoDB\BSON\UTCDateTime|null $established
+ * @property UTCDateTime|null $established
  * @property int $favorites
  * @property string|null $about
  * @property int $count
  * @property array<string, mixed>|null $external_links
- * @property \MongoDB\BSON\UTCDateTime|null $createdAt
- * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
- * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\ProducersFactory>
+ * @property UTCDateTime|null $createdAt
+ * @property UTCDateTime|null $modifiedAt
+ *
+ * @use HasFactory<ProducersFactory>
  */
 class Producers extends JikanApiSearchableModel
 {
     use FilteredByLetter, HasFactory;
-    protected array $filters = ["order_by", "sort", "letter"];
+
+    protected array $filters = ['order_by', 'sort', 'letter'];
 
     /**
      * The attributes that are mass assignable.
@@ -35,7 +39,7 @@ class Producers extends JikanApiSearchableModel
      */
     protected $fillable = [
         'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'external', 'count',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     /**
@@ -51,13 +55,13 @@ class Producers extends JikanApiSearchableModel
      * @var list<string>
      */
     protected $hidden = [
-        '_id', 'request_hash', 'expiresAt'
+        '_id', 'request_hash', 'expiresAt',
     ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->displayNameFieldName = "titles.0.title";
+        $this->displayNameFieldName = 'titles.0.title';
     }
 
     /**
@@ -82,16 +86,16 @@ class Producers extends JikanApiSearchableModel
      */
     public function toSearchableArray(): array
     {
-        $titles = !is_null($this->titles) ? collect($this->titles)->map(fn ($x) => $x["title"])->toArray() : [''];
+        $titles = ! is_null($this->titles) ? collect($this->titles)->map(fn ($x) => $x['title'])->toArray() : [''];
 
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
-            'url' => !is_null($this->url) ? $this->url : '',
+            'url' => ! is_null($this->url) ? $this->url : '',
             'titles' => implode(', ', $titles),
             'established' => $this->convertToTimestamp($this->established),
             'favorites' => $this->favorites,
-            'count' => $this->count
+            'count' => $this->count,
         ];
     }
 
@@ -112,16 +116,16 @@ class Producers extends JikanApiSearchableModel
                     'type' => 'string',
                     'optional' => false,
                     'infix' => true,
-                    'sort' => true
+                    'sort' => true,
                 ],
                 [
                     'name' => 'url',
                     'type' => 'string',
                     'optional' => false,
                     'infix' => true,
-                    'sort' => true
+                    'sort' => true,
                 ],
-            ]
+            ],
         ];
     }
 
@@ -129,7 +133,7 @@ class Producers extends JikanApiSearchableModel
     {
         return [
             'url',
-            'titles'
+            'titles',
         ];
     }
 

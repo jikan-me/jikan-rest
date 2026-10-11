@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MangaCharactersResource extends JsonResource
@@ -9,7 +10,7 @@ class MangaCharactersResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
@@ -19,6 +20,7 @@ class MangaCharactersResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="array",
+     *
      *          @OA\Items(
      *               type="object",
      *

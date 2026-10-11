@@ -1,5 +1,7 @@
 <?php
+
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Unit;
 
 use App\Contracts\DataRequest;
@@ -26,7 +28,7 @@ final class DefaultMediatorTest extends TestCase
         $mockRequest = \Mockery::mock(DataRequest::class);
         $mockHandler = \Mockery::mock(RequestHandler::class);
         $mockHandler->expects()->handle($mockRequest)->once()->andReturns(response()->json([
-            "message" => "success"
+            'message' => 'success',
         ]));
 
         $sut = new DefaultMediator([
@@ -35,6 +37,6 @@ final class DefaultMediatorTest extends TestCase
 
         $response = $sut->send($mockRequest);
         $this->assertEquals(200, $response->status());
-        $this->assertEquals(json_encode(["message" => "success"]), $response->content());
+        $this->assertEquals(json_encode(['message' => 'success']), $response->content());
     }
 }

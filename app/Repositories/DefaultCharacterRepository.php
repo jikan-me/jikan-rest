@@ -4,8 +4,8 @@ namespace App\Repositories;
 
 use App\Character;
 use App\Contracts\CharacterRepository;
-use App\Contracts\Repository;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 final class DefaultCharacterRepository extends DatabaseRepository implements CharacterRepository
@@ -16,12 +16,12 @@ final class DefaultCharacterRepository extends DatabaseRepository implements Cha
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Character>
+     * @return EloquentBuilder|Builder<Character>
      */
     public function topCharacters(): EloquentBuilder|ScoutBuilder
     {
-        return $this->queryable()->whereNotNull("member_favorites")
-            ->where("member_favorites", ">", 0)
-            ->orderBy("member_favorites", "desc");
+        return $this->queryable()->whereNotNull('member_favorites')
+            ->where('member_favorites', '>', 0)
+            ->orderBy('member_favorites', 'desc');
     }
 }

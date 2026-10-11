@@ -16,15 +16,12 @@ use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 
-/**
- */
 class SearchCommand extends Data
 {
     use HasLimitParameter, HasPageParameter;
 
     /**
      * The search keywords
-     * @var string|Optional
      */
     #[Max(255), StringType]
     public string|Optional $q;
@@ -32,6 +29,6 @@ class SearchCommand extends Data
     #[WithCast(EnumCast::class, SortDirection::class), EnumValidation(SortDirection::class)]
     public SortDirection|Optional $sort;
 
-    #[Size(1), StringType, Alpha, Prohibits("q")]
+    #[Size(1), StringType, Alpha, Prohibits('q')]
     public string|Optional $letter;
 }

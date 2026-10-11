@@ -2,20 +2,23 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Producers;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Producers */
+/** @mixin Producers */
 class ProducerFullResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
      *      schema="producer_full",
      *      description="Producers Resource",
+     *
      *      @OA\Property(
      *          property="mal_id",
      *          type="integer",
@@ -30,11 +33,13 @@ class ProducerFullResource extends JsonResource
      *          property="titles",
      *          type="array",
      *          description="All titles",
+     *
      *          @OA\Items(
      *              type="object",
      *              ref="#/components/schemas/title",
      *          ),
      *      ),
+     *
      *     @OA\Property(
      *         property="images",
      *         type="object",
@@ -62,7 +67,6 @@ class ProducerFullResource extends JsonResource
      *         description="About the Producer",
      *         nullable=true
      *     ),
-     *
      *      @OA\Property(
      *          property="external",
      *          type="array",
@@ -96,7 +100,7 @@ class ProducerFullResource extends JsonResource
             'established' => $this->established ?? null,
             'about' => $this->about ?? null,
             'count' => $this->count ?? null,
-            'external' => $this->external_links ?? null
+            'external' => $this->external_links ?? null,
         ];
     }
 }

@@ -9,9 +9,6 @@ use App\Dto\QueryUpcomingAnimeSeasonCommand;
 use Exception;
 use OpenApi\Annotations as OA;
 
-/**
- *
- */
 class SeasonController extends Controller
 {
     /**
@@ -24,6 +21,7 @@ class SeasonController extends Controller
      *       name="filter",
      *       description="Entry types",
      *       in="query",
+     *
      *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
      *     ),
      *
@@ -36,15 +34,18 @@ class SeasonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns current seasonal anime",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/anime_search"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
+     *
      * @throws Exception
      */
     public function now(QueryCurrentAnimeSeasonCommand $command): mixed
@@ -62,6 +63,7 @@ class SeasonController extends Controller
      *       name="year",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -69,6 +71,7 @@ class SeasonController extends Controller
      *       name="season",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -76,6 +79,7 @@ class SeasonController extends Controller
      *       name="filter",
      *       description="Entry types",
      *       in="query",
+     *
      *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
      *     ),
      *
@@ -88,15 +92,18 @@ class SeasonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns seasonal anime",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/anime_search"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
+     *
      * @throws Exception
      */
     public function main(QuerySpecificAnimeSeasonCommand $command): mixed
@@ -113,10 +120,12 @@ class SeasonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns available list of seasons",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/seasons"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -133,6 +142,7 @@ class SeasonController extends Controller
      *
      *          @OA\Items(
      *              type="object",
+     *
      *              @OA\Property(
      *                   property="year",
      *                   type="integer",
@@ -142,6 +152,7 @@ class SeasonController extends Controller
      *                   property="seasons",
      *                   type="array",
      *                   description="List of available seasons",
+     *
      *                   @OA\Items(
      *                       type="string"
      *                   ),
@@ -165,6 +176,7 @@ class SeasonController extends Controller
      *       name="filter",
      *       description="Entry types",
      *       in="query",
+     *
      *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
      *     ),
      *
@@ -177,15 +189,18 @@ class SeasonController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns upcoming season's anime",
+     *
      *          @OA\JsonContent(
      *               ref="#/components/schemas/anime_search"
      *          )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
+     *
      * @throws Exception
      */
     public function later(QueryUpcomingAnimeSeasonCommand $command): mixed

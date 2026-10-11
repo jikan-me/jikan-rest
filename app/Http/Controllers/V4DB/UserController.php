@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Dto\QueryAnimeListOfUserCommand;
 use App\Dto\QueryMangaListOfUserCommand;
 use App\Dto\QueryRecentlyOnlineUsersCommand;
-use App\Dto\QueryAnimeListOfUserCommand;
 use App\Dto\UserAboutLookupCommand;
 use App\Dto\UserClubsLookupCommand;
 use App\Dto\UserExternalLookupCommand;
@@ -20,11 +20,9 @@ use App\Dto\UserUpdatesLookupCommand;
 
 /**
  * Class Controller
- * @package App\Http\Controllers\V4DB
  */
 class UserController extends Controller
 {
-
     /**
      *  @OA\Get(
      *     path="/users/{username}/full",
@@ -35,19 +33,23 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns complete user resource data",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/user_profile_full"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -69,19 +71,23 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user profile",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/user_profile"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -103,16 +109,19 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user statistics",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/user_statistics"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -124,7 +133,6 @@ class UserController extends Controller
         return $this->mediator->send($command);
     }
 
-
     /**
      *  @OA\Get(
      *     path="/users/{username}/favorites",
@@ -135,19 +143,23 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user favorites",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/user_favorites"
      *             ),
      *         ),
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -169,16 +181,19 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user updates",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/user_updates"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -200,16 +215,19 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user about in raw HTML",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/user_about"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -231,6 +249,7 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -238,16 +257,19 @@ class UserController extends Controller
      *       name="type",
      *       in="query",
      *       required=false,
+     *
      *       @OA\Schema(type="string",enum={"anime", "manga"})
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user history (past 30 days)",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/user_history"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -269,6 +291,7 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -277,10 +300,12 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user friends",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/user_friends"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -303,6 +328,7 @@ class UserController extends Controller
      *                      type="object",
      *
      *                      allOf={
+     *
      *                          @OA\Schema(
      *
      *                              @OA\Property(
@@ -311,7 +337,9 @@ class UserController extends Controller
      *                                  ref="#/components/schemas/user_meta"
      *                              ),
      *                          ),
+     *
      *                          @OA\Schema (
+     *
      *                              @OA\Property(
      *                                  property="last_online",
      *                                  type="string",
@@ -347,27 +375,30 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="status",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/user_anime_list_status_filter")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user anime list",
+     *
      *         @OA\JsonContent(
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
-     *
      */
     public function animelist(QueryAnimeListOfUserCommand $command): mixed
     {
@@ -386,27 +417,30 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Parameter(
      *       name="status",
      *       in="query",
+     *
      *       @OA\Schema(ref="#/components/schemas/user_manga_list_status_filter")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user manga list",
+     *
      *         @OA\JsonContent(
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
-     *
      */
     public function mangalist(QueryMangaListOfUserCommand $command): mixed
     {
@@ -423,6 +457,7 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -431,29 +466,37 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user reviews",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  allOf={
+     *
      *                      @OA\Schema(ref="#/components/schemas/pagination"),
      *                      @OA\Schema(
+     *
      *                          @OA\Property(
      *                               property="data",
      *                               type="array",
      *
      *                               @OA\Items(
      *                                   anyOf={
+     *
      *                                       @OA\Schema(
      *                                          allOf={
      *                                              @OA\Schema(ref="#/components/schemas/anime_review"),
      *                                              @OA\Schema(
+     *
      *                                                 @OA\Property(
      *                                                     property="anime",
      *                                                     type="object",
      *                                                     ref="#/components/schemas/anime_meta",
      *                                                 ),
      *                                             ),
+     *
      *                                              @OA\Schema(
+     *
      *                                                 @OA\Property(
      *                                                     property="user",
      *                                                     type="object",
@@ -462,17 +505,21 @@ class UserController extends Controller
      *                                             ),
      *                                          },
      *                                       ),
+     *
      *                                       @OA\Schema(
      *                                          allOf={
      *                                              @OA\Schema(ref="#/components/schemas/manga_review"),
      *                                              @OA\Schema(
+     *
      *                                                 @OA\Property(
      *                                                     property="manga",
      *                                                     type="object",
      *                                                     ref="#/components/schemas/manga_meta",
      *                                                 ),
      *                                             ),
+     *
      *                                              @OA\Schema(
+     *
      *                                                 @OA\Property(
      *                                                     property="user",
      *                                                     type="object",
@@ -489,6 +536,7 @@ class UserController extends Controller
      *              )
      *          ),
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -510,6 +558,7 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -518,14 +567,15 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns Recent Anime Recommendations",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/recommendations")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
      *     ),
      * ),
-     *
      */
     public function recommendations(UserRecommendationsLookupCommand $command): mixed
     {
@@ -542,6 +592,7 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
@@ -550,8 +601,10 @@ class UserController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns user clubs",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/user_clubs")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -569,6 +622,7 @@ class UserController extends Controller
      *              @OA\Property(
      *                   property="data",
      *                   type="array",
+     *
      *                   @OA\Items(
      *                      type="object",
      *
@@ -608,12 +662,14 @@ class UserController extends Controller
      *       name="username",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="string")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns user's external links",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/external_links"
      *         )

@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Anime;
 use App\Character;
 use App\Manga;
@@ -10,8 +14,8 @@ use Tests\TestCase;
 
 class SearchControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testAnimeSearch()
     {
@@ -26,7 +30,7 @@ class SearchControllerTest extends TestCase
                         'count',
                         'total',
                         'per_page',
-                    ]
+                    ],
                 ],
                 'data' => [
                     [
@@ -36,12 +40,12 @@ class SearchControllerTest extends TestCase
                             'jpg' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                             'webp' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                         ],
                         'trailer' => [
@@ -54,7 +58,7 @@ class SearchControllerTest extends TestCase
                                 'medium_image_url',
                                 'large_image_url',
                                 'maximum_image_url',
-                            ]
+                            ],
                         ],
                         'title',
                         'title_english',
@@ -72,15 +76,15 @@ class SearchControllerTest extends TestCase
                                 'from' => [
                                     'day',
                                     'month',
-                                    'year'
+                                    'year',
                                 ],
                                 'to' => [
                                     'day',
                                     'month',
-                                    'year'
-                                ]
+                                    'year',
+                                ],
                             ],
-                            'string'
+                            'string',
                         ],
                         'duration',
                         'rating',
@@ -99,44 +103,43 @@ class SearchControllerTest extends TestCase
                             'day',
                             'time',
                             'timezone',
-                            'string'
+                            'string',
                         ],
                         'producers' => [
                             [
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
+                                'url',
+                            ],
                         ],
                         'licensors' => [
                             [
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
+                                'url',
+                            ],
                         ],
                         'studios' => [
                             [
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
+                                'url',
+                            ],
                         ],
                         'genres' => [
                             [
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
+                                'url',
+                            ],
                         ],
-                    ]
-                ]
-            ])
-        ;
+                    ],
+                ],
+            ]);
     }
 
     public function testMangaSearch()
@@ -152,7 +155,7 @@ class SearchControllerTest extends TestCase
                         'count',
                         'total',
                         'per_page',
-                    ]
+                    ],
                 ],
                 'data' => [
                     [
@@ -162,12 +165,12 @@ class SearchControllerTest extends TestCase
                             'jpg' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                             'webp' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                         ],
                         'title',
@@ -186,15 +189,15 @@ class SearchControllerTest extends TestCase
                                 'from' => [
                                     'day',
                                     'month',
-                                    'year'
+                                    'year',
                                 ],
                                 'to' => [
                                     'day',
                                     'month',
-                                    'year'
-                                ]
+                                    'year',
+                                ],
                             ],
-                            'string'
+                            'string',
                         ],
                         'score',
                         'scored_by',
@@ -209,36 +212,35 @@ class SearchControllerTest extends TestCase
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
+                                'url',
+                            ],
                         ],
                         'serializations' => [
                             [
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
+                                'url',
+                            ],
                         ],
                         'genres' => [
                             [
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
-                        ]
-                    ]
-                ]
-            ])
-        ;
+                                'url',
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
     }
 
     public function testPeopleSearch()
     {
         Person::factory(2)->create();
         Person::factory()->createOne([
-            "name" => "Sawano Kuma"
+            'name' => 'Sawano Kuma',
         ]);
         $this->get('/v4/people?q=Sawano')
             ->assertStatus(200)
@@ -250,7 +252,7 @@ class SearchControllerTest extends TestCase
                         'count',
                         'total',
                         'per_page',
-                    ]
+                    ],
                 ],
                 'data' => [
                     [
@@ -269,17 +271,16 @@ class SearchControllerTest extends TestCase
                         'birthday',
                         'favorites',
                         'about',
-                    ]
-                ]
-            ])
-        ;
+                    ],
+                ],
+            ]);
     }
 
     public function testCharacterSearch()
     {
         Character::factory(2)->create();
         Character::factory()->createOne([
-            "name" => "Okabe"
+            'name' => 'Okabe',
         ]);
         $this->get('/v4/characters?q=Okabe')
             ->assertStatus(200)
@@ -291,7 +292,7 @@ class SearchControllerTest extends TestCase
                         'count',
                         'total',
                         'per_page',
-                    ]
+                    ],
                 ],
                 'data' => [
                     [
@@ -309,9 +310,8 @@ class SearchControllerTest extends TestCase
                         'nicknames',
                         'favorites',
                         'about',
-                    ]
+                    ],
                 ],
-            ])
-        ;
+            ]);
     }
 }

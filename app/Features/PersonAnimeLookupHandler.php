@@ -19,6 +19,6 @@ final class PersonAnimeLookupHandler extends ItemLookupHandler
 
     protected function resource(CachedData $results): PersonAnimeCollection
     {
-        return new PersonAnimeCollection($results->get("anime_staff_positions"));
+        return new PersonAnimeCollection($results->get('anime_staff_positions'));
     }
 }

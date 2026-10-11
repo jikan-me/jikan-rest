@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 /**
  * Mongo-backed searchable model base. Attributes are magic (from the collection);
  * documented below are the shared ones the app reads.
@@ -16,7 +15,7 @@ abstract class JikanApiSearchableModel extends JikanApiModel
     /**
      * @return string[]
      */
-    public abstract function typesenseQueryBy(): array;
+    abstract public function typesenseQueryBy(): array;
 
     /**
      * The Typesense schema to be created (native Laravel Scout TypesenseEngine
@@ -53,7 +52,7 @@ abstract class JikanApiSearchableModel extends JikanApiModel
             $parameters['sort_by'] = implode(',', array_map(
                 function (array $sort): string {
                     return (string) ($sort['field'] ?? (string) key($sort))
-                        . ':' . (string) ($sort['direction'] ?? reset($sort));
+                        .':'.(string) ($sort['direction'] ?? reset($sort));
                 },
                 $sortBy
             ));
@@ -82,26 +81,22 @@ abstract class JikanApiSearchableModel extends JikanApiModel
                     'name' => $titleAttributeName,
                     'type' => 'string',
                     'sort' => true,
-                    'optional' => false
-                ]
-            ]
+                    'optional' => false,
+                ],
+            ],
         ];
     }
 
     /**
      * Get the name of the index associated with the model.
-     *
-     * @return string
      */
     public function searchableAs(): string
     {
-        return strtolower($this->table) . '_index' . (app()->environment("testing") ? "_testing" : "");
+        return strtolower($this->table).'_index'.(app()->environment('testing') ? '_testing' : '');
     }
 
     /**
      * Get the value used to index the model.
-     *
-     * @return mixed
      */
     public function getScoutKey(): mixed
     {
@@ -110,8 +105,6 @@ abstract class JikanApiSearchableModel extends JikanApiModel
 
     /**
      * Get the key name used to index the model.
-     *
-     * @return mixed
      */
     public function getScoutKeyName(): mixed
     {
@@ -121,31 +114,30 @@ abstract class JikanApiSearchableModel extends JikanApiModel
     /**
      * Returns what weights to use on query_by fields.
      * https://typesense.org/docs/0.23.0/api/documents.html#search-parameters
-     * @return string|null
      */
-    public function getTypeSenseQueryByWeights(): string|null
+    public function getTypeSenseQueryByWeights(): ?string
     {
         return null;
     }
 
     /**
      * Returns which fields the search index should sort on when searching
-     * @return array|null
      */
     /**
      * @return array<int, array<string, string>>|null
      */
-    public function getSearchIndexSortBy(): array|null
+    public function getSearchIndexSortBy(): ?array
     {
         return null;
     }
 
     protected function simplifyStringForSearch($val): string
     {
-        if (!$val) {
-            return "";
+        if (! $val) {
+            return '';
         }
-        return preg_replace("/[^[:alnum:][:space:]]/u", ' ', $val) ?? "";
+
+        return preg_replace('/[^[:alnum:][:space:]]/u', ' ', $val) ?? '';
     }
 
     public function getTitleAttributeName(): string

@@ -18,19 +18,23 @@ class ProducerController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns producer resource",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/producer"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -52,19 +56,23 @@ class ProducerController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns producer resource",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/producer_full"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -86,16 +94,19 @@ class ProducerController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns producer's external links",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/external_links"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

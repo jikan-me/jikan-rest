@@ -1,13 +1,12 @@
 <?php
 
-
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class PersonVoicesCollection extends ResourceCollection
 {
-
     /**
      * The resource that this resource collects.
      *
@@ -48,13 +47,13 @@ class PersonVoicesCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)
     {
         return [
-            'data' => $this->collection
+            'data' => $this->collection,
         ];
     }
 }

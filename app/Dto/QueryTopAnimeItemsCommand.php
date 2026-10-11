@@ -19,7 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryTopAnimeItemsCommand extends QueryTopItemsCommand implements DataRequest
 {
-    use PreparesData, HasSfwParameter;
+    use HasSfwParameter, PreparesData;
 
     #[WithCast(EnumCast::class, AnimeTypeEnum::class), EnumValidation(AnimeTypeEnum::class)]
     public AnimeTypeEnum|Optional $type;

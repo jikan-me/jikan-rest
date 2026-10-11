@@ -1,5 +1,23 @@
 <?php
 
+use App\Contracts\AnimeRepository;
+use App\Contracts\CharacterRepository;
+use App\Contracts\ClubRepository;
+use App\Contracts\MagazineRepository;
+use App\Contracts\MangaRepository;
+use App\Contracts\Mediator;
+use App\Contracts\PeopleRepository;
+use App\Contracts\ProducerRepository;
+use App\Contracts\UserRepository;
+use App\Repositories\AnimeGenresRepository;
+use App\Repositories\MangaGenresRepository;
+use App\Services\EloquentBuilderPaginatorService;
+use App\Services\ScoutBuilderPaginatorService;
+use App\Services\ScoutSearchService;
+use App\Services\SearchService;
+use App\Services\TypesenseCollectionDescriptor;
+use App\Support\CacheOptions;
+use App\Support\JikanUnitOfWork;
 use Laravel\Octane\Contracts\OperationTerminated;
 use Laravel\Octane\Events\RequestHandled;
 use Laravel\Octane\Events\RequestReceived;
@@ -134,33 +152,33 @@ return [
         ...Octane::defaultServicesToWarm(),
 
         // Jikan app services (ported from AppServiceProvider::servicesToWarm())
-        \App\Services\ScoutSearchService::class,
-        \App\Services\ScoutBuilderPaginatorService::class,
-        \App\Services\EloquentBuilderPaginatorService::class,
+        ScoutSearchService::class,
+        ScoutBuilderPaginatorService::class,
+        EloquentBuilderPaginatorService::class,
     ],
 
     'flush' => [
         // In RoadRunner we want to reset the repositories after each request,
         // because we cache the query builders in them.
         // Ported from AppServiceProvider::servicesToClear().
-        \App\Support\JikanUnitOfWork::class,
-        \App\Contracts\Mediator::class,
-        \App\Services\SearchService::class,
+        JikanUnitOfWork::class,
+        Mediator::class,
+        SearchService::class,
         // Repository singletons cache query builders (RepositoryQueryBase) and
         // must be rebuilt per request under persistent workers.
-        \App\Contracts\AnimeRepository::class,
-        \App\Contracts\MangaRepository::class,
-        \App\Contracts\CharacterRepository::class,
-        \App\Contracts\ClubRepository::class,
-        \App\Contracts\MagazineRepository::class,
-        \App\Contracts\ProducerRepository::class,
-        \App\Contracts\PeopleRepository::class,
-        \App\Contracts\UserRepository::class,
-        \App\Repositories\AnimeGenresRepository::class,
-        \App\Repositories\MangaGenresRepository::class,
+        AnimeRepository::class,
+        MangaRepository::class,
+        CharacterRepository::class,
+        ClubRepository::class,
+        MagazineRepository::class,
+        ProducerRepository::class,
+        PeopleRepository::class,
+        UserRepository::class,
+        AnimeGenresRepository::class,
+        MangaGenresRepository::class,
         // Request-scoped cache TTL + in-memory collection descriptor cache.
-        \App\Support\CacheOptions::class,
-        \App\Services\TypesenseCollectionDescriptor::class,
+        CacheOptions::class,
+        TypesenseCollectionDescriptor::class,
     ],
 
     /*

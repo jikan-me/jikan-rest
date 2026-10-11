@@ -12,8 +12,11 @@ use App\Contracts\Mediator;
 use App\Contracts\PeopleRepository;
 use App\Contracts\ProducerRepository;
 use App\Contracts\Repository;
+use App\Contracts\SearchAnalyticsService;
 use App\Contracts\UnitOfWork;
 use App\Contracts\UserRepository;
+use App\Exceptions\Handler;
+use App\Features;
 use App\Macros\CollectionOffsetGetFirst;
 use App\Macros\ResponseJikanCacheFlags;
 use App\Macros\To2dArrayWithDottedKeys;
@@ -33,34 +36,39 @@ use App\Services\DefaultCachedScraperService;
 use App\Services\DefaultPrivateFieldMapperService;
 use App\Services\DefaultQueryBuilderService;
 use App\Services\DefaultScoutSearchService;
+use App\Services\DefaultSearchAnalyticsService;
+use App\Services\DummySearchAnalyticsService;
 use App\Services\EloquentBuilderPaginatorService;
 use App\Services\MongoSearchService;
 use App\Services\PrivateFieldMapperService;
 use App\Services\QueryBuilderPaginatorService;
 use App\Services\SearchEngineSearchService;
 use App\Services\SearchService;
+use App\Services\TypesenseCollectionDescriptor;
 use App\Services\TypeSenseScoutSearchService;
 use App\Support\CacheOptions;
 use App\Support\DefaultMediator;
 use App\Support\JikanConfig;
 use App\Support\JikanUnitOfWork;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Response;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Collection;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\ServiceProvider;
 use Jikan\MyAnimeList\MalClient;
 use Laravel\Scout\Builder as ScoutBuilder;
-use App\Features;
+use Symfony\Component\HttpClient\HttpClient;
+use Typesense\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * @throws \ReflectionException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
     public function boot(): void
     {
@@ -83,41 +91,40 @@ class AppServiceProvider extends ServiceProvider
      * Register any application services.
      *
      * @throws \ReflectionException
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     * @return void
+     * @throws BindingResolutionException
      */
     public function register(): void
     {
         // Custom exception handler (JSON rendering lives in App\Exceptions\Handler).
         $this->app->singleton(
-            \Illuminate\Contracts\Debug\ExceptionHandler::class,
-            \App\Exceptions\Handler::class
+            ExceptionHandler::class,
+            Handler::class
         );
 
         // Scraper client + parser + serializer, previously bound in bootstrap/app.php.
-        $httpClient = \Symfony\Component\HttpClient\HttpClient::create([
+        $httpClient = HttpClient::create([
             'timeout' => (float) config('jikan.source_timeout'),
         ]);
         $this->app->instance('HttpClient', $httpClient);
         $this->app->instance('JikanParser', new MalClient($httpClient));
         $this->app->instance('SerializerV4', SerializerFactory::createV4());
 
-        $this->app->singleton(JikanConfig::class, fn() => new JikanConfig(config("jikan")));
-        $this->app->singleton(\App\Contracts\SearchAnalyticsService::class,
-            ! $this->app->environment('testing') ? \App\Services\DefaultSearchAnalyticsService::class :
-                \App\Services\DummySearchAnalyticsService::class);
-        $this->app->alias(JikanConfig::class, "jikan-config");
+        $this->app->singleton(JikanConfig::class, fn () => new JikanConfig(config('jikan')));
+        $this->app->singleton(SearchAnalyticsService::class,
+            ! $this->app->environment('testing') ? DefaultSearchAnalyticsService::class :
+                DummySearchAnalyticsService::class);
+        $this->app->alias(JikanConfig::class, 'jikan-config');
         // cache options class is used to share the request scope level cache settings
         $this->app->singleton(CacheOptions::class);
         $this->app->singleton(CachedScraperService::class, DefaultCachedScraperService::class);
         $this->app->singleton(PrivateFieldMapperService::class, DefaultPrivateFieldMapperService::class);
         $this->app->bind(QueryBuilderPaginatorService::class, DefaultBuilderPaginatorService::class);
-        if (static::getSearchIndexDriver($this->app) === "typesense") {
+        if (static::getSearchIndexDriver($this->app) === 'typesense') {
             $this->app->singleton(
-                \Typesense\Client::class,
-                fn () => new \Typesense\Client(config('scout.typesense.client-settings'))
+                Client::class,
+                fn () => new Client(config('scout.typesense.client-settings'))
             );
-            $this->app->singleton(\App\Services\TypesenseCollectionDescriptor::class);
+            $this->app->singleton(TypesenseCollectionDescriptor::class);
         }
         $this->registerModelRepositories();
     }
@@ -127,16 +134,15 @@ class AppServiceProvider extends ServiceProvider
         if ($this->getSearchIndexesEnabledConfig($this->app)) {
             $scoutDriver = static::getSearchIndexDriver($this->app);
             $serviceClass = match ($scoutDriver) {
-                "typesense" => TypeSenseScoutSearchService::class,
+                'typesense' => TypeSenseScoutSearchService::class,
                 default => DefaultScoutSearchService::class
             };
 
             $scoutSearchService = $this->app->make($serviceClass, [
-                "repository" => $repository,
+                'repository' => $repository,
             ]);
             $result = new SearchEngineSearchService($scoutSearchService, $repository);
-        }
-        else {
+        } else {
             $result = new MongoSearchService($repository);
         }
 
@@ -223,8 +229,8 @@ class AppServiceProvider extends ServiceProvider
 
         foreach ($searchRequestHandlersDescriptors as $handlerClass => $repositoryInstance) {
             $register($handlerClass, fn () => [
-                "queryBuilderService" => $app->make(DefaultQueryBuilderService::class, [
-                    "searchService" => $this->getSearchService($repositoryInstance)
+                'queryBuilderService' => $app->make(DefaultQueryBuilderService::class, [
+                    'searchService' => $this->getSearchService($repositoryInstance),
                 ]),
             ]);
         }
@@ -251,53 +257,53 @@ class AppServiceProvider extends ServiceProvider
         ];
 
         foreach ($requestHandlersWithOnlyRepositoryDependency as $handlerClass => $repositoryInstance) {
-            $register($handlerClass, fn () => ["repository" => $repositoryInstance]);
+            $register($handlerClass, fn () => ['repository' => $repositoryInstance]);
         }
 
         // request handlers which are fetching data through the jikan library from MAL, and caching the result.
         $requestHandlersWithScraperService = [
             Features\AnimeFullLookupHandler::class => $unitOfWorkInstance->anime(),
             Features\AnimeLookupHandler::class => $unitOfWorkInstance->anime(),
-            Features\UserSearchHandler::class => $unitOfWorkInstance->documents("common"),
-            Features\QueryTopReviewsHandler::class => $unitOfWorkInstance->documents("common"),
-            Features\UserByIdLookupHandler::class => $unitOfWorkInstance->documents("common"),
-            Features\AnimeCharactersLookupHandler::class => $unitOfWorkInstance->documents("anime_characters_staff"),
-            Features\AnimeStaffLookupHandler::class => $unitOfWorkInstance->documents("anime_characters_staff"),
-            Features\AnimeEpisodesLookupHandler::class => $unitOfWorkInstance->documents("anime_episodes"),
-            Features\AnimeEpisodeLookupHandler::class => $unitOfWorkInstance->documents("anime_episode"),
-            Features\AnimeNewsLookupHandler::class => $unitOfWorkInstance->documents("anime_news"),
-            Features\AnimeForumLookupHandler::class => $unitOfWorkInstance->documents("anime_forum"),
-            Features\AnimeVideosLookupHandler::class => $unitOfWorkInstance->documents("anime_videos"),
-            Features\AnimeVideosEpisodesLookupHandler::class => $unitOfWorkInstance->documents("anime_videos_episodes"),
-            Features\AnimePicturesLookupHandler::class => $unitOfWorkInstance->documents("anime_pictures"),
-            Features\AnimeStatsLookupHandler::class => $unitOfWorkInstance->documents("anime_stats"),
-            Features\AnimeMoreInfoLookupHandler::class => $unitOfWorkInstance->documents("anime_moreinfo"),
-            Features\AnimeRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("anime_recommendations"),
-            Features\AnimeReviewsLookupHandler::class => $unitOfWorkInstance->documents("anime_reviews"),
+            Features\UserSearchHandler::class => $unitOfWorkInstance->documents('common'),
+            Features\QueryTopReviewsHandler::class => $unitOfWorkInstance->documents('common'),
+            Features\UserByIdLookupHandler::class => $unitOfWorkInstance->documents('common'),
+            Features\AnimeCharactersLookupHandler::class => $unitOfWorkInstance->documents('anime_characters_staff'),
+            Features\AnimeStaffLookupHandler::class => $unitOfWorkInstance->documents('anime_characters_staff'),
+            Features\AnimeEpisodesLookupHandler::class => $unitOfWorkInstance->documents('anime_episodes'),
+            Features\AnimeEpisodeLookupHandler::class => $unitOfWorkInstance->documents('anime_episode'),
+            Features\AnimeNewsLookupHandler::class => $unitOfWorkInstance->documents('anime_news'),
+            Features\AnimeForumLookupHandler::class => $unitOfWorkInstance->documents('anime_forum'),
+            Features\AnimeVideosLookupHandler::class => $unitOfWorkInstance->documents('anime_videos'),
+            Features\AnimeVideosEpisodesLookupHandler::class => $unitOfWorkInstance->documents('anime_videos_episodes'),
+            Features\AnimePicturesLookupHandler::class => $unitOfWorkInstance->documents('anime_pictures'),
+            Features\AnimeStatsLookupHandler::class => $unitOfWorkInstance->documents('anime_stats'),
+            Features\AnimeMoreInfoLookupHandler::class => $unitOfWorkInstance->documents('anime_moreinfo'),
+            Features\AnimeRecommendationsLookupHandler::class => $unitOfWorkInstance->documents('anime_recommendations'),
+            Features\AnimeReviewsLookupHandler::class => $unitOfWorkInstance->documents('anime_reviews'),
             Features\AnimeRelationsLookupHandler::class => $unitOfWorkInstance->anime(),
             Features\AnimeExternalLookupHandler::class => $unitOfWorkInstance->anime(),
             Features\AnimeStreamingLookupHandler::class => $unitOfWorkInstance->anime(),
             Features\AnimeThemesLookupHandler::class => $unitOfWorkInstance->anime(),
-            Features\AnimeUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents("anime_userupdates"),
+            Features\AnimeUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents('anime_userupdates'),
             Features\CharacterLookupHandler::class => $unitOfWorkInstance->characters(),
             Features\CharacterFullLookupHandler::class => $unitOfWorkInstance->characters(),
             Features\CharacterAnimeLookupHandler::class => $unitOfWorkInstance->characters(),
             Features\CharacterMangaLookupHandler::class => $unitOfWorkInstance->characters(),
             Features\CharacterVoicesLookupHandler::class => $unitOfWorkInstance->characters(),
-            Features\CharacterPicturesLookupHandler::class => $unitOfWorkInstance->documents("characters_pictures"),
+            Features\CharacterPicturesLookupHandler::class => $unitOfWorkInstance->documents('characters_pictures'),
             Features\ClubLookupHandler::class => $unitOfWorkInstance->clubs(),
-            Features\ClubMembersLookupHandler::class => $unitOfWorkInstance->documents("clubs_members"),
+            Features\ClubMembersLookupHandler::class => $unitOfWorkInstance->documents('clubs_members'),
             Features\ClubStaffLookupHandler::class => $unitOfWorkInstance->clubs(),
             Features\ClubRelationsLookupHandler::class => $unitOfWorkInstance->clubs(),
-            Features\MangaCharactersLookupHandler::class => $unitOfWorkInstance->documents("manga_characters"),
-            Features\MangaNewsLookupHandler::class => $unitOfWorkInstance->documents("manga_news"),
-            Features\MangaForumLookupHandler::class => $unitOfWorkInstance->documents("manga_forum"),
-            Features\MangaPicturesLookupHandler::class => $unitOfWorkInstance->documents("manga_pictures"),
-            Features\MangaStatsLookupHandler::class => $unitOfWorkInstance->documents("manga_stats"),
-            Features\MangaMoreInfoLookupHandler::class => $unitOfWorkInstance->documents("manga_moreinfo"),
-            Features\MangaRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("manga_recommendations"),
-            Features\MangaUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents("manga_userupdates"),
-            Features\MangaReviewsLookupHandler::class => $unitOfWorkInstance->documents("manga_reviews"),
+            Features\MangaCharactersLookupHandler::class => $unitOfWorkInstance->documents('manga_characters'),
+            Features\MangaNewsLookupHandler::class => $unitOfWorkInstance->documents('manga_news'),
+            Features\MangaForumLookupHandler::class => $unitOfWorkInstance->documents('manga_forum'),
+            Features\MangaPicturesLookupHandler::class => $unitOfWorkInstance->documents('manga_pictures'),
+            Features\MangaStatsLookupHandler::class => $unitOfWorkInstance->documents('manga_stats'),
+            Features\MangaMoreInfoLookupHandler::class => $unitOfWorkInstance->documents('manga_moreinfo'),
+            Features\MangaRecommendationsLookupHandler::class => $unitOfWorkInstance->documents('manga_recommendations'),
+            Features\MangaUserUpdatesLookupHandler::class => $unitOfWorkInstance->documents('manga_userupdates'),
+            Features\MangaReviewsLookupHandler::class => $unitOfWorkInstance->documents('manga_reviews'),
             Features\MangaLookupHandler::class => $unitOfWorkInstance->manga(),
             Features\MangaFullLookupHandler::class => $unitOfWorkInstance->manga(),
             Features\MangaRelationsLookupHandler::class => $unitOfWorkInstance->manga(),
@@ -307,42 +313,42 @@ class AppServiceProvider extends ServiceProvider
             Features\PersonFullLookupHandler::class => $unitOfWorkInstance->people(),
             Features\PersonMangaLookupHandler::class => $unitOfWorkInstance->people(),
             Features\PersonVoicesLookupHandler::class => $unitOfWorkInstance->people(),
-            Features\PersonPicturesLookupHandler::class => $unitOfWorkInstance->documents("people_pictures"),
+            Features\PersonPicturesLookupHandler::class => $unitOfWorkInstance->documents('people_pictures'),
             Features\ProducerLookupHandler::class => $unitOfWorkInstance->producers(),
             Features\ProducerFullLookupHandler::class => $unitOfWorkInstance->producers(),
             Features\ProducerExternalLookupHandler::class => $unitOfWorkInstance->producers(),
-            Features\QueryAnimeRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
-            Features\QueryMangaRecommendationsHandler::class => $unitOfWorkInstance->documents("recommendations"),
-            Features\QueryAnimeReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
-            Features\QueryMangaReviewsHandler::class => $unitOfWorkInstance->documents("reviews"),
-            Features\QueryAnimeSeasonListHandler::class => $unitOfWorkInstance->documents("season_archive"),
+            Features\QueryAnimeRecommendationsHandler::class => $unitOfWorkInstance->documents('recommendations'),
+            Features\QueryMangaRecommendationsHandler::class => $unitOfWorkInstance->documents('recommendations'),
+            Features\QueryAnimeReviewsHandler::class => $unitOfWorkInstance->documents('reviews'),
+            Features\QueryMangaReviewsHandler::class => $unitOfWorkInstance->documents('reviews'),
+            Features\QueryAnimeSeasonListHandler::class => $unitOfWorkInstance->documents('season_archive'),
             Features\UserFullLookupHandler::class => $unitOfWorkInstance->users(),
             Features\UserProfileLookupHandler::class => $unitOfWorkInstance->users(),
             Features\UserStatisticsLookupHandler::class => $unitOfWorkInstance->users(),
             Features\UserFavoritesLookupHandler::class => $unitOfWorkInstance->users(),
             Features\UserUpdatesLookupHandler::class => $unitOfWorkInstance->users(),
             Features\UserAboutLookupHandler::class => $unitOfWorkInstance->users(),
-            Features\UserHistoryLookupHandler::class => $unitOfWorkInstance->documents("users_history"),
-            Features\UserFriendsLookupHandler::class => $unitOfWorkInstance->documents("users_friends"),
-            Features\UserReviewsLookupHandler::class => $unitOfWorkInstance->documents("users_reviews"),
-            Features\UserRecommendationsLookupHandler::class => $unitOfWorkInstance->documents("users_recommendations"),
-            Features\UserClubsLookupHandler::class => $unitOfWorkInstance->documents("users_clubs"),
+            Features\UserHistoryLookupHandler::class => $unitOfWorkInstance->documents('users_history'),
+            Features\UserFriendsLookupHandler::class => $unitOfWorkInstance->documents('users_friends'),
+            Features\UserReviewsLookupHandler::class => $unitOfWorkInstance->documents('users_reviews'),
+            Features\UserRecommendationsLookupHandler::class => $unitOfWorkInstance->documents('users_recommendations'),
+            Features\UserClubsLookupHandler::class => $unitOfWorkInstance->documents('users_clubs'),
             Features\UserExternalLookupHandler::class => $unitOfWorkInstance->users(),
-            Features\QueryRecentlyOnlineUsersHandler::class => $unitOfWorkInstance->documents("users_recently_online"),
-            Features\QueryRecentlyAddedEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
-            Features\QueryPopularEpisodesHandler::class => $unitOfWorkInstance->documents("watch"),
-            Features\QueryRecentlyAddedPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
-            Features\QueryPopularPromoVideosHandler::class => $unitOfWorkInstance->documents("watch"),
-            Features\QueryAnimeListOfUserHandler::class => $unitOfWorkInstance->documents("users_animelist"),
-            Features\QueryMangaListOfUserHandler::class => $unitOfWorkInstance->documents("users_mangalist")
+            Features\QueryRecentlyOnlineUsersHandler::class => $unitOfWorkInstance->documents('users_recently_online'),
+            Features\QueryRecentlyAddedEpisodesHandler::class => $unitOfWorkInstance->documents('watch'),
+            Features\QueryPopularEpisodesHandler::class => $unitOfWorkInstance->documents('watch'),
+            Features\QueryRecentlyAddedPromoVideosHandler::class => $unitOfWorkInstance->documents('watch'),
+            Features\QueryPopularPromoVideosHandler::class => $unitOfWorkInstance->documents('watch'),
+            Features\QueryAnimeListOfUserHandler::class => $unitOfWorkInstance->documents('users_animelist'),
+            Features\QueryMangaListOfUserHandler::class => $unitOfWorkInstance->documents('users_mangalist'),
         ];
 
         foreach ($requestHandlersWithScraperService as $handlerClass => $repositoryInstance) {
             $register($handlerClass, fn () => [
-                "scraperService" => $app->make(DefaultCachedScraperService::class, [
-                    "repository" => $repositoryInstance,
-                    "jikan" => $app->get("JikanParser"),
-                    "serializer" => $app->get("SerializerV4"),
+                'scraperService' => $app->make(DefaultCachedScraperService::class, [
+                    'repository' => $repositoryInstance,
+                    'jikan' => $app->get('JikanParser'),
+                    'serializer' => $app->get('SerializerV4'),
                 ]),
             ]);
         }
@@ -357,7 +363,7 @@ class AppServiceProvider extends ServiceProvider
             Features\QueryAnimeSchedulesHandler::class,
             Features\QueryCurrentAnimeSeasonHandler::class,
             Features\QuerySpecificAnimeSeasonHandler::class,
-            Features\QueryUpcomingAnimeSeasonHandler::class
+            Features\QueryUpcomingAnimeSeasonHandler::class,
         ];
 
         foreach ($requestHandlersWithNoDependencies as $handlerClass) {
@@ -373,10 +379,10 @@ class AppServiceProvider extends ServiceProvider
             ->reject(fn ($class, $macro) => Collection::hasMacro($macro))
             ->each(fn ($class, $macro) => Collection::macro($macro, app($class)()));
 
-        Response::macro("addJikanCacheFlags", app(ResponseJikanCacheFlags::class)());
-        JsonResponse::macro("addJikanCacheFlags", app(ResponseJikanCacheFlags::class)());
+        Response::macro('addJikanCacheFlags', app(ResponseJikanCacheFlags::class)());
+        JsonResponse::macro('addJikanCacheFlags', app(ResponseJikanCacheFlags::class)());
 
-        ScoutBuilder::mixin(new ScoutBuilderMixin());
+        ScoutBuilder::mixin(new ScoutBuilderMixin);
     }
 
     /**
@@ -385,18 +391,18 @@ class AppServiceProvider extends ServiceProvider
     private function collectionMacros(): array
     {
         return [
-            "to2dArrayWithDottedKeys" => To2dArrayWithDottedKeys::class,
-            "offsetGetFirst" => CollectionOffsetGetFirst::class
+            'to2dArrayWithDottedKeys' => To2dArrayWithDottedKeys::class,
+            'offsetGetFirst' => CollectionOffsetGetFirst::class,
         ];
     }
 
     private function getSearchIndexesEnabledConfig($app): bool
     {
-        return $this->getSearchIndexDriver($app) != "null";
+        return $this->getSearchIndexDriver($app) != 'null';
     }
 
     private static function getSearchIndexDriver($app): string
     {
-        return $app["config"]->get("scout.driver");
+        return $app['config']->get('scout.driver');
     }
 }

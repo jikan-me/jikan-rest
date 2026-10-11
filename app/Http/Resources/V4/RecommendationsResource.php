@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RecommendationsResource extends JsonResource
@@ -9,7 +10,7 @@ class RecommendationsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
@@ -19,6 +20,7 @@ class RecommendationsResource extends JsonResource
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  type="array",
@@ -31,7 +33,6 @@ class RecommendationsResource extends JsonResource
      *                          type="string",
      *                          description="MAL IDs of recommendations is both of the MAL ID's with a `-` delimiter",
      *                      ),
-     *
      *                      @OA\Property (
      *                          property="entry",
      *                          type="array",
@@ -40,6 +41,7 @@ class RecommendationsResource extends JsonResource
      *                          @OA\Items(
      *                              type="object",
      *                              anyOf={
+     *
      *                                  @OA\Schema(ref="#/components/schemas/anime_meta"),
      *                                  @OA\Schema(ref="#/components/schemas/manga_meta"),
      *                              }
@@ -51,7 +53,6 @@ class RecommendationsResource extends JsonResource
      *                          type="string",
      *                          description="Recommendation context provided by the user",
      *                      ),
-     *
      *                      @OA\Property (
      *                          property="user",
      *                          type="object",
@@ -62,7 +63,6 @@ class RecommendationsResource extends JsonResource
      *          ),
      *     }
      *  ),
-     *
      *
      * @OA\Schema(
      *      schema="entry_recommendations",
@@ -75,15 +75,18 @@ class RecommendationsResource extends JsonResource
      *          @OA\Items(
      *              type="object",
 
+     *
      *              @OA\Property (
      *                  property="entry",
      *                  type="object",
      *                   oneOf={
+     *
      *                       @OA\Schema(ref="#/components/schemas/anime_meta"),
      *                       @OA\Schema(ref="#/components/schemas/manga_meta"),
      *                   }
      *                  ),
      *              ),
+     *
      *              @OA\Property(
      *                  property="url",
      *                  type="string",

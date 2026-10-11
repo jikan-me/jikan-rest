@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Services;
+
 use App\JikanApiSearchableModel;
 use Illuminate\Support\Collection;
 use Typesense\Client as Typesense;
@@ -11,7 +13,7 @@ use Typesense\Client as Typesense;
  */
 final class TypesenseCollectionDescriptor
 {
-/** @var \Illuminate\Support\Collection<string, mixed> */
+    /** @var Collection<string, mixed> */
     private readonly Collection $cache;
 
     public function __construct(private readonly Typesense $typesense)
@@ -31,8 +33,8 @@ final class TypesenseCollectionDescriptor
 
         $collection = $this->typesense->getCollections()->{$modelSearchableAs};
         $collectionDetails = $collection->retrieve();
-        $fields = collect($collectionDetails["fields"]);
-        $searchableAttributeNames = $fields->pluck("name")->all();
+        $fields = collect($collectionDetails['fields']);
+        $searchableAttributeNames = $fields->pluck('name')->all();
         $this->cache->put($modelSearchableAs, $searchableAttributeNames);
 
         return $searchableAttributeNames;

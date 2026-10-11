@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Magazine;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
@@ -7,8 +11,8 @@ use Tests\TestCase;
 
 class MagazineControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testMagazinesListing()
     {
@@ -20,8 +24,8 @@ class MagazineControllerTest extends TestCase
                     'mal_id',
                     'name',
                     'url',
-                    'count'
-                ]
+                    'count',
+                ],
             ]]);
     }
 }

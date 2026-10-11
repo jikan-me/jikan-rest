@@ -4,6 +4,7 @@ namespace App\Contracts;
 
 use App\Character;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -12,7 +13,7 @@ use Laravel\Scout\Builder as ScoutBuilder;
 interface CharacterRepository extends Repository
 {
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Character>
+     * @return EloquentBuilder|Builder<Character>
      */
     public function topCharacters(): EloquentBuilder|ScoutBuilder;
 }

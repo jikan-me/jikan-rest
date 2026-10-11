@@ -21,7 +21,7 @@ final class AnimeStreamingLookupHandler extends ItemLookupHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

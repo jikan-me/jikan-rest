@@ -15,12 +15,11 @@ use App\Services\QueryBuilderPaginatorService;
 class QueryTopMangaItemsHandler implements RequestHandler
 {
     public function __construct(private readonly MangaRepository $repository,
-                                private readonly QueryBuilderPaginatorService $paginatorService)
-    {
-    }
+        private readonly QueryBuilderPaginatorService $paginatorService) {}
 
     /**
-     * @param QueryTopMangaItemsCommand $request
+     * @param  QueryTopMangaItemsCommand  $request
+     *
      * @returns MangaCollection
      */
     public function handle($request): MangaCollection
@@ -29,8 +28,8 @@ class QueryTopMangaItemsHandler implements RequestHandler
         /**
          * @var ?TopMangaFilterEnum $filterType
          */
-        $filterType = $requestParams->has("filter") ? $request->filter : null;
-        $builder = match($filterType) {
+        $filterType = $requestParams->has('filter') ? $request->filter : null;
+        $builder = match ($filterType) {
             TopMangaFilterEnum::publishing() => $this->repository->getTopPublishingItems(),
             TopMangaFilterEnum::upcoming() => $this->repository->getTopUpcomingItems(),
             TopMangaFilterEnum::bypopularity() => $this->repository->orderByPopularity(),
@@ -42,13 +41,13 @@ class QueryTopMangaItemsHandler implements RequestHandler
 
         return new MangaCollection(
             $this->paginatorService->paginate(
-                $builder, $requestParams->get("limit"), $requestParams->get("page")
+                $builder, $requestParams->get('limit'), $requestParams->get('page')
             )
         );
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

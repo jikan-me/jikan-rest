@@ -148,7 +148,7 @@ class SourceHeartbeatProvider extends ServiceProvider
      * Entries may be malformed in storage (null/strings) and are filtered out,
      * so the input type is deliberately loose.
      *
-     * @param array<int, mixed> $fails  entries as [timestamp, status, health] (may be malformed)
+     * @param  array<int, mixed>  $fails  entries as [timestamp, status, health] (may be malformed)
      * @return array<int, array<mixed>>
      */
     public static function pruneFails(array $fails): array

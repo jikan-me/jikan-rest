@@ -6,7 +6,6 @@ use App\Filters\FilterQueryString;
 
 /**
  * Class ExplicitGenresAnime
- * @package App
  */
 class ExplicitGenresAnime extends JikanApiModel
 {
@@ -16,12 +15,12 @@ class ExplicitGenresAnime extends JikanApiModel
 
     protected $fillable = [
         'mal_id', 'name', 'url', 'count',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     protected $table = 'explicit_genres_anime';
 
     protected $hidden = [
-        '_id', 'expiresAt'
+        '_id', 'expiresAt',
     ];
 }

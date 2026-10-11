@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Character;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Character */
+/** @mixin Character */
 class CharacterResource extends JsonResource
 {
     /**
@@ -41,10 +43,12 @@ class CharacterResource extends JsonResource
      *          property="nicknames",
      *          type="array",
      *          description="Other Names",
+     *
      *          @OA\Items(
      *              type="string"
      *          )
      *      ),
+     *
      *      @OA\Property(
      *          property="favorites",
      *          type="integer",
@@ -62,7 +66,7 @@ class CharacterResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)
@@ -75,7 +79,7 @@ class CharacterResource extends JsonResource
             'name_kanji' => $this->name_kanji,
             'nicknames' => $this->nicknames,
             'favorites' => $this->favorites,
-            'about' => $this->about
+            'about' => $this->about,
         ];
     }
 }

@@ -8,13 +8,12 @@ use OpenApi\Annotations as OA;
 
 /**
  * Class Controller
- * @package App\Http\Controllers\V4DB
  */
 class Controller extends BaseController
 {
-
     /**
      * @OA\OpenApi(
+     *
      *     @OA\Info(
      *         version="4.0.0",
      *         title="Jikan API",
@@ -25,32 +24,31 @@ class Controller extends BaseController
      *             name="API Support (Discord)",
      *             url="http://discord.jikan.moe"
      *         ),
+     *
      *         @OA\License(
      *             name="MIT",
      *             url="https://github.com/jikan-me/jikan-rest/blob/master/LICENSE"
      *         )
      *     ),
+     *
      *     @OA\Server(
      *         description="Jikan REST API",
      *         url="https://api.jikan.moe/v4",
      *     ),
+     *
      *     @OA\ExternalDocumentation(
      *         description="About",
      *         url="https://jikan.moe"
      *     ),
      * )
      */
-
     protected Mediator $mediator;
 
     /**
      * AnimeController constructor.
-     *
-     * @param Mediator $mediator
      */
     public function __construct(Mediator $mediator)
     {
         $this->mediator = $mediator;
     }
-
 }

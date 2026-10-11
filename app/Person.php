@@ -3,9 +3,10 @@
 namespace App;
 
 use App\Concerns\FilteredByLetter;
-use Jikan\Jikan;
-use Jikan\Request\Person\PersonRequest;
+use Database\Factories\PersonFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Jikan\Request\Person\PersonRequest;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Mongo-backed person document. Attributes are magic (from the collection); the
@@ -19,21 +20,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string|null $given_name
  * @property string|null $family_name
  * @property array<string, mixed> $alternate_names
- * @property \MongoDB\BSON\UTCDateTime|null $birthday
+ * @property UTCDateTime|null $birthday
  * @property int $favorites
  * @property int $member_favorites
  * @property string|null $about
  * @property array<string, mixed> $voice_acting_roles
  * @property array<string, mixed> $anime_staff_positions
  * @property array<string, mixed> $published_manga
- * @property \MongoDB\BSON\UTCDateTime|null $createdAt
- * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
- * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\PersonFactory>
+ * @property UTCDateTime|null $createdAt
+ * @property UTCDateTime|null $modifiedAt
+ *
+ * @use HasFactory<PersonFactory>
  */
 class Person extends JikanApiSearchableModel
 {
-    use HasFactory, FilteredByLetter;
-    protected array $filters = ["order_by", "sort"];
+    use FilteredByLetter, HasFactory;
+
+    protected array $filters = ['order_by', 'sort'];
 
     /**
      * The attributes that are mass assignable.
@@ -44,7 +47,7 @@ class Person extends JikanApiSearchableModel
         'mal_id', 'url', 'images', 'website_url', 'name', 'given_name', 'family_name',
         'alternative_names', 'birthday', 'member_favorites', 'about', 'voice_acting_roles',
         'anime_staff_positions', 'published_manga',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     /**
@@ -67,13 +70,13 @@ class Person extends JikanApiSearchableModel
      * @var list<string>
      */
     protected $hidden = [
-        '_id', 'member_favorites'
+        '_id', 'member_favorites',
     ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->displayNameFieldName = "name";
+        $this->displayNameFieldName = 'name';
     }
 
     /** @noinspection PhpUnused */
@@ -97,6 +100,7 @@ class Person extends JikanApiSearchableModel
     public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getPerson(new PersonRequest($id));
+
         return json_decode(
             app('SerializerV4')
                 ->serialize($data, 'json'),
@@ -119,17 +123,17 @@ class Person extends JikanApiSearchableModel
             'family_name' => $this->family_name,
             'alternate_names' => $this->alternate_names,
             'member_favorites' => $this->member_favorites,
-            'birthday' => $this->convertToTimestamp($this->birthday)
+            'birthday' => $this->convertToTimestamp($this->birthday),
         ];
     }
 
     public function typesenseQueryBy(): array
     {
         return [
-            "name",
-            "given_name",
-            "family_name",
-            "alternate_names"
+            'name',
+            'given_name',
+            'family_name',
+            'alternate_names',
         ];
     }
 

@@ -17,7 +17,7 @@ use Spatie\LaravelData\Optional;
  */
 final class PeopleSearchCommand extends SearchCommand implements DataRequest
 {
-    #[MapInputName("order_by"), MapOutputName("order_by"),
+    #[MapInputName('order_by'), MapOutputName('order_by'),
         WithCast(EnumCast::class, PeopleOrderByEnum::class), EnumValidation(PeopleOrderByEnum::class)]
     public PeopleOrderByEnum|Optional $orderBy;
 }

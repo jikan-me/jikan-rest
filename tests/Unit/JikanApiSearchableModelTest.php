@@ -2,10 +2,11 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
+use App\JikanApiSearchableModel;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\TestCase;
 
-final class JikanApiSearchableModelFixture extends \App\JikanApiSearchableModel
+final class JikanApiSearchableModelFixture extends JikanApiSearchableModel
 {
     public string $titleAttributeNameFixture;
 
@@ -25,16 +26,16 @@ final class JikanApiSearchableModelTest extends TestCase
     public static function titleFieldDataProvider()
     {
         return [
-            ["name"],
-            ["username"],
-            ["title"]
+            ['name'],
+            ['username'],
+            ['title'],
         ];
     }
 
     #[DataProvider('titleFieldDataProvider')]
     public function testGetCollectionSchemaShouldReturnSortableTitleFieldInSchemaConfig($titleAttributeNameFixture)
     {
-        $fixture = new JikanApiSearchableModelFixture();
+        $fixture = new JikanApiSearchableModelFixture;
         $fixture->titleAttributeNameFixture = $titleAttributeNameFixture;
         $schema = $fixture->getCollectionSchema();
 

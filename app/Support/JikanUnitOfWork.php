@@ -29,9 +29,7 @@ final class JikanUnitOfWork implements UnitOfWork
         private readonly UserRepository $userRepository,
         private readonly AnimeGenresRepository $animeGenresRepository,
         private readonly MangaGenresRepository $mangaGenresRepository
-    )
-    {
-    }
+    ) {}
 
     public function anime(): AnimeRepository
     {

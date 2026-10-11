@@ -2,7 +2,6 @@
 
 namespace App\Dto;
 
-
 use App\Casts\EnumCast;
 use App\Enums\UserHistoryTypeEnum;
 use App\Rules\Attributes\EnumValidation;
@@ -11,7 +10,6 @@ use Spatie\LaravelData\Attributes\WithCast;
 
 /**
  * @extends LookupByUsernameCommand<JsonResponse>
-
  */
 final class UserHistoryLookupCommand extends LookupByUsernameCommand
 {

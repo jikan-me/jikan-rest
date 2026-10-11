@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MoreInfoResource extends JsonResource
@@ -9,7 +10,7 @@ class MoreInfoResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
@@ -19,7 +20,6 @@ class MoreInfoResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="object",
-     *
      *          @OA\Property(
      *              property="moreinfo",
      *              type="string",
@@ -35,7 +35,7 @@ class MoreInfoResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'moreinfo' => $this['moreinfo']
+            'moreinfo' => $this['moreinfo'],
         ];
     }
 }

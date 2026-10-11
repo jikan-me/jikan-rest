@@ -1,11 +1,18 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\JikanEnumServiceProvider;
+use App\Providers\SourceHeartbeatProvider;
+use Illuminate\Filesystem\FilesystemServiceProvider;
+use L5Swagger\L5SwaggerServiceProvider;
+
 return [
-    Illuminate\Filesystem\FilesystemServiceProvider::class,
+    FilesystemServiceProvider::class,
     Illuminate\Foundation\Support\Providers\EventServiceProvider::class,
-    App\Providers\AppServiceProvider::class,
-    App\Providers\SourceHeartbeatProvider::class,
-    App\Providers\EventServiceProvider::class,
-    App\Providers\JikanEnumServiceProvider::class,
-    \L5Swagger\L5SwaggerServiceProvider::class,
+    AppServiceProvider::class,
+    SourceHeartbeatProvider::class,
+    EventServiceProvider::class,
+    JikanEnumServiceProvider::class,
+    L5SwaggerServiceProvider::class,
 ];

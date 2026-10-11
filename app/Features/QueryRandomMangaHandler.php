@@ -14,7 +14,7 @@ use Spatie\LaravelData\Optional;
 final class QueryRandomMangaHandler implements RequestHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle($request)
     {
@@ -35,7 +35,7 @@ final class QueryRandomMangaHandler implements RequestHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

@@ -24,7 +24,7 @@ final class AnimeRecommendationsLookupHandler extends RequestHandlerWithScraperC
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -32,16 +32,16 @@ final class AnimeRecommendationsLookupHandler extends RequestHandlerWithScraperC
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
+        $id = $requestParams->get('id');
 
         return $this->scraperService->findList(
             $requestFingerPrint,
             fn (MalClient $jikan, ?int $page = null) => collect(
-                ["recommendations" => $jikan->getAnimeRecommendations(new AnimeRecommendationsRequest($id))]
+                ['recommendations' => $jikan->getAnimeRecommendations(new AnimeRecommendationsRequest($id))]
             )
         );
     }

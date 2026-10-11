@@ -17,7 +17,6 @@ class CommonResource extends JsonResource
      *          @OA\Schema(ref="#/components/schemas/trailer_images"),
      *      }
      *  ),
-     *
      *  @OA\Schema(
      *      schema="trailer_base",
      *      type="object",
@@ -195,6 +194,7 @@ class CommonResource extends JsonResource
      *      schema="mal_url",
      *      type="object",
      *      description="Parsed URL Data",
+     *
      *      @OA\Property(
      *          property="mal_id",
      *          type="integer",
@@ -221,6 +221,7 @@ class CommonResource extends JsonResource
      *      schema="mal_url_2",
      *      type="object",
      *      description="Parsed URL Data",
+     *
      *      @OA\Property(
      *          property="mal_id",
      *          type="integer",
@@ -247,6 +248,7 @@ class CommonResource extends JsonResource
      *      schema="entry_meta",
      *      type="object",
      *      description="Entry Meta data",
+     *
      *      @OA\Property(
      *          property="mal_id",
      *          type="integer",
@@ -298,7 +300,6 @@ class CommonResource extends JsonResource
      *     @OA\Property(
      *          property="pagination",
      *          type="object",
-     *
      *          @OA\Property(
      *               property="last_visible_page",
      *               type="integer"
@@ -317,7 +318,6 @@ class CommonResource extends JsonResource
      *     @OA\Property(
      *          property="pagination",
      *          type="object",
-     *
      *          @OA\Property(
      *               property="last_visible_page",
      *               type="integer"
@@ -330,11 +330,9 @@ class CommonResource extends JsonResource
      *               property="current_page",
      *               type="integer"
      *          ),
-     *
      *          @OA\Property (
      *              property="items",
      *              type="object",
-     *
      *              @OA\Property (
      *                  property="count",
      *                  type="integer"
@@ -351,10 +349,10 @@ class CommonResource extends JsonResource
      *      ),
      *  ),
      *
-     *
      * @OA\Schema(
      *     schema="user_meta",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="username",
      *         type="string",
@@ -391,6 +389,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="user_images",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="jpg",
      *         type="object",
@@ -418,6 +417,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="anime_meta",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="mal_id",
      *         type="integer",
@@ -443,6 +443,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="manga_meta",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="mal_id",
      *         type="integer",
@@ -468,6 +469,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="character_meta",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="mal_id",
      *         type="integer",
@@ -493,6 +495,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="person_meta",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="mal_id",
      *         type="integer",
@@ -518,6 +521,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="anime_images",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="jpg",
      *         type="object",
@@ -569,6 +573,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="manga_images",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="jpg",
      *         type="object",
@@ -620,6 +625,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="character_images",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="jpg",
      *         type="object",
@@ -659,6 +665,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="people_images",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="jpg",
      *         type="object",
@@ -675,6 +682,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="common_images",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="jpg",
      *         type="object",
@@ -691,6 +699,7 @@ class CommonResource extends JsonResource
      * @OA\Schema(
      *     schema="title",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="type",
      *         type="string",
@@ -702,7 +711,5 @@ class CommonResource extends JsonResource
      *         description="Title value",
      *     ),
      * ),
-     *
-     *
      */
 }

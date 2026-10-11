@@ -2,7 +2,6 @@
 
 namespace App\Dto;
 
-
 use App\Casts\EnumCast;
 use App\Dto\Concerns\HasPreliminaryParameter;
 use App\Dto\Concerns\HasSpoilersParameter;
@@ -20,7 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 final class MangaReviewsLookupCommand extends LookupDataCommand
 {
-    use PreparesData, HasPreliminaryParameter, HasSpoilersParameter;
+    use HasPreliminaryParameter, HasSpoilersParameter, PreparesData;
 
     #[Numeric, Min(1)]
     public int|Optional $page = 1;

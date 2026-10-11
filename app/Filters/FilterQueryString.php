@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -10,18 +11,17 @@ trait FilterQueryString
 {
     use FilterResolver;
 
-    /** @var array<string, class-string<\App\Filters\BaseClause>> */
+    /** @var array<string, class-string<BaseClause>> */
     private array $availableFilters = [
         'default' => WhereClause::class,
         'order_by' => OrderbyClause::class,
-        'sort' => OrderbyClause::class
+        'sort' => OrderbyClause::class,
     ];
 
     /** @noinspection PhpUnused */
     /**
-     * @param \Illuminate\Database\Eloquent\Builder<static> $query
-     * @param Collection<string, mixed> $queryParameters
-     * @return mixed
+     * @param  Builder<static>  $query
+     * @param  Collection<string, mixed>  $queryParameters
      */
     public function scopeFilter(Builder $query, Collection $queryParameters): mixed
     {
@@ -36,7 +36,7 @@ trait FilterQueryString
     }
 
     /**
-     * @param Collection<string, mixed> $filters
+     * @param  Collection<string, mixed>  $filters
      * @return Collection<string, mixed>
      */
     private function _normalizeOrderBy(Collection $filters): Collection
@@ -44,25 +44,25 @@ trait FilterQueryString
         // If DTO is not transformed then the value can be Enum type.
         // This scenario happens when we use ->all() on the DTO, instead of ->toArray().
         // However it is preferred to have the parsed values passed down, not the transformed ones.
-        foreach(["order_by", "sort"] as $key) {
+        foreach (['order_by', 'sort'] as $key) {
             if ($filters->has($key) && $filters->get($key) instanceof Enum) {
                 $filters[$key] = $filters[$key]->label;
             }
         }
 
         // fixme: this can be done more elegantly, for now this is here as a quick hack.
-        if ($filters->has("sort") && $filters->has("order_by")) {
+        if ($filters->has('sort') && $filters->has('order_by')) {
             // we put the order by field and the sort direction in one array element.
             // the OrderByClause class will explode the string by the comma and set the correct field.
-            $filters["order_by"] = $filters["order_by"] . "," . $filters["sort"];
-            unset($filters["sort"]);
+            $filters['order_by'] = $filters['order_by'].','.$filters['sort'];
+            unset($filters['sort']);
         }
 
         return $filters;
     }
 
     /**
-     * @param Collection<string, mixed> $queryParameters
+     * @param  Collection<string, mixed>  $queryParameters
      * @return Collection<string, mixed>
      */
     private function getFilters(Collection $queryParameters): Collection
@@ -72,11 +72,11 @@ trait FilterQueryString
             $filters = $this->filters ?: [];
 
             // if model class sets the "unguardFilters" variable to true, then we skip the filter validation
-            return !($this->unguardFilters != true) || in_array($key, $filters);
+            return ! ($this->unguardFilters != true) || in_array($key, $filters);
         };
 
         $result = collect(array_filter($queryParameters->all(), $filter, ARRAY_FILTER_USE_KEY))
-                    ->filter(fn ($v, $k) => $v !== "" && $v !== null && !(is_float($v) && is_nan($v))) ?? Collection::empty();
+            ->filter(fn ($v, $k) => $v !== '' && $v !== null && ! (is_float($v) && is_nan($v))) ?? Collection::empty();
 
         return $this->_normalizeOrderBy($result);
     }

@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class IncrementalIndexer extends Command
 {
-    /**
-     * @var bool
-     */
     private bool $cancelled = false;
 
     /**
@@ -26,7 +23,7 @@ class IncrementalIndexer extends Command
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'mediaType' => ['The media type to index.', 'Valid values: anime, manga']
+            'mediaType' => ['The media type to index.', 'Valid values: anime, manga'],
         ];
     }
 
@@ -35,11 +32,10 @@ class IncrementalIndexer extends Command
      */
     private function getExistingIds(string $mediaType): array
     {
-        $existingIdsHash = "";
-        $existingIdsRaw = "";
+        $existingIdsHash = '';
+        $existingIdsRaw = '';
 
-        if (Storage::exists("indexer/incremental/$mediaType.json"))
-        {
+        if (Storage::exists("indexer/incremental/$mediaType.json")) {
             $existingIdsRaw = Storage::get("indexer/incremental/$mediaType.json");
             $existingIdsHash = sha1($existingIdsRaw);
         }
@@ -55,8 +51,7 @@ class IncrementalIndexer extends Command
         $idsToFetch = [];
         [$existingIdsHash, $existingIdsRaw] = $this->getExistingIds($mediaType);
 
-        if ($this->cancelled)
-        {
+        if ($this->cancelled) {
             return [];
         }
 
@@ -64,24 +59,18 @@ class IncrementalIndexer extends Command
         $newIdsHash = sha1($newIdsRaw);
 
         /** @noinspection PhpConditionAlreadyCheckedInspection */
-        if ($this->cancelled)
-        {
+        if ($this->cancelled) {
             return [];
         }
 
-        if ($newIdsHash !== $existingIdsHash)
-        {
+        if ($newIdsHash !== $existingIdsHash) {
             $newIds = json_decode($newIdsRaw, true);
             $existingIds = json_decode($existingIdsRaw, true);
 
-            if (is_null($existingIds) || count($existingIds) === 0)
-            {
+            if (is_null($existingIds) || count($existingIds) === 0) {
                 $idsToFetch = $newIds;
-            }
-            else
-            {
-                foreach (["sfw", "nsfw"] as $t)
-                {
+            } else {
+                foreach (['sfw', 'nsfw'] as $t) {
                     $idsToFetch[$t] = array_diff($newIds[$t], $existingIds[$t]);
                 }
             }
@@ -101,7 +90,7 @@ class IncrementalIndexer extends Command
     }
 
     /**
-     * @param array<string, array<int, int>> $idsToFetch
+     * @param  array<string, array<int, int>>  $idsToFetch
      */
     private function fetchIds(string $mediaType, array $idsToFetch, bool $resume): void
     {
@@ -109,16 +98,14 @@ class IncrementalIndexer extends Command
         $success = [];
         $failedIds = [];
         $idCount = count($idsToFetch);
-        if ($resume && Storage::exists("indexer/incremental/{$mediaType}_resume.save"))
-        {
-            $index = (int)Storage::get("indexer/incremental/{$mediaType}_resume.save");
+        if ($resume && Storage::exists("indexer/incremental/{$mediaType}_resume.save")) {
+            $index = (int) Storage::get("indexer/incremental/{$mediaType}_resume.save");
             $this->info("Resuming from index: $index");
         }
 
         $ids = array_merge($idsToFetch['sfw'], $idsToFetch['nsfw']);
 
-        if ($index > 0 && !isset($ids[$index]))
-        {
+        if ($index > 0 && ! isset($ids[$index])) {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
         }
@@ -127,36 +114,28 @@ class IncrementalIndexer extends Command
 
         $this->info("$idCount $mediaType entries available");
 
-        for ($i = $index; $i <= ($idCount - 1); $i++)
-        {
-            if ($this->cancelled)
-            {
+        for ($i = $index; $i <= ($idCount - 1); $i++) {
+            if ($this->cancelled) {
                 return;
             }
 
             $id = $ids[$i];
 
-            $url = config('app.url') . "/v4/$mediaType/$id";
-            $this->info("Indexing/Updating " . ($i + 1) . "/$idCount $url [MAL ID: $id]");
+            $url = config('app.url')."/v4/$mediaType/$id";
+            $this->info('Indexing/Updating '.($i + 1)."/$idCount $url [MAL ID: $id]");
 
-            try
-            {
+            try {
                 $response = json_decode(file_get_contents($url), true);
 
                 // a 404 means the entry no longer exists upstream: skip quietly
-                if (isset($response['error']) && (int) $response['status'] !== 404)
-                {
+                if (isset($response['error']) && (int) $response['status'] !== 404) {
                     $this->error("[SKIPPED] Failed to fetch $url - {$response['error']}");
                     $failedIds[] = $id;
                     Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
-                }
-                else
-                {
+                } else {
                     $success[] = $id;
                 }
-            }
-            catch (\Exception)
-            {
+            } catch (\Exception) {
                 $this->warn("[SKIPPED] Failed to fetch $url");
                 $failedIds[] = $id;
                 Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
@@ -168,10 +147,9 @@ class IncrementalIndexer extends Command
         Storage::delete("indexer/incremental/{$mediaType}_resume.save");
 
         $this->info("--- Indexing of $mediaType is complete.");
-        $this->info(count($success) . ' entries indexed or updated.');
-        if (count($failedIds) > 0)
-        {
-            $this->info(count($failedIds) . ' entries failed to index or update. Re-run with --failed to requeue failed entries only.');
+        $this->info(count($success).' entries indexed or updated.');
+        if (count($failedIds) > 0) {
+            $this->info(count($failedIds).' entries failed to index or update. Re-run with --failed to requeue failed entries only.');
         }
 
         // finalize the latest state
@@ -186,18 +164,19 @@ class IncrementalIndexer extends Command
                 'mediaType' => $this->argument('mediaType'),
                 'delay' => $this->option('delay'),
                 'resume' => $this->option('resume') ?? false,
-                'failed' => $this->option('failed') ?? false
+                'failed' => $this->option('failed') ?? false,
             ],
             [
                 'mediaType' => 'required|in:anime,manga',
                 'delay' => 'integer|min:1',
                 'resume' => 'bool|prohibited_with:failed',
-                'failed' => 'bool|prohibited_with:resume'
+                'failed' => 'bool|prohibited_with:resume',
             ]
         );
 
         if ($validator->fails()) {
             $this->error($validator->errors()->toJson());
+
             return 1;
         }
 
@@ -210,30 +189,24 @@ class IncrementalIndexer extends Command
         /**
          * @var $mediaTypes array
          */
-        $mediaTypes = $this->argument("mediaType");
+        $mediaTypes = $this->argument('mediaType');
 
-        foreach ($mediaTypes as $mediaType)
-        {
+        foreach ($mediaTypes as $mediaType) {
             $idsToFetch = [];
 
             // if "--failed" option is specified just run the failed ones
-            if ($onlyFailed && Storage::exists("indexer/incremental/{$mediaType}_failed.json"))
-            {
-                $idsToFetch["sfw"] = $this->getFailedIdsToFetch($mediaType);
-            }
-            else
-            {
+            if ($onlyFailed && Storage::exists("indexer/incremental/{$mediaType}_failed.json")) {
+                $idsToFetch['sfw'] = $this->getFailedIdsToFetch($mediaType);
+            } else {
                 $idsToFetch = $this->getIdsToFetch($mediaType);
             }
 
-            if ($this->cancelled)
-            {
+            if ($this->cancelled) {
                 return 127;
             }
 
             $idCount = count($idsToFetch);
-            if ($idCount === 0)
-            {
+            if ($idCount === 0) {
                 continue;
             }
 

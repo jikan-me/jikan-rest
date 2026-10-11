@@ -19,11 +19,11 @@ use Jikan\Request\User\UserMangaListRequest;
 final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
 {
     /**
-     * @param QueryMangaListOfUserCommand $request
+     * @param  QueryMangaListOfUserCommand  $request
      */
     public function handle($request)
     {
-        $requestParams = collect(["jikanParserRequest" => $request->toJikanParserRequest()]);
+        $requestParams = collect(['jikanParserRequest' => $request->toJikanParserRequest()]);
         $requestFingerPrint = $request->getFingerPrint();
         $results = $this->getScraperData($requestFingerPrint, $requestParams);
 
@@ -36,7 +36,7 @@ final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
             return new UserProfileAnimeListCollection([]);
         }
 
-        $listResults = $results->get("manga");
+        $listResults = $results->get('manga');
         foreach ($listResults as &$result) {
             $result = (new UserProfileMangaListResource($result));
         }
@@ -45,7 +45,7 @@ final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -53,18 +53,19 @@ final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         /**
          * @var UserMangaListRequest $jikanParserRequest
          */
-        $jikanParserRequest = $requestParams->get("jikanParserRequest");
+        $jikanParserRequest = $requestParams->get('jikanParserRequest');
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => ["anime" => $jikan->getUserMangaList($jikanParserRequest)],
-            $requestParams->get("page", 1)
+            fn (MalClient $jikan, ?int $page = null) => ['anime' => $jikan->getUserMangaList($jikanParserRequest)],
+            $requestParams->get('page', 1)
         );
     }
 }

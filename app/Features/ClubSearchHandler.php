@@ -11,9 +11,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 final class ClubSearchHandler extends SearchRequestHandler
 {
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -21,8 +20,7 @@ final class ClubSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @param LengthAwarePaginator<int, mixed> $paginator
-     * @return ClubCollection
+     * @param  LengthAwarePaginator<int, mixed>  $paginator
      */
     protected function renderResponse(LengthAwarePaginator $paginator): ClubCollection
     {

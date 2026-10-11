@@ -22,7 +22,7 @@ final class ClubOrderByEnum extends Enum
     protected static function labels(): array
     {
         return [
-            "members_count" => "members"
+            'members_count' => 'members',
         ];
     }
 }

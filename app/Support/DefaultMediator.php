@@ -17,22 +17,20 @@ final class DefaultMediator implements Mediator
 
     /**
      * @param  array<string, \Closure(): RequestHandler>  $handlerFactories
-     *        keyed by the request (DTO) class name.
+     *                                                                       keyed by the request (DTO) class name.
      */
-    public function __construct(private readonly array $handlerFactories)
-    {
-    }
+    public function __construct(private readonly array $handlerFactories) {}
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function send(DataRequest $requestData)
     {
         $className = get_class($requestData);
 
-        if (!isset($this->handlerFactories[$className])) {
+        if (! isset($this->handlerFactories[$className])) {
             return response()->json([
-                "message" => "Programmer error: Request handler not found for request."
+                'message' => 'Programmer error: Request handler not found for request.',
             ], 500);
         }
 

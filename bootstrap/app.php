@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Middleware\DisableSwaggerUi;
+use App\Http\Middleware\EndpointCacheTtlMiddleware;
+use App\Http\Middleware\MicroCaching;
+use App\Http\Middleware\SourceHeartbeatMonitor;
+use Composer\InstalledVersions;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,7 +17,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 */
 defined('JIKAN_PARSER_VERSION') or define(
     'JIKAN_PARSER_VERSION',
-    \Composer\InstalledVersions::getPrettyVersion('jikan-me/jikan') ?? 'unknown'
+    InstalledVersions::getPrettyVersion('jikan-me/jikan') ?? 'unknown'
 );
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -27,12 +32,12 @@ return Application::configure(basePath: dirname(__DIR__))
         // (config/cors.php); the legacy custom CorsMiddleware was removed.
         // Don't expose the self-served Swagger UI under /v4 (product decision);
         // l5-swagger + spec generation stay. See DisableSwaggerUi.
-        $middleware->append(\App\Http\Middleware\DisableSwaggerUi::class);
+        $middleware->append(DisableSwaggerUi::class);
 
         $middleware->alias([
-            'microcaching' => \App\Http\Middleware\MicroCaching::class,
-            'source-health-monitor' => \App\Http\Middleware\SourceHeartbeatMonitor::class,
-            'cache-ttl' => \App\Http\Middleware\EndpointCacheTtlMiddleware::class,
+            'microcaching' => MicroCaching::class,
+            'source-health-monitor' => SourceHeartbeatMonitor::class,
+            'cache-ttl' => EndpointCacheTtlMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

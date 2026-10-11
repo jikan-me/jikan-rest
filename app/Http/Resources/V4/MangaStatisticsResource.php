@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MangaStatisticsResource extends JsonResource
@@ -9,7 +10,7 @@ class MangaStatisticsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
@@ -19,7 +20,6 @@ class MangaStatisticsResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="object",
-     *
      *          @OA\Property(
      *              property="reading",
      *              type="integer",
@@ -50,12 +50,13 @@ class MangaStatisticsResource extends JsonResource
      *              type="integer",
      *              description="Total number of users who have the resource added to their lists"
      *          ),
-     *
      *          @OA\Property(
      *               property="scores",
      *               type="array",
+     *
      *               @OA\Items(
      *                   type="object",
+     *
      *                   @OA\Property(
      *                       property="score",
      *                       type="integer",
@@ -89,7 +90,7 @@ class MangaStatisticsResource extends JsonResource
             'dropped' => $this['dropped'],
             'plan_to_read' => $this['plan_to_read'],
             'total' => $this['total'],
-            'scores' => $this['scores']
+            'scores' => $this['scores'],
         ];
     }
 }

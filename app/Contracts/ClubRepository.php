@@ -7,6 +7,4 @@ use App\Club;
 /**
  * @extends Repository<Club>
  */
-interface ClubRepository extends Repository
-{
-}
+interface ClubRepository extends Repository {}

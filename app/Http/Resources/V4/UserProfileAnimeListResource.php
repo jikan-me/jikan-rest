@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Jikan\Helper\Constants as JikanConstants;
 use Jikan\Model\Common\DateRange;
@@ -13,10 +14,11 @@ class UserProfileAnimeListResource extends JsonResource
         JikanConstants::USER_ANIME_LIST_FINISHED_AIRING => 'Finished Airing',
         JikanConstants::USER_ANIME_LIST_NOT_YET_AIRED => 'Not yet aired',
     ];
+
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)
@@ -26,7 +28,7 @@ class UserProfileAnimeListResource extends JsonResource
         $startDate = strtotime($startDateStr);
         $endDate = strtotime($endDateStr);
 
-        $dateRangeStr = "";
+        $dateRangeStr = '';
         switch ($startDateStr) {
             case 'Not available':
                 $dateRangeStr .= 'Not available';
@@ -35,7 +37,7 @@ class UserProfileAnimeListResource extends JsonResource
                 $dateRangeStr .= date('M j, Y', $startDate);
         }
 
-        $dateRangeStr .= " to ";
+        $dateRangeStr .= ' to ';
 
         switch ($endDateStr) {
             case '?':
@@ -46,7 +48,6 @@ class UserProfileAnimeListResource extends JsonResource
         }
 
         $dateRange = new DateRange($dateRangeStr);
-
 
         return [
             'watching_status' => $this['watching_status'],
@@ -84,14 +85,14 @@ class UserProfileAnimeListResource extends JsonResource
                             'day' => $endDateStr === '?' ? null : $dateRange->getUntilProp()->getDay(),
                             'month' => $endDateStr === '?' ? null : $dateRange->getUntilProp()->getMonth(),
                             'year' => $endDateStr === '?' ? null : $dateRange->getUntilProp()->getYear(),
-                        ]
+                        ],
                     ],
-                    'string' => (string) $dateRange
+                    'string' => (string) $dateRange,
                 ],
                 'studios' => $this['studios'],
                 'licensors' => $this['licensors'],
                 'genres' => $this['genres'],
-                'demographics' => $this['demographics']
+                'demographics' => $this['demographics'],
             ],
         ];
     }

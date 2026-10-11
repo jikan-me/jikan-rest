@@ -1,47 +1,50 @@
 <?php
+
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Unit;
 
 use App\Support\CachedData;
 use App\Support\CacheOptions;
 use Illuminate\Support\Carbon;
 use MongoDB\BSON\UTCDateTime;
-use Tests\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\TestCase;
 
 final class CachedDataTest extends TestCase
 {
     public static function dateTimeProvider(): array
     {
         $now = Carbon::now();
+
         return [
-            "mongodb bson date time" => [
-                $now, new UTCDateTime($now->getTimestampMs())
+            'mongodb bson date time' => [
+                $now, new UTCDateTime($now->getTimestampMs()),
             ],
-            "built-in datetime" => [
-                $now, $now->toDateTime()
+            'built-in datetime' => [
+                $now, $now->toDateTime(),
             ],
-            "atom string datetime" => [
-                $now, $now->toAtomString()
-            ]
+            'atom string datetime' => [
+                $now, $now->toAtomString(),
+            ],
         ];
     }
 
     public static function invalidModifiedAtValuesProvider(): array
     {
         return [
-            "number value" => [
-                ["modifiedAt" => 1]
+            'number value' => [
+                ['modifiedAt' => 1],
             ],
-            "float value" => [
-                ["modifiedAt" => 1.3]
+            'float value' => [
+                ['modifiedAt' => 1.3],
             ],
-            "bool value" => [
-                ["modifiedAt" => true]
+            'bool value' => [
+                ['modifiedAt' => true],
             ],
-            "modifiedAt key not present" => [
-                ["someotherkey" => 1]
-            ]
+            'modifiedAt key not present' => [
+                ['someotherkey' => 1],
+            ],
         ];
     }
 
@@ -61,7 +64,7 @@ final class CachedDataTest extends TestCase
     #[DataProvider('dateTimeProvider')]
     public function testLastModifiedReturnsModifiedTime($now, $dateTime)
     {
-        $sut = CachedData::from(collect(["modifiedAt" => $dateTime]));
+        $sut = CachedData::from(collect(['modifiedAt' => $dateTime]));
         $this->assertEquals($now->getTimestamp(), $sut->lastModified());
     }
 
@@ -80,7 +83,7 @@ final class CachedDataTest extends TestCase
     public function testIsExpiredReturnsTrueIfLastModifiedIsMoreThanCacheTtlAgo()
     {
         $this->app->get(CacheOptions::class)->setTtl(99);
-        $sut = CachedData::from(collect(["modifiedAt" => Carbon::now()->subSeconds(100)]));
+        $sut = CachedData::from(collect(['modifiedAt' => Carbon::now()->subSeconds(100)]));
         $this->assertEquals(true, $sut->isExpired());
     }
 }

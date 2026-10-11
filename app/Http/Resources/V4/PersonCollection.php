@@ -1,14 +1,13 @@
 <?php
 
-
 namespace App\Http\Resources\V4;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class PersonCollection extends ResourceCollection
 {
-
     /**
      * The resource that this resource collects.
      *
@@ -21,12 +20,14 @@ class PersonCollection extends ResourceCollection
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination_plus"),
      *          @OA\Schema(
+     *
      *              @OA\Property(
      *                   property="data",
      *                   type="array",
      *
      *                   @OA\Items(
      *                       allOf={
+     *
      *                           @OA\Schema(ref="#/components/schemas/person"),
      *                       }
      *                   )
@@ -40,7 +41,7 @@ class PersonCollection extends ResourceCollection
     private $pagination;
 
     /**
-     * @param LengthAwarePaginator<int, mixed> $resource
+     * @param  LengthAwarePaginator<int, mixed>  $resource
      */
     public function __construct(LengthAwarePaginator $resource)
     {
@@ -64,14 +65,14 @@ class PersonCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)
     {
         return [
             'pagination' => $this->pagination,
-            'data' => $this->collection
+            'data' => $this->collection,
         ];
     }
 

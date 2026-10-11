@@ -18,12 +18,12 @@ use Jikan\Request\User\UserAnimeListRequest;
 final class QueryAnimeListOfUserHandler extends RequestHandlerWithScraperCache
 {
     /**
-     * @param QueryAnimeListOfUserCommand $request
+     * @param  QueryAnimeListOfUserCommand  $request
      * @return JsonResponse
      */
     public function handle($request)
     {
-        $requestParams = collect(["jikanParserRequest" => $request->toJikanParserRequest()]);
+        $requestParams = collect(['jikanParserRequest' => $request->toJikanParserRequest()]);
         $requestFingerPrint = $request->getFingerPrint();
         $results = $this->getScraperData($requestFingerPrint, $requestParams);
 
@@ -32,11 +32,11 @@ final class QueryAnimeListOfUserHandler extends RequestHandlerWithScraperCache
 
     public function resource(CachedData $results): JsonResource
     {
-        if ($results->isEmpty() || count($results->get("anime")) === 0) {
+        if ($results->isEmpty() || count($results->get('anime')) === 0) {
             return new UserProfileAnimeListCollection([]);
         }
 
-        $listResults = $results->get("anime");
+        $listResults = $results->get('anime');
         foreach ($listResults as &$result) {
             $result = (new UserProfileAnimeListResource($result));
         }
@@ -45,7 +45,7 @@ final class QueryAnimeListOfUserHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -53,18 +53,19 @@ final class QueryAnimeListOfUserHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         /**
          * @var UserAnimeListRequest $jikanParserRequest
          */
-        $jikanParserRequest = $requestParams->get("jikanParserRequest");
+        $jikanParserRequest = $requestParams->get('jikanParserRequest');
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => ["anime" => $jikan->getUserAnimeList($jikanParserRequest)],
-            $requestParams->get("page", 1)
+            fn (MalClient $jikan, ?int $page = null) => ['anime' => $jikan->getUserAnimeList($jikanParserRequest)],
+            $requestParams->get('page', 1)
         );
     }
 }

@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use App\CarbonDateRange;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 use Jikan\Model\Common\DateRange;
 use JMS\Serializer\Serializer;
-use \Illuminate\Database\Eloquent\Factories\Factory;
 use Spatie\Enum\Laravel\Faker\FakerEnumProvider;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\App;
 
 abstract class JikanModelFactory extends Factory
 {
@@ -36,16 +36,17 @@ abstract class JikanModelFactory extends Factory
     public function configure(): JikanModelFactory|static
     {
         $this->faker->addProvider(new FakerEnumProvider($this->faker));
-        if (array_key_exists("GITHUB_JOB", $_ENV) && $_ENV["GITHUB_JOB"] !== "") {
-            $this->faker->seed($_ENV["GITHUB_JOB"]);
+        if (array_key_exists('GITHUB_JOB', $_ENV) && $_ENV['GITHUB_JOB'] !== '') {
+            $this->faker->seed($_ENV['GITHUB_JOB']);
         } else {
             $this->faker->seed(Str::random());
         }
+
         return $this;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function definition(): array
     {
@@ -57,18 +58,17 @@ abstract class JikanModelFactory extends Factory
         /**
          * @var Serializer $serializer
          */
-        $serializer = app("SerializerV4");
-        $translated = array_merge(array(), $stateDefinition);
-        foreach ($stateDefinition as $k => $v)
-        {
-            if ($v instanceof DateRange || $v instanceof CarbonDateRange)
-            {
+        $serializer = app('SerializerV4');
+        $translated = array_merge([], $stateDefinition);
+        foreach ($stateDefinition as $k => $v) {
+            if ($v instanceof DateRange || $v instanceof CarbonDateRange) {
                 $converted = $serializer->toArray([$k => $v]);
                 $translated[$k] = $converted[$k];
             }
         }
+
         return $translated;
     }
 
-    protected abstract function definitionInternal(): array;
+    abstract protected function definitionInternal(): array;
 }

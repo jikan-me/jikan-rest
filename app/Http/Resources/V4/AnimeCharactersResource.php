@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnimeCharactersResource extends JsonResource
@@ -22,7 +23,6 @@ class AnimeCharactersResource extends JsonResource
      *                  property="character",
      *                  type="object",
      *                  description="Character details",
-     *
      *                  @OA\Property(
      *                      property="mal_id",
      *                      type="integer",
@@ -59,7 +59,6 @@ class AnimeCharactersResource extends JsonResource
      *                      @OA\Property(
      *                          property="person",
      *                          type="object",
-     *
      *                          @OA\Property(
      *                              property="mal_id",
      *                              type="integer",
@@ -92,7 +91,7 @@ class AnimeCharactersResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)

@@ -14,6 +14,7 @@ use Spatie\LaravelData\Optional;
  *      in="query",
  *      required=false,
  *      description="This is a flag. When supplied it will include entries which are continuing from previous seasons. MAL includes these items on the seasons view in the &#8243;TV (continuing)&#8243; section. (Example: https://myanimelist.net/anime/season/2024/winter) <br />Example usage: `?continuing`",
+ *
  *      @OA\Schema(type="boolean")
  * ),
  */

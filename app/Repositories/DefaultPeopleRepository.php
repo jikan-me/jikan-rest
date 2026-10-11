@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Contracts\PeopleRepository;
-use App\Contracts\Repository;
 use App\Person;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 class DefaultPeopleRepository extends DatabaseRepository implements PeopleRepository
@@ -16,12 +16,12 @@ class DefaultPeopleRepository extends DatabaseRepository implements PeopleReposi
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Person>
+     * @return EloquentBuilder|Builder<Person>
      */
     public function topPeople(): EloquentBuilder|ScoutBuilder
     {
-        return $this->queryable()->whereNotNull("member_favorites")
-            ->where("member_favorites", ">", 0)
-            ->orderBy("member_favorites", "desc");
+        return $this->queryable()->whereNotNull('member_favorites')
+            ->where('member_favorites', '>', 0)
+            ->orderBy('member_favorites', 'desc');
     }
 }

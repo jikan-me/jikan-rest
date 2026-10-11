@@ -2,13 +2,9 @@
 
 namespace App\Dto;
 
-
 use Illuminate\Http\JsonResponse;
 
 /**
  * @extends LookupByUsernameCommand<JsonResponse>
-
  */
-final class UserUpdatesLookupCommand extends LookupByUsernameCommand
-{
-}
+final class UserUpdatesLookupCommand extends LookupByUsernameCommand {}

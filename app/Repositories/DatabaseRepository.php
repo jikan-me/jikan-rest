@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 class DatabaseRepository extends RepositoryQuery implements Repository
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function createEntity()
     {
@@ -59,20 +59,20 @@ class DatabaseRepository extends RepositoryQuery implements Repository
     }
 
     /**
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      */
     public function insert(array $attributes): bool
     {
         // this way we trigger scout to index records in the search index.
         $modelClass = $this->getModelClass();
         /** @noinspection PhpUndefinedMethodInspection */
-        $modelInstance = new $modelClass();
+        $modelInstance = new $modelClass;
         // fixme: change this to $modelClass::create() call, because that one protects against
         //        mass assignment. This way of doing it is just a work around to make sure all attributes
         //        land in the database. The "fillable" and "guard" fields of models should be populated
         //        correctly.
         $modelInstance->fill($attributes);
-        foreach(["request_hash", "modifiedAt", "createdAt"] as $metaField) {
+        foreach (['request_hash', 'modifiedAt', 'createdAt'] as $metaField) {
             if (array_key_exists($metaField, $attributes)) {
                 $modelInstance->$metaField = $attributes[$metaField];
             }

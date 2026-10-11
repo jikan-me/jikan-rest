@@ -4,9 +4,9 @@ namespace App\Concerns;
 
 use App\Http\HttpHelper;
 use Illuminate\Http\Request;
-use Spatie\LaravelData\Support\Creation\ValidationStrategy;
 use Spatie\LaravelData\Resolvers\DataFromSomethingResolver;
 use Spatie\LaravelData\Support\Creation\CreationContext;
+use Spatie\LaravelData\Support\Creation\ValidationStrategy;
 
 /**
  * Helper trait for data transfer objects
@@ -35,6 +35,7 @@ trait HasRequestFingerprint
             ->execute(static::class, $creationContext, $request);
 
         $result->fingerprint = HttpHelper::resolveRequestFingerprint($request);
+
         return $result;
     }
 

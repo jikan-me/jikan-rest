@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ClubRelationsResource extends JsonResource
 {
-
     /**
      *  @OA\Schema(
      *      schema="club_relations",
@@ -15,10 +15,10 @@ class ClubRelationsResource extends JsonResource
      *     @OA\Property(
      *          property="data",
      *          type="object",
-     *
      *          @OA\Property(
      *              property="anime",
      *              type="array",
+     *
      *              @OA\Items(
      *                  ref="#/components/schemas/mal_url"
      *              ),
@@ -27,6 +27,7 @@ class ClubRelationsResource extends JsonResource
      *          @OA\Property(
      *              property="manga",
      *              type="array",
+     *
      *              @OA\Items(
      *                  ref="#/components/schemas/mal_url"
      *              ),
@@ -35,6 +36,7 @@ class ClubRelationsResource extends JsonResource
      *          @OA\Property(
      *              property="characters",
      *              type="array",
+     *
      *              @OA\Items(
      *                  ref="#/components/schemas/mal_url"
      *              ),
@@ -46,7 +48,7 @@ class ClubRelationsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)

@@ -33,21 +33,21 @@ final class QueryAnimeListOfUserCommand extends QueryListOfUserCommand
     #[
         WithCast(EnumCast::class, UserAnimeListOrderByEnum::class),
         EnumValidation(UserAnimeListOrderByEnum::class),
-        MapInputName("order_by")
+        MapInputName('order_by')
     ]
     public UserAnimeListOrderByEnum|Optional $orderBy;
 
     #[
         WithCast(EnumCast::class, UserAnimeListOrderByEnum::class),
         EnumValidation(UserAnimeListOrderByEnum::class),
-        MapInputName("order_by2")
+        MapInputName('order_by2')
     ]
     public UserAnimeListOrderByEnum|Optional $orderBy2;
 
     #[
         WithCast(EnumCast::class, AnimeListAiringStatusFilterEnum::class),
         EnumValidation(AnimeListAiringStatusFilterEnum::class),
-        MapInputName("airing_status")
+        MapInputName('airing_status')
     ]
     public AnimeListAiringStatusFilterEnum|Optional $airingStatus;
 
@@ -58,30 +58,31 @@ final class QueryAnimeListOfUserCommand extends QueryListOfUserCommand
     public int|Optional $producer;
 
     #[
-        BeforeOrEqual("aired_to"),
-        DateFormat("Y-m-d"),
+        BeforeOrEqual('aired_to'),
+        DateFormat('Y-m-d'),
         Sometimes,
         Required,
         WithCast(DateTimeInterfaceCast::class),
         WithTransformer(DateTimeInterfaceTransformer::class),
-        MapInputName("aired_from")
+        MapInputName('aired_from')
     ]
     public CarbonImmutable|Optional $airedFrom;
 
     #[
-        AfterOrEqual("aired_from"),
-        DateFormat("Y-m-d"),
+        AfterOrEqual('aired_from'),
+        DateFormat('Y-m-d'),
         Sometimes,
         Required,
         WithCast(DateTimeInterfaceCast::class),
         WithTransformer(DateTimeInterfaceTransformer::class),
-        MapInputName("aired_to")
+        MapInputName('aired_to')
     ]
     public CarbonImmutable|Optional $airedTo;
 
     public function toJikanParserRequest(): UserAnimeListRequest
     {
         $mapper = app(JikanUserListRequestMapperService::class);
+
         return $mapper->map($this, UserListTypeEnum::anime());
     }
 }

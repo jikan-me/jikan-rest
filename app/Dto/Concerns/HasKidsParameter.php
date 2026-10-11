@@ -13,6 +13,7 @@ use Spatie\LaravelData\Attributes\WithCast;
  *      in="query",
  *      required=false,
  *      description="This is a flag. When supplied it will include entries with the Kids genres in specific endpoints that filter them out by default. You do not need to pass a value to it. e.g usage: `?kids`",
+ *
  *      @OA\Schema(type="boolean")
  * ),
  */

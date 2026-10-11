@@ -18,18 +18,18 @@
 declare(strict_types=1);
 
 $options = getopt('', ['base-url::', 'out::', 'endpoints::', 'timeout::']);
-$baseUrl       = rtrim($options['base-url'] ?? 'http://127.0.0.1:8000', '/');
-$outDir        = rtrim($options['out'] ?? __DIR__ . '/baseline', '/');
-$endpointsFile = $options['endpoints'] ?? __DIR__ . '/endpoints.txt';
-$timeout       = (int) ($options['timeout'] ?? 30);
+$baseUrl = rtrim($options['base-url'] ?? 'http://127.0.0.1:8000', '/');
+$outDir = rtrim($options['out'] ?? __DIR__.'/baseline', '/');
+$endpointsFile = $options['endpoints'] ?? __DIR__.'/endpoints.txt';
+$timeout = (int) ($options['timeout'] ?? 30);
 
-if (!is_file($endpointsFile)) {
+if (! is_file($endpointsFile)) {
     fwrite(STDERR, "endpoints file not found: {$endpointsFile}\n");
     exit(2);
 }
 
-@mkdir($outDir . '/raw', 0777, true);
-@mkdir($outDir . '/shape', 0777, true);
+@mkdir($outDir.'/raw', 0777, true);
+@mkdir($outDir.'/shape', 0777, true);
 
 /** Fields whose values legitimately change between runs. */
 $volatile = [
@@ -55,26 +55,28 @@ function shape(mixed $value, array $volatile): mixed
             $out[$key] = in_array($key, $volatile, true) ? '@volatile' : shape($item, $volatile);
         }
         ksort($out);
+
         return $out;
     }
 
     return match (true) {
-        $value === null  => '@null',
-        is_bool($value)  => '@bool',
-        is_int($value)   => '@int',
+        $value === null => '@null',
+        is_bool($value) => '@bool',
+        is_int($value) => '@int',
         is_float($value) => '@float',
-        default          => '@string',
+        default => '@string',
     };
 }
 
 function slugify(string $method, string $path): string
 {
-    $slug = strtolower($method) . '_' . trim(preg_replace('/[^a-zA-Z0-9]+/', '_', $path), '_');
-    return $slug === strtolower($method) . '_' ? strtolower($method) . '_root' : $slug;
+    $slug = strtolower($method).'_'.trim(preg_replace('/[^a-zA-Z0-9]+/', '_', $path), '_');
+
+    return $slug === strtolower($method).'_' ? strtolower($method).'_root' : $slug;
 }
 
 $lines = file($endpointsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
-$meta  = [];
+$meta = [];
 $count = 0;
 
 foreach ($lines as $line) {
@@ -83,30 +85,30 @@ foreach ($lines as $line) {
         continue;
     }
 
-    $parts  = preg_split('/\s+/', $line, 2) ?: [$line];
+    $parts = preg_split('/\s+/', $line, 2) ?: [$line];
     $method = 'GET';
-    $path   = $parts[0];
+    $path = $parts[0];
     if (count($parts) === 2 && in_array(strtoupper($parts[0]), ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], true)) {
         $method = strtoupper($parts[0]);
-        $path   = $parts[1];
+        $path = $parts[1];
     }
 
-    $url  = $baseUrl . $path;
+    $url = $baseUrl.$path;
     $slug = slugify($method, $path);
 
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => $timeout,
+        CURLOPT_TIMEOUT => $timeout,
         CURLOPT_FOLLOWLOCATION => false,
-        CURLOPT_HTTPHEADER     => ['Accept: application/json'],
+        CURLOPT_HTTPHEADER => ['Accept: application/json'],
     ]);
-    $body   = curl_exec($ch);
+    $body = curl_exec($ch);
     $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $error  = curl_error($ch) ?: null;
+    $error = curl_error($ch) ?: null;
     curl_close($ch);
 
-    if (!is_string($body)) {
+    if (! is_string($body)) {
         $body = '';
     }
 
@@ -118,15 +120,15 @@ foreach ($lines as $line) {
         : shape($decoded, $volatile);
     file_put_contents(
         "{$outDir}/shape/{$slug}.json",
-        json_encode($shape, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n"
+        json_encode($shape, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n"
     );
 
     $meta[$slug] = [
         'method' => $method,
-        'path'   => $path,
+        'path' => $path,
         'status' => $status,
-        'bytes'  => strlen($body),
-        'error'  => $error,
+        'bytes' => strlen($body),
+        'error' => $error,
     ];
 
     printf(
@@ -142,7 +144,7 @@ foreach ($lines as $line) {
 
 file_put_contents(
     "{$outDir}/meta.json",
-    json_encode($meta, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n"
+    json_encode($meta, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n"
 );
 
 printf("\nCaptured %d endpoints to %s\n", $count, $outDir);

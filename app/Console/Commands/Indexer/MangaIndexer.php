@@ -6,16 +6,15 @@ use App\Exceptions\Console\FileNotFoundException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-
 /**
  * Class MangaIndexer
- * @package App\Console\Commands\Indexer
  */
 class MangaIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
+     *
      * @var string
      */
     protected $signature = 'indexer:manga
@@ -52,6 +51,7 @@ class MangaIndexer extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws FileNotFoundException
      */
     public function handle()
@@ -63,8 +63,8 @@ class MangaIndexer extends Command
         $delay = $this->option('delay') ?? 3;
         $index = $this->option('index') ?? 0;
 
-        $index = (int)$index;
-        $delay = (int)$delay;
+        $index = (int) $index;
+        $delay = (int) $delay;
 
         $this->info("Info: MangaIndexer uses purarue/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
 
@@ -72,7 +72,7 @@ class MangaIndexer extends Command
             $this->ids = $this->loadFailedMalIds();
         }
 
-        if (!$failed) {
+        if (! $failed) {
             $this->ids = $this->fetchMalIds();
         }
 
@@ -83,13 +83,13 @@ class MangaIndexer extends Command
 
         // Resume
         if ($resume && Storage::exists('indexer/indexer_manga.save')) {
-            $index = (int)Storage::get('indexer/indexer_manga.save');
+            $index = (int) Storage::get('indexer/indexer_manga.save');
 
             $this->info("Resuming from index: {$index}");
         }
 
         // check if index even exists
-        if ($index > 0 && !isset($this->ids[$index])) {
+        if ($index > 0 && ! isset($this->ids[$index])) {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
         }
@@ -106,9 +106,9 @@ class MangaIndexer extends Command
         for ($i = $index; $i <= ($count - 1); $i++) {
             $id = $this->ids[$i];
 
-            $url = config('app.url') . "/v4/manga/{$id}";
+            $url = config('app.url')."/v4/manga/{$id}";
 
-            echo "Indexing/Updating " . ($i + 1) . "/{$count} {$url} [MAL ID: {$id}] \n";
+            echo 'Indexing/Updating '.($i + 1)."/{$count} {$url} [MAL ID: {$id}] \n";
 
             try {
                 $response = json_decode(file_get_contents($url), true);
@@ -133,18 +133,17 @@ class MangaIndexer extends Command
         Storage::delete('indexer/indexer_manga.save');
 
         echo "---------\nIndexing complete\n";
-        echo count($success) . " entries indexed or updated\n";
-        echo count($failedIds) . " entries failed to index or update. Re-run with --failed to requeue failed entries only\n";
+        echo count($success)." entries indexed or updated\n";
+        echo count($failedIds)." entries failed to index or update. Re-run with --failed to requeue failed entries only\n";
     }
 
     /**
-     * @return array
      * @url https://github.com/purarue/mal-id-cache
      */
     /**
      * @return array<int, int>
      */
-    private function fetchMalIds() : array
+    private function fetchMalIds(): array
     {
         $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/manga_cache.json...\n");
 
@@ -161,19 +160,17 @@ class MangaIndexer extends Command
     }
 
     /**
-     * @return array
      * @throws FileNotFoundException
      */
     /**
      * @return array<int, int>
      */
-    private function loadFailedMalIds() : array
+    private function loadFailedMalIds(): array
     {
-        if (!Storage::exists('indexer/indexer_manga.failed')) {
+        if (! Storage::exists('indexer/indexer_manga.failed')) {
             throw new FileNotFoundException('"indexer/indexer_manga.failed" does not exist');
         }
 
         return json_decode(Storage::get('indexer/indexer_manga.failed'));
     }
-
 }

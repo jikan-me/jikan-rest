@@ -1,25 +1,26 @@
 <?php
 
 namespace App\Support;
-use Laravel\Scout\Builder as ScoutBuilder;
+
 use Illuminate\Contracts\Database\Query\Builder;
+use Laravel\Scout\Builder as ScoutBuilder;
 use MongoDB\Laravel\Eloquent\Builder as MongoDbBuilder;
 
 class RepositoryQueryBase
 {
     private ?Builder $queryableBuilder = null;
+
     private ?ScoutBuilder $searchableBuilder = null;
 
     public function __construct(
         private readonly \Closure $getQueryable,
-        private readonly \Closure $getSearchable)
-    {
-    }
+        private readonly \Closure $getSearchable) {}
 
     protected function queryable(bool $createNew = false): Builder|MongoDbBuilder
     {
         if ($createNew) {
             $callback = $this->getQueryable;
+
             return $callback();
         }
 
@@ -35,6 +36,7 @@ class RepositoryQueryBase
     {
         if ($createNew) {
             $getSearchable = $this->getSearchable;
+
             return $getSearchable($keywords, $callback);
         }
 

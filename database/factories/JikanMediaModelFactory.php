@@ -22,13 +22,13 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
     public function __construct(
         MediaModelFactoryDescriptor $descriptor,
-        ?int        $count = null,
+        ?int $count = null,
         ?Collection $states = null,
         ?Collection $has = null,
         ?Collection $for = null,
         ?Collection $afterMaking = null,
         ?Collection $afterCreating = null,
-                    $connection = null,
+        $connection = null,
         ?Collection $recycle = null)
     {
         parent::__construct($count, $states, $has, $for, $afterMaking, $afterCreating, $connection, $recycle);
@@ -51,10 +51,6 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
     /**
      * Helper function for overriding fields of the model factory based on query string parameters.
-     *
-     * @param array $additionalParams
-     * @param bool $doOpposite
-     * @return self
      */
     public function overrideFromQueryStringParameters(array $additionalParams, bool $doOpposite = false): self
     {
@@ -65,7 +61,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         // we want to generate overrides for each manufactured item, so all of them will call the faker for values,
         // and they should have their own values, increasing the randomness of the generated data
         /** @noinspection PhpParamsInspection */
-        return $this->state(new Sequence(fn(Sequence $_) => $this->serializeStateDefinition($this->getStateOverrides($additionalParams, $doOpposite))));
+        return $this->state(new Sequence(fn (Sequence $_) => $this->serializeStateDefinition($this->getStateOverrides($additionalParams, $doOpposite))));
     }
 
     private function getStateOverrides(array $additionalParams, bool $doOpposite = false): array
@@ -74,8 +70,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
         if ($doOpposite) {
             $overrides = $this->getOppositeOverridesFromQueryStringParameters($additionalParams);
-        }
-        else {
+        } else {
             $overrides = $this->getOverridesFromQueryStringParameters($additionalParams);
         }
 
@@ -85,7 +80,8 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
     /**
      * Helper function to create records in db in sequential order.
      * The records are created with an increasing value for the specified field.
-     * @param string $orderByField The field to order items by. Used to generate increasing value for the field.
+     *
+     * @param  string  $orderByField  The field to order items by. Used to generate increasing value for the field.
      * @return Collection The created items/records
      */
     public function createManyWithOrder(string $orderByField): Collection
@@ -97,41 +93,45 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         $fromActivityMarkerKeyPath = "$activityMarkerKeyName.from";
         $toActivityMarkerKeyPath = "$activityMarkerKeyName.to";
 
-        $fieldValueGenerator = match($orderByField) {
-            $fromActivityMarkerKeyPath, $toActivityMarkerKeyPath => ((function() {
-                $randomDate = $this->createRandomDateTime("-5 years");
-                return fn($i) => $randomDate->copy()->addDays($i);
+        $fieldValueGenerator = match ($orderByField) {
+            $fromActivityMarkerKeyPath, $toActivityMarkerKeyPath => ((function () {
+                $randomDate = $this->createRandomDateTime('-5 years');
+
+                return fn ($i) => $randomDate->copy()->addDays($i);
             })()),
-            "rating" => ((function() {
+            'rating' => ((function () {
                 $validRatingItems = AnimeRatingEnum::toValues();
                 $validRatingItemsCount = count($validRatingItems);
-                return fn($i) => $validRatingItems[$i % $validRatingItemsCount];
+
+                return fn ($i) => $validRatingItems[$i % $validRatingItemsCount];
             })()),
-            "title" => ((function() {
-                $alphabet = range("a", "z");
+            'title' => ((function () {
+                $alphabet = range('a', 'z');
                 $alphabetCount = count($alphabet);
-                return fn($i) => $alphabet[$i % $alphabetCount];
+
+                return fn ($i) => $alphabet[$i % $alphabetCount];
             })()),
-            "type" => ((function() {
+            'type' => ((function () {
                 $types = $this->modelName() === "App\Anime" ? AnimeTypeEnum::toValues() : MangaTypeEnum::toValues();
                 $typesCount = count($types);
-                return fn($i) => $types[$i % $typesCount];
+
+                return fn ($i) => $types[$i % $typesCount];
             })()),
-            default => fn($i) => $i,
+            default => fn ($i) => $i,
         };
 
         for ($i = 1; $i <= $count; $i++) {
             if ($orderByField === $fromActivityMarkerKeyPath) {
                 $createdItem = $this->createOne($this->serializeStateDefinition([
-                    $activityMarkerKeyName => new CarbonDateRange($fieldValueGenerator($i), null)
+                    $activityMarkerKeyName => new CarbonDateRange($fieldValueGenerator($i), null),
                 ]));
-            } else if ($orderByField === $toActivityMarkerKeyPath) {
+            } elseif ($orderByField === $toActivityMarkerKeyPath) {
                 $createdItem = $this->createOne($this->serializeStateDefinition([
-                    $activityMarkerKeyName => new CarbonDateRange(null, $fieldValueGenerator($i))
+                    $activityMarkerKeyName => new CarbonDateRange(null, $fieldValueGenerator($i)),
                 ]));
             } else {
                 $createdItem = $this->createOne([
-                    $orderByField => $fieldValueGenerator($i)
+                    $orderByField => $fieldValueGenerator($i),
                 ]);
             }
             $items->add($createdItem);
@@ -145,122 +145,120 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         $overrides = [];
         $activityMarkerKeyName = $this->descriptor->activityMarkerKeyName();
         // let's make all database items the same type
-        if ($additionalParams->has("type")) {
+        if ($additionalParams->has('type')) {
             // value => label  key pairs
             // we store labels in the database
-            $typeOverride = collect($this->descriptor->typeParamMap())->get(strtolower($additionalParams["type"]));
-            if (!is_null($typeOverride)) {
-                $overrides["type"] = $typeOverride;
+            $typeOverride = collect($this->descriptor->typeParamMap())->get(strtolower($additionalParams['type']));
+            if (! is_null($typeOverride)) {
+                $overrides['type'] = $typeOverride;
             }
         }
 
-        if ($additionalParams->has("letter")) {
-            $title = $additionalParams["letter"] . $this->createTitle();
+        if ($additionalParams->has('letter')) {
+            $title = $additionalParams['letter'].$this->createTitle();
             $a = [
-                "titles" => [
+                'titles' => [
                     [
-                        "type" => "Default",
-                        "title" => $title
-                    ]
+                        'type' => 'Default',
+                        'title' => $title,
+                    ],
                 ],
-                "title" => $title,
-                "title_english" => $title,
-                "title_japanese" => $title,
-                "title_synonyms" => [$title],
+                'title' => $title,
+                'title_english' => $title,
+                'title_japanese' => $title,
+                'title_synonyms' => [$title],
             ];
             $overrides = [...$overrides, ...$a];
         }
 
-        if ($additionalParams->has("score")) {
-            $overrides["score"] = floatval($additionalParams["score"]);
+        if ($additionalParams->has('score')) {
+            $overrides['score'] = floatval($additionalParams['score']);
         }
 
-        if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
-            $min_score = floatval($additionalParams["min_score"]);
+        if ($additionalParams->has('min_score') && ! $additionalParams->has('max_score')) {
+            $min_score = floatval($additionalParams['min_score']);
             if ($this->isScoreValueValid($min_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), 9.99);
+                $overrides['score'] = $this->faker->randomFloat(2, floatval($additionalParams['min_score']), 9.99);
             }
         }
 
-        if (!$additionalParams->has("min_score") && $additionalParams->has("max_score")) {
-            $max_score = floatval($additionalParams["max_score"]);
+        if (! $additionalParams->has('min_score') && $additionalParams->has('max_score')) {
+            $max_score = floatval($additionalParams['max_score']);
 
             if ($this->isScoreValueValid($max_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["max_score"]));
+                $overrides['score'] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams['max_score']));
             }
         }
 
-        if ($additionalParams->has(["min_score", "max_score"])) {
-            $min_score = floatval($additionalParams["min_score"]);
-            $max_score = floatval($additionalParams["max_score"]);
+        if ($additionalParams->has(['min_score', 'max_score'])) {
+            $min_score = floatval($additionalParams['min_score']);
+            $max_score = floatval($additionalParams['max_score']);
 
             if ($this->isScoreValueValid($min_score) && $this->isScoreValueValid($max_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["min_score"]), floatval($additionalParams["max_score"]));
+                $overrides['score'] = $this->faker->randomFloat(2, floatval($additionalParams['min_score']), floatval($additionalParams['max_score']));
             }
         }
 
-        if ($additionalParams->has("status")) {
+        if ($additionalParams->has('status')) {
             $statusParamMap = $this->descriptor->statusParamMap();
-            $statusOverride = collect($statusParamMap)->get(strtolower($additionalParams["status"]));
-            if (!is_null($statusOverride)) {
-                $overrides["status"] = $statusOverride;
-            }
-            else {
-                $overrides["status"] = $this->faker->randomElement(array_values($statusParamMap));
+            $statusOverride = collect($statusParamMap)->get(strtolower($additionalParams['status']));
+            if (! is_null($statusOverride)) {
+                $overrides['status'] = $statusOverride;
+            } else {
+                $overrides['status'] = $this->faker->randomElement(array_values($statusParamMap));
             }
 
             $logicalActivityMarker = $this->descriptor->activityMarkerLogicalKeyName();
 
-            if (Str::contains(strtolower($overrides["status"]), strtolower($this->descriptor->statusParamMap()[$logicalActivityMarker]))) {
+            if (Str::contains(strtolower($overrides['status']), strtolower($this->descriptor->statusParamMap()[$logicalActivityMarker]))) {
                 $overrides[$logicalActivityMarker] = true;
-            }
-            else {
+            } else {
                 $overrides[$logicalActivityMarker] = false;
             }
         }
 
-        if ($this->descriptor->hasRatingParam() && $additionalParams->has("rating")) {
-            $v = AnimeRatingEnum::tryFrom(strtolower($additionalParams["rating"]));
-            if (!is_null($v)) {
-                $overrides["rating"] = $v->label;
+        if ($this->descriptor->hasRatingParam() && $additionalParams->has('rating')) {
+            $v = AnimeRatingEnum::tryFrom(strtolower($additionalParams['rating']));
+            if (! is_null($v)) {
+                $overrides['rating'] = $v->label;
             }
         }
 
-        if ($additionalParams->has("genres")) {
-            $overrides["genres"] = [];
-            $genreIds = explode(",", $additionalParams["genres"]);
+        if ($additionalParams->has('genres')) {
+            $overrides['genres'] = [];
+            $genreIds = explode(',', $additionalParams['genres']);
             foreach ($genreIds as $genreId) {
                 $m = $this->ensureGenreExists($genreId);
 
-                $overrides["genres"][] = [
-                    "mal_id" => $m->mal_id,
-                    "type" => $this->descriptor->mediaName(),
-                    "name" => $m->name,
-                    "url" => $m->url
+                $overrides['genres'][] = [
+                    'mal_id' => $m->mal_id,
+                    'type' => $this->descriptor->mediaName(),
+                    'name' => $m->name,
+                    'url' => $m->url,
                 ];
             }
         }
 
-        if ($additionalParams->has("start_date") && !empty($additionalParams["start_date"])
-            && !$additionalParams->has("end_date")) {
-            $startDate = $this->adaptDateString($additionalParams["start_date"]);
+        if ($additionalParams->has('start_date') && ! empty($additionalParams['start_date'])
+            && ! $additionalParams->has('end_date')) {
+            $startDate = $this->adaptDateString($additionalParams['start_date']);
             $dt = Carbon::parse($startDate)->addDays($this->faker->numberBetween(1, 25));
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($dt, null);
         }
 
-        if ($additionalParams->has("end_date") && !empty($additionalParams["end_date"])
-            && !$additionalParams->has("start_date")) {
-            $endDate = $this->adaptDateString($additionalParams["end_date"]);
+        if ($additionalParams->has('end_date') && ! empty($additionalParams['end_date'])
+            && ! $additionalParams->has('start_date')) {
+            $endDate = $this->adaptDateString($additionalParams['end_date']);
             $to = Carbon::parse($endDate);
             $from = $to->copy()->subDays($this->faker->randomElement([30, 60, 90, 120, 180]));
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($from, $to->subDays($this->faker->numberBetween(1, 25)));
         }
 
-        if ($additionalParams->has(["start_date", "end_date"])
-            && !empty($additionalParams["start_date"]) && !empty($additionalParams["end_date"])) {
-            $startDate = $this->adaptDateString($additionalParams["start_date"]);
+        if ($additionalParams->has(['start_date', 'end_date'])
+            && ! empty($additionalParams['start_date']) && ! empty($additionalParams['end_date'])) {
+            $startDate = $this->adaptDateString($additionalParams['start_date']);
             $from = Carbon::parse($startDate);
-            $endDate = $this->adaptDateString($additionalParams["end_date"]);
+            $endDate = $this->adaptDateString($additionalParams['end_date']);
             $to = Carbon::parse($endDate);
 
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($from, $to);
@@ -274,103 +272,101 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         $overrides = [];
         $activityMarkerKeyName = $this->descriptor->activityMarkerKeyName();
 
-        if ($additionalParams->has("type")) {
+        if ($additionalParams->has('type')) {
             // value => label  key pairs
             // we store labels in the database
             $types = $this->descriptor->typeParamMap();
-            $typeKey = $this->faker->randomElement(array_diff(array_keys($types), [$additionalParams["type"]]));
-            $overrides["type"] = $types[$typeKey];
+            $typeKey = $this->faker->randomElement(array_diff(array_keys($types), [$additionalParams['type']]));
+            $overrides['type'] = $types[$typeKey];
         }
 
-        if ($additionalParams->has("letter")) {
-            $alphabet = array_filter(range("a", "z"), fn ($elem) => $elem !== $additionalParams["letter"]);
-            $title = $this->faker->randomElement($alphabet) . $this->createTitle();
+        if ($additionalParams->has('letter')) {
+            $alphabet = array_filter(range('a', 'z'), fn ($elem) => $elem !== $additionalParams['letter']);
+            $title = $this->faker->randomElement($alphabet).$this->createTitle();
             $a = [
-                "titles" => [
+                'titles' => [
                     [
-                        "type" => "Default",
-                        "title" => $title
-                    ]
+                        'type' => 'Default',
+                        'title' => $title,
+                    ],
                 ],
-                "title" => $title,
-                "title_english" => $title,
-                "title_japanese" => $title,
-                "title_synonyms" => [$title],
+                'title' => $title,
+                'title_english' => $title,
+                'title_japanese' => $title,
+                'title_synonyms' => [$title],
             ];
             $overrides = [...$overrides, ...$a];
         }
 
-        if ($additionalParams->has("score")) {
-            $specifiedScore = floatval($additionalParams["score"]);
+        if ($additionalParams->has('score')) {
+            $specifiedScore = floatval($additionalParams['score']);
             do {
                 $randomScore = $this->faker->randomFloat(2, 1.00, 9.99);
             } while ($randomScore === $specifiedScore);
 
-            $overrides["score"] = $randomScore;
+            $overrides['score'] = $randomScore;
         }
 
-        if ($additionalParams->has("min_score") && !$additionalParams->has("max_score")) {
-            $min_score = floatval($additionalParams["min_score"]);
+        if ($additionalParams->has('min_score') && ! $additionalParams->has('max_score')) {
+            $min_score = floatval($additionalParams['min_score']);
             if ($this->isScoreValueValid($min_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]) - 0.01);
+                $overrides['score'] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams['min_score']) - 0.01);
             }
         }
 
-        if (!$additionalParams->has("min_score") && $additionalParams->has("max_score")) {
-            $max_score = $additionalParams["max_score"];
+        if (! $additionalParams->has('min_score') && $additionalParams->has('max_score')) {
+            $max_score = $additionalParams['max_score'];
             if ($this->isScoreValueValid($max_score)) {
-                $overrides["score"] = $this->faker->randomFloat(2, floatval($additionalParams["max_score"]) + 0.01, 9.99);
+                $overrides['score'] = $this->faker->randomFloat(2, floatval($additionalParams['max_score']) + 0.01, 9.99);
             }
         }
 
-        if ($additionalParams->has("min_score") && $additionalParams->has("max_score")) {
-            $min_score = floatval($additionalParams["min_score"]);
-            $max_score = floatval($additionalParams["max_score"]);
+        if ($additionalParams->has('min_score') && $additionalParams->has('max_score')) {
+            $min_score = floatval($additionalParams['min_score']);
+            $max_score = floatval($additionalParams['max_score']);
 
-            if ($this->isScoreValueValid($min_score) && $this->isScoreValueValid($max_score))
-            {
-                $overrides["score"] = $this->faker->randomElement([
-                    $this->faker->randomFloat(2, 1.00, floatval($additionalParams["min_score"]) - 0.01),
-                    $this->faker->randomFloat(2, floatval($additionalParams["max_score"]) + 0.01, 9.99)
+            if ($this->isScoreValueValid($min_score) && $this->isScoreValueValid($max_score)) {
+                $overrides['score'] = $this->faker->randomElement([
+                    $this->faker->randomFloat(2, 1.00, floatval($additionalParams['min_score']) - 0.01),
+                    $this->faker->randomFloat(2, floatval($additionalParams['max_score']) + 0.01, 9.99),
                 ]);
             }
         }
 
-        if ($additionalParams->has("status")) {
+        if ($additionalParams->has('status')) {
             $statuses = $this->descriptor->statusParamMap();
 
-            $rndKey = $this->faker->randomElement(array_diff(array_keys($statuses), [strtolower($additionalParams["status"])]));
-            $overrides["status"] = $statuses[$rndKey];
+            $rndKey = $this->faker->randomElement(array_diff(array_keys($statuses), [strtolower($additionalParams['status'])]));
+            $overrides['status'] = $statuses[$rndKey];
 
             $logicalActivityMarker = $this->descriptor->activityMarkerLogicalKeyName();
 
-            if (Str::contains(strtolower($overrides["status"]), strtolower($this->descriptor->statusParamMap()[$logicalActivityMarker]))) {
+            if (Str::contains(strtolower($overrides['status']), strtolower($this->descriptor->statusParamMap()[$logicalActivityMarker]))) {
                 $overrides[$logicalActivityMarker] = true;
-            }
-            else {
+            } else {
                 $overrides[$logicalActivityMarker] = false;
             }
         }
 
-        if ($this->descriptor->hasRatingParam() && $additionalParams->has("rating")) {
+        if ($this->descriptor->hasRatingParam() && $additionalParams->has('rating')) {
             $ratings = [
-                "g" => "G - All Ages",
-                "pg" => "PG - Children",
-                "pg13" => "PG-13 - Teens 13 or older",
-                "r17" => "R - 17+ (violence & profanity)",
-                "r" => "R+ - Mild Nudity",
-                "rx" => "Rx - Hentai",
+                'g' => 'G - All Ages',
+                'pg' => 'PG - Children',
+                'pg13' => 'PG-13 - Teens 13 or older',
+                'r17' => 'R - 17+ (violence & profanity)',
+                'r' => 'R+ - Mild Nudity',
+                'rx' => 'Rx - Hentai',
             ];
-            $rndKey = $this->faker->randomElement(array_diff(array_keys($ratings), [strtolower($additionalParams["rating"])]));
-            $overrides["rating"] = $ratings[$rndKey];
+            $rndKey = $this->faker->randomElement(array_diff(array_keys($ratings), [strtolower($additionalParams['rating'])]));
+            $overrides['rating'] = $ratings[$rndKey];
         }
 
-        if (($additionalParams->has("genres") && $additionalParams->has("genres_exclude")) || (
-                !$additionalParams->has("genres") && $additionalParams->has("genres_exclude")
-            ) ) {
-            $overrides["genres"] = [];
+        if (($additionalParams->has('genres') && $additionalParams->has('genres_exclude')) || (
+            ! $additionalParams->has('genres') && $additionalParams->has('genres_exclude')
+        )) {
+            $overrides['genres'] = [];
             // use the "genres_exclude" values to add genres to the anime item
-            $genreIds = explode(",", $additionalParams["genres_exclude"]);
+            $genreIds = explode(',', $additionalParams['genres_exclude']);
             if (count($genreIds) > 1) {
                 $genreId = $this->faker->randomElement($genreIds);
             } else {
@@ -378,16 +374,16 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             }
 
             $m = $this->ensureGenreExists($genreId);
-            $overrides["genres"][] = [
-                "mal_id" => $m->mal_id,
-                "type" => $this->descriptor->mediaName(),
-                "name" => $m->name,
-                "url" => $m->url
+            $overrides['genres'][] = [
+                'mal_id' => $m->mal_id,
+                'type' => $this->descriptor->mediaName(),
+                'name' => $m->name,
+                'url' => $m->url,
             ];
-        } else if ($additionalParams->has("genres")) {
-            $overrides["genres"] = [];
+        } elseif ($additionalParams->has('genres')) {
+            $overrides['genres'] = [];
             // add such genres which are not in the "genres" param
-            $genreIds = explode(",", $additionalParams["genres"]);
+            $genreIds = explode(',', $additionalParams['genres']);
             $numberOfGenresToAdd = $this->faker->numberBetween(0, 4);
             for ($numberOfGenresAdded = 0; $numberOfGenresAdded <= $numberOfGenresToAdd; $numberOfGenresAdded++) {
                 $outboundsGenreId = $this->faker->numberBetween(0, 74);
@@ -397,42 +393,42 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
                 $m = $this->ensureGenreExists($outboundsGenreId);
 
-                $overrides["genres"][] = [
-                    "mal_id" => $m->mal_id,
-                    "type" => $this->descriptor->mediaName(),
-                    "name" => $m->name,
-                    "url" => $m->url
+                $overrides['genres'][] = [
+                    'mal_id' => $m->mal_id,
+                    'type' => $this->descriptor->mediaName(),
+                    'name' => $m->name,
+                    'url' => $m->url,
                 ];
             }
         }
 
-        if ($additionalParams->has("start_date") && !empty($additionalParams["start_date"])
-            && !$additionalParams->has("end_date")) {
-            $startDate = $this->adaptDateString($additionalParams["start_date"]);
+        if ($additionalParams->has('start_date') && ! empty($additionalParams['start_date'])
+            && ! $additionalParams->has('end_date')) {
+            $startDate = $this->adaptDateString($additionalParams['start_date']);
             $dt = Carbon::parse($startDate)->subDays($this->faker->randomElement([30, 60, 90, 120, 180]));
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($dt, null);
         }
 
-        if ($additionalParams->has("end_date") && !empty($additionalParams["end_date"])
-            && !$additionalParams->has("start_date")) {
-            $endDate = $this->adaptDateString($additionalParams["end_date"]);
+        if ($additionalParams->has('end_date') && ! empty($additionalParams['end_date'])
+            && ! $additionalParams->has('start_date')) {
+            $endDate = $this->adaptDateString($additionalParams['end_date']);
             $to = Carbon::parse($endDate)->addDays($this->faker->randomElement([30, 60, 90, 120, 180]));
             $from = $to->copy()->subDays($this->faker->randomElement([30, 60, 90, 120, 180]));
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($from, $to);
         }
 
-        if ($additionalParams->has("start_date") && $additionalParams->has("end_date")
-            && !empty($additionalParams["start_date"]) && !empty($additionalParams["end_date"])) {
-            $originalFrom = Carbon::parse($this->adaptDateString($additionalParams["start_date"]));
-            $originalTo = Carbon::parse($this->adaptDateString($additionalParams["end_date"]));
+        if ($additionalParams->has('start_date') && $additionalParams->has('end_date')
+            && ! empty($additionalParams['start_date']) && ! empty($additionalParams['end_date'])) {
+            $originalFrom = Carbon::parse($this->adaptDateString($additionalParams['start_date']));
+            $originalTo = Carbon::parse($this->adaptDateString($additionalParams['end_date']));
             $interval = $originalTo->diff($originalFrom);
-            $afterOrBefore = $this->faker->randomElement(["after", "before"]);
+            $afterOrBefore = $this->faker->randomElement(['after', 'before']);
 
             $randomDayIntervalValue = $this->faker->numberBetween(8, 90) + $interval->days;
 
             [$artificialFrom, $artificialTo] = match ($afterOrBefore) {
-                "after" => [$originalFrom->addDays($randomDayIntervalValue), $originalTo->addDays($randomDayIntervalValue)],
-                "before" => [$originalFrom->subDays($randomDayIntervalValue), $originalTo->subDays($randomDayIntervalValue)]
+                'after' => [$originalFrom->addDays($randomDayIntervalValue), $originalTo->addDays($randomDayIntervalValue)],
+                'before' => [$originalFrom->subDays($randomDayIntervalValue), $originalTo->subDays($randomDayIntervalValue)]
             };
 
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($artificialFrom, $artificialTo);
@@ -443,11 +439,11 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
     protected function ensureGenreExists(int $genreId): Model
     {
-        $m = $this->descriptor->genreQueryBuilder()->firstWhere("mal_id", $genreId);
+        $m = $this->descriptor->genreQueryBuilder()->firstWhere('mal_id', $genreId);
         if ($m == null) {
             $f = $this->descriptor->genreFactory();
             $m = $f->createOne([
-                "mal_id" => $genreId
+                'mal_id' => $genreId,
             ]);
         }
 
@@ -456,9 +452,9 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
     protected function adaptDateString($dateStr): string
     {
-        $parts = explode("-", $dateStr);
+        $parts = explode('-', $dateStr);
         if (count($parts) === 1) {
-            return $parts[0] . "-01-01";
+            return $parts[0].'-01-01';
         }
 
         return $dateStr;
@@ -472,12 +468,12 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
     protected function getRandomRating(): string
     {
         return $this->faker->randomElement([
-            "G - All Ages",
-            "PG - Children",
-            "PG-13 - Teens 13 or older",
-            "R - 17+ (violence & profanity)",
-            "R+ - Mild Nudity",
-            "Rx - Hentai"
+            'G - All Ages',
+            'PG - Children',
+            'PG-13 - Teens 13 or older',
+            'R - 17+ (violence & profanity)',
+            'R+ - Mild Nudity',
+            'Rx - Hentai',
         ]);
     }
 }

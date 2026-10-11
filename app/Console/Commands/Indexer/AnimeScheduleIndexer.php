@@ -6,12 +6,12 @@ use App\Http\HttpHelper;
 use Illuminate\Console\Command;
 use Jikan\Request\Schedule\ScheduleRequest;
 
-
 class AnimeScheduleIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
+     *
      * @var string
      */
     protected $signature = 'indexer:anime-schedule';
@@ -35,7 +35,6 @@ class AnimeScheduleIndexer extends Command
 
     /**
      * Execute the console command.
-     *
      */
     public function handle()
     {
@@ -49,7 +48,7 @@ class AnimeScheduleIndexer extends Command
         $results = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getSchedule(new ScheduleRequest()),
+                    ->getSchedule(new ScheduleRequest),
                 'json'
             ),
             true
@@ -57,6 +56,7 @@ class AnimeScheduleIndexer extends Command
 
         if (HttpHelper::hasError($results)) {
             echo "FAILED: {$results->original['error']}\n";
+
             return;
         }
 
@@ -72,7 +72,7 @@ class AnimeScheduleIndexer extends Command
         $itemCount = count($anime);
         echo "Anime currently airing: {$itemCount} entries\n";
         foreach ($anime as $entry) {
-            $url = config('app.url') . "/v4/anime/{$entry['mal_id']}";
+            $url = config('app.url')."/v4/anime/{$entry['mal_id']}";
 
             file_get_contents($url);
             sleep(3); // prevent rate-limit
@@ -81,6 +81,6 @@ class AnimeScheduleIndexer extends Command
             $i++;
         }
 
-        echo str_pad("Indexing complete", 10).PHP_EOL;
+        echo str_pad('Indexing complete', 10).PHP_EOL;
     }
 }

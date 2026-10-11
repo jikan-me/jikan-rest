@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnimeStaffResource extends JsonResource
 {
-
     /**
      *  @OA\Schema(
      *      schema="anime_staff",
@@ -23,7 +23,6 @@ class AnimeStaffResource extends JsonResource
      *                  property="person",
      *                  type="object",
      *                  description="Person details",
-     *
      *                  @OA\Property(
      *                      property="mal_id",
      *                      type="integer",
@@ -49,6 +48,7 @@ class AnimeStaffResource extends JsonResource
      *                  property="positions",
      *                  type="array",
      *                  description="Staff Positions",
+     *
      *                  @OA\Items(type="string")
      *              ),
      *          ),
@@ -59,7 +59,7 @@ class AnimeStaffResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)

@@ -13,6 +13,7 @@ use Spatie\LaravelData\Attributes\WithCast;
  *      in="query",
  *      required=false,
  *      description="Any reviews that are tagged as a spoiler. Spoiler reviews are not returned by default. e.g usage: `?spoiler=true`",
+ *
  *      @OA\Schema(type="boolean")
  * ),
  */

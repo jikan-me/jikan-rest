@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnimeEpisodeResource extends JsonResource
@@ -72,7 +73,7 @@ class AnimeEpisodeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)
@@ -87,7 +88,7 @@ class AnimeEpisodeResource extends JsonResource
             'aired' => $this['aired'],
             'filler' => $this['filler'],
             'recap' => $this['recap'],
-            'synopsis' => $this['synopsis']
+            'synopsis' => $this['synopsis'],
         ];
     }
 }

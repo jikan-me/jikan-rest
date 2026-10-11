@@ -8,7 +8,6 @@ use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
 /**
  * @extends ItemLookupHandler<AnimeFullLookupCommand, JsonResponse>
  */

@@ -17,6 +17,4 @@ use Spatie\Enum\Laravel\Enum;
  *   enum={"mal_id", "count", "favorites", "established"}
  * )
  */
-final class ProducerOrderByEnum extends Enum
-{
-}
+final class ProducerOrderByEnum extends Enum {}

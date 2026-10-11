@@ -20,6 +20,6 @@ final class PersonMangaLookupHandler extends ItemLookupHandler
 
     protected function resource(CachedData $results): JsonResource
     {
-        return new PersonMangaCollection($results->get("published_manga"));
+        return new PersonMangaCollection($results->get('published_manga'));
     }
 }

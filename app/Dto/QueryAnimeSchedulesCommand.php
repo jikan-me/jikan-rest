@@ -23,7 +23,7 @@ use Spatie\LaravelData\Data;
  */
 final class QueryAnimeSchedulesCommand extends Data implements DataRequest
 {
-    use HasLimitParameter, HasRequestFingerprint, HasPageParameter, PreparesData, HasSfwParameter, HasKidsParameter, HasUnapprovedParameter, MapsRouteParameters;
+    use HasKidsParameter, HasLimitParameter, HasPageParameter, HasRequestFingerprint, HasSfwParameter, HasUnapprovedParameter, MapsRouteParameters, PreparesData;
 
     #[
         WithCast(EnumCast::class, AnimeScheduleFilterEnum::class),

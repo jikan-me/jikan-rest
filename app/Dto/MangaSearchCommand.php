@@ -30,8 +30,8 @@ final class MangaSearchCommand extends MediaSearchCommand implements DataRequest
     public string|Optional $magazines;
 
     #[
-        MapInputName("order_by"),
-        MapOutputName("order_by"),
+        MapInputName('order_by'),
+        MapOutputName('order_by'),
         EnumValidation(MangaOrderByEnum::class),
         WithCast(EnumCast::class, MangaOrderByEnum::class)
     ]

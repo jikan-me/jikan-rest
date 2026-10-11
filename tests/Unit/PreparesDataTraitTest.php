@@ -1,17 +1,20 @@
 <?php
+
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Unit;
+
 use App\Dto\Concerns\HasLimitParameter;
 use App\Dto\Concerns\HasPageParameter;
 use App\Dto\Concerns\PreparesData;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 use Tests\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 
 final class PreparesDataFixture extends Data
 {
-    use PreparesData, HasLimitParameter, HasPageParameter;
+    use HasLimitParameter, HasPageParameter, PreparesData;
 
     public string|Optional $filter;
 }
@@ -25,11 +28,11 @@ final class PreparesDataTraitTest extends TestCase
             'limit = 1, page = empty, filter = empty' => [['limit' => '1', 'page' => '', 'filter' => ''], ['limit' => 1]],
             'limit = 1, page = 2, filter = empty' => [
                 ['limit' => '1', 'page' => '2', 'filter' => ''],
-                ['limit' => 1, 'page' => 2]
+                ['limit' => 1, 'page' => 2],
             ],
             'limit = 1, page = 2, filter = somefilter' => [
                 ['limit' => '1', 'page' => '2', 'filter' => 'somefilter'],
-                ['limit' => 1, 'page' => 2, 'filter' => 'somefilter']
+                ['limit' => 1, 'page' => 2, 'filter' => 'somefilter'],
             ],
         ];
     }

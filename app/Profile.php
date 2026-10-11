@@ -3,8 +3,10 @@
 namespace App;
 
 use App\Concerns\FilteredByLetter;
+use Database\Factories\ProfileFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\User\UserProfileRequest;
+use MongoDB\BSON\UTCDateTime;
 
 /**
  * Mongo-backed user profile document. Attributes are magic (from the collection); the
@@ -14,24 +16,26 @@ use Jikan\Request\User\UserProfileRequest;
  * @property string $username
  * @property string $url
  * @property array<string, mixed> $images
- * @property \MongoDB\BSON\UTCDateTime|null $last_online
+ * @property UTCDateTime|null $last_online
  * @property string|null $gender
- * @property \MongoDB\BSON\UTCDateTime|null $birthday
+ * @property UTCDateTime|null $birthday
  * @property string|null $location
- * @property \MongoDB\BSON\UTCDateTime|null $joined
+ * @property UTCDateTime|null $joined
  * @property array<string, mixed> $anime_stats
  * @property array<string, mixed> $manga_stats
  * @property array<string, mixed> $favorites
  * @property array<string, mixed>|null $last_updates
  * @property string|null $about
  * @property array<string, mixed>|null $external_links
- * @property \MongoDB\BSON\UTCDateTime|null $createdAt
- * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
- * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\ProfileFactory>
+ * @property UTCDateTime|null $createdAt
+ * @property UTCDateTime|null $modifiedAt
+ *
+ * @use HasFactory<ProfileFactory>
  */
 class Profile extends JikanApiSearchableModel
 {
     use FilteredByLetter, HasFactory;
+
     protected array $filters = [];
 
     /**
@@ -42,7 +46,7 @@ class Profile extends JikanApiSearchableModel
     protected $fillable = [
         'mal_id', 'username', 'url', 'images', 'last_online', 'gender', 'birthday', 'location',
         'joined', 'anime_stats', 'manga_stats', 'favorites', 'about',
-        'createdAt', 'modifiedAt', 'internal_username'
+        'createdAt', 'modifiedAt', 'internal_username',
     ];
 
     /**
@@ -64,7 +68,7 @@ class Profile extends JikanApiSearchableModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->displayNameFieldName = "username";
+        $this->displayNameFieldName = 'username';
     }
 
     /**
@@ -91,19 +95,19 @@ class Profile extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
-            'username' => $this->username
+            'username' => $this->username,
         ];
     }
 
     public function typesenseQueryBy(): array
     {
         return [
-            "username"
+            'username',
         ];
     }
 
     public function getTitleAttributeName(): string
     {
-        return "username";
+        return 'username';
     }
 }

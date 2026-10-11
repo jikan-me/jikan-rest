@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 
 class ClubController extends Controller
 {
-
     /**
      *  @OA\Get(
      *     path="/clubs/{id}",
@@ -22,19 +21,23 @@ class ClubController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Club Resource",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/club"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -56,6 +59,7 @@ class ClubController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
@@ -64,8 +68,10 @@ class ClubController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns Club Members Resource",
+     *
      *         @OA\JsonContent(
      *              allOf={
+     *
      *                  @OA\Schema(ref="#/components/schemas/pagination"),
      *                  @OA\Schema(
      *                      ref="#/components/schemas/club_member"
@@ -73,6 +79,7 @@ class ClubController extends Controller
      *              }
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -124,16 +131,19 @@ class ClubController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Club Staff",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/club_staff"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -155,16 +165,19 @@ class ClubController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns Club Relations",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/club_relations"
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

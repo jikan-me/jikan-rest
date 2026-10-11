@@ -3,10 +3,10 @@
 namespace App\Repositories;
 
 use App\Contracts\GenreRepository;
-use App\GenreAnime;
-use App\ExplicitGenresAnime;
-use App\ThemeAnime;
 use App\DemographicAnime;
+use App\ExplicitGenresAnime;
+use App\GenreAnime;
+use App\ThemeAnime;
 use Illuminate\Support\Collection;
 
 final class AnimeGenresRepository extends DatabaseRepository implements GenreRepository

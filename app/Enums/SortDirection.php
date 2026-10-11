@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Enums;
+
 use Spatie\Enum\Laravel\Enum;
 
 /**
@@ -14,6 +15,4 @@ use Spatie\Enum\Laravel\Enum;
  *   enum={"desc","asc"}
  * )
  */
-final class SortDirection extends Enum
-{
-}
+final class SortDirection extends Enum {}

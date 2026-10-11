@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\GenreAnime;
 use App\GenreManga;
 use App\Testing\ScoutFlush;
@@ -8,21 +12,21 @@ use Tests\TestCase;
 
 class GenreControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testAnimeGenre()
     {
         GenreAnime::factory()->createOne();
         $this->get('/v4/genres/anime')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 [
                     'mal_id',
                     'name',
                     'url',
-                    'count'
-                ]
+                    'count',
+                ],
             ]]);
     }
 
@@ -31,13 +35,13 @@ class GenreControllerTest extends TestCase
         GenreManga::factory()->createOne();
         $this->get('/v4/genres/manga')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 [
                     'mal_id',
                     'name',
                     'url',
-                    'count'
-                ]
+                    'count',
+                ],
             ]]);
     }
 

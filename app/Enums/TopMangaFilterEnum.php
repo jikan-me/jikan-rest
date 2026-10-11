@@ -17,6 +17,4 @@ use Spatie\Enum\Laravel\Enum;
  *   enum={"publishing","upcoming","bypopularity","favorite"}
  * )
  */
-final class TopMangaFilterEnum extends Enum
-{
-}
+final class TopMangaFilterEnum extends Enum {}

@@ -16,6 +16,4 @@ use Spatie\Enum\Laravel\Enum;
  *    enum={"mal_id", "name", "count"}
  *  )
  */
-final class MagazineOrderByEnum extends Enum
-{
-}
+final class MagazineOrderByEnum extends Enum {}

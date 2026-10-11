@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AnimeThemesResource extends JsonResource
 {
-
     /**
      *  @OA\Schema(
      *      schema="anime_themes",
@@ -18,13 +18,16 @@ class AnimeThemesResource extends JsonResource
      *          @OA\Property(
      *               property="openings",
      *               type="array",
+     *
      *               @OA\Items(
      *                   type="string",
      *               ),
      *          ),
+     *
      *          @OA\Property(
      *               property="endings",
      *               type="array",
+     *
      *               @OA\Items(
      *                   type="string",
      *               ),
@@ -36,14 +39,14 @@ class AnimeThemesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)
     {
         return [
             'openings' => $this->opening_themes ?? [],
-            'endings' => $this->ending_themes ?? []
+            'endings' => $this->ending_themes ?? [],
         ];
     }
 }

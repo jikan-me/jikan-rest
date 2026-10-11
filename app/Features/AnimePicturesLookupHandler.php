@@ -11,7 +11,6 @@ use Illuminate\Support\Collection;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Anime\AnimePicturesRequest;
 
-
 /**
  * @extends RequestHandlerWithScraperCache<AnimePicturesLookupCommand, JsonResponse>
  */
@@ -25,7 +24,7 @@ final class AnimePicturesLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -33,16 +32,16 @@ final class AnimePicturesLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
+        $id = $requestParams->get('id');
 
         return $this->scraperService->findList(
             $requestFingerPrint,
             fn (MalClient $jikan, ?int $page = null) => collect(
-                ["pictures" => $jikan->getAnimePictures(new AnimePicturesRequest($id))]
+                ['pictures' => $jikan->getAnimePictures(new AnimePicturesRequest($id))]
             )
         );
     }

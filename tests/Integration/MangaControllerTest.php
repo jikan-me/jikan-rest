@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Manga;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
@@ -8,13 +12,13 @@ use Tests\TestCase;
 
 class MangaControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testMain()
     {
         Manga::factory()->createOne([
-            "mal_id" => 1
+            'mal_id' => 1,
         ]);
         $this->get('/v4/manga/1')
             ->assertStatus(200)
@@ -25,12 +29,12 @@ class MangaControllerTest extends TestCase
                     'jpg' => [
                         'image_url',
                         'small_image_url',
-                        'large_image_url'
+                        'large_image_url',
                     ],
                     'webp' => [
                         'image_url',
                         'small_image_url',
-                        'large_image_url'
+                        'large_image_url',
                     ],
                 ],
                 'title',
@@ -49,15 +53,15 @@ class MangaControllerTest extends TestCase
                         'from' => [
                             'day',
                             'month',
-                            'year'
+                            'year',
                         ],
                         'to' => [
                             'day',
                             'month',
-                            'year'
-                        ]
+                            'year',
+                        ],
                     ],
-                    'string'
+                    'string',
                 ],
                 'score',
                 'scored_by',
@@ -72,42 +76,42 @@ class MangaControllerTest extends TestCase
                         'mal_id',
                         'type',
                         'name',
-                        'url'
-                    ]
+                        'url',
+                    ],
                 ],
                 'serializations' => [
                     [
                         'mal_id',
                         'type',
                         'name',
-                        'url'
-                    ]
+                        'url',
+                    ],
                 ],
                 'genres' => [
                     [
                         'mal_id',
                         'type',
                         'name',
-                        'url'
-                    ]
-                ]
+                        'url',
+                    ],
+                ],
             ]]);
     }
 
     public function testCharacters()
     {
-        $this->givenDummyCharactersStaffData("/v4/manga/1/characters", "manga");
+        $this->givenDummyCharactersStaffData('/v4/manga/1/characters', 'manga');
 
         $this->get('/v4/manga/1/characters')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 [
                     'character' => [
                         'mal_id',
                         'url',
                         'images' => [
                             'jpg' => [
-                                'image_url'
+                                'image_url',
                             ],
                             'webp' => [
                                 'image_url',
@@ -117,7 +121,7 @@ class MangaControllerTest extends TestCase
                         'name',
                     ],
                     'role',
-                ]
+                ],
             ]]);
     }
 
@@ -139,7 +143,7 @@ class MangaControllerTest extends TestCase
             'comments' => 0,
             'excerpt' => 'Here are the North American anime & manga releases for September Week 1: September 1 - 7 Anime Releases Africa no Salaryman (TV) (Africa Salaryman) Complete Coll...',
         ]]);
-        DB::table("manga_news")->insert($document);
+        DB::table('manga_news')->insert($document);
         $this->get('/v4/manga/1/news')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -162,9 +166,9 @@ class MangaControllerTest extends TestCase
                             ],
                         ],
                         'comments',
-                        'excerpt'
-                    ]
-                ]
+                        'excerpt',
+                    ],
+                ],
             ]);
     }
 
@@ -187,7 +191,7 @@ class MangaControllerTest extends TestCase
             ]],
             'pictures'
         );
-        DB::table("manga_pictures")->insert($document);
+        DB::table('manga_pictures')->insert($document);
         $this->get('/v4/manga/1/pictures')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -203,14 +207,14 @@ class MangaControllerTest extends TestCase
                             'large_image_url',
                             'small_image_url',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
     public function testStats()
     {
-        $document = $this->dummyScraperResultDocument('/v4/manga/1/statistics', "manga",
+        $document = $this->dummyScraperResultDocument('/v4/manga/1/statistics', 'manga',
             [
                 'reading' => 1293641,
                 'completed' => 37,
@@ -232,10 +236,10 @@ class MangaControllerTest extends TestCase
                 ],
             ]
         );
-        DB::table("manga_stats")->insert($document);
+        DB::table('manga_stats')->insert($document);
         $this->get('/v4/manga/1/statistics')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 'reading',
                 'completed',
                 'on_hold',
@@ -246,15 +250,15 @@ class MangaControllerTest extends TestCase
                     [
                         'score',
                         'votes',
-                        'percentage'
-                    ]
-                ]
+                        'percentage',
+                    ],
+                ],
             ]]);
     }
 
     public function testForum()
     {
-        $document = $this->dummyScraperResultDocument('/v4/manga/1/forum', "manga", [
+        $document = $this->dummyScraperResultDocument('/v4/manga/1/forum', 'manga', [
             [
                 'mal_id' => 2022869,
                 'url' => 'https://myanimelist.net/forum/?topicid=2022869',
@@ -269,9 +273,9 @@ class MangaControllerTest extends TestCase
                     'author_url' => 'https://myanimelist.net/profile/Bacon_and_Eggs',
                     'date' => '2022-06-19T06:26:00+00:00',
                 ],
-            ]
-        ], "topics");
-        DB::table("manga_forum")->insert($document);
+            ],
+        ], 'topics');
+        DB::table('manga_forum')->insert($document);
         $this->get('/v4/manga/1/forum')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -288,27 +292,27 @@ class MangaControllerTest extends TestCase
                             'url',
                             'author_username',
                             'author_url',
-                            'date'
-                        ]
-                    ]
-                ]
+                            'date',
+                        ],
+                    ],
+                ],
             ]);
     }
 
     public function testMoreInfo()
     {
-        $document = $this->dummyScraperResultDocument('/v4/manga/1/moreinfo', "manga", ["moreinfo" => "asd"]);
-        DB::table("manga_moreinfo")->insert($document);
+        $document = $this->dummyScraperResultDocument('/v4/manga/1/moreinfo', 'manga', ['moreinfo' => 'asd']);
+        DB::table('manga_moreinfo')->insert($document);
         $this->get('/v4/manga/1/moreinfo')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
-                'moreinfo'
+            ->assertJsonStructure(['data' => [
+                'moreinfo',
             ]]);
     }
 
     public function testReviews()
     {
-        $document = $this->dummyResultsDocument('/v4/manga/1/reviews', "manga", [
+        $document = $this->dummyResultsDocument('/v4/manga/1/reviews', 'manga', [
             [
                 'mal_id' => 7406,
                 'url' => 'https://myanimelist.net/reviews.php?id=7406',
@@ -344,9 +348,9 @@ class MangaControllerTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         ]);
-        DB::table("manga_reviews")->insert($document);
+        DB::table('manga_reviews')->insert($document);
         $this->get('/v4/manga/1/reviews')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -378,9 +382,9 @@ class MangaControllerTest extends TestCase
                                     'image_url',
                                 ],
                             ],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ]);
     }
 
@@ -393,7 +397,7 @@ class MangaControllerTest extends TestCase
                 'status',
                 'type',
                 'message',
-                'error'
+                'error',
             ]);
     }
 
@@ -421,8 +425,8 @@ class MangaControllerTest extends TestCase
                     ],
                     'url' => 'https://myanimelist.net/recommendations/anime/1-205',
                     'votes' => 118,
-                ]
-            ]
+                ],
+            ],
         ]);
         DB::table('manga_recommendations')->insert($document);
         $this->get('/v4/manga/1/recommendations')
@@ -437,20 +441,20 @@ class MangaControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
                         'url',
                         'votes',
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -470,16 +474,16 @@ class MangaControllerTest extends TestCase
                         ],
                     ],
                 ],
-                'score' => NULL,
+                'score' => null,
                 'status' => 'Watching',
                 'volumes_read' => 16,
                 'volumes_total' => 26,
                 'chapters_read' => 22,
                 'chapters_total' => 22,
                 'date' => '2023-01-31T22:34:00+00:00',
-            ]
+            ],
         ]);
-        DB::table("manga_userupdates")->insert($document);
+        DB::table('manga_userupdates')->insert($document);
         $this->get('/v4/manga/1/userupdates')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -507,9 +511,9 @@ class MangaControllerTest extends TestCase
                         'volumes_total',
                         'chapters_read',
                         'chapters_total',
-                        'date'
-                    ]
-                ]
+                        'date',
+                    ],
+                ],
             ]);
     }
 
@@ -523,8 +527,8 @@ class MangaControllerTest extends TestCase
     public function testMangaRelations()
     {
         Manga::factory()->createOne([
-            "mal_id" => 1,
-            "related" => [
+            'mal_id' => 1,
+            'related' => [
                 [
                     'relation' => 'Other',
                     'entry' => [
@@ -541,8 +545,8 @@ class MangaControllerTest extends TestCase
                             'url' => 'https://myanimelist.net/manga/25146/One_Piece_x_Toriko',
                         ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
         $this->get('/v4/manga/1/relations')
             ->assertStatus(200)
@@ -555,11 +559,11 @@ class MangaControllerTest extends TestCase
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
+                                'url',
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 

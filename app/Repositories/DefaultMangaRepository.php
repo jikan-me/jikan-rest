@@ -6,6 +6,7 @@ use App\Contracts\MangaRepository;
 use App\Enums\MangaStatusEnum;
 use App\Manga;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 final class DefaultMangaRepository extends DatabaseRepository implements MangaRepository
@@ -16,56 +17,56 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function getTopPublishingItems(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->orderByPopularity()
-            ->where("publishing", true);
+            ->where('publishing', true);
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->orderByPopularity()
-            ->where("status", MangaStatusEnum::upcoming()->label);
+            ->where('status', MangaStatusEnum::upcoming()->label);
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->queryable()
-            ->orderBy("members", "desc");
+            ->orderBy('members', 'desc');
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder
     {
-        return $this->queryable()->orderBy("favorites", "desc");
+        return $this->queryable()->orderBy('favorites', 'desc');
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function orderByRank(): EloquentBuilder|ScoutBuilder
     {
         return $this->queryable()
-            ->whereNotNull("rank")
-            ->where("rank", ">", 0)
-            ->orderBy("rank");
+            ->whereNotNull('rank')
+            ->where('rank', '>', 0)
+            ->orderBy('rank');
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
@@ -74,12 +75,12 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
     }
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function orderByScore(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->queryable()
-            ->orderBy("score", "desc");
+            ->orderBy('score', 'desc');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GenreResource extends JsonResource
@@ -9,12 +10,13 @@ class GenreResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      *
      *  @OA\Schema(
      *      schema="genre",
      *      description="Genre Resource",
+     *
      *      @OA\Property(
      *          property="mal_id",
      *          type="integer",
@@ -46,7 +48,7 @@ class GenreResource extends JsonResource
             'mal_id' => $this['mal_id'],
             'name' => $this['name'],
             'url' => $this['url'],
-            'count' => $this['count']
+            'count' => $this['count'],
         ];
     }
 }

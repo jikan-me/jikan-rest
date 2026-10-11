@@ -2,33 +2,34 @@
 <?php
 
 use Dotenv\Dotenv;
+use MirazMac\DotEnv\Writer;
 
 require_once __DIR__.'/vendor/autoload.php';
 
 $safe_defaults = [
     // mongodb regex search by default
-    "SCOUT_DRIVER" => "none",
-    "SCOUT_QUEUE" => false,
-    "THROTTLE" => false,
-    "QUEUE_CONNECTION" => "database",
-    "DB_CACHING" => true,
-    "DB_HOST" => "localhost",
-    "DB_PORT" => 27017,
-    "DB_DATABASE" => "jikan",
-    "DB_USERNAME" => "",
-    "DB_PASSWORD" => ""
+    'SCOUT_DRIVER' => 'none',
+    'SCOUT_QUEUE' => false,
+    'THROTTLE' => false,
+    'QUEUE_CONNECTION' => 'database',
+    'DB_CACHING' => true,
+    'DB_HOST' => 'localhost',
+    'DB_PORT' => 27017,
+    'DB_DATABASE' => 'jikan',
+    'DB_USERNAME' => '',
+    'DB_PASSWORD' => '',
 ];
 
 // get a copy of the current env vars.
 // these are the ones that are set during the container creation
 $current_env = $_ENV;
 
-if (!file_exists(".env")) {
-    copy(".env.dist", ".env");
-    $writer = new \MirazMac\DotEnv\Writer(__DIR__ . '/' . '.env');
+if (! file_exists('.env')) {
+    copy('.env.dist', '.env');
+    $writer = new Writer(__DIR__.'/'.'.env');
 
     foreach ($safe_defaults as $env_var_name => $env_var_default) {
-        $writer->set("SCOUT_DRIVER", env($env_var_name, $env_var_default));
+        $writer->set('SCOUT_DRIVER', env($env_var_name, $env_var_default));
     }
     $writer->write();
 }
@@ -38,19 +39,20 @@ if (!file_exists(".env")) {
 // https://docs.docker.com/engine/swarm/secrets/
 // Additionally we need to write the secrets to the .env file so the workers in roadrunner can access them.
 // (it might just pass down the global env vars, but haven't tested that yet)
-$envWriter = new \MirazMac\DotEnv\Writer(__DIR__ . '/' . '.env');
+$envWriter = new Writer(__DIR__.'/'.'.env');
 $itemsWritten = 0;
 foreach (array_keys($current_env) as $env_key) {
-    if (!str_contains($env_key, "__FILE")) {
+    if (! str_contains($env_key, '__FILE')) {
         continue;
     }
-    if (!file_exists($current_env[$env_key])) {
-        echo "Couldn't load secret: " . $_ENV[$env_key] . PHP_EOL;
+    if (! file_exists($current_env[$env_key])) {
+        echo "Couldn't load secret: ".$_ENV[$env_key].PHP_EOL;
+
         continue;
     }
-    $originalKey = str_replace("__FILE", "", $env_key);
+    $originalKey = str_replace('__FILE', '', $env_key);
     $secretsFileContents = file_get_contents($current_env[$env_key]);
-    $envWriter->set($originalKey, str_replace(["\n", "\r"], "", $secretsFileContents));
+    $envWriter->set($originalKey, str_replace(["\n", "\r"], '', $secretsFileContents));
     $itemsWritten++;
 }
 
@@ -64,20 +66,20 @@ $dotenv->load();
 
 $current_env = $_ENV;
 
-if ($current_env["SCOUT_DRIVER"] === "typesense" && empty($current_env["TYPESENSE_API_KEY"])) {
-    echo "Please set the TYPESENSE_API_KEY environment variable when setting SCOUT_DRIVER to typesense.";
+if ($current_env['SCOUT_DRIVER'] === 'typesense' && empty($current_env['TYPESENSE_API_KEY'])) {
+    echo 'Please set the TYPESENSE_API_KEY environment variable when setting SCOUT_DRIVER to typesense.';
     exit(1);
 }
 
-$periodical_full_indexer_key = "JIKAN_ENABLE_PERIODICAL_FULL_INDEXER";
+$periodical_full_indexer_key = 'JIKAN_ENABLE_PERIODICAL_FULL_INDEXER';
 if (array_key_exists($periodical_full_indexer_key, $current_env) && in_array($current_env[$periodical_full_indexer_key], [1, '1', 'true', 'True', 'TRUE'])) {
-    $supercronic_schedule = file_get_contents("/etc/supercronic/laravel");
+    $supercronic_schedule = file_get_contents('/etc/supercronic/laravel');
     $supercronic_schedule .= PHP_EOL;
-    $supercronic_schedule .= "0 1 * * 1 php /app/artisan indexer:anime --fail && php /app/artisan indexer:anime --resume && php /app/artisan indexer:manga --fail && php /app/artisan indexer:manga --resume";
+    $supercronic_schedule .= '0 1 * * 1 php /app/artisan indexer:anime --fail && php /app/artisan indexer:anime --resume && php /app/artisan indexer:manga --fail && php /app/artisan indexer:manga --resume';
     $supercronic_schedule .= PHP_EOL;
-    file_put_contents("/etc/supercronic/laravel", $supercronic_schedule);
+    file_put_contents('/etc/supercronic/laravel', $supercronic_schedule);
     $current_time = time();
-    echo json_encode(["level" => "info", "ts" => "$current_time.0", "logger" => "container_entrypoint", "msg" => "Full anime/manga indexer is enabled. They will run every Monday at 1am."]) . PHP_EOL;
+    echo json_encode(['level' => 'info', 'ts' => "$current_time.0", 'logger' => 'container_entrypoint', 'msg' => 'Full anime/manga indexer is enabled. They will run every Monday at 1am.']).PHP_EOL;
 }
 // Note: Octane/ModeRunner owns the RoadRunner .rr.yaml (overridden via -o
 // flags at start time), so no RR v2 YAML preprocessing is performed here.

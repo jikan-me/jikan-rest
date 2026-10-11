@@ -1,6 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
 
 namespace Tests\Integration;
+
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Facades\DB;
@@ -8,8 +11,8 @@ use Tests\TestCase;
 
 class RecommendationsControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testAnimeRecommendations()
     {
@@ -58,7 +61,7 @@ class RecommendationsControllerTest extends TestCase
                 'username' => 'VBayer',
             ],
         ]]);
-        DB::table("recommendations")->insert($document);
+        DB::table('recommendations')->insert($document);
         $this->get('/v4/recommendations/anime')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -77,16 +80,16 @@ class RecommendationsControllerTest extends TestCase
                                     'jpg' => [
                                         'image_url',
                                         'small_image_url',
-                                        'large_image_url'
+                                        'large_image_url',
                                     ],
                                     'webp' => [
                                         'image_url',
                                         'small_image_url',
-                                        'large_image_url'
+                                        'large_image_url',
                                     ],
                                 ],
-                                'title'
-                            ]
+                                'title',
+                            ],
                         ],
                         'content',
                         'date',
@@ -94,9 +97,8 @@ class RecommendationsControllerTest extends TestCase
                             'username',
                             'url',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
-
 }

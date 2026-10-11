@@ -20,7 +20,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array<string, mixed> $streaming_links
  */
 final /**
- * @implements \ArrayAccess<array-key, mixed>
+ * @implements ArrayAccess<array-key, mixed>
  */
 class CachedData implements ArrayAccess
 {
@@ -31,19 +31,18 @@ class CachedData implements ArrayAccess
     private int $cacheTimeToLive;
 
     /**
-     * @param Collection<array-key, mixed> $scraperResult
+     * @param  Collection<array-key, mixed>  $scraperResult
      */
     private function __construct(
         private readonly Collection $scraperResult,
         int $cacheTtl
-    )
-    {
+    ) {
         $this->cacheTimeToLive = $cacheTtl;
     }
 
     /**
-     * @param Collection<array-key, mixed> $scraperResult Always a collection which has the result from the scraper wrapped under a key
-     *                                  or a document from the db.
+     * @param  Collection<array-key, mixed>  $scraperResult  Always a collection which has the result from the scraper wrapped under a key
+     *                                                       or a document from the db.
      * @return static
      */
     public static function from(Collection $scraperResult): self
@@ -52,7 +51,7 @@ class CachedData implements ArrayAccess
     }
 
     /**
-     * @param array<string, mixed> $scraperResult
+     * @param  array<string, mixed>  $scraperResult
      */
     public static function fromArray(array $scraperResult): self
     {
@@ -94,6 +93,7 @@ class CachedData implements ArrayAccess
     {
         $modifiedAt = $this->lastModified();
         $ttl = $this->cacheTimeToLive;
+
         return $modifiedAt !== null ? $ttl + $modifiedAt : $ttl;
     }
 
@@ -105,11 +105,11 @@ class CachedData implements ArrayAccess
 
         $result = $this->scraperResult;
 
-        if (null !== $modifiedAt = $result->get("modifiedAt")) {
+        if (null !== $modifiedAt = $result->get('modifiedAt')) {
             return $this->mixedToTimestamp($modifiedAt);
         }
 
-        if (null !== $modifiedAt = $result->get("updated_at")) {
+        if (null !== $modifiedAt = $result->get('updated_at')) {
             return $this->mixedToTimestamp($modifiedAt);
         }
 
@@ -120,7 +120,7 @@ class CachedData implements ArrayAccess
      * Dynamically get elements by key from the underlying scraper result collection.
      * Additionally, this will add support for DelegatesToResource trait which is used by JsonResource class,
      * making the instances of this class passable as ctor arg for laravel resources.
-     * @param string|int $key
+     *
      * @return \Closure|null
      */
     public function __get(string|int $key)
@@ -132,7 +132,7 @@ class CachedData implements ArrayAccess
      * Determine if an element with the specified key exists in the underlying scraper result collection.
      * Additionally, this will add support for DelegatesToResource trait which is used by JsonResource class,
      * making the instance of this class passable as ctor arg for laravel resources.
-     * @param string|int $key
+     *
      * @return bool
      */
     public function __isset(string|int $key)
@@ -142,8 +142,7 @@ class CachedData implements ArrayAccess
 
     /**
      * Dynamically pass method calls to the underlying scraper result collection.
-     * @param $method
-     * @param $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)
@@ -158,13 +157,13 @@ class CachedData implements ArrayAccess
     private function mixedToTimestamp(mixed $modifiedAt): ?int
     {
         if ($modifiedAt instanceof UTCDateTime) {
-            return (int) $modifiedAt->toDateTime()->format("U");
+            return (int) $modifiedAt->toDateTime()->format('U');
         }
         if ($modifiedAt instanceof \DateTimeInterface) {
-            return (int) $modifiedAt->format("U");
+            return (int) $modifiedAt->format('U');
         }
         if (is_string($modifiedAt)) {
-            return Carbon::createFromTimeString($modifiedAt)->format("U");
+            return Carbon::createFromTimeString($modifiedAt)->format('U');
         }
 
         return null;

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'paths' => ['*'],
     'allowed_methods' => ['GET', 'OPTIONS'],

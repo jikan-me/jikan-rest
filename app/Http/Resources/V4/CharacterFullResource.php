@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources\V4;
 
+use App\Character;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Character */
+/** @mixin Character */
 class CharacterFullResource extends JsonResource
 {
     /**
@@ -41,10 +43,12 @@ class CharacterFullResource extends JsonResource
      *          property="nicknames",
      *          type="array",
      *          description="Other Names",
+     *
      *          @OA\Items(
      *              type="string"
      *          )
      *      ),
+     *
      *      @OA\Property(
      *          property="favorites",
      *          type="integer",
@@ -56,7 +60,6 @@ class CharacterFullResource extends JsonResource
      *          description="Biography",
      *          nullable=true
      *      ),
-     *
      *     @OA\Property(
      *          property="anime",
      *          type="array",
@@ -76,7 +79,6 @@ class CharacterFullResource extends JsonResource
      *              ),
      *          ),
      *     ),
-     *
      *     @OA\Property(
      *          property="manga",
      *          type="array",
@@ -96,7 +98,6 @@ class CharacterFullResource extends JsonResource
      *              ),
      *          ),
      *     ),
-     *
      *     @OA\Property(
      *          property="voices",
      *          type="array",
@@ -123,7 +124,7 @@ class CharacterFullResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)

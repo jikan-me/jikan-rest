@@ -14,7 +14,7 @@ use Illuminate\Http\Response;
 interface RequestHandler
 {
     /**
-     * @param TRequest $request
+     * @param  TRequest  $request
      * @return TResponse
      */
     public function handle($request);

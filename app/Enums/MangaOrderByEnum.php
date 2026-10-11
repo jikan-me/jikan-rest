@@ -31,7 +31,7 @@ final class MangaOrderByEnum extends Enum
     {
         return [
             'start_date' => 'published.from',
-            'end_date' => 'published.to'
+            'end_date' => 'published.to',
         ];
     }
 }

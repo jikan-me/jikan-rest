@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repository;
 use App\Contracts\UserRepository;
 use App\Profile;
 

@@ -8,7 +8,6 @@ use App\Dto\QueryRandomMangaCommand;
 use App\Dto\QueryRandomPersonCommand;
 use App\Dto\QueryRandomUserCommand;
 
-
 class RandomController extends Controller
 {
     /**
@@ -19,9 +18,11 @@ class RandomController extends Controller
      *              @OA\Property(
      *                   property="data",
      *                   type="array",
+     *
      *                   @OA\Items(
      *                      type="object",
      *                      anyOf={
+     *
      *                          @OA\Schema(ref="#/components/schemas/anime"),
      *                          @OA\Schema(ref="#/components/schemas/manga"),
      *                          @OA\Schema(ref="#/components/schemas/character"),
@@ -43,13 +44,16 @@ class RandomController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a random anime resource",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  ref="#/components/schemas/anime"
      *              )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -70,13 +74,16 @@ class RandomController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a random manga resource",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  ref="#/components/schemas/manga"
      *              )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -97,13 +104,16 @@ class RandomController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a random character resource",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  ref="#/components/schemas/character"
      *              )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -124,13 +134,16 @@ class RandomController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a random person resource",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  ref="#/components/schemas/person"
      *              )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -151,13 +164,16 @@ class RandomController extends Controller
      *     @OA\Response(
      *         response="200",
      *         description="Returns a random user profile resource",
+     *
      *         @OA\JsonContent(
+     *
      *              @OA\Property(
      *                  property="data",
      *                  ref="#/components/schemas/user_profile"
      *              )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",

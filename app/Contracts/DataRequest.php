@@ -9,8 +9,7 @@ use Illuminate\Http\Response;
 
 /**
  * Marker interface to represent a request with a response
+ *
  * @template T of ResourceCollection|JsonResource|JsonResponse|Response
  */
-interface DataRequest
-{
-}
+interface DataRequest {}

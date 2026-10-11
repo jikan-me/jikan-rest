@@ -11,31 +11,28 @@ use Spatie\LaravelData\Optional;
 
 final class JikanUserListRequestMapperService
 {
-    public function __construct(private readonly PrivateFieldMapperService $fieldMapperService)
-    {
-    }
+    public function __construct(private readonly PrivateFieldMapperService $fieldMapperService) {}
 
     public function map(QueryListOfUserCommand $command, UserListTypeEnum $listType): UserAnimeListRequest|UserMangaListRequest
     {
-        $values = collect($command->all())->except(["username", "page", "status"])->toArray();
+        $values = collect($command->all())->except(['username', 'page', 'status'])->toArray();
 
         $status = $command->status;
         if ($status instanceof Optional) {
             $status = 7;
         }
 
-        if (array_key_exists("sort", $values)) {
-            $values["sort"] = $values["sort"] === "asc" ? -1 : 1;
+        if (array_key_exists('sort', $values)) {
+            $values['sort'] = $values['sort'] === 'asc' ? -1 : 1;
         }
 
         if ($listType->equals(UserListTypeEnum::anime())) {
-            $rangeFrom = "airedFrom";
-            $rangeTo = "airedTo";
+            $rangeFrom = 'airedFrom';
+            $rangeTo = 'airedTo';
             $jikanUserListRequest = new UserAnimeListRequest($command->username, $command->page, $status);
-        }
-        else {
-            $rangeFrom = "publishedFrom";
-            $rangeTo = "publishedTo";
+        } else {
+            $rangeFrom = 'publishedFrom';
+            $rangeTo = 'publishedTo';
             $jikanUserListRequest = new UserMangaListRequest($command->username, $command->page, $status);
         }
 

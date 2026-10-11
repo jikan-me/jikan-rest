@@ -241,12 +241,6 @@ parameters:
 			path: app/DataPipes/MapRouteParametersDataPipe.php
 
 		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\AnimeReviewsLookupCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 3
-			path: app/Dto/AnimeReviewsLookupCommand.php
-
-		-
 			message: '#^Negated boolean expression is always true\.$#'
 			identifier: booleanNot.alwaysTrue
 			count: 1
@@ -277,18 +271,6 @@ parameters:
 			path: app/Dto/LookupDataCommand.php
 
 		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\MangaReviewsLookupCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 3
-			path: app/Dto/MangaReviewsLookupCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\MediaSearchCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 3
-			path: app/Dto/MediaSearchCommand.php
-
-		-
 			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
 			identifier: property.notFound
 			count: 1
@@ -301,21 +283,9 @@ parameters:
 			path: app/Dto/QueryAnimeRecommendationsCommand.php
 
 		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryAnimeReviewsCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 2
-			path: app/Dto/QueryAnimeReviewsCommand.php
-
-		-
 			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
 			identifier: property.notFound
 			count: 1
-			path: app/Dto/QueryAnimeSchedulesCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryAnimeSchedulesCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 5
 			path: app/Dto/QueryAnimeSchedulesCommand.php
 
 		-
@@ -328,12 +298,6 @@ parameters:
 			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
 			identifier: property.notFound
 			count: 1
-			path: app/Dto/QueryAnimeSeasonCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryAnimeSeasonCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 5
 			path: app/Dto/QueryAnimeSeasonCommand.php
 
 		-
@@ -379,12 +343,6 @@ parameters:
 			path: app/Dto/QueryMangaRecommendationsCommand.php
 
 		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryMangaReviewsCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 2
-			path: app/Dto/QueryMangaReviewsCommand.php
-
-		-
 			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
 			identifier: property.notFound
 			count: 1
@@ -407,18 +365,6 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: app/Dto/QueryPopularPromoVideosCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryRandomAnimeCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 2
-			path: app/Dto/QueryRandomAnimeCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryRandomMangaCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 2
-			path: app/Dto/QueryRandomMangaCommand.php
 
 		-
 			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
@@ -463,12 +409,6 @@ parameters:
 			path: app/Dto/QueryReviewsCommand.php
 
 		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryReviewsCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 3
-			path: app/Dto/QueryReviewsCommand.php
-
-		-
 			message: '#^Method App\\Dto\\QueryReviewsCommand\:\:fromRequest\(\) should return static\(App\\Dto\\QueryReviewsCommand\)\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
 			identifier: return.type
 			count: 1
@@ -481,33 +421,9 @@ parameters:
 			path: app/Dto/QuerySpecificAnimeSeasonCommand.php
 
 		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryTopAnimeItemsCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 2
-			path: app/Dto/QueryTopAnimeItemsCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryTopItemsCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 1
-			path: app/Dto/QueryTopItemsCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryTopMangaItemsCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 2
-			path: app/Dto/QueryTopMangaItemsCommand.php
-
-		-
 			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
 			identifier: property.notFound
 			count: 1
-			path: app/Dto/QueryTopReviewsCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\QueryTopReviewsCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 3
 			path: app/Dto/QueryTopReviewsCommand.php
 
 		-
@@ -515,12 +431,6 @@ parameters:
 			identifier: return.type
 			count: 1
 			path: app/Dto/QueryTopReviewsCommand.php
-
-		-
-			message: '#^Access to an undefined static property static\(App\\Dto\\SearchCommand\)\:\:\$defaultLimit\.$#'
-			identifier: staticProperty.notFound
-			count: 1
-			path: app/Dto/SearchCommand.php
 
 		-
 			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'

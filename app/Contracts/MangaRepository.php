@@ -4,6 +4,7 @@ namespace App\Contracts;
 
 use App\Manga;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
@@ -12,38 +13,37 @@ use Laravel\Scout\Builder as ScoutBuilder;
 interface MangaRepository extends Repository
 {
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function getTopPublishingItems(): EloquentBuilder|ScoutBuilder;
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder;
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder;
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder;
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function orderByRank(): EloquentBuilder|ScoutBuilder;
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder;
 
     /**
-     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     * @return EloquentBuilder|Builder<Manga>
      */
     public function orderByScore(): EloquentBuilder|ScoutBuilder;
-
 }

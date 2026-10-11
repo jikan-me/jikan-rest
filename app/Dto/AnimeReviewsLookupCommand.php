@@ -14,13 +14,12 @@ use Spatie\LaravelData\Attributes\Validation\Numeric;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
 
-
 /**
  * @extends LookupDataCommand<JsonResponse>
  */
 final class AnimeReviewsLookupCommand extends LookupDataCommand
 {
-    use PreparesData, HasPreliminaryParameter, HasSpoilersParameter;
+    use HasPreliminaryParameter, HasSpoilersParameter, PreparesData;
 
     #[Numeric, Min(1)]
     public int|Optional $page = 1;

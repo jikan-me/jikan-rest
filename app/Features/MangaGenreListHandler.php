@@ -10,7 +10,7 @@ use App\Dto\MangaGenreListCommand;
 final class MangaGenreListHandler extends GenreListHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

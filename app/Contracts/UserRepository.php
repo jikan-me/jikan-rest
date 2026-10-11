@@ -7,6 +7,4 @@ use App\Profile;
 /**
  * @extends Repository<Profile>
  */
-interface UserRepository extends Repository
-{
-}
+interface UserRepository extends Repository {}

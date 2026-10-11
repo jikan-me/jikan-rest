@@ -1,24 +1,28 @@
 <?php
+
 namespace App\Mixins;
 
 use Illuminate\Container\Container;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Contracts\PaginatesEloquentModels;
 use Laravel\Scout\Engines\TypesenseEngine;
 
-/** @mixin \Laravel\Scout\Builder<\Illuminate\Database\Eloquent\Model> */
+/** @mixin Builder<Model> */
 class ScoutBuilderMixin
 {
     /**
      * Specialised pagination. It retrieves all results from the search engine in chunks, loads them in memory
      * then paginates on the database results.
+     *
      * @noinspection PhpUnused
      */
     public function jikanPaginate(): \Closure
     {
-        return function (int|null $perPage = null, string $pageName = 'page', int|null $page = null) {
-            /** @var \Laravel\Scout\Builder $this */
+        return function (?int $perPage = null, string $pageName = 'page', ?int $page = null) {
+            /** @var Builder $this */
             /** @var TypesenseEngine $engine */
             $engine = $this->engine();
             if ($engine instanceof PaginatesEloquentModels) {

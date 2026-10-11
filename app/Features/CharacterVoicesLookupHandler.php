@@ -17,12 +17,12 @@ final class CharacterVoicesLookupHandler extends ItemLookupHandler
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return new CharacterSeiyuuCollection(
-            $results->get("voice_actors")
+            $results->get('voice_actors')
         );
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

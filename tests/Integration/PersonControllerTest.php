@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Person;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
@@ -8,17 +12,17 @@ use Tests\TestCase;
 
 class PersonControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testMain()
     {
         Person::factory()->createOne([
-            "mal_id" => 1
+            'mal_id' => 1,
         ]);
         $this->get('/v4/people/1')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 'mal_id',
                 'url',
                 'website_url',
@@ -37,12 +41,11 @@ class PersonControllerTest extends TestCase
             ]]);
     }
 
-
     public function testAnimeography()
     {
         Person::factory()->createOne([
-            "mal_id" => 1,
-            "anime_staff_positions" => [
+            'mal_id' => 1,
+            'anime_staff_positions' => [
                 [
                     'position' => 'Theme Song Performance',
                     'anime' => [
@@ -62,12 +65,12 @@ class PersonControllerTest extends TestCase
                         ],
                         'title' => 'Anime Tenchou',
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
         $this->get('/v4/people/1/anime')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 [
                     'position',
                     'anime' => [
@@ -77,25 +80,25 @@ class PersonControllerTest extends TestCase
                             'jpg' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                             'webp' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                         ],
-                        'title'
-                    ]
-                ]
+                        'title',
+                    ],
+                ],
             ]]);
     }
 
     public function testMangaography()
     {
         Person::factory()->createOne([
-            "mal_id" => 1,
-            "published_manga" => [
+            'mal_id' => 1,
+            'published_manga' => [
                 [
                     'position' => 'Art',
                     'manga' => [
@@ -115,12 +118,12 @@ class PersonControllerTest extends TestCase
                         ],
                         'title' => 'Anime Tenchou',
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
         $this->get('/v4/people/1/manga')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 [
                     'position',
                     'manga' => [
@@ -130,25 +133,25 @@ class PersonControllerTest extends TestCase
                             'jpg' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                             'webp' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                         ],
-                        'title'
-                    ]
-                ]
+                        'title',
+                    ],
+                ],
             ]]);
     }
 
     public function testVoices()
     {
         Person::factory()->createOne([
-            "mal_id" => 1,
-            "voice_acting_roles" => [
+            'mal_id' => 1,
+            'voice_acting_roles' => [
                 [
                     'role' => 'Main',
                     'anime' => [
@@ -182,12 +185,12 @@ class PersonControllerTest extends TestCase
                         ],
                         'name' => 'Gilgamesh',
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
         $this->get('/v4/people/1/voices')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 [
                     'role',
                     'anime' => [
@@ -197,15 +200,15 @@ class PersonControllerTest extends TestCase
                             'jpg' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                             'webp' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                         ],
-                        'title'
+                        'title',
                     ],
                     'character' => [
                         'mal_id',
@@ -219,9 +222,9 @@ class PersonControllerTest extends TestCase
                                 'small_image_url',
                             ],
                         ],
-                        'name'
-                    ]
-                ]
+                        'name',
+                    ],
+                ],
             ]]);
     }
 
@@ -233,20 +236,20 @@ class PersonControllerTest extends TestCase
                     'jpg' => [
                         'image_url' => 'https://cdn.myanimelist.net/images/voiceactors/10/34138.jpg',
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
-        DB::table("people_pictures")->insert($document);
+        DB::table('people_pictures')->insert($document);
         $this->get('/v4/people/1/pictures')
             ->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
                     [
                         'jpg' => [
-                            'image_url'
-                        ]
-                    ]
-                ]
+                            'image_url',
+                        ],
+                    ],
+                ],
             ]);
     }
 

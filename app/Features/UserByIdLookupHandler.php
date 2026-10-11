@@ -20,13 +20,13 @@ final class UserByIdLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn (MalClient $jikan, ?int $page = null) => collect(['results' => $jikan->getUsernameById(new UsernameByIdRequest($requestParams->get("id")))])
+            fn (MalClient $jikan, ?int $page = null) => collect(['results' => $jikan->getUsernameById(new UsernameByIdRequest($requestParams->get('id')))])
         );
     }
 }

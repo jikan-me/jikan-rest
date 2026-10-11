@@ -1,53 +1,54 @@
 <?php
+
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
 
 use App\Anime;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Facades\DB;
-use MongoDB\BSON\UTCDateTime;
 use Tests\TestCase;
 
 class AnimeControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
-
+    use SyntheticMongoDbTransaction;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->searchIndexModelCleanupList = ['App\\Anime'];
     }
+
     public function testMain()
     {
         Anime::factory(1)->createOne([
-            "mal_id" => 1,
-            "studios" => [
+            'mal_id' => 1,
+            'studios' => [
                 [
                     'mal_id' => 18,
                     'type' => 'anime',
                     'name' => 'Toei Animation',
                     'url' => 'https://myanimelist.net/anime/producer/18/Toei_Animation',
-                ]
+                ],
             ],
-            "producers" => [
+            'producers' => [
                 [
                     'mal_id' => 16,
                     'type' => 'anime',
                     'name' => 'TV Tokyo',
                     'url' => 'https://myanimelist.net/anime/producer/16/TV_Tokyo',
-                ]
+                ],
             ],
-            "licensors" => [
+            'licensors' => [
                 [
                     'mal_id' => 102,
                     'type' => 'anime',
                     'name' => 'Funimation',
                     'url' => 'https://myanimelist.net/anime/producer/102/Funimation',
-                ]
-            ]
+                ],
+            ],
         ]);
         $this->getJson('/v4/anime/1')
             ->assertStatus(200)
@@ -58,12 +59,12 @@ class AnimeControllerTest extends TestCase
                     'jpg' => [
                         'image_url',
                         'small_image_url',
-                        'large_image_url'
+                        'large_image_url',
                     ],
                     'webp' => [
                         'image_url',
                         'small_image_url',
-                        'large_image_url'
+                        'large_image_url',
                     ],
                 ],
                 'trailer' => [
@@ -76,7 +77,7 @@ class AnimeControllerTest extends TestCase
                         'medium_image_url',
                         'large_image_url',
                         'maximum_image_url',
-                    ]
+                    ],
                 ],
                 'title',
                 'title_english',
@@ -94,15 +95,15 @@ class AnimeControllerTest extends TestCase
                         'from' => [
                             'day',
                             'month',
-                            'year'
+                            'year',
                         ],
                         'to' => [
                             'day',
                             'month',
-                            'year'
-                        ]
+                            'year',
+                        ],
                     ],
-                    'string'
+                    'string',
                 ],
                 'duration',
                 'rating',
@@ -120,39 +121,39 @@ class AnimeControllerTest extends TestCase
                     'day',
                     'time',
                     'timezone',
-                    'string'
+                    'string',
                 ],
                 'producers' => [
                     [
                         'mal_id',
                         'type',
                         'name',
-                        'url'
-                    ]
+                        'url',
+                    ],
                 ],
                 'licensors' => [
                     [
                         'mal_id',
                         'type',
                         'name',
-                        'url'
-                    ]
+                        'url',
+                    ],
                 ],
                 'studios' => [
                     [
                         'mal_id',
                         'type',
                         'name',
-                        'url'
-                    ]
+                        'url',
+                    ],
                 ],
                 'genres' => [
                     [
                         'mal_id',
                         'type',
                         'name',
-                        'url'
-                    ]
+                        'url',
+                    ],
                 ],
             ]]);
     }
@@ -160,7 +161,7 @@ class AnimeControllerTest extends TestCase
     public function testCharacters()
     {
         // let's avoid sending request to MAL in tests
-        $this->givenDummyCharactersStaffData("/v4/anime/1/characters", "anime");
+        $this->givenDummyCharactersStaffData('/v4/anime/1/characters', 'anime');
 
         $this->getJson('/v4/anime/1/characters')
             ->assertStatus(200)
@@ -191,21 +192,21 @@ class AnimeControllerTest extends TestCase
                                         'image_url',
                                     ],
                                 ],
-                                'name'
+                                'name',
                             ],
-                            'language'
-                        ]
-                    ]
-                ]
+                            'language',
+                        ],
+                    ],
+                ],
             ]]);
     }
 
     public function testStaff()
     {
-        $this->givenDummyCharactersStaffData('/v4/anime/1/staff', "anime");
+        $this->givenDummyCharactersStaffData('/v4/anime/1/staff', 'anime');
         $this->getJson('/v4/anime/1/staff')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 [
                     'person' => [
                         'mal_id',
@@ -214,34 +215,34 @@ class AnimeControllerTest extends TestCase
                                 'image_url',
                             ],
                         ],
-                        'name'
+                        'name',
                     ],
-                    'positions'
-                ]
+                    'positions',
+                ],
             ]]);
     }
 
     private function dummyEpisode(): array
     {
         return [
-            "mal_id" => 301,
-            "url" => "https://myanimelist.net/anime/516/Keroro_Gunsou/episode/301",
-            "title" => "Tamama, Exiled from the Nishizawa House, Sir? / Momoka: A Chocolate ",
-            "title_japanese" => null,
-            "title_romanji" => null,
-            "aired" => null,
-            "filler" => false,
-            "recap" => false,
-            "score" => 4.5,
-            "forum_url" => null
+            'mal_id' => 301,
+            'url' => 'https://myanimelist.net/anime/516/Keroro_Gunsou/episode/301',
+            'title' => 'Tamama, Exiled from the Nishizawa House, Sir? / Momoka: A Chocolate ',
+            'title_japanese' => null,
+            'title_romanji' => null,
+            'aired' => null,
+            'filler' => false,
+            'recap' => false,
+            'score' => 4.5,
+            'forum_url' => null,
         ];
     }
 
     public function testEpisodesOne()
     {
-        DB::table("anime_episodes")->insert(
-            $this->dummyResultsDocument("/v4/anime/1/episodes", "anime", [
-                $this->dummyEpisode()
+        DB::table('anime_episodes')->insert(
+            $this->dummyResultsDocument('/v4/anime/1/episodes', 'anime', [
+                $this->dummyEpisode(),
             ])
         );
         $this->get('/v4/anime/1/episodes')
@@ -262,18 +263,18 @@ class AnimeControllerTest extends TestCase
                         'score',
                         'filler',
                         'recap',
-                        'forum_url'
-                    ]
-                ]
+                        'forum_url',
+                    ],
+                ],
             ]);
     }
 
     public function testEpisodesTwo()
     {
-        DB::table("anime_episodes")->insert(
+        DB::table('anime_episodes')->insert(
             $this->dummyResultsDocument(
-                "/v4/anime/21/episodes?page=2",
-                "anime",
+                '/v4/anime/21/episodes?page=2',
+                'anime',
                 array_fill(0, 24, $this->dummyEpisode()),
                 true,
                 2
@@ -297,15 +298,15 @@ class AnimeControllerTest extends TestCase
                         'score',
                         'filler',
                         'recap',
-                        'forum_url'
-                    ]
-                ]
+                        'forum_url',
+                    ],
+                ],
             ]);
     }
 
     public function testEpisode()
     {
-        $document = $this->dummyScraperResultDocument('/v4/anime/21/episodes/1', "anime", [
+        $document = $this->dummyScraperResultDocument('/v4/anime/21/episodes/1', 'anime', [
             'mal_id' => 1,
             'url' => 'https://myanimelist.net/anime/21/One_Piece/episode/1',
             'title' => 'I\'m Luffy! The Man Who\'s Gonna Be King of the Pirates!',
@@ -315,9 +316,9 @@ class AnimeControllerTest extends TestCase
             'aired' => '1999-10-20T00:00:00+09:00',
             'filler' => false,
             'recap' => false,
-            'synopsis' => 'The series begins with an attack'
+            'synopsis' => 'The series begins with an attack',
         ]);
-        DB::table("anime_episode")->insert($document);
+        DB::table('anime_episode')->insert($document);
         $this->get('/v4/anime/21/episodes/1')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -333,7 +334,7 @@ class AnimeControllerTest extends TestCase
                     'filler',
                     'recap',
                     'synopsis',
-                ]
+                ],
             ]);
     }
 
@@ -355,7 +356,7 @@ class AnimeControllerTest extends TestCase
             'comments' => 0,
             'excerpt' => 'Here are the North American anime & manga releases for September Week 1: September 1 - 7 Anime Releases Africa no Salaryman (TV) (Africa Salaryman) Complete Coll...',
         ]]);
-        DB::table("anime_news")->insert($document);
+        DB::table('anime_news')->insert($document);
         $this->get('/v4/anime/1/news')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -378,9 +379,9 @@ class AnimeControllerTest extends TestCase
                             ],
                         ],
                         'comments',
-                        'excerpt'
-                    ]
-                ]
+                        'excerpt',
+                    ],
+                ],
             ]);
     }
 
@@ -403,7 +404,7 @@ class AnimeControllerTest extends TestCase
             ]],
             'pictures'
         );
-        DB::table("anime_pictures")->insert($document);
+        DB::table('anime_pictures')->insert($document);
         $this->get('/v4/anime/1/pictures')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -418,9 +419,9 @@ class AnimeControllerTest extends TestCase
                             'image_url',
                             'large_image_url',
                             'small_image_url',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ]);
     }
 
@@ -445,7 +446,7 @@ class AnimeControllerTest extends TestCase
                                 'maximum_image_url' => 'https://img.youtube.com/vi/qig4KOK2R2g/maxresdefault.jpg',
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 'episodes' => [
                     [
@@ -458,7 +459,7 @@ class AnimeControllerTest extends TestCase
                                 'image_url' => 'https://img1.ak.crunchyroll.com/i/spire1-tmb/191b230426f0b0e6568b4ca6edab47321473136587_large.jpg',
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 'music_videos' => [
                     [
@@ -479,14 +480,14 @@ class AnimeControllerTest extends TestCase
                             'title' => '"heavenly blue"',
                             'author' => 'Kalafina',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]
         );
         DB::table('anime_videos')->insert($document);
         $this->get('/v4/anime/1/videos')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 'promo' => [
                     [
                         'title',
@@ -500,9 +501,9 @@ class AnimeControllerTest extends TestCase
                                 'medium_image_url',
                                 'large_image_url',
                                 'maximum_image_url',
-                            ]
+                            ],
                         ],
-                    ]
+                    ],
                 ],
                 'episodes' => [
                     [
@@ -515,7 +516,7 @@ class AnimeControllerTest extends TestCase
                                 'image_url',
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 'music_videos' => [
                     [
@@ -536,14 +537,14 @@ class AnimeControllerTest extends TestCase
                             'title',
                             'author',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]]);
     }
 
     public function testStats()
     {
-        $document = $this->dummyScraperResultDocument('/v4/anime/21/statistics', "anime",
+        $document = $this->dummyScraperResultDocument('/v4/anime/21/statistics', 'anime',
             [
                 'watching' => 1293641,
                 'completed' => 37,
@@ -565,10 +566,10 @@ class AnimeControllerTest extends TestCase
                 ],
             ]
         );
-        DB::table("anime_stats")->insert($document);
+        DB::table('anime_stats')->insert($document);
         $this->get('/v4/anime/21/statistics')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
+            ->assertJsonStructure(['data' => [
                 'watching',
                 'completed',
                 'on_hold',
@@ -579,15 +580,15 @@ class AnimeControllerTest extends TestCase
                     [
                         'score',
                         'votes',
-                        'percentage'
-                    ]
-                ]
+                        'percentage',
+                    ],
+                ],
             ]]);
     }
 
     public function testForum()
     {
-        $document = $this->dummyScraperResultDocument('/v4/anime/1/forum', "anime", [
+        $document = $this->dummyScraperResultDocument('/v4/anime/1/forum', 'anime', [
             [
                 'mal_id' => 2022869,
                 'url' => 'https://myanimelist.net/forum/?topicid=2022869',
@@ -602,9 +603,9 @@ class AnimeControllerTest extends TestCase
                     'author_url' => 'https://myanimelist.net/profile/Bacon_and_Eggs',
                     'date' => '2022-06-19T06:26:00+00:00',
                 ],
-            ]
-        ], "topics");
-        DB::table("anime_forum")->insert($document);
+            ],
+        ], 'topics');
+        DB::table('anime_forum')->insert($document);
         $this->get('/v4/anime/1/forum')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -621,27 +622,27 @@ class AnimeControllerTest extends TestCase
                             'url',
                             'author_username',
                             'author_url',
-                            'date'
-                        ]
-                    ]
-                ]
+                            'date',
+                        ],
+                    ],
+                ],
             ]);
     }
 
     public function testMoreInfo()
     {
-        $document = $this->dummyScraperResultDocument('/v4/anime/1/moreinfo', "anime", ["moreinfo" => "asd"]);
-        DB::table("anime_moreinfo")->insert($document);
+        $document = $this->dummyScraperResultDocument('/v4/anime/1/moreinfo', 'anime', ['moreinfo' => 'asd']);
+        DB::table('anime_moreinfo')->insert($document);
         $this->get('/v4/anime/1/moreinfo')
             ->assertStatus(200)
-            ->assertJsonStructure(['data'=>[
-                'moreinfo'
+            ->assertJsonStructure(['data' => [
+                'moreinfo',
             ]]);
     }
 
     public function testReviewsOne()
     {
-        $document = $this->dummyResultsDocument('/v4/anime/1/reviews', "anime", [
+        $document = $this->dummyResultsDocument('/v4/anime/1/reviews', 'anime', [
             [
                 'mal_id' => 7406,
                 'url' => 'https://myanimelist.net/reviews.php?id=7406',
@@ -664,7 +665,7 @@ class AnimeControllerTest extends TestCase
                 ],
                 'is_spoiler' => false,
                 'is_preliminary' => false,
-                'episodes_watched' => NULL,
+                'episodes_watched' => null,
                 'user' => [
                     'url' => 'https://myanimelist.net/profile/TheLlama',
                     'username' => 'TheLlama',
@@ -677,9 +678,9 @@ class AnimeControllerTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         ]);
-        DB::table("anime_reviews")->insert($document);
+        DB::table('anime_reviews')->insert($document);
         $this->get('/v4/anime/1/reviews')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -711,9 +712,9 @@ class AnimeControllerTest extends TestCase
                                     'image_url',
                                 ],
                             ],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ]);
     }
 
@@ -726,7 +727,7 @@ class AnimeControllerTest extends TestCase
                 'status',
                 'type',
                 'message',
-                'error'
+                'error',
             ]);
     }
 
@@ -754,8 +755,8 @@ class AnimeControllerTest extends TestCase
                     ],
                     'url' => 'https://myanimelist.net/recommendations/anime/1-205',
                     'votes' => 118,
-                ]
-            ]
+                ],
+            ],
         ]);
         DB::table('anime_recommendations')->insert($document);
         $this->get('/v4/anime/1/recommendations')
@@ -770,20 +771,20 @@ class AnimeControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
                         'url',
                         'votes',
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -803,14 +804,14 @@ class AnimeControllerTest extends TestCase
                         ],
                     ],
                 ],
-                'score' => NULL,
+                'score' => null,
                 'status' => 'Watching',
                 'episodes_seen' => 16,
                 'episodes_total' => 26,
                 'date' => '2023-01-31T22:34:00+00:00',
-            ]
+            ],
         ]);
-        DB::table("anime_userupdates")->insert($document);
+        DB::table('anime_userupdates')->insert($document);
         $this->get('/v4/anime/1/userupdates')
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -836,9 +837,9 @@ class AnimeControllerTest extends TestCase
                         'status',
                         'episodes_seen',
                         'episodes_total',
-                        'date'
-                    ]
-                ]
+                        'date',
+                    ],
+                ],
             ]);
     }
 
@@ -852,8 +853,8 @@ class AnimeControllerTest extends TestCase
     public function testAnimeRelations()
     {
         Anime::factory()->createOne([
-            "mal_id" => 1,
-            "related" => [
+            'mal_id' => 1,
+            'related' => [
                 [
                     'relation' => 'Adaptation',
                     'entry' => [
@@ -870,8 +871,8 @@ class AnimeControllerTest extends TestCase
                             'url' => 'https://myanimelist.net/manga/174/Shooting_Star_Bebop__Cowboy_Bebop',
                         ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
         $this->get('/v4/anime/1/relations')
             ->assertStatus(200)
@@ -884,26 +885,26 @@ class AnimeControllerTest extends TestCase
                                 'mal_id',
                                 'type',
                                 'name',
-                                'url'
-                            ]
+                                'url',
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
     public function testAnimeThemes()
     {
         Anime::factory()->createOne([
-            "mal_id" => 1,
-            "themes" => [
+            'mal_id' => 1,
+            'themes' => [
                 [
                     'mal_id' => 50,
                     'type' => 'anime',
                     'name' => 'Adult Cast',
                     'url' => 'https://myanimelist.net/anime/genre/50/Adult_Cast',
-                ]
-            ]
+                ],
+            ],
         ]);
         $this->get('/v4/anime/1/themes')
             ->assertStatus(200)
@@ -911,7 +912,7 @@ class AnimeControllerTest extends TestCase
                 'data' => [
                     'openings',
                     'endings',
-                ]
+                ],
             ]);
     }
 

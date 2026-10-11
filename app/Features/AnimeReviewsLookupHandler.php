@@ -20,7 +20,7 @@ final class AnimeReviewsLookupHandler extends RequestHandlerWithScraperCache
     use ResolvesMediaReviewParams;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -33,7 +33,7 @@ final class AnimeReviewsLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @param Collection<array-key, mixed> $requestParams
+     * @param  Collection<array-key, mixed>  $requestParams
      */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
@@ -46,7 +46,7 @@ final class AnimeReviewsLookupHandler extends RequestHandlerWithScraperCache
             fn (MalClient $jikan, ?int $page = null) => $jikan->getAnimeReviews(new AnimeReviewsRequest(
                 $id, $page, $sort, $spoilers, $preliminary
             )),
-            $requestParams->get("page", 1)
+            $requestParams->get('page', 1)
         );
     }
 }

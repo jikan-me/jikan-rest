@@ -7,6 +7,4 @@ use App\Magazine;
 /**
  * @extends Repository<Magazine>
  */
-interface MagazineRepository extends Repository
-{
-}
+interface MagazineRepository extends Repository {}

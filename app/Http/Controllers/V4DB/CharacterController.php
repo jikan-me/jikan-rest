@@ -24,19 +24,23 @@ class CharacterController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns complete character resource data",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/character_full"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -58,19 +62,23 @@ class CharacterController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns character resource",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(
      *                 property="data",
      *                 ref="#/components/schemas/character"
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -92,14 +100,17 @@ class CharacterController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns anime that character is in",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/character_anime")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -111,7 +122,6 @@ class CharacterController extends Controller
         return $this->mediator->send($command);
     }
 
-
     /**
      *  @OA\Get(
      *     path="/characters/{id}/manga",
@@ -122,14 +132,17 @@ class CharacterController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns manga that character is in",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/character_manga")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -151,14 +164,17 @@ class CharacterController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns the character's voice actors",
+     *
      *         @OA\JsonContent(ref="#/components/schemas/character_voice_actors")
      *     ),
+     *
      *     @OA\Response(
      *         response="400",
      *         description="Error: Bad request. When required parameters were not supplied.",
@@ -180,12 +196,14 @@ class CharacterController extends Controller
      *       name="id",
      *       in="path",
      *       required=true,
+     *
      *       @OA\Schema(type="integer")
      *     ),
      *
      *     @OA\Response(
      *         response="200",
      *         description="Returns pictures related to the entry",
+     *
      *         @OA\JsonContent(
      *              ref="#/components/schemas/character_pictures"
      *         )
@@ -200,11 +218,13 @@ class CharacterController extends Controller
      *  @OA\Schema(
      *      schema="character_pictures",
      *      description="Character Pictures",
+     *
      *      @OA\Property(
      *          property="data",
      *          type="array",
      *
      *          @OA\Items(
+     *
      *              @OA\Property(
      *                  property="image_url",
      *                  type="string",

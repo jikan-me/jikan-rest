@@ -2,16 +2,17 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Annotations as OA;
 
 class ReviewsResource extends JsonResource
 {
     /**
-     *
      * @OA\Schema(
      *     schema="manga_review",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="mal_id",
      *         type="integer",
@@ -91,8 +92,10 @@ class ReviewsResource extends JsonResource
      *         property="tags",
      *         type="array",
      *         description="Review tags",
+     *
      *         @OA\Items(type="string"),
      *     ),
+     *
      *     @OA\Property (
      *         property="is_spoiler",
      *         type="boolean",
@@ -108,6 +111,7 @@ class ReviewsResource extends JsonResource
      * @OA\Schema(
      *     schema="anime_review",
      *     type="object",
+     *
      *     @OA\Property(
      *         property="mal_id",
      *         type="integer",
@@ -187,8 +191,10 @@ class ReviewsResource extends JsonResource
      *         property="tags",
      *         type="array",
      *         description="Review tags",
+     *
      *         @OA\Items(type="string"),
      *     ),
+     *
      *     @OA\Property (
      *         property="is_spoiler",
      *         type="boolean",
@@ -206,7 +212,6 @@ class ReviewsResource extends JsonResource
      *     ),
      *  ),
      *
-     *
      *  @OA\Schema(
      *      schema="anime_reviews",
      *      description="Anime Reviews Resource",
@@ -214,6 +219,7 @@ class ReviewsResource extends JsonResource
      *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
+     *
      *              @OA\Property(
      *                   property="data",
      *                   type="array",
@@ -222,8 +228,10 @@ class ReviewsResource extends JsonResource
      *                      type="object",
      *
      *                      allOf={
+     *
      *                          @OA\Schema(ref="#/components/schemas/anime_review"),
      *                          @OA\Schema(
+     *
      *                              @OA\Property(
      *                                  property="user",
      *                                  type="object",
@@ -237,15 +245,12 @@ class ReviewsResource extends JsonResource
      *      },
      *  ),
      *
-     *
      *  @OA\Schema(
      *      schema="manga_reviews",
      *      description="Manga Reviews Resource",
-     *
-     *
-     *      allOf={
      *          @OA\Schema(ref="#/components/schemas/pagination"),
      *          @OA\Schema(
+     *
      *              @OA\Property(
      *                   property="data",
      *                   type="array",
@@ -254,8 +259,10 @@ class ReviewsResource extends JsonResource
      *                      type="object",
      *
      *                      allOf={
+     *
      *                          @OA\Schema(ref="#/components/schemas/manga_review"),
      *                          @OA\Schema(
+     *
      *                              @OA\Property(
      *                                  property="user",
      *                                  type="object",
@@ -273,7 +280,7 @@ class ReviewsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<string, mixed>
      */
     public function toArray($request)
