@@ -4,6 +4,30 @@ return [
     'max_results_per_page' => env('MAX_RESULTS_PER_PAGE', 25),
     'micro_caching_enabled' => env('MICROCACHING', false),
     'default_cache_expire' => env('CACHE_DEFAULT_EXPIRE', 86400),
+    // ------------------------------------------------------------------------
+    // Application settings. Centralised here (formerly read via env() inside
+    // app code), which keeps the app safe under `php artisan config:cache`.
+    // Defaults mirror .env.dist.
+    // ------------------------------------------------------------------------
+    'source_timeout' => (int) env('SOURCE_TIMEOUT', 10),
+    'queue_delay_per_job' => (int) env('QUEUE_DELAY_PER_JOB', 5),
+    'github_reporting' => (bool) env('GITHUB_REPORTING', true),
+    'github_rest' => env('GITHUB_REST', 'jikan-me/jikan-rest'),
+    'github_api' => env('GITHUB_API', 'jikan-me/jikan'),
+    'insights_enabled' => (bool) env('INSIGHTS', false),
+    'insights_max_store_time' => (int) env('INSIGHTS_MAX_STORE_TIME', 172800),
+    'disable_user_lists' => env('DISABLE_USER_LISTS', false),
+    'cors_middleware_enabled' => (bool) env('CORS_MIDDLEWARE', false),
+    // Dedicated token for the internal cache-bypass (jobs refreshing cached
+    // responses). Empty by default — no bypass. Was previously env('APP_KEY').
+    'cache_bypass_token' => env('CACHE_BYPASS_TOKEN', ''),
+    'microcaching_expire' => (int) env('MICROCACHING_EXPIRE', 5),
+    'rate_limit_per_minute' => (int) env('RATE_LIMIT_PER_MINUTE', 240),
+    // Source-heartbeat (MAL availability) scoring.
+    'source_good_health_score' => (float) env('SOURCE_GOOD_HEALTH_SCORE', 0.9),
+    'source_bad_health_recheck' => (int) env('SOURCE_BAD_HEALTH_RECHECK', 10),
+    'source_bad_health_range' => (int) env('SOURCE_BAD_HEALTH_RANGE', 30),
+    'source_bad_health_max_store' => (int) env('SOURCE_BAD_HEALTH_MAX_STORE', 50),
     'typesense_options' => [
         'text_match_buckets' => env('TYPESENSE_TEXT_MATCH_BUCKETS', 1),
         'typo_tokens_threshold' => env('TYPESENSE_TYPO_TOKENS_THRESHOLD'),

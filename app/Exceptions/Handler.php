@@ -71,7 +71,7 @@ class Handler extends ExceptionHandler
              * Redis
              * Remove sensitive information from production
              */
-            if (!env('APP_DEBUG')) {
+            if (!config('app.debug')) {
                 $githubReport->setError(' ');
             }
 
@@ -80,21 +80,21 @@ class Handler extends ExceptionHandler
                     'status' => 500,
                     'type' => 'ConnectionException',
                     'message' => 'Failed to communicate with the Redis server',
-                    'error' => env('APP_DEBUG') ?  $e->getMessage() : null,
-                    'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
+                    'error' => config('app.debug') ?  $e->getMessage() : null,
+                    'report_url' => config('jikan.github_reporting') ? (string) $githubReport : null
                 ], 500);
         }
 
         // ParserException from Jikan PHP API
         if ($e instanceof ParserException) {
-            $githubReport->setRepo(env('GITHUB_API', 'jikan-me/jikan'));
+            $githubReport->setRepo(config('jikan.github_api'));
             return response()
                 ->json([
                         'status' => 500,
                         'type' => 'ParserException',
                         'message' => 'Unable to parse this request. Please follow report_url to generate an issue on GitHub',
-                        'error' => $e->getMessage(),
-                        'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
+                        'error' => config('app.debug') ? $e->getMessage() : '',
+                        'report_url' => config('jikan.github_reporting') ? (string) $githubReport : null
                     ], 500);
         }
 
@@ -131,7 +131,7 @@ class Handler extends ExceptionHandler
                             'status' => $e->getCode(),
                             'type' => 'BadResponseException',
                             'message' => 'Resource does not exist',
-                            'error' => $e->getMessage()
+                            'error' => config('app.debug') ? $e->getMessage() : ''
                         ], $e->getCode());
                 case 429:
                     return response()
@@ -139,7 +139,7 @@ class Handler extends ExceptionHandler
                             'status' => $e->getCode(),
                             'type' => 'RateLimitException',
                             'message' => 'Jikan is being rate limited by MyAnimeList.',
-                            'error' => $e->getMessage()
+                            'error' => config('app.debug') ? $e->getMessage() : ''
                         ], $e->getCode());
                 case 403:
                 case 500:
@@ -155,7 +155,7 @@ class Handler extends ExceptionHandler
                             'status' => 500,
                             'type' => 'UpstreamException',
                             'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
-                            'error' => $e->getMessage()
+                            'error' => config('app.debug') ? $e->getMessage() : ''
                         ], 500);
                 default:
                     return response()
@@ -163,7 +163,7 @@ class Handler extends ExceptionHandler
                             'status' => $e->getCode(),
                             'type' => 'BadResponseException',
                             'message' => 'Something went wrong, please try again later.',
-                            'error' => $e->getMessage()
+                            'error' => config('app.debug') ? $e->getMessage() : ''
                         ], $e->getCode());
             }
         }
@@ -175,8 +175,8 @@ class Handler extends ExceptionHandler
                 ->json([
                     'status' => 500,
                     'type' => 'UpstreamException',
-                    'message' => 'Request to MyAnimeList.net timed out (' .env('SOURCE_TIMEOUT', 5) . ' seconds). Please try again later.',
-                    'error' => $e->getMessage()
+                    'message' => 'Request to MyAnimeList.net timed out (' . config('jikan.source_timeout') . ' seconds). Please try again later.',
+                    'error' => config('app.debug') ? $e->getMessage() : ''
                 ], 500);
         }
 
@@ -188,7 +188,7 @@ class Handler extends ExceptionHandler
                     'status' => 500,
                     'type' => 'UpstreamException',
                     'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
-                    'error' => $e->getMessage()
+                    'error' => config('app.debug') ? $e->getMessage() : ''
                 ], 500);
         }
 
@@ -200,7 +200,7 @@ class Handler extends ExceptionHandler
                     'status' => 500,
                     'type' => 'UpstreamException',
                     'message' => 'Request to MyAnimeList.net failed. MyAnimeList.net may be down/unavailable, refuses to connect or took too long to respond. Please try again later.',
-                    'error' => $e->getMessage()
+                    'error' => config('app.debug') ? $e->getMessage() : ''
                 ], 500);
         }
 
@@ -220,9 +220,9 @@ class Handler extends ExceptionHandler
                 'status' => 500,
                 'type' => "Exception",
                 'message' => 'Unhandled Exception. Please follow report_url to generate an issue on GitHub',
-                'trace' => "{$e->getFile()} at line {$e->getLine()}",
-                'error' => $e->getMessage(),
-                'report_url' => env('GITHUB_REPORTING', true) ? (string) $githubReport : null
+                'trace' => config('app.debug') ? "{$e->getFile()} at line {$e->getLine()}" : '',
+                'error' => config('app.debug') ? $e->getMessage() : '',
+                'report_url' => config('jikan.github_reporting') ? (string) $githubReport : null
             ], 500);
     }
 

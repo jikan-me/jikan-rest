@@ -205,3 +205,16 @@ Overall: controllers are thin (good). Validation is centralized in DTO attribute
 - **GitHub report-URL on errors** — intentional public-API aid; still recommend redacting trace detail in prod.
 - **`$text` Mongo search as the no-Typesense fallback** — by design; keep, but fix the dropped filters (§#9).
 - **Parity preservation** — route/response shape intentionally preserved byte-for-byte in v4; do not "modernize" controller responses while claiming parity.
+---
+
+## Resolution status (living; updated as fixes land)
+
+| P-item | Status | Where |
+|---|---|---|
+| P0 #1 Dockerfile | ⏳ not started | follow-up (upstream PR) |
+| P0 #2 env()→config | ✅ done | commit "P0 correctness batch"; `config:cache` verified booting |
+| P0 #3 rate limiting | ✅ done | `throttle:v4` + `RateLimiter::for('v4')` (240/min; 10k/min testing) |
+| P0 #4 error/trace redaction | ✅ done | `Handler` gates behind `config('app.debug')` |
+| P0 #5 APP_KEY bypass | ✅ done | `CACHE_BYPASS_TOKEN` (empty = no bypass), jobs updated |
+| P1 #6 Octane flush gaps | ⏳ not started | backlog |
+| P1 … | ⏳ | see phase-2 audit (`audit-phase2.md`) + backlog |

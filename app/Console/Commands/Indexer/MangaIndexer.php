@@ -107,7 +107,7 @@ class MangaIndexer extends Command
         for ($i = $index; $i <= ($count - 1); $i++) {
             $id = $this->ids[$i];
 
-            $url = env('APP_URL') . "/v4/manga/{$id}";
+            $url = config('app.url') . "/v4/manga/{$id}";
 
             echo "Indexing/Updating " . ($i + 1) . "/{$count} {$url} [MAL ID: {$id}] \n";
 

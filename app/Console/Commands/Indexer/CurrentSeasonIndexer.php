@@ -67,7 +67,7 @@ class CurrentSeasonIndexer extends Command
         $itemCount = count($anime);
         echo "Anime in current season: {$itemCount} entries\n";
         foreach ($anime as $i => $entry) {
-            $url = env('APP_URL') . "/v4/anime/{$entry['mal_id']}";
+            $url = config('app.url') . "/v4/anime/{$entry['mal_id']}";
 
             file_get_contents($url);
             sleep(3); // prevent rate-limit

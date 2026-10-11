@@ -77,14 +77,14 @@ class GithubReport
         $report->code = $exception->getCode();
         $report->error = $exception->getMessage();
         $report->trace = "{$exception->getFile()} on line {$exception->getLine()}";
-        $report->repo = $repo ?? env('GITHUB_REST', 'jikan-me/jikan-rest');
+        $report->repo = $repo ?? config('jikan.github_rest');
         $report->requestUri = $request->getRequestUri();
         $report->requestMethod = $request->getMethod();
         $report->jikanVersion = InstalledVersions::getVersion('jikan-me/jikan');
         $report->phpVersion = PHP_VERSION;
 
         $report->redisRunning = false;
-        if (env('CACHING') && strtolower(env('CACHE_DRIVER')) === 'redis') {
+        if (config('jikan.micro_caching_enabled') && strtolower(config('cache.default')) === 'redis') {
             try {
                 $report->redisRunning = trim(app('redis')->ping()) === 'PONG' ? "Connected" : "Disconnected";
             } catch (ConnectionException $e) {
@@ -93,7 +93,7 @@ class GithubReport
         }
 
         $report->instanceType = 'UNKNOWN';
-        if (env('APP_ENV') !== 'testing') {
+        if (! app()->environment('testing')) {
             if (array_key_exists('SERVER_NAME', $_SERVER)) {
                 $report->instanceType = $_SERVER['SERVER_NAME'] === 'api.jikan.moe' ? 'OFFICIAL' : 'HOSTED';
             }

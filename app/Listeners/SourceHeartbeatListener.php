@@ -25,17 +25,17 @@ class SourceHeartbeatListener
     public function __construct()
     {
         $this->logger = new Logger('source-health-monitor');
-        $this->logger->pushHandler(new StreamHandler(storage_path().'/logs/source-health-monitor.log'), env('APP_DEBUG') ? Logger::DEBUG : Logger::WARNING);
+        $this->logger->pushHandler(new StreamHandler(storage_path().'/logs/source-health-monitor.log'), config('app.debug') ? Logger::DEBUG : Logger::WARNING);
 
         if (SourceHeartbeatProvider::isFailoverEnabled()) {
             $lastFailoverLockTimestamp = $this->getLastFailoverLockTimestamp();
 
-            if (env('APP_DEBUG', false)) {
+            if (config('app.debug')) {
                 $this->logger->debug('Failover is RUNNING');
             }
 
             // Disable failover if it has expired
-            if (time() > ($lastFailoverLockTimestamp + env('SOURCE_BAD_HEALTH_RECHECK'))) {
+            if (time() > ($lastFailoverLockTimestamp + config('jikan.source_bad_health_recheck'))) {
                 // Disable failover if successful requests score
                 $this->attemptDisableFailover();
             }
@@ -52,7 +52,7 @@ class SourceHeartbeatListener
     {
         $eventCount = $this->insertFail($event);
 
-        if (env('APP_DEBUG', false)) {
+        if (config('app.debug')) {
             $this->logger->debug('Event count: '.$eventCount);
         }
 
@@ -78,7 +78,7 @@ class SourceHeartbeatListener
         Storage::put('source_failover.lock', '');
         Storage::put('source_failover_last_downtime', time());
 
-        if (env('APP_DEBUG', false)) {
+        if (config('app.debug')) {
             $this->logger->debug('Failover ENABLED');
         }
     }
@@ -96,9 +96,9 @@ class SourceHeartbeatListener
     {
         $score = $this->getSuccessfulRequestsScore();
 
-        if ($score >= env('SOURCE_GOOD_HEALTH_SCORE', 0.9)) {
+        if ($score >= config('jikan.source_good_health_score')) {
             $this->disableFailover();
-            if (env('APP_DEBUG', false)) {
+            if (config('app.debug')) {
                 $this->logger->debug('Failover disabled; Score: '.$score);
                 $this->logger->debug('Failover DISABLED');
             }
@@ -136,14 +136,14 @@ class SourceHeartbeatListener
                 continue;
             }
 
-            if ($fail[0] >= (time()-env('SOURCE_BAD_HEALTH_RANGE'))) {
+            if ($fail[0] >= (time()-config('jikan.source_bad_health_range'))) {
                 unset($fail);
             }
         }
 
         // slice
-        if (count($fails) > env('SOURCE_BAD_HEALTH_MAX_STORE')) {
-            $fails = array_slice($fails, 0 - env('SOURCE_BAD_HEALTH_MAX_STORE'));
+        if (count($fails) > config('jikan.source_bad_health_max_store')) {
+            $fails = array_slice($fails, 0 - config('jikan.source_bad_health_max_store'));
         }
 
         return $fails;
@@ -163,7 +163,7 @@ class SourceHeartbeatListener
 
         $scored = $score / max($totalFails, 1);
 
-        if(env('APP_DEBUG', false)) {
+        if(config('app.debug')) {
             $this->logger->debug('Failover successful requests score: '.$scored);
         }
 

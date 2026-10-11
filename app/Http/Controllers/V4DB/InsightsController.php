@@ -15,7 +15,7 @@ class InsightsController extends Controller
 
     public function main(Request $request)
     {
-        if (!env('INSIGHTS')) {
+        if (!config('jikan.insights_enabled')) {
             return response()->json([
                 'status' => 403,
                 'type' => 'InsightsRuntimeException',
@@ -24,7 +24,7 @@ class InsightsController extends Controller
             ], 403);
         }
 
-        $maxResultsPerPage = (int) env('MAX_RESULTS_PER_PAGE', 25);
+        $maxResultsPerPage = (int) config('jikan.max_results_per_page');
 
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? $maxResultsPerPage;
@@ -40,7 +40,7 @@ class InsightsController extends Controller
         }
 
         $results = DB::table('insights')
-            ->where('timestamp', '>', time() - env('INSIGHTS_MAX_STORE_TIME', 172800) )
+            ->where('timestamp', '>', time() - config('jikan.insights_max_store_time') )
             ->orderBy('timestamp', 'desc')
             ->paginate(
                 $limit,
@@ -63,7 +63,7 @@ class InsightsController extends Controller
 
     public function trends(Request $request)
     {
-        if (!env('INSIGHTS')) {
+        if (!config('jikan.insights_enabled')) {
             return response()->json([
                 'status' => 403,
                 'type' => 'InsightsRuntimeException',
@@ -72,7 +72,7 @@ class InsightsController extends Controller
             ], 403);
         }
 
-        $maxResultsPerPage = (int) env('MAX_RESULTS_PER_PAGE', 25);
+        $maxResultsPerPage = (int) config('jikan.max_results_per_page');
 
         $page = $request->get('page') ?? 1;
         $limit = $request->get('limit') ?? $maxResultsPerPage;
@@ -99,7 +99,7 @@ class InsightsController extends Controller
 
 //        $results = DB::table('insights')
 //            ->where('url', 'regexp',"/\/v(\d)\/{$trend}\/(\d+).*/i")
-//            ->where('timestamp', '>', time() - env('INSIGHTS_MAX_STORE_TIME', 172800) )
+//            ->where('timestamp', '>', time() - config('jikan.insights_max_store_time') )
 //            ->orderBy('timestamp', 'desc')
 //            ->paginate(
 //                $limit,
@@ -110,7 +110,7 @@ class InsightsController extends Controller
 
         $results = DB::table('insights')
 //            ->where('url', 'regexp',"/\/v(\d)\/{$trend}\/(\d+).*/i")
-            ->where('timestamp', '>', time() - env('INSIGHTS_MAX_STORE_TIME', 172800) )
+            ->where('timestamp', '>', time() - config('jikan.insights_max_store_time') )
             ->orderBy('timestamp', 'desc')
             ->raw(fn($collection) => $collection->aggregate([
                 [

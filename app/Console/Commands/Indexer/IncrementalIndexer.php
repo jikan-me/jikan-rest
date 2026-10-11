@@ -124,7 +124,7 @@ class IncrementalIndexer extends Command
 
             $id = $ids[$index];
 
-            $url = env('APP_URL') . "/v4/$mediaType/$id";
+            $url = config('app.url') . "/v4/$mediaType/$id";
             $this->info("Indexing/Updating " . ($i + 1) . "/$idCount $url [MAL ID: $id]");
 
             try

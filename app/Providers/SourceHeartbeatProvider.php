@@ -48,14 +48,14 @@ class SourceHeartbeatProvider extends ServiceProvider
         // remove any fails greater than SOURCE_BAD_HEALTH_RANGE
         foreach ($fails as $fail) {
 
-            if ($fail[0] >= (time()-env('SOURCE_BAD_HEALTH_RANGE'))) {
+            if ($fail[0] >= (time()-config('jikan.source_bad_health_range'))) {
                 unset($fail);
             }
         }
 
         // slice
-        if (count($fails) > env('SOURCE_BAD_HEALTH_MAX_STORE')) {
-            $fails = array_slice($fails, 0 - env('SOURCE_BAD_HEALTH_MAX_STORE'));
+        if (count($fails) > config('jikan.source_bad_health_max_store')) {
+            $fails = array_slice($fails, 0 - config('jikan.source_bad_health_max_store'));
         }
 
         $score = 0;
@@ -74,7 +74,7 @@ class SourceHeartbeatProvider extends ServiceProvider
     {
         $score = self::getHeartbeatScore();
 
-        if ($score > 0.5 && $score < env('SOURCE_GOOD_HEALTH_SCORE')) {
+        if ($score > 0.5 && $score < config('jikan.source_good_health_score')) {
             return "LEARNING";
         }
 

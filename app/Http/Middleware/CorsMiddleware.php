@@ -27,6 +27,10 @@ class CorsMiddleware extends HandleCors
 
     public function handle($request, \Closure $next): Response|JsonResponse|RedirectResponse
     {
+        if (! config('jikan.cors_middleware_enabled')) {
+            return $next($request);
+        }
+
         if (!$this->hasMatchingPath($request)) {
             return $next($request);
         }

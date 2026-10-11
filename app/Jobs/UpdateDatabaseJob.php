@@ -51,10 +51,10 @@ class UpdateDatabaseJob extends Job
         $response = app('GuzzleClient')
             ->request(
                 'GET',
-                env('APP_URL') . $this->requestUri,
+                config('app.url') . $this->requestUri,
                 [
                     'headers' => [
-                        'auth' => env('APP_KEY') // skips middleware
+                        'auth' => config('jikan.cache_bypass_token') // skips micro-caching middleware
                     ]
                 ]
             );
@@ -73,7 +73,7 @@ class UpdateDatabaseJob extends Job
             json_decode($cache, true)
         ));
 
-        sleep((int) env('QUEUE_DELAY_PER_JOB', 5));
+        sleep(config('jikan.queue_delay_per_job'));
     }
 
     public function failed(\Exception $e)

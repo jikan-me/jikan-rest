@@ -52,9 +52,10 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Response;
-use Illuminate\Support\Env;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 use Jikan\MyAnimeList\MalClient;
 use Laravel\Scout\Builder as ScoutBuilder;
 use App\Features;
@@ -70,6 +71,16 @@ class AppServiceProvider extends ServiceProvider
         $this->registerMacros();
         // the registration of request handlers should happen after the load of all service providers.
         $this->registerRequestHandlers();
+
+        // Application-level rate limit for the public v4 API (P0: no throttling existed).
+        RateLimiter::for('v4', function () {
+            $perMinute = $this->app->environment('testing')
+                ? 10_000
+                : (int) (config('jikan.rate_limit_per_minute') ?: 240);
+
+            return Limit::perMinute($perMinute)
+                ->by((string) (request()->ip() ?? 'local'));
+        });
     }
 
     /**
@@ -89,7 +100,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Scraper client + parser + serializer, previously bound in bootstrap/app.php.
         $httpClient = \Symfony\Component\HttpClient\HttpClient::create([
-            'timeout' => env('SOURCE_TIMEOUT', 1),
+            'timeout' => (float) config('jikan.source_timeout'),
         ]);
         $this->app->instance('HttpClient', $httpClient);
         $this->app->instance('JikanParser', new MalClient($httpClient));
@@ -97,7 +108,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(JikanConfig::class, fn() => new JikanConfig(config("jikan")));
         $this->app->singleton(\App\Contracts\SearchAnalyticsService::class,
-            env("APP_ENV") !== "testing" ? \App\Services\DefaultSearchAnalyticsService::class :
+            ! $this->app->environment('testing') ? \App\Services\DefaultSearchAnalyticsService::class :
                 \App\Services\DummySearchAnalyticsService::class);
         $this->app->alias(JikanConfig::class, "jikan-config");
         // cache options class is used to share the request scope level cache settings

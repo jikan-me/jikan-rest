@@ -106,7 +106,7 @@ class AnimeIndexer extends Command
         for ($i = $index; $i <= ($count - 1); $i++) {
             $id = $this->ids[$i];
 
-            $url = env('APP_URL') . "/v4/anime/{$id}";
+            $url = config('app.url') . "/v4/anime/{$id}";
 
             echo "Indexing/Updating " . ($i + 1) . "/{$count} {$url} [MAL ID: {$id}] \n";
 

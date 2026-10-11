@@ -157,6 +157,25 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 - Time-dependent `SeasonControllerTest::testShouldNotIncludeNewlyStartedSeason...`
   fails today (failed on the Lumen baseline too).
 
+### 10. Config-cache safety + security hardening (from the audit's P0 batch)
+- **`env()` → `config()` everywhere outside config** (`grep env(` in `app/ routes/ bootstrap/`
+  is now empty, modulo dead `PsrWorkerErrorListener` which is slated for deletion).
+  New settings centralized in `config/jikan.php` (scraper timeouts, heartbeat scoring,
+  insights, queue delay, Github reporting, rate limit, cache-bypass token) and
+  `config/app.php` (`version`). `php artisan config:cache` now works and the app boots
+  fully from cached config (was silently nulling `APP_VERSION` etc.).
+- **`bootstrap/app.php` gating moved into middleware** — the `withMiddleware` callback
+  runs before the config repository is bound (fires on kernel resolution), so
+  `config()` there was illegal; `Insights`/`CorsMiddleware` now self-gate at request time.
+- **Rate limiting added** (`throttle:v4`) via `RateLimiter::for('v4')` — 240 req/min/IP
+  (config: `RATE_LIMIT_PER_MINUTE`), 10 000/min under testing. Parity unaffected
+  (headers only, harness compares status+shape).
+- **Error responses redacted in production** — `Handler` gates `error` and the raw
+  `trace` (file:line) behind `config('app.debug')`; error/report_url still emitted with
+  the same shape for parity, values empty when debug is off.
+- **`APP_KEY` no longer doubles as a cache-bypass header** — replaced with a dedicated
+  `CACHE_BYPASS_TOKEN` (empty by default = no bypass); the cache-refresh jobs send it.
+
 ---
 
 ## Verification
@@ -168,8 +187,12 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   the original Lumen baseline). A `tearDown()` reset was added so `Carbon::setTestNow`
   doesn't leak between tests.
 - **Parity harness** (`tools/parity/{snapshot,compare}.php`, baseline committed):
-  **69 → 3** differences; remaining 3 = `/docs` → Swagger redirect (intentional) +
-  `users/recentlyonline` (pre-existing parser bug).
+  **69 → 3** differences at the green check; after the later DB wipe, re-verified that
+  every remaining diff is DB-state/upstream (anime/manga/characters/people → 500
+  `ParserException` from the MAL markup change; `/docs` redirect; `users/recentlyonline`;
+  `producers` empty until re-seeded). Seeded endpoints (genres/magazines) match baseline
+  byte-for-byte in shape, and the P0 removed-fields/rate-limit changes introduced **no
+  new shape or status diffs**.
 - **Live smoke** (native runtime): `/`, `/v4`, `/v4/genres/anime`, `/v4/seasons/now`,
   `/v4/schedules?filter=...`, `/v4/producers/{id}`, `/v4/api/documentation` all `200`.
 - **Octane**: `php artisan octane:start --server=roadrunner` serves endpoints `200`;

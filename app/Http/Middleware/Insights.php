@@ -31,6 +31,10 @@ class Insights
      */
     public function terminate(Request $request, $response)
     {
+        if (! config('jikan.insights_enabled')) {
+            return;
+        }
+
         if (isset($response->original['error'])) {
             return;
         }
@@ -38,7 +42,7 @@ class Insights
         // @todo scaling: implement as scheduled event if needed
         // Delete requests older than INSIGHTS_MAX_STORE
         DB::table('insights')
-            ->where('timestamp', '<', time() - env('INSIGHTS_MAX_STORE_TIME', 172800) )
+            ->where('timestamp', '<', time() - config('jikan.insights_max_store_time') )
             ->delete();
 
         DB::table('insights')

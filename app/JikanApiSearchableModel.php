@@ -46,7 +46,7 @@ abstract class JikanApiSearchableModel extends JikanApiModel
      */
     public function searchableAs(): string
     {
-        return strtolower($this->table) . '_index' . (env("APP_ENV") === "testing" ? "_testing" : "");
+        return strtolower($this->table) . '_index' . (app()->environment("testing") ? "_testing" : "");
     }
 
     /**

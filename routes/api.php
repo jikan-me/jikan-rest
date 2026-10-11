@@ -21,7 +21,7 @@ Route::get('/', function () {
     return response()->json([
         'author_url' => 'https://github.com/irfan-dahir',
         'discord_url' => 'http://discord.jikan.moe',
-        'version' => env('APP_VERSION'),
+        'version' => config('app.version'),
         'parser_version' => JIKAN_PARSER_VERSION,
         'website_url' => 'https://jikan.moe',
         'documentation_url' => 'https://docs.api.jikan.moe/',
@@ -54,7 +54,7 @@ foreach (['v1', 'v2', 'v3'] as $version) {
 Route::group([
     'prefix' => 'v4',
     'namespace' => 'App\Http\Controllers\V4DB',
-    'middleware' => $commonMiddleware,
+    'middleware' => array_merge($commonMiddleware, ['throttle:v4']),
 ], function ($router) {
     require __DIR__.'/web.v4.php';
 });

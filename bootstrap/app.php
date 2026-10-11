@@ -23,13 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
-        if (env('INSIGHTS', false)) {
-            $middleware->append(\App\Http\Middleware\Insights::class);
-        }
-
-        if (env('CORS_MIDDLEWARE', false)) {
-            $middleware->append(\App\Http\Middleware\CorsMiddleware::class);
-        }
+        // Gating for these lives inside the middleware classes (config reads
+        // are not safe at this bootstrap point — this callback runs before the
+        // config repository is bound when the console/http kernel resolves).
+        $middleware->append(\App\Http\Middleware\Insights::class);
+        $middleware->append(\App\Http\Middleware\CorsMiddleware::class);
 
         $middleware->alias([
             'microcaching' => \App\Http\Middleware\MicroCaching::class,

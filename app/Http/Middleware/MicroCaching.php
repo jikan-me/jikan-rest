@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Http\HttpHelper;
 use App\Support\JikanConfig;
 use Closure;
-use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Cache;
 use Jikan\Exception\BadResponseException;
 
@@ -47,8 +46,11 @@ class MicroCaching
             }
         }
 
-        // Allow bypass of caching if APP_KEY supplied in auth header
-        if ($request->header('auth') === env('APP_KEY')) {
+        // Allow bypass of caching if the dedicated cache-bypass token is
+        // supplied in the auth header (was previously APP_KEY). Empty token
+        // => no bypass.
+        $bypassToken = (string) config('jikan.cache_bypass_token');
+        if ($bypassToken !== '' && $request->header('auth') === $bypassToken) {
             return $next($request);
         }
 
@@ -82,7 +84,7 @@ class MicroCaching
                 json_encode(
                     $response->getData()
                 ),
-                env('MICROCACHING_EXPIRE', 60)
+                config('jikan.microcaching_expire')
             );
 
         } catch (\Exception $e) {

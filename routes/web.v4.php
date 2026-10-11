@@ -5,7 +5,7 @@ $router->get('/', function () use ($router) {
     return response()->json([
         'author_url' => 'https://github.com/irfan-dahir',
         'discord_url' => 'http://discord.jikan.moe',
-        'version' => env('APP_VERSION'),
+        'version' => config('app.version'),
         'parser_version' => JIKAN_PARSER_VERSION,
         'website_url' => 'https://jikan.moe',
         'documentation_url' => 'https://docs.api.jikan.moe/',
@@ -377,7 +377,7 @@ $router->group(
                     'uses' => 'UserController@friends'
                 ]);
 
-                if (env('DISABLE_USER_LISTS') === false) {
+                if (config('jikan.disable_user_lists') === false) {
                     $router->get('/animelist/{status?}', [
                         'uses' => 'UserController@animelist'
                     ])->where('status', '[A-Za-z]+');

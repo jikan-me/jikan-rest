@@ -59,10 +59,10 @@ class UpdateCacheJob extends Job
         $response = app('GuzzleClient')
             ->request(
                 'GET',
-                env('APP_URL') . $this->requestUri,
+                config('app.url') . $this->requestUri,
                 [
                     'headers' => [
-                        'auth' => env('APP_KEY') // skip middleware
+                        'auth' => config('jikan.cache_bypass_token') // skip micro-caching middleware
                     ]
                 ]
             );
@@ -75,7 +75,7 @@ class UpdateCacheJob extends Job
         Cache::forever($this->cacheExpiryFingerprint, time() + $this->requestCacheTtl);
         app('redis')->del($queueFingerprint);
 
-        sleep((int) env('QUEUE_DELAY_PER_JOB', 5));
+        sleep(config('jikan.queue_delay_per_job'));
     }
 
     public function failed(\Exception $e)

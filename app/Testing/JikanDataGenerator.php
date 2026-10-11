@@ -149,7 +149,7 @@ trait JikanDataGenerator
 
     private function getItemTestUrl($type, $mal_id = "", $sub_type = ""): string
     {
-        $test_base_url =  env('APP_URL');
+        $test_base_url =  config('app.url');
         $url = empty($sub_type) ?
             $test_base_url . "/v4/" . $type . "/" . $mal_id
             : $test_base_url . "/v4/" . $type . "/" . $sub_type . "/" . $mal_id;
