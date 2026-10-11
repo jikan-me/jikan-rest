@@ -1,8 +1,8 @@
 {
   "_readme": "Maps doc ROLES to actual paths in THIS project. api/api-standard intentionally unmapped (the v4 contract is the parity harness + generated swagger, no handwritten API spec file); declined rather than guessed.",
   "roles": {
-    "decisions": "MIGRATION_PLAN.md",
-    "backlog": "PR_CHANGELOG.md"
+    "decisions": "docs/MIGRATION_PLAN.md",
+    "backlog": "docs/PR_CHANGELOG.md"
   },
   "externalRoles": {},
   "declinedRoles": {

@@ -131,7 +131,7 @@ TYPESENSE_API_KEY=abcd SCOUT_DRIVER=typesense docker compose up -d app
 curl -fsS http://localhost:8108/health           # -> {"ok":true}
 
 # 3. pre-create collections — REQUIRED, the native Scout TypesenseEngine cannot
-#    auto-create one from an empty schema. Follow TYPESENSE_SPIKE.md
+#    auto-create one from an empty schema. Follow docs/TYPESENSE_SPIKE.md
 #    "Pre-create collections" (curl calls) or a typesense:ensure-collections
 #    command if available, then import:
 docker compose exec app php artisan scout:import "App\Anime"

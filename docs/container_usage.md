@@ -117,7 +117,7 @@ files**: the local MongoDB/Redis run without authentication by default (drop the
 
 Full build / run / env (`APP_KEY`, `TYPESENSE_API_KEY`, `SCOUT_DRIVER`,
 `CACHE_DRIVER`) / seeding / health instructions are in
-[`DOCKER.md`](DOCKER.md). On Apple Silicon, build with
+[`DOCKER.md`](docs/DOCKER.md). On Apple Silicon, build with
 `RR_STAGE=rr-arm64 docker compose up -d --build`.
 
 > The old secret-file flow (db_username.txt / redis_password.txt /

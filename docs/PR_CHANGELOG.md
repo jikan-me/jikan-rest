@@ -2,8 +2,8 @@
 
 > **Living document.** Updated as work progresses. This is the accumulated summary
 > for the eventual upstream PR(s) to [jikan-me/jikan-rest](https://github.com/jikan-me/jikan-rest).
-> The push plan/playbook lives in [`UPSTREAM_PR.md`](UPSTREAM_PR.md); upstream
-> blockers live in [`UPSTREAM_ISSUES.md`](UPSTREAM_ISSUES.md).
+> The push plan/playbook lives in [`UPSTREAM_PR.md`](docs/UPSTREAM_PR.md); upstream
+> blockers live in [`UPSTREAM_ISSUES.md`](docs/UPSTREAM_ISSUES.md).
 >
 > - Branch: `laravel-12` (local fork; nothing has been pushed upstream)
 > - Proof points: parity harness, PHPUnit suite, live endpoint checks
@@ -158,7 +158,7 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 - Fix: factory fixtures for `Profile`, `Producers`, `Club` use correct `UTCDateTime` args.
 
 ### 9. Known pre-existing / upstream issues (not migration defects)
-> All upstream blockers live in [`UPSTREAM_ISSUES.md`](UPSTREAM_ISSUES.md). UP-01…05
+> All upstream blockers live in [`UPSTREAM_ISSUES.md`](docs/UPSTREAM_ISSUES.md). UP-01…05
 > were **filed upstream** (jikan-me/jikan #598–#602, 2026-10-11); fixing them is parked/not targeted locally.
 - **`jikan-me/jikan` anime/manga parsers break against current MAL markup.** MAL now
   serves the opening/ending-theme section as a JS widget (no `<table>`), but

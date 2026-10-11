@@ -56,18 +56,18 @@
       }
     ],
     "unmapped": [
-      "AUDIT.md",
+      "docs/AUDIT.md",
       "COMMANDS.MD",
-      "DB_INDEXES.md",
-      "DOCKER.md",
-      "MIGRATION_PLAN.md",
-      "PR_CHANGELOG.md",
-      "TROUBLESHOOTING.md",
-      "TYPESENSE_SPIKE.md",
-      "UPSTREAM_ISSUES.md",
-      "UPSTREAM_PR.md",
-      "audit-phase2.md",
-      "container_usage.md"
+      "docs/DB_INDEXES.md",
+      "docs/DOCKER.md",
+      "docs/MIGRATION_PLAN.md",
+      "docs/PR_CHANGELOG.md",
+      "docs/TROUBLESHOOTING.md",
+      "docs/TYPESENSE_SPIKE.md",
+      "docs/UPSTREAM_ISSUES.md",
+      "docs/UPSTREAM_PR.md",
+      "docs/audit-phase2.md",
+      "docs/container_usage.md"
     ],
     "_note": "Every proposal here is `inferred` and nothing downstream may treat it as authoritative. Choosing between four candidate `design` documents is the judgement half (/map-project), not this script's job."
   },
@@ -88,18 +88,18 @@
       "why": "12 document(s) map to no role in the vocabulary",
       "note": "Not necessarily a detection failure: on a real zero-state repository 17 of 20 top-level documents had no role in the vocabulary AT ALL, and you cannot infer a mapping to a role that does not exist. A document mapped to no role is reported, never silently ignored.",
       "documents": [
-        "AUDIT.md",
+        "docs/AUDIT.md",
         "COMMANDS.MD",
-        "DB_INDEXES.md",
-        "DOCKER.md",
-        "MIGRATION_PLAN.md",
-        "PR_CHANGELOG.md",
-        "TROUBLESHOOTING.md",
-        "TYPESENSE_SPIKE.md",
-        "UPSTREAM_ISSUES.md",
-        "UPSTREAM_PR.md",
-        "audit-phase2.md",
-        "container_usage.md"
+        "docs/DB_INDEXES.md",
+        "docs/DOCKER.md",
+        "docs/MIGRATION_PLAN.md",
+        "docs/PR_CHANGELOG.md",
+        "docs/TROUBLESHOOTING.md",
+        "docs/TYPESENSE_SPIKE.md",
+        "docs/UPSTREAM_ISSUES.md",
+        "docs/UPSTREAM_PR.md",
+        "docs/audit-phase2.md",
+        "docs/container_usage.md"
       ]
     }
   ],
