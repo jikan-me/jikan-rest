@@ -16,7 +16,7 @@
 
 | Piece | State |
 |---|---|
-| RFC issue for `jikan-me/jikan-rest` | **Not written yet** — draft §4 below |
+| RFC issue for `jikan-me/jikan-rest` | **Decided against (2026-10-12): no RFC — the PR series is the vehicle.** The §4 draft is kept for reference only; its open questions should be raised in PR discussion |
 | PR series | Proposed in §5; infra + backend commits all **landed locally** — **nothing pushed** |
 | Infra agent (T1–T4) | T1 heartbeat ✅ · T2 TTL guard ✅ · T3 Dockerfile ✅ · T4 PHPStan/Pint/CI ✅ |
 | Local work committed at reconciliation | insights + CORS **removals** (`c858c3d`), **observability** (`41dd860`), `UPSTREAM_PR.md` (`8f94dfa`) |
@@ -69,7 +69,7 @@ proven by a committed parity harness. Developer tooling is first-party too:
 ```markdown
 ### RFC: Migrate jikan-rest from Lumen 9 to Laravel 13
 
-**Status:** proposal — seeking buy-in before code review.
+**Status:** proposal — seeking buy-in before code review. _(Decision 2026-10-12: this RFC is **not** being filed — the PR series in §5 is the vehicle; these arguments + the open questions double as the cover letter and review prompts for the PRs.)_
 
 **Motivation.** Lumen 9 is archived; Laravel 9 reached security end-of-life and the
 Lumen/Mongo driver pairing can no longer be maintained on current PHP. The public v4
@@ -139,7 +139,7 @@ locally — when they (or we) pick them up, they ship as separate PRs to
 
 ## 7. Checklist before pushing
 
-- [ ] Maintainer buy-in via the RFC (§4) — target version 13 confirmed
+- [ ] ~~Maintainer buy-in via the RFC (§4)~~ — **skipped by decision (2026-10-12): PR series opens directly**; field the §4 open questions during PR review instead
 - [ ] Parity: full green on the endpoints that can run (parser blockers documented)
 - [ ] Full suite green on a clean checkout (280/2673, known flake documented)
 - [ ] Composer: `name`/`description` finalized for the fork; `config.platform` pinned; `laravel/boost` (+ `.ai/skills/`) stance decided (§5 PR 1b)
