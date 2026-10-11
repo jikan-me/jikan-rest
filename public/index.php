@@ -31,7 +31,4 @@ require __DIR__.'/../vendor/autoload.php';
 /** @var \Illuminate\Foundation\Application $app */
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
-// gzip responses (as the previous Lumen entrypoint did)
-ob_start('ob_gzhandler');
-
 $app->handleRequest(Request::capture());
