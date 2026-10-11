@@ -11,6 +11,10 @@ class ScraperHelper
      * @param object|array $response
      * @return array
      */
+    /**
+     * @param object|array<string, mixed> $response
+     * @return array<string, mixed>
+     */
     public static function getSerializedJSON(object|array $response): array
     {
         return \json_decode(

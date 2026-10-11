@@ -60,6 +60,10 @@ class SerializerFactory
             ->build();
     }
 
+    /**
+     * @param array<string, mixed> $type
+     * @return array<string, mixed>
+     */
     private static function convertMalUrl($visitor, MalUrl $obj, array $type): array
     {
         return [
@@ -70,6 +74,10 @@ class SerializerFactory
         ];
     }
 
+    /**
+     * @param array<string, mixed> $type
+     * @return array<string, mixed>
+     */
     private static function convertMalUrlv2($visitor, MalUrl $obj, array $type): array
     {
         return [
@@ -81,6 +89,10 @@ class SerializerFactory
         ];
     }
 
+    /**
+     * @param array<string, mixed> $type
+     * @return array<string, mixed>
+     */
     private static function convertDateRange($visitor, DateRange $obj, array $type): array
     {
         return [
@@ -105,6 +117,10 @@ class SerializerFactory
         ];
     }
 
+    /**
+     * @param array<string, mixed> $type
+     * @return array<string, mixed>
+     */
     private static function convertCarbonDateRange($visitor, CarbonDateRange $obj, array $type): array
     {
         $from = $obj->getFrom();
@@ -132,11 +148,17 @@ class SerializerFactory
         ];
     }
 
+    /**
+     * @param array<string, mixed> $type
+     */
     private static function convertDateTimeImmutable($visitor, \DateTimeImmutable $obj, array $type): ?string
     {
         return $obj ? $obj->format(DATE_ATOM) : null;
     }
 
+    /**
+     * @param array<string, mixed> $type
+     */
     private static function convertBsonDateTime($visitor, UTCDateTime $obj, array $type, SerializationContext $context): string
     {
         return $obj->toDateTime()->format(DATE_ATOM);

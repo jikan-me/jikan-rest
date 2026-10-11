@@ -2,16 +2,20 @@
 
 namespace App\Features;
 
+use App\Contracts\DataRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use App\Support\CachedData;
 
 /**
- * @template TRequest
+ * @template TRequest of DataRequest
  * @extends RequestHandlerWithScraperCache<TRequest, JsonResponse>
  */
 abstract class UserLookupHandler extends RequestHandlerWithScraperCache
 {
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $username = $requestParams->get("username");

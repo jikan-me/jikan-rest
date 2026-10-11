@@ -65,7 +65,7 @@ abstract class JikanApiSearchableModel extends JikanApiModel
     /**
      * The Typesense schema to be created.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getCollectionSchema(): array
     {
@@ -131,6 +131,9 @@ abstract class JikanApiSearchableModel extends JikanApiModel
     /**
      * Returns which fields the search index should sort on when searching
      * @return array|null
+     */
+    /**
+     * @return array<int, array<string, string>>|null
      */
     public function getSearchIndexSortBy(): array|null
     {

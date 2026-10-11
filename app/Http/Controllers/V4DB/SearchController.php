@@ -144,7 +144,7 @@ class SearchController extends Controller
      *     ),
      * )
      */
-    public function anime(AnimeSearchCommand $request)
+    public function anime(AnimeSearchCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -271,7 +271,7 @@ class SearchController extends Controller
      *     ),
      * )
      */
-    public function manga(MangaSearchCommand $request)
+    public function manga(MangaSearchCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -321,7 +321,7 @@ class SearchController extends Controller
      *     ),
      * )
      */
-    public function people(PeopleSearchCommand $request)
+    public function people(PeopleSearchCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -373,7 +373,7 @@ class SearchController extends Controller
      *     ),
      * )
      */
-    public function character(CharactersSearchCommand $request)
+    public function character(CharactersSearchCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -469,7 +469,7 @@ class SearchController extends Controller
      *      },
      *  ),
      */
-    public function users(UsersSearchCommand $request)
+    public function users(UsersSearchCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -505,7 +505,7 @@ class SearchController extends Controller
      *
      *
      */
-    public function userById(UserByIdLookupCommand $command)
+    public function userById(UserByIdLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -569,7 +569,7 @@ class SearchController extends Controller
      *     ),
      * )
      */
-    public function clubs(ClubSearchCommand $request)
+    public function clubs(ClubSearchCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -622,7 +622,7 @@ class SearchController extends Controller
      *     ),
      * )
      */
-    public function producers(ProducersSearchCommand $request)
+    public function producers(ProducersSearchCommand $request): mixed
     {
         return $this->mediator->send($request);
     }

@@ -17,6 +17,9 @@ final class DocumentRepository extends DatabaseRepository
         $this->tableName = $tableName;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function scrape(int|string $id): array
     {
         throw new \Exception("Not supported");
@@ -27,6 +30,9 @@ final class DocumentRepository extends DatabaseRepository
         return $this->tableName;
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function insert(array $attributes): bool
     {
         // override the parent method, because these records are not search indexed

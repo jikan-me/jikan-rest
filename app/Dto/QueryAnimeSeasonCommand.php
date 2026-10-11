@@ -19,6 +19,9 @@ use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 
 
+/**
+ * @implements DataRequest<\Illuminate\Http\JsonResponse>
+ */
 abstract class QueryAnimeSeasonCommand extends Data implements DataRequest
 {
     use HasSfwParameter,

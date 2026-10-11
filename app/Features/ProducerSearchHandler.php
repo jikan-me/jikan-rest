@@ -20,9 +20,10 @@ class ProducerSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @inheritDoc
+     * @param LengthAwarePaginator<int, mixed> $paginator
+     * @return ProducerCollection
      */
-    protected function renderResponse(LengthAwarePaginator $paginator)
+    protected function renderResponse(LengthAwarePaginator $paginator): ProducerCollection
     {
         return new ProducerCollection($paginator);
     }

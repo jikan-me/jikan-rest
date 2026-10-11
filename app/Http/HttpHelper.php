@@ -38,6 +38,10 @@ class HttpHelper
         return (int) str_replace('v', '', $request->segment(1));
     }
 
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
     public static function serializeEmptyObjects(string $requestType, array $data): array
     {
         if (!($requestType === 'anime' || $requestType === 'manga')) {
@@ -47,6 +51,10 @@ class HttpHelper
         return self::serializeEmptyObjectsControllerLevel($data);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
     public static function serializeEmptyObjectsControllerLevel(array $data): array
     {
         if (isset($data['related']) && \count($data['related']) === 0) {

@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Spatie\LaravelData\Data;
 
 /**
- * @extends DataRequest<JsonResponse>
+ * @implements DataRequest<JsonResponse>
  */
 final class QueryRecentlyOnlineUsersCommand extends Data implements DataRequest
 {

@@ -56,7 +56,7 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function anime(QueryRandomAnimeCommand $command)
+    public function anime(QueryRandomAnimeCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -83,7 +83,7 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function manga(QueryRandomMangaCommand $command)
+    public function manga(QueryRandomMangaCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -110,7 +110,7 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function characters(QueryRandomCharacterCommand $command)
+    public function characters(QueryRandomCharacterCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -137,7 +137,7 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function people(QueryRandomPersonCommand $command)
+    public function people(QueryRandomPersonCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -164,7 +164,7 @@ class RandomController extends Controller
      *     ),
      * ),
      */
-    public function users(QueryRandomUserCommand $command)
+    public function users(QueryRandomUserCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

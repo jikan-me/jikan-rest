@@ -19,6 +19,9 @@ final class QueryAnimeSeasonListHandler extends RequestHandlerWithScraperCache
         return QueryAnimeSeasonListCommand::class;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         return $this->scraperService->findList(

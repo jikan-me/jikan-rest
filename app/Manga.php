@@ -23,16 +23,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $title
  * @property string|null $title_english
  * @property string|null $title_japanese
- * @property array $title_synonyms
- * @property array $titles
- * @property array $images
+ * @property array<string, mixed> $title_synonyms
+ * @property array<string, mixed> $titles
+ * @property array<string, mixed> $images
  * @property string $type
  * @property string|null $source
  * @property int|null $chapters
  * @property int|null $volumes
  * @property string $status
  * @property bool|null $publishing
- * @property array|null $published
+ * @property array<string, mixed>|null $published
  * @property string|null $duration
  * @property float|null $score
  * @property int|null $scored_by
@@ -42,16 +42,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property int|null $favorites
  * @property string|null $synopsis
  * @property string|null $background
- * @property array $related
- * @property array $authors
- * @property array $serializations
- * @property array $magazines
- * @property array $genres
- * @property array $explicit_genres
- * @property array $demographics
- * @property array|null $external_links
+ * @property array<string, mixed> $related
+ * @property array<string, mixed> $authors
+ * @property array<string, mixed> $serializations
+ * @property array<string, mixed> $magazines
+ * @property array<string, mixed> $genres
+ * @property array<string, mixed> $explicit_genres
+ * @property array<string, mixed> $demographics
+ * @property array<string, mixed>|null $external_links
  * @property \MongoDB\BSON\UTCDateTime|null $createdAt
  * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\MangaFactory>
  */
 class Manga extends JikanApiSearchableModel
 {
@@ -65,7 +66,7 @@ class Manga extends JikanApiSearchableModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms', 'titles',
@@ -78,7 +79,7 @@ class Manga extends JikanApiSearchableModel
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = ['themes'];
 
@@ -92,7 +93,7 @@ class Manga extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         '_id', 'expiresAt', 'request_hash'
@@ -104,7 +105,11 @@ class Manga extends JikanApiSearchableModel
         $this->displayNameFieldName = "title";
     }
 
-    /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     * @noinspection PhpUnused
+     */
     public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
@@ -116,12 +121,20 @@ class Manga extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, MangaTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query->where("type", $value->label);
     }
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
@@ -132,6 +145,10 @@ class Manga extends JikanApiSearchableModel
             );
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByMagazine(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (empty($value)) {
@@ -144,19 +161,27 @@ class Manga extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByMagazines(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (empty($value)) {
             return $query;
         }
 
-        /** @var \Illuminate\Support\Collection $magazines */
+        /** @var array<int, int> $magazines */
         $magazines = collect(explode(',', $value))->filter()->map(fn($x) => (int)$x)->toArray();
 
         return $query->whereIn("serializations.mal_id", $magazines);
     }
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function scopeExceptItemsWithAdultRating(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
@@ -167,6 +192,10 @@ class Manga extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function scopeExceptKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
@@ -174,13 +203,20 @@ class Manga extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function scopeOnlyKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
             ->where("demographics.mal_id", Constants::GENRE_MANGA_KIDS);
     }
 
-    public static function scrape(int $id)
+    /**
+     * @return array<string, mixed>
+     */
+    public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getManga(new MangaRequest($id));
 
@@ -196,7 +232,7 @@ class Manga extends JikanApiSearchableModel
     /**
      * Converts the model to an index-able data array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toSearchableArray(): array
     {
@@ -234,6 +270,9 @@ class Manga extends JikanApiSearchableModel
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getCollectionSchema(): array
     {
         return [
@@ -299,7 +338,10 @@ class Manga extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
-    public function getThemesAttribute()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getThemesAttribute(): array
     {
         $result = [];
         if (array_key_exists("themes", $this->attributes)) {
@@ -331,6 +373,9 @@ class Manga extends JikanApiSearchableModel
      * Returns which fields the search index should sort on when searching
      * @return array|null
      */
+    /**
+     * @return array<int, array<string, string>>|null
+     */
     public function getSearchIndexSortBy(): array|null
     {
         return [
@@ -349,7 +394,7 @@ class Manga extends JikanApiSearchableModel
         ];
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): \Illuminate\Database\Eloquent\Factories\Factory
     {
         return App::make(MangaFactory::class);
     }

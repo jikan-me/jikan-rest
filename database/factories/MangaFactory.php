@@ -7,6 +7,9 @@ use App\Manga;
 use Illuminate\Support\Collection;
 use MongoDB\BSON\UTCDateTime;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<App\Manga>
+ */
 class MangaFactory extends JikanMediaModelFactory
 {
     use JikanDataGenerator;

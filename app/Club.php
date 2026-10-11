@@ -14,7 +14,7 @@ use Jikan\Request\Club\ClubRequest;
  *
  * @property int $mal_id
  * @property string $url
- * @property array $images
+ * @property array<string, mixed> $images
  * @property string $name
  * @property int $members
  * @property string $category
@@ -23,6 +23,7 @@ use Jikan\Request\Club\ClubRequest;
  * @property \MongoDB\BSON\UTCDateTime|null $created
  * @property \MongoDB\BSON\UTCDateTime|null $createdAt
  * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\ClubFactory>
  */
 class Club extends JikanApiSearchableModel
 {
@@ -33,7 +34,7 @@ class Club extends JikanApiSearchableModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'url', 'images', 'name', 'members', 'category', 'created', 'access', 'anime', 'manga', 'created_at', 'updated_at', 'characters', 'staff'
@@ -42,7 +43,7 @@ class Club extends JikanApiSearchableModel
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = ['images'];
 
@@ -56,7 +57,7 @@ class Club extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         '_id', 'request_hash', 'expiresAt'
@@ -69,24 +70,38 @@ class Club extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByCategory(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubCategoryEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query->where("category", $value->label);
     }
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ClubTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query->where("access", $value->label);
     }
 
     /** @noinspection PhpUnused */
-    public function getImagesAttribute()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getImagesAttribute(): array
     {
         return $this->attributes['images'];
     }
 
-    public static function scrape(int $id)
+    /**
+     * @return array<string, mixed>
+     */
+    public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getClub(new ClubRequest($id));
 
@@ -97,6 +112,9 @@ class Club extends JikanApiSearchableModel
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         return [

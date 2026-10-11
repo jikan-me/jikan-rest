@@ -15,6 +15,10 @@ final class DefaultQueryBuilderService implements QueryBuilderService
     {
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParameters
+     * @return \Laravel\Scout\Builder<\Illuminate\Database\Eloquent\Model>|\Illuminate\Database\Eloquent\Builder
+     */
     public function query(Collection $requestParameters): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         if ($requestParameters->get("q", "") !== "" && !$requestParameters->has("letter")) {
@@ -31,6 +35,10 @@ final class DefaultQueryBuilderService implements QueryBuilderService
         return $builder;
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>|\Laravel\Scout\Builder<\Illuminate\Database\Eloquent\Model> $builder
+     * @return array<string, mixed>
+     */
     public function paginate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, ?int $page = null, ?int $limit = null): array
     {
         $paginated = $this->paginateBuilder($builder, $page, $limit);
@@ -49,11 +57,19 @@ final class DefaultQueryBuilderService implements QueryBuilderService
         ];
     }
 
-    public function paginateBuilder(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $builder, ?int $page = null, ?int $limit = null): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>|\Laravel\Scout\Builder<\Illuminate\Database\Eloquent\Model> $builder
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<int, mixed>
+     */
+    public function paginateBuilder(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, ?int $page = null, ?int $limit = null): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         return $this->paginatorService->paginate($builder, $limit, $page);
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParameters
+     * @return array<string, mixed>
+     */
     private function getSearchEngineOptions(Collection $requestParameters): array
     {
         $orderBy = $requestParameters->get("order_by");

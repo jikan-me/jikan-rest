@@ -6,6 +6,10 @@ use Spatie\Enum\Enum;
 
 trait MediaFilters
 {
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByMaxScore(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         // if the client specifies the "max" possible value, ignore it, in that case they want everything included
@@ -16,6 +20,10 @@ trait MediaFilters
         return $query->where("score", "<=", floatval($value));
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByMinScore(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         // if the client specifies the "max" possible value, ignore it, in that case they want everything included
@@ -26,16 +34,28 @@ trait MediaFilters
         return $query->where("score", ">=", floatval($value));
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByScore(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query->where("score", floatval($value));
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByStatus(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, Enum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query->where("status", $value->label);
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByGenres(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (!is_string($value) || empty($value)) {
@@ -59,6 +79,10 @@ trait MediaFilters
         return $query;
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByGenresExclude(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (!is_string($value) || empty($value)) {
@@ -78,6 +102,10 @@ trait MediaFilters
         return $query;
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterBySfw(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, bool $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         // call scopeExceptItemsWithAdultRating method via $query->exceptItemsWithAdultRating()
@@ -85,11 +113,19 @@ trait MediaFilters
         return $value ? $query->exceptItemsWithAdultRating() : $query;
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByUnapproved(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ?bool $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         return !$value ? $query->where("approved", true) : $query;
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByKids(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, ?bool $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (is_null($value)) {

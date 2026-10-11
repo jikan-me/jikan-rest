@@ -41,7 +41,7 @@ class ClubController extends Controller
      *     ),
      * )
      */
-    public function main(ClubLookupCommand $command)
+    public function main(ClubLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -109,7 +109,7 @@ class ClubController extends Controller
      *     ),
      * ),
      */
-    public function members(ClubMembersLookupCommand $command)
+    public function members(ClubMembersLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -140,7 +140,7 @@ class ClubController extends Controller
      *     ),
      * )
      */
-    public function staff(ClubStaffLookupCommand $command)
+    public function staff(ClubStaffLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -171,7 +171,7 @@ class ClubController extends Controller
      *     ),
      * )
      */
-    public function relations(ClubRelationLookupCommand $command)
+    public function relations(ClubRelationLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

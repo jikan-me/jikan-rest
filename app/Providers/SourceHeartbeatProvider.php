@@ -26,7 +26,7 @@ class SourceHeartbeatProvider extends ServiceProvider
     /**
      * The event listener mappings for the application.
      *
-     * @var array
+     * @var array<string, array<int, string>>
      */
     protected $listen = [
         'App\Events\SourceHeartbeatEvent' => [
@@ -69,6 +69,9 @@ class SourceHeartbeatProvider extends ServiceProvider
      * (recency window + size cap applied in-memory).
      *
      * @return array[]
+     */
+    /**
+     * @return array<int, array{0: int, 1: int, 2: int}>
      */
     public static function getRecentEvents(): array
     {
@@ -143,8 +146,8 @@ class SourceHeartbeatProvider extends ServiceProvider
     /**
      * Drop heartbeats outside the recency window and cap the stored sample.
      *
-     * @param  array[]  $fails  entries as [timestamp, status, health]
-     * @return array[]
+     * @param array<int, array{0: int, 1: int, 2: int}> $fails  entries as [timestamp, status, health]
+     * @return array<int, array{0: int, 1: int, 2: int}>
      */
     public static function pruneFails(array $fails): array
     {
@@ -153,7 +156,7 @@ class SourceHeartbeatProvider extends ServiceProvider
 
         $fails = array_values(array_filter(
             $fails,
-            fn ($fail): bool => is_array($fail) && isset($fail[0]) && (int) $fail[0] >= $cutoff
+            fn (array $fail): bool => (int) $fail[0] >= $cutoff
         ));
 
         // cap the sample at SOURCE_BAD_HEALTH_MAX_STORE

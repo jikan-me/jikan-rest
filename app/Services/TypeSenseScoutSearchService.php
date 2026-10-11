@@ -79,6 +79,10 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         };
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private function adaptToShortQueries(string $query, string $modelTitleAttributeName, array $options): array
     {
         if (strlen($query) <= 3) {
@@ -108,6 +112,10 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         return $options;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private function setQueryByWeights(array $options, JikanApiSearchableModel $modelInstance): array
     {
         $queryByWeights = $modelInstance->getTypeSenseQueryByWeights();
@@ -118,6 +126,10 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         return $options;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private function setSortOrder(array $options, JikanApiSearchableModel $modelInstance): array
     {
         $sortByFields = $modelInstance->getSearchIndexSortBy();
@@ -136,6 +148,10 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         return $options;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private function overrideSortingOrder(array $options, JikanApiSearchableModel $modelInstance, ?string $orderByField, bool $sortDirectionDescending): array
     {
         $modelAttrNames = $this->collectionDescriptor->getSearchableAttributes($modelInstance);
@@ -171,6 +187,9 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         return $options;
     }
 
+    /**
+     * @param array<string, mixed> $typesenseApiResponse
+     */
     private function recordSearchTelemetry(string $query, array $typesenseApiResponse): void
     {
         $hits = collect($typesenseApiResponse["hits"]);

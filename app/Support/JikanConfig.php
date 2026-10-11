@@ -19,6 +19,7 @@ final class JikanConfig
 
     private bool $microCachingEnabled;
 
+/** @var \Illuminate\Support\Collection<string, mixed> */
     private Collection $config;
 
     private int $textMatchBuckets;
@@ -31,6 +32,9 @@ final class JikanConfig
 
     private string $exhaustiveSearch;
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function __construct(array $config)
     {
         $this->perEndpointCacheTtl = Arr::get($config, "per_endpoint_cache_ttl", []);

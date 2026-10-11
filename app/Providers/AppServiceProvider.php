@@ -143,7 +143,7 @@ class AppServiceProvider extends ServiceProvider
         return $result;
     }
 
-    private function registerModelRepositories()
+    private function registerModelRepositories(): void
     {
         // note: We deliberately not included here any of the GenreRepository implementations.
         //       We don't want to bind them to an abstract symbol.
@@ -168,7 +168,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UnitOfWork::class, JikanUnitOfWork::class);
     }
 
-    private function registerRequestHandlers()
+    private function registerRequestHandlers(): void
     {
         /*
          * This bit is about a "mediator" pattern for handling requests.
@@ -379,6 +379,9 @@ class AppServiceProvider extends ServiceProvider
         ScoutBuilder::mixin(new ScoutBuilderMixin());
     }
 
+    /**
+     * @return array<string, class-string>
+     */
     private function collectionMacros(): array
     {
         return [

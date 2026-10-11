@@ -20,9 +20,10 @@ final class CharacterSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @inheritDoc
+     * @param LengthAwarePaginator<int, mixed> $paginator
+     * @return CharacterCollection
      */
-    protected function renderResponse(LengthAwarePaginator $paginator)
+    protected function renderResponse(LengthAwarePaginator $paginator): CharacterCollection
     {
         return new CharacterCollection($paginator);
     }

@@ -25,6 +25,9 @@ final class UserHistoryLookupHandler extends RequestHandlerWithScraperCache
         return new ProfileHistoryResource($results);
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $type = $requestParams->get("type");

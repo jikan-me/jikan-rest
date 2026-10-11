@@ -12,6 +12,10 @@ final class DefaultBuilderPaginatorService implements QueryBuilderPaginatorServi
     {
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>|\Laravel\Scout\Builder<\Illuminate\Database\Eloquent\Model> $builder
+     * @return \Illuminate\Pagination\LengthAwarePaginator<int, mixed>
+     */
     public function paginate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, ?int $limit = null, ?int $page = null): LengthAwarePaginator
     {
         if ($builder instanceof  \Laravel\Scout\Builder) {

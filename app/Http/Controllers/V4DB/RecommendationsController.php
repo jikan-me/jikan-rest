@@ -30,7 +30,7 @@ class RecommendationsController extends Controller
      * ),
      *
      */
-    public function anime(QueryAnimeRecommendationsCommand $command)
+    public function anime(QueryAnimeRecommendationsCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -57,7 +57,7 @@ class RecommendationsController extends Controller
      * ),
      *
      */
-    public function manga(QueryMangaRecommendationsCommand $command)
+    public function manga(QueryMangaRecommendationsCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

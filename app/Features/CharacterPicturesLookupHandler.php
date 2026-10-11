@@ -29,6 +29,9 @@ final class CharacterPicturesLookupHandler extends RequestHandlerWithScraperCach
         return CharacterPicturesLookupCommand::class;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $id = $requestParams->get("id");

@@ -6,14 +6,15 @@ use App\Contracts\CachedScraperService;
 use App\Dto\LookupDataCommand;
 use App\Contracts\RequestHandler;
 use App\Support\CachedData;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @template TRequest of LookupDataCommand<TResponse>
- * @template TResponse of ResourceCollection|JsonResource|Response
+ * @template TRequest of LookupDataCommand
+ * @template TResponse of ResourceCollection|JsonResource|JsonResponse|Response
  * @implements RequestHandler<TRequest, TResponse>
  */
 abstract class ItemLookupHandler implements RequestHandler

@@ -7,6 +7,10 @@ use Illuminate\Support\Collection;
 
 trait ResolvesMediaReviewParams
 {
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     * @return array<string, mixed>
+     */
     protected function getReviewRequestParams(Collection $requestParams): array
     {
         $id = $requestParams->get("id");

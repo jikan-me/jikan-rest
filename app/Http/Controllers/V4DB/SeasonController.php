@@ -47,7 +47,7 @@ class SeasonController extends Controller
      * ),
      * @throws Exception
      */
-    public function now(QueryCurrentAnimeSeasonCommand $command)
+    public function now(QueryCurrentAnimeSeasonCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -99,7 +99,7 @@ class SeasonController extends Controller
      * ),
      * @throws Exception
      */
-    public function main(QuerySpecificAnimeSeasonCommand $command)
+    public function main(QuerySpecificAnimeSeasonCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -150,7 +150,7 @@ class SeasonController extends Controller
      *      ),
      * ),
      */
-    public function archive(QueryAnimeSeasonListCommand $command)
+    public function archive(QueryAnimeSeasonListCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -188,7 +188,7 @@ class SeasonController extends Controller
      * ),
      * @throws Exception
      */
-    public function later(QueryUpcomingAnimeSeasonCommand $command)
+    public function later(QueryUpcomingAnimeSeasonCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

@@ -55,7 +55,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function full(AnimeFullLookupCommand $command)
+    public function full(AnimeFullLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -89,7 +89,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function main(AnimeLookupCommand $command)
+    public function main(AnimeLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -120,7 +120,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function characters(AnimeCharactersLookupCommand $command)
+    public function characters(AnimeCharactersLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -151,7 +151,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function staff(AnimeStaffLookupCommand $command)
+    public function staff(AnimeStaffLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -260,7 +260,7 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function episodes(AnimeEpisodesLookupCommand $command)
+    public function episodes(AnimeEpisodesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -301,7 +301,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function episode(AnimeEpisodeLookupCommand $command)
+    public function episode(AnimeEpisodeLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -346,7 +346,7 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function news(AnimeNewsLookupCommand $command)
+    public function news(AnimeNewsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -385,7 +385,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function forum(AnimeForumLookupCommand $command)
+    public function forum(AnimeForumLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -416,7 +416,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function videos(AnimeVideosLookupCommand $command)
+    public function videos(AnimeVideosLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -492,7 +492,7 @@ class AnimeController extends Controller
      *      }
      *  )
      */
-    public function videosEpisodes(AnimeVideosEpisodesLookupCommand $command)
+    public function videosEpisodes(AnimeVideosEpisodesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -525,7 +525,7 @@ class AnimeController extends Controller
      * )
      *
      */
-    public function pictures(AnimePicturesLookupCommand $command)
+    public function pictures(AnimePicturesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -556,7 +556,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function stats(AnimeStatsLookupCommand $command)
+    public function stats(AnimeStatsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -587,7 +587,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function moreInfo(AnimeMoreInfoLookupCommand $command)
+    public function moreInfo(AnimeMoreInfoLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -618,7 +618,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function recommendations(AnimeRecommendationsLookupCommand $command)
+    public function recommendations(AnimeRecommendationsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -651,7 +651,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function userupdates(AnimeUserUpdatesLookupCommand $command)
+    public function userupdates(AnimeUserUpdatesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -686,7 +686,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function reviews(AnimeReviewsLookupCommand $command)
+    public function reviews(AnimeReviewsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -726,7 +726,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function relations(AnimeRelationsLookupCommand $command)
+    public function relations(AnimeRelationsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -757,7 +757,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function themes(AnimeThemesLookupCommand $command)
+    public function themes(AnimeThemesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -788,7 +788,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function external(AnimeExternalLookupCommand $command)
+    public function external(AnimeExternalLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -819,7 +819,7 @@ class AnimeController extends Controller
      *     ),
      * )
      */
-    public function streaming(AnimeStreamingLookupCommand $command)
+    public function streaming(AnimeStreamingLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

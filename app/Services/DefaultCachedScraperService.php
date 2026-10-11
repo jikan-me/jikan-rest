@@ -112,6 +112,9 @@ final class DefaultCachedScraperService implements CachedScraperService
         return $this->dbResultSetToCachedData($dbResults);
     }
 
+    /**
+     * @param Collection<int, mixed> $dbResults
+     */
     private function dbResultSetToCachedData(Collection $dbResults): CachedData
     {
         if (!$dbResults->isEmpty()) {
@@ -138,20 +141,23 @@ final class DefaultCachedScraperService implements CachedScraperService
         return CachedData::fromArray($item);
     }
 
-    private function raiseNotFoundIfEmpty(CachedData $results)
+    private function raiseNotFoundIfEmpty(CachedData $results): void
     {
         if ($results->isEmpty()) {
             abort(404, "Resource not found.");
         }
     }
 
-    private function raiseNotFoundIfErrors(mixed $response)
+    private function raiseNotFoundIfErrors(mixed $response): void
     {
         if (HttpHelper::hasError($response)) {
             abort(404, "Resource not found.");
         }
     }
 
+    /**
+     * @param array<string, mixed> $scraperResponse
+     */
     private function updateCacheById(int $id, string $cacheKey, CachedData $results, array $scraperResponse): CachedData
     {
         $response = $this->prepareScraperResponse($cacheKey, $results->isEmpty(), $scraperResponse);
@@ -171,6 +177,9 @@ final class DefaultCachedScraperService implements CachedScraperService
         return $this->dbRecordToCachedData($dbResult);
     }
 
+    /**
+     * @param array<string, mixed> $scraperResponse
+     */
     private function updateCacheByKey(string $cacheKey, CachedData $results, array $scraperResponse): CachedData
     {
         $response = $this->prepareScraperResponse($cacheKey, $results->isEmpty(), $scraperResponse);
@@ -185,6 +194,10 @@ final class DefaultCachedScraperService implements CachedScraperService
         return $this->get($cacheKey);
     }
 
+    /**
+     * @param array<string, mixed> $scraperResponse
+     * @return array<string, mixed>
+     */
     private function prepareScraperResponse(string $cacheKey, bool $resultsEmpty, array $scraperResponse): array
     {
         $meta = [];
@@ -204,6 +217,9 @@ final class DefaultCachedScraperService implements CachedScraperService
         return $meta + $scraperResponse;
     }
 
+    /**
+     * @return \Illuminate\Support\Collection<int, mixed>
+     */
     private function getByCacheKey(string $cacheKey): Collection
     {
         return $this->getQueryableByCacheKey($cacheKey)->get();
@@ -214,6 +230,9 @@ final class DefaultCachedScraperService implements CachedScraperService
         return $this->repository->where("request_hash", $cacheKey);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function serializeScraperResult(mixed $data): array
     {
         return $this->serializer->toArray($data);

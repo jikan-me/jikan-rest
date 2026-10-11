@@ -7,7 +7,8 @@ use App\Dto\Concerns\HasPageParameter;
 use Illuminate\Http\JsonResponse;
 
 /**
- * @extends LookupDataCommand<JsonResponse>
+ * @extends LookupByUsernameCommand<JsonResponse>
+
  */
 final class UserRecommendationsLookupCommand extends LookupByUsernameCommand
 {

@@ -5,7 +5,7 @@ namespace App\Features;
 use App\Dto\AnimeGenreListCommand;
 
 /**
- * @implements GenreListHandler<AnimeGenreListCommand>
+ * @extends GenreListHandler<AnimeGenreListCommand>
  */
 final class AnimeGenreListHandler extends GenreListHandler
 {

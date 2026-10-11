@@ -51,6 +51,9 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
      */
     protected abstract function getSeasonItems($request, ?AnimeTypeEnum $type): Builder;
 
+    /**
+     * @return array{0: \Illuminate\Support\Carbon, 1: \Illuminate\Support\Carbon}
+     */
     protected function getSeasonRange(int $year, AnimeSeasonEnum $season): array
     {
         [$monthStart, $monthEnd] = match ($season->value) {

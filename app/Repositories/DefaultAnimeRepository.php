@@ -14,9 +14,6 @@ use Illuminate\Support\Carbon;
 use Laravel\Scout\Builder as ScoutBuilder;
 use MongoDB\BSON\UTCDateTime;
 
-/**
- * @implements Repository<Anime>
- */
 final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRepository
 {
     public function __construct()
@@ -24,6 +21,9 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         parent::__construct(fn () => Anime::query(), fn ($x, $y) => Anime::search($x, $y));
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function getTopAiringItems(): EloquentBuilder|ScoutBuilder
     {
         return $this
@@ -31,6 +31,9 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ->where("airing", true);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder
     {
         return $this
@@ -38,6 +41,9 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ->where("status", AnimeStatusEnum::upcoming()->label);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
         $builder = $this->queryable();
@@ -46,22 +52,34 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         return $builder;
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function excludeNsfwItems($builder): EloquentBuilder|ScoutBuilder
     {
         return $builder->exceptItemsWithAdultRating();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Anime>|\Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function excludeUnapprovedItems($builder): Collection|EloquentBuilder|ScoutBuilder
     {
         return $builder
             ->where("approved", true);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function excludeKidsItems($builder): EloquentBuilder|ScoutBuilder
     {
         return $builder->exceptKidsItems();
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
     {
         return $this
@@ -69,6 +87,9 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ->orderBy("members", "desc");
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder
     {
         return $this
@@ -76,6 +97,9 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ->orderBy("favorites", "desc");
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function orderByRank(): EloquentBuilder|ScoutBuilder
     {
         return $this
@@ -236,6 +260,9 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         return $queryable->orderBy("members", "desc");
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Anime>
+     */
     public function orderByScore(): EloquentBuilder|ScoutBuilder
     {
         return $this

@@ -34,7 +34,7 @@ class ProducersIndexer extends Command
     protected $description = 'Index all producers';
 
     /**
-     * @var array
+     * @var array<int, int>
      */
     private array $ids;
 
@@ -140,6 +140,9 @@ class ProducersIndexer extends Command
     /**
      * @return array
      */
+    /**
+     * @return array<int, int>
+     */
     private function fetchMalIds() : array
     {
         $this->info("Scraping Producer MAL IDs from https://myanimelist.net/anime/producer...\n");
@@ -165,6 +168,9 @@ class ProducersIndexer extends Command
     /**
      * @return array
      * @throws FileNotFoundException
+     */
+    /**
+     * @return array<int, int>
      */
     private function loadFailedMalIds() : array
     {

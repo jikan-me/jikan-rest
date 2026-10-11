@@ -10,7 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Spatie\LaravelData\Attributes\WithCast;
 
 /**
- * @extends LookupDataCommand<JsonResponse>
+ * @extends LookupByUsernameCommand<JsonResponse>
+
  */
 final class UserHistoryLookupCommand extends LookupByUsernameCommand
 {

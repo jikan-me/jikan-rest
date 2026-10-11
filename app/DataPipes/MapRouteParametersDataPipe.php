@@ -14,6 +14,10 @@ use Spatie\LaravelData\Support\Creation\CreationContext;
  */
 final class MapRouteParametersDataPipe implements DataPipe
 {
+    /**
+     * @param array<string, mixed> $properties
+     * @return array<string, mixed>
+     */
     public function handle(mixed $payload, DataClass $class, array $properties, \Spatie\LaravelData\Support\Creation\CreationContext $creationContext): array
     {
         if ($payload instanceof Request) {

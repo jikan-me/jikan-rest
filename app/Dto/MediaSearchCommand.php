@@ -21,6 +21,8 @@ use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 
+/**
+ */
 class MediaSearchCommand extends SearchCommand
 {
     use HasSfwParameter, HasUnapprovedParameter, \App\Dto\Concerns\PreparesData;

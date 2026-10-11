@@ -20,9 +20,10 @@ class MangaSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @inheritDoc
+     * @param LengthAwarePaginator<int, mixed> $paginator
+     * @return MangaCollection
      */
-    protected function renderResponse(LengthAwarePaginator $paginator)
+    protected function renderResponse(LengthAwarePaginator $paginator): MangaCollection
     {
         return new MangaCollection($paginator);
     }

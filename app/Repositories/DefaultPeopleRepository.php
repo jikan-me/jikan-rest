@@ -8,9 +8,6 @@ use App\Person;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
-/**
- * @implements Repository<Person>
- */
 class DefaultPeopleRepository extends DatabaseRepository implements PeopleRepository
 {
     public function __construct()
@@ -18,6 +15,9 @@ class DefaultPeopleRepository extends DatabaseRepository implements PeopleReposi
         parent::__construct(fn () => Person::query(), fn ($x, $y) => Person::search($x, $y));
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Person>
+     */
     public function topPeople(): EloquentBuilder|ScoutBuilder
     {
         return $this->queryable()->whereNotNull("member_favorites")

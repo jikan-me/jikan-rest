@@ -30,6 +30,9 @@ class IncrementalIndexer extends Command
         ];
     }
 
+    /**
+     * @return array{0: string, 1: string}
+     */
     private function getExistingIds(string $mediaType): array
     {
         $existingIdsHash = "";
@@ -44,6 +47,9 @@ class IncrementalIndexer extends Command
         return [$existingIdsHash, $existingIdsRaw];
     }
 
+    /**
+     * @return array<string, array<int, int>>
+     */
     private function getIdsToFetch(string $mediaType): array
     {
         $idsToFetch = [];
@@ -86,11 +92,17 @@ class IncrementalIndexer extends Command
         return $idsToFetch;
     }
 
+    /**
+     * @return array<int, int>
+     */
     private function getFailedIdsToFetch(string $mediaType): array
     {
         return json_decode(Storage::get("indexer/incremental/{$mediaType}_failed.json"));
     }
 
+    /**
+     * @param array<string, array<int, int>> $idsToFetch
+     */
     private function fetchIds(string $mediaType, array $idsToFetch, bool $resume): void
     {
         $index = 0;

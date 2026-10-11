@@ -54,7 +54,7 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function full(UserFullLookupCommand $command)
+    public function full(UserFullLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -88,7 +88,7 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function profile(UserProfileLookupCommand $command)
+    public function profile(UserProfileLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -119,7 +119,7 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function statistics(UserStatisticsLookupCommand $command)
+    public function statistics(UserStatisticsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -154,7 +154,7 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function favorites(UserFavoritesLookupCommand $command)
+    public function favorites(UserFavoritesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -185,7 +185,7 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function userupdates(UserUpdatesLookupCommand $command)
+    public function userupdates(UserUpdatesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -216,7 +216,7 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function about(UserAboutLookupCommand $command)
+    public function about(UserAboutLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -254,7 +254,7 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function history(UserHistoryLookupCommand $command)
+    public function history(UserHistoryLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -330,7 +330,7 @@ class UserController extends Controller
      *     }
      *  ),
      */
-    public function friends(UserFriendsLookupCommand $command)
+    public function friends(UserFriendsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -369,7 +369,7 @@ class UserController extends Controller
      * ),
      *
      */
-    public function animelist(QueryAnimeListOfUserCommand $command)
+    public function animelist(QueryAnimeListOfUserCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -408,7 +408,7 @@ class UserController extends Controller
      * ),
      *
      */
-    public function mangalist(QueryMangaListOfUserCommand $command)
+    public function mangalist(QueryMangaListOfUserCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -495,7 +495,7 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function reviews(UserReviewsLookupCommand $command)
+    public function reviews(UserReviewsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -527,7 +527,7 @@ class UserController extends Controller
      * ),
      *
      */
-    public function recommendations(UserRecommendationsLookupCommand $command)
+    public function recommendations(UserRecommendationsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -593,7 +593,7 @@ class UserController extends Controller
      *     }
      *  ),
      */
-    public function clubs(UserClubsLookupCommand $command)
+    public function clubs(UserClubsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -625,12 +625,12 @@ class UserController extends Controller
      *     ),
      * ),
      */
-    public function external(UserExternalLookupCommand $command)
+    public function external(UserExternalLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
 
-    public function recentlyOnline(QueryRecentlyOnlineUsersCommand $command)
+    public function recentlyOnline(QueryRecentlyOnlineUsersCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

@@ -6,6 +6,7 @@ use App\Contracts\DataRequest;
 use App\Contracts\RequestHandler;
 use App\Services\QueryBuilderService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
@@ -13,8 +14,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
 /**
- * @template TRequest of DataRequest<TResponse>
- * @template TResponse of ResourceCollection|JsonResource|Response
+ * @template TRequest of DataRequest
+ * @template TResponse of ResourceCollection|JsonResource|JsonResponse|Response
  * @implements RequestHandler<TRequest, TResponse>
  */
 abstract class SearchRequestHandler implements RequestHandler
@@ -48,11 +49,15 @@ abstract class SearchRequestHandler implements RequestHandler
     }
 
     /**
-     * @param LengthAwarePaginator $paginator
+     * @param LengthAwarePaginator<int, mixed> $paginator
      * @return TResponse
      */
     protected abstract function renderResponse(LengthAwarePaginator $paginator);
 
+    /**
+     * @param Collection<array-key, mixed> $requestData
+     * @return Collection<array-key, mixed>
+     */
     protected function prepareOrderByParam(Collection $requestData): Collection
     {
         if ($requestData->has('order_by') && !is_null($requestData->get("order_by"))) {

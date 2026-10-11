@@ -13,7 +13,7 @@ use Laravel\Scout\Builder as ScoutBuilder;
 interface RepositoryQuery
 {
     /**
-     * @param Collection $params
+     * @param Collection<array-key, mixed> $params
      * @return Builder<T>|ScoutBuilder<T>
      */
     public function filter(Collection $params): Builder|ScoutBuilder;

@@ -70,7 +70,7 @@ class SourceHeartbeatListener
         return count(SourceHeartbeatProvider::getRecentEvents());
     }
 
-    private function enableFailover()
+    private function enableFailover(): void
     {
         // Atomically upsert the lock + last-downtime markers in Mongo.
         SourceHeartbeatProvider::setFailoverLock(time());
@@ -81,7 +81,7 @@ class SourceHeartbeatListener
         }
     }
 
-    private function disableFailover()
+    private function disableFailover(): void
     {
         // Remove the lock and the recorded events (the old file scheme dropped
         // both failovers.json and the lock file when failover was disabled).
@@ -106,7 +106,10 @@ class SourceHeartbeatListener
         return false;
     }
 
-    private function getRecentFails()
+    /**
+     * @return array<int, mixed>
+     */
+    private function getRecentFails(): array
     {
         return SourceHeartbeatProvider::getRecentEvents();
     }

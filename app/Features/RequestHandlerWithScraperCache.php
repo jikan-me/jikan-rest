@@ -7,14 +7,15 @@ use App\Contracts\RequestHandler;
 use App\Contracts\DataRequest;
 use App\Http\Resources\V4\ResultsResource;
 use App\Support\CachedData;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 /**
- * @template TRequest of DataRequest<TResponse>
- * @template TResponse of ResourceCollection|JsonResource|Response
+ * @template TRequest of DataRequest
+ * @template TResponse of ResourceCollection|JsonResource|JsonResponse|Response
  * @implements RequestHandler<TRequest, TResponse>
  */
 abstract class RequestHandlerWithScraperCache implements RequestHandler
@@ -35,6 +36,9 @@ abstract class RequestHandlerWithScraperCache implements RequestHandler
         return $this->renderResponse($requestFingerPrint, $results);
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected abstract function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData;
 
     protected function resource(CachedData $results): JsonResource

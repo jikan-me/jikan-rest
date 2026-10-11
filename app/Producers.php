@@ -12,15 +12,16 @@ use Jikan\Request\Producer\ProducerRequest;
  *
  * @property int $mal_id
  * @property string $url
- * @property array $images
- * @property array|null $titles
+ * @property array<string, mixed> $images
+ * @property array<string, mixed>|null $titles
  * @property \MongoDB\BSON\UTCDateTime|null $established
  * @property int $favorites
  * @property string|null $about
  * @property int $count
- * @property array|null $external_links
+ * @property array<string, mixed>|null $external_links
  * @property \MongoDB\BSON\UTCDateTime|null $createdAt
  * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\ProducersFactory>
  */
 class Producers extends JikanApiSearchableModel
 {
@@ -30,7 +31,7 @@ class Producers extends JikanApiSearchableModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'external', 'count',
@@ -47,7 +48,7 @@ class Producers extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         '_id', 'request_hash', 'expiresAt'
@@ -59,7 +60,10 @@ class Producers extends JikanApiSearchableModel
         $this->displayNameFieldName = "titles.0.title";
     }
 
-    public static function scrape(int $id)
+    /**
+     * @return array<string, mixed>
+     */
+    public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getProducer(new ProducerRequest($id));
 
@@ -73,6 +77,9 @@ class Producers extends JikanApiSearchableModel
         return $data;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         $titles = !is_null($this->titles) ? collect($this->titles)->map(fn ($x) => $x["title"])->toArray() : [''];
@@ -88,6 +95,9 @@ class Producers extends JikanApiSearchableModel
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getCollectionSchema(): array
     {
         return [

@@ -13,20 +13,21 @@ use Jikan\Request\User\UserProfileRequest;
  * @property int $mal_id
  * @property string $username
  * @property string $url
- * @property array $images
+ * @property array<string, mixed> $images
  * @property \MongoDB\BSON\UTCDateTime|null $last_online
  * @property string|null $gender
  * @property \MongoDB\BSON\UTCDateTime|null $birthday
  * @property string|null $location
  * @property \MongoDB\BSON\UTCDateTime|null $joined
- * @property array $anime_stats
- * @property array $manga_stats
- * @property array $favorites
- * @property array|null $last_updates
+ * @property array<string, mixed> $anime_stats
+ * @property array<string, mixed> $manga_stats
+ * @property array<string, mixed> $favorites
+ * @property array<string, mixed>|null $last_updates
  * @property string|null $about
- * @property array|null $external_links
+ * @property array<string, mixed>|null $external_links
  * @property \MongoDB\BSON\UTCDateTime|null $createdAt
  * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\ProfileFactory>
  */
 class Profile extends JikanApiSearchableModel
 {
@@ -36,7 +37,7 @@ class Profile extends JikanApiSearchableModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'username', 'url', 'images', 'last_online', 'gender', 'birthday', 'location',
@@ -54,7 +55,7 @@ class Profile extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         '_id',
@@ -66,7 +67,10 @@ class Profile extends JikanApiSearchableModel
         $this->displayNameFieldName = "username";
     }
 
-    public static function scrape(string $username)
+    /**
+     * @return array<string, mixed>
+     */
+    public static function scrape(string $username): array
     {
         $data = app('JikanParser')->getUserProfile(new UserProfileRequest($username));
 
@@ -80,7 +84,7 @@ class Profile extends JikanApiSearchableModel
     /**
      * Converts the model to an index-able data array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toSearchableArray(): array
     {

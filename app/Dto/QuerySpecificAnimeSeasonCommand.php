@@ -26,6 +26,9 @@ final class QuerySpecificAnimeSeasonCommand extends QueryAnimeSeasonCommand
 
     protected static int $defaultLimit = 30;
 
+    /**
+     * @return array<string, string>
+     */
     public static function messages(...$args): array
     {
         return [

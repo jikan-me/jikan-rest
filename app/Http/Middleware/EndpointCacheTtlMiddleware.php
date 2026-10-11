@@ -19,7 +19,7 @@ final class EndpointCacheTtlMiddleware
     {
     }
 
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
         $routeName = HttpHelper::getRouteName($request);
         $ttl = $this->jikanConfig->cacheTtlForEndpoint($routeName);

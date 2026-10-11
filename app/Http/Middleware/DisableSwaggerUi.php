@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
  */
 final class DisableSwaggerUi
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): \Symfony\Component\HttpFoundation\Response
     {
         if ($request->path() === 'v4/api/documentation') {
             abort(404);

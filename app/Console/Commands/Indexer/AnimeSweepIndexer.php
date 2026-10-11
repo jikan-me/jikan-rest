@@ -75,6 +75,9 @@ class AnimeSweepIndexer extends Command
      * @return array
      * @url https://github.com/purarue/mal-id-cache
      */
+    /**
+     * @return array<int, int>
+     */
     private function fetchMalIds(): array
     {
         $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/anime_cache.json...\n");

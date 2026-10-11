@@ -7,7 +7,7 @@ use Illuminate\Pagination\Paginator;
 use Laravel\Scout\Contracts\PaginatesEloquentModels;
 use Laravel\Scout\Engines\TypesenseEngine;
 
-/** @mixin \Laravel\Scout\Builder */
+/** @mixin \Laravel\Scout\Builder<\Illuminate\Database\Eloquent\Model> */
 class ScoutBuilderMixin
 {
     /**

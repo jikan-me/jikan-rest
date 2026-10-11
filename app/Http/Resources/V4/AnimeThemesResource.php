@@ -37,7 +37,7 @@ class AnimeThemesResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray($request)
     {

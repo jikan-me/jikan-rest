@@ -11,6 +11,7 @@ use Typesense\Client as Typesense;
  */
 final class TypesenseCollectionDescriptor
 {
+/** @var \Illuminate\Support\Collection<string, mixed> */
     private readonly Collection $cache;
 
     public function __construct(private readonly Typesense $typesense)
@@ -18,6 +19,9 @@ final class TypesenseCollectionDescriptor
         $this->cache = collect();
     }
 
+    /**
+     * @return string[]
+     */
     public function getSearchableAttributes(JikanApiSearchableModel $model): array
     {
         $modelSearchableAs = $model->searchableAs();

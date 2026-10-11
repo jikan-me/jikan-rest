@@ -5,7 +5,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class OrderbyClause extends BaseClause
 {
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
+     */
     protected function apply($query): Builder
     {
         foreach ($this->normalizeValues() as $field => $order) {
@@ -15,11 +17,14 @@ class OrderbyClause extends BaseClause
         return $query;
     }
 
-    protected function validate($value): bool
+    protected function validate(mixed $value): bool
     {
         return !in_array(null, (array)$value);
     }
 
+    /**
+     * @return array<string, 'asc'|'desc'>
+     */
     private function normalizeValues(): array
     {
         $normalized = [];

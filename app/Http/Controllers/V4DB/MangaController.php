@@ -49,7 +49,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function full(MangaFullLookupCommand $command)
+    public function full(MangaFullLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -84,7 +84,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function main(MangaLookupCommand $command)
+    public function main(MangaLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -115,7 +115,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function characters(MangaCharactersLookupCommand $command)
+    public function characters(MangaCharactersLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -158,7 +158,7 @@ class MangaController extends Controller
      *      }
      *  )
      */
-    public function news(MangaNewsLookupCommand $command)
+    public function news(MangaNewsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -197,7 +197,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function forum(MangaForumLookupCommand $command)
+    public function forum(MangaForumLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -241,7 +241,7 @@ class MangaController extends Controller
      *     )
      * )
      */
-    public function pictures(MangaPicturesLookupCommand $command)
+    public function pictures(MangaPicturesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -272,7 +272,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function stats(MangaStatsLookupCommand $command)
+    public function stats(MangaStatsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -303,7 +303,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function moreInfo(MangaMoreInfoLookupCommand $command)
+    public function moreInfo(MangaMoreInfoLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -334,7 +334,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function recommendations(MangaRecommendationsLookupCommand $command)
+    public function recommendations(MangaRecommendationsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -367,7 +367,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function userupdates(MangaUserUpdatesLookupCommand $command)
+    public function userupdates(MangaUserUpdatesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -403,7 +403,7 @@ class MangaController extends Controller
      * )
      * @throws \Exception
      */
-    public function reviews(MangaReviewsLookupCommand $command)
+    public function reviews(MangaReviewsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -441,7 +441,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function relations(MangaRelationsLookupCommand $command)
+    public function relations(MangaRelationsLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -472,7 +472,7 @@ class MangaController extends Controller
      *     ),
      * )
      */
-    public function external(MangaExternalLookupCommand $command)
+    public function external(MangaExternalLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

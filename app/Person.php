@@ -13,21 +13,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @property int $mal_id
  * @property string $url
- * @property array $images
+ * @property array<string, mixed> $images
  * @property string|null $website_url
  * @property string $name
  * @property string|null $given_name
  * @property string|null $family_name
- * @property array $alternate_names
+ * @property array<string, mixed> $alternate_names
  * @property \MongoDB\BSON\UTCDateTime|null $birthday
  * @property int $favorites
  * @property int $member_favorites
  * @property string|null $about
- * @property array $voice_acting_roles
- * @property array $anime_staff_positions
- * @property array $published_manga
+ * @property array<string, mixed> $voice_acting_roles
+ * @property array<string, mixed> $anime_staff_positions
+ * @property array<string, mixed> $published_manga
  * @property \MongoDB\BSON\UTCDateTime|null $createdAt
  * @property \MongoDB\BSON\UTCDateTime|null $modifiedAt
+ * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\PersonFactory>
  */
 class Person extends JikanApiSearchableModel
 {
@@ -37,7 +38,7 @@ class Person extends JikanApiSearchableModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'url', 'images', 'website_url', 'name', 'given_name', 'family_name',
@@ -49,7 +50,7 @@ class Person extends JikanApiSearchableModel
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = ['images', 'favorites'];
 
@@ -63,7 +64,7 @@ class Person extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         '_id', 'member_favorites'
@@ -76,18 +77,24 @@ class Person extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
-    public function getFavoritesAttribute()
+    public function getFavoritesAttribute(): mixed
     {
         return $this->attributes['member_favorites'];
     }
 
     /** @noinspection PhpUnused */
-    public function getImagesAttribute()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getImagesAttribute(): array
     {
         return $this->attributes['images'];
     }
 
-    public static function scrape(int $id)
+    /**
+     * @return array<string, mixed>
+     */
+    public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getPerson(new PersonRequest($id));
         return json_decode(
@@ -100,7 +107,7 @@ class Person extends JikanApiSearchableModel
     /**
      * Converts the model to an index-able data array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toSearchableArray(): array
     {

@@ -87,7 +87,7 @@ class WatchController extends Controller
      *     },
      *  ),
      */
-    public function recentEpisodes(QueryRecentlyAddedEpisodesCommand $command)
+    public function recentEpisodes(QueryRecentlyAddedEpisodesCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -111,7 +111,7 @@ class WatchController extends Controller
      *     ),
      * ),
      */
-    public function popularEpisodes(QueryPopularEpisodesCommand $command)
+    public function popularEpisodes(QueryPopularEpisodesCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -168,7 +168,7 @@ class WatchController extends Controller
      *     },
      *  ),
      */
-    public function recentPromos(QueryRecentlyAddedPromoVideosCommand $command)
+    public function recentPromos(QueryRecentlyAddedPromoVideosCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -192,7 +192,7 @@ class WatchController extends Controller
      *     ),
      * ),
      */
-    public function popularPromos(QueryPopularPromoVideosCommand $command)
+    public function popularPromos(QueryPopularPromoVideosCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

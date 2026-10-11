@@ -15,6 +15,9 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
         parent::__construct(fn () => Manga::query(), fn ($x, $y) => Manga::search($x, $y));
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     */
     public function getTopPublishingItems(): EloquentBuilder|ScoutBuilder
     {
         return $this
@@ -22,6 +25,9 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
             ->where("publishing", true);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     */
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder
     {
         return $this
@@ -29,6 +35,9 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
             ->where("status", MangaStatusEnum::upcoming()->label);
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     */
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
     {
         return $this
@@ -36,11 +45,17 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
             ->orderBy("members", "desc");
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     */
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder
     {
         return $this->queryable()->orderBy("favorites", "desc");
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     */
     public function orderByRank(): EloquentBuilder|ScoutBuilder
     {
         return $this->queryable()
@@ -49,12 +64,18 @@ final class DefaultMangaRepository extends DatabaseRepository implements MangaRe
             ->orderBy("rank");
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     */
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return $this->queryable()->exceptItemsWithAdultRating();
     }
 
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Manga>
+     */
     public function orderByScore(): EloquentBuilder|ScoutBuilder
     {
         return $this

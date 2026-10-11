@@ -11,6 +11,10 @@ trait FilteredByLetter
     protected ?string $displayNameFieldName;
 
     /** @noinspection PhpUnused */
+    /**
+     * @param \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static> $query
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function filterByLetter(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (empty($this->displayNameFieldName)) {

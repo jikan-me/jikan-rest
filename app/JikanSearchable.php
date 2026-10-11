@@ -10,7 +10,10 @@ trait JikanSearchable
 {
     use Searchable;
 
-    protected function toTypeSenseCompatibleNestedField(string $fieldName): array
+    /**
+     * @return mixed
+     */
+    protected function toTypeSenseCompatibleNestedField(string $fieldName): mixed
     {
         $field = $this->{$fieldName};
 
@@ -21,6 +24,9 @@ trait JikanSearchable
         return collect($field)->to2dArrayWithDottedKeys($field, $fieldName.'.');
     }
 
+    /**
+     * @return array<int, int>
+     */
     protected function getMalIdsOfField(mixed $field): array
     {
         if (is_null($field)) {
@@ -42,6 +48,11 @@ trait JikanSearchable
         return $datetime ? Parser::parseDate($datetime)->getTimestamp() : 0;
     }
 
+    /**
+     * @param \Laravel\Scout\Builder<static> $builder
+     * @param array<int, int|string> $ids
+     * @return \Laravel\Scout\Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
     public function queryScoutModelsByIds(Builder $builder, array $ids): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
     {
         $query = static::usesSoftDelete()

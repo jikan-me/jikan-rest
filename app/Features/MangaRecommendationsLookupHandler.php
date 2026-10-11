@@ -26,6 +26,9 @@ final class MangaRecommendationsLookupHandler extends RequestHandlerWithScraperC
         return new RecommendationsResource($results);
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $id = $requestParams->get("id");

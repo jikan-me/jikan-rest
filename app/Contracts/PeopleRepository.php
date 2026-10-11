@@ -7,9 +7,12 @@ use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Laravel\Scout\Builder as ScoutBuilder;
 
 /**
- * @implements Repository<Person>
+ * @extends Repository<Person>
  */
 interface PeopleRepository extends Repository
 {
+    /**
+     * @return \Illuminate\Contracts\Database\Query\Builder|\Laravel\Scout\Builder<\App\Person>
+     */
     public function topPeople(): EloquentBuilder|ScoutBuilder;
 }

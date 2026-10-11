@@ -12,6 +12,10 @@ use Spatie\LaravelData\Support\DataProperty;
  */
 trait PreparesData
 {
+    /**
+     * @param array<string, mixed> $properties
+     * @return array<string, mixed>
+     */
     public static function prepareForPipeline(array $properties): array
     {
         $properties = collect($properties);

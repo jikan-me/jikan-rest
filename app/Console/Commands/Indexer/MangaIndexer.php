@@ -33,7 +33,7 @@ class MangaIndexer extends Command
     protected $description = 'Index all manga';
 
     /**
-     * @var array
+     * @var array<int, int>
      */
     private array $ids;
 
@@ -141,6 +141,9 @@ class MangaIndexer extends Command
      * @return array
      * @url https://github.com/purarue/mal-id-cache
      */
+    /**
+     * @return array<int, int>
+     */
     private function fetchMalIds() : array
     {
         $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/manga_cache.json...\n");
@@ -160,6 +163,9 @@ class MangaIndexer extends Command
     /**
      * @return array
      * @throws FileNotFoundException
+     */
+    /**
+     * @return array<int, int>
      */
     private function loadFailedMalIds() : array
     {

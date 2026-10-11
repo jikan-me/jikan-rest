@@ -9,5 +9,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface QueryBuilderPaginatorService
 {
-    function paginate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $builder, ?int $limit = null, ?int $page = null): LengthAwarePaginator;
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>|\Laravel\Scout\Builder<\Illuminate\Database\Eloquent\Model> $builder
+     * @return \Illuminate\Pagination\LengthAwarePaginator<int, mixed>
+     */
+    function paginate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, ?int $limit = null, ?int $page = null): LengthAwarePaginator;
 }

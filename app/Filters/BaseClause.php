@@ -8,13 +8,18 @@ abstract class BaseClause
     protected $filter;
     protected $values;
 
-    public function __construct($values, $filter)
+    public function __construct(mixed $values, mixed $filter)
     {
         $this->values = $values;
         $this->filter = $filter;
     }
 
-    public function handle($query, $nextFilter)
+    /**
+     * @param mixed $query
+     * @param \Closure(mixed): mixed $nextFilter
+     * @return mixed
+     */
+    public function handle(mixed $query, \Closure $nextFilter): mixed
     {
         $query = $nextFilter($query);
 
@@ -25,7 +30,11 @@ abstract class BaseClause
         return static::apply($query);
     }
 
+    /**
+     * @param mixed $query
+     * @return \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
+     */
     abstract protected function apply($query): Builder;
 
-    abstract protected function validate($value): bool;
+    abstract protected function validate(mixed $value): bool;
 }

@@ -21,6 +21,9 @@ abstract class QueryReviewsHandler extends RequestHandlerWithScraperCache
 
     protected abstract function reviewType(): ReviewTypeEnum;
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $reviewRequestParams = $this->getReviewRequestParams($requestParams);

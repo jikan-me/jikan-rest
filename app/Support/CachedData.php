@@ -16,10 +16,13 @@ use MongoDB\BSON\UTCDateTime;
  *
  * The documented attributes are those the resources wrappers actually read.
  *
- * @property array $external_links
- * @property array $streaming_links
+ * @property array<string, mixed> $external_links
+ * @property array<string, mixed> $streaming_links
  */
-final class CachedData implements ArrayAccess
+final /**
+ * @implements \ArrayAccess<array-key, mixed>
+ */
+class CachedData implements ArrayAccess
 {
     use ForwardsCalls, Macroable {
         __call as macroCall;
@@ -27,6 +30,9 @@ final class CachedData implements ArrayAccess
 
     private int $cacheTimeToLive;
 
+    /**
+     * @param Collection<array-key, mixed> $scraperResult
+     */
     private function __construct(
         private readonly Collection $scraperResult,
         int $cacheTtl
@@ -36,7 +42,7 @@ final class CachedData implements ArrayAccess
     }
 
     /**
-     * @param Collection $scraperResult Always a collection which has the result from the scraper wrapped under a key
+     * @param Collection<array-key, mixed> $scraperResult Always a collection which has the result from the scraper wrapped under a key
      *                                  or a document from the db.
      * @return static
      */
@@ -45,6 +51,9 @@ final class CachedData implements ArrayAccess
         return new self($scraperResult, app(CacheOptions::class)->ttl());
     }
 
+    /**
+     * @param array<string, mixed> $scraperResult
+     */
     public static function fromArray(array $scraperResult): self
     {
         return self::from(collect($scraperResult));
@@ -73,6 +82,9 @@ final class CachedData implements ArrayAccess
         return Carbon::now()->unix() > $expiry;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return $this->scraperResult->toArray();

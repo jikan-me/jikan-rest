@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property string $name
  * @property string $url
  * @property int $count
+ * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\GenreAnimeFactory>
  */
 class GenreAnime extends JikanApiSearchableModel
 {
@@ -23,7 +24,7 @@ class GenreAnime extends JikanApiSearchableModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'name', 'url', 'count',
@@ -41,14 +42,14 @@ class GenreAnime extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         '_id', 'expiresAt'
     ];
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public static function scrape() : array
     {
@@ -61,6 +62,9 @@ class GenreAnime extends JikanApiSearchableModel
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         return [

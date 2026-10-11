@@ -23,6 +23,9 @@ final class QueryTopReviewsHandler extends RequestHandlerWithScraperCache
         return QueryTopReviewsCommand::class;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         // Note: `?? default` (not get($k, $default)) because a nullable DTO property

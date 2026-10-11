@@ -10,7 +10,7 @@ use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Search\UserSearchRequest;
 
 /**
- * @implements RequestHandlerWithScraperCache<UsersSearchCommand, JsonResponse>
+ * @extends RequestHandlerWithScraperCache<UsersSearchCommand, JsonResponse>
  */
 final class UserSearchHandler extends RequestHandlerWithScraperCache
 {
@@ -22,6 +22,9 @@ final class UserSearchHandler extends RequestHandlerWithScraperCache
         return UsersSearchCommand::class;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         return $this->scraperService->findList(

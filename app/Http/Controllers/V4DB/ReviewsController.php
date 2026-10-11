@@ -59,7 +59,7 @@ class ReviewsController extends Controller
      *     ),
      * ),
      */
-    public function anime(QueryAnimeReviewsCommand $command)
+    public function anime(QueryAnimeReviewsCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -114,7 +114,7 @@ class ReviewsController extends Controller
      *     ),
      * ),
      */
-    public function manga(QueryMangaReviewsCommand $command)
+    public function manga(QueryMangaReviewsCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

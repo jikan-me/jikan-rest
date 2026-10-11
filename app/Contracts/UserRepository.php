@@ -5,7 +5,7 @@ namespace App\Contracts;
 use App\Profile;
 
 /**
- * @implements Repository<Profile>
+ * @extends Repository<Profile>
  */
 interface UserRepository extends Repository
 {

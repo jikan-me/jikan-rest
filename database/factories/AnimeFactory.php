@@ -7,7 +7,9 @@ use App\Testing\JikanDataGenerator;
 use Illuminate\Support\Collection;
 use MongoDB\BSON\UTCDateTime;
 
-
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<App\Anime>
+ */
 class AnimeFactory extends JikanMediaModelFactory
 {
     use JikanDataGenerator;

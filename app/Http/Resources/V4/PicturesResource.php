@@ -48,6 +48,9 @@ class PicturesResource extends JsonResource
      *     ),
      *  )
      */
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray($request)
     {
         return $this['pictures'];

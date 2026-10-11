@@ -74,7 +74,7 @@ class ScheduleController extends Controller
      *      }
      *  )
      */
-    public function main(QueryAnimeSchedulesCommand $command)
+    public function main(QueryAnimeSchedulesCommand $command): mixed
     {
         \Log::info("ScheduleController::main called", ["filter" => request()->filter]);
         return $this->mediator->send($command);

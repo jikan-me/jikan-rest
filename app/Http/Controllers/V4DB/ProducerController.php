@@ -37,7 +37,7 @@ class ProducerController extends Controller
      *     ),
      * )
      */
-    public function main(ProducerLookupCommand $command)
+    public function main(ProducerLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -71,7 +71,7 @@ class ProducerController extends Controller
      *     ),
      * )
      */
-    public function full(ProducerFullLookupCommand $command)
+    public function full(ProducerFullLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -102,7 +102,7 @@ class ProducerController extends Controller
      *     ),
      * )
      */
-    public function external(ProducerExternalLookupCommand $command)
+    public function external(ProducerExternalLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

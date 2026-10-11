@@ -20,9 +20,10 @@ class PeopleSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @inheritDoc
+     * @param LengthAwarePaginator<int, mixed> $paginator
+     * @return PersonCollection
      */
-    protected function renderResponse(LengthAwarePaginator $paginator)
+    protected function renderResponse(LengthAwarePaginator $paginator): PersonCollection
     {
         return new PersonCollection($paginator);
     }

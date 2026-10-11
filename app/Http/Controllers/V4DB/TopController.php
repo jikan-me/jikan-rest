@@ -60,7 +60,7 @@ class TopController extends Controller
      *     ),
      * )
      */
-    public function anime(QueryTopAnimeItemsCommand $request)
+    public function anime(QueryTopAnimeItemsCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -101,7 +101,7 @@ class TopController extends Controller
      *     ),
      * )
      */
-    public function manga(QueryTopMangaItemsCommand $request)
+    public function manga(QueryTopMangaItemsCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -128,7 +128,7 @@ class TopController extends Controller
      *     ),
      * )
      */
-    public function people(QueryTopPeopleCommand $request)
+    public function people(QueryTopPeopleCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -155,7 +155,7 @@ class TopController extends Controller
      *     ),
      * )
      */
-    public function characters(QueryTopCharactersCommand $request)
+    public function characters(QueryTopCharactersCommand $request): mixed
     {
         return $this->mediator->send($request);
     }
@@ -276,7 +276,7 @@ class TopController extends Controller
      *     ),
      *  ),
      */
-    public function reviews(QueryTopReviewsCommand $request)
+    public function reviews(QueryTopReviewsCommand $request): mixed
     {
         return $this->mediator->send($request);
     }

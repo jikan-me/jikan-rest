@@ -32,6 +32,9 @@ final class AnimeVideosEpisodesLookupHandler extends RequestHandlerWithScraperCa
         return AnimeVideosEpisodesLookupCommand::class;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $id = $requestParams->get("id");

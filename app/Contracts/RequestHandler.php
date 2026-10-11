@@ -2,13 +2,14 @@
 
 namespace App\Contracts;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 
 /**
- * @template TRequest of DataRequest<TResponse>
- * @template TResponse of ResourceCollection|JsonResource|Response
+ * @template TRequest of DataRequest
+ * @template TResponse of ResourceCollection|JsonResource|JsonResponse|Response
  */
 interface RequestHandler
 {

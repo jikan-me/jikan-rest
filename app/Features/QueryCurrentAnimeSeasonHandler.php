@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 
 /**
- * @implements RequestHandler<QueryCurrentAnimeSeasonCommand, JsonResponse>
+ * @extends QueryAnimeSeasonHandlerBase<QueryCurrentAnimeSeasonCommand>
  */
 final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
 {
@@ -24,6 +24,9 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
     /**
      * @return array
      * @throws Exception
+     */
+    /**
+     * @return array{0: \App\Enums\AnimeSeasonEnum, 1: int}
      */
     private function getCurrentSeason() : array
     {

@@ -19,6 +19,9 @@ class AnimeSearchHandler extends SearchRequestHandler
         return AnimeSearchCommand::class;
     }
 
+    /**
+     * @param LengthAwarePaginator<int, mixed> $paginator
+     */
     protected function renderResponse(LengthAwarePaginator $paginator): AnimeCollection
     {
         return new AnimeCollection($paginator);

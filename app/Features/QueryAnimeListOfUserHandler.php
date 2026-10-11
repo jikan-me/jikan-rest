@@ -52,6 +52,9 @@ final class QueryAnimeListOfUserHandler extends RequestHandlerWithScraperCache
         return QueryAnimeListOfUserCommand::class;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         /**

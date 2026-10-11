@@ -4,7 +4,7 @@
 namespace App\Http\Resources\V4;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CharacterCollection extends ResourceCollection
 {
@@ -37,8 +37,12 @@ class CharacterCollection extends ResourceCollection
 
     private $pagination;
 
+    /**
+     * @param LengthAwarePaginator<int, mixed> $resource
+     */
     public function __construct(LengthAwarePaginator $resource)
     {
+        /** @var \Illuminate\Pagination\LengthAwarePaginator<int, mixed> $resource */
         $this->pagination = [
             'last_visible_page' => $resource->lastPage(),
             'has_next_page' => $resource->hasMorePages(),
@@ -59,7 +63,7 @@ class CharacterCollection extends ResourceCollection
      * Transform the resource collection into an array.
      *
      * @param \Illuminate\Http\Request $request
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray($request)
     {

@@ -29,6 +29,9 @@ final class MangaReviewsLookupHandler extends RequestHandlerWithScraperCache
         return new ReviewsResource($results);
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $reviewRequestParams = $this->getReviewRequestParams($requestParams);

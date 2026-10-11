@@ -19,6 +19,9 @@ final class QueryRecentlyAddedEpisodesHandler extends RequestHandlerWithScraperC
         return QueryRecentlyAddedEpisodesCommand::class;
     }
 
+    /**
+     * @param Collection<array-key, mixed> $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         return $this->scraperService->findList(

@@ -43,7 +43,7 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function full(CharacterFullLookupCommand $command)
+    public function full(CharacterFullLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -77,7 +77,7 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function main(CharacterLookupCommand $command)
+    public function main(CharacterLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -106,7 +106,7 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function anime(CharacterAnimeLookupCommand $command)
+    public function anime(CharacterAnimeLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -136,7 +136,7 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function manga(CharacterMangaLookupCommand $command)
+    public function manga(CharacterMangaLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -165,7 +165,7 @@ class CharacterController extends Controller
      *     ),
      * )
      */
-    public function voices(CharacterVoicesLookupCommand $command)
+    public function voices(CharacterVoicesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
@@ -221,7 +221,7 @@ class CharacterController extends Controller
      *      )
      *  )
      */
-    public function pictures(CharacterPicturesLookupCommand $command)
+    public function pictures(CharacterPicturesLookupCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

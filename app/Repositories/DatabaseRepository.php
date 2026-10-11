@@ -18,6 +18,9 @@ class DatabaseRepository extends RepositoryQuery implements Repository
         return $this->queryable()->newModelInstance();
     }
 
+    /**
+     * @return JikanApiModel|array<string, mixed>|null
+     */
     public function getByMalId(int $id): JikanApiModel|array|null
     {
         $results = $this->getAllByMalId($id);
@@ -44,6 +47,9 @@ class DatabaseRepository extends RepositoryQuery implements Repository
 
     // fixme: this should not be here.
     //        this is here because we have the "scrape" static method on models
+    /**
+     * @return array<string, mixed>
+     */
     public function scrape(int|string $id): array
     {
         $modelClass = $this->getModelClass();
@@ -52,6 +58,9 @@ class DatabaseRepository extends RepositoryQuery implements Repository
         return $modelClass::scrape($id);
     }
 
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function insert(array $attributes): bool
     {
         // this way we trigger scout to index records in the search index.

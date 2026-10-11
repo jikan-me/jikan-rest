@@ -10,6 +10,7 @@ trait FilterQueryString
 {
     use FilterResolver;
 
+    /** @var array<string, class-string<\App\Filters\BaseClause>> */
     private array $availableFilters = [
         'default' => WhereClause::class,
         'order_by' => OrderbyClause::class,
@@ -17,7 +18,12 @@ trait FilterQueryString
     ];
 
     /** @noinspection PhpUnused */
-    public function scopeFilter(Builder $query, Collection $queryParameters)
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder<static> $query
+     * @param Collection<string, mixed> $queryParameters
+     * @return mixed
+     */
+    public function scopeFilter(Builder $query, Collection $queryParameters): mixed
     {
         $filters = $this->getFilters($queryParameters)->map(function ($values, $filter) {
             return $this->resolve($filter, $values);
@@ -29,6 +35,10 @@ trait FilterQueryString
             ->thenReturn();
     }
 
+    /**
+     * @param Collection<string, mixed> $filters
+     * @return Collection<string, mixed>
+     */
     private function _normalizeOrderBy(Collection $filters): Collection
     {
         // If DTO is not transformed then the value can be Enum type.
@@ -51,6 +61,10 @@ trait FilterQueryString
         return $filters;
     }
 
+    /**
+     * @param Collection<string, mixed> $queryParameters
+     * @return Collection<string, mixed>
+     */
     private function getFilters(Collection $queryParameters): Collection
     {
         $filter = function ($key) {

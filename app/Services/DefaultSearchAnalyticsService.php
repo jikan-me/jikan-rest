@@ -15,10 +15,13 @@ use Typesense\Documents;
  */
 final class DefaultSearchAnalyticsService implements SearchAnalyticsService
 {
+    /**
+     * @param Collection<int, mixed> $hits
+     */
     public function logSearch(string $searchTerm, int $hitsCount, Collection $hits, string $indexName): void
     {
         /**
-         * @var Collection $existingMetrics
+         * @var \Illuminate\Support\Collection<int, \App\SearchMetric> $existingMetrics
          */
         $existingMetrics = SearchMetric::search($searchTerm, function (Documents $documents, string $query, array $options) {
             if (strlen($query) <= 3) {

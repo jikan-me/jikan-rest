@@ -31,6 +31,9 @@ class ProfileAboutResource extends JsonResource
      *      ),
      *  ),
      */
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray($request)
     {
         return [

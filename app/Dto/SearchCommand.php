@@ -16,6 +16,8 @@ use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Optional;
 
+/**
+ */
 class SearchCommand extends Data
 {
     use HasLimitParameter, HasPageParameter;

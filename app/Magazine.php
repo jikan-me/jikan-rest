@@ -15,6 +15,7 @@ use Jikan\Request\Magazine\MagazinesRequest;
  * @property string $name
  * @property string $url
  * @property int $count
+ * @use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\MagazineFactory>
  */
 class Magazine extends JikanApiSearchableModel
 {
@@ -24,7 +25,7 @@ class Magazine extends JikanApiSearchableModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'name', 'url', 'count',
@@ -41,7 +42,7 @@ class Magazine extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         '_id', 'expiresAt'
@@ -54,7 +55,7 @@ class Magazine extends JikanApiSearchableModel
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public static function scrape() : array
     {
@@ -67,6 +68,9 @@ class Magazine extends JikanApiSearchableModel
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
         return [

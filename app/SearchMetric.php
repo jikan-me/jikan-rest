@@ -9,7 +9,7 @@ use Laravel\Scout\Builder;
  *
  * @property string $search_term
  * @property int $request_count
- * @property array $hits
+ * @property array<int, int> $hits
  * @property int $hits_count
  * @property string $index_name
  */
@@ -28,6 +28,9 @@ class SearchMetric extends JikanApiSearchableModel
         return "jikan_search_metrics";
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray()
     {
         return [
@@ -40,6 +43,9 @@ class SearchMetric extends JikanApiSearchableModel
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getCollectionSchema(): array
     {
         return [

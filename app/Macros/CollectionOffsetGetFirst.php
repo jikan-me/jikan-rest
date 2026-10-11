@@ -6,7 +6,7 @@ use App\JikanApiModel;
 use Illuminate\Support\Collection;
 
 /**
- * @mixin Collection
+ * @mixin \Illuminate\Support\Collection<array-key, mixed>
  * @method offsetGetFirst(string $offset, mixed $default = null)
  */
 final class CollectionOffsetGetFirst

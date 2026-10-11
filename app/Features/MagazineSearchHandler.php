@@ -20,9 +20,10 @@ final class MagazineSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @inheritDoc
+     * @param LengthAwarePaginator<int, mixed> $paginator
+     * @return MagazineCollection
      */
-    protected function renderResponse(LengthAwarePaginator $paginator)
+    protected function renderResponse(LengthAwarePaginator $paginator): MagazineCollection
     {
         return new MagazineCollection($paginator);
     }

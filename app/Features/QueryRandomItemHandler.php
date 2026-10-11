@@ -4,15 +4,16 @@ namespace App\Features;
 
 use App\Contracts\Repository;
 use App\Contracts\RequestHandler;
+use App\Contracts\DataRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
-use Spatie\LaravelData\Data;
 
 /**
- * @template TRequest of Data
- * @template TResponse of ResourceCollection|JsonResource|Response
+ * @template TRequest of DataRequest
+ * @template TResponse of ResourceCollection|JsonResource|JsonResponse|Response
  * @implements RequestHandler<TRequest, TResponse>
  */
 abstract class QueryRandomItemHandler implements RequestHandler
