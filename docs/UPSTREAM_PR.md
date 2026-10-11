@@ -20,7 +20,8 @@
 | PR series | Proposed in §5; infra + backend commits all **landed locally** — **nothing pushed** |
 | Infra agent (T1–T4) | T1 heartbeat ✅ · T2 TTL guard ✅ · T3 Dockerfile ✅ · T4 PHPStan/Pint/CI ✅ |
 | Local work committed at reconciliation | insights + CORS **removals** (`c858c3d`), **observability** (`41dd860`), `UPSTREAM_PR.md` (`8f94dfa`) |
-| Verification | **289 tests / 2696 assertions** (only known season flake) · PHPStan level 5 exit 0 · Parity 59 endpoints, zero new diffs · Docker logic verified locally (no Docker to build) |
+| Verification | **292 tests / 2707 assertions — fully green** (season flake defused) · PHPStan level 6 baseline-pinned exit 0 · Parity: 21 endpoints byte-match, zero new shape/status diffs · **Docker: first real build + full compose stack validated locally via Colima (2026-10-12)** · **Typesense E2E verified** against the Docker server (import + search + chunked pagination, no config) |
+| Docker / CI | Image builds clean on a real runtime; `app`/`mongo`/`redis`/`typesense` healthy, `/up` 200, `rr --version` 2025.1.15 (arm64). CI matrix first-green still parked for a GitHub runner |
 | `jikan-me/jikan` parser fixes | Parked (`UPSTREAM_ISSUES.md` UP-01…05); not targeting at the moment |
 | Decisions made | Laravel **13** (final), **Typesense-only** search (native Scout engine), Octane RoadRunner default, PHPUnit 12, security/config-cache hardening in scope |
 

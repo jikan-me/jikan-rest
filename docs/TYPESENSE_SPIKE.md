@@ -243,3 +243,40 @@ rm -rf /tmp/typesense-data              # wipe temp data
 
 Verify no local env/config leftovers: `SCOUT_DRIVER=typesense` must not remain
 in `.env`, and `config/scout.php` must be byte-identical to HEAD.
+
+---
+
+## 8. E2E re-verified against Docker Typesense (2026-10-12)
+
+**Environment:** Docker Typesense `27.0` via Colima on `127.0.0.1:8108`
+(key `abcd`); native app (Homebrew PHP 8.4) with the §4 env overrides
+(`SCOUT_DRIVER=typesense`, `TYPESENSE_*`). **No `model-settings` config, no
+pre-created collections** — the Resolution above is the only wiring.
+
+**Import (out of the box):**
+- `artisan scout:import "App\Producers"` → `producers_index` auto-created from
+  `Producers::typesenseCollectionSchema()` = **382 docs** (fields: `.*`,
+  `titles`, `url`, `count`, `established`, `favorites`, `mal_id`).
+- `artisan scout:import "App\Magazine"` → `magazines_index` = **1498 docs**.
+- (anime/manga/characters/people = 0 docs — upstream parser blockers, see
+  `UPSTREAM_ISSUES.md`; the search pipeline itself is model-agnostic.)
+
+**§5 matrix — all pass against the Docker server:**
+
+| Check | Result |
+|---|---|
+| `producers?q=studio` | 200, total **35** |
+| `producers?q=pierrot` | 200, total **1** (Studio Pierrot) |
+| `magazines?q=shonen` | 200, total **39** |
+| `producers?q=*&order_by=favorites&sort=desc` | 200, top `mal_id` **2** (Kyoto Animation) |
+| `magazines?q=*` (chunked >250) | 200, total **1498** (int), **60** pages |
+| `producers?q=*` (chunked >250) | 200, total **382** (int), **16** pages |
+| boundary `magazines?q=*&page=10`/`page=11` | no id overlap |
+| `anime?q=gate` (empty index) | 200, graceful empty |
+
+Chunked-pagination totals (`jikanPaginate()`, `ScoutBuilderMixin`) are clean
+ints with no overlap at the 250-hit boundary — consistent with §6's findings.
+
+**Cleanup applied:** dev server stopped; the 4 spike-created
+`search_metrics` rows deleted from Mongo. Docker Typesense left running for
+future search work.

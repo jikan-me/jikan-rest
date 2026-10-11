@@ -803,3 +803,31 @@ builds, `rr --version` = 2025.1.15, `GET /up` = 200, `GET /` = v4 heartbeat JSON
 empty-DB index endpoints return proper pagination (count 0). Data-backed detail
 endpoints (`/v4/anime/:id`) currently 500 `ParserException` on an **empty** DB —
 data-gated on the jikan v5 parser upstream blockers, not the app shell.
+
+
+## 15. Typesense E2E verified against a real server (2026-10-12)
+
+Closed the last "previously-unverified" search gap. With Docker Typesense 27.0
+running locally (Colima), the native Scout `TypesenseEngine` was exercised
+end-to-end — **out of the box, with no `model-settings` config and no
+pre-created collections** (the `typesenseCollectionSchema()` /
+`typesenseSearchParameters()` model-methods contract from the spike's
+"production fix" is the only wiring):
+
+- `scout:import App\Producers` → collection auto-created, 382 docs;
+  `App\Magazine` → 1498 docs.
+- §5 verification matrix all green via `/v4`: `producers?q=studio` = 35,
+  `q=pierrot` = 1, `magazines?q=shonen` = 39, sort by favorites → top id 2
+  (Kyoto Animation).
+- **Chunked pagination >250 hits** (`jikanPaginate()`/`ScoutBuilderMixin`)
+  correct: `magazines?q=*` total 1498 (int) / 60 pages; `producers?q=*` total
+  382 / 16 pages; page 10→11 boundary has no overlap.
+- Empty index (`anime?q=…`, no anime data — upstream-blocked) returns a
+  graceful empty shape.
+- Results + runbook recorded in `docs/TYPESENSE_SPIKE.md` §8; spike-created
+  `search_metrics` rows cleaned up.
+
+Effectively resolves the changelog follow-up "Verify the native Typesense
+engine end-to-end against a real Typesense server and reconcile search-index
+behavior/ranking parity" for the import/search/pagination paths. Ranking
+parity for anime/manga still awaits data (UP-01/UP-02).
