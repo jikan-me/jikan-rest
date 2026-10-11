@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'deprecations' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
+    'deprecations' => env('LOG_DEPRECATIONS_CHANNEL', 'daily'),
 
 
     /*
@@ -56,16 +56,15 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/lumen.log'),
+            'path' => storage_path('logs/jikan.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/daily/lumen.log'),
+            'path' => storage_path('logs/daily/jikan.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
-//            'replace_placeholders' => true, // enabled by default on 10.x - IDK what it does
         ],
 
         'slack' => [

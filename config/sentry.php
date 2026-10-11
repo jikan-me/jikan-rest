@@ -50,10 +50,12 @@ return [
     // @see: https://docs.sentry.io/platforms/php/configuration/options/#send-default-pii
     'send_default_pii' => false,
 
-    'traces_sample_rate' => (float)(env('SENTRY_TRACES_SAMPLE_RATE', 0.0)),
+    // Default to a small tracing sample when Sentry is enabled
+    // (the app does not send PII; adjust for cost/volume).
+    'traces_sample_rate' => (float)(env('SENTRY_TRACES_SAMPLE_RATE', 0.1)),
 
     'controllers_base_namespace' => env('SENTRY_CONTROLLERS_BASE_NAMESPACE', 'App\\Http\\Controllers'),
 
-    'release' => env('APP_VERSION')
+    'release' => config('app.version')
 
 ];
