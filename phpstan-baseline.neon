@@ -55,24 +55,6 @@ parameters:
 			path: app/Club.php
 
 		-
-			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$client \(Symfony\\Contracts\\HttpClient\\HttpClientInterface\) is implicitly nullable via default value null\.$#'
-			identifier: parameter.implicitlyNullable
-			count: 1
-			path: app/Compat/Goutte/Client.php
-
-		-
-			message: '#^Deprecated in PHP 8\.4\: Parameter \#2 \$history \(Symfony\\Component\\BrowserKit\\History\) is implicitly nullable via default value null\.$#'
-			identifier: parameter.implicitlyNullable
-			count: 1
-			path: app/Compat/Goutte/Client.php
-
-		-
-			message: '#^Deprecated in PHP 8\.4\: Parameter \#3 \$cookieJar \(Symfony\\Component\\BrowserKit\\CookieJar\) is implicitly nullable via default value null\.$#'
-			identifier: parameter.implicitlyNullable
-			count: 1
-			path: app/Compat/Goutte/Client.php
-
-		-
 			message: '#^Trait App\\Concerns\\ScraperCacheTtl is used zero times and is not analysed\.$#'
 			identifier: trait.unused
 			count: 1

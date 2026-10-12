@@ -1045,3 +1045,26 @@ venv. Shipped upstream as **backend-quality-suite#24** (bracket-aware
   v4 resource schemas (characters vs staff vs voices, genre filter enum, club
   relations, statistics shapes, season/year).
 - Regenerated spec: **101 ops, 101/101 with summary + description**, exit 0.
+
+
+## 27. CI workflow static validation (2026-10-12) — runner-ready
+
+Static audit of the GitHub Actions workflows (no runner available):
+
+- **ci.yml**: fixed a real bug — `CACHE_MAGAZINES_EXPIRE` → **`CACHE_MAGAZINE_EXPIRE`**
+  (app/config+jikan.php and .env.dist use the singular form; the plural was a
+  dead var that silently dropped the 5-day magazine TTL to 1 day). Also pinned
+  `mongo:latest` → `mongo:8.0` (matches docker-compose). Everything else verified
+  against the app: matrix 8.3/8.4 + `--ignore-platform-req=php` on 8.3 is
+  consistent with `config.platform.php: 8.4.26`; Mongo service/healthcheck and
+  env contract (`jikan_tests`, `CACHE_DRIVER=array`, `SCOUT_DRIVER` unset /
+  engine-less) match config + the test harness; lint/phpstan/pint/phpunit + the
+  Docker build step (no `RR_STAGE`, arch auto-detect) all check out.
+- **tests.yml DELETED** — superseded by ci.yml and guaranteed red on the first
+  run (PHP pinned 8.1 vs required ^8.3, duplicate triggers, stale
+  typesense:0.24.1 + `SCOUT_DRIVER=typesense`). Coverage via codecov can be
+  folded into ci.yml later if wanted.
+- **phpstan-baseline.neon**: removed the 3 stale `app/Compat/Goutte/Client.php`
+  ignoreError entries (dead since the Goutte shim was dropped); PHPStan gate now
+  logs zero warnings. `container-image-release.yml` validated — clean (no ARGs,
+  RR arch auto-detect, standard multi-arch digest flow).

@@ -22,7 +22,7 @@ jobs:
         php: ['8.3', '8.4']
     services:
       mongodb:
-        image: mongo:latest
+        image: mongo:8.0   # pinned to match docker-compose.yml (mongo:8.0)
         ports:
           - 27017:27017
         options: >-
@@ -52,7 +52,7 @@ jobs:
       CACHE_USERLIST_EXPIRE: 3600
       CACHE_SEARCH_EXPIRE: 432000
       CACHE_PRODUCERS_EXPIRE: 432000
-      CACHE_MAGAZINES_EXPIRE: 432000
+      CACHE_MAGAZINE_EXPIRE: 432000
       MAX_RESULTS_PER_PAGE: 25
       # SCOUT_DRIVER intentionally unset: tests exercise the Mongo "$text"
       # fallback (the local default), not the Typesense engine.
