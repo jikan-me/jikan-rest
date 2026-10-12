@@ -28,6 +28,19 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Trust the reverse proxy / load balancer in front of the app so that
+        // request()->ip() (used by the rate limiter) is the real client address.
+        // Comma-separated IPs/CIDRs, or `*` to trust every proxy. This closure
+        // runs before the config repository exists, so env() is correct here.
+        $trustedProxies = env('TRUSTED_PROXIES');
+        if (is_string($trustedProxies) && trim($trustedProxies) !== '') {
+            $middleware->trustProxies(
+                at: trim($trustedProxies) === '*'
+                    ? '*'
+                    : array_map('trim', explode(',', $trustedProxies))
+            );
+        }
+
         // CORS is handled by Laravel's default global HandleCors middleware
         // (config/cors.php); the legacy custom CorsMiddleware was removed.
         // Don't expose the self-served Swagger UI under /v4 (product decision);

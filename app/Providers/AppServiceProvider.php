@@ -83,11 +83,16 @@ class AppServiceProvider extends ServiceProvider
         // the registration of request handlers should happen after the load of all service providers.
         $this->registerRequestHandlers();
 
-        // Application-level rate limit for the public v4 API (P0: no throttling existed).
+        // Opt-in application-level rate limit for the public v4 API. Disabled
+        // (0) by default: it only behaves correctly with TRUSTED_PROXIES set
+        // (otherwise every client behind a proxy shares the proxy's bucket) and
+        // a shared cache store such as redis (the `array` store is per worker).
         RateLimiter::for('v4', function () {
-            $perMinute = $this->app->environment('testing')
-                ? 10_000
-                : (int) (config('jikan.rate_limit_per_minute') ?: 240);
+            $perMinute = (int) config('jikan.rate_limit_per_minute');
+
+            if ($perMinute <= 0) {
+                return Limit::none();
+            }
 
             return Limit::perMinute($perMinute)
                 ->by((string) (request()->ip() ?? 'local'));

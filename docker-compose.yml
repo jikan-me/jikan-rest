@@ -77,6 +77,10 @@ services:
       # Enable with:  CACHE_DRIVER=redis docker compose up -d app
       CACHE_DRIVER: "${CACHE_DRIVER:-array}"
 
+      # --- Reverse proxy / rate limiting (see .env.dist) ------------------------
+      TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
+      RATE_LIMIT_PER_MINUTE: "${RATE_LIMIT_PER_MINUTE:-0}"
+
       # --- Octane (RoadRunner) — matches config/octane.php default -------------
       OCTANE_SERVER: "${OCTANE_SERVER:-roadrunner}"
       OCTANE_HTTPS: "${OCTANE_HTTPS:-false}"

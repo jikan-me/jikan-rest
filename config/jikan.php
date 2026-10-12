@@ -19,7 +19,8 @@ return [
     // responses). Empty by default — no bypass. Was previously env('APP_KEY').
     'cache_bypass_token' => env('CACHE_BYPASS_TOKEN', ''),
     'microcaching_expire' => (int) env('MICROCACHING_EXPIRE', 5),
-    'rate_limit_per_minute' => (int) env('RATE_LIMIT_PER_MINUTE', 240),
+    // Per-IP requests/minute for the v4 API. 0 (default) disables the limiter.
+    'rate_limit_per_minute' => (int) env('RATE_LIMIT_PER_MINUTE', 0),
     // Source-heartbeat (MAL availability) scoring.
     'source_good_health_score' => (float) env('SOURCE_GOOD_HEALTH_SCORE', 0.9),
     'source_bad_health_recheck' => (int) env('SOURCE_BAD_HEALTH_RECHECK', 10),
