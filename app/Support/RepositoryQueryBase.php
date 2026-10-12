@@ -29,7 +29,10 @@ class RepositoryQueryBase
             $this->queryableBuilder = $callback();
         }
 
-        return $this->queryableBuilder;
+        // Builders are mutable (`where()` mutates in place). Hand out a copy so
+        // clauses added by one caller can never accumulate on the cached
+        // instance and bleed into later requests on a persistent worker.
+        return clone $this->queryableBuilder;
     }
 
     protected function searchable(string $keywords, ?\Closure $callback = null, bool $createNew = false): ScoutBuilder
@@ -45,6 +48,6 @@ class RepositoryQueryBase
             $this->searchableBuilder = $getSearchable($keywords, $callback);
         }
 
-        return $this->searchableBuilder;
+        return clone $this->searchableBuilder;
     }
 }

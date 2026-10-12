@@ -67,6 +67,13 @@ use Typesense\Client;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * Handler class => request (DTO) class. Pure strings; safe to share across requests.
+     *
+     * @var array<class-string, class-string>
+     */
+    private static array $requestClassCache = [];
+
+    /**
      * @throws \ReflectionException
      * @throws BindingResolutionException
      */
@@ -129,16 +136,16 @@ class AppServiceProvider extends ServiceProvider
         $this->registerModelRepositories();
     }
 
-    private function getSearchService(Repository $repository): SearchService
+    private function getSearchService(Repository $repository, Application $app): SearchService
     {
-        if ($this->getSearchIndexesEnabledConfig($this->app)) {
-            $scoutDriver = static::getSearchIndexDriver($this->app);
+        if ($this->getSearchIndexesEnabledConfig($app)) {
+            $scoutDriver = static::getSearchIndexDriver($app);
             $serviceClass = match ($scoutDriver) {
                 'typesense' => TypeSenseScoutSearchService::class,
                 default => DefaultScoutSearchService::class
             };
 
-            $scoutSearchService = $this->app->make($serviceClass, [
+            $scoutSearchService = $app->make($serviceClass, [
                 'repository' => $repository,
             ]);
             $result = new SearchEngineSearchService($scoutSearchService, $repository);
@@ -186,14 +193,18 @@ class AppServiceProvider extends ServiceProvider
          */
         $this->app->bind(Mediator::class, DefaultMediator::class);
 
-        $this->app->singleton(
+        // The factory map captures repository instances, so it must live exactly
+        // as long as one request. `scoped` + resolving through the container that
+        // is asking (never `$this->app`, which under Octane is the long-lived base
+        // application) keeps it inside the per-request sandbox.
+        $this->app->scoped(
             'jikan-mediator-handler-factories',
             fn (Application $app) => $this->buildRequestHandlerFactories($app)
         );
 
         $this->app->when(DefaultMediator::class)
             ->needs('$handlerFactories')
-            ->give(fn () => $this->app->make('jikan-mediator-handler-factories'));
+            ->give(fn (Application $app) => $app->make('jikan-mediator-handler-factories'));
     }
 
     /**
@@ -210,10 +221,11 @@ class AppServiceProvider extends ServiceProvider
         $factories = [];
 
         $register = function (string $handlerClass, callable $argsBuilder) use (&$factories, $app) {
-            // requestClass() is an instance method, so peek at one throwaway
-            // instance to learn the DTO this handler dispatches, then keep only
-            // a lazy factory for real (per-request) construction.
-            $requestClass = $app->make($handlerClass, $argsBuilder())->requestClass();
+            // requestClass() is an instance method that returns a constant, so it
+            // can be read from an uninitialised instance (no dependency graph is
+            // built). The result is pure data, safe to memoise for the worker.
+            $requestClass = self::$requestClassCache[$handlerClass]
+                ??= (new \ReflectionClass($handlerClass))->newInstanceWithoutConstructor()->requestClass();
             $factories[$requestClass] = fn () => $app->make($handlerClass, $argsBuilder());
         };
 
@@ -230,7 +242,7 @@ class AppServiceProvider extends ServiceProvider
         foreach ($searchRequestHandlersDescriptors as $handlerClass => $repositoryInstance) {
             $register($handlerClass, fn () => [
                 'queryBuilderService' => $app->make(DefaultQueryBuilderService::class, [
-                    'searchService' => $this->getSearchService($repositoryInstance),
+                    'searchService' => $this->getSearchService($repositoryInstance, $app),
                 ]),
             ]);
         }

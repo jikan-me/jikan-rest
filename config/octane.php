@@ -176,6 +176,8 @@ return [
         UserRepository::class,
         AnimeGenresRepository::class,
         MangaGenresRepository::class,
+        // Handler factory map captures per-request repository instances.
+        'jikan-mediator-handler-factories',
         // Request-scoped cache TTL + in-memory collection descriptor cache.
         CacheOptions::class,
         TypesenseCollectionDescriptor::class,
