@@ -26,6 +26,11 @@ on the Lumen release ("before") and what it is now.
   or file path. Status codes and `type`/`message` are unchanged.
 - **Non-numeric ids** (`/v4/anime/abc`, `/v4/manga/xyz`, characters, people, producers) are a
   `404`, as on the Lumen release.
+- **CORS** is opt-in again via `CORS_MIDDLEWARE=true` (default `false`, as before). The app uses
+  Laravel's built-in `HandleCors` (all origins, `GET`/`OPTIONS`); the custom `CorsMiddleware` is gone.
+- **Cache bypass removed.** The `auth: <APP_KEY>` request header that skipped the micro-cache
+  existed only for the cache-refresh jobs (`UpdateCacheJob`, `UpdateDatabaseJob`), which were
+  deleted. Nothing replaces it; `CACHE_BYPASS_TOKEN` is no longer read.
 - **Removed endpoints.** `/v4/insights` and `/v4/insights/trends` (work in progress, gated off
   by `INSIGHTS=false`) and the `Insights` middleware, controller and resources were removed.
 - **New endpoints.** `GET /up` (liveness), `GET /llms.txt`, `GET /v4/ai/manifest.json`,
