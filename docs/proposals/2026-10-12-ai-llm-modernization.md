@@ -150,6 +150,11 @@ calls-per-task, cost. *Done:* benchmark tracked in-repo + numbers reported.
 | 5 — Core/identity/resilience | WS-C routes+L7, WS-I, WS-J | 2–4 days | parity freeze (routes); Redis decision |
 | 6 — MCP + eval | WS-E2 MCP; WS-K benchmark/metrics | ~1–2 days (prototype) | product-value decision; live data |
 
+**Execution status (live):** **Phases 1–2 landed on `laravel-12` (2026-10-12)** — AGENTS.md/CLAUDE.md,
+llms.txt + `GET /llms.txt`, `docs/INDEX.md`, `composer endpoints:write|check`,
+`GET /v4/ai/manifest.json`, CI artifact-freshness job, add-an-endpoint recipe
+(see PR_CHANGELOG §28). Phases 3–6 are tracked in **issue #615**.
+
 ## 6.1 Detailed execution plan (planning-only; ordered, each task verifiable)
 
 Hard gates across phases: single branch `laravel-12`; v4 JSON unchanged for default
