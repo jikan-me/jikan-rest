@@ -1,6 +1,6 @@
 # Proposal — Jikan-rest: modern, AI/LLM-friendly project (2026-10-12)
 
-**Status:** Draft — 2026-10-12, planning-only (no code changes yet). Open questions: 6 (see §7).
+**Status:** open — 2026-10-12, planning-only (no code changes yet). This proposal declares **6 open questions** (see §7).
 **Scope:** audit + plan for making the jikan-rest codebase and docs maximally navigable by
 both humans and AI agents (IDE assistants, CLI agents, LLM tooling / MCP).
 **Owned by:** Irfan Dahir (this document) — execution gated on approval, single branch `laravel-12`,
