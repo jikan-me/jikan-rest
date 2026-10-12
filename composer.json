@@ -1,7 +1,12 @@
 {
     "name": "jikan-rest/laravel",
     "description": "Jikan - Unofficial MyAnimeList PHP API (Laravel 13 modernization fork).",
-    "keywords": ["framework", "laravel", "anime", "myanimelist"],
+    "keywords": [
+        "framework",
+        "laravel",
+        "anime",
+        "myanimelist"
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
@@ -49,12 +54,14 @@
             "Database\\Factories\\": "database/factories/"
         },
         "files": [
-          "app/Support/helpers.php"
+            "app/Support/helpers.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
-          "Tests\\": ["tests/"]
+            "Tests\\": [
+                "tests/"
+            ]
         }
     },
     "scripts": {
@@ -67,14 +74,16 @@
         "pint": "@php ./vendor/bin/pint",
         "pint:test": "@php ./vendor/bin/pint --test",
         "test": [
-          "@phpunit --testsuite unit"
+            "@phpunit --testsuite unit"
         ],
         "integration-test": [
-          "@phpunit --testsuite integration"
+            "@phpunit --testsuite integration"
         ],
         "test-cover": [
-          "@phpunit-cover"
-        ]
+            "@phpunit-cover"
+        ],
+        "endpoints:write": "@php artisan endpoints:write",
+        "endpoints:check": "@php artisan endpoints:write --check"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

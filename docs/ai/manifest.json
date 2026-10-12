@@ -1,0 +1,2129 @@
+{
+    "schema_version": "1.0",
+    "openapi": "/v4/docs/openapi",
+    "tools": [
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeSearch",
+                "description": "Anime search\n\nSearches the anime catalog. Accepts filters such as q, type, score, status, rating, genres, order_by, and sort, with pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeById",
+                "description": "Anime details\n\nReturns the details of an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeCharacters",
+                "description": "Anime characters\n\nReturns the characters of an anime by id, together with their voice actors.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeEpisodes",
+                "description": "Anime episodes\n\nReturns the list of episodes for an anime by id, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeEpisodeById",
+                "description": "Anime episode\n\nReturns a single episode of an anime by id and episode.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeExternal",
+                "description": "Anime external links\n\nReturns the external links of an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeForum",
+                "description": "Anime forum topics\n\nReturns the forum topics of an anime by id. Use filter to restrict to all, episode, or other topics.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeFullById",
+                "description": "Complete anime resource\n\nReturns the complete anime resource, including primary data plus related sub-resources, for an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeMoreInfo",
+                "description": "Anime more info\n\nReturns additional trivia and background information about an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeNews",
+                "description": "Anime news\n\nReturns recent news articles for an anime by id, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimePictures",
+                "description": "Anime pictures\n\nReturns the pictures of an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeRecommendations",
+                "description": "Anime recommendations\n\nReturns the recommendations for an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeRelations",
+                "description": "Anime relations\n\nReturns the related entries for an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeReviews",
+                "description": "Anime reviews\n\nReturns the reviews of an anime by id. Supports pagination via page, with preliminary and spoilers toggles for review types.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeStaff",
+                "description": "Anime staff\n\nReturns the staff of an anime by id along with their positions.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeStatistics",
+                "description": "Anime statistics\n\nReturns the statistics of an anime by id, such as watching, completed, and on-hold counts.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeStreaming",
+                "description": "Anime streaming links\n\nReturns the streaming links of an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeThemes",
+                "description": "Anime themes\n\nReturns the opening and ending themes of an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeUserUpdates",
+                "description": "Anime user updates\n\nReturns the recent list updates of users for an anime by id, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeVideos",
+                "description": "Anime videos\n\nReturns the promotional videos, episodes, and music videos of an anime by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeVideosEpisodes",
+                "description": "Anime video episodes\n\nReturns the episode videos of an anime by id, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getCharactersSearch",
+                "description": "Characters search\n\nSearches the characters catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getCharacterById",
+                "description": "Character details\n\nReturns the details of a character by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getCharacterAnime",
+                "description": "Character anime roles\n\nReturns the anime roles of a character by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getCharacterFullById",
+                "description": "Complete character resource\n\nReturns the complete character resource for a character by id, including anime and manga roles, voices, and more.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getCharacterManga",
+                "description": "Character manga roles\n\nReturns the manga roles of a character by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getCharacterPictures",
+                "description": "Character pictures\n\nReturns the pictures of a character by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getCharacterVoiceActors",
+                "description": "Character voice actors\n\nReturns the voice actors of a character by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getClubsSearch",
+                "description": "Clubs search\n\nSearches the clubs catalog using the q, type, category, order_by, sort, and letter filters. Supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getClubsById",
+                "description": "Club details\n\nReturns the details of a club by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getClubMembers",
+                "description": "Club members\n\nReturns the members of a club by id, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getClubRelations",
+                "description": "Club relations\n\nReturns the anime, manga, and characters related to a club by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getClubStaff",
+                "description": "Club staff\n\nReturns the staff of a club by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getAnimeGenres",
+                "description": "Anime genres\n\nReturns the list of anime genres, explicit genres, themes, and demographics. Use filter to select the list type.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaGenres",
+                "description": "Manga genres\n\nReturns the list of manga genres, explicit genres, themes, and demographics. Use filter to select the list type.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMagazines",
+                "description": "Magazines list\n\nSearches the magazines catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaSearch",
+                "description": "Manga search\n\nSearches the manga catalog. Accepts filters such as q, type, score, status, genres, order_by, and sort, with pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaById",
+                "description": "Manga details\n\nReturns the details of a manga by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaCharacters",
+                "description": "Manga characters\n\nReturns the characters of a manga by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaExternal",
+                "description": "Manga external links\n\nReturns the external links of a manga by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaTopics",
+                "description": "Manga forum topics\n\nReturns the forum topics of a manga by id. Use filter to restrict to all, episode, or other topics.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaFullById",
+                "description": "Complete manga resource\n\nReturns the complete manga resource, including primary data plus related sub-resources, for a manga by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaMoreInfo",
+                "description": "Manga more info\n\nReturns additional trivia and background information about a manga by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaNews",
+                "description": "Manga news\n\nReturns recent news articles for a manga by id, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaPictures",
+                "description": "Manga pictures\n\nReturns the pictures of a manga by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaRecommendations",
+                "description": "Manga recommendations\n\nReturns the recommendations for a manga by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaRelations",
+                "description": "Manga relations\n\nReturns the related entries for a manga by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaReviews",
+                "description": "Manga reviews\n\nReturns the reviews of a manga by id. Supports pagination via page, with preliminary and spoilers toggles for review types.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaStatistics",
+                "description": "Manga statistics\n\nReturns the statistics of a manga by id, such as reading, completed, and on-hold counts.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getMangaUserUpdates",
+                "description": "Manga user updates\n\nReturns the recent list updates of users for a manga by id, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getPeopleSearch",
+                "description": "People search\n\nSearches the people catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getPersonById",
+                "description": "Person details\n\nReturns the details of a person by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getPersonAnime",
+                "description": "Person anime roles\n\nReturns the anime roles of a person by id with their staff positions.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getPersonFullById",
+                "description": "Complete person resource\n\nReturns the complete person resource for a person by id, including anime and manga roles, voices, and more.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getPersonManga",
+                "description": "Person manga roles\n\nReturns the manga roles of a person by id with their staff positions.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getPersonPictures",
+                "description": "Person pictures\n\nReturns the pictures of a person by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getPersonVoices",
+                "description": "Person voice acting roles\n\nReturns the voice acting roles of a person by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getProducers",
+                "description": "Producers list\n\nSearches the producers catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getProducerById",
+                "description": "Producer details\n\nReturns the details of a producer by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getProducerExternal",
+                "description": "Producer external links\n\nReturns the external links of a producer by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getProducerFullById",
+                "description": "Complete producer resource\n\nReturns the complete producer resource, including primary data plus related sub-resources, for a producer by id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRandomAnime",
+                "description": "Random anime\n\nReturns a random anime from the indexed catalog.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRandomCharacters",
+                "description": "Random characters\n\nReturns a random character from the indexed catalog.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRandomManga",
+                "description": "Random manga\n\nReturns a random manga from the indexed catalog.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRandomPeople",
+                "description": "Random people\n\nReturns a random person from the indexed catalog.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRandomUsers",
+                "description": "Random users\n\nReturns a random user profile from the indexed catalog.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRecentAnimeRecommendations",
+                "description": "Recent anime recommendations\n\nReturns the most recent anime recommendations from MyAnimeList.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRecentMangaRecommendations",
+                "description": "Recent manga recommendations\n\nReturns the most recent manga recommendations from MyAnimeList.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRecentAnimeReviews",
+                "description": "Recent anime reviews\n\nReturns the most recent anime reviews. Supports pagination via page, with preliminary and spoilers toggles.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRecentMangaReviews",
+                "description": "Recent manga reviews\n\nReturns the most recent manga reviews. Supports pagination via page, with preliminary and spoilers toggles.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getSchedules",
+                "description": "Anime schedule\n\nReturns the weekly airing schedule of anime. Use filter to select a weekday, with kids and sfw to include or exclude entries by their ratings, and pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getSeasonsList",
+                "description": "Seasons list\n\nLists the years and seasons with available anime archives.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getSeasonNow",
+                "description": "Current anime season\n\nReturns the anime currently airing this season. Can be filtered by filter and supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getSeasonUpcoming",
+                "description": "Upcoming anime season\n\nReturns the anime of the upcoming season. Can be filtered by filter and supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getSeason",
+                "description": "Seasonal anime\n\nReturns the anime that aired in a specific year and season. Can be filtered by filter and supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getTopAnime",
+                "description": "Top anime\n\nReturns the top-ranked anime. Can be filtered by type, filter, rating, and sfw.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getTopCharacters",
+                "description": "Top characters\n\nReturns the top-ranked characters.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getTopManga",
+                "description": "Top manga\n\nReturns the top-ranked manga. Can be filtered by type and filter.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getTopPeople",
+                "description": "Top people\n\nReturns the top-ranked people.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getTopReviews",
+                "description": "Top reviews\n\nReturns the top-ranked reviews. Can be filtered by type, with preliminary and spoilers toggles.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUsersSearch",
+                "description": "Users search\n\nSearches the users catalog using the q, gender, location, maxAge, and minAge filters. Supports pagination via page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getRecentlyOnlineUsers",
+                "description": "Recently online users\n\nReturns the users currently online or recently online.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserById",
+                "description": "User by ID\n\nReturns a user profile by their MyAnimeList id.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserProfile",
+                "description": "User profile\n\nReturns the public profile of a user by username.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserAbout",
+                "description": "User about\n\nReturns the profile \"about\" section of a user by username in raw HTML.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserAnimelist",
+                "description": "User animelist\n\nReturns the anime list of a user by username, optionally filtered by status. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserClubs",
+                "description": "User clubs\n\nReturns the clubs joined by a user by username, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserExternal",
+                "description": "User external links\n\nReturns the external links of a user by username.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserFavorites",
+                "description": "User favorites\n\nReturns the favorites of a user by username.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserFriends",
+                "description": "User friends\n\nReturns the friends of a user by username, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserFullProfile",
+                "description": "Complete user profile\n\nReturns the complete profile of a user by username.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserHistory",
+                "description": "User history\n\nReturns the recent anime and manga history of a user by username. Use type to filter to anime or manga entries.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserMangaList",
+                "description": "User manga list\n\nReturns the manga list of a user by username, optionally filtered by status. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserRecommendations",
+                "description": "User recommendations\n\nReturns the recommendations made by a user by username, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserReviews",
+                "description": "User reviews\n\nReturns the reviews written by a user by username, paginated by page.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserStatistics",
+                "description": "User statistics\n\nReturns the statistics of a user by username.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getUserUpdates",
+                "description": "User updates\n\nReturns the recent anime and manga list updates of a user by username.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getWatchRecentEpisodes",
+                "description": "Recently added episodes\n\nReturns recently added episodes currently trending on MyAnimeList.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getWatchPopularEpisodes",
+                "description": "Popular episodes\n\nReturns popular episodes currently trending on MyAnimeList.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getWatchRecentPromos",
+                "description": "Recently added promotional videos\n\nReturns recently added promotional videos currently trending on MyAnimeList.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "getWatchPopularPromos",
+                "description": "Popular promotional videos\n\nReturns popular promotional videos currently trending on MyAnimeList.",
+                "parameters": {
+                    "type": "object",
+                    "properties": [],
+                    "required": []
+                }
+            }
+        }
+    ],
+    "functions": [
+        {
+            "name": "getAnimeSearch",
+            "description": "Anime search\n\nSearches the anime catalog. Accepts filters such as q, type, score, status, rating, genres, order_by, and sort, with pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeById",
+            "description": "Anime details\n\nReturns the details of an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeCharacters",
+            "description": "Anime characters\n\nReturns the characters of an anime by id, together with their voice actors.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeEpisodes",
+            "description": "Anime episodes\n\nReturns the list of episodes for an anime by id, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeEpisodeById",
+            "description": "Anime episode\n\nReturns a single episode of an anime by id and episode.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeExternal",
+            "description": "Anime external links\n\nReturns the external links of an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeForum",
+            "description": "Anime forum topics\n\nReturns the forum topics of an anime by id. Use filter to restrict to all, episode, or other topics.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeFullById",
+            "description": "Complete anime resource\n\nReturns the complete anime resource, including primary data plus related sub-resources, for an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeMoreInfo",
+            "description": "Anime more info\n\nReturns additional trivia and background information about an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeNews",
+            "description": "Anime news\n\nReturns recent news articles for an anime by id, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimePictures",
+            "description": "Anime pictures\n\nReturns the pictures of an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeRecommendations",
+            "description": "Anime recommendations\n\nReturns the recommendations for an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeRelations",
+            "description": "Anime relations\n\nReturns the related entries for an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeReviews",
+            "description": "Anime reviews\n\nReturns the reviews of an anime by id. Supports pagination via page, with preliminary and spoilers toggles for review types.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeStaff",
+            "description": "Anime staff\n\nReturns the staff of an anime by id along with their positions.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeStatistics",
+            "description": "Anime statistics\n\nReturns the statistics of an anime by id, such as watching, completed, and on-hold counts.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeStreaming",
+            "description": "Anime streaming links\n\nReturns the streaming links of an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeThemes",
+            "description": "Anime themes\n\nReturns the opening and ending themes of an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeUserUpdates",
+            "description": "Anime user updates\n\nReturns the recent list updates of users for an anime by id, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeVideos",
+            "description": "Anime videos\n\nReturns the promotional videos, episodes, and music videos of an anime by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeVideosEpisodes",
+            "description": "Anime video episodes\n\nReturns the episode videos of an anime by id, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getCharactersSearch",
+            "description": "Characters search\n\nSearches the characters catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getCharacterById",
+            "description": "Character details\n\nReturns the details of a character by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getCharacterAnime",
+            "description": "Character anime roles\n\nReturns the anime roles of a character by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getCharacterFullById",
+            "description": "Complete character resource\n\nReturns the complete character resource for a character by id, including anime and manga roles, voices, and more.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getCharacterManga",
+            "description": "Character manga roles\n\nReturns the manga roles of a character by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getCharacterPictures",
+            "description": "Character pictures\n\nReturns the pictures of a character by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getCharacterVoiceActors",
+            "description": "Character voice actors\n\nReturns the voice actors of a character by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getClubsSearch",
+            "description": "Clubs search\n\nSearches the clubs catalog using the q, type, category, order_by, sort, and letter filters. Supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getClubsById",
+            "description": "Club details\n\nReturns the details of a club by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getClubMembers",
+            "description": "Club members\n\nReturns the members of a club by id, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getClubRelations",
+            "description": "Club relations\n\nReturns the anime, manga, and characters related to a club by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getClubStaff",
+            "description": "Club staff\n\nReturns the staff of a club by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getAnimeGenres",
+            "description": "Anime genres\n\nReturns the list of anime genres, explicit genres, themes, and demographics. Use filter to select the list type.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaGenres",
+            "description": "Manga genres\n\nReturns the list of manga genres, explicit genres, themes, and demographics. Use filter to select the list type.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMagazines",
+            "description": "Magazines list\n\nSearches the magazines catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaSearch",
+            "description": "Manga search\n\nSearches the manga catalog. Accepts filters such as q, type, score, status, genres, order_by, and sort, with pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaById",
+            "description": "Manga details\n\nReturns the details of a manga by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaCharacters",
+            "description": "Manga characters\n\nReturns the characters of a manga by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaExternal",
+            "description": "Manga external links\n\nReturns the external links of a manga by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaTopics",
+            "description": "Manga forum topics\n\nReturns the forum topics of a manga by id. Use filter to restrict to all, episode, or other topics.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaFullById",
+            "description": "Complete manga resource\n\nReturns the complete manga resource, including primary data plus related sub-resources, for a manga by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaMoreInfo",
+            "description": "Manga more info\n\nReturns additional trivia and background information about a manga by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaNews",
+            "description": "Manga news\n\nReturns recent news articles for a manga by id, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaPictures",
+            "description": "Manga pictures\n\nReturns the pictures of a manga by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaRecommendations",
+            "description": "Manga recommendations\n\nReturns the recommendations for a manga by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaRelations",
+            "description": "Manga relations\n\nReturns the related entries for a manga by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaReviews",
+            "description": "Manga reviews\n\nReturns the reviews of a manga by id. Supports pagination via page, with preliminary and spoilers toggles for review types.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaStatistics",
+            "description": "Manga statistics\n\nReturns the statistics of a manga by id, such as reading, completed, and on-hold counts.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getMangaUserUpdates",
+            "description": "Manga user updates\n\nReturns the recent list updates of users for a manga by id, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getPeopleSearch",
+            "description": "People search\n\nSearches the people catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getPersonById",
+            "description": "Person details\n\nReturns the details of a person by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getPersonAnime",
+            "description": "Person anime roles\n\nReturns the anime roles of a person by id with their staff positions.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getPersonFullById",
+            "description": "Complete person resource\n\nReturns the complete person resource for a person by id, including anime and manga roles, voices, and more.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getPersonManga",
+            "description": "Person manga roles\n\nReturns the manga roles of a person by id with their staff positions.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getPersonPictures",
+            "description": "Person pictures\n\nReturns the pictures of a person by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getPersonVoices",
+            "description": "Person voice acting roles\n\nReturns the voice acting roles of a person by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getProducers",
+            "description": "Producers list\n\nSearches the producers catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getProducerById",
+            "description": "Producer details\n\nReturns the details of a producer by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getProducerExternal",
+            "description": "Producer external links\n\nReturns the external links of a producer by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getProducerFullById",
+            "description": "Complete producer resource\n\nReturns the complete producer resource, including primary data plus related sub-resources, for a producer by id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRandomAnime",
+            "description": "Random anime\n\nReturns a random anime from the indexed catalog.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRandomCharacters",
+            "description": "Random characters\n\nReturns a random character from the indexed catalog.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRandomManga",
+            "description": "Random manga\n\nReturns a random manga from the indexed catalog.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRandomPeople",
+            "description": "Random people\n\nReturns a random person from the indexed catalog.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRandomUsers",
+            "description": "Random users\n\nReturns a random user profile from the indexed catalog.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRecentAnimeRecommendations",
+            "description": "Recent anime recommendations\n\nReturns the most recent anime recommendations from MyAnimeList.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRecentMangaRecommendations",
+            "description": "Recent manga recommendations\n\nReturns the most recent manga recommendations from MyAnimeList.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRecentAnimeReviews",
+            "description": "Recent anime reviews\n\nReturns the most recent anime reviews. Supports pagination via page, with preliminary and spoilers toggles.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRecentMangaReviews",
+            "description": "Recent manga reviews\n\nReturns the most recent manga reviews. Supports pagination via page, with preliminary and spoilers toggles.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getSchedules",
+            "description": "Anime schedule\n\nReturns the weekly airing schedule of anime. Use filter to select a weekday, with kids and sfw to include or exclude entries by their ratings, and pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getSeasonsList",
+            "description": "Seasons list\n\nLists the years and seasons with available anime archives.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getSeasonNow",
+            "description": "Current anime season\n\nReturns the anime currently airing this season. Can be filtered by filter and supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getSeasonUpcoming",
+            "description": "Upcoming anime season\n\nReturns the anime of the upcoming season. Can be filtered by filter and supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getSeason",
+            "description": "Seasonal anime\n\nReturns the anime that aired in a specific year and season. Can be filtered by filter and supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getTopAnime",
+            "description": "Top anime\n\nReturns the top-ranked anime. Can be filtered by type, filter, rating, and sfw.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getTopCharacters",
+            "description": "Top characters\n\nReturns the top-ranked characters.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getTopManga",
+            "description": "Top manga\n\nReturns the top-ranked manga. Can be filtered by type and filter.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getTopPeople",
+            "description": "Top people\n\nReturns the top-ranked people.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getTopReviews",
+            "description": "Top reviews\n\nReturns the top-ranked reviews. Can be filtered by type, with preliminary and spoilers toggles.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUsersSearch",
+            "description": "Users search\n\nSearches the users catalog using the q, gender, location, maxAge, and minAge filters. Supports pagination via page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getRecentlyOnlineUsers",
+            "description": "Recently online users\n\nReturns the users currently online or recently online.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserById",
+            "description": "User by ID\n\nReturns a user profile by their MyAnimeList id.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserProfile",
+            "description": "User profile\n\nReturns the public profile of a user by username.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserAbout",
+            "description": "User about\n\nReturns the profile \"about\" section of a user by username in raw HTML.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserAnimelist",
+            "description": "User animelist\n\nReturns the anime list of a user by username, optionally filtered by status. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserClubs",
+            "description": "User clubs\n\nReturns the clubs joined by a user by username, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserExternal",
+            "description": "User external links\n\nReturns the external links of a user by username.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserFavorites",
+            "description": "User favorites\n\nReturns the favorites of a user by username.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserFriends",
+            "description": "User friends\n\nReturns the friends of a user by username, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserFullProfile",
+            "description": "Complete user profile\n\nReturns the complete profile of a user by username.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserHistory",
+            "description": "User history\n\nReturns the recent anime and manga history of a user by username. Use type to filter to anime or manga entries.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserMangaList",
+            "description": "User manga list\n\nReturns the manga list of a user by username, optionally filtered by status. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserRecommendations",
+            "description": "User recommendations\n\nReturns the recommendations made by a user by username, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserReviews",
+            "description": "User reviews\n\nReturns the reviews written by a user by username, paginated by page.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserStatistics",
+            "description": "User statistics\n\nReturns the statistics of a user by username.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getUserUpdates",
+            "description": "User updates\n\nReturns the recent anime and manga list updates of a user by username.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getWatchRecentEpisodes",
+            "description": "Recently added episodes\n\nReturns recently added episodes currently trending on MyAnimeList.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getWatchPopularEpisodes",
+            "description": "Popular episodes\n\nReturns popular episodes currently trending on MyAnimeList.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getWatchRecentPromos",
+            "description": "Recently added promotional videos\n\nReturns recently added promotional videos currently trending on MyAnimeList.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        },
+        {
+            "name": "getWatchPopularPromos",
+            "description": "Popular promotional videos\n\nReturns popular promotional videos currently trending on MyAnimeList.",
+            "parameters": {
+                "type": "object",
+                "properties": [],
+                "required": []
+            }
+        }
+    ]
+}

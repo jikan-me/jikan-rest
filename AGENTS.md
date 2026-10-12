@@ -1,0 +1,86 @@
+# AGENTS.md — Jikan REST API v4
+
+Agent-facing quickstart for the `laravel-12` branch. Read this first; it is the
+source of truth for how to run, verify, and change this project.
+
+## What this is
+
+A read-only public JSON API over MyAnimeList data (v4 contract, ~101 GET
+endpoints). Stack: **Laravel 13** · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb`
+v5) · Octane (RoadRunner default) · Scout/Typesense optional. The **public v4
+JSON contract is immutable** — never change a default response shape.
+
+## Quick start
+
+```bash
+./install.sh --yes            # env + deps + runtime (idempotent)
+./install.sh --dry-run        # preview without executing
+script/server                 # RoadRunner on :8000 (or SERVER=frankenphp|serve)
+tools/dev/php vendor/bin/phpunit --no-coverage
+```
+
+`tools/dev/php` is a **gitignored** macOS wrapper (Homebrew php@8.4). On Linux or
+fresh clones use your distro php or `PHP_BIN=/path/to/php tools/dev/php …`.
+
+## Canonical commands
+
+| Task | Command |
+|---|---|
+| Tests | `tools/dev/php vendor/bin/phpunit --no-coverage` |
+| Lint | `tools/dev/php vendor/bin/pint --test app routes config tests` |
+| Static analysis | `tools/dev/php -d error_reporting=24575 vendor/bin/phpstan analyse --no-progress` |
+| Regenerate OpenAPI spec | `tools/dev/php artisan l5-swagger:generate` |
+| Regenerate agent catalog+manifest | `tools/dev/php composer endpoints:write` |
+| Parity harness | `tools/dev/php tools/parity/snapshot.php …` + `compare.php` |
+| Audit suite | `/path/to/backend-suite audit <name>` (see `.backend-suite/`) |
+| Full data index | `tools/dev/php artisan indexer:anime` / `indexer:manga` (long) |
+
+Generated artifacts (`storage/api-docs/api-docs.json`, `docs/ai/*`) are
+committed canonical: **do not hand-edit** — regenerate, and `endpoints:check` /
+`git diff --exit-code` must stay clean.
+
+## Repo map
+
+- `docs/INDEX.md` — question → file map (start here)
+- `docs/AGENTS.md` / `AGENTS.md` — this agent guide
+- `llms.txt` — LLM index of docs + contract (also served at `GET /llms.txt`)
+- `docs/ARCHITECTURE.md`, `docs/DESIGN.md` — how / scope
+- `docs/SETUP.md`, `docs/PROVIDERS.md` — native setup + services matrix
+- `docs/RFC.md`, `docs/UPSTREAM_PR.md` — decisions + upstream playbook
+- `.backend-suite/` — machine-readable quality context (audits, doc roles)
+- Contract: OpenAPI at `GET /v4/docs/openapi`; function-calling manifest at
+  `GET /v4/ai/manifest.json`
+
+## How to add an endpoint
+
+Follow `docs/RECIPE_ADD_ENDPOINT.md` — route → DTO → handler → service → model →
+resource → `@OA` attribute → test → `l5-swagger:generate` → parity → audits.
+End: full suite green, generate exit 0, audits clean, generated artifacts
+unmodified.
+
+## Conventions & gotchas
+
+- **v4 contract**: default responses are frozen. Only additive, opt-in changes
+  (`fields=`, `?ids=`) are acceptable.
+- **Enums** (`app/Enums/*`): spatie/laravel-enum reads its values from the class
+  **docblock** `@method static self value()` lines — never delete them when
+  editing the `#[OA\Schema]` attribute above an enum class.
+- **swagger-php 6**: annotations must be **PHP 8 attributes** (`#[OA\Get(…)]`),
+  not docblock `@OA\Get`. Operation `path`/`operationId`/`summary`/`description`
+  live inside the attribute.
+- **Search**: models implement the Scout contract on
+  `JikanApiSearchableModel` (`typesenseCollectionSchema()` /
+  `typesenseSearchParameters()`); collections auto-create on import.
+- **Routes**: v4 uses `'uses' => 'Controller@method'` strings under the group
+  namespace (route-coverage + endpoint-parity audits depend on it).
+- **Branch rule**: everything ships on `laravel-12` (no splits).
+- **Getting the tarpit right**: don't mutate `env()` outside config; keep the
+  app `config:cache`-safe.
+
+## Gates that must stay green
+
+1. `vendor/bin/phpunit --no-coverage` → 292/2707, 0 failures.
+2. `l5-swagger:generate` → exit 0; `artisan endpoints:check` → exit 0.
+3. Audits: `endpoint-parity`, `route-coverage`, `toolchain-gates`,
+   `proposal-status` → exit 0.
+4. `git diff --exit-code` on generated artifacts after regeneration.

@@ -52,6 +52,25 @@ Route::redirect('/v4/api-docs', '/v4/docs/openapi', 301);
 Route::redirect('/docs', '/v4/docs', 301);
 Route::redirect('/v4/documentation', '/v4/docs', 301);
 
+// LLM/machine index (llmstxt.org style) — serves the committed llms.txt.
+Route::get('/llms.txt', function () {
+    $index = base_path('llms.txt');
+
+    return is_file($index)
+        ? response()->file($index, ['Content-Type' => 'text/plain; charset=utf-8'])
+        : response()->json(['error' => 'llms.txt not found'], 404);
+});
+
+// AI tool-calling manifest (committed canonical at docs/ai/manifest.json;
+// regenerate with `composer endpoints:write`, verify with endpoints:check).
+Route::get('/v4/ai/manifest.json', function () {
+    $manifest = base_path('docs/ai/manifest.json');
+
+    return is_file($manifest)
+        ? response()->file($manifest, ['Content-Type' => 'application/json; charset=utf-8'])
+        : response()->json(['error' => 'AI manifest not generated — run composer endpoints:write'], 404);
+});
+
 // Health/liveness endpoint. Registered explicitly: withRouting(health:) only works
 // when no custom `using` closure is provided (we load the v4 routes ourselves).
 Route::get('/up', fn () => response('OK', 200));

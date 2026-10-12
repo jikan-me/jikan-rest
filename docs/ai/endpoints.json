@@ -1,0 +1,1016 @@
+{
+    "schema_version": "1.0",
+    "source": "/v4/docs/openapi",
+    "endpoints": [
+        {
+            "method": "GET",
+            "path": "/anime",
+            "operationId": "getAnimeSearch",
+            "summary": "Anime search",
+            "description": "Searches the anime catalog. Accepts filters such as **q**, **type**, **score**, **status**, **rating**, **genres**, **order_by**, and **sort**, with pagination via **page**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}",
+            "operationId": "getAnimeById",
+            "summary": "Anime details",
+            "description": "Returns the details of an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/characters",
+            "operationId": "getAnimeCharacters",
+            "summary": "Anime characters",
+            "description": "Returns the characters of an anime by **id**, together with their voice actors.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/episodes",
+            "operationId": "getAnimeEpisodes",
+            "summary": "Anime episodes",
+            "description": "Returns the list of episodes for an anime by **id**, paginated by **page**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/episodes/{episode}",
+            "operationId": "getAnimeEpisodeById",
+            "summary": "Anime episode",
+            "description": "Returns a single episode of an anime by **id** and **episode**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/external",
+            "operationId": "getAnimeExternal",
+            "summary": "Anime external links",
+            "description": "Returns the external links of an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/forum",
+            "operationId": "getAnimeForum",
+            "summary": "Anime forum topics",
+            "description": "Returns the forum topics of an anime by **id**. Use **filter** to restrict to all, episode, or other topics.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/full",
+            "operationId": "getAnimeFullById",
+            "summary": "Complete anime resource",
+            "description": "Returns the complete anime resource, including primary data plus related sub-resources, for an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/moreinfo",
+            "operationId": "getAnimeMoreInfo",
+            "summary": "Anime more info",
+            "description": "Returns additional trivia and background information about an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/news",
+            "operationId": "getAnimeNews",
+            "summary": "Anime news",
+            "description": "Returns recent news articles for an anime by **id**, paginated by **page**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/pictures",
+            "operationId": "getAnimePictures",
+            "summary": "Anime pictures",
+            "description": "Returns the pictures of an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/recommendations",
+            "operationId": "getAnimeRecommendations",
+            "summary": "Anime recommendations",
+            "description": "Returns the recommendations for an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/relations",
+            "operationId": "getAnimeRelations",
+            "summary": "Anime relations",
+            "description": "Returns the related entries for an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/reviews",
+            "operationId": "getAnimeReviews",
+            "summary": "Anime reviews",
+            "description": "Returns the reviews of an anime by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/staff",
+            "operationId": "getAnimeStaff",
+            "summary": "Anime staff",
+            "description": "Returns the staff of an anime by **id** along with their positions.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/statistics",
+            "operationId": "getAnimeStatistics",
+            "summary": "Anime statistics",
+            "description": "Returns the statistics of an anime by **id**, such as watching, completed, and on-hold counts.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/streaming",
+            "operationId": "getAnimeStreaming",
+            "summary": "Anime streaming links",
+            "description": "Returns the streaming links of an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/themes",
+            "operationId": "getAnimeThemes",
+            "summary": "Anime themes",
+            "description": "Returns the opening and ending themes of an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/userupdates",
+            "operationId": "getAnimeUserUpdates",
+            "summary": "Anime user updates",
+            "description": "Returns the recent list updates of users for an anime by **id**, paginated by **page**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/videos",
+            "operationId": "getAnimeVideos",
+            "summary": "Anime videos",
+            "description": "Returns the promotional videos, episodes, and music videos of an anime by **id**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/anime/{id}/videos/episodes",
+            "operationId": "getAnimeVideosEpisodes",
+            "summary": "Anime video episodes",
+            "description": "Returns the episode videos of an anime by **id**, paginated by **page**.",
+            "tags": [
+                "anime"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/characters",
+            "operationId": "getCharactersSearch",
+            "summary": "Characters search",
+            "description": "Searches the characters catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
+            "tags": [
+                "characters"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/characters/{id}",
+            "operationId": "getCharacterById",
+            "summary": "Character details",
+            "description": "Returns the details of a character by **id**.",
+            "tags": [
+                "characters"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/characters/{id}/anime",
+            "operationId": "getCharacterAnime",
+            "summary": "Character anime roles",
+            "description": "Returns the anime roles of a character by **id**.",
+            "tags": [
+                "characters"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/characters/{id}/full",
+            "operationId": "getCharacterFullById",
+            "summary": "Complete character resource",
+            "description": "Returns the complete character resource for a character by **id**, including anime and manga roles, voices, and more.",
+            "tags": [
+                "characters"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/characters/{id}/manga",
+            "operationId": "getCharacterManga",
+            "summary": "Character manga roles",
+            "description": "Returns the manga roles of a character by **id**.",
+            "tags": [
+                "characters"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/characters/{id}/pictures",
+            "operationId": "getCharacterPictures",
+            "summary": "Character pictures",
+            "description": "Returns the pictures of a character by **id**.",
+            "tags": [
+                "characters"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/characters/{id}/voices",
+            "operationId": "getCharacterVoiceActors",
+            "summary": "Character voice actors",
+            "description": "Returns the voice actors of a character by **id**.",
+            "tags": [
+                "characters"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/clubs",
+            "operationId": "getClubsSearch",
+            "summary": "Clubs search",
+            "description": "Searches the clubs catalog using the **q**, **type**, **category**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
+            "tags": [
+                "clubs"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/clubs/{id}",
+            "operationId": "getClubsById",
+            "summary": "Club details",
+            "description": "Returns the details of a club by **id**.",
+            "tags": [
+                "clubs"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/clubs/{id}/members",
+            "operationId": "getClubMembers",
+            "summary": "Club members",
+            "description": "Returns the members of a club by **id**, paginated by **page**.",
+            "tags": [
+                "clubs"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/clubs/{id}/relations",
+            "operationId": "getClubRelations",
+            "summary": "Club relations",
+            "description": "Returns the anime, manga, and characters related to a club by **id**.",
+            "tags": [
+                "clubs"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/clubs/{id}/staff",
+            "operationId": "getClubStaff",
+            "summary": "Club staff",
+            "description": "Returns the staff of a club by **id**.",
+            "tags": [
+                "clubs"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/genres/anime",
+            "operationId": "getAnimeGenres",
+            "summary": "Anime genres",
+            "description": "Returns the list of anime genres, explicit genres, themes, and demographics. Use **filter** to select the list type.",
+            "tags": [
+                "genres"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/genres/manga",
+            "operationId": "getMangaGenres",
+            "summary": "Manga genres",
+            "description": "Returns the list of manga genres, explicit genres, themes, and demographics. Use **filter** to select the list type.",
+            "tags": [
+                "genres"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/magazines",
+            "operationId": "getMagazines",
+            "summary": "Magazines list",
+            "description": "Searches the magazines catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
+            "tags": [
+                "magazines"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga",
+            "operationId": "getMangaSearch",
+            "summary": "Manga search",
+            "description": "Searches the manga catalog. Accepts filters such as **q**, **type**, **score**, **status**, **genres**, **order_by**, and **sort**, with pagination via **page**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}",
+            "operationId": "getMangaById",
+            "summary": "Manga details",
+            "description": "Returns the details of a manga by **id**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/characters",
+            "operationId": "getMangaCharacters",
+            "summary": "Manga characters",
+            "description": "Returns the characters of a manga by **id**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/external",
+            "operationId": "getMangaExternal",
+            "summary": "Manga external links",
+            "description": "Returns the external links of a manga by **id**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/forum",
+            "operationId": "getMangaTopics",
+            "summary": "Manga forum topics",
+            "description": "Returns the forum topics of a manga by **id**. Use **filter** to restrict to all, episode, or other topics.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/full",
+            "operationId": "getMangaFullById",
+            "summary": "Complete manga resource",
+            "description": "Returns the complete manga resource, including primary data plus related sub-resources, for a manga by **id**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/moreinfo",
+            "operationId": "getMangaMoreInfo",
+            "summary": "Manga more info",
+            "description": "Returns additional trivia and background information about a manga by **id**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/news",
+            "operationId": "getMangaNews",
+            "summary": "Manga news",
+            "description": "Returns recent news articles for a manga by **id**, paginated by **page**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/pictures",
+            "operationId": "getMangaPictures",
+            "summary": "Manga pictures",
+            "description": "Returns the pictures of a manga by **id**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/recommendations",
+            "operationId": "getMangaRecommendations",
+            "summary": "Manga recommendations",
+            "description": "Returns the recommendations for a manga by **id**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/relations",
+            "operationId": "getMangaRelations",
+            "summary": "Manga relations",
+            "description": "Returns the related entries for a manga by **id**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/reviews",
+            "operationId": "getMangaReviews",
+            "summary": "Manga reviews",
+            "description": "Returns the reviews of a manga by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/statistics",
+            "operationId": "getMangaStatistics",
+            "summary": "Manga statistics",
+            "description": "Returns the statistics of a manga by **id**, such as reading, completed, and on-hold counts.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/manga/{id}/userupdates",
+            "operationId": "getMangaUserUpdates",
+            "summary": "Manga user updates",
+            "description": "Returns the recent list updates of users for a manga by **id**, paginated by **page**.",
+            "tags": [
+                "manga"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/people",
+            "operationId": "getPeopleSearch",
+            "summary": "People search",
+            "description": "Searches the people catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
+            "tags": [
+                "people"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/people/{id}",
+            "operationId": "getPersonById",
+            "summary": "Person details",
+            "description": "Returns the details of a person by **id**.",
+            "tags": [
+                "people"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/people/{id}/anime",
+            "operationId": "getPersonAnime",
+            "summary": "Person anime roles",
+            "description": "Returns the anime roles of a person by **id** with their staff positions.",
+            "tags": [
+                "people"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/people/{id}/full",
+            "operationId": "getPersonFullById",
+            "summary": "Complete person resource",
+            "description": "Returns the complete person resource for a person by **id**, including anime and manga roles, voices, and more.",
+            "tags": [
+                "people"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/people/{id}/manga",
+            "operationId": "getPersonManga",
+            "summary": "Person manga roles",
+            "description": "Returns the manga roles of a person by **id** with their staff positions.",
+            "tags": [
+                "people"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/people/{id}/pictures",
+            "operationId": "getPersonPictures",
+            "summary": "Person pictures",
+            "description": "Returns the pictures of a person by **id**.",
+            "tags": [
+                "people"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/people/{id}/voices",
+            "operationId": "getPersonVoices",
+            "summary": "Person voice acting roles",
+            "description": "Returns the voice acting roles of a person by **id**.",
+            "tags": [
+                "people"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/producers",
+            "operationId": "getProducers",
+            "summary": "Producers list",
+            "description": "Searches the producers catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
+            "tags": [
+                "producers"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/producers/{id}",
+            "operationId": "getProducerById",
+            "summary": "Producer details",
+            "description": "Returns the details of a producer by **id**.",
+            "tags": [
+                "producers"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/producers/{id}/external",
+            "operationId": "getProducerExternal",
+            "summary": "Producer external links",
+            "description": "Returns the external links of a producer by **id**.",
+            "tags": [
+                "producers"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/producers/{id}/full",
+            "operationId": "getProducerFullById",
+            "summary": "Complete producer resource",
+            "description": "Returns the complete producer resource, including primary data plus related sub-resources, for a producer by **id**.",
+            "tags": [
+                "producers"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/random/anime",
+            "operationId": "getRandomAnime",
+            "summary": "Random anime",
+            "description": "Returns a random anime from the indexed catalog.",
+            "tags": [
+                "random"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/random/characters",
+            "operationId": "getRandomCharacters",
+            "summary": "Random characters",
+            "description": "Returns a random character from the indexed catalog.",
+            "tags": [
+                "random"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/random/manga",
+            "operationId": "getRandomManga",
+            "summary": "Random manga",
+            "description": "Returns a random manga from the indexed catalog.",
+            "tags": [
+                "random"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/random/people",
+            "operationId": "getRandomPeople",
+            "summary": "Random people",
+            "description": "Returns a random person from the indexed catalog.",
+            "tags": [
+                "random"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/random/users",
+            "operationId": "getRandomUsers",
+            "summary": "Random users",
+            "description": "Returns a random user profile from the indexed catalog.",
+            "tags": [
+                "random"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/recommendations/anime",
+            "operationId": "getRecentAnimeRecommendations",
+            "summary": "Recent anime recommendations",
+            "description": "Returns the most recent anime recommendations from MyAnimeList.",
+            "tags": [
+                "recommendations"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/recommendations/manga",
+            "operationId": "getRecentMangaRecommendations",
+            "summary": "Recent manga recommendations",
+            "description": "Returns the most recent manga recommendations from MyAnimeList.",
+            "tags": [
+                "recommendations"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/reviews/anime",
+            "operationId": "getRecentAnimeReviews",
+            "summary": "Recent anime reviews",
+            "description": "Returns the most recent anime reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.",
+            "tags": [
+                "reviews"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/reviews/manga",
+            "operationId": "getRecentMangaReviews",
+            "summary": "Recent manga reviews",
+            "description": "Returns the most recent manga reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.",
+            "tags": [
+                "reviews"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/schedules",
+            "operationId": "getSchedules",
+            "summary": "Anime schedule",
+            "description": "Returns the weekly airing schedule of anime. Use **filter** to select a weekday, with **kids** and **sfw** to include or exclude entries by their ratings, and pagination via **page**.",
+            "tags": [
+                "schedules"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/seasons",
+            "operationId": "getSeasonsList",
+            "summary": "Seasons list",
+            "description": "Lists the years and seasons with available anime archives.",
+            "tags": [
+                "seasons"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/seasons/now",
+            "operationId": "getSeasonNow",
+            "summary": "Current anime season",
+            "description": "Returns the anime currently airing this season. Can be filtered by **filter** and supports pagination via **page**.",
+            "tags": [
+                "seasons"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/seasons/upcoming",
+            "operationId": "getSeasonUpcoming",
+            "summary": "Upcoming anime season",
+            "description": "Returns the anime of the upcoming season. Can be filtered by **filter** and supports pagination via **page**.",
+            "tags": [
+                "seasons"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/seasons/{year}/{season}",
+            "operationId": "getSeason",
+            "summary": "Seasonal anime",
+            "description": "Returns the anime that aired in a specific **year** and **season**. Can be filtered by **filter** and supports pagination via **page**.",
+            "tags": [
+                "seasons"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/top/anime",
+            "operationId": "getTopAnime",
+            "summary": "Top anime",
+            "description": "Returns the top-ranked anime. Can be filtered by **type**, **filter**, **rating**, and **sfw**.",
+            "tags": [
+                "top"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/top/characters",
+            "operationId": "getTopCharacters",
+            "summary": "Top characters",
+            "description": "Returns the top-ranked characters.",
+            "tags": [
+                "top"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/top/manga",
+            "operationId": "getTopManga",
+            "summary": "Top manga",
+            "description": "Returns the top-ranked manga. Can be filtered by **type** and **filter**.",
+            "tags": [
+                "top"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/top/people",
+            "operationId": "getTopPeople",
+            "summary": "Top people",
+            "description": "Returns the top-ranked people.",
+            "tags": [
+                "top"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/top/reviews",
+            "operationId": "getTopReviews",
+            "summary": "Top reviews",
+            "description": "Returns the top-ranked reviews. Can be filtered by **type**, with **preliminary** and **spoilers** toggles.",
+            "tags": [
+                "top"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users",
+            "operationId": "getUsersSearch",
+            "summary": "Users search",
+            "description": "Searches the users catalog using the **q**, **gender**, **location**, **maxAge**, and **minAge** filters. Supports pagination via **page**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/recentlyonline",
+            "operationId": "getRecentlyOnlineUsers",
+            "summary": "Recently online users",
+            "description": "Returns the users currently online or recently online.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/userbyid/{id}",
+            "operationId": "getUserById",
+            "summary": "User by ID",
+            "description": "Returns a user profile by their MyAnimeList **id**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}",
+            "operationId": "getUserProfile",
+            "summary": "User profile",
+            "description": "Returns the public profile of a user by **username**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/about",
+            "operationId": "getUserAbout",
+            "summary": "User about",
+            "description": "Returns the profile \"about\" section of a user by **username** in raw HTML.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/animelist",
+            "operationId": "getUserAnimelist",
+            "summary": "User animelist",
+            "description": "Returns the anime list of a user by **username**, optionally filtered by **status**. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/clubs",
+            "operationId": "getUserClubs",
+            "summary": "User clubs",
+            "description": "Returns the clubs joined by a user by **username**, paginated by **page**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/external",
+            "operationId": "getUserExternal",
+            "summary": "User external links",
+            "description": "Returns the external links of a user by **username**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/favorites",
+            "operationId": "getUserFavorites",
+            "summary": "User favorites",
+            "description": "Returns the favorites of a user by **username**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/friends",
+            "operationId": "getUserFriends",
+            "summary": "User friends",
+            "description": "Returns the friends of a user by **username**, paginated by **page**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/full",
+            "operationId": "getUserFullProfile",
+            "summary": "Complete user profile",
+            "description": "Returns the complete profile of a user by **username**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/history",
+            "operationId": "getUserHistory",
+            "summary": "User history",
+            "description": "Returns the recent anime and manga history of a user by **username**. Use **type** to filter to anime or manga entries.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/mangalist",
+            "operationId": "getUserMangaList",
+            "summary": "User manga list",
+            "description": "Returns the manga list of a user by **username**, optionally filtered by **status**. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/recommendations",
+            "operationId": "getUserRecommendations",
+            "summary": "User recommendations",
+            "description": "Returns the recommendations made by a user by **username**, paginated by **page**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/reviews",
+            "operationId": "getUserReviews",
+            "summary": "User reviews",
+            "description": "Returns the reviews written by a user by **username**, paginated by **page**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/statistics",
+            "operationId": "getUserStatistics",
+            "summary": "User statistics",
+            "description": "Returns the statistics of a user by **username**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/users/{username}/userupdates",
+            "operationId": "getUserUpdates",
+            "summary": "User updates",
+            "description": "Returns the recent anime and manga list updates of a user by **username**.",
+            "tags": [
+                "users"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/watch/episodes",
+            "operationId": "getWatchRecentEpisodes",
+            "summary": "Recently added episodes",
+            "description": "Returns recently added episodes currently trending on MyAnimeList.",
+            "tags": [
+                "watch"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/watch/episodes/popular",
+            "operationId": "getWatchPopularEpisodes",
+            "summary": "Popular episodes",
+            "description": "Returns popular episodes currently trending on MyAnimeList.",
+            "tags": [
+                "watch"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/watch/promos",
+            "operationId": "getWatchRecentPromos",
+            "summary": "Recently added promotional videos",
+            "description": "Returns recently added promotional videos currently trending on MyAnimeList.",
+            "tags": [
+                "watch"
+            ]
+        },
+        {
+            "method": "GET",
+            "path": "/watch/promos/popular",
+            "operationId": "getWatchPopularPromos",
+            "summary": "Popular promotional videos",
+            "description": "Returns popular promotional videos currently trending on MyAnimeList.",
+            "tags": [
+                "watch"
+            ]
+        }
+    ]
+}

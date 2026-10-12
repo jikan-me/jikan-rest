@@ -1068,3 +1068,34 @@ Static audit of the GitHub Actions workflows (no runner available):
   ignoreError entries (dead since the Goutte shim was dropped); PHPStan gate now
   logs zero warnings. `container-image-release.yml` validated — clean (no ARGs,
   RR arch auto-detect, standard multi-arch digest flow).
+
+## 28. AI/LLM modernization — phases 1 & 2 landed (2026-10-12)
+
+Executed the first two phases of `docs/proposals/2026-10-12-ai-llm-modernization.md`
+(per decisions: AGENTS.md+CLAUDE.md; llms.txt committed **and** served; commit-canonical
+artifacts with CI diff guards; `/v4/ai/manifest.json` **and** MCP as product — MCP later;
+eval as acceptance).
+
+**Phase 1 — agent & machine entrypoints**
+- `AGENTS.md` (root) — agent quickstart: commands (test/pint/phpstan/generate/parity/audits),
+  repo map, add-an-endpoint recipe pointer, conventions (v4 immutability, enum venerated
+  docblocks, swagger-php-6 attributes, branch rule), green-gates list.
+- `CLAUDE.md` — thin include pointing at AGENTS.md + the 3 most critical rules.
+- `llms.txt` (root, llmstxt.org style) — LLM index of docs + contract + endpoints; served at
+  **`GET /llms.txt`** (outside the throttled group; text/plain).
+- `docs/INDEX.md` — question → file table; linked from README.
+
+**Phase 2 — agent interfaces + artifact freshness**
+- `composer endpoints:write` / `endpoints:check` (`EndpointsCommand`) — deterministic
+  generation/verification of the endpoint catalog + tool manifest from the OpenAPI spec.
+- **`GET /v4/ai/manifest.json`** — OpenAI-style `tools` (+ legacy `functions`) for all 101
+  operations (name=operationId, description=summary+description, JSON-schema params incl.
+  enums/required). Committed canonical at `docs/ai/{endpoints.json,manifest.json}`.
+- CI: new `artifact-freshness` job — regenerates spec + artifacts and fails on `git diff`
+  drift; serve-smoke checks `/llms.txt` + `/v4/ai/manifest.json`. (Runner-gated execute;
+  the same commands are green locally.)
+- `docs/RECIPE_ADD_ENDPOINT.md` — the end-to-end recipe (route → DTO → handler → service →
+  resource → `@OA` attr → test → generate → audits), the WS-F acceptance path.
+- Verified: `endpoints:check` exit 0, `l5-swagger:generate` exit 0, endpoint-parity +
+  route-coverage + toolchain-gates + proposal-status audits green, `/llms.txt` +
+  `/v4/ai/manifest.json` serve 200. Remaining phases (3–6) tracked in a GitHub issue.

@@ -1,0 +1,45 @@
+# Jikan REST API v4
+
+> Unofficial MyAnimeList.net REST API. Read-only public JSON API: anime, manga,
+> characters, people, producers, magazines, genres, top/seasons/schedules,
+> user profiles, random, and search. Contract is OpenAPI; rendered docs are
+> Scalar. Machine/AI-first pointers are below.
+
+## Notes
+- Base URL: `https://api.jikan.moe/v4/` (local: `http://localhost:8000/v4/`).
+- The v4 JSON contract is immutable for default requests; only additive opt-in
+  parameters exist.
+- No auth. Rate-limited per IP. Errors use `{status, type, message}`.
+- Data is scraped from MyAnimeList and cached (per-endpoint TTL).
+
+## Docs
+- [Repo agent guide](AGENTS.md)
+- [Doc index (question → file)](docs/INDEX.md)
+- [Setup / native install](docs/SETUP.md)
+- [Services & providers matrix](docs/PROVIDERS.md)
+- [Architecture](docs/ARCHITECTURE.md) · [Design/scope](docs/DESIGN.md)
+- [Product-readiness gates](docs/PRODUCTION-READINESS.md)
+- [Changelog / everything done](docs/PR_CHANGELOG.md) · [RFC/decisions](docs/RFC.md)
+- [Proposals](docs/proposals/2026-10-12-ai-llm-modernization.md)
+- [Upstream PR playbook](docs/UPSTREAM_PR.md)
+
+## Contract (machine-readable)
+- OpenAPI spec: `GET /v4/docs/openapi` (JSON; regenerate with `artisan l5-swagger:generate`)
+- Docs UI (Scalar): `GET /v4/docs`
+- Function-calling manifest (OpenAI/Anthropic tool shapes): `GET /v4/ai/manifest.json`
+- LLM index (this file): `GET /llms.txt`
+
+## Endpoints (short)
+- `anime`, `manga`, `characters`, `people` — detail + sub-resources (`/full`,
+  `/characters`, `/staff`, `/voices`, `/pictures`, `/statistics`, `/reviews`, …)
+- Search: `anime?q=…`, `manga?q=…`, `characters?q=…`, `people?q=…`, `users?q=…`,
+  plus filters (`type`, `score`, `status`, `genres`, `order_by`, `sort`, …)
+- Catalogs: `top/*`, `seasons/*`, `schedules`, `producers`, `magazines`, `genres/*`
+- Community: `users/{username}/*` (profile, history, friends, animelist, reviews…)
+- Meta: `/random/*`, `/recommendations/*`, `/reviews/*`, `/watch/*`
+- Full surface in the OpenAPI spec or `/v4/ai/manifest.json`.
+
+## Related
+- Upstream: [jikan-me/jikan](https://github.com/jikan-me/jikan) (PHP scraper/parser),
+  [jikan-me/jikan-rest](https://github.com/jikan-me/jikan-rest).
+- Status: [status.jikan.moe](https://status.jikan.moe) · Discord: http://discord.jikan.moe

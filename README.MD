@@ -20,6 +20,10 @@ https://github.com/jikan-me/jikan-rest/tree/v3
 
 ⚠ v3 is discontinued and will no longer receive any updates.
 
+**For agents & AI:** start at [`AGENTS.md`](AGENTS.md) (agent quickstart), [`llms.txt`](llms.txt) /
+`GET /llms.txt` (LLM index), [`docs/INDEX.md`](docs/INDEX.md) (question → file), the OpenAPI spec at
+`GET /v4/docs/openapi`, and the function-calling manifest at `GET /v4/ai/manifest.json`.
+
 ### Installation (self-host)
 
 **Stack:** Laravel 13 · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb` v5) · Octane (RoadRunner default / FrankenPHP opt-in) · PHPUnit 12 · Laravel Scout search. Run it natively **or** with Docker.

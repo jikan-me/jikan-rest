@@ -107,3 +107,35 @@ jobs:
         run: |
           ls -1 storage/logs/*.log 2>/dev/null || true
           tail -50 storage/logs/laravel.log 2>/dev/null || true
+  artifact-freshness:
+    name: Agent artifacts — spec, manifest, catalog
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:Y2kY4Q0VwrVnlA+iihSWX9ZUlpHew19c9XMzCVMUn4A=
+      DB_DATABASE: jikan_tests
+      CACHE_DRIVER: array
+      GITHUB_REPORTING: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          coverage: none
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
+      - name: Regenerate OpenAPI spec
+        run: php artisan l5-swagger:generate
+      - name: Regenerate AI artifacts
+        run: composer endpoints:write
+      - name: Gate — committed artifacts must not drift
+        run: |
+          composer endpoints:check
+          git diff --exit-code -- storage/api-docs/api-docs.json docs/ai \
+            || { echo "::error::Generated artifacts are stale. Run 'php artisan l5-swagger:generate' and 'composer endpoints:write', then commit."; exit 1; }
+      - name: Serve smoke — /llms.txt and /v4/ai/manifest.json
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8000 >/tmp/serve.log 2>&1 &
+          sleep 3
+          curl -fsS http://127.0.0.1:8000/llms.txt | head -n 1
+          test "$(curl -fsS http://127.0.0.1:8000/v4/ai/manifest.json | grep -c '"tools"')" -ge 1
