@@ -1099,3 +1099,15 @@ eval as acceptance).
 - Verified: `endpoints:check` exit 0, `l5-swagger:generate` exit 0, endpoint-parity +
   route-coverage + toolchain-gates + proposal-status audits green, `/llms.txt` +
   `/v4/ai/manifest.json` serve 200. Remaining phases (3–6) tracked in a GitHub issue.
+
+## 29. Remove superseded container helper (container-setup.sh + container_usage.md)
+
+Reviewed upstream PR **#605** ("More container setup script improvements", OPEN) —
+it fixes `set -euo pipefail`, adds macOS + image-source selection and URL-safe/
+silent secret generation to `container-setup.sh`. **Verdict: not ported.** On
+`laravel-12` that script is superseded dead infra: referenced nowhere except the
+stale `container_usage.md` guide; the branch's container story is the new
+Dockerfile/entrypoint + `docker compose` (`docs/DOCKER.md`), which already covers
+local-vs-remote images. Removing both (Lumen-era leftovers, consistent with the
+migration's cleanup posture). If a lightweight interactive container helper is
+ever wanted, we'd write a thin wrapper around the current compose flow instead.
