@@ -19,6 +19,10 @@ final class AiManifestService
 {
     public const SCHEMA_VERSION = '1.0';
 
+    /**
+     * @param  array<string, mixed>  $spec  Decoded OpenAPI document.
+     * @return array{endpoints: array<int, array<string, mixed>>, tools: array<int, array<string, mixed>>, functions: array<int, mixed>}
+     */
     public function fromSpec(array $spec): array
     {
         $endpoints = $this->endpoints($spec);
@@ -36,6 +40,7 @@ final class AiManifestService
     /**
      * Deterministic endpoint list (sorted by path, then method).
      *
+     * @param  array<string, mixed>  $spec  Decoded OpenAPI document.
      * @return array<int, array{method: string, path: string, operationId: string, summary: string, description: string, tags: array<int, string>}>
      */
     public function endpoints(array $spec): array
@@ -67,6 +72,7 @@ final class AiManifestService
      * summary + description; inputs are minimal JSON-schema (type/enum).
      *
      * @param  array<int, array{method: string, path: string, operationId: string, summary: string, description: string, tags: array<int, string>}>  $endpoints
+     * @param  array<string, mixed>  $spec  Decoded OpenAPI document (used for parameter lookup).
      * @return array<int, array{type: string, function: array<mixed>}>
      */
     public function tools(array $endpoints, array $spec = []): array
@@ -126,6 +132,9 @@ final class AiManifestService
         return $tools;
     }
 
+    /**
+     * @param  array<string, mixed>  $schema
+     */
     private function schemaType(array $schema): string
     {
         $type = (string) Arr::get($schema, 'type', 'string');

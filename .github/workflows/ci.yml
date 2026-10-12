@@ -47,11 +47,9 @@ jobs:
       CACHE_DRIVER: array
       QUEUE_CONNECTION: sync
       CACHE_DEFAULT_EXPIRE: 86400
-      CACHE_META_EXPIRE: 300
       CACHE_USER_EXPIRE: 300
       CACHE_USERLIST_EXPIRE: 3600
       CACHE_SEARCH_EXPIRE: 432000
-      CACHE_PRODUCERS_EXPIRE: 432000
       CACHE_MAGAZINE_EXPIRE: 432000
       MAX_RESULTS_PER_PAGE: 25
       # SCOUT_DRIVER intentionally unset: tests exercise the Mongo "$text"
@@ -121,6 +119,9 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.4
+          # composer.lock requires ext-mongodb ^2.5 (and composer.json ext-pcntl);
+          # without them `composer install` fails before any check runs.
+          extensions: mongodb-stable, pcntl
           coverage: none
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
