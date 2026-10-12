@@ -55,12 +55,6 @@ parameters:
 			path: app/Club.php
 
 		-
-			message: '#^Trait App\\Concerns\\ScraperCacheTtl is used zero times and is not analysed\.$#'
-			identifier: trait.unused
-			count: 1
-			path: app/Concerns/ScraperCacheTtl.php
-
-		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
 			count: 3

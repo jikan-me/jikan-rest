@@ -3,7 +3,6 @@
 namespace App\Support;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Env;
 
 class HttpHelper
 {
@@ -25,13 +24,6 @@ class HttpHelper
         }
 
         return $requestType;
-    }
-
-    public static function requestCacheExpiry(string $requestType): int
-    {
-        $requestType = strtoupper($requestType);
-
-        return (int) (Env::get("CACHE_{$requestType}_EXPIRE") ?? Env::get('CACHE_DEFAULT_EXPIRE'));
     }
 
     public static function requestAPIVersion(Request $request): int
