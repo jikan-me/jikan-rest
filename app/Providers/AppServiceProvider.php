@@ -107,6 +107,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->registerSentry();
+
         // Custom exception handler (JSON rendering lives in App\Exceptions\Handler).
         $this->app->singleton(
             ExceptionHandler::class,
@@ -139,6 +141,28 @@ class AppServiceProvider extends ServiceProvider
             $this->app->singleton(TypesenseCollectionDescriptor::class);
         }
         $this->registerModelRepositories();
+    }
+
+    /**
+     * sentry/sentry-laravel is excluded from package auto-discovery (composer.json
+     * extra.laravel.dont-discover) so it only runs when reporting is enabled.
+     */
+    private function registerSentry(): void
+    {
+        if (! config('jikan.reporting') || strtolower((string) config('jikan.reporting_driver')) !== 'sentry') {
+            return;
+        }
+
+        $this->app->register(\Sentry\Laravel\ServiceProvider::class);
+        // Sentry Performance Monitoring (optional)
+        $this->app->register(\Sentry\Laravel\Tracing\ServiceProvider::class);
+
+        $this->app->booted(function (): void {
+            \Sentry\configureScope(function (\Sentry\State\Scope $scope): void {
+                $scope->setTag('rest.jikan.version', (string) config('app.version'));
+                $scope->setTag('parser.jikan.version', (string) JIKAN_PARSER_VERSION);
+            });
+        });
     }
 
     private function getSearchService(Repository $repository, Application $app): SearchService

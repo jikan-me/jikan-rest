@@ -77,6 +77,12 @@ services:
       # Enable with:  CACHE_DRIVER=redis docker compose up -d app
       CACHE_DRIVER: "${CACHE_DRIVER:-array}"
 
+      # --- Error reporting / queue workers (see .env.dist) ---------------------
+      REPORTING: "${REPORTING:-false}"
+      REPORTING_DRIVER: "${REPORTING_DRIVER:-sentry}"
+      SENTRY_LARAVEL_DSN: "${SENTRY_LARAVEL_DSN:-}"
+      QUEUE_WORKERS: "${QUEUE_WORKERS:-0}"
+
       # --- Reverse proxy / rate limiting (see .env.dist) ------------------------
       TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
       RATE_LIMIT_PER_MINUTE: "${RATE_LIMIT_PER_MINUTE:-0}"

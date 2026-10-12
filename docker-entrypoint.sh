@@ -23,6 +23,15 @@ if [ -f /etc/supercronic/laravel ] ; then
   trap 'kill "$SUPERVISOR_PID" 2>/dev/null || true' TERM INT EXIT
 fi
 
+# Optional queue workers (replaces the old RoadRunner `laravel_queue_worker_1`
+# service). Set QUEUE_WORKERS=N to run N `queue:work` processes.
+queue_workers="${QUEUE_WORKERS:-0}"
+i=0
+while [ "$i" -lt "$queue_workers" ]; do
+  php /app/artisan queue:work --sleep=3 --tries=3 &
+  i=$((i + 1))
+done
+
 # Octane (RoadRunner) generates its own .rr.yaml on start and overrides the
 # important bits via -o flags; drop any legacy v3 config that was shipped.
 rm -f /app/.rr.yaml

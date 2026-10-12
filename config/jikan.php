@@ -12,13 +12,17 @@ return [
     'source_timeout' => (int) env('SOURCE_TIMEOUT', 10),
     'queue_delay_per_job' => (int) env('QUEUE_DELAY_PER_JOB', 5),
     'github_reporting' => (bool) env('GITHUB_REPORTING', true),
+    // Opt-in error reporting. Sentry is only registered when REPORTING is true
+    // and REPORTING_DRIVER is `sentry` (same contract as master).
+    'reporting' => (bool) env('REPORTING', false),
+    'reporting_driver' => env('REPORTING_DRIVER', 'sentry'),
     'github_rest' => env('GITHUB_REST', 'jikan-me/jikan-rest'),
     'github_api' => env('GITHUB_API', 'jikan-me/jikan'),
     'disable_user_lists' => env('DISABLE_USER_LISTS', false),
     // Dedicated token for the internal cache-bypass (jobs refreshing cached
     // responses). Empty by default — no bypass. Was previously env('APP_KEY').
     'cache_bypass_token' => env('CACHE_BYPASS_TOKEN', ''),
-    'microcaching_expire' => (int) env('MICROCACHING_EXPIRE', 5),
+    'microcaching_expire' => (int) env('MICROCACHING_EXPIRE', 60),
     // Per-IP requests/minute for the v4 API. 0 (default) disables the limiter.
     'rate_limit_per_minute' => (int) env('RATE_LIMIT_PER_MINUTE', 0),
     // Source-heartbeat (MAL availability) scoring.

@@ -100,7 +100,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "sentry/sentry-laravel"
+            ]
         }
     }
 }
