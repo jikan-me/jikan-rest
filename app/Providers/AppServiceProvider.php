@@ -80,15 +80,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Surface lazy loading and reads of missing attributes as exceptions in
-        // local/testing; production keeps the lenient behaviour.
-        //
-        // Model::shouldBeStrict() would also forbid silently discarded attributes, but
-        // DatabaseRepository::insert() deliberately relies on fill() dropping keys that
-        // are not in a model's $fillable (see its fixme), so that third check stays off
-        // until the models' $fillable lists are complete.
-        Model::preventLazyLoading(! $this->app->isProduction());
-        Model::preventAccessingMissingAttributes(! $this->app->isProduction());
+        // Lazy loading, silently discarded attributes and reads of missing attributes
+        // throw outside production; production keeps the lenient behaviour. The
+        // discarded-attributes check is what exposed Profile::$fillable lacking
+        // last_updates / external_links (DatabaseRepository::insert() relies on fill()).
+        Model::shouldBeStrict(! $this->app->isProduction());
 
         $this->registerMacros();
         // the registration of request handlers should happen after the load of all service providers.

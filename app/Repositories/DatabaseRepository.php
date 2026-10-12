@@ -71,8 +71,11 @@ class DatabaseRepository extends RepositoryQuery implements Repository
         //        mass assignment. This way of doing it is just a work around to make sure all attributes
         //        land in the database. The "fillable" and "guard" fields of models should be populated
         //        correctly.
-        $modelInstance->fill($attributes);
-        foreach (['request_hash', 'modifiedAt', 'createdAt'] as $metaField) {
+        // the meta fields are assigned directly below; keeping them out of fill() avoids
+        // tripping strict models for keys that are never meant to be mass-assigned
+        $metaFields = ['request_hash', 'modifiedAt', 'createdAt'];
+        $modelInstance->fill(\Illuminate\Support\Arr::except($attributes, $metaFields));
+        foreach ($metaFields as $metaField) {
             if (array_key_exists($metaField, $attributes)) {
                 $modelInstance->$metaField = $attributes[$metaField];
             }
