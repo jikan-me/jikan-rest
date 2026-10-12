@@ -70,6 +70,10 @@ jobs:
       - name: Validate composer.json
         run: composer validate --strict
 
+      - name: Security advisories (composer audit)
+        # Fails on a known advisory in composer.lock; abandoned packages are reported, not fatal.
+        run: composer audit --locked --abandoned=report
+
       - name: Install dependencies
         # Lock is resolved against config.platform = 8.4.26; --ignore-platform-req=php
         # lets a runner with an older 8.4 patch release install the identical lock.
