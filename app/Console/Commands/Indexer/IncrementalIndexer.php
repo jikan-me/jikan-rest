@@ -20,6 +20,13 @@ class IncrementalIndexer extends Command
     {--resume : Resume from the last position}
     {--failed : Run only entries that failed to index last time}';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Index or update only the anime/manga MAL ids that are new since the last run';
+
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
