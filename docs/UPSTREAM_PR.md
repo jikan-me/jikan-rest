@@ -17,7 +17,7 @@
 | Piece | State |
 |---|---|
 | RFC issue for `jikan-me/jikan-rest` | **Decided against (2026-10-12): no RFC — the PR series is the vehicle.** The §4 draft is kept for reference only; its open questions should be raised in PR discussion |
-| PR series | Proposed in §5; infra + backend commits all **landed locally** — **nothing pushed** |
+| PR series | **Single PR — no split (decision 2026-10-12): everything ships from `laravel-12`**; draft **PR #614** open against `master` (84 commits). §5 is now an internal theme map, not a split plan. |
 | Infra agent (T1–T4) | T1 heartbeat ✅ · T2 TTL guard ✅ · T3 Dockerfile ✅ · T4 PHPStan/Pint/CI ✅ |
 | Local work committed at reconciliation | insights + CORS **removals** (`c858c3d`), **observability** (`41dd860`), `UPSTREAM_PR.md` (`8f94dfa`) |
 | Verification | **292 tests / 2707 assertions — fully green** · PHPStan level 6 baseline-pinned exit 0 · **Parity: 59 endpoints match, 0 diffs** (baseline ratcheted 2026-10-12 after **jikan v5 adoption** cleared the parser blockers — anime/manga/characters/people/recentlyonline now serve live data) · Docker build + stack validated locally (Colima) · Typesense E2E verified (Docker server) |
@@ -98,10 +98,11 @@ Octane-served endpoints. Links to the staged PR series below.
 
 ---
 
-## 5. Proposed PR series (everything is already committed locally; this is the push order)
+## 5. PR themes (internal map — **single PR, no split**)
 
-Split so each PR is reviewable/bisectable, **no unrelated churn** (Pint/PHPStan/CI
-in their own PRs). Suggested squash onto the local branch, then open in order:
+> **Decision 2026-10-12: we are NOT splitting.** Everything ships on `laravel-12`
+> as one branch (draft PR #614). Use this table only as a reviewer-visible index of
+> the work themes inside that single PR — it is not a push order.
 
 | # | PR title | Contents (local commits) | Notes |
 |---|---|---|---|
@@ -148,7 +149,7 @@ locally — when they (or we) pick them up, they ship as separate PRs to
 - [ ] Secrets: no real `APP_KEY`/tokens in source; `.env.dist` sane defaults
 - [ ] Decide Goutte-shim stance with maintainers (§4 Q3)
 - [ ] Decide `insights` + CORS removal with maintainers (§8) — fold into the deciding PR
-- [ ] Rebase on `master`; keep the diff single-purpose per PR
+- [ ] Rebase `laravel-12` on `master`; keep the single PR's diff navigable (see §5 theme map)
 - [ ] Update this file + `PR_CHANGELOG.md` with the final push plan
 - [ ] Offer to co-maintain the migrated branch if upstream wants to defer
 
