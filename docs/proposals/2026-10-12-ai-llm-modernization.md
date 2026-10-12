@@ -1,6 +1,7 @@
 # Proposal — Jikan-rest: modern, AI/LLM-friendly project (2026-10-12)
 
-**Status:** open — 2026-10-12, planning-only (no code changes yet). This proposal declares **11 open questions** (see §9).
+**Status:** open — 2026-10-12, planning-only (no code changes yet; execution gated on a later go-ahead).
+**Decisions:** declares **11 open questions** — 10 resolved, 1 open (Q3, route modernization, explained in §9), see Decisions §10.
 **Inputs reviewed:** (a) our own in-repo audit, (b) `Downloads/jikan_rest_ai_modernization_plan.md`
 and `Downloads/plan.md` — two external LLM-modernization audits for jikan-rest, reviewed 2026-10-12.
 **Owned by:** Irfan Dahir (this document). Execution gated on approval; single branch `laravel-12` (no-PR-split).
@@ -70,6 +71,8 @@ hermetic test DB · jikan v5 adopted (parser blockers cleared) · Docker validat
 | G13 | No agent-era metrics/benchmark (bytes/tokens, calls-per-task) | nothing measures "fewer calls/smaller responses" |
 
 ## 5. Workstreams
+
+> **Decisions applied (2026-10-12):** AGENTS.md + CLAUDE.md include (WS-A); `llms.txt` committed **and** served (WS-A); generated artifacts committed as canonical + CI diff-guarded (WS-D); `/v4/ai/manifest.json` **and** a product MCP adapter (WS-E); the agents-add-an-endpoint eval is acceptance (WS-F); `fields` + bounded batch first, markdown deferred (WS-G); lexical benchmark first, semantic deferred (WS-H); scraper circuit breaker + fallbacks with Redis (WS-J); alias normalization + DQ checks (WS-I). **Planning-only for now — nothing executes until separately approved.**
 
 ### WS-A — Agent & machine entrypoints (quick win)
 Add root **`AGENTS.md`** (+ thin `CLAUDE.md` include) with the run/test/lint/phpstan/pint/
@@ -165,55 +168,53 @@ calls-per-task, cost. *Done:* benchmark tracked in-repo + numbers reported.
 
 ## 9. Open questions
 
-1. Which agent-file naming do we standardize on — `AGENTS.md` (ecosystem) with a `CLAUDE.md` include, or only `CLAUDE.md`?
-2. Serve `/llms.txt` on the public API, or keep it repo-only initially?
-3. Is the 103-route `Controller@action` → class-ref modernization in scope, and before or after the full-index parity freeze?
-4. Agent-interface ordering: `/v4/ai/manifest.json` first + MCP companion second — and is MCP a product deliverable or a dev/prototype?
-5. How much generated content (`llms-full.txt`, endpoint catalog, manifest) do we commit vs generate in CI?
-6. Do we pursue the formal "agents add an endpoint" eval (two LLMs, one recipe) as the acceptance test for WS-A/WS-F?
-7. Response-efficiency scope: which of `fields` / batch reads / ETag+conditional / compact representations ship first, and what are the default size bounds?
-8. Markdown content negotiation (`Accept: text/markdown`): opt-in `?format=` too, which endpoints, and the cache/header semantics?
-9. Semantic retrieval: adopt as optional? engine/model/hosting choice, hybrid+disableable, gated on the search benchmark?
-10. Scraper resilience: circuit breaker + agent-safe fallback payload schema — accept the contract/header implications, and Redis as the breaker store?
-11. Entity identity & data-quality pipeline scope: alias normalization + source-vs-derived labeling — how deep in phase 5?
+1. Which agent-file naming do we standardize on — `AGENTS.md` (ecosystem) with a `CLAUDE.md` include, or only `CLAUDE.md`? **→ Decided: AGENTS.md + CLAUDE.md include.**
+2. Serve `/llms.txt` on the public API, or keep it repo-only initially? **→ Decided: both (committed root file + served route).**
+3. Is the 103-route `Controller@action` → class-ref modernization in scope, and before or after the full-index parity freeze? **→ OPEN.** (What it is: routes declared as `'uses' => 'AnimeController@main'` become explicit `[AnimeController::class, 'main']` references — clearer/greppable/static, but a wide behaviour-neutral change touching what route-coverage/endpoint-parity read. Default interim: defer until after the parity freeze, make it optional.)
+4. Agent-interface ordering: `/v4/ai/manifest.json` first + MCP companion second — and is MCP a product deliverable or a dev/prototype? **→ Decided: both ship as product deliverables.**
+5. How much generated content (`llms-full.txt`, endpoint catalog, manifest) do we commit vs generate in CI? **→ Decided: commit canonical artifacts; CI regenerates and fails on drift.**
+6. Do we pursue the formal "agents add an endpoint" eval (two LLMs, one recipe) as the acceptance test for WS-A/WS-F? **→ Decided: yes, it is the acceptance test.**
+7. Response-efficiency scope: which of `fields` / batch reads / ETag+conditional / compact representations ship first, and what are the default size bounds? **→ Decided: `fields` + bounded batch reads first; ETag/cache headers next; defaults bounded and measured.**
+8. Markdown content negotiation (`Accept: text/markdown`): opt-in `?format=` too, which endpoints, and the cache/header semantics? **→ Decided: defer; measure fields/batch token gains first.**
+9. Semantic retrieval: adopt as optional? engine/model/hosting choice, hybrid+disableable, gated on the search benchmark? **→ Decided: decision deferred; lexical benchmark first, revisit with evidence.**
+10. Scraper resilience: circuit breaker + agent-safe fallback payload schema — accept the contract/header implications, and Redis as the breaker store? **→ Decided: breaker + fallbacks via Redis.**
+11. Entity identity & data-quality pipeline scope: alias normalization + source-vs-derived labeling — how deep in phase 5? **→ Decided: alias normalization + DQ checks (medium scope).**
 
 ## Decisions
 
-All eleven questions from §9 are open; each is a decision heading below (🔴 = open, ✅ = resolved — none resolved yet).
+Resolved 10/11 (2026-10-12). One remains open (Q3).
 
-### 🔴 #1 — Agent-file naming (`AGENTS.md` vs `CLAUDE.md`)
-Open; see §9 Q1.
+### ✅ #1 — Agent-file naming (`AGENTS.md` vs `CLAUDE.md`)
+Resolved: **AGENTS.md + CLAUDE.md include** (WS-A). 2026-10-12.
 
-### 🔴 #2 — Serve `/llms.txt` publicly vs repo-only
-Open; see §9 Q2.
+### ✅ #2 — Serve `/llms.txt` publicly vs repo-only
+Resolved: **both — committed root file + served route** (WS-A). 2026-10-12.
 
 ### 🔴 #3 — Route modernization scope/timing
-Open; see §9 Q3.
+Open — pending the explanation + decision (see §9 Q3). Default interim: defer until after the parity freeze; optional.
 
-### 🔴 #4 — Agent-interface ordering + MCP product vs prototype
-Open; see §9 Q4.
+### ✅ #4 — Agent-interface ordering + MCP product vs prototype
+Resolved: **manifest AND MCP both ship as product deliverables** (WS-E). 2026-10-12.
 
-### 🔴 #5 — Commit vs CI-generate machine artifacts
-Open; see §9 Q5.
+### ✅ #5 — Commit vs CI-generate machine artifacts
+Resolved: **commit canonical; CI regenerates + fails on drift** (WS-D). 2026-10-12.
 
-### 🔴 #6 — "Agents add an endpoint" eval as acceptance
-Open; see §9 Q6.
+### ✅ #6 — "Agents add an endpoint" eval as acceptance
+Resolved: **yes — the acceptance test for WS-A/WS-F**. 2026-10-12.
 
-### 🔴 #7 — Response-efficiency scope (`fields`/batch/ETag) + size bounds
-Open; see §9 Q7.
+### ✅ #7 — Response-efficiency scope (`fields`/batch/ETag) + size bounds
+Resolved: **`fields` + bounded batch first; ETag/cache headers next; bounded + measured** (WS-G). 2026-10-12.
 
-### 🔴 #8 — Markdown content negotiation scope
-Open; see §9 Q8.
+### ✅ #8 — Markdown content negotiation scope
+Resolved: **defer; measure fields/batch token gains first** (WS-G). 2026-10-12.
 
-### 🔴 #9 — Semantic retrieval: optional adoption + engine + benchmark gate
-Open; see §9 Q9.
+### ✅ #9 — Semantic retrieval: optional adoption + engine + benchmark gate
+Resolved: **decision deferred until the lexical benchmark exists** (WS-H). 2026-10-12.
 
-### 🔴 #10 — Scraper circuit breaker + fallback payload contract
-Open; see §9 Q10.
+### ✅ #10 — Scraper circuit breaker + fallback payload contract
+Resolved: **breaker + agent-safe fallbacks via Redis** (WS-J). 2026-10-12.
 
-### 🔴 #11 — Entity identity & data-quality pipeline scope
-Open; see §9 Q11.
-
----
+### ✅ #11 — Entity identity & data-quality pipeline scope
+Resolved: **alias normalization + DQ checks, medium scope** (WS-I). 2026-10-12.
 
 _Last updated: 2026-10-12_
