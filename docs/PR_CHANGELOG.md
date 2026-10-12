@@ -774,3 +774,15 @@ middleware chain (~15 ms), **60 s micro-cache not engaging**, heavy list payload
 (~105 KB seasons) with no in-app gzip. Full analysis + prioritized improvements in
 `docs/PERFORMANCE.md` (P0 micro-cache/indexes, P1 preload/gzip, P2 Octane tuning
 +Redis + fields/batch/ETag from the AI proposal, P3 re-measure post-index).
+
+## 31. P0 evaluation: micro-cache + Mongo read path (local, metrics kept — NOT pushed)
+
+- Confirmed micro-cache engages on repeat (295→19 ms) but **no throughput win** under
+  `ab -k` on Octane (8w): OFF 298 RPS vs ON 188 RPS (`/v4/anime/21`); the per-request
+  `sha1/json_encode/json_decode` overhead outweighs the ~7 ms indexed Mongo read, and it's
+  per-worker state. Kept `MICROCACHING=false` (repo default); recorded (PERFORMANCE.md gains
+  log) for PR #614 reporting.
+- Verified `mal_id` + compound indexes exist; `findOne` ≈ 7.4 ms is doc-size/serialization
+  cost, not a scan. Single-request floor ≈ 23 ms across runtimes.
+- Recommended: worker scaling (already 41→~298 RPS), profile the heartbeat middleware/
+  JMS floor, gzip+HTTP/2, Redis + fields/batch/ETag later. Numbers TBD-to-PR, local-only.

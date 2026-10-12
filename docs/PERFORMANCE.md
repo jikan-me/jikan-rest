@@ -70,3 +70,35 @@ absolutes. Tests were run on spare ports alongside the indexer's `:8000` server
 ---
 
 _Last updated: 2026-10-13 · indexer background load caveat applies._
+
+## Gains log (2026-10-13, local — NOT pushed, pending PR reporting)
+
+### Micro-cache (60s in-process) — enabled locally as P0, then evaluated
+Verification: it engages (sequential repeat: **295 ms → 19 ms** on `/v4/anime/21`).
+Impact on throughput (`ab -k -c 20`, Octane/RoadRunner **8 workers**):
+
+| config | `/v4/anime/21` RPS | `/v4/seasons/now` RPS |
+|---|---|---|
+| micro-cache OFF | **298** | 102 |
+| micro-cache ON | 188 | 101 |
+
+**Conclusion:** with enough workers the app's parallel work dominates; the micro-cache's
+per-request sha1/`json_decode`/`json_encode` overhead can **exceed** the small indexed Mongo
+read it skips, and it's per-process (octane) state that loses `Cache-Control` headers on hits.
+Single-request floor is ~**23 ms** on every runtime — Mongo `findOne` ≈ 7 ms, the rest is the
+middleware chain (e.g. per-request source-heartbeat) + JMS serialization + response build.
+
+### What actually moved the needle (relative)
+- **Workers:** native serve 41 RPS → Octane 8w ~**298 RPS** on `/v4/anime/21` (≈7×).
+- **Server overhead:** `/up` 236 → 2,046 (2w) → **3,973 (8w)**.
+
+### Standing recommendations (revised)
+- Keep `MICROCACHING=false` (opt-in default) for now; if adopted, pair with a **shared Redis**
+  cache + only for payload-heavy endpoints, not small reads.
+- Profile the **~23 ms floor**: source-heartbeat middleware I/O per request, JMS serializer,
+  response escaping — target the biggest slice (likely middleware + serialization).
+- **gzip/br + HTTP/2** in front (proxy) for the heavy list payloads (~105 KB seasons/now).
+- Octane worker/max-requests tuning; **Redis** shared cache/rate-limit at scale.
+- **fields/batch/ETag (proposal WS-G)** for the real consumer token/transfer wins.
+- Re-measure post-index (clean absolutes) + provide these numbers to PR #614.
+
