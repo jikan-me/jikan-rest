@@ -92,38 +92,6 @@ public function handle($request, Closure $next)
 
 ## Authentication
 
-### Sanctum (API Token Authentication)
-
-```php
-// config/sanctum.php
-'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
-    '%s%s',
-    'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
-    env('APP_URL') ? ',' . parse_url(env('APP_URL'), PHP_URL_HOST) : ''
-)));
-
-'expiration' => 60 * 24, // Token expiration in minutes (null = never)
-'token_prefix' => env('SANCTUM_TOKEN_PREFIX', ''),
-
-// Issuing tokens with abilities
-$token = $user->createToken('api-token', ['read', 'write'])->plainTextToken;
-
-// Validate abilities on routes
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/orders', function () {
-        // User must have 'read' ability
-        abort_unless(Auth::user()->tokenCan('read'), 403);
-        // ...
-    })->middleware('abilities:read');
-
-    Route::post('/orders', function () {
-        // User must have 'write' ability
-        abort_unless(Auth::user()->tokenCan('write'), 403);
-        // ...
-    })->middleware('abilities:write');
-});
-```
-
 ### Password Security
 
 ```php
@@ -690,42 +658,12 @@ protected function configureRateLimiting(): void
 }
 
 // Route usage
-Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
-    Route::apiResource('posts', PostController::class);
+Route::middleware('throttle:api')->group(function () {
+    Route::get('/posts', [PostController::class, 'index']);
 });
 
 Route::post('/login', [AuthController::class, 'login'])
     ->middleware('throttle:auth');
-```
-
-### API Authentication — Sanctum vs Passport
-
-```php
-// Sanctum (recommended for most apps — simple, first-party, SPA)
-// config/sanctum.php
-'expiration' => 60 * 24, // Tokens expire after 24 hours
-'model' => User::class,
-
-// Issuing scoped tokens
-$token = $user->createToken('client-name', [
-    'posts:read',
-    'posts:write',
-])->plainTextToken;
-
-// Middleware scoping
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/posts', [PostController::class, 'index'])
-        ->middleware('abilities:posts:read');
-
-    Route::post('/posts', [PostController::class, 'store'])
-        ->middleware('abilities:posts:write');
-});
-
-// Passport (OAuth2 — for third-party clients or complex auth flows)
-// Install: composer require laravel/passport
-Passport::tokensExpireIn(now()->addDays(15));
-Passport::refreshTokensExpireIn(now()->addDays(30));
-Passport::personalAccessTokensExpireIn(now()->addMonths(6));
 ```
 
 ### CORS Configuration
@@ -733,7 +671,7 @@ Passport::personalAccessTokensExpireIn(now()->addMonths(6));
 ```php
 // config/cors.php
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*'],
     'allowed_methods' => ['*'],
     'allowed_origins' => explode(',', env('CORS_ALLOWED_ORIGINS', '')), // Whitelist specific origins
     'allowed_origins_patterns' => [],
