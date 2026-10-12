@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\DisableSwaggerUi;
 use App\Http\Middleware\EndpointCacheTtlMiddleware;
+use App\Http\Middleware\GzipResponse;
 use App\Http\Middleware\MicroCaching;
 use App\Http\Middleware\SourceHeartbeatMonitor;
 use Composer\InstalledVersions;
@@ -50,6 +51,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'microcaching' => MicroCaching::class,
+            'gzip' => GzipResponse::class,
             'source-health-monitor' => SourceHeartbeatMonitor::class,
             'cache-ttl' => EndpointCacheTtlMiddleware::class,
         ]);

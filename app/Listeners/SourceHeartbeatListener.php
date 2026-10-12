@@ -16,6 +16,8 @@ class SourceHeartbeatListener
 {
     private Logger $logger;
 
+    private static float $lastRecordAt = 0.0;
+
     /**
      * Create the event listener.
      *
@@ -48,6 +50,16 @@ class SourceHeartbeatListener
      */
     public function handle(SourceHeartbeatEvent $event)
     {
+        // Perf: the previous code wrote a Mongo heartbeat + score query per
+        // request. Debounce to at most one record per interval (default 1s);
+        // health granularity is unchanged for an upstream-health indicator.
+        $interval = (float) config('jikan.source_heartbeat_interval', 1.0);
+        $now = microtime(true);
+        if ($now - self::$lastRecordAt < $interval) {
+            return;
+        }
+        self::$lastRecordAt = $now;
+
         $eventCount = $this->insertFail($event);
 
         if (config('app.debug')) {

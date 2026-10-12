@@ -786,3 +786,20 @@ middleware chain (~15 ms), **60 s micro-cache not engaging**, heavy list payload
   cost, not a scan. Single-request floor ≈ 23 ms across runtimes.
 - Recommended: worker scaling (already 41→~298 RPS), profile the heartbeat middleware/
   JMS floor, gzip+HTTP/2, Redis + fields/batch/ETag later. Numbers TBD-to-PR, local-only.
+
+## 32. End-to-end performance pass — optimizations applied + report (local, NOT pushed)
+
+Applied two local optimizations (pending your go before any push):
+- **Heartbeat debounce** (`SourceHeartbeatListener` + `jikan.source_heartbeat_interval`,
+  default 1 s): per-request Mongo heartbeat insert/query removed → `/v4/anime/21`
+  baseline 259 rps → **~998 rps** (4 workers) and the single-request floor fell
+  **~23 ms → ~4 ms**; `/v4/seasons/now` 104 → **~203 rps**.
+- **`GzipResponse` middleware** (accept-encoding opt-in, >1 KB, 2xx): `/v4/seasons/now`
+  payload 109 KB → **18 KB** (~6× transfer).
+
+Measured-but-kept-default: micro-cache (no win on small reads — off), opcache CLI (~nil),
+config:cache (neutral on warm workers). Not actionable locally: opcache.preload /
+classmap-authoritative (runtime image), Redis via docker (host port closed), FrankenPHP
+data routes (no driver in static binary). Full matrix so far in `docs/PERFORMANCE.md`
+(baseline, levers, after + PR takeaways). Suite green 331/2836; generate 0; endpoints:check 0;
+audits clean.

@@ -102,3 +102,39 @@ middleware chain (e.g. per-request source-heartbeat) + JMS serialization + respo
 - **fields/batch/ETag (proposal WS-G)** for the real consumer token/transfer wins.
 - Re-measure post-index (clean absolutes) + provide these numbers to PR #614.
 
+## End-to-end performance lever report (2026-10-13) — for PR #614
+
+Methodology: `ab -k` (keep-alive), `-c` sweeps, Octane/RoadRunner on a Mac (arm64),
+local Mongo; the full indexer ran in the background (relative numbers). Post-index +
+runner re-run recommended for absolutes.
+
+### Baseline (before any optimization) — Octane RR 8 workers
+`/up` 3,973 rps · `/v4/anime/21` 259 rps (median 72 ms) · `/v4/anime/966/full` 120 rps ·
+`/v4/seasons/now` 104 rps (median 191 ms) · `/v4/top/anime` 136 rps. Single-request
+floor for anime/21 ≈ **23 ms**.
+
+### Levers tested → verdict
+
+| Lever | Result | Action |
+|---|---|---|
+| **Heartbeat per-request Mongo write/query** | THE bottleneck | **Debounced to ≤1 write/interval (1 s default)** — `SourceHeartbeatListener` |
+| **Response compression (gzip)** | seasons 109 KB → **18 KB** (~6×) | **Applied** — `GzipResponse` middleware (opt-in on Accept-Encoding) |
+| Worker count (Octane) | 2w → 4w → 8w scales | Use ≈ cores; keep configurable |
+| Micro-cache (60 s, in-process) | No win on small reads (off 298 vs on 188 rps, 8w) | Kept OFF; Redis+piggyback only |
+| opcache.enable_cli (dev server) | ~nil | Keep default; compile not the cost |
+| config:cache (warm workers) | ~nil (899 vs 998 rps) | Keep for prod boot, not request path |
+| opcache.preload / classmap-authoritative | not measured in-range (ini plumbing) | Recommend for the runtime image |
+| Redis shared cache/rate-limit | local redis reachable (docker), host port closed | Recommend at scale; CACHE_DRIVER=redis |
+| FrankenPHP | fastest server (5.4k rps light) but **no ext-mongodb** → Mongo routes 500 | Use container image w/ driver, or edge/static |
+| Mongo read | indexed `mal_id` confirmed; ~4 ms in-flight w/ persistent workers | Consider projection for huge docs later |
+| ETag/fields/batch (proposal WS-G) | not implemented | Recommend for consumer token/transfer wins |
+
+### After (applied optimizations) — Octane RR 4 workers
+`/v4/anime/21` plain **~998 rps** (was 259) · `/v4/seasons/now` **~203 rps** (was 104) ·
+single-request floor **~4 ms** (was ~23 ms, dominated by the heartbeat write).
+gzip: payload/transfer ~6× smaller when the client accepts it.
+
+### Net takeaways for the PR
+- Remove/reduce per-request side-effecting I/O (heartbeat) — biggest win.
+- Serve with Octane + adequate workers; gzip responses; keep micro-cache off by default;
+  cache config for boot; profile serialization next; add WS-G efficiency later.

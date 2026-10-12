@@ -25,6 +25,7 @@ return [
     // Source-heartbeat (MAL availability) scoring.
     'source_good_health_score' => (float) env('SOURCE_GOOD_HEALTH_SCORE', 0.9),
     'source_bad_health_recheck' => (int) env('SOURCE_BAD_HEALTH_RECHECK', 10),
+    'source_heartbeat_interval' => (float) env('SOURCE_HEARTBEAT_INTERVAL', 1.0),
     'source_bad_health_range' => (int) env('SOURCE_BAD_HEALTH_RANGE', 30),
     'source_bad_health_max_store' => (int) env('SOURCE_BAD_HEALTH_MAX_STORE', 50),
     'typesense_options' => [
