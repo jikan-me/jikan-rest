@@ -88,8 +88,7 @@ foreach (['v1', 'v2', 'v3'] as $version) {
 
 Route::group([
     'prefix' => 'v4',
-    'namespace' => 'App\Http\Controllers\V4DB',
     'middleware' => array_merge($commonMiddleware, ['throttle:v4']),
-], function ($router) {
+], function () {
     require __DIR__.'/web.v4.php';
 });
