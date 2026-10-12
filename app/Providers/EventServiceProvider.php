@@ -12,8 +12,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array<string, array<int, string>>
      */
     protected $listen = [
-        // Loop-error handling previously came from pushrbx/lumen-roadrunner
-        // (removed during the Laravel migration). Add an Octane listener here
-        // if worker loop errors need handling again.
+        // Worker loop errors used to be handled here by PsrWorkerErrorListener
+        // (pushrbx/lumen-roadrunner). Octane's WorkerErrorOccurred listeners in
+        // config/octane.php (ReportException, StopWorkerIfNecessary) replace it,
+        // so no listener is needed here.
     ];
 }
