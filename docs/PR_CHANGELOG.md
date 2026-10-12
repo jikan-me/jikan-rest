@@ -338,6 +338,9 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `HandleCors`, which already serves CORS from `config/cors.php`. Deleted the class +
   its bootstrap append + the `cors_middleware_enabled`/`CORS_MIDDLEWARE` config/env;
   CORS now works via the framework default (single-pass).
+  > **Correction (audit fixes):** the on/off gate was restored — `config/cors.php` only
+  > lists paths when `CORS_MIDDLEWARE=true` (master's default was off), so an edge proxy
+  > that already sets CORS headers doesn't produce duplicate `Access-Control-Allow-Origin`.
 - **Observability polish** (audit-1 §9): log channels renamed off `lumen.log`
   (`jikan.log` / `daily/jikan.log`), deprecations now recorded to `daily` instead of
   `null`, stale config comment removed; Sentry `release` derives from
@@ -649,6 +652,9 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `HandleCors`, which already serves CORS from `config/cors.php`. Deleted the class +
   its bootstrap append + the `cors_middleware_enabled`/`CORS_MIDDLEWARE` config/env;
   CORS now works via the framework default (single-pass).
+  > **Correction (audit fixes):** the on/off gate was restored — `config/cors.php` only
+  > lists paths when `CORS_MIDDLEWARE=true` (master's default was off), so an edge proxy
+  > that already sets CORS headers doesn't produce duplicate `Access-Control-Allow-Origin`.
 - **Observability polish** (audit-1 §9): log channels renamed off `lumen.log`
   (`jikan.log` / `daily/jikan.log`), deprecations now recorded to `daily` instead of
   `null`, stale config comment removed; Sentry `release` derives from

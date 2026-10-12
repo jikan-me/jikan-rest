@@ -42,7 +42,8 @@ return Application::configure(basePath: dirname(__DIR__))
         }
 
         // CORS is handled by Laravel's default global HandleCors middleware
-        // (config/cors.php); the legacy custom CorsMiddleware was removed.
+        // (config/cors.php), enabled only when CORS_MIDDLEWARE=true; the legacy
+        // custom CorsMiddleware was removed.
         // Don't expose the self-served Swagger UI under /v4 (product decision);
         // l5-swagger + spec generation stay. See DisableSwaggerUi.
         $middleware->append(DisableSwaggerUi::class);

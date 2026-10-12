@@ -77,6 +77,8 @@ services:
       # Enable with:  CACHE_DRIVER=redis docker compose up -d app
       CACHE_DRIVER: "${CACHE_DRIVER:-array}"
 
+      CORS_MIDDLEWARE: "${CORS_MIDDLEWARE:-false}"
+
       # --- Error reporting / queue workers (see .env.dist) ---------------------
       REPORTING: "${REPORTING:-false}"
       REPORTING_DRIVER: "${REPORTING_DRIVER:-sentry}"
