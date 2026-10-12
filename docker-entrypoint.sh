@@ -12,6 +12,17 @@ fi
 
 [ $status -ne 0 ] && exit $status
 
+# Laravel's encrypter needs APP_KEY. If none was supplied (container env or
+# APP_KEY__FILE secret, both of which end up in .env/env), generate one for this
+# container. Set APP_KEY explicitly in production so it is stable across restarts.
+if [ -z "${APP_KEY:-}" ] ; then
+  # an *empty* APP_KEY in the environment would shadow the value in .env
+  unset APP_KEY
+  if ! grep -Eq '^APP_KEY=.+' /app/.env 2>/dev/null ; then
+    php /app/artisan key:generate --force
+  fi
+fi
+
 # Cache config now that runtime env + (optionally) injected secrets are in the
 # .env file — baking it at image build time would freeze per-deployment values.
 php /app/artisan config:cache
