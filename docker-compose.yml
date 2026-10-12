@@ -92,6 +92,8 @@ services:
       # --- Octane (RoadRunner) — matches config/octane.php default -------------
       OCTANE_SERVER: "${OCTANE_SERVER:-roadrunner}"
       OCTANE_HTTPS: "${OCTANE_HTTPS:-false}"
+      OCTANE_WORKERS: "${OCTANE_WORKERS:-auto}"
+      OCTANE_MAX_REQUESTS: "${OCTANE_MAX_REQUESTS:-500}"
     depends_on:
       mongo:
         condition: service_healthy

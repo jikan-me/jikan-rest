@@ -36,4 +36,9 @@ done
 # important bits via -o flags; drop any legacy v3 config that was shipped.
 rm -f /app/.rr.yaml
 
+# A custom RoadRunner config can be supplied via OCTANE_RR_CONFIG.
+if [ -n "${OCTANE_RR_CONFIG:-}" ] ; then
+  set -- --rr-config="$OCTANE_RR_CONFIG" "$@"
+fi
+
 exec php /app/artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8080 "$@"

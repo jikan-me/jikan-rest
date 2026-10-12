@@ -73,6 +73,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Workers and worker recycling
+    |--------------------------------------------------------------------------
+    |
+    | `octane:start` falls back to these when --workers / --max-requests are not
+    | given. Replaces the pool settings that used to live in .rr.yaml
+    | (JIKAN_* / RR_* env vars). `auto` = one worker per CPU core.
+    |
+    */
+
+    'workers' => env('OCTANE_WORKERS', 'auto'),
+
+    'max_requests' => (int) env('OCTANE_MAX_REQUESTS', 500),
+
+    /*
+    |--------------------------------------------------------------------------
     | Octane Listeners
     |--------------------------------------------------------------------------
     |
