@@ -13,7 +13,7 @@ class ProducerController extends Controller
         path: '/producers/{id}',
         operationId: 'getProducerById',
         summary: 'Producer details',
-        description: 'Retrieves the producer details for the producer identified by **id**.',
+        description: 'Returns the details of a producer by **id**.',
         tags: ['producers'],
         parameters: [
             new OA\Parameter(
@@ -45,7 +45,7 @@ class ProducerController extends Controller
         path: '/producers/{id}/full',
         operationId: 'getProducerFullById',
         summary: 'Complete producer resource',
-        description: 'Returns the complete producer resource — primary data plus related sub-resources — in one response for the given **id**.',
+        description: 'Returns the complete producer resource, including primary data plus related sub-resources, for a producer by **id**.',
         tags: ['producers'],
         parameters: [
             new OA\Parameter(
@@ -77,7 +77,7 @@ class ProducerController extends Controller
         path: '/producers/{id}/external',
         operationId: 'getProducerExternal',
         summary: 'Producer external links',
-        description: 'Retrieves the producer external links for a producer.',
+        description: 'Returns the external links of a producer by **id**.',
         tags: ['producers'],
         parameters: [
             new OA\Parameter(

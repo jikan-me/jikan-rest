@@ -13,7 +13,7 @@ class GenreController extends Controller
         path: '/genres/anime',
         operationId: 'getAnimeGenres',
         summary: 'Anime genres',
-        description: 'Retrieves the anime genres for the anime identified by **id**.',
+        description: 'Returns the list of anime genres, explicit genres, themes, and demographics. Use **filter** to select the list type.',
         tags: ['genres'],
         parameters: [
             new OA\Parameter(
@@ -40,7 +40,7 @@ class GenreController extends Controller
         path: '/genres/manga',
         operationId: 'getMangaGenres',
         summary: 'Manga genres',
-        description: 'Retrieves the manga genres for the manga identified by **id**.',
+        description: 'Returns the list of manga genres, explicit genres, themes, and demographics. Use **filter** to select the list type.',
         tags: ['genres'],
         parameters: [
             new OA\Parameter(

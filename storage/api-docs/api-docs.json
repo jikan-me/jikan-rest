@@ -26,7 +26,7 @@
                     "anime"
                 ],
                 "summary": "Complete anime resource",
-                "description": "Returns the complete anime resource — primary data plus related sub-resources — in one response for the given **id**.",
+                "description": "Returns the complete anime resource, including primary data plus related sub-resources, for an anime by **id**.",
                 "operationId": "getAnimeFullById",
                 "parameters": [
                     {
@@ -66,7 +66,7 @@
                     "anime"
                 ],
                 "summary": "Anime details",
-                "description": "Retrieves the details for the given **id**.",
+                "description": "Returns the details of an anime by **id**.",
                 "operationId": "getAnimeById",
                 "parameters": [
                     {
@@ -106,7 +106,7 @@
                     "anime"
                 ],
                 "summary": "Anime characters",
-                "description": "Retrieves the anime characters for the anime identified by **id**.",
+                "description": "Returns the characters of an anime by **id**, together with their voice actors.",
                 "operationId": "getAnimeCharacters",
                 "parameters": [
                     {
@@ -141,7 +141,7 @@
                     "anime"
                 ],
                 "summary": "Anime staff",
-                "description": "Retrieves the anime staff for the anime identified by **id**.",
+                "description": "Returns the staff of an anime by **id** along with their positions.",
                 "operationId": "getAnimeStaff",
                 "parameters": [
                     {
@@ -176,7 +176,7 @@
                     "anime"
                 ],
                 "summary": "Anime episodes",
-                "description": "Retrieves the anime episodes for the anime identified by **id**.",
+                "description": "Returns the list of episodes for an anime by **id**, paginated by **page**.",
                 "operationId": "getAnimeEpisodes",
                 "parameters": [
                     {
@@ -214,7 +214,7 @@
                     "anime"
                 ],
                 "summary": "Anime episode",
-                "description": "Retrieves the anime episode for the anime identified by **id**.",
+                "description": "Returns a single episode of an anime by **id** and **episode**.",
                 "operationId": "getAnimeEpisodeById",
                 "parameters": [
                     {
@@ -262,7 +262,7 @@
                     "anime"
                 ],
                 "summary": "Anime news",
-                "description": "Retrieves the anime news for the anime identified by **id**.",
+                "description": "Returns recent news articles for an anime by **id**, paginated by **page**.",
                 "operationId": "getAnimeNews",
                 "parameters": [
                     {
@@ -300,7 +300,7 @@
                     "anime"
                 ],
                 "summary": "Anime forum topics",
-                "description": "Retrieves the anime forum topics for the anime identified by **id**.",
+                "description": "Returns the forum topics of an anime by **id**. Use **filter** to restrict to all, episode, or other topics.",
                 "operationId": "getAnimeForum",
                 "parameters": [
                     {
@@ -349,7 +349,7 @@
                     "anime"
                 ],
                 "summary": "Anime videos",
-                "description": "Retrieves the anime videos for the anime identified by **id**.",
+                "description": "Returns the promotional videos, episodes, and music videos of an anime by **id**.",
                 "operationId": "getAnimeVideos",
                 "parameters": [
                     {
@@ -384,7 +384,7 @@
                     "anime"
                 ],
                 "summary": "Anime video episodes",
-                "description": "Retrieves the anime video episodes for the anime identified by **id**.",
+                "description": "Returns the episode videos of an anime by **id**, paginated by **page**.",
                 "operationId": "getAnimeVideosEpisodes",
                 "parameters": [
                     {
@@ -422,7 +422,7 @@
                     "anime"
                 ],
                 "summary": "Anime pictures",
-                "description": "Retrieves the anime pictures for the anime identified by **id**.",
+                "description": "Returns the pictures of an anime by **id**.",
                 "operationId": "getAnimePictures",
                 "parameters": [
                     {
@@ -457,7 +457,7 @@
                     "anime"
                 ],
                 "summary": "Anime statistics",
-                "description": "Retrieves the anime statistics for the anime identified by **id**.",
+                "description": "Returns the statistics of an anime by **id**, such as watching, completed, and on-hold counts.",
                 "operationId": "getAnimeStatistics",
                 "parameters": [
                     {
@@ -492,7 +492,7 @@
                     "anime"
                 ],
                 "summary": "Anime more info",
-                "description": "Retrieves the anime more info for the anime identified by **id**.",
+                "description": "Returns additional trivia and background information about an anime by **id**.",
                 "operationId": "getAnimeMoreInfo",
                 "parameters": [
                     {
@@ -527,7 +527,7 @@
                     "anime"
                 ],
                 "summary": "Anime recommendations",
-                "description": "Retrieves the anime recommendations for the anime identified by **id**.",
+                "description": "Returns the recommendations for an anime by **id**.",
                 "operationId": "getAnimeRecommendations",
                 "parameters": [
                     {
@@ -562,7 +562,7 @@
                     "anime"
                 ],
                 "summary": "Anime user updates",
-                "description": "Retrieves the anime user updates for the anime identified by **id**.",
+                "description": "Returns the recent list updates of users for an anime by **id**, paginated by **page**.",
                 "operationId": "getAnimeUserUpdates",
                 "parameters": [
                     {
@@ -600,7 +600,7 @@
                     "anime"
                 ],
                 "summary": "Anime reviews",
-                "description": "Retrieves the anime reviews for the anime identified by **id**.",
+                "description": "Returns the reviews of an anime by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.",
                 "operationId": "getAnimeReviews",
                 "parameters": [
                     {
@@ -644,7 +644,7 @@
                     "anime"
                 ],
                 "summary": "Anime relations",
-                "description": "Retrieves the anime relations for the anime identified by **id**.",
+                "description": "Returns the related entries for an anime by **id**.",
                 "operationId": "getAnimeRelations",
                 "parameters": [
                     {
@@ -684,7 +684,7 @@
                     "anime"
                 ],
                 "summary": "Anime themes",
-                "description": "Retrieves the anime themes for the anime identified by **id**.",
+                "description": "Returns the opening and ending themes of an anime by **id**.",
                 "operationId": "getAnimeThemes",
                 "parameters": [
                     {
@@ -719,7 +719,7 @@
                     "anime"
                 ],
                 "summary": "Anime external links",
-                "description": "Retrieves the anime external links for the anime identified by **id**.",
+                "description": "Returns the external links of an anime by **id**.",
                 "operationId": "getAnimeExternal",
                 "parameters": [
                     {
@@ -754,7 +754,7 @@
                     "anime"
                 ],
                 "summary": "Anime streaming links",
-                "description": "Retrieves the anime streaming links for the anime identified by **id**.",
+                "description": "Returns the streaming links of an anime by **id**.",
                 "operationId": "getAnimeStreaming",
                 "parameters": [
                     {
@@ -789,7 +789,7 @@
                     "characters"
                 ],
                 "summary": "Complete character resource",
-                "description": "Returns the complete character resource — primary data plus related sub-resources — in one response for the given **id**.",
+                "description": "Returns the complete character resource for a character by **id**, including anime and manga roles, voices, and more.",
                 "operationId": "getCharacterFullById",
                 "parameters": [
                     {
@@ -829,7 +829,7 @@
                     "characters"
                 ],
                 "summary": "Character details",
-                "description": "Retrieves a particular character for the given **id**.",
+                "description": "Returns the details of a character by **id**.",
                 "operationId": "getCharacterById",
                 "parameters": [
                     {
@@ -869,7 +869,7 @@
                     "characters"
                 ],
                 "summary": "Character anime roles",
-                "description": "Retrieves the character anime roles for the character identified by **id**.",
+                "description": "Returns the anime roles of a character by **id**.",
                 "operationId": "getCharacterAnime",
                 "parameters": [
                     {
@@ -904,7 +904,7 @@
                     "characters"
                 ],
                 "summary": "Character manga roles",
-                "description": "Retrieves the character manga roles for the character identified by **id**.",
+                "description": "Returns the manga roles of a character by **id**.",
                 "operationId": "getCharacterManga",
                 "parameters": [
                     {
@@ -939,7 +939,7 @@
                     "characters"
                 ],
                 "summary": "Character voice actors",
-                "description": "Retrieves the character voice actors for the character identified by **id**.",
+                "description": "Returns the voice actors of a character by **id**.",
                 "operationId": "getCharacterVoiceActors",
                 "parameters": [
                     {
@@ -974,7 +974,7 @@
                     "characters"
                 ],
                 "summary": "Character pictures",
-                "description": "Retrieves the character pictures for the character identified by **id**.",
+                "description": "Returns the pictures of a character by **id**.",
                 "operationId": "getCharacterPictures",
                 "parameters": [
                     {
@@ -1009,7 +1009,7 @@
                     "clubs"
                 ],
                 "summary": "Club details",
-                "description": "Retrieves the club details for the club identified by **id**.",
+                "description": "Returns the details of a club by **id**.",
                 "operationId": "getClubsById",
                 "parameters": [
                     {
@@ -1049,7 +1049,7 @@
                     "clubs"
                 ],
                 "summary": "Club members",
-                "description": "Retrieves the club members for a club.",
+                "description": "Returns the members of a club by **id**, paginated by **page**.",
                 "operationId": "getClubMembers",
                 "parameters": [
                     {
@@ -1094,7 +1094,7 @@
                     "clubs"
                 ],
                 "summary": "Club staff",
-                "description": "Retrieves the club staff for a club.",
+                "description": "Returns the staff of a club by **id**.",
                 "operationId": "getClubStaff",
                 "parameters": [
                     {
@@ -1129,7 +1129,7 @@
                     "clubs"
                 ],
                 "summary": "Club relations",
-                "description": "Retrieves the club relations for a club.",
+                "description": "Returns the anime, manga, and characters related to a club by **id**.",
                 "operationId": "getClubRelations",
                 "parameters": [
                     {
@@ -1164,7 +1164,7 @@
                     "genres"
                 ],
                 "summary": "Anime genres",
-                "description": "Retrieves the anime genres for the anime identified by **id**.",
+                "description": "Returns the list of anime genres, explicit genres, themes, and demographics. Use **filter** to select the list type.",
                 "operationId": "getAnimeGenres",
                 "parameters": [
                     {
@@ -1198,7 +1198,7 @@
                     "genres"
                 ],
                 "summary": "Manga genres",
-                "description": "Retrieves the manga genres for the manga identified by **id**.",
+                "description": "Returns the list of manga genres, explicit genres, themes, and demographics. Use **filter** to select the list type.",
                 "operationId": "getMangaGenres",
                 "parameters": [
                     {
@@ -1232,7 +1232,7 @@
                     "magazines"
                 ],
                 "summary": "Magazines list",
-                "description": "Lists magazines from the indexed catalog using the MyAnimeList filters **q, **order_by, **sort, **letter**. Pageable; joins MyAnimeList rate limiting.",
+                "description": "Searches the magazines catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
                 "operationId": "getMagazines",
                 "parameters": [
                     {
@@ -1294,7 +1294,7 @@
                     "manga"
                 ],
                 "summary": "Complete manga resource",
-                "description": "Returns the complete manga resource — primary data plus related sub-resources — in one response for the given **id**.",
+                "description": "Returns the complete manga resource, including primary data plus related sub-resources, for a manga by **id**.",
                 "operationId": "getMangaFullById",
                 "parameters": [
                     {
@@ -1334,7 +1334,7 @@
                     "manga"
                 ],
                 "summary": "Manga details",
-                "description": "Retrieves a particular manga for the given **id**.",
+                "description": "Returns the details of a manga by **id**.",
                 "operationId": "getMangaById",
                 "parameters": [
                     {
@@ -1374,7 +1374,7 @@
                     "manga"
                 ],
                 "summary": "Manga characters",
-                "description": "Retrieves the manga characters for the manga identified by **id**.",
+                "description": "Returns the characters of a manga by **id**.",
                 "operationId": "getMangaCharacters",
                 "parameters": [
                     {
@@ -1409,7 +1409,7 @@
                     "manga"
                 ],
                 "summary": "Manga news",
-                "description": "Retrieves the manga news for the manga identified by **id**.",
+                "description": "Returns recent news articles for a manga by **id**, paginated by **page**.",
                 "operationId": "getMangaNews",
                 "parameters": [
                     {
@@ -1447,7 +1447,7 @@
                     "manga"
                 ],
                 "summary": "Manga forum topics",
-                "description": "Retrieves the manga forum topics for the manga identified by **id**.",
+                "description": "Returns the forum topics of a manga by **id**. Use **filter** to restrict to all, episode, or other topics.",
                 "operationId": "getMangaTopics",
                 "parameters": [
                     {
@@ -1496,7 +1496,7 @@
                     "manga"
                 ],
                 "summary": "Manga pictures",
-                "description": "Retrieves the manga pictures for the manga identified by **id**.",
+                "description": "Returns the pictures of a manga by **id**.",
                 "operationId": "getMangaPictures",
                 "parameters": [
                     {
@@ -1531,7 +1531,7 @@
                     "manga"
                 ],
                 "summary": "Manga statistics",
-                "description": "Retrieves the manga statistics for the manga identified by **id**.",
+                "description": "Returns the statistics of a manga by **id**, such as reading, completed, and on-hold counts.",
                 "operationId": "getMangaStatistics",
                 "parameters": [
                     {
@@ -1566,7 +1566,7 @@
                     "manga"
                 ],
                 "summary": "Manga more info",
-                "description": "Retrieves the manga more info for the manga identified by **id**.",
+                "description": "Returns additional trivia and background information about a manga by **id**.",
                 "operationId": "getMangaMoreInfo",
                 "parameters": [
                     {
@@ -1601,7 +1601,7 @@
                     "manga"
                 ],
                 "summary": "Manga recommendations",
-                "description": "Retrieves the manga recommendations for the manga identified by **id**.",
+                "description": "Returns the recommendations for a manga by **id**.",
                 "operationId": "getMangaRecommendations",
                 "parameters": [
                     {
@@ -1636,7 +1636,7 @@
                     "manga"
                 ],
                 "summary": "Manga user updates",
-                "description": "Retrieves the manga user updates for the manga identified by **id**.",
+                "description": "Returns the recent list updates of users for a manga by **id**, paginated by **page**.",
                 "operationId": "getMangaUserUpdates",
                 "parameters": [
                     {
@@ -1674,7 +1674,7 @@
                     "manga"
                 ],
                 "summary": "Manga reviews",
-                "description": "Retrieves the manga reviews for the manga identified by **id**.",
+                "description": "Returns the reviews of a manga by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.",
                 "operationId": "getMangaReviews",
                 "parameters": [
                     {
@@ -1718,7 +1718,7 @@
                     "manga"
                 ],
                 "summary": "Manga relations",
-                "description": "Retrieves the manga relations for the manga identified by **id**.",
+                "description": "Returns the related entries for a manga by **id**.",
                 "operationId": "getMangaRelations",
                 "parameters": [
                     {
@@ -1761,7 +1761,7 @@
                     "manga"
                 ],
                 "summary": "Manga external links",
-                "description": "Retrieves the manga external links for the manga identified by **id**.",
+                "description": "Returns the external links of a manga by **id**.",
                 "operationId": "getMangaExternal",
                 "parameters": [
                     {
@@ -1796,7 +1796,7 @@
                     "people"
                 ],
                 "summary": "Complete person resource",
-                "description": "Returns the complete person resource — primary data plus related sub-resources — in one response for the given **id**.",
+                "description": "Returns the complete person resource for a person by **id**, including anime and manga roles, voices, and more.",
                 "operationId": "getPersonFullById",
                 "parameters": [
                     {
@@ -1836,7 +1836,7 @@
                     "people"
                 ],
                 "summary": "Person details",
-                "description": "Retrieves a particular person for the given **id**.",
+                "description": "Returns the details of a person by **id**.",
                 "operationId": "getPersonById",
                 "parameters": [
                     {
@@ -1876,7 +1876,7 @@
                     "people"
                 ],
                 "summary": "Person anime roles",
-                "description": "Retrieves the person anime roles for the person identified by **id**.",
+                "description": "Returns the anime roles of a person by **id** with their staff positions.",
                 "operationId": "getPersonAnime",
                 "parameters": [
                     {
@@ -1911,7 +1911,7 @@
                     "people"
                 ],
                 "summary": "Person voice acting roles",
-                "description": "Retrieves the person voice acting roles for the person identified by **id**.",
+                "description": "Returns the voice acting roles of a person by **id**.",
                 "operationId": "getPersonVoices",
                 "parameters": [
                     {
@@ -1946,7 +1946,7 @@
                     "people"
                 ],
                 "summary": "Person manga roles",
-                "description": "Retrieves the person manga roles for the person identified by **id**.",
+                "description": "Returns the manga roles of a person by **id** with their staff positions.",
                 "operationId": "getPersonManga",
                 "parameters": [
                     {
@@ -1981,7 +1981,7 @@
                     "people"
                 ],
                 "summary": "Person pictures",
-                "description": "Retrieves the person pictures for the person identified by **id**.",
+                "description": "Returns the pictures of a person by **id**.",
                 "operationId": "getPersonPictures",
                 "parameters": [
                     {
@@ -2016,7 +2016,7 @@
                     "producers"
                 ],
                 "summary": "Producer details",
-                "description": "Retrieves the producer details for the producer identified by **id**.",
+                "description": "Returns the details of a producer by **id**.",
                 "operationId": "getProducerById",
                 "parameters": [
                     {
@@ -2056,7 +2056,7 @@
                     "producers"
                 ],
                 "summary": "Complete producer resource",
-                "description": "Returns the complete producer resource — primary data plus related sub-resources — in one response for the given **id**.",
+                "description": "Returns the complete producer resource, including primary data plus related sub-resources, for a producer by **id**.",
                 "operationId": "getProducerFullById",
                 "parameters": [
                     {
@@ -2096,7 +2096,7 @@
                     "producers"
                 ],
                 "summary": "Producer external links",
-                "description": "Retrieves the producer external links for a producer.",
+                "description": "Returns the external links of a producer by **id**.",
                 "operationId": "getProducerExternal",
                 "parameters": [
                     {
@@ -2131,7 +2131,7 @@
                     "random"
                 ],
                 "summary": "Random anime",
-                "description": "Returns a random anime from the indexed catalog. Outcome varies per request.",
+                "description": "Returns a random anime from the indexed catalog.",
                 "operationId": "getRandomAnime",
                 "responses": {
                     "200": {
@@ -2161,7 +2161,7 @@
                     "random"
                 ],
                 "summary": "Random manga",
-                "description": "Returns a random manga from the indexed catalog. Outcome varies per request.",
+                "description": "Returns a random manga from the indexed catalog.",
                 "operationId": "getRandomManga",
                 "responses": {
                     "200": {
@@ -2191,7 +2191,7 @@
                     "random"
                 ],
                 "summary": "Random characters",
-                "description": "Returns a random characters from the indexed catalog. Outcome varies per request.",
+                "description": "Returns a random character from the indexed catalog.",
                 "operationId": "getRandomCharacters",
                 "responses": {
                     "200": {
@@ -2221,7 +2221,7 @@
                     "random"
                 ],
                 "summary": "Random people",
-                "description": "Returns a random people from the indexed catalog. Outcome varies per request.",
+                "description": "Returns a random person from the indexed catalog.",
                 "operationId": "getRandomPeople",
                 "responses": {
                     "200": {
@@ -2251,7 +2251,7 @@
                     "random"
                 ],
                 "summary": "Random users",
-                "description": "Returns a random users from the indexed catalog. Outcome varies per request.",
+                "description": "Returns a random user profile from the indexed catalog.",
                 "operationId": "getRandomUsers",
                 "responses": {
                     "200": {
@@ -2281,7 +2281,7 @@
                     "recommendations"
                 ],
                 "summary": "Recent anime recommendations",
-                "description": "Retrieves the most recent recent anime recommendations from MyAnimeList.",
+                "description": "Returns the most recent anime recommendations from MyAnimeList.",
                 "operationId": "getRecentAnimeRecommendations",
                 "parameters": [
                     {
@@ -2311,7 +2311,7 @@
                     "recommendations"
                 ],
                 "summary": "Recent manga recommendations",
-                "description": "Retrieves the most recent recent manga recommendations from MyAnimeList.",
+                "description": "Returns the most recent manga recommendations from MyAnimeList.",
                 "operationId": "getRecentMangaRecommendations",
                 "parameters": [
                     {
@@ -2341,7 +2341,7 @@
                     "reviews"
                 ],
                 "summary": "Recent anime reviews",
-                "description": "Retrieves the most recent recent anime reviews.",
+                "description": "Returns the most recent anime reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.",
                 "operationId": "getRecentAnimeReviews",
                 "parameters": [
                     {
@@ -2396,7 +2396,7 @@
                     "reviews"
                 ],
                 "summary": "Recent manga reviews",
-                "description": "Retrieves the most recent recent manga reviews.",
+                "description": "Returns the most recent manga reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.",
                 "operationId": "getRecentMangaReviews",
                 "parameters": [
                     {
@@ -2467,7 +2467,7 @@
                     "schedules"
                 ],
                 "summary": "Anime schedule",
-                "description": "Returns the airing anime schedule. The **filter** parameter pins a weekday (**monday**..**sunday**); **kids** and **sfw** toggle child-safe listings.",
+                "description": "Returns the weekly airing schedule of anime. Use **filter** to select a weekday, with **kids** and **sfw** to include or exclude entries by their ratings, and pagination via **page**.",
                 "operationId": "getSchedules",
                 "parameters": [
                     {
@@ -2549,7 +2549,7 @@
                     "anime"
                 ],
                 "summary": "Anime search",
-                "description": "Retrieves the anime search for the anime identified by **id**.",
+                "description": "Searches the anime catalog. Accepts filters such as **q**, **type**, **score**, **status**, **rating**, **genres**, **order_by**, and **sort**, with pagination via **page**.",
                 "operationId": "getAnimeSearch",
                 "parameters": [
                     {
@@ -2706,7 +2706,7 @@
                     "manga"
                 ],
                 "summary": "Manga search",
-                "description": "Retrieves the manga search for the manga identified by **id**.",
+                "description": "Searches the manga catalog. Accepts filters such as **q**, **type**, **score**, **status**, **genres**, **order_by**, and **sort**, with pagination via **page**.",
                 "operationId": "getMangaSearch",
                 "parameters": [
                     {
@@ -2856,7 +2856,7 @@
                     "people"
                 ],
                 "summary": "People search",
-                "description": "Searches the people catalog using the MyAnimeList filters **q, **order_by, **sort, **letter**. Pageable; joins MyAnimeList rate limiting.",
+                "description": "Searches the people catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
                 "operationId": "getPeopleSearch",
                 "parameters": [
                     {
@@ -2918,7 +2918,7 @@
                     "characters"
                 ],
                 "summary": "Characters search",
-                "description": "Retrieves the characters search for the character identified by **id**.",
+                "description": "Searches the characters catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
                 "operationId": "getCharactersSearch",
                 "parameters": [
                     {
@@ -2980,7 +2980,7 @@
                     "users"
                 ],
                 "summary": "Users search",
-                "description": "Searches the users catalog using the MyAnimeList filters **q, **gender, **location, **maxAge, **minAge**. Pageable; joins MyAnimeList rate limiting.",
+                "description": "Searches the users catalog using the **q**, **gender**, **location**, **maxAge**, and **minAge** filters. Supports pagination via **page**.",
                 "operationId": "getUsersSearch",
                 "parameters": [
                     {
@@ -3048,7 +3048,7 @@
                     "users"
                 ],
                 "summary": "User by ID",
-                "description": "Retrieves the user by id for the user identified by **username**.",
+                "description": "Returns a user profile by their MyAnimeList **id**.",
                 "operationId": "getUserById",
                 "parameters": [
                     {
@@ -3088,7 +3088,7 @@
                     "clubs"
                 ],
                 "summary": "Clubs search",
-                "description": "Retrieves the clubs search for a club.",
+                "description": "Searches the clubs catalog using the **q**, **type**, **category**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
                 "operationId": "getClubsSearch",
                 "parameters": [
                     {
@@ -3164,7 +3164,7 @@
                     "producers"
                 ],
                 "summary": "Producers list",
-                "description": "Retrieves the producers list for a producer.",
+                "description": "Searches the producers catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
                 "operationId": "getProducers",
                 "parameters": [
                     {
@@ -3226,7 +3226,7 @@
                     "seasons"
                 ],
                 "summary": "Current anime season",
-                "description": "Returns the anime currently airing this season. Accepts an optional **filter**.",
+                "description": "Returns the anime currently airing this season. Can be filtered by **filter** and supports pagination via **page**.",
                 "operationId": "getSeasonNow",
                 "parameters": [
                     {
@@ -3284,7 +3284,7 @@
                     "seasons"
                 ],
                 "summary": "Seasonal anime",
-                "description": "Returns the anime for a specific year and season, filtered by the **filter** parameter.",
+                "description": "Returns the anime that aired in a specific **year** and **season**. Can be filtered by **filter** and supports pagination via **page**.",
                 "operationId": "getSeason",
                 "parameters": [
                     {
@@ -3358,7 +3358,7 @@
                     "seasons"
                 ],
                 "summary": "Seasons list",
-                "description": "Lists the available seasonal anime indexes.",
+                "description": "Lists the years and seasons with available anime archives.",
                 "operationId": "getSeasonsList",
                 "responses": {
                     "200": {
@@ -3383,7 +3383,7 @@
                     "seasons"
                 ],
                 "summary": "Upcoming anime season",
-                "description": "Returns the upcoming anime season. Accepts an optional **filter**.",
+                "description": "Returns the anime of the upcoming season. Can be filtered by **filter** and supports pagination via **page**.",
                 "operationId": "getSeasonUpcoming",
                 "parameters": [
                     {
@@ -3441,7 +3441,7 @@
                     "top"
                 ],
                 "summary": "Top anime",
-                "description": "Returns the top-ranked anime. Query parameters: **type, **filter, **rating, **sfw**.",
+                "description": "Returns the top-ranked anime. Can be filtered by **type**, **filter**, **rating**, and **sfw**.",
                 "operationId": "getTopAnime",
                 "parameters": [
                     {
@@ -3505,7 +3505,7 @@
                     "top"
                 ],
                 "summary": "Top manga",
-                "description": "Returns the top-ranked manga. Query parameters: **type, **filter**.",
+                "description": "Returns the top-ranked manga. Can be filtered by **type** and **filter**.",
                 "operationId": "getTopManga",
                 "parameters": [
                     {
@@ -3620,7 +3620,7 @@
                     "top"
                 ],
                 "summary": "Top reviews",
-                "description": "Returns the top-ranked reviews. Query parameters: **type, **preliminary, **spoilers**.",
+                "description": "Returns the top-ranked reviews. Can be filtered by **type**, with **preliminary** and **spoilers** toggles.",
                 "operationId": "getTopReviews",
                 "parameters": [
                     {
@@ -3743,7 +3743,7 @@
                     "users"
                 ],
                 "summary": "Complete user profile",
-                "description": "Retrieves the complete user profile for the user identified by **username**.",
+                "description": "Returns the complete profile of a user by **username**.",
                 "operationId": "getUserFullProfile",
                 "parameters": [
                     {
@@ -3783,7 +3783,7 @@
                     "users"
                 ],
                 "summary": "User profile",
-                "description": "Retrieves the user profile for the user identified by **username**.",
+                "description": "Returns the public profile of a user by **username**.",
                 "operationId": "getUserProfile",
                 "parameters": [
                     {
@@ -3823,7 +3823,7 @@
                     "users"
                 ],
                 "summary": "User statistics",
-                "description": "Retrieves the user statistics for the user identified by **username**.",
+                "description": "Returns the statistics of a user by **username**.",
                 "operationId": "getUserStatistics",
                 "parameters": [
                     {
@@ -3858,7 +3858,7 @@
                     "users"
                 ],
                 "summary": "User favorites",
-                "description": "Retrieves the user favorites for the user identified by **username**.",
+                "description": "Returns the favorites of a user by **username**.",
                 "operationId": "getUserFavorites",
                 "parameters": [
                     {
@@ -3898,7 +3898,7 @@
                     "users"
                 ],
                 "summary": "User updates",
-                "description": "Retrieves the user updates for the user identified by **username**.",
+                "description": "Returns the recent anime and manga list updates of a user by **username**.",
                 "operationId": "getUserUpdates",
                 "parameters": [
                     {
@@ -3933,7 +3933,7 @@
                     "users"
                 ],
                 "summary": "User about",
-                "description": "Retrieves the user about for the user identified by **username**.",
+                "description": "Returns the profile \"about\" section of a user by **username** in raw HTML.",
                 "operationId": "getUserAbout",
                 "parameters": [
                     {
@@ -3968,7 +3968,7 @@
                     "users"
                 ],
                 "summary": "User history",
-                "description": "Retrieves the user history for the user identified by **username**. Filters: **type**.",
+                "description": "Returns the recent anime and manga history of a user by **username**. Use **type** to filter to anime or manga entries.",
                 "operationId": "getUserHistory",
                 "parameters": [
                     {
@@ -4015,7 +4015,7 @@
                     "users"
                 ],
                 "summary": "User friends",
-                "description": "Retrieves the user friends for the user identified by **username**.",
+                "description": "Returns the friends of a user by **username**, paginated by **page**.",
                 "operationId": "getUserFriends",
                 "parameters": [
                     {
@@ -4053,7 +4053,7 @@
                     "users"
                 ],
                 "summary": "User animelist",
-                "description": "Retrieves the user animelist for the user identified by **username**. Filters: **status**.\n\nUser Anime lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+                "description": "Returns the anime list of a user by **username**, optionally filtered by **status**. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
                 "operationId": "getUserAnimelist",
                 "parameters": [
                     {
@@ -4094,7 +4094,7 @@
                     "users"
                 ],
                 "summary": "User manga list",
-                "description": "Retrieves the user manga list for the user identified by **username**. Filters: **status**.\n\nUser Manga lists have been discontinued since May 1st, 2022. <a href='https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A'>Read more</a>",
+                "description": "Returns the manga list of a user by **username**, optionally filtered by **status**. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
                 "operationId": "getUserMangaList",
                 "parameters": [
                     {
@@ -4135,7 +4135,7 @@
                     "users"
                 ],
                 "summary": "User reviews",
-                "description": "Retrieves the user reviews for the user identified by **username**.",
+                "description": "Returns the reviews written by a user by **username**, paginated by **page**.",
                 "operationId": "getUserReviews",
                 "parameters": [
                     {
@@ -4240,7 +4240,7 @@
                     "users"
                 ],
                 "summary": "User recommendations",
-                "description": "Retrieves the user recommendations for the user identified by **username**.",
+                "description": "Returns the recommendations made by a user by **username**, paginated by **page**.",
                 "operationId": "getUserRecommendations",
                 "parameters": [
                     {
@@ -4278,7 +4278,7 @@
                     "users"
                 ],
                 "summary": "User clubs",
-                "description": "Retrieves the user clubs for the user identified by **username**.",
+                "description": "Returns the clubs joined by a user by **username**, paginated by **page**.",
                 "operationId": "getUserClubs",
                 "parameters": [
                     {
@@ -4316,7 +4316,7 @@
                     "users"
                 ],
                 "summary": "User external links",
-                "description": "Retrieves the user external links for the user identified by **username**.",
+                "description": "Returns the external links of a user by **username**.",
                 "operationId": "getUserExternal",
                 "parameters": [
                     {

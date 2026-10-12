@@ -31,7 +31,7 @@ class RandomController extends Controller
         path: '/random/anime',
         operationId: 'getRandomAnime',
         summary: 'Random anime',
-        description: 'Returns a random anime from the indexed catalog. Outcome varies per request.',
+        description: 'Returns a random anime from the indexed catalog.',
         tags: ['random'],
         responses: [
             new OA\Response(
@@ -55,7 +55,7 @@ class RandomController extends Controller
         path: '/random/manga',
         operationId: 'getRandomManga',
         summary: 'Random manga',
-        description: 'Returns a random manga from the indexed catalog. Outcome varies per request.',
+        description: 'Returns a random manga from the indexed catalog.',
         tags: ['random'],
         responses: [
             new OA\Response(
@@ -79,7 +79,7 @@ class RandomController extends Controller
         path: '/random/characters',
         operationId: 'getRandomCharacters',
         summary: 'Random characters',
-        description: 'Returns a random characters from the indexed catalog. Outcome varies per request.',
+        description: 'Returns a random character from the indexed catalog.',
         tags: ['random'],
         responses: [
             new OA\Response(
@@ -103,7 +103,7 @@ class RandomController extends Controller
         path: '/random/people',
         operationId: 'getRandomPeople',
         summary: 'Random people',
-        description: 'Returns a random people from the indexed catalog. Outcome varies per request.',
+        description: 'Returns a random person from the indexed catalog.',
         tags: ['random'],
         responses: [
             new OA\Response(
@@ -127,7 +127,7 @@ class RandomController extends Controller
         path: '/random/users',
         operationId: 'getRandomUsers',
         summary: 'Random users',
-        description: 'Returns a random users from the indexed catalog. Outcome varies per request.',
+        description: 'Returns a random user profile from the indexed catalog.',
         tags: ['random'],
         responses: [
             new OA\Response(

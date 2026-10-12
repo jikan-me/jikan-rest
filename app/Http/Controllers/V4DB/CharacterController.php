@@ -19,7 +19,7 @@ class CharacterController extends Controller
         path: '/characters/{id}/full',
         operationId: 'getCharacterFullById',
         summary: 'Complete character resource',
-        description: 'Returns the complete character resource — primary data plus related sub-resources — in one response for the given **id**.',
+        description: 'Returns the complete character resource for a character by **id**, including anime and manga roles, voices, and more.',
         tags: ['characters'],
         parameters: [
             new OA\Parameter(
@@ -51,7 +51,7 @@ class CharacterController extends Controller
         path: '/characters/{id}',
         operationId: 'getCharacterById',
         summary: 'Character details',
-        description: 'Retrieves a particular character for the given **id**.',
+        description: 'Returns the details of a character by **id**.',
         tags: ['characters'],
         parameters: [
             new OA\Parameter(
@@ -83,7 +83,7 @@ class CharacterController extends Controller
         path: '/characters/{id}/anime',
         operationId: 'getCharacterAnime',
         summary: 'Character anime roles',
-        description: 'Retrieves the character anime roles for the character identified by **id**.',
+        description: 'Returns the anime roles of a character by **id**.',
         tags: ['characters'],
         parameters: [
             new OA\Parameter(
@@ -111,7 +111,7 @@ class CharacterController extends Controller
         path: '/characters/{id}/manga',
         operationId: 'getCharacterManga',
         summary: 'Character manga roles',
-        description: 'Retrieves the character manga roles for the character identified by **id**.',
+        description: 'Returns the manga roles of a character by **id**.',
         tags: ['characters'],
         parameters: [
             new OA\Parameter(
@@ -139,7 +139,7 @@ class CharacterController extends Controller
         path: '/characters/{id}/voices',
         operationId: 'getCharacterVoiceActors',
         summary: 'Character voice actors',
-        description: 'Retrieves the character voice actors for the character identified by **id**.',
+        description: 'Returns the voice actors of a character by **id**.',
         tags: ['characters'],
         parameters: [
             new OA\Parameter(
@@ -167,7 +167,7 @@ class CharacterController extends Controller
         path: '/characters/{id}/pictures',
         operationId: 'getCharacterPictures',
         summary: 'Character pictures',
-        description: 'Retrieves the character pictures for the character identified by **id**.',
+        description: 'Returns the pictures of a character by **id**.',
         tags: ['characters'],
         parameters: [
             new OA\Parameter(

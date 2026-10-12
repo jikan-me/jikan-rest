@@ -12,7 +12,7 @@ class MagazineController extends Controller
         path: '/magazines',
         operationId: 'getMagazines',
         summary: 'Magazines list',
-        description: 'Lists magazines from the indexed catalog using the MyAnimeList filters **q, **order_by, **sort, **letter**. Pageable; joins MyAnimeList rate limiting.',
+        description: 'Searches the magazines catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['magazines'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),

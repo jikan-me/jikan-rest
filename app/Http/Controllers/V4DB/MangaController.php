@@ -23,7 +23,7 @@ class MangaController extends Controller
         path: '/manga/{id}/full',
         operationId: 'getMangaFullById',
         summary: 'Complete manga resource',
-        description: 'Returns the complete manga resource — primary data plus related sub-resources — in one response for the given **id**.',
+        description: 'Returns the complete manga resource, including primary data plus related sub-resources, for a manga by **id**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -55,7 +55,7 @@ class MangaController extends Controller
         path: '/manga/{id}',
         operationId: 'getMangaById',
         summary: 'Manga details',
-        description: 'Retrieves a particular manga for the given **id**.',
+        description: 'Returns the details of a manga by **id**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -87,7 +87,7 @@ class MangaController extends Controller
         path: '/manga/{id}/characters',
         operationId: 'getMangaCharacters',
         summary: 'Manga characters',
-        description: 'Retrieves the manga characters for the manga identified by **id**.',
+        description: 'Returns the characters of a manga by **id**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -115,7 +115,7 @@ class MangaController extends Controller
         path: '/manga/{id}/news',
         operationId: 'getMangaNews',
         summary: 'Manga news',
-        description: 'Retrieves the manga news for the manga identified by **id**.',
+        description: 'Returns recent news articles for a manga by **id**, paginated by **page**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -146,7 +146,7 @@ class MangaController extends Controller
         path: '/manga/{id}/forum',
         operationId: 'getMangaTopics',
         summary: 'Manga forum topics',
-        description: 'Retrieves the manga forum topics for the manga identified by **id**.',
+        description: 'Returns the forum topics of a manga by **id**. Use **filter** to restrict to all, episode, or other topics.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -181,7 +181,7 @@ class MangaController extends Controller
         path: '/manga/{id}/pictures',
         operationId: 'getMangaPictures',
         summary: 'Manga pictures',
-        description: 'Retrieves the manga pictures for the manga identified by **id**.',
+        description: 'Returns the pictures of a manga by **id**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -221,7 +221,7 @@ class MangaController extends Controller
         path: '/manga/{id}/statistics',
         operationId: 'getMangaStatistics',
         summary: 'Manga statistics',
-        description: 'Retrieves the manga statistics for the manga identified by **id**.',
+        description: 'Returns the statistics of a manga by **id**, such as reading, completed, and on-hold counts.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -249,7 +249,7 @@ class MangaController extends Controller
         path: '/manga/{id}/moreinfo',
         operationId: 'getMangaMoreInfo',
         summary: 'Manga more info',
-        description: 'Retrieves the manga more info for the manga identified by **id**.',
+        description: 'Returns additional trivia and background information about a manga by **id**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -277,7 +277,7 @@ class MangaController extends Controller
         path: '/manga/{id}/recommendations',
         operationId: 'getMangaRecommendations',
         summary: 'Manga recommendations',
-        description: 'Retrieves the manga recommendations for the manga identified by **id**.',
+        description: 'Returns the recommendations for a manga by **id**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -305,7 +305,7 @@ class MangaController extends Controller
         path: '/manga/{id}/userupdates',
         operationId: 'getMangaUserUpdates',
         summary: 'Manga user updates',
-        description: 'Retrieves the manga user updates for the manga identified by **id**.',
+        description: 'Returns the recent list updates of users for a manga by **id**, paginated by **page**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -337,7 +337,7 @@ class MangaController extends Controller
         path: '/manga/{id}/reviews',
         operationId: 'getMangaReviews',
         summary: 'Manga reviews',
-        description: 'Retrieves the manga reviews for the manga identified by **id**.',
+        description: 'Returns the reviews of a manga by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -368,7 +368,7 @@ class MangaController extends Controller
         path: '/manga/{id}/relations',
         operationId: 'getMangaRelations',
         summary: 'Manga relations',
-        description: 'Retrieves the manga relations for the manga identified by **id**.',
+        description: 'Returns the related entries for a manga by **id**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(
@@ -404,7 +404,7 @@ class MangaController extends Controller
         path: '/manga/{id}/external',
         operationId: 'getMangaExternal',
         summary: 'Manga external links',
-        description: 'Retrieves the manga external links for the manga identified by **id**.',
+        description: 'Returns the external links of a manga by **id**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(

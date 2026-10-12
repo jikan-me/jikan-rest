@@ -12,7 +12,7 @@ class RecommendationsController extends Controller
         path: '/recommendations/anime',
         operationId: 'getRecentAnimeRecommendations',
         summary: 'Recent anime recommendations',
-        description: 'Retrieves the most recent recent anime recommendations from MyAnimeList.',
+        description: 'Returns the most recent anime recommendations from MyAnimeList.',
         tags: ['recommendations'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),
@@ -35,7 +35,7 @@ class RecommendationsController extends Controller
         path: '/recommendations/manga',
         operationId: 'getRecentMangaRecommendations',
         summary: 'Recent manga recommendations',
-        description: 'Retrieves the most recent recent manga recommendations from MyAnimeList.',
+        description: 'Returns the most recent manga recommendations from MyAnimeList.',
         tags: ['recommendations'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),

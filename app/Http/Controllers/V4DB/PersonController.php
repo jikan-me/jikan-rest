@@ -16,7 +16,7 @@ class PersonController extends Controller
         path: '/people/{id}/full',
         operationId: 'getPersonFullById',
         summary: 'Complete person resource',
-        description: 'Returns the complete person resource — primary data plus related sub-resources — in one response for the given **id**.',
+        description: 'Returns the complete person resource for a person by **id**, including anime and manga roles, voices, and more.',
         tags: ['people'],
         parameters: [
             new OA\Parameter(
@@ -48,7 +48,7 @@ class PersonController extends Controller
         path: '/people/{id}',
         operationId: 'getPersonById',
         summary: 'Person details',
-        description: 'Retrieves a particular person for the given **id**.',
+        description: 'Returns the details of a person by **id**.',
         tags: ['people'],
         parameters: [
             new OA\Parameter(
@@ -80,7 +80,7 @@ class PersonController extends Controller
         path: '/people/{id}/anime',
         operationId: 'getPersonAnime',
         summary: 'Person anime roles',
-        description: 'Retrieves the person anime roles for the person identified by **id**.',
+        description: 'Returns the anime roles of a person by **id** with their staff positions.',
         tags: ['people'],
         parameters: [
             new OA\Parameter(
@@ -108,7 +108,7 @@ class PersonController extends Controller
         path: '/people/{id}/voices',
         operationId: 'getPersonVoices',
         summary: 'Person voice acting roles',
-        description: 'Retrieves the person voice acting roles for the person identified by **id**.',
+        description: 'Returns the voice acting roles of a person by **id**.',
         tags: ['people'],
         parameters: [
             new OA\Parameter(
@@ -136,7 +136,7 @@ class PersonController extends Controller
         path: '/people/{id}/manga',
         operationId: 'getPersonManga',
         summary: 'Person manga roles',
-        description: 'Retrieves the person manga roles for the person identified by **id**.',
+        description: 'Returns the manga roles of a person by **id** with their staff positions.',
         tags: ['people'],
         parameters: [
             new OA\Parameter(
@@ -164,7 +164,7 @@ class PersonController extends Controller
         path: '/people/{id}/pictures',
         operationId: 'getPersonPictures',
         summary: 'Person pictures',
-        description: 'Retrieves the person pictures for the person identified by **id**.',
+        description: 'Returns the pictures of a person by **id**.',
         tags: ['people'],
         parameters: [
             new OA\Parameter(

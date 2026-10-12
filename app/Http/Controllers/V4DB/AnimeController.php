@@ -30,7 +30,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/full',
         operationId: 'getAnimeFullById',
         summary: 'Complete anime resource',
-        description: 'Returns the complete anime resource — primary data plus related sub-resources — in one response for the given **id**.',
+        description: 'Returns the complete anime resource, including primary data plus related sub-resources, for an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -62,7 +62,7 @@ class AnimeController extends Controller
         path: '/anime/{id}',
         operationId: 'getAnimeById',
         summary: 'Anime details',
-        description: 'Retrieves the details for the given **id**.',
+        description: 'Returns the details of an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -94,7 +94,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/characters',
         operationId: 'getAnimeCharacters',
         summary: 'Anime characters',
-        description: 'Retrieves the anime characters for the anime identified by **id**.',
+        description: 'Returns the characters of an anime by **id**, together with their voice actors.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -122,7 +122,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/staff',
         operationId: 'getAnimeStaff',
         summary: 'Anime staff',
-        description: 'Retrieves the anime staff for the anime identified by **id**.',
+        description: 'Returns the staff of an anime by **id** along with their positions.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -150,7 +150,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/episodes',
         operationId: 'getAnimeEpisodes',
         summary: 'Anime episodes',
-        description: 'Retrieves the anime episodes for the anime identified by **id**.',
+        description: 'Returns the list of episodes for an anime by **id**, paginated by **page**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -181,7 +181,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/episodes/{episode}',
         operationId: 'getAnimeEpisodeById',
         summary: 'Anime episode',
-        description: 'Retrieves the anime episode for the anime identified by **id**.',
+        description: 'Returns a single episode of an anime by **id** and **episode**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -219,7 +219,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/news',
         operationId: 'getAnimeNews',
         summary: 'Anime news',
-        description: 'Retrieves the anime news for the anime identified by **id**.',
+        description: 'Returns recent news articles for an anime by **id**, paginated by **page**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -250,7 +250,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/forum',
         operationId: 'getAnimeForum',
         summary: 'Anime forum topics',
-        description: 'Retrieves the anime forum topics for the anime identified by **id**.',
+        description: 'Returns the forum topics of an anime by **id**. Use **filter** to restrict to all, episode, or other topics.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -285,7 +285,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/videos',
         operationId: 'getAnimeVideos',
         summary: 'Anime videos',
-        description: 'Retrieves the anime videos for the anime identified by **id**.',
+        description: 'Returns the promotional videos, episodes, and music videos of an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -313,7 +313,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/videos/episodes',
         operationId: 'getAnimeVideosEpisodes',
         summary: 'Anime video episodes',
-        description: 'Retrieves the anime video episodes for the anime identified by **id**.',
+        description: 'Returns the episode videos of an anime by **id**, paginated by **page**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -344,7 +344,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/pictures',
         operationId: 'getAnimePictures',
         summary: 'Anime pictures',
-        description: 'Retrieves the anime pictures for the anime identified by **id**.',
+        description: 'Returns the pictures of an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -372,7 +372,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/statistics',
         operationId: 'getAnimeStatistics',
         summary: 'Anime statistics',
-        description: 'Retrieves the anime statistics for the anime identified by **id**.',
+        description: 'Returns the statistics of an anime by **id**, such as watching, completed, and on-hold counts.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -400,7 +400,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/moreinfo',
         operationId: 'getAnimeMoreInfo',
         summary: 'Anime more info',
-        description: 'Retrieves the anime more info for the anime identified by **id**.',
+        description: 'Returns additional trivia and background information about an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -428,7 +428,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/recommendations',
         operationId: 'getAnimeRecommendations',
         summary: 'Anime recommendations',
-        description: 'Retrieves the anime recommendations for the anime identified by **id**.',
+        description: 'Returns the recommendations for an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -456,7 +456,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/userupdates',
         operationId: 'getAnimeUserUpdates',
         summary: 'Anime user updates',
-        description: 'Retrieves the anime user updates for the anime identified by **id**.',
+        description: 'Returns the recent list updates of users for an anime by **id**, paginated by **page**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -485,7 +485,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/reviews',
         operationId: 'getAnimeReviews',
         summary: 'Anime reviews',
-        description: 'Retrieves the anime reviews for the anime identified by **id**.',
+        description: 'Returns the reviews of an anime by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -523,7 +523,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/relations',
         operationId: 'getAnimeRelations',
         summary: 'Anime relations',
-        description: 'Retrieves the anime relations for the anime identified by **id**.',
+        description: 'Returns the related entries for an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -558,7 +558,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/themes',
         operationId: 'getAnimeThemes',
         summary: 'Anime themes',
-        description: 'Retrieves the anime themes for the anime identified by **id**.',
+        description: 'Returns the opening and ending themes of an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -586,7 +586,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/external',
         operationId: 'getAnimeExternal',
         summary: 'Anime external links',
-        description: 'Retrieves the anime external links for the anime identified by **id**.',
+        description: 'Returns the external links of an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
@@ -614,7 +614,7 @@ class AnimeController extends Controller
         path: '/anime/{id}/streaming',
         operationId: 'getAnimeStreaming',
         summary: 'Anime streaming links',
-        description: 'Retrieves the anime streaming links for the anime identified by **id**.',
+        description: 'Returns the streaming links of an anime by **id**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(

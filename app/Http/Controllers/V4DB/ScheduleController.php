@@ -11,7 +11,7 @@ class ScheduleController extends Controller
         path: '/schedules',
         operationId: 'getSchedules',
         summary: 'Anime schedule',
-        description: 'Returns the airing anime schedule. The **filter** parameter pins a weekday (**monday**..**sunday**); **kids** and **sfw** toggle child-safe listings.',
+        description: 'Returns the weekly airing schedule of anime. Use **filter** to select a weekday, with **kids** and **sfw** to include or exclude entries by their ratings, and pagination via **page**.',
         tags: ['schedules'],
         parameters: [
             new OA\Parameter(

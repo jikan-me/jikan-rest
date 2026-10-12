@@ -28,7 +28,7 @@ class UserController extends Controller
         path: '/users/{username}/full',
         operationId: 'getUserFullProfile',
         summary: 'Complete user profile',
-        description: 'Retrieves the complete user profile for the user identified by **username**.',
+        description: 'Returns the complete profile of a user by **username**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -60,7 +60,7 @@ class UserController extends Controller
         path: '/users/{username}',
         operationId: 'getUserProfile',
         summary: 'User profile',
-        description: 'Retrieves the user profile for the user identified by **username**.',
+        description: 'Returns the public profile of a user by **username**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -92,7 +92,7 @@ class UserController extends Controller
         path: '/users/{username}/statistics',
         operationId: 'getUserStatistics',
         summary: 'User statistics',
-        description: 'Retrieves the user statistics for the user identified by **username**.',
+        description: 'Returns the statistics of a user by **username**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -120,7 +120,7 @@ class UserController extends Controller
         path: '/users/{username}/favorites',
         operationId: 'getUserFavorites',
         summary: 'User favorites',
-        description: 'Retrieves the user favorites for the user identified by **username**.',
+        description: 'Returns the favorites of a user by **username**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -152,7 +152,7 @@ class UserController extends Controller
         path: '/users/{username}/userupdates',
         operationId: 'getUserUpdates',
         summary: 'User updates',
-        description: 'Retrieves the user updates for the user identified by **username**.',
+        description: 'Returns the recent anime and manga list updates of a user by **username**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -180,7 +180,7 @@ class UserController extends Controller
         path: '/users/{username}/about',
         operationId: 'getUserAbout',
         summary: 'User about',
-        description: 'Retrieves the user about for the user identified by **username**.',
+        description: 'Returns the profile "about" section of a user by **username** in raw HTML.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -208,7 +208,7 @@ class UserController extends Controller
         path: '/users/{username}/history',
         operationId: 'getUserHistory',
         summary: 'User history',
-        description: 'Retrieves the user history for the user identified by **username**. Filters: **type**.',
+        description: 'Returns the recent anime and manga history of a user by **username**. Use **type** to filter to anime or manga entries.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -242,7 +242,7 @@ class UserController extends Controller
         path: '/users/{username}/friends',
         operationId: 'getUserFriends',
         summary: 'User friends',
-        description: 'Retrieves the user friends for the user identified by **username**.',
+        description: 'Returns the friends of a user by **username**, paginated by **page**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -273,9 +273,7 @@ class UserController extends Controller
         path: '/users/{username}/animelist',
         operationId: 'getUserAnimelist',
         summary: 'User animelist',
-        description: 'Retrieves the user animelist for the user identified by **username**. Filters: **status**.
-
-User Anime lists have been discontinued since May 1st, 2022. <a href=\'https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A\'>Read more</a>',
+        description: 'Returns the anime list of a user by **username**, optionally filtered by **status**. Note: MyAnimeList discontinued user lists on May 1st, 2022.',
         tags: ['users'],
         deprecated: true,
         parameters: [
@@ -309,9 +307,7 @@ User Anime lists have been discontinued since May 1st, 2022. <a href=\'https://d
         path: '/users/{username}/mangalist',
         operationId: 'getUserMangaList',
         summary: 'User manga list',
-        description: 'Retrieves the user manga list for the user identified by **username**. Filters: **status**.
-
-User Manga lists have been discontinued since May 1st, 2022. <a href=\'https://docs.google.com/document/d/1-6H-agSnqa8Mfmw802UYfGQrceIEnAaEh4uCXAPiX5A\'>Read more</a>',
+        description: 'Returns the manga list of a user by **username**, optionally filtered by **status**. Note: MyAnimeList discontinued user lists on May 1st, 2022.',
         tags: ['users'],
         deprecated: true,
         parameters: [
@@ -345,7 +341,7 @@ User Manga lists have been discontinued since May 1st, 2022. <a href=\'https://d
         path: '/users/{username}/reviews',
         operationId: 'getUserReviews',
         summary: 'User reviews',
-        description: 'Retrieves the user reviews for the user identified by **username**.',
+        description: 'Returns the reviews written by a user by **username**, paginated by **page**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -378,7 +374,7 @@ User Manga lists have been discontinued since May 1st, 2022. <a href=\'https://d
         path: '/users/{username}/recommendations',
         operationId: 'getUserRecommendations',
         summary: 'User recommendations',
-        description: 'Retrieves the user recommendations for the user identified by **username**.',
+        description: 'Returns the recommendations made by a user by **username**, paginated by **page**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -407,7 +403,7 @@ User Manga lists have been discontinued since May 1st, 2022. <a href=\'https://d
         path: '/users/{username}/clubs',
         operationId: 'getUserClubs',
         summary: 'User clubs',
-        description: 'Retrieves the user clubs for the user identified by **username**.',
+        description: 'Returns the clubs joined by a user by **username**, paginated by **page**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -438,7 +434,7 @@ User Manga lists have been discontinued since May 1st, 2022. <a href=\'https://d
         path: '/users/{username}/external',
         operationId: 'getUserExternal',
         summary: 'User external links',
-        description: 'Retrieves the user external links for the user identified by **username**.',
+        description: 'Returns the external links of a user by **username**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(

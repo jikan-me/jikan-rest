@@ -72,7 +72,7 @@ class ReviewsController extends Controller
         path: '/reviews/anime',
         operationId: 'getRecentAnimeReviews',
         summary: 'Recent anime reviews',
-        description: 'Retrieves the most recent recent anime reviews.',
+        description: 'Returns the most recent anime reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.',
         tags: ['reviews'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),
@@ -110,7 +110,7 @@ class ReviewsController extends Controller
         path: '/reviews/manga',
         operationId: 'getRecentMangaReviews',
         summary: 'Recent manga reviews',
-        description: 'Retrieves the most recent recent manga reviews.',
+        description: 'Returns the most recent manga reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.',
         tags: ['reviews'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),

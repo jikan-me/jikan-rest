@@ -15,7 +15,7 @@ class TopController extends Controller
         path: '/top/anime',
         operationId: 'getTopAnime',
         summary: 'Top anime',
-        description: 'Returns the top-ranked anime. Query parameters: **type, **filter, **rating, **sfw**.',
+        description: 'Returns the top-ranked anime. Can be filtered by **type**, **filter**, **rating**, and **sfw**.',
         tags: ['top'],
         parameters: [
             new OA\Parameter(
@@ -62,7 +62,7 @@ class TopController extends Controller
         path: '/top/manga',
         operationId: 'getTopManga',
         summary: 'Top manga',
-        description: 'Returns the top-ranked manga. Query parameters: **type, **filter**.',
+        description: 'Returns the top-ranked manga. Can be filtered by **type** and **filter**.',
         tags: ['top'],
         parameters: [
             new OA\Parameter(
@@ -146,7 +146,7 @@ class TopController extends Controller
         path: '/top/reviews',
         operationId: 'getTopReviews',
         summary: 'Top reviews',
-        description: 'Returns the top-ranked reviews. Query parameters: **type, **preliminary, **spoilers**.',
+        description: 'Returns the top-ranked reviews. Can be filtered by **type**, with **preliminary** and **spoilers** toggles.',
         tags: ['top'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),

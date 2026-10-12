@@ -19,7 +19,7 @@ class SearchController extends Controller
         path: '/anime',
         operationId: 'getAnimeSearch',
         summary: 'Anime search',
-        description: 'Retrieves the anime search for the anime identified by **id**.',
+        description: 'Searches the anime catalog. Accepts filters such as **q**, **type**, **score**, **status**, **rating**, **genres**, **order_by**, and **sort**, with pagination via **page**.',
         tags: ['anime'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/unapproved'),
@@ -133,7 +133,7 @@ class SearchController extends Controller
         path: '/manga',
         operationId: 'getMangaSearch',
         summary: 'Manga search',
-        description: 'Retrieves the manga search for the manga identified by **id**.',
+        description: 'Searches the manga catalog. Accepts filters such as **q**, **type**, **score**, **status**, **genres**, **order_by**, and **sort**, with pagination via **page**.',
         tags: ['manga'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/unapproved'),
@@ -242,7 +242,7 @@ class SearchController extends Controller
         path: '/people',
         operationId: 'getPeopleSearch',
         summary: 'People search',
-        description: 'Searches the people catalog using the MyAnimeList filters **q, **order_by, **sort, **letter**. Pageable; joins MyAnimeList rate limiting.',
+        description: 'Searches the people catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['people'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),
@@ -287,7 +287,7 @@ class SearchController extends Controller
         path: '/characters',
         operationId: 'getCharactersSearch',
         summary: 'Characters search',
-        description: 'Retrieves the characters search for the character identified by **id**.',
+        description: 'Searches the characters catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['characters'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),
@@ -332,7 +332,7 @@ class SearchController extends Controller
         path: '/users',
         operationId: 'getUsersSearch',
         summary: 'Users search',
-        description: 'Searches the users catalog using the MyAnimeList filters **q, **gender, **location, **maxAge, **minAge**. Pageable; joins MyAnimeList rate limiting.',
+        description: 'Searches the users catalog using the **q**, **gender**, **location**, **maxAge**, and **minAge** filters. Supports pagination via **page**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),
@@ -383,7 +383,7 @@ class SearchController extends Controller
         path: '/users/userbyid/{id}',
         operationId: 'getUserById',
         summary: 'User by ID',
-        description: 'Retrieves the user by id for the user identified by **username**.',
+        description: 'Returns a user profile by their MyAnimeList **id**.',
         tags: ['users'],
         parameters: [
             new OA\Parameter(
@@ -415,7 +415,7 @@ class SearchController extends Controller
         path: '/clubs',
         operationId: 'getClubsSearch',
         summary: 'Clubs search',
-        description: 'Retrieves the clubs search for a club.',
+        description: 'Searches the clubs catalog using the **q**, **type**, **category**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['clubs'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),
@@ -470,7 +470,7 @@ class SearchController extends Controller
         path: '/producers',
         operationId: 'getProducers',
         summary: 'Producers list',
-        description: 'Retrieves the producers list for a producer.',
+        description: 'Searches the producers catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['producers'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),

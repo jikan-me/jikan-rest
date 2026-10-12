@@ -1030,3 +1030,18 @@ venv. Shipped upstream as **backend-quality-suite#24** (bracket-aware
   tools/dev/php wrapper → distro php; COMPOSER_BIN → composer); `README.MD`
   quick-start + tests command note the `--dry-run` preview and the Linux
   `PHP_BIN=… php …` replacement for the gitignored `tools/dev/php`.
+
+
+## 26. OpenAPI prose QA pass (2026-10-12)
+
+- Reviewed all 101 operation descriptions in the `#[OA\Get]` attributes;
+  **rewrote 94** to natural, accurate copy (7 left as-is — already good).
+- Killed the template artifacts: the "Retrieves the X for the Y identified by
+  **id**" stutter (~60 ops), "most recent recent…" double-words, run-on bold
+  segments (`**q, **order_by`), `a random characters/people/users` grammar, the
+  `/users/{username}/animelist`-style broken HTML anchors.
+- Fixed factual errors: `/users/userbyid/{id}` (path is `id`, not `username`),
+  `/anime` search (catalog, no `id`), etc. Accuracy cross-checked against the
+  v4 resource schemas (characters vs staff vs voices, genre filter enum, club
+  relations, statistics shapes, season/year).
+- Regenerated spec: **101 ops, 101/101 with summary + description**, exit 0.

@@ -18,7 +18,7 @@ class SeasonController extends Controller
         path: '/seasons/now',
         operationId: 'getSeasonNow',
         summary: 'Current anime season',
-        description: 'Returns the anime currently airing this season. Accepts an optional **filter**.',
+        description: 'Returns the anime currently airing this season. Can be filtered by **filter** and supports pagination via **page**.',
         tags: ['seasons'],
         parameters: [
             new OA\Parameter(
@@ -54,7 +54,7 @@ class SeasonController extends Controller
         path: '/seasons/{year}/{season}',
         operationId: 'getSeason',
         summary: 'Seasonal anime',
-        description: 'Returns the anime for a specific year and season, filtered by the **filter** parameter.',
+        description: 'Returns the anime that aired in a specific **year** and **season**. Can be filtered by **filter** and supports pagination via **page**.',
         tags: ['seasons'],
         parameters: [
             new OA\Parameter(
@@ -99,7 +99,7 @@ class SeasonController extends Controller
         path: '/seasons',
         operationId: 'getSeasonsList',
         summary: 'Seasons list',
-        description: 'Lists the available seasonal anime indexes.',
+        description: 'Lists the years and seasons with available anime archives.',
         tags: ['seasons'],
         responses: [
             new OA\Response(
@@ -145,7 +145,7 @@ class SeasonController extends Controller
         path: '/seasons/upcoming',
         operationId: 'getSeasonUpcoming',
         summary: 'Upcoming anime season',
-        description: 'Returns the upcoming anime season. Accepts an optional **filter**.',
+        description: 'Returns the anime of the upcoming season. Can be filtered by **filter** and supports pagination via **page**.',
         tags: ['seasons'],
         parameters: [
             new OA\Parameter(

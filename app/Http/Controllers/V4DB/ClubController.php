@@ -16,7 +16,7 @@ class ClubController extends Controller
         path: '/clubs/{id}',
         operationId: 'getClubsById',
         summary: 'Club details',
-        description: 'Retrieves the club details for the club identified by **id**.',
+        description: 'Returns the details of a club by **id**.',
         tags: ['clubs'],
         parameters: [
             new OA\Parameter(
@@ -48,7 +48,7 @@ class ClubController extends Controller
         path: '/clubs/{id}/members',
         operationId: 'getClubMembers',
         summary: 'Club members',
-        description: 'Retrieves the club members for a club.',
+        description: 'Returns the members of a club by **id**, paginated by **page**.',
         tags: ['clubs'],
         parameters: [
             new OA\Parameter(
@@ -96,7 +96,7 @@ class ClubController extends Controller
         path: '/clubs/{id}/staff',
         operationId: 'getClubStaff',
         summary: 'Club staff',
-        description: 'Retrieves the club staff for a club.',
+        description: 'Returns the staff of a club by **id**.',
         tags: ['clubs'],
         parameters: [
             new OA\Parameter(
@@ -124,7 +124,7 @@ class ClubController extends Controller
         path: '/clubs/{id}/relations',
         operationId: 'getClubRelations',
         summary: 'Club relations',
-        description: 'Retrieves the club relations for a club.',
+        description: 'Returns the anime, manga, and characters related to a club by **id**.',
         tags: ['clubs'],
         parameters: [
             new OA\Parameter(
