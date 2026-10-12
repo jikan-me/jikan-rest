@@ -1,6 +1,8 @@
 # CLAUDE.md
 
-Primary instructions live in **`AGENTS.md`** (auto-picked-up by Claude Code) — read it before
+@AGENTS.md
+
+Primary instructions live in **`AGENTS.md`** (imported above) — read it before
 acting in this repo. Three rules that matter most:
 
 1. **Never change the public v4 JSON contract** for default requests — only additive,
