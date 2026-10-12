@@ -150,6 +150,64 @@ calls-per-task, cost. *Done:* benchmark tracked in-repo + numbers reported.
 | 5 — Core/identity/resilience | WS-C routes+L7, WS-I, WS-J | 2–4 days | parity freeze (routes); Redis decision |
 | 6 — MCP + eval | WS-E2 MCP; WS-K benchmark/metrics | ~1–2 days (prototype) | product-value decision; live data |
 
+## 6.1 Detailed execution plan (planning-only; ordered, each task verifiable)
+
+Hard gates across phases: single branch `laravel-12`; v4 JSON unchanged for default
+requests; `l5-swagger:generate` exit 0; suite 292/2707 green; endpoint-parity +
+route-coverage + toolchain-gates + proposal-status audits exit 0; artifacts committed
+canonical and CI diff-guarded (WS-D). "Measure-first": no new serialization/format ships
+a token/bytes delta. Q3 (routes) remains open — not executed until decided.
+
+### Phase 1 — Agent & machine entrypoints (WS-A, WS-B)
+| ID | Task | Touch | Verify / done |
+|---|---|---|---|
+| 1.1 | Write root **`AGENTS.md`**: what the project is; canonical commands (`tools/dev/php`/`PHP_BIN`): `artisan test`/`test:integration`, `pint`, `phpstan`, `l5-swagger:generate`, `tools/parity/…`, `backend-suite audit …`; doc map (§1.3); conventions incl. spatie-enum venerated docblocks; add-an-endpoint recipe pointer; "must stay green" gates. | `AGENTS.md` (new) | A fresh CLI agent (Claude Code + one other) can boot+test the repo from this file alone (WS-F acceptance). |
+| 1.2 | Add thin **`CLAUDE.md`** that points at/embeds `AGENTS.md`. | `CLAUDE.md` (new) | `backend-suite audit claude-md-drift` runs — confirm not red or documented N/A. |
+| 1.3 | **`llms.txt`** (root): index → docs tree, `/v4/docs/openapi`, PROVIDERS, PR_CHANGELOG, RFC, proposals; link `llms-full.txt` when generated (1.4/WS-D). | `llms.txt` (new) | `curl` from repo; deterministic content. |
+| 1.4 | **`GET /llms.txt`** route (outside throttled v4 group) serving the same content; `text/plain; charset=utf-8`. | `routes/api.php`, `config` none, view/controller (fn) | `curl /llms.txt` 200; no `Jikan` beat/limits on it; parity `get_docs` unaffected. |
+| 1.5 | **`docs/INDEX.md`** (question→file) + link from README quick-start; cross-link from `AGENTS.md`. | `docs/INDEX.md` (new); `README.MD` | All links resolve (relative). |
+| 1.6 | Phase-record: changelog entry; manifests/roles unchanged (INDEX is not a suite role). | `docs/PR_CHANGELOG.md` | `resolve.py` still exit 0; tree clean. |
+
+### Phase 2 — Agent interfaces + freshness (WS-E1, WS-D, WS-F)
+| ID | Task | Touch | Verify / done |
+|---|---|---|---|
+| 2.1 | **`composer endpoints:*`** console command: walk routes + `@OA` (operationId/path/summary/tags) → emit `tools/parity/endpoints.txt`-style catalog + JSON; make extraction deterministic. | `app/Console/Commands/` (new), composer `scripts` | Command idempotent; catalog == spec ops (101). |
+| 2.2 | **`/v4/ai/manifest.json`**: OpenAI-tools + Anthropic-tools shapes generated from the catalog; strict inputs (types, enums, bounds, `required`), bounded `max` counts; annotated param docs. Exposed in spec (`@OA`) + docs. | new command+service+controller; `@OA`; docs | Manifest validates; `generate` deterministic (`git diff` clean). |
+| 2.3 | **CI freshness**: add to `ci.yml` — after deps: regenerate spec + manifest + llms-full, `git diff --exit-code`; run `backend-suite` audits + `resolve.py`. (Runner-gated execute; local run now.) | `.github/workflows/ci.yml` | Local regen-diff clean; CI steps syntactically valid (re-run static validation). |
+| 2.4 | **Add-an-endpoint recipe** doc (route→DTO→handler→service→model→resource→`@OA`→test→generate→parity→audit). | `docs/RECIPE_ADD_ENDPOINT.md` (new) | Two LLMs complete the recipe end-to-end (Q6 acceptance). |
+
+### Phase 3 — Response efficiency (WS-G)
+| ID | Task | Touch | Verify / done |
+|---|---|---|---|
+| 3.1 | **`fields=a,b`** selection on high-volume GETs (anime/manga details + search): DTO/validator + resource projection; `@OA` parameter; default = current shape. | controllers/handlers/resources/DTOs | Default responses byte-identical (parity); `fields` tests pass. |
+| 3.2 | **Bounded batch reads** (`?ids=` up to N=50) for anime/manga/characters: handler + resource + bounds/errors; `@OA`. | new handlers/routes/resources | 1+50 ids returns compact map; 51 → 422; parity of single-id default intact. |
+| 3.3 | **ETag/conditional + cache headers**: per-endpoint TTL→`Cache-Control: max-age`; ETag from cache key; `If-None-Match` → 304. | middleware/response macros, config | 304 path tested; headers documented; parity unaffected. |
+| 3.4 | Measure bytes/tokens before→after (small script + committed numbers in changelog). | `tools/` metric script; changelog | Delta recorded (target ≠0). |
+
+### Phase 4 — Retrieval (WS-H)
+| ID | Task | Touch | Verify / done |
+|---|---|---|---|
+| 4.1 | Typesense tuning: exact-ID/exact-title priority, alias-aware (`titles` incl. synonyms/romanized), typo tolerance, stable ranking; validate via current integration run (post-index data). | search config/contract, `JikanApiSearchableModel` weights; `@OA` | Search benchmark starts reflecting gains. |
+| 4.2 | **Curated search benchmark**: queries (ID lookup, exact title, alias/typo, filters, natural-language) + expected results; data-driven test/harness; recorded scores. | `tools/` + tests data | Benchmark committed; runs in CI. |
+| 4.3 | Semantic (deferred per Q9): explicitly NOT built this phase; log evidence when benchmark exists. | — | Decision log marks revisit gate. |
+
+### Phase 5 — Core surface + identity + resilience (WS-C?, WS-I, WS-J)
+| ID | Task | Touch | Verify / done |
+|---|---|---|---|
+| 5.1 | Route modernization (Q3): IF approved, convert 103 string actions → `[Controller::class, 'method']`; update `.backend-suite/arch-rules.json` (`actionPattern`/`controllerDirs`) + audits. | `routes/*.php`, arch-rules | route-coverage + endpoint-parity green; parity unchanged. |
+| 5.2 | **PHPStan L7 tunnel**: bump level; add-fix findings; regenerate baseline incrementally until exit 0. | `phpstan.neon`, baselines, app fixes | exit 0; no new ignores without reason. |
+| 5.3 | **Entity identity/DQ**: alias normalization rules + data-quality checks (broken refs, duplicates, alias consistency) as tests/CI job; source-vs-derived labeling documented. | tests/CI + docs | DQ job green (or reports known counts). |
+| 5.4 | **Scraper breaker + fallbacks**: Redis circuit breaker on MAL 429/503 + fallback payload (`is_cached`, `retry_after_seconds`) + `@OA` + docs; extends failovers/heartbeat. | service/middleware/config-redis/docs | Unit tests for breaker+fallback; parity shape for cached snapshot documented. |
+
+### Phase 6 — MCP + evaluation (WS-E2, WS-K)
+| ID | Task | Touch | Verify / done |
+|---|---|---|---|
+| 6.1 | **MCP adapter** (product per Q4): thin companion package exposing read-only tools (`search_anime`, `get_anime`, `get_anime_relations`, `search_manga`, `search_characters`, `get_seasonal_anime`, `compare_anime`), strict schemas, output caps, timeouts/caching consistent with the API; CI tool tests + docs. | new package/module (separate), CI, docs | MCP client (e.g., Claude Desktop) searches+retrieves via documented tools; tool tests pass. |
+| 6.2 | **Observability**: per-endpoint latency/errors, cache hit-rate, response bytes, search lag, MCP call metrics. | metrics/log channels/CI | Metrics visible; no sensitive content logged. |
+| 6.3 | **Agent-task benchmark harness**: calls-per-task, bytes/tokens, p50/p95 latency; baseline committed; re-run at milestones. | `tools/` harness + data | Baseline published in changelog. |
+
+**Sequencing rules:** phases 1–2 land without waiting on the index/runner (docs/config/commands only). Phase 3+ depend on post-index data for real measurements; 5.1 gated on Q3; 5.2, 5.4 are long but independent. Each phase ends with: changelog entry, docs refresh, PR-body milestone note, tree clean.
+
 ## 7. Guardrails (adopted from the external audits)
 
 - No routing every request through an LLM; no mandatory vector DB; no GPU/local model required.
