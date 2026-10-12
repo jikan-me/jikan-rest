@@ -4,14 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Jikan REST API v4 — API Reference</title>
+    <link rel="stylesheet" href="{{ asset('vendor/scalar/style.css') }}">
 </head>
 <body>
     <div id="app"></div>
 
-    <script type="module">
-        import { createApiReference } from 'https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.73.1/esm.js'
-
-        createApiReference('#app', {
+    {{-- Self-hosted Scalar API Reference (@scalar/api-reference@1.73.1, UMD standalone bundle) — no runtime CDN dependency --}}
+    <script src="{{ asset('vendor/scalar/standalone.js') }}"></script>
+    <script>
+        Scalar.createApiReference('#app', {
             // The existing l5-swagger OpenAPI JSON (same origin as this page)
             url: {{ Js::from(url('v4/docs/openapi')) }},
             theme: 'default',
