@@ -41,8 +41,12 @@ class GithubReport
         $report = new self;
         $report->name = \get_class($exception);
         $report->code = $exception->getCode();
-        $report->error = $exception->getMessage();
-        $report->trace = "{$exception->getFile()} on line {$exception->getLine()}";
+        // The prefilled issue URL is returned to API clients in every 500 body,
+        // so exception internals (message, file path, line) are only included
+        // when debugging; otherwise just the exception class and request.
+        $debug = (bool) config('app.debug');
+        $report->error = $debug ? $exception->getMessage() : '';
+        $report->trace = $debug ? "{$exception->getFile()} on line {$exception->getLine()}" : '';
         $report->repo = $repo ?? config('jikan.github_rest');
         $report->requestUri = $request->getRequestUri();
         $report->requestMethod = $request->getMethod();
