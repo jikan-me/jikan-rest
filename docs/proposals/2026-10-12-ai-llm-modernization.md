@@ -168,15 +168,32 @@ Quick wins are phases 1–2; they need no data and can land on `laravel-12` imme
 
 ## Decisions
 
-All six questions from §7 are open; each is logged below for the proposal-status convention
-(🔴 = open, ✅ = resolved — none resolved yet).
+All six questions from §7 are open; each is a decision heading below for the proposal-status
+convention (🔴 = open, ✅ = resolved — none resolved yet).
 
-- **🔴 #1** Agent-file naming (`AGENTS.md` vs `CLAUDE.md`) — open (§7 Q1)
-- **🔴 #2** Serve `/llms.txt` publicly vs repo-only — open (§7 Q2)
-- **🔴 #3** Route modernization scope/timing — open (§7 Q3)
-- **🔴 #4** MCP tooling: product vs dev prototype — open (§7 Q4)
-- **🔴 #5** Commit vs CI-generate machine artifacts — open (§7 Q5)
-- **🔴 #6** "Agents add an endpoint" eval as acceptance — open (§7 Q6)
+### 🔴 #1 — Agent-file naming (`AGENTS.md` vs `CLAUDE.md`)
+
+Open; see §7 Q1.
+
+### 🔴 #2 — Serve `/llms.txt` publicly vs repo-only
+
+Open; see §7 Q2.
+
+### 🔴 #3 — Route modernization scope/timing
+
+Open; see §7 Q3.
+
+### 🔴 #4 — MCP tooling: product vs dev prototype
+
+Open; see §7 Q4.
+
+### 🔴 #5 — Commit vs CI-generate machine artifacts
+
+Open; see §7 Q5.
+
+### 🔴 #6 — "Agents add an endpoint" eval as acceptance
+
+Open; see §7 Q6.
 
 ---
 
