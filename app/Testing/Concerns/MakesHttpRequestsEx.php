@@ -15,24 +15,17 @@ trait MakesHttpRequestsEx
     }
 
     /**
-     * Visit the given URI with a JSON GET request.
+     * GET the endpoint with the given query parameters and return the response.
+     *
+     * When $uri is given it is requested verbatim and $params is NOT appended
+     * (this is how the helper has always behaved).
+     *
+     * @param  array<string, mixed>  $params
      */
-    public function getJson($uri, array $headers = [], $options = 0)
+    public function getJsonWithParams(array $params, ?string $uri = null): TestResponse
     {
-        return $this->json('GET', $uri, [], $headers, $options);
-    }
+        $uri ??= $this->getBaseUri().'?'.http_build_query($params);
 
-    public function getJsonResponse(array $params, ?string $baseUri = null): array
-    {
-        $parameters = http_build_query($params);
-        $uri = $baseUri ?? $this->getBaseUri().'?'.$parameters;
-
-        /** @var TestResponse $response */
-        $response = $this->getJson($uri);
-
-        // Lumen exposed the last response via $this->response; Laravel returns it.
-        $this->response = $response;
-
-        return $response->json();
+        return $this->getJson($uri);
     }
 }

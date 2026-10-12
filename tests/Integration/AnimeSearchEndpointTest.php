@@ -204,13 +204,14 @@ class AnimeSearchEndpointTest extends TestCase
             ->overrideFromQueryStringParameters($additionalParams)
             ->create();
 
-        $content = $this->getJsonResponse([
+        $jsonResponse = $this->getJsonWithParams([
             'limit' => $limitCount,
             ...$additionalParams,
         ]);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(200);
-        $this->assertPaginationData($limitCount, 25, $limitCount);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, $limitCount, 25, $limitCount);
         $this->assertIsArray($content['data']);
         $this->assertCount($limitCount, $content['data']);
     }
@@ -220,18 +221,19 @@ class AnimeSearchEndpointTest extends TestCase
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
 
-        $this->assertStatus(200);
+        $jsonResponse->assertStatus(200);
     }
 
     #[DataProvider('partialDatesParameterProvider')]
     public function testSearchByStartDateShouldRaiseIfPartialDate($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(400);
+        $jsonResponse->assertStatus(400);
         $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
@@ -240,13 +242,14 @@ class AnimeSearchEndpointTest extends TestCase
     {
         $overrides = $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
         $actualStartDate = Carbon::parse(data_get($content, 'data.0.aired.from'));
         $paramStartDate = Carbon::parse($overrides['aired']['from']);
 
-        $this->assertStatus(200);
-        $this->assertPaginationData(5);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertGreaterThanOrEqual(0, $paramStartDate->diff($actualStartDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content['data']);
@@ -257,13 +260,14 @@ class AnimeSearchEndpointTest extends TestCase
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
         $actualEndDate = Carbon::parse(data_get($content, 'data.0.aired.to'));
         $paramEndDate = Carbon::parse($params['end_date']);
 
-        $this->assertStatus(200);
-        $this->assertPaginationData(5);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertGreaterThanOrEqual(1, $actualEndDate->diff($paramEndDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content['data']);
@@ -274,15 +278,16 @@ class AnimeSearchEndpointTest extends TestCase
     {
         $overrides = $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
         $actualStartDate = Carbon::parse(data_get($content, 'data.0.aired.from'));
         $paramStartDate = Carbon::parse($overrides['aired']['from']);
         $actualEndDate = Carbon::parse(data_get($content, 'data.0.aired.to'));
         $paramEndDate = Carbon::parse($overrides['aired']['to']);
 
-        $this->assertStatus(200);
-        $this->assertPaginationData(5);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertGreaterThanOrEqual(0, $paramStartDate->diff($actualStartDate)->days);
         $this->assertLessThanOrEqual(0, $actualEndDate->diff($paramEndDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
@@ -306,11 +311,12 @@ class AnimeSearchEndpointTest extends TestCase
             'aired' => new CarbonDateRange($carbonStartDate, null),
         ]));
 
-        $content = $this->getJsonResponse(['start_date' => $startDate]);
+        $jsonResponse = $this->getJsonWithParams(['start_date' => $startDate]);
+        $content = $jsonResponse->json();
         $actualStartDate = Carbon::parse(data_get($content, 'data.0.aired.from'));
 
-        $this->assertStatus(200);
-        $this->assertPaginationData(1);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 1);
         $this->assertEquals(0, $carbonStartDate->diff($actualStartDate)->days);
         $this->assertCount(1, $content['data']);
     }
@@ -332,11 +338,12 @@ class AnimeSearchEndpointTest extends TestCase
             'aired' => new CarbonDateRange(Carbon::parse('2015-01-05'), $carbonEndDate),
         ]));
 
-        $content = $this->getJsonResponse(['end_date' => $endDate]);
+        $jsonResponse = $this->getJsonWithParams(['end_date' => $endDate]);
+        $content = $jsonResponse->json();
         $actualEndDate = Carbon::parse(data_get($content, 'data.0.aired.to'));
 
-        $this->assertStatus(200);
-        $this->assertPaginationData(1);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 1);
         $this->assertEquals(0, $carbonEndDate->diff($actualEndDate)->days);
         $this->assertCount(1, $content['data']);
     }
@@ -346,10 +353,11 @@ class AnimeSearchEndpointTest extends TestCase
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(200);
-        $this->assertPaginationData(5);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertIsArray($content['data']);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content['data']);
@@ -361,9 +369,10 @@ class AnimeSearchEndpointTest extends TestCase
             'status' => 'gibberish',
         ];
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(400);
+        $jsonResponse->assertStatus(400);
         $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
@@ -371,9 +380,10 @@ class AnimeSearchEndpointTest extends TestCase
     public function testSearchByInvalidScoreParameters($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(400);
+        $jsonResponse->assertStatus(400);
         $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
@@ -382,10 +392,11 @@ class AnimeSearchEndpointTest extends TestCase
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(200);
-        $this->assertPaginationData(5);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertIsArray($content['data']);
         // we created 5 elements according to parameters, so we expect 5 of them.
         $this->assertCount(5, $content['data']);
@@ -406,13 +417,14 @@ class AnimeSearchEndpointTest extends TestCase
                 'genres' => '1,2',
             ])
             ->create();
-        $content = $this->getJsonResponse([
+        $jsonResponse = $this->getJsonWithParams([
             'genres' => '1,2',
             'min_score' => '0.0',
             'max_score' => '10.0',
         ]);
-        $this->assertStatus(200);
-        $this->assertPaginationData(5);
+        $content = $jsonResponse->json();
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertIsArray($content['data']);
         $this->assertCount(5, $content['data']);
     }
@@ -426,9 +438,10 @@ class AnimeSearchEndpointTest extends TestCase
          * @var Collection $items
          */
         $items = $f->createManyWithOrder($orderByField);
-        $content = $this->getJsonResponse([
+        $jsonResponse = $this->getJsonWithParams([
             'order_by' => $paramName,
         ]);
+        $content = $jsonResponse->json();
 
         $expectedItems = $items->map(fn ($elem) => data_get($elem, $orderByField));
         $actualItems = collect($content['data'])->map(fn ($elem) => data_get($elem, $orderByField));
@@ -438,8 +451,8 @@ class AnimeSearchEndpointTest extends TestCase
             $actualItems = $actualItems->map(fn (Carbon $elem) => $elem->getTimestamp());
         }
 
-        $this->assertStatus(200);
-        $this->assertPaginationData($expectedCount);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, $expectedCount);
         $this->assertIsArray($content['data']);
         $this->assertCount($expectedCount, $content['data']);
         $this->assertCollectionsStrictlyEqual($expectedItems, $actualItems);
@@ -471,18 +484,19 @@ class AnimeSearchEndpointTest extends TestCase
             ['score' => 1.51],
         ))->create();
 
-        $content = $this->getJsonResponse([
+        $jsonResponse = $this->getJsonWithParams([
             'order_by' => 'score',
             'q' => 'awesome',
             'page' => 1,
             'sort' => 'desc',
             'limit' => 15,
         ]);
+        $content = $jsonResponse->json();
 
         $expectedItems = $items->map(fn ($elem) => data_get($elem, 'score'));
         $actualItems = collect($content['data'])->map(fn ($elem) => data_get($elem, 'score'));
 
-        $this->assertPaginationData(3, 3, 15);
+        $this->assertPaginationData($jsonResponse, 3, 3, 15);
         $this->assertIsArray($content['data']);
         $this->assertCount(3, $content['data']);
         $this->assertCollectionsStrictlyEqual($expectedItems, $actualItems);
@@ -492,9 +506,10 @@ class AnimeSearchEndpointTest extends TestCase
     public function testSearchByInvalidRatingParameters($params, $expectedCount)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(400);
+        $jsonResponse->assertStatus(400);
         $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
@@ -502,10 +517,11 @@ class AnimeSearchEndpointTest extends TestCase
     public function testSearchByLetter($params, $expectedCount)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(200);
-        $this->assertPaginationData($expectedCount);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, $expectedCount);
         $this->assertIsArray($content['data']);
         $this->assertCount($expectedCount, $content['data']);
     }
@@ -515,11 +531,12 @@ class AnimeSearchEndpointTest extends TestCase
         $this->generateFiveSpecificAndTenRandomElementsInDb([
             'letter' => 'a',
         ]);
-        $content = $this->getJsonResponse([
+        $jsonResponse = $this->getJsonWithParams([
             'letter' => 'asd',
         ]);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(400);
+        $jsonResponse->assertStatus(400);
         $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
@@ -542,13 +559,14 @@ class AnimeSearchEndpointTest extends TestCase
         ]);
         Anime::factory(5)->create();
 
-        $content = $this->getJsonResponse([
+        $jsonResponse = $this->getJsonWithParams([
             'q' => 'awesome',
             'page' => 2,
         ]);
+        $content = $jsonResponse->json();
 
-        $this->assertStatus(200);
-        $this->assertPaginationData(25, 255);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 25, 255);
         $this->assertIsArray($content['data']);
         $this->assertCount(25, $content['data']);
         // https://github.com/jikan-me/jikan-rest/issues/298 shows that the array indexes start at 25, not from 0

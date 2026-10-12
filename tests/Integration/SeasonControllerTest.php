@@ -51,11 +51,12 @@ class SeasonControllerTest extends TestCase
         $state['airing'] = true;
         $f->create($state);
 
-        $content = $this->getJsonResponse([], '/v4/seasons/2024/winter');
+        $jsonResponse = $this->getJsonWithParams([], '/v4/seasons/2024/winter');
+        $content = $jsonResponse->json();
 
         Carbon::setTestNow();
 
-        $this->assertStatus(200);
+        $jsonResponse->assertStatus(200);
         $this->assertIsArray($content['data']);
         $this->assertCount(1, $content['data']);
     }
@@ -99,8 +100,9 @@ class SeasonControllerTest extends TestCase
         $state['airing'] = true;
         $f->create($state);
 
-        $content = $this->getJsonResponse([], '/v4/seasons/2024/winter');
-        $this->assertStatus(200);
+        $jsonResponse = $this->getJsonWithParams([], '/v4/seasons/2024/winter');
+        $content = $jsonResponse->json();
+        $jsonResponse->assertStatus(200);
         $this->assertIsArray($content['data']);
         $this->assertCount(2, $content['data']);
     }
@@ -146,8 +148,9 @@ class SeasonControllerTest extends TestCase
         $state['episodes'] = null;
         $f->create($state);
 
-        $content = $this->getJsonResponse([], $requestUrl);
-        $this->assertStatus(200);
+        $jsonResponse = $this->getJsonWithParams([], $requestUrl);
+        $content = $jsonResponse->json();
+        $jsonResponse->assertStatus(200);
         $this->assertIsArray($content['data']);
         $this->assertCount(3, $content['data']);
     }
@@ -188,8 +191,9 @@ class SeasonControllerTest extends TestCase
         $state['airing'] = true;
         $f->create($state);
 
-        $content = $this->getJsonResponse([], '/v4/seasons/2024/winter');
-        $this->assertStatus(200);
+        $jsonResponse = $this->getJsonWithParams([], '/v4/seasons/2024/winter');
+        $content = $jsonResponse->json();
+        $jsonResponse->assertStatus(200);
         $this->assertIsArray($content['data']);
         $this->assertCount(2, $content['data']);
     }
@@ -215,16 +219,19 @@ class SeasonControllerTest extends TestCase
         $state['score'] = 8.9;
         $f->create($state);
 
-        $content = $this->getJsonResponse([], '/v4/seasons/now?filter=tv&continuing&page=1');
-        $this->assertStatus(200);
+        $jsonResponse = $this->getJsonWithParams([], '/v4/seasons/now?filter=tv&continuing&page=1');
+        $content = $jsonResponse->json();
+        $jsonResponse->assertStatus(200);
         $this->assertCount(1, $content['data']);
 
-        $content = $this->getJsonResponse([], '/v4/seasons/2024/summer?filter=tv&continuing&page=1');
-        $this->assertStatus(200);
+        $jsonResponse = $this->getJsonWithParams([], '/v4/seasons/2024/summer?filter=tv&continuing&page=1');
+        $content = $jsonResponse->json();
+        $jsonResponse->assertStatus(200);
         $this->assertCount(0, $content['data']);
 
-        $content = $this->getJsonResponse([], '/v4/seasons/2024/spring?filter=tv&continuing&page=1');
-        $this->assertStatus(200);
+        $jsonResponse = $this->getJsonWithParams([], '/v4/seasons/2024/spring?filter=tv&continuing&page=1');
+        $content = $jsonResponse->json();
+        $jsonResponse->assertStatus(200);
         $this->assertCount(0, $content['data']);
         Carbon::setTestNow();
     }

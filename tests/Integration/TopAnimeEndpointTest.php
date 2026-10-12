@@ -103,13 +103,14 @@ class TopAnimeEndpointTest extends TestCase
         if ($descendingOrder) {
             $items = $items->reverse();
         }
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
         $expectedItems = $items->map(fn ($elem) => data_get($elem, $fieldToOrderBy))->values();
         $actualItems = collect($content['data'])->map(fn ($elem) => data_get($elem, $fieldToOrderBy))->values();
 
-        $this->assertStatus(200);
-        $this->assertPaginationData($expectedCount);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, $expectedCount);
         $this->assertIsArray($content['data']);
         $this->assertCount($expectedCount, $content['data']);
 

@@ -321,7 +321,7 @@ class TopControllerTest extends TestCase
         /** @noinspection PhpParamsInspection */
         $jikanParser->allows()->getReviews(\Mockery::any())->andReturn($reviewsFacade);
         $this->app->instance('JikanParser', $jikanParser);
-        $this->getJsonResponse($params, '/v4/top/reviews');
-        $this->assertStatus(200);
+        $jsonResponse = $this->getJsonWithParams($params, '/v4/top/reviews');
+        $jsonResponse->assertStatus(200);
     }
 }

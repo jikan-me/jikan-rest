@@ -35,12 +35,6 @@ abstract class TestCase extends BaseTestCase
 
     protected int $maxResultsPerPage;
 
-    /**
-     * The last JSON response. Lumen's TestCase exposed this; Laravel's does not,
-     * so we keep a compatible property for the existing test helpers.
-     */
-    protected ?TestResponse $response = null;
-
     protected function dummyScraperResultDocument(string $uri, string $mediaType, array $content, ?string $wrapKey = null): array
     {
         return [
@@ -217,18 +211,7 @@ abstract class TestCase extends BaseTestCase
         }
     }
 
-    /**
-     * Lumen exposed assertStatus() on the TestCase; Laravel only has it on the
-     * TestResponse. Keep a delegating compat method.
-     */
-    public function assertStatus(int $status): static
-    {
-        $this->response->assertStatus($status);
-
-        return $this;
-    }
-
-    public function assertPaginationData(int $expectedCount, ?int $expectedTotal = null, ?int $perPage = null): TestResponse
+    public function assertPaginationData(TestResponse $response, int $expectedCount, ?int $expectedTotal = null, ?int $perPage = null): TestResponse
     {
         if (is_null($expectedTotal)) {
             $expectedTotal = $expectedCount;
@@ -238,10 +221,10 @@ abstract class TestCase extends BaseTestCase
             $perPage = $this->maxResultsPerPage;
         }
 
-        $this->response->assertJsonPath('pagination.items.count', $expectedCount);
-        $this->response->assertJsonPath('pagination.items.total', $expectedTotal);
+        $response->assertJsonPath('pagination.items.count', $expectedCount);
+        $response->assertJsonPath('pagination.items.total', $expectedTotal);
 
-        return $this->response->assertJsonPath('pagination.items.per_page', $perPage);
+        return $response->assertJsonPath('pagination.items.per_page', $perPage);
     }
 
     public function assertCollectionsStrictlyEqual(Collection $expectedItems, Collection $actualItems): void
