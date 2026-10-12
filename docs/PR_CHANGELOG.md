@@ -757,3 +757,20 @@ eval as acceptance).
 - Verified: `endpoints:check` exit 0, `l5-swagger:generate` exit 0, endpoint-parity +
   route-coverage + toolchain-gates + proposal-status audits green, `/llms.txt` +
   `/v4/ai/manifest.json` serve 200. Remaining phases (3–6) tracked in a GitHub issue.
+
+## 30. Performance stress-test matrix (2026-10-13)
+
+Benched `/up`, `/v4/anime/21`, `/v4/seasons/now` across runtimes (ab -k, spare
+ports, indexer running in the background — relative numbers, caveat in the doc):
+- Native `artisan serve` ≈ 236 RPS (`/up`) / 41 (`anime/21`) / 31 (`seasons/now`)
+  — single-threaded ceiling (~27 ms request latency dominated by work, not server).
+- **Octane/RoadRunner**: 2 workers → 2,046 `/up`, 92 `anime/21`; **8 workers →
+  3,973 `/up`, ~212 `anime/21` @ c=10** — real scaling.
+- **FrankenPHP**: fastest server (5,457 `/up` RPS) but **500 on Mongo routes** —
+  its static binary lacks ext-mongodb (container image with the driver is the path).
+- `opcache.enable_cli` on the dev server ≈ nil (compile isn't the bottleneck).
+Bottlenecks: Mongo `findOne` ≈ 7.4 ms (largest single cost), JMS serialization +
+middleware chain (~15 ms), **60 s micro-cache not engaging**, heavy list payloads
+(~105 KB seasons) with no in-app gzip. Full analysis + prioritized improvements in
+`docs/PERFORMANCE.md` (P0 micro-cache/indexes, P1 preload/gzip, P2 Octane tuning
++Redis + fields/batch/ETag from the AI proposal, P3 re-measure post-index).
