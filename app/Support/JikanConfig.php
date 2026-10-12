@@ -37,7 +37,12 @@ final class JikanConfig
      */
     public function __construct(array $config)
     {
-        $this->perEndpointCacheTtl = Arr::get($config, 'per_endpoint_cache_ttl', []);
+        // config/jikan.php feeds raw env() strings (or null when unset); normalise to
+        // ?int so CacheOptions::setTtl() never relies on implicit string coercion.
+        $this->perEndpointCacheTtl = array_map(
+            static fn ($ttl) => ($ttl === null || $ttl === '') ? null : (int) $ttl,
+            Arr::get($config, 'per_endpoint_cache_ttl', [])
+        );
         $this->defaultCacheExpire = Arr::get($config, 'default_cache_expire', 0);
         $this->microCachingEnabled = in_array(Arr::get($config, 'micro_caching_enabled', false), [true, 1, '1', 'true']);
         $this->textMatchBuckets = (int) (filled(Arr::get($config, 'typesense_options.text_match_buckets')) ? Arr::get($config, 'typesense_options.text_match_buckets') : 1);
