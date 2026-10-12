@@ -6,6 +6,7 @@ Dockerfile
 .rr.yaml
 rr
 bootstrap/cache/*
+!bootstrap/cache/.gitignore
 storage/logs/*
 storage/framework/cache/data/*
 storage/framework/sessions/*
