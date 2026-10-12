@@ -36,3 +36,6 @@ frankenphp-worker.php
 # Laravel bootstrap cache (generated)
 bootstrap/cache/*.php
 .rr.yaml
+
+# Created by Storage::fake() during tests
+/storage/framework/testing/

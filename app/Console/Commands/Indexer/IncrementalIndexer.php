@@ -104,13 +104,13 @@ class IncrementalIndexer extends Command
         $index = 0;
         $success = [];
         $failedIds = [];
-        $idCount = count($idsToFetch);
+        // `$idsToFetch` is ['sfw' => [...], 'nsfw' => [...]]; count the ids, not the keys.
+        $ids = array_merge($idsToFetch['sfw'] ?? [], $idsToFetch['nsfw'] ?? []);
+        $idCount = count($ids);
         if ($resume && Storage::exists("indexer/incremental/{$mediaType}_resume.save")) {
             $index = (int) Storage::get("indexer/incremental/{$mediaType}_resume.save");
             $this->info("Resuming from index: $index");
         }
-
-        $ids = array_merge($idsToFetch['sfw'], $idsToFetch['nsfw']);
 
         if ($index > 0 && ! isset($ids[$index])) {
             $index = 0;
@@ -138,14 +138,14 @@ class IncrementalIndexer extends Command
                 if (isset($response['error']) && (int) $response['status'] !== 404) {
                     $this->error("[SKIPPED] Failed to fetch $url - {$response['error']}");
                     $failedIds[] = $id;
-                    Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
+                    Storage::put("indexer/incremental/{$mediaType}_failed.json", json_encode($failedIds));
                 } else {
                     $success[] = $id;
                 }
             } catch (\Exception) {
                 $this->warn("[SKIPPED] Failed to fetch $url");
                 $failedIds[] = $id;
-                Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
+                Storage::put("indexer/incremental/{$mediaType}_failed.json", json_encode($failedIds));
             }
 
             Storage::put("indexer/incremental/{$mediaType}_resume.save", $i);
@@ -174,15 +174,26 @@ class IncrementalIndexer extends Command
                 'failed' => $this->option('failed') ?? false,
             ],
             [
-                'mediaType' => 'required|in:anime,manga',
+                // `mediaType*` is an array argument: `in` rejects an array unless `array` is also
+                // applied, so every valid invocation used to fail validation.
+                'mediaType' => 'required|array',
+                'mediaType.*' => 'in:anime,manga',
                 'delay' => 'integer|min:1',
-                'resume' => 'bool|prohibited_with:failed',
-                'failed' => 'bool|prohibited_with:resume',
+                'resume' => 'bool',
+                'failed' => 'bool',
             ]
         );
 
         if ($validator->fails()) {
             $this->error($validator->errors()->toJson());
+
+            return 1;
+        }
+
+        // Laravel has no `prohibited_with` rule (the old rules threw BadMethodCallException on
+        // every run), and `prohibits` would treat a false flag as present, so check explicitly.
+        if ($this->option('resume') && $this->option('failed')) {
+            $this->error('--resume and --failed cannot be used together.');
 
             return 1;
         }
@@ -212,7 +223,7 @@ class IncrementalIndexer extends Command
                 return 127;
             }
 
-            $idCount = count($idsToFetch);
+            $idCount = array_sum(array_map('count', $idsToFetch));
             if ($idCount === 0) {
                 continue;
             }
