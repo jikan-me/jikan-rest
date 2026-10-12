@@ -1,199 +1,218 @@
 # Proposal — Jikan-rest: modern, AI/LLM-friendly project (2026-10-12)
 
-**Status:** open — 2026-10-12, planning-only (no code changes yet). This proposal declares **6 open questions** (see §7).
-**Scope:** audit + plan for making the jikan-rest codebase and docs maximally navigable by
-both humans and AI agents (IDE assistants, CLI agents, LLM tooling / MCP).
-**Owned by:** Irfan Dahir (this document) — execution gated on approval, single branch `laravel-12`,
-consistent with the no-PR-split decision.
+**Status:** open — 2026-10-12, planning-only (no code changes yet). This proposal declares **11 open questions** (see §9).
+**Inputs reviewed:** (a) our own in-repo audit, (b) `Downloads/jikan_rest_ai_modernization_plan.md`
+and `Downloads/plan.md` — two external LLM-modernization audits for jikan-rest, reviewed 2026-10-12.
+**Owned by:** Irfan Dahir (this document). Execution gated on approval; single branch `laravel-12` (no-PR-split).
 
 ---
 
 ## 1. Summary
 
-jikan-rest is already unusually well-documented for the parity era: the whole v4 contract is
-exposed as a regenerable OpenAPI spec rendered by Scalar (`/v4/docs`, `/v4/docs/openapi`), docs
-live under `docs/` with an LLM-friendly providers matrix, and a machine-readable quality context
-(`.backend-suite/`) ships. What it lacks are the **agent-facing surfaces** the ecosystem now
-expects: a root `AGENTS.md`/`CLAUDE.md`, an `llms.txt` index, a single "how this repo works for
-agents" entrypoint, more explicit code routing, and CI gates that keep the machine-readable
-artifacts from drifting. This proposal turns those gaps into a staged, low-risk plan that builds
-**on** what exists rather than re-inventing it.
+jikan-rest already ships an unusually machine-friendly core: a regenerable OpenAPI spec served to a
+self-hosted Scalar UI (`/v4/docs`, `/v4/docs/openapi`), an LLM-friendly docs corpus with a providers
+matrix, and a `.backend-suite/` quality context — plus every operation now carries curated
+summary/description after the docblock→attribute migration. What it lacks is the **agent/machine
+surface the ecosystem now expects**: a root `AGENTS.md`/`CLAUDE.md`, an `llms.txt` index, token-
+efficient response options, a function-calling manifest / MCP adapter, optional semantic retrieval,
+scraper-rate-limit resilience for agent loops, and CI gates that keep the machine artifacts from
+rotting. This proposal integrates our plan with the two external audits into one staged, low-risk
+roadmap that **builds on** what exists and keeps v4 compatible throughout.
 
 ## 2. Motivation / goals
 
-- **Onboarding & velocity for AI agents** — an agent hitting the repo today must reverse-engineer
-  the run/test/generate/audit loop from `docs/`; a root `AGENTS.md` + `llms.txt` makes the first
-  correct action obvious (test → lint → phpstan → generate spec → parity → audits).
-- **Machine "grep-ability" of the contract** — `llms.txt` (and a served `/llms.txt`) give LLMs a
-  deterministic pointer set: docs tree, spec path, providers matrix, changelog, decisions.
-- **Modern code surface** — typed DTOs/enums already exist; removing the last Lumen-era
-  indirections (string-action routes, baseline-ridden PHPStan level) makes the code both
-  clearer to agents and more static-analysis-friendly.
-- **Freshness guarantees** — CI that fails when `llms.txt`/spec/docs go stale, so the AI-facing
-  artifacts stay truthful.
+- **Agents hit the repo and API correctly on the first try** (`AGENTS.md`/`llms.txt`/manifest/MCP).
+- **Fewer tokens & round-trips** for LLM consumers (fields/batch/cache/compact formats).
+- **Better retrieval** (stronger lexical search now; semantic only as an optional, disableable add-on).
+- **Consistent entities & relationships** (identity, aliases, source-vs-derived, data quality).
+- **Agent loops don't break during MAL rate-limit/outage** (circuit breaker + safe fallbacks).
+- **Machine artifacts can't rot** (CI regenerates + diffs spec/manifest/llms.txt; contract tests).
+- **Deterministic by default** — no LLM/GPU/vector DB in the required path; keep the core API
+  usable without any AI infrastructure.
 
-## 3. Current-state audit
+## 3. What we take from the external audits
 
-### Strengths (already built — do not redo)
-| Area | State |
-|---|---|
-| API contract | OpenAPI spec at `/v4/docs/openapi` (regenerable, `artisan l5-swagger:generate` exit 0), 101 ops all summarized+described (prose-QA'd), rendered by self-hosted Scalar at `/v4/docs` |
-| Docs corpus | 18 files under `docs/` incl. PROVIDERS (LLM-friendly matrix), ARCHITECTURE, DESIGN, RFC (RFC-0001), PRODUCTION-READINESS, POST_FULL_INDEX, MIGRATION_PLAN, PR_CHANGELOG |
-| Quality context | `.backend-suite/` profile + arch-rules + doc-roles manifest (7 mapped/11 declined), 19 audits (13 clean, residual documented) |
-| Dev tooling | cross-platform `install.sh` (with `--dry-run`), `script/` wrappers, `laravel/boost` + 4 marketplace skills (`.ai/skills/*`) |
-| Testing | 292 / 2707 green, hermetic test DB, engine-less CI env contract |
+| External idea | Take it? | Where it lands here |
+|---|---|---|
+| First-party **MCP adapter** (thin, read-only, strict schemas, bounded results, CI-tested tools) | ✅ (strengthens our optional WS) | WS-E |
+| **Function-calling manifest** endpoint (`/v4/ai/manifest.json`, OpenAI/Anthropic-style schemas) | ✅ cheap, distinct from MCP | WS-E |
+| **Content negotiation** `Accept: text/markdown` + token-optimized cards | ✅ opt-in, measure-first | WS-G |
+| **Response ergonomics**: `fields` selection, bounded batch reads, ETag/conditional, stable paging | ✅ | WS-G |
+| **Retrieval**: exact-ID/title priority, alias/typo tolerance, curated search benchmark; semantic as **optional** hybrid with async embeddings, timeouts/fallbacks, disableable | ✅ | WS-H |
+| **Entity identity & relationships**: alias normalization, canonical refs, depth-limited traversal, source-vs-derived labeling, data-quality checks | ✅ | WS-I |
+| **Scraper resilience**: Redis circuit breaker for 429/503 + agent-safe snapshot fallback + retry headers | ✅ (extends our failovers/heartbeat) | WS-J |
+| **Observability/evaluation**: cache hit-rate, response bytes/tokens, search latency/lag, per-endpoint latency+errors, agent-task benchmark | ✅ | WS-K |
+| **pgvector/PostgreSQL migration** | ❌ keep Mongo+Typesense (our WS-G footprint) | — |
+| **Routing every request through an LLM / mandatory embeddings / graph DB** | ❌ (explicit non-goals, §7) | — |
 
-### Gaps (the plan targets these)
-| # | Gap | Evidence | Consequence |
-|---|---|---|---|
-| G1 | **No agent entrypoint** | `AGENTS.md`/`CLAUDE.md` absent; claude-md-drift audit N/A | agents learn the repo ad hoc; setup/run conventions live only in SETUP.md |
-| G2 | **No `llms.txt`** | absent at root; no served route | LLMs lack a deterministic index of repo docs/endpoints |
-| G3 | **Docs lack a single index** | 18 files, no index/quickstart-for-agents | humans+agents must guess which doc answers which question |
-| G4 | **Route indirection** | 103 `'uses' => 'Controller@action'` strings | controller resolution not greppable/static; agent must chase routes |
-| G5 | **PHPStan parked at L6** | baseline-pinned; L7 tunnel parked | weaker whole-program typing signal for agents & tools |
-| G6 | **Machine artifacts not CI-guarded** | no check tying spec/llms.txt/endpoint catalog to source | docs/spec can silently drift from code |
-| G7 | **No proposals dir** | `docs/proposals/` absent; proposal-status audit inert | our own RFC process has no home in the suite's role map |
-| G8 | **Consumer-side AI surface minimal** | only `/v4/docs*`; no `/llms.txt`, no robots/AI hints (`llms.txt` serving is expected for products) | external agents can't self-discover the API cheaply |
+## 4. Current-state audit
 
-## 4. Workstreams
+### Strengths (already built)
+Contract spec + Scalar docs (101 ops, prose-QA'd) · docs corpus (18 files) · `.backend-suite` context
++ audits · cross-platform installer + script wrappers + `.ai/skills` · suite 292/2707 green ·
+hermetic test DB · jikan v5 adopted (parser blockers cleared) · Docker validated locally.
+
+### Gaps the plan targets
+| # | Gap | Consequence |
+|---|---|---|
+| G1 | No agent entrypoint (`AGENTS.md`/`CLAUDE.md`) | agents learn the repo ad hoc |
+| G2 | No `llms.txt` / no served `/llms.txt` | LLMs lack a deterministic index |
+| G3 | Docs lack a single index/quickstart | guessing which doc answers which question |
+| G4 | 103 `Controller@action` string routes | indirection, weaker agent grep-ability |
+| G5 | PHPStan parked at level 6 | weaker whole-program typing signal |
+| G6 | Machine artifacts not CI-guarded | spec/llms/catalog can drift from source |
+| G7 | No `docs/proposals/` (now added) | proposal process had no home (fixed by this doc) |
+| G8 | No tool manifest or MCP adapter | agents must hand-write HTTP wrappers |
+| G9 | No token-efficient response options (`fields`, batch, markdown, ETag) | LLM consumers fetch ~2.5KB+ and repeat calls |
+| G10 | Search = Typesense only; no semantic option; no benchmark | natural-language discovery unserved; no measured relevance |
+| G11 | Entity identity/alias/derived-data conventions informal | inconsistent cross-resource refs |
+| G12 | Scraper rate-limit handling basic (failovers heartbeat only) | agent loops break on 429/Cloudflare; no safe snapshot fallback |
+| G13 | No agent-era metrics/benchmark (bytes/tokens, calls-per-task) | nothing measures "fewer calls/smaller responses" |
+
+## 5. Workstreams
 
 ### WS-A — Agent & machine entrypoints (quick win)
-Goal: a first-action-obvious repo for AI agents.
-- Add **`AGENTS.md`** at repo root (the emerging multi-agent standard; also aliased/pinned by
-  `CLAUDE.md` for Claude Code via a small `CLAUDE.md` that includes it). Content: what the project
-  is, run/test/lint/phpstan/pint/generate/parity/audit commands (via `tools/dev/php` or `PHP_BIN`),
-  doc map, "add-an-endpoint" recipe, quality gates that must stay green, conventions
-  (enum values live in venerated docblocks — the gotcha we hit), and the `script/` wrappers.
-- Add **`llms.txt`** at root (llmstxt.org convention): a human+LLM-readable index listing the docs
-  tree, `/v4/docs/openapi` contract URL, providers matrix, changelog, decisions, and the endpoint
-  catalog; plus a longer **`llms-full.txt`** (generated, optional).
-- Add a **`GET /llms.txt`** route (outside the throttled v4 group) serving the same content for
-  product/consumer agents.
-- Done when: `AGENTS.md` present + `script/`-driven quickstart verifiable by a fresh agent in one
-  read; `curl /llms.txt` 200; `claude-md-drift` audit runs clean (or is explicitly marked N/A with
-  a documented reason).
+Add root **`AGENTS.md`** (+ thin `CLAUDE.md` include) with the run/test/lint/phpstan/pint/
+generate/parity/audit commands, doc map, "add-an-endpoint" recipe, conventions (incl. the
+enum-value-docblock gotcha), and `script/` wrappers. Add **`llms.txt`** (+ generated
+**`llms-full.txt`**) and a served **`GET /llms.txt`** route.
+*Done:* a fresh agent can act correctly in one read; `curl /llms.txt` 200; claude-md-drift resolves.
 
 ### WS-B — Docs that compose (quick win)
-Goal: one index, no guessing.
-- **`docs/INDEX.md`** — one table mapping question → file (setup, run, providers, architecture,
-  design, rfc, readiness, post-index, audit, upstream).
-- **`docs/AGENTS.md`** — the in-repo agent quickstart (can live as the canonical doc, root file
-  includes/symlinks it).
-- **Doc-role map**: register `AGENTS.md`/`INDEX.md` in `.backend-suite/docs.manifest.json` as the
-  `entry-point`-adjacent roles (and keep `entry-point` → README).
-- Add **`docs/proposals/`** for this + future proposals (activating the `proposal-status` audit).
-- Done when: a fresh agent can find, in ≤2 reads, how to run tests, add an endpoint, and regenerate
-  docs; `proposal-status` audit is no longer inert.
+`docs/INDEX.md` (question→file table) + `docs/AGENTS.md` quickstart; register roles in
+`.backend-suite/docs.manifest.json`; keep `docs/proposals/` live (proposal-status audit active).
 
-### WS-C — Modern code surface (medium)
-Goal: less indirection, stronger static typing.
-- **Explicit routing (P2, optional)**: convert 103 `Controller@action` string routes to direct
-  class references (`[AnimeController::class, 'main']` or invokable/closure-with-class). Keep
-  `route-coverage`/`endpoint-parity` audits satisfied (they read `uses`; update
-  `.backend-suite/arch-rules.json` `actionPattern`/`controllerDirs` accordingly). This is the
-  largest behavioural-neutral change — sequence last, behind the parity/data freeze.
-- **PHPStan L7 tunnel**: resume (it was parked) once the L6 baseline is ratcheted; regenerate the
-  baseline against attributes-era code (`app/Compat` entries already removed).
-- **API modernization hygiene**: adopt PHP 8.4 idioms where safe (readonly DTOs, native enums where
-  already used, property promotion), drop dead env vars (`CACHE_META_EXPIRE`,
-  `CACHE_PRODUCERS_EXPIRE`) and dead config references, and keep the v4 JSON keys byte-stable.
-- Done when: routes explicit (if chosen), `phpstan` level 7 exits 0 (or a documented, shrinking
-  baseline), no dead env references, suite green.
+### WS-C — Modern code surface
+Convert the 103 string-action routes to direct class references (option; audit config update),
+resume the **PHPStan L7 tunnel**, apply PHP 8.4 idioms where safe, drop dead env vars/config refs.
+*Done:* routes explicit (if chosen), phpstan L7 green (or shrinking baseline), no dead env refs,
+suite green.
 
-### WS-D — Machine artifact freshness in CI (medium)
-Goal: AI-facing artifacts can't rot.
-- **`composer endpoints:*` catalog command** (mirrors the upstream jikan convention): derive an
-  endpoint index from routes+OA (operationId, path, summary) → used by parity, `llms.txt`, and a
-  doc-staleness check.
-- **CI additions** (to the validated `ci.yml`): regenerate spec + assert `git diff` clean;
-  regenerate `llms-full.txt` + assert clean; run `backend-suite` audits (endpoint-parity,
-  route-coverage, toolchain-gates, proposal-status) + `resolve.py` (no new stub debt).
-- Done when: a stale spec/llms.txt/proposal status fails CI; parity + audits are in the pipeline.
+### WS-D — Machine-artifact freshness in CI
+A **`composer endpoints:*`** catalog command (operationId/path/summary from routes+OA) feeding
+parity, `llms.txt`, and a doc-staleness check; CI regenerates spec + manifests and **fails on git
+diff**, runs the `backend-suite` audits + `resolve.py`. *Done:* stale artifacts fail CI.
 
-### WS-E — Consumer/API AI surface (medium, optional)
-Goal: product agents can self-discover.
-- `/llms.txt` route (WS-A) is the anchor. Optional:
-  - **JSON-LD/API hints** in the docs page (`<meta>` describing the OpenAPI URL).
-  - **MCP server** (phase 2): a thin `mcp` adapter exposing tools for `search`,
-    `anime_lookup`, `parity_check`, `docs_get` against the live API, so external agents can
-    operate the product with tools rather than curl-scraping.
-  - `robots.txt` remains 404-safe; consider allowing agents (permissive `User-agent: *` + allow).
-- Done when: `/llms.txt` serves; optional MCP repo documented and runnable in dev.
+### WS-E — Agent interfaces (manifest + MCP)
+1. **`GET /v4/ai/manifest.json`** — auto-generated function-calling schemas (OpenAI/Anthropic),
+   domain-annotated params, strict inputs, bounded result counts. ✓ cheap, no new deps.
+2. **First-party MCP adapter** — thin companion (sidecar/package), read-only over existing
+   services: initial tools `search_anime`, `get_anime(id, include)`, `get_anime_relations(id)`,
+   `search_manga`, `search_characters`, `get_seasonal_anime(year, season)`, `compare_anime(ids, fields)`.
+   Strict schemas, output-size caps, timeouts/caching consistent with the public API, actionable
+   validation errors, CI test for tool behavior + schema. *Done:* manifest serves; MCP client can
+   search+retrieve via documented tools; docs for supported clients.
 
-### WS-F — Developer-env agents (quick win)
-Goal: the human-agent loop is reproducible.
-- Keep `.ai/skills` (boost) but add one **"add-an-endpoint recipe"** doc (route → DTO → handler →
-  service → model → resource → `@OA` → test → `l5-swagger:generate` → parity → audit), usable
-  verbatim by agent or human.
-- Document the **canonical agent command set** in `AGENTS.md` (WS-A) — one-liners that never
-  require reading a README section meaningfully (they delegate to `script/`).
-- Done when: two LLMs (e.g., Claude Code + an OpenCode-style agent) can each add a trivial
-  endpoint end-to-end using only the docs.
+### WS-F — Developer-env agents
+Keep `.ai/skills`; add the **"add-an-endpoint recipe"** doc (route→DTO→handler→service→model→
+resource→`@OA`→test→generate→audit) usable verbatim; acceptance = two LLMs complete the recipe.
 
-## 5. Sequencing & effort
+### WS-G — Response efficiency & token economy
+`fields` selection; **bounded batch reads** (multiple IDs in one request); **ETag/conditional
+requests** + standardized cache headers; **`Accept: text/markdown`** opt-in compact cards
+(measure-first: bytes/tokens before/after); document rate limits/caching/freshness/retry.
+*Done:* measured ≤ baseline bytes per endpoint; params remain consistent across the surface.
+
+### WS-H — Retrieval quality
+**Lexical first** (Typesense): exact-ID/exact-title priority, alias-aware + typo-tolerant matching,
+review searchable fields (titles/alternatives/synopses/genres), stable ranking, curated query
+benchmark. **Optional semantic retrieval** (WS-H2): async embeddings from descriptive fields,
+hybrid lexical+semantic, timeouts/fallbacks, independently disableable; no mandatory vector infra.
+*Done:* search benchmark exists; semantic (if adopted) is opt-in + measured.
+
+### WS-I — Entity identity & relationships
+Canonical identifiers + alias normalization, cross-resource refs audit, depth-limited relationship
+traversal, **source-vs-derived labeling** (no AI summaries masquerading as facts), data-quality
+checks (broken refs/duplicates). *Done:* identity conventions documented + DQ checks in CI.
+
+### WS-J — Scraper resilience for agents
+Redis **circuit breaker** on MAL 429/503 + **agent-safe fallback payloads** (cached snapshot with
+`is_cached` + `retry_after_seconds`), observability of rate events; extends our failovers/heartbeat.
+*Done:* agent loops survive MAL rate-limit windows with explicit retry semantics.
+
+### WS-K — Observability & evaluation
+Per-endpoint latency/error rates, cache hit-rate, response bytes/tokens, search latency/lag, MCP
+tool metrics; a **version-controlled agent-task benchmark** (lookup/title/typo/filter/natural-
+language/similarity/traversal/recovery) measuring relevance, p50/p95 latency, bytes/tokens,
+calls-per-task, cost. *Done:* benchmark tracked in-repo + numbers reported.
+
+## 6. Sequencing & effort
 
 | Phase | Workstreams | Effort | Depends on |
 |---|---|---|---|
-| **1 — Entrypoints (now)** | WS-A (`AGENTS.md`/`CLAUDE.md`), WS-B doc index + `docs/proposals/` | ~0.5 day | none (index running in parallel; no data needed) |
-| **2 — Freshness guards** | WS-D catalog command + CI checks + WS-F recipe | ~1 day | phase 1; CI runner for the green gate (local: run the same commands in the docs test) |
-| **3 — Code surface** | WS-C explicit routes (optional)+ L7 tunnel + hygiene | 1–2 days | post-index parity freeze (routes are the riskiest change) |
-| **4 — Consumer surface** | WS-E `/llms.txt` (phase 1 item), MCP + hints (optional) | ~1 day (MCP: prototype) | approved scope; live API with full data (post-index) |
+| 1 — Entrypoints (now) | WS-A, WS-B | ~0.5 day | none (runs parallel to full index) |
+| 2 — Agent interfaces + freshness | WS-E1 (manifest), WS-D, WS-F | ~1–1.5 days | phase 1; CI runner for green gate (local: same commands) |
+| 3 — Response efficiency | WS-G (fields/batch/ETag/markdown) | ~1 day | phase 2; measure-first |
+| 4 — Retrieval | WS-H lexical tuning; semantic only if approved | ~1 day (lexical) / 2–3 (semantic) | post-index Typesense re-import; benchmark gate |
+| 5 — Core/identity/resilience | WS-C routes+L7, WS-I, WS-J | 2–4 days | parity freeze (routes); Redis decision |
+| 6 — MCP + eval | WS-E2 MCP; WS-K benchmark/metrics | ~1–2 days (prototype) | product-value decision; live data |
 
-Quick wins are phases 1–2; they need no data and can land on `laravel-12` immediately.
+## 7. Guardrails (adopted from the external audits)
 
-## 6. Risks & decisions
+- No routing every request through an LLM; no mandatory vector DB; no GPU/local model required.
+- Embed only fields worth embedding (never IDs/scores); embeddings async, version-tracked, disableable.
+- No breaking v4 to clean schemas; never claim inferred similarity/popularity = critical acclaim.
+- Response efficiency always opt-in/measure-first; bounded batch/expansion; public errors stay
+  actionable without stack traces/secrets.
 
-- **Contract drift**: `llms.txt`/spec/endpoint catalog must never contradict code — mitigated by
-  WS-D CI guards + regen-from-source (no hand-maintained copies).
-- **Route modernization** (WS-C) is the only behaviour-touching change besides docs; keep it
-  explicit-optional, behind the parity harness and the suite audits.
-- **MCP server** adds surface — keep it an optional phase-2 prototype (dev-only) until product
-  value is proven; does not affect the v4 contract.
-- **Scope posture**: everything here stays on `laravel-12` single-PR; docs/tooling additions are
-  dev-only-for-maintainers (same stance as the backend-suite integration).
-- **Decision needed**: adopt `AGENTS.md` naming vs `CLAUDE.md`; serve `/llms.txt` publicly vs
-  repo-only; do the route modernization now or defer to post-merge.
+## 8. Risks & decisions
 
-## 7. Open questions
+- Scope creep toward "AI product" — mitigated by guardrails + phasing (deterministic first).
+- Route modernization is the only behavior-touching change — behind parity/audit freeze.
+- MCP/manifest add surface — manifest ships first (cheap); MCP stays a prototype until value proven.
+- Semantic search needs an embedding source decision (managed API vs local model vs none).
+- Keep Mongo+Typesense footprint (external audit agrees); no graph DB.
 
-1. Which agent-file naming do we standardize on — `AGENTS.md` (ecosystem) with a `CLAUDE.md`
-   include, or only `CLAUDE.md`?
+## 9. Open questions
+
+1. Which agent-file naming do we standardize on — `AGENTS.md` (ecosystem) with a `CLAUDE.md` include, or only `CLAUDE.md`?
 2. Serve `/llms.txt` on the public API, or keep it repo-only initially?
-3. Is the 103-route `Controller@action` → class-ref modernization in scope, and if so, before or
-   after the full-index parity freeze?
-4. Should MCP tooling be a product-facing deliverable (phase 2), or a dev-orchestration prototype?
-5. How much generated content (`llms-full.txt`, endpoint catalog) do we commit vs generate in CI?
-6. Do we pursue a formal "agents add an endpoint" eval (two LLMs, one recipe) as the acceptance
-   test for WS-A/WS-F?
+3. Is the 103-route `Controller@action` → class-ref modernization in scope, and before or after the full-index parity freeze?
+4. Agent-interface ordering: `/v4/ai/manifest.json` first + MCP companion second — and is MCP a product deliverable or a dev/prototype?
+5. How much generated content (`llms-full.txt`, endpoint catalog, manifest) do we commit vs generate in CI?
+6. Do we pursue the formal "agents add an endpoint" eval (two LLMs, one recipe) as the acceptance test for WS-A/WS-F?
+7. Response-efficiency scope: which of `fields` / batch reads / ETag+conditional / compact representations ship first, and what are the default size bounds?
+8. Markdown content negotiation (`Accept: text/markdown`): opt-in `?format=` too, which endpoints, and the cache/header semantics?
+9. Semantic retrieval: adopt as optional? engine/model/hosting choice, hybrid+disableable, gated on the search benchmark?
+10. Scraper resilience: circuit breaker + agent-safe fallback payload schema — accept the contract/header implications, and Redis as the breaker store?
+11. Entity identity & data-quality pipeline scope: alias normalization + source-vs-derived labeling — how deep in phase 5?
 
 ## Decisions
 
-All six questions from §7 are open; each is a decision heading below for the proposal-status
-convention (🔴 = open, ✅ = resolved — none resolved yet).
+All eleven questions from §9 are open; each is a decision heading below (🔴 = open, ✅ = resolved — none resolved yet).
 
 ### 🔴 #1 — Agent-file naming (`AGENTS.md` vs `CLAUDE.md`)
-
-Open; see §7 Q1.
+Open; see §9 Q1.
 
 ### 🔴 #2 — Serve `/llms.txt` publicly vs repo-only
-
-Open; see §7 Q2.
+Open; see §9 Q2.
 
 ### 🔴 #3 — Route modernization scope/timing
+Open; see §9 Q3.
 
-Open; see §7 Q3.
-
-### 🔴 #4 — MCP tooling: product vs dev prototype
-
-Open; see §7 Q4.
+### 🔴 #4 — Agent-interface ordering + MCP product vs prototype
+Open; see §9 Q4.
 
 ### 🔴 #5 — Commit vs CI-generate machine artifacts
-
-Open; see §7 Q5.
+Open; see §9 Q5.
 
 ### 🔴 #6 — "Agents add an endpoint" eval as acceptance
+Open; see §9 Q6.
 
-Open; see §7 Q6.
+### 🔴 #7 — Response-efficiency scope (`fields`/batch/ETag) + size bounds
+Open; see §9 Q7.
+
+### 🔴 #8 — Markdown content negotiation scope
+Open; see §9 Q8.
+
+### 🔴 #9 — Semantic retrieval: optional adoption + engine + benchmark gate
+Open; see §9 Q9.
+
+### 🔴 #10 — Scraper circuit breaker + fallback payload contract
+Open; see §9 Q10.
+
+### 🔴 #11 — Entity identity & data-quality pipeline scope
+Open; see §9 Q11.
 
 ---
 
