@@ -253,7 +253,7 @@ Route::get('/anime', [SearchController::class, 'anime']);
 
 ## 10. Decisions (locked)
 
-1. **Target Laravel 12 first**, then bump to 13 once the Typesense Scout driver supports `illuminate ^13`. (§1.1)
+1. **Target Laravel 12 first**, then bump to 13 once the Typesense Scout driver supports `illuminate ^13`. (§1.1) *Superseded 2026-10-13: the PR targets Laravel 13 directly (decision 12).*
 2. **Runtime: both** — RoadRunner as the backwards-compatible default, FrankenPHP opt-in via `OCTANE_SERVER`. (§3.6)
 3. **Search: Typesense only.** ElasticSearch support and its config/services are removed.
 4. **Local fork now, upstream contribution intended.** (§11)
@@ -267,6 +267,10 @@ Decisions added by the 2026-10-13 audit-fix pass (details and evidence: `docs/PR
 9. **Strict Eloquent models outside production** (`Model::shouldBeStrict`). It exposed `Profile::$fillable` lacking `last_updates` / `external_links`; completing it means cached `/v4/users/{u}/full` now returns `updates` and `external` like the uncached response.
 10. **Lumen test shims are retired** (stateless `getJsonWithParams()`, Laravel `setUp<Trait>` hooks). Test and assertion counts were unchanged by the conversion.
 11. **Suite wiring.** `CLAUDE.md` imports `AGENTS.md`; opencode reads the generated AGENTS.md block plus `opencode.json`. Client-UI audit sections (errorHandling, contractHeaders, formRequestValidation, routeModelBinding) are removed from `arch-rules.json` so those audits refuse instead of reporting a false zero. Generated audit baselines are not committed (they embed absolute paths); `baselines/.gitkeep` keeps the directory.
+12. **Target Laravel 13 directly** (no 12-first landing) on **PHP 8.4+ only** (`composer.json` `php: ^8.4`; CI and Docker run 8.4). Decided 2026-10-13.
+13. **The pre-release parser is accepted:** `jikan-me/jikan ^5.0@beta` is the intended dependency for this Laravel 13 PR and moves to a stable v5 when one ships.
+14. **Rate limiting stays in this PR**, opt-in and off by default (decision 5).
+15. **Agent/LLM tooling stays in this PR** (`AGENTS.md`/`CLAUDE.md`, `.ai/skills`, `.backend-suite`, `opencode.json`, `.claude/settings.json`, `llms.txt`, the AI manifest). Making the project agentic and LLM-friendly is part of this change, not a follow-up.
 
 ## 11. Upstream contribution strategy
 
