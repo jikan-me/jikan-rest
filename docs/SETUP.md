@@ -35,11 +35,40 @@ tools/dev/php vendor/bin/phpunit --no-coverage
 | `--seed` | Run the unblocked indexers (genres + magazines). Anime/manga await jikan v5 (see `docs/UPSTREAM_ISSUES.md`). |
 | `--env=local\|production` | Set `APP_ENV`. |
 | `--check` | Prerequisites only. |
+| `--dry-run` | Preview every step, print what would run/download — **nothing is executed**. |
+| `--yes` / `-y` | Accept every default, no prompts (CI-safe). |
+
+> The integration toggles above (`--with-redis`…`--with-typesense`, `--with-backend-suite`,
+> `--with-skills`, `--seed`) and the runtime choice are detailed section-by-section in
+> `docs/PROVIDERS.md`.
 
 Examples:
 ```bash
 ./install.sh --with-backend-suite --with-skills                 # dev + quality + skills
 ./install.sh --with-typesense --server frankenphp --env=production --no-dev --seed
+```
+
+---
+
+## PHP & Composer discovery
+
+`install.sh` (and `tools/dev/php`) resolve the PHP toolchain in this order:
+
+1. **`PHP_BIN` env var** — always wins when set.
+2. **`tools/dev/php`** — the local wrapper. On **macOS** it's the Homebrew `php@8.4`
+   binary (it unsets `PHP_INI_SCAN_DIR`, which Homebrew requires). The file lives
+   under `/tools/dev/`, which is **gitignored** — it does **not** exist on a fresh
+   clone, so it only appears on machines where it was created locally.
+3. **Distro PHP from PATH** — on **Linux / fresh clone** the fallback is `php` /
+   `php8.4` on PATH (the wrapper prefers `php8.4 → php8.3 → php`) with
+   `ext-mongodb` + `ext-pcntl` installed.
+
+Composer falls back from `COMPOSER_BIN` → `composer` on PATH.
+
+Examples:
+```bash
+./install.sh --dry-run --yes                     # preview every step, execute nothing
+PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any OS)
 ```
 
 ---

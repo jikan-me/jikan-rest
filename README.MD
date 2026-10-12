@@ -26,9 +26,10 @@ https://github.com/jikan-me/jikan-rest/tree/v3
 
 - **Composer / native (recommended)** — see the [setup guide](docs/SETUP.md):
   ```bash
-  ./install.sh          # interactive — prompts with defaults
-  ./install.sh --yes    # accept defaults (CI-safe)
-  ./script/server       # start RoadRunner on :8000
+  ./install.sh            # interactive — prompts with defaults
+  ./install.sh --yes      # accept defaults (CI-safe)
+  ./install.sh --dry-run  # preview every step, execute nothing
+  ./script/server         # start RoadRunner on :8000
   ```
   Every service toggle (Redis, Typesense, backend-quality-suite, skills, seeding)
   and the default-to-prod shape are in [docs/SETUP.md](docs/SETUP.md) and the
@@ -73,6 +74,9 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 ## Running Tests
 
 `tools/dev/php vendor/bin/phpunit --no-coverage`
+
+`tools/dev/php` resolves the local PHP wrapper (macOS Homebrew `php@8.4`); on Linux or a
+fresh clone, replace it with `PHP_BIN=… php …` (e.g. `PHP_BIN=/usr/bin/php8.4 php vendor/bin/phpunit --no-coverage`).
 
 Note: Some tests hit MyAnimeList and may be affected by their rate limit (HTTP 429).
 

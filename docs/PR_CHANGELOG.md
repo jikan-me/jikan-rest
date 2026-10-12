@@ -1014,3 +1014,19 @@ venv. Shipped upstream as **backend-quality-suite#24** (bracket-aware
 `#[OA\...]` attribute-chain detection + `docMarkers` backwards-compat:
 `@OA\Get(` matches `#[OA\Get(`). The local venv patch used until then:
 `/tmp/audit_endpoint_parity.py.patched`.
+
+
+## 25. Scalar self-hosted; installer/docs polish (2026-10-12)
+
+- **Scalar fully self-hosted** — no runtime CDN dependency: vendored
+  `@scalar/api-reference@1.73.1` UMD standalone (`public/vendor/scalar/`:
+  standalone.js 4.2 MiB + style.css 304 KiB, SHA-256 matches jsdelivr) and the
+  docs view now loads local assets via `Scalar.createApiReference(...)` with the
+  same config (url=/v4/docs/openapi, hideTestRequestButton, dev tools off,
+  hosted Agent AI disabled). Verified: page + assets 200, zero `cdn.jsdelivr`
+  references, offline-capable.
+- **installer/docs polish**: `docs/SETUP.md` gains `--dry-run`/`--yes` rows, a
+  PROVIDERS pointer, and a "PHP & Composer discovery" section (PHP_BIN →
+  tools/dev/php wrapper → distro php; COMPOSER_BIN → composer); `README.MD`
+  quick-start + tests command note the `--dry-run` preview and the Linux
+  `PHP_BIN=… php …` replacement for the gitignored `tools/dev/php`.
