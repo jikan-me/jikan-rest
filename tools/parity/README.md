@@ -43,6 +43,10 @@ php tools/parity/compare.php \
 
 ## Notes
 
+- **Known gap:** the endpoint set has no invalid-input cases (for example non-numeric ids), so the
+  harness cannot catch a status regression there; `tests/Integration/RouteConstraintsTest.php` covers it
+  for now. The candidate invalid-id endpoints are listed, commented out, at the end of `endpoints.txt`.
+
 - Endpoints that hit MyAnimeList can be slow; `snapshot.php` uses a 30s timeout
   per request. Pass `--timeout=60` if needed.
 - Add new endpoints to `endpoints.txt` as coverage needs grow; keep the baseline

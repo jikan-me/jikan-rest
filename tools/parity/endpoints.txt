@@ -79,3 +79,13 @@ GET /v4/recommendations/anime
 GET /v4/watch/episodes
 GET /v4/watch/promos
 GET /v4/users/recentlyonline
+
+# Invalid input (not captured yet). On the Lumen release the `{id:[0-9]+}` route patterns made these
+# route misses (404). The Laravel port briefly returned 400 until the id constraints were fixed
+# (see tests/Integration/RouteConstraintsTest.php). Uncomment once a baseline can be captured from a
+# Lumen checkout; a baseline must come from the Lumen app, not be written by hand.
+# GET /v4/anime/abc
+# GET /v4/manga/xyz
+# GET /v4/characters/abc
+# GET /v4/people/abc
+# GET /v4/producers/abc
