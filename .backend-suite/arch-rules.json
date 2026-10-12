@@ -1,28 +1,5 @@
 {
-  "_readme": "Laravel-specific architecture rules template. Copy to .backend-suite/arch-rules.json and fill in the TODO values. See the main arch-rules.json.template for the base template with all available sections.",
-  "errorHandling": {
-    "_comment": "Consumed by bin/audit_error_handling.php. Every key is this project's name for its own error machinery; the audit refuses rather than guessing them, because a wrong name matches nothing and reports a confident zero.",
-    "exception_type": "AppException",
-    "guard_call": "guarded",
-    "client_call_pattern": "Http::(?:get|post|put|patch|delete)",
-    "error_state_widget": "ErrorResponse",
-    "error_message_field": "errorMessage",
-    "state_class_pattern": "^class (\\w+Failed)\\b",
-    "state_file_suffix": "_Failure.php",
-    "pages_marker": "/Http/"
-  },
-  "contractHeaders": {
-    "_comment": "Consumed by bin/audit_contract_headers.php. Optional keys the script also reads, each documented at its top: namePrefix, sectionLabels, ignoreFields, checks, screenTreeDepth, receiverPattern, receiverName, screenClassPattern, scope, adapterGlob, excludeGlobs, outputPrefixes, baseline.",
-    "headerMarker": "// CONTRACT:",
-    "receiverPattern": "private\\s+(\\w+)\\s+\\$contract\\s*;",
-    "receiverName": "contract",
-    "screenClassPattern": "class\\s+(\\w+Controller)\\b",
-    "scope": "app/Http/Controllers/*.php",
-    "adapterGlob": "app/Services/*.php",
-    "outputPrefixes": [
-      "on"
-    ]
-  },
+  "_readme": "Project architecture rules for the jikan-rest API (read-only PHP/Laravel JSON API). Sections for audits that describe client-UI or FormRequest/route-model-binding conventions (errorHandling, contractHeaders, formRequestValidation, routeModelBinding) are deliberately absent: this API validates through spatie Data DTOs, binds ids through a mediator, and has no UI, so those audits refuse ('could not check') instead of reporting a vacuous zero. Route audits parse the class-based, named route spelling used in routes/web.v4.php.",
   "layerBoundaries": {
     "_comment": "Consumed by bin/audit_layer_boundaries.py. Every rule in rules[] is enforced (an earlier version read rules[0] only); baseline is the recorded oracle the ratchet compares against. On a PHP project mustNotImport may name a namespace root (App\\Http\\) or a repo-rooted path — both compare by prefix, and one rule may ban both.",
     "rules": [
@@ -47,9 +24,6 @@
   },
   "apiConsistency": {
     "_comment": "Consumed by bin/audit_api_consistency.py. checks: each of the four (loadBearingCopy, hardBakedCopy, authoredSemantics, vocabulary) is true or {\"enabled\": false, \"why\": \"...\"} — an unconfigured check refuses rather than passes. authoredSemantics is a client-UI-provenance check (an interaction must author a named semantics node); on a server-side tree the interaction surface lives in the client app, so turn it off with a why rather than letting every route report as an unnamed interaction. vocabularyRules: this project's own naming rules, [{message, classPattern?, classNotPattern?, has, hasNot?}] — a class whose name matches, whose members all match has, and whose members match none of hasNot is a finding; vocabulary on with zero rules refuses rather than sweeping clean.",
-    "semanticsWrappers": [
-      "Semantics"
-    ],
     "scope": [
       "routes/**/*.php",
       "app/Http/Controllers/**/*.php",
@@ -95,31 +69,6 @@
     "actionPattern": "->name\\('(v4\\.[a-z]+\\.[A-Za-z]+)'\\)",
     "ttlConfigGlob": "config/jikan.php",
     "ttlKeyPattern": "'(v4\\.[a-z]+\\.[A-Za-z]+)'\\s*=>"
-  },
-  "formRequestValidation": {
-    "_comment": "Consumed by bin/audit_form_request_validation.py. requestDirs: directories containing FormRequest classes. requireRules: require rules() method. requireAuthorize: require authorize() method. requireMessages: require messages() method. requireAttributes: require attributes() method. forbidDuplicateRules: forbid duplicate field rules. forbidEmptyRules: forbid empty rules array.",
-    "requestDirs": [
-      "app/Http/Requests"
-    ],
-    "requireRules": true,
-    "requireAuthorize": true,
-    "requireMessages": false,
-    "requireAttributes": false,
-    "forbidDuplicateRules": true,
-    "forbidEmptyRules": true
-  },
-  "routeModelBinding": {
-    "_comment": "Consumed by bin/audit_route_model_binding.php. routesGlob: glob for route files. controllerDirs: directories to scan for controllers. modelDirs: directories to scan for Eloquent models. bindingPattern: regex for Route::model/bind. checkControllerSignatures: whether to check controller method signatures. allowMissingModels: whether to allow missing models for resource routes.",
-    "routesGlob": "routes/*.php",
-    "controllerDirs": [
-      "app/Http/Controllers/V4DB"
-    ],
-    "modelDirs": [
-      "app/Models"
-    ],
-    "bindingPattern": "Route::(?:model|bind)\\s*\\([^)]+\\.class",
-    "checkControllerSignatures": false,
-    "allowMissingModels": false
   },
   "endpointParity": {
     "_comment": "verifies route/controller-action parity for class-based routes ([Controller::class, method]); no extra config needed",
@@ -179,5 +128,13 @@
       "test"
     ],
     "testsuiteFlag": "--testsuite"
+  },
+  "testNetworkCoupling": {
+    "_comment": "Consumed by bin/audit_test_network_coupling.py. Tests must never reach myanimelist.net: Tests\\TestCase::createApplication() replaces the parser's HTTP client with a mock that throws CustomTestException on any request. A host-referencing test therefore counts as safe when it extends that TestCase (or builds its own mock); a test constructing a real client is a finding.",
+    "liveHostPattern": "myanimelist\\.net",
+    "mockClientPattern": "(extends\\s+TestCase|Mockery::mock\\(|MockHttpClient)",
+    "fallbackPattern": "HttpClient::create\\(",
+    "testsGlob": "tests/**/*.php",
+    "exempt": {}
   }
 }
