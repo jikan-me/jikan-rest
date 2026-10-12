@@ -38,8 +38,8 @@ Move `jikan-me/jikan-rest` from the archived Lumen 9 (Laravel 9, security-EOL) o
 **Laravel 13** with first-party tooling: `laravel/framework` + `mongodb/laravel-mongodb`
 v5, Laravel Scout's **native Typesense engine** (replacing the third-party driver),
 PHPUnit 12, `l5-swagger` docs, Octane (RoadRunner default) in place of the old
-`lumen-roadrunner` package — while preserving the public v4 JSON contract byte-for-byte,
-proven by a committed parity harness. Developer tooling is first-party too:
+`lumen-roadrunner` package — while preserving the public v4 JSON contract for valid requests,
+guarded by a committed parity harness and the integration suite. Developer tooling is first-party too:
 `laravel/boost` (agent/skills CLI) with four Laravel marketplace skills
 (`laravel-specialist`, `php-pro`, `laravel-security`, `laravel-patterns`) under `.ai/skills/`.
 
@@ -73,7 +73,8 @@ proven by a committed parity harness. Developer tooling is first-party too:
 
 **Motivation.** Lumen 9 is archived; Laravel 9 reached security end-of-life and the
 Lumen/Mongo driver pairing can no longer be maintained on current PHP. The public v4
-API contract is preserved byte-for-byte (parity harness evidence attached).
+API contract is preserved for valid requests (parity harness and integration-suite evidence
+attached; the harness has no invalid-input cases).
 
 **Proposal.** Move to Laravel 13 with first-party packages: laravel/framework,
 mongodb/laravel-mongodb v5, Scout's native Typesense engine (drops the third-party

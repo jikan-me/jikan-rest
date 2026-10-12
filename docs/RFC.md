@@ -22,8 +22,8 @@ Migrate jikan-rest, a read-only public v4 JSON API over MyAnimeList data, from
 the archived Lumen 9 micro-framework (Laravel 9 / security-EOL) to **Laravel
 13** with first-party packages — `mongodb/laravel-mongodb` v5, Laravel Scout's
 **native Typesense engine**, Octane (RoadRunner default), PHPUnit 12,
-l5-swagger — while preserving the public v4 JSON contract byte-for-byte,
-proven by a committed parity harness.
+l5-swagger — while preserving the public v4 JSON contract for valid requests,
+guarded by a committed parity harness and the integration suite.
 
 ## 2. Motivation
 

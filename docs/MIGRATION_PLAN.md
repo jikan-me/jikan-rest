@@ -4,7 +4,7 @@ Status: **planning draft** (untracked). Not started.
 
 ## 1. Objective
 
-Move jikan-rest off `laravel/lumen-framework` ^9 (discontinued; Lumen archived Feb 2023, Laravel 9 security-EOL Feb 2024) onto a supported, first-party Laravel release, while preserving the public v4 API contract byte-for-byte where possible.
+Move jikan-rest off `laravel/lumen-framework` ^9 (discontinued; Lumen archived Feb 2023, Laravel 9 security-EOL Feb 2024) onto a supported, first-party Laravel release, while preserving the public v4 API contract for valid requests (guarded by the parity harness and the integration suite).
 
 **Target: Laravel 12 first (PHP 8.4), then bump to Laravel 13.**
 
