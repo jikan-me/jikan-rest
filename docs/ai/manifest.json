@@ -9,7 +9,72 @@
                 "description": "Anime search\n\nSearches the anime catalog. Accepts filters such as q, type, score, status, rating, genres, order_by, and sort, with pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "q": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "score": {
+                            "type": "number",
+                            "description": ""
+                        },
+                        "min_score": {
+                            "type": "number",
+                            "description": "Set a minimum score for results."
+                        },
+                        "max_score": {
+                            "type": "number",
+                            "description": "Set a maximum score for results"
+                        },
+                        "status": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "rating": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sfw": {
+                            "type": "boolean",
+                            "description": "Filter out Adult entries"
+                        },
+                        "genres": {
+                            "type": "string",
+                            "description": "Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                        },
+                        "genres_exclude": {
+                            "type": "string",
+                            "description": "Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                        },
+                        "order_by": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sort": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "letter": {
+                            "type": "string",
+                            "description": "Return entries starting with the given letter"
+                        },
+                        "producers": {
+                            "type": "string",
+                            "description": "Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                        },
+                        "start_date": {
+                            "type": "string",
+                            "description": "Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`"
+                        },
+                        "end_date": {
+                            "type": "string",
+                            "description": "Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`"
+                        }
+                    },
                     "required": []
                 }
             }
@@ -21,8 +86,15 @@
                 "description": "Anime details\n\nReturns the details of an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -33,8 +105,15 @@
                 "description": "Anime characters\n\nReturns the characters of an anime by id, together with their voice actors.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -45,8 +124,15 @@
                 "description": "Anime episodes\n\nReturns the list of episodes for an anime by id, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -57,8 +143,20 @@
                 "description": "Anime episode\n\nReturns a single episode of an anime by id and episode.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        },
+                        "episode": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "episode"
+                    ]
                 }
             }
         },
@@ -69,8 +167,15 @@
                 "description": "Anime external links\n\nReturns the external links of an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -81,8 +186,24 @@
                 "description": "Anime forum topics\n\nReturns the forum topics of an anime by id. Use filter to restrict to all, episode, or other topics.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        },
+                        "filter": {
+                            "type": "string",
+                            "description": "Filter topics",
+                            "enum": [
+                                "all",
+                                "episode",
+                                "other"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -93,8 +214,15 @@
                 "description": "Complete anime resource\n\nReturns the complete anime resource, including primary data plus related sub-resources, for an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -105,8 +233,15 @@
                 "description": "Anime more info\n\nReturns additional trivia and background information about an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -117,8 +252,15 @@
                 "description": "Anime news\n\nReturns recent news articles for an anime by id, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -129,8 +271,15 @@
                 "description": "Anime pictures\n\nReturns the pictures of an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -141,8 +290,15 @@
                 "description": "Anime recommendations\n\nReturns the recommendations for an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -153,8 +309,15 @@
                 "description": "Anime relations\n\nReturns the related entries for an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -165,8 +328,15 @@
                 "description": "Anime reviews\n\nReturns the reviews of an anime by id. Supports pagination via page, with preliminary and spoilers toggles for review types.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -177,8 +347,15 @@
                 "description": "Anime staff\n\nReturns the staff of an anime by id along with their positions.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -189,8 +366,15 @@
                 "description": "Anime statistics\n\nReturns the statistics of an anime by id, such as watching, completed, and on-hold counts.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -201,8 +385,15 @@
                 "description": "Anime streaming links\n\nReturns the streaming links of an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -213,8 +404,15 @@
                 "description": "Anime themes\n\nReturns the opening and ending themes of an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -225,8 +423,15 @@
                 "description": "Anime user updates\n\nReturns the recent list updates of users for an anime by id, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -237,8 +442,15 @@
                 "description": "Anime videos\n\nReturns the promotional videos, episodes, and music videos of an anime by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -249,8 +461,15 @@
                 "description": "Anime video episodes\n\nReturns the episode videos of an anime by id, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -261,7 +480,24 @@
                 "description": "Characters search\n\nSearches the characters catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "q": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "order_by": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sort": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "letter": {
+                            "type": "string",
+                            "description": "Return entries starting with the given letter"
+                        }
+                    },
                     "required": []
                 }
             }
@@ -273,8 +509,15 @@
                 "description": "Character details\n\nReturns the details of a character by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -285,8 +528,15 @@
                 "description": "Character anime roles\n\nReturns the anime roles of a character by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -297,8 +547,15 @@
                 "description": "Complete character resource\n\nReturns the complete character resource for a character by id, including anime and manga roles, voices, and more.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -309,8 +566,15 @@
                 "description": "Character manga roles\n\nReturns the manga roles of a character by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -321,8 +585,15 @@
                 "description": "Character pictures\n\nReturns the pictures of a character by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -333,8 +604,15 @@
                 "description": "Character voice actors\n\nReturns the voice actors of a character by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -345,7 +623,32 @@
                 "description": "Clubs search\n\nSearches the clubs catalog using the q, type, category, order_by, sort, and letter filters. Supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "q": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "category": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "order_by": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sort": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "letter": {
+                            "type": "string",
+                            "description": "Return entries starting with the given letter"
+                        }
+                    },
                     "required": []
                 }
             }
@@ -357,8 +660,15 @@
                 "description": "Club details\n\nReturns the details of a club by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -369,8 +679,15 @@
                 "description": "Club members\n\nReturns the members of a club by id, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -381,8 +698,15 @@
                 "description": "Club relations\n\nReturns the anime, manga, and characters related to a club by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -393,8 +717,15 @@
                 "description": "Club staff\n\nReturns the staff of a club by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -405,7 +736,12 @@
                 "description": "Anime genres\n\nReturns the list of anime genres, explicit genres, themes, and demographics. Use filter to select the list type.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
                     "required": []
                 }
             }
@@ -417,7 +753,12 @@
                 "description": "Manga genres\n\nReturns the list of manga genres, explicit genres, themes, and demographics. Use filter to select the list type.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
                     "required": []
                 }
             }
@@ -429,7 +770,24 @@
                 "description": "Magazines list\n\nSearches the magazines catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "q": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "order_by": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sort": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "letter": {
+                            "type": "string",
+                            "description": "Return entries starting with the given letter"
+                        }
+                    },
                     "required": []
                 }
             }
@@ -441,7 +799,68 @@
                 "description": "Manga search\n\nSearches the manga catalog. Accepts filters such as q, type, score, status, genres, order_by, and sort, with pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "q": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "score": {
+                            "type": "number",
+                            "description": ""
+                        },
+                        "min_score": {
+                            "type": "number",
+                            "description": "Set a minimum score for results."
+                        },
+                        "max_score": {
+                            "type": "number",
+                            "description": "Set a maximum score for results"
+                        },
+                        "status": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sfw": {
+                            "type": "boolean",
+                            "description": "Filter out Adult entries"
+                        },
+                        "genres": {
+                            "type": "string",
+                            "description": "Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                        },
+                        "genres_exclude": {
+                            "type": "string",
+                            "description": "Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                        },
+                        "order_by": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sort": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "letter": {
+                            "type": "string",
+                            "description": "Return entries starting with the given letter"
+                        },
+                        "magazines": {
+                            "type": "string",
+                            "description": "Filter by magazine(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                        },
+                        "start_date": {
+                            "type": "string",
+                            "description": "Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`"
+                        },
+                        "end_date": {
+                            "type": "string",
+                            "description": "Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`"
+                        }
+                    },
                     "required": []
                 }
             }
@@ -453,8 +872,15 @@
                 "description": "Manga details\n\nReturns the details of a manga by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -465,8 +891,15 @@
                 "description": "Manga characters\n\nReturns the characters of a manga by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -477,8 +910,15 @@
                 "description": "Manga external links\n\nReturns the external links of a manga by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -489,8 +929,24 @@
                 "description": "Manga forum topics\n\nReturns the forum topics of a manga by id. Use filter to restrict to all, episode, or other topics.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        },
+                        "filter": {
+                            "type": "string",
+                            "description": "Filter topics",
+                            "enum": [
+                                "all",
+                                "episode",
+                                "other"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -501,8 +957,15 @@
                 "description": "Complete manga resource\n\nReturns the complete manga resource, including primary data plus related sub-resources, for a manga by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -513,8 +976,15 @@
                 "description": "Manga more info\n\nReturns additional trivia and background information about a manga by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -525,8 +995,15 @@
                 "description": "Manga news\n\nReturns recent news articles for a manga by id, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -537,8 +1014,15 @@
                 "description": "Manga pictures\n\nReturns the pictures of a manga by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -549,8 +1033,15 @@
                 "description": "Manga recommendations\n\nReturns the recommendations for a manga by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -561,8 +1052,15 @@
                 "description": "Manga relations\n\nReturns the related entries for a manga by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -573,8 +1071,15 @@
                 "description": "Manga reviews\n\nReturns the reviews of a manga by id. Supports pagination via page, with preliminary and spoilers toggles for review types.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -585,8 +1090,15 @@
                 "description": "Manga statistics\n\nReturns the statistics of a manga by id, such as reading, completed, and on-hold counts.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -597,8 +1109,15 @@
                 "description": "Manga user updates\n\nReturns the recent list updates of users for a manga by id, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -609,7 +1128,24 @@
                 "description": "People search\n\nSearches the people catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "q": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "order_by": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sort": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "letter": {
+                            "type": "string",
+                            "description": "Return entries starting with the given letter"
+                        }
+                    },
                     "required": []
                 }
             }
@@ -621,8 +1157,15 @@
                 "description": "Person details\n\nReturns the details of a person by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -633,8 +1176,15 @@
                 "description": "Person anime roles\n\nReturns the anime roles of a person by id with their staff positions.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -645,8 +1195,15 @@
                 "description": "Complete person resource\n\nReturns the complete person resource for a person by id, including anime and manga roles, voices, and more.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -657,8 +1214,15 @@
                 "description": "Person manga roles\n\nReturns the manga roles of a person by id with their staff positions.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -669,8 +1233,15 @@
                 "description": "Person pictures\n\nReturns the pictures of a person by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -681,8 +1252,15 @@
                 "description": "Person voice acting roles\n\nReturns the voice acting roles of a person by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -693,7 +1271,24 @@
                 "description": "Producers list\n\nSearches the producers catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "q": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "order_by": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sort": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "letter": {
+                            "type": "string",
+                            "description": "Return entries starting with the given letter"
+                        }
+                    },
                     "required": []
                 }
             }
@@ -705,8 +1300,15 @@
                 "description": "Producer details\n\nReturns the details of a producer by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -717,8 +1319,15 @@
                 "description": "Producer external links\n\nReturns the external links of a producer by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -729,8 +1338,15 @@
                 "description": "Complete producer resource\n\nReturns the complete producer resource, including primary data plus related sub-resources, for a producer by id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -741,7 +1357,7 @@
                 "description": "Random anime\n\nReturns a random anime from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -753,7 +1369,7 @@
                 "description": "Random characters\n\nReturns a random character from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -765,7 +1381,7 @@
                 "description": "Random manga\n\nReturns a random manga from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -777,7 +1393,7 @@
                 "description": "Random people\n\nReturns a random person from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -789,7 +1405,7 @@
                 "description": "Random users\n\nReturns a random user profile from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -801,7 +1417,7 @@
                 "description": "Recent anime recommendations\n\nReturns the most recent anime recommendations from MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -813,7 +1429,7 @@
                 "description": "Recent manga recommendations\n\nReturns the most recent manga recommendations from MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -825,7 +1441,7 @@
                 "description": "Recent anime reviews\n\nReturns the most recent anime reviews. Supports pagination via page, with preliminary and spoilers toggles.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -837,7 +1453,7 @@
                 "description": "Recent manga reviews\n\nReturns the most recent manga reviews. Supports pagination via page, with preliminary and spoilers toggles.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -849,7 +1465,39 @@
                 "description": "Anime schedule\n\nReturns the weekly airing schedule of anime. Use filter to select a weekday, with kids and sfw to include or exclude entries by their ratings, and pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": "Filter by day",
+                            "enum": [
+                                "monday",
+                                "tuesday",
+                                "wednesday",
+                                "thursday",
+                                "friday",
+                                "saturday",
+                                "sunday",
+                                "unknown",
+                                "other"
+                            ]
+                        },
+                        "kids": {
+                            "type": "string",
+                            "description": "When supplied, it will filter entries with the `Kids` Genre Demographic. When supplied as `kids=true`, it will return only Kid entries and when supplied as `kids=false`, it will filter out any Kid entries. Defaults to `false`.",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        },
+                        "sfw": {
+                            "type": "string",
+                            "description": "'Safe For Work'. When supplied, it will filter entries with the `Hentai` Genre. When supplied as `sfw=true`, it will return only SFW entries and when supplied as `sfw=false`, it will filter out any Hentai entries. Defaults to `false`.",
+                            "enum": [
+                                "true",
+                                "false"
+                            ]
+                        }
+                    },
                     "required": []
                 }
             }
@@ -861,7 +1509,7 @@
                 "description": "Seasons list\n\nLists the years and seasons with available anime archives.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -873,7 +1521,20 @@
                 "description": "Current anime season\n\nReturns the anime currently airing this season. Can be filtered by filter and supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": "Entry types",
+                            "enum": [
+                                "tv",
+                                "movie",
+                                "ova",
+                                "special",
+                                "ona",
+                                "music"
+                            ]
+                        }
+                    },
                     "required": []
                 }
             }
@@ -885,7 +1546,20 @@
                 "description": "Upcoming anime season\n\nReturns the anime of the upcoming season. Can be filtered by filter and supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "filter": {
+                            "type": "string",
+                            "description": "Entry types",
+                            "enum": [
+                                "tv",
+                                "movie",
+                                "ova",
+                                "special",
+                                "ona",
+                                "music"
+                            ]
+                        }
+                    },
                     "required": []
                 }
             }
@@ -897,8 +1571,32 @@
                 "description": "Seasonal anime\n\nReturns the anime that aired in a specific year and season. Can be filtered by filter and supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "year": {
+                            "type": "integer",
+                            "description": ""
+                        },
+                        "season": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "filter": {
+                            "type": "string",
+                            "description": "Entry types",
+                            "enum": [
+                                "tv",
+                                "movie",
+                                "ova",
+                                "special",
+                                "ona",
+                                "music"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "year",
+                        "season"
+                    ]
                 }
             }
         },
@@ -909,7 +1607,24 @@
                 "description": "Top anime\n\nReturns the top-ranked anime. Can be filtered by type, filter, rating, and sfw.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "filter": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "rating": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "sfw": {
+                            "type": "boolean",
+                            "description": "Filter out Adult entries"
+                        }
+                    },
                     "required": []
                 }
             }
@@ -921,7 +1636,7 @@
                 "description": "Top characters\n\nReturns the top-ranked characters.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -933,7 +1648,16 @@
                 "description": "Top manga\n\nReturns the top-ranked manga. Can be filtered by type and filter.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "filter": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
                     "required": []
                 }
             }
@@ -945,7 +1669,7 @@
                 "description": "Top people\n\nReturns the top-ranked people.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -957,7 +1681,20 @@
                 "description": "Top reviews\n\nReturns the top-ranked reviews. Can be filtered by type, with preliminary and spoilers toggles.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "preliminary": {
+                            "type": "boolean",
+                            "description": "Whether the results include preliminary reviews or not. Defaults to true."
+                        },
+                        "spoilers": {
+                            "type": "boolean",
+                            "description": "Whether the results include reviews with spoilers or not. Defaults to true."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -969,7 +1706,28 @@
                 "description": "Users search\n\nSearches the users catalog using the q, gender, location, maxAge, and minAge filters. Supports pagination via page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {
+                        "q": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "gender": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "location": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "maxAge": {
+                            "type": "integer",
+                            "description": ""
+                        },
+                        "minAge": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
                     "required": []
                 }
             }
@@ -981,7 +1739,7 @@
                 "description": "Recently online users\n\nReturns the users currently online or recently online.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -993,8 +1751,15 @@
                 "description": "User by ID\n\nReturns a user profile by their MyAnimeList id.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
                 }
             }
         },
@@ -1005,8 +1770,15 @@
                 "description": "User profile\n\nReturns the public profile of a user by username.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1017,8 +1789,15 @@
                 "description": "User about\n\nReturns the profile \"about\" section of a user by username in raw HTML.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1029,8 +1808,19 @@
                 "description": "User animelist\n\nReturns the anime list of a user by username, optionally filtered by status. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "status": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1041,8 +1831,15 @@
                 "description": "User clubs\n\nReturns the clubs joined by a user by username, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1053,8 +1850,15 @@
                 "description": "User external links\n\nReturns the external links of a user by username.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1065,8 +1869,15 @@
                 "description": "User favorites\n\nReturns the favorites of a user by username.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1077,8 +1888,15 @@
                 "description": "User friends\n\nReturns the friends of a user by username, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1089,8 +1907,15 @@
                 "description": "Complete user profile\n\nReturns the complete profile of a user by username.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1101,8 +1926,23 @@
                 "description": "User history\n\nReturns the recent anime and manga history of a user by username. Use type to filter to anime or manga entries.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "type": {
+                            "type": "string",
+                            "description": "",
+                            "enum": [
+                                "anime",
+                                "manga"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1113,8 +1953,19 @@
                 "description": "User manga list\n\nReturns the manga list of a user by username, optionally filtered by status. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        },
+                        "status": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1125,8 +1976,15 @@
                 "description": "User recommendations\n\nReturns the recommendations made by a user by username, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1137,8 +1995,15 @@
                 "description": "User reviews\n\nReturns the reviews written by a user by username, paginated by page.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1149,8 +2014,15 @@
                 "description": "User statistics\n\nReturns the statistics of a user by username.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1161,8 +2033,15 @@
                 "description": "User updates\n\nReturns the recent anime and manga list updates of a user by username.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
-                    "required": []
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": ""
+                        }
+                    },
+                    "required": [
+                        "username"
+                    ]
                 }
             }
         },
@@ -1173,7 +2052,7 @@
                 "description": "Recently added episodes\n\nReturns recently added episodes currently trending on MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -1185,7 +2064,7 @@
                 "description": "Popular episodes\n\nReturns popular episodes currently trending on MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -1197,7 +2076,7 @@
                 "description": "Recently added promotional videos\n\nReturns recently added promotional videos currently trending on MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -1209,7 +2088,7 @@
                 "description": "Popular promotional videos\n\nReturns popular promotional videos currently trending on MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": [],
+                    "properties": {},
                     "required": []
                 }
             }
@@ -1221,7 +2100,72 @@
             "description": "Anime search\n\nSearches the anime catalog. Accepts filters such as q, type, score, status, rating, genres, order_by, and sort, with pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "q": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "score": {
+                        "type": "number",
+                        "description": ""
+                    },
+                    "min_score": {
+                        "type": "number",
+                        "description": "Set a minimum score for results."
+                    },
+                    "max_score": {
+                        "type": "number",
+                        "description": "Set a maximum score for results"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "rating": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sfw": {
+                        "type": "boolean",
+                        "description": "Filter out Adult entries"
+                    },
+                    "genres": {
+                        "type": "string",
+                        "description": "Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                    },
+                    "genres_exclude": {
+                        "type": "string",
+                        "description": "Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                    },
+                    "order_by": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sort": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "letter": {
+                        "type": "string",
+                        "description": "Return entries starting with the given letter"
+                    },
+                    "producers": {
+                        "type": "string",
+                        "description": "Filter by producer(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "description": "Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "description": "Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`"
+                    }
+                },
                 "required": []
             }
         },
@@ -1230,8 +2174,15 @@
             "description": "Anime details\n\nReturns the details of an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1239,8 +2190,15 @@
             "description": "Anime characters\n\nReturns the characters of an anime by id, together with their voice actors.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1248,8 +2206,15 @@
             "description": "Anime episodes\n\nReturns the list of episodes for an anime by id, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1257,8 +2222,20 @@
             "description": "Anime episode\n\nReturns a single episode of an anime by id and episode.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    },
+                    "episode": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id",
+                    "episode"
+                ]
             }
         },
         {
@@ -1266,8 +2243,15 @@
             "description": "Anime external links\n\nReturns the external links of an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1275,8 +2259,24 @@
             "description": "Anime forum topics\n\nReturns the forum topics of an anime by id. Use filter to restrict to all, episode, or other topics.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    },
+                    "filter": {
+                        "type": "string",
+                        "description": "Filter topics",
+                        "enum": [
+                            "all",
+                            "episode",
+                            "other"
+                        ]
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1284,8 +2284,15 @@
             "description": "Complete anime resource\n\nReturns the complete anime resource, including primary data plus related sub-resources, for an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1293,8 +2300,15 @@
             "description": "Anime more info\n\nReturns additional trivia and background information about an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1302,8 +2316,15 @@
             "description": "Anime news\n\nReturns recent news articles for an anime by id, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1311,8 +2332,15 @@
             "description": "Anime pictures\n\nReturns the pictures of an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1320,8 +2348,15 @@
             "description": "Anime recommendations\n\nReturns the recommendations for an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1329,8 +2364,15 @@
             "description": "Anime relations\n\nReturns the related entries for an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1338,8 +2380,15 @@
             "description": "Anime reviews\n\nReturns the reviews of an anime by id. Supports pagination via page, with preliminary and spoilers toggles for review types.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1347,8 +2396,15 @@
             "description": "Anime staff\n\nReturns the staff of an anime by id along with their positions.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1356,8 +2412,15 @@
             "description": "Anime statistics\n\nReturns the statistics of an anime by id, such as watching, completed, and on-hold counts.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1365,8 +2428,15 @@
             "description": "Anime streaming links\n\nReturns the streaming links of an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1374,8 +2444,15 @@
             "description": "Anime themes\n\nReturns the opening and ending themes of an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1383,8 +2460,15 @@
             "description": "Anime user updates\n\nReturns the recent list updates of users for an anime by id, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1392,8 +2476,15 @@
             "description": "Anime videos\n\nReturns the promotional videos, episodes, and music videos of an anime by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1401,8 +2492,15 @@
             "description": "Anime video episodes\n\nReturns the episode videos of an anime by id, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1410,7 +2508,24 @@
             "description": "Characters search\n\nSearches the characters catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "q": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "order_by": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sort": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "letter": {
+                        "type": "string",
+                        "description": "Return entries starting with the given letter"
+                    }
+                },
                 "required": []
             }
         },
@@ -1419,8 +2534,15 @@
             "description": "Character details\n\nReturns the details of a character by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1428,8 +2550,15 @@
             "description": "Character anime roles\n\nReturns the anime roles of a character by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1437,8 +2566,15 @@
             "description": "Complete character resource\n\nReturns the complete character resource for a character by id, including anime and manga roles, voices, and more.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1446,8 +2582,15 @@
             "description": "Character manga roles\n\nReturns the manga roles of a character by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1455,8 +2598,15 @@
             "description": "Character pictures\n\nReturns the pictures of a character by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1464,8 +2614,15 @@
             "description": "Character voice actors\n\nReturns the voice actors of a character by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1473,7 +2630,32 @@
             "description": "Clubs search\n\nSearches the clubs catalog using the q, type, category, order_by, sort, and letter filters. Supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "q": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "order_by": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sort": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "letter": {
+                        "type": "string",
+                        "description": "Return entries starting with the given letter"
+                    }
+                },
                 "required": []
             }
         },
@@ -1482,8 +2664,15 @@
             "description": "Club details\n\nReturns the details of a club by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1491,8 +2680,15 @@
             "description": "Club members\n\nReturns the members of a club by id, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1500,8 +2696,15 @@
             "description": "Club relations\n\nReturns the anime, manga, and characters related to a club by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1509,8 +2712,15 @@
             "description": "Club staff\n\nReturns the staff of a club by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1518,7 +2728,12 @@
             "description": "Anime genres\n\nReturns the list of anime genres, explicit genres, themes, and demographics. Use filter to select the list type.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "filter": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
                 "required": []
             }
         },
@@ -1527,7 +2742,12 @@
             "description": "Manga genres\n\nReturns the list of manga genres, explicit genres, themes, and demographics. Use filter to select the list type.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "filter": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
                 "required": []
             }
         },
@@ -1536,7 +2756,24 @@
             "description": "Magazines list\n\nSearches the magazines catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "q": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "order_by": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sort": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "letter": {
+                        "type": "string",
+                        "description": "Return entries starting with the given letter"
+                    }
+                },
                 "required": []
             }
         },
@@ -1545,7 +2782,68 @@
             "description": "Manga search\n\nSearches the manga catalog. Accepts filters such as q, type, score, status, genres, order_by, and sort, with pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "q": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "score": {
+                        "type": "number",
+                        "description": ""
+                    },
+                    "min_score": {
+                        "type": "number",
+                        "description": "Set a minimum score for results."
+                    },
+                    "max_score": {
+                        "type": "number",
+                        "description": "Set a maximum score for results"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sfw": {
+                        "type": "boolean",
+                        "description": "Filter out Adult entries"
+                    },
+                    "genres": {
+                        "type": "string",
+                        "description": "Filter by genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                    },
+                    "genres_exclude": {
+                        "type": "string",
+                        "description": "Exclude genre(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                    },
+                    "order_by": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sort": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "letter": {
+                        "type": "string",
+                        "description": "Return entries starting with the given letter"
+                    },
+                    "magazines": {
+                        "type": "string",
+                        "description": "Filter by magazine(s) IDs. Can pass multiple with a comma as a delimiter. e.g 1,2,3"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "description": "Filter by starting date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "description": "Filter by ending date. Format: YYYY-MM-DD. e.g `2022`, `2005-05`, `2005-01-01`"
+                    }
+                },
                 "required": []
             }
         },
@@ -1554,8 +2852,15 @@
             "description": "Manga details\n\nReturns the details of a manga by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1563,8 +2868,15 @@
             "description": "Manga characters\n\nReturns the characters of a manga by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1572,8 +2884,15 @@
             "description": "Manga external links\n\nReturns the external links of a manga by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1581,8 +2900,24 @@
             "description": "Manga forum topics\n\nReturns the forum topics of a manga by id. Use filter to restrict to all, episode, or other topics.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    },
+                    "filter": {
+                        "type": "string",
+                        "description": "Filter topics",
+                        "enum": [
+                            "all",
+                            "episode",
+                            "other"
+                        ]
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1590,8 +2925,15 @@
             "description": "Complete manga resource\n\nReturns the complete manga resource, including primary data plus related sub-resources, for a manga by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1599,8 +2941,15 @@
             "description": "Manga more info\n\nReturns additional trivia and background information about a manga by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1608,8 +2957,15 @@
             "description": "Manga news\n\nReturns recent news articles for a manga by id, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1617,8 +2973,15 @@
             "description": "Manga pictures\n\nReturns the pictures of a manga by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1626,8 +2989,15 @@
             "description": "Manga recommendations\n\nReturns the recommendations for a manga by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1635,8 +3005,15 @@
             "description": "Manga relations\n\nReturns the related entries for a manga by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1644,8 +3021,15 @@
             "description": "Manga reviews\n\nReturns the reviews of a manga by id. Supports pagination via page, with preliminary and spoilers toggles for review types.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1653,8 +3037,15 @@
             "description": "Manga statistics\n\nReturns the statistics of a manga by id, such as reading, completed, and on-hold counts.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1662,8 +3053,15 @@
             "description": "Manga user updates\n\nReturns the recent list updates of users for a manga by id, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1671,7 +3069,24 @@
             "description": "People search\n\nSearches the people catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "q": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "order_by": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sort": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "letter": {
+                        "type": "string",
+                        "description": "Return entries starting with the given letter"
+                    }
+                },
                 "required": []
             }
         },
@@ -1680,8 +3095,15 @@
             "description": "Person details\n\nReturns the details of a person by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1689,8 +3111,15 @@
             "description": "Person anime roles\n\nReturns the anime roles of a person by id with their staff positions.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1698,8 +3127,15 @@
             "description": "Complete person resource\n\nReturns the complete person resource for a person by id, including anime and manga roles, voices, and more.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1707,8 +3143,15 @@
             "description": "Person manga roles\n\nReturns the manga roles of a person by id with their staff positions.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1716,8 +3159,15 @@
             "description": "Person pictures\n\nReturns the pictures of a person by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1725,8 +3175,15 @@
             "description": "Person voice acting roles\n\nReturns the voice acting roles of a person by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1734,7 +3191,24 @@
             "description": "Producers list\n\nSearches the producers catalog using the q, order_by, sort, and letter filters. Supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "q": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "order_by": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sort": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "letter": {
+                        "type": "string",
+                        "description": "Return entries starting with the given letter"
+                    }
+                },
                 "required": []
             }
         },
@@ -1743,8 +3217,15 @@
             "description": "Producer details\n\nReturns the details of a producer by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1752,8 +3233,15 @@
             "description": "Producer external links\n\nReturns the external links of a producer by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1761,8 +3249,15 @@
             "description": "Complete producer resource\n\nReturns the complete producer resource, including primary data plus related sub-resources, for a producer by id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1770,7 +3265,7 @@
             "description": "Random anime\n\nReturns a random anime from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1779,7 +3274,7 @@
             "description": "Random characters\n\nReturns a random character from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1788,7 +3283,7 @@
             "description": "Random manga\n\nReturns a random manga from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1797,7 +3292,7 @@
             "description": "Random people\n\nReturns a random person from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1806,7 +3301,7 @@
             "description": "Random users\n\nReturns a random user profile from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1815,7 +3310,7 @@
             "description": "Recent anime recommendations\n\nReturns the most recent anime recommendations from MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1824,7 +3319,7 @@
             "description": "Recent manga recommendations\n\nReturns the most recent manga recommendations from MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1833,7 +3328,7 @@
             "description": "Recent anime reviews\n\nReturns the most recent anime reviews. Supports pagination via page, with preliminary and spoilers toggles.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1842,7 +3337,7 @@
             "description": "Recent manga reviews\n\nReturns the most recent manga reviews. Supports pagination via page, with preliminary and spoilers toggles.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1851,7 +3346,39 @@
             "description": "Anime schedule\n\nReturns the weekly airing schedule of anime. Use filter to select a weekday, with kids and sfw to include or exclude entries by their ratings, and pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "filter": {
+                        "type": "string",
+                        "description": "Filter by day",
+                        "enum": [
+                            "monday",
+                            "tuesday",
+                            "wednesday",
+                            "thursday",
+                            "friday",
+                            "saturday",
+                            "sunday",
+                            "unknown",
+                            "other"
+                        ]
+                    },
+                    "kids": {
+                        "type": "string",
+                        "description": "When supplied, it will filter entries with the `Kids` Genre Demographic. When supplied as `kids=true`, it will return only Kid entries and when supplied as `kids=false`, it will filter out any Kid entries. Defaults to `false`.",
+                        "enum": [
+                            "true",
+                            "false"
+                        ]
+                    },
+                    "sfw": {
+                        "type": "string",
+                        "description": "'Safe For Work'. When supplied, it will filter entries with the `Hentai` Genre. When supplied as `sfw=true`, it will return only SFW entries and when supplied as `sfw=false`, it will filter out any Hentai entries. Defaults to `false`.",
+                        "enum": [
+                            "true",
+                            "false"
+                        ]
+                    }
+                },
                 "required": []
             }
         },
@@ -1860,7 +3387,7 @@
             "description": "Seasons list\n\nLists the years and seasons with available anime archives.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1869,7 +3396,20 @@
             "description": "Current anime season\n\nReturns the anime currently airing this season. Can be filtered by filter and supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "filter": {
+                        "type": "string",
+                        "description": "Entry types",
+                        "enum": [
+                            "tv",
+                            "movie",
+                            "ova",
+                            "special",
+                            "ona",
+                            "music"
+                        ]
+                    }
+                },
                 "required": []
             }
         },
@@ -1878,7 +3418,20 @@
             "description": "Upcoming anime season\n\nReturns the anime of the upcoming season. Can be filtered by filter and supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "filter": {
+                        "type": "string",
+                        "description": "Entry types",
+                        "enum": [
+                            "tv",
+                            "movie",
+                            "ova",
+                            "special",
+                            "ona",
+                            "music"
+                        ]
+                    }
+                },
                 "required": []
             }
         },
@@ -1887,8 +3440,32 @@
             "description": "Seasonal anime\n\nReturns the anime that aired in a specific year and season. Can be filtered by filter and supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "year": {
+                        "type": "integer",
+                        "description": ""
+                    },
+                    "season": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "filter": {
+                        "type": "string",
+                        "description": "Entry types",
+                        "enum": [
+                            "tv",
+                            "movie",
+                            "ova",
+                            "special",
+                            "ona",
+                            "music"
+                        ]
+                    }
+                },
+                "required": [
+                    "year",
+                    "season"
+                ]
             }
         },
         {
@@ -1896,7 +3473,24 @@
             "description": "Top anime\n\nReturns the top-ranked anime. Can be filtered by type, filter, rating, and sfw.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "filter": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "rating": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "sfw": {
+                        "type": "boolean",
+                        "description": "Filter out Adult entries"
+                    }
+                },
                 "required": []
             }
         },
@@ -1905,7 +3499,7 @@
             "description": "Top characters\n\nReturns the top-ranked characters.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1914,7 +3508,16 @@
             "description": "Top manga\n\nReturns the top-ranked manga. Can be filtered by type and filter.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "filter": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
                 "required": []
             }
         },
@@ -1923,7 +3526,7 @@
             "description": "Top people\n\nReturns the top-ranked people.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1932,7 +3535,20 @@
             "description": "Top reviews\n\nReturns the top-ranked reviews. Can be filtered by type, with preliminary and spoilers toggles.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "preliminary": {
+                        "type": "boolean",
+                        "description": "Whether the results include preliminary reviews or not. Defaults to true."
+                    },
+                    "spoilers": {
+                        "type": "boolean",
+                        "description": "Whether the results include reviews with spoilers or not. Defaults to true."
+                    }
+                },
                 "required": []
             }
         },
@@ -1941,7 +3557,28 @@
             "description": "Users search\n\nSearches the users catalog using the q, gender, location, maxAge, and minAge filters. Supports pagination via page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {
+                    "q": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "gender": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "location": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "maxAge": {
+                        "type": "integer",
+                        "description": ""
+                    },
+                    "minAge": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
                 "required": []
             }
         },
@@ -1950,7 +3587,7 @@
             "description": "Recently online users\n\nReturns the users currently online or recently online.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -1959,8 +3596,15 @@
             "description": "User by ID\n\nReturns a user profile by their MyAnimeList id.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "id"
+                ]
             }
         },
         {
@@ -1968,8 +3612,15 @@
             "description": "User profile\n\nReturns the public profile of a user by username.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -1977,8 +3628,15 @@
             "description": "User about\n\nReturns the profile \"about\" section of a user by username in raw HTML.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -1986,8 +3644,19 @@
             "description": "User animelist\n\nReturns the anime list of a user by username, optionally filtered by status. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -1995,8 +3664,15 @@
             "description": "User clubs\n\nReturns the clubs joined by a user by username, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2004,8 +3680,15 @@
             "description": "User external links\n\nReturns the external links of a user by username.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2013,8 +3696,15 @@
             "description": "User favorites\n\nReturns the favorites of a user by username.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2022,8 +3712,15 @@
             "description": "User friends\n\nReturns the friends of a user by username, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2031,8 +3728,15 @@
             "description": "Complete user profile\n\nReturns the complete profile of a user by username.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2040,8 +3744,23 @@
             "description": "User history\n\nReturns the recent anime and manga history of a user by username. Use type to filter to anime or manga entries.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "",
+                        "enum": [
+                            "anime",
+                            "manga"
+                        ]
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2049,8 +3768,19 @@
             "description": "User manga list\n\nReturns the manga list of a user by username, optionally filtered by status. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2058,8 +3788,15 @@
             "description": "User recommendations\n\nReturns the recommendations made by a user by username, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2067,8 +3804,15 @@
             "description": "User reviews\n\nReturns the reviews written by a user by username, paginated by page.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2076,8 +3820,15 @@
             "description": "User statistics\n\nReturns the statistics of a user by username.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2085,8 +3836,15 @@
             "description": "User updates\n\nReturns the recent anime and manga list updates of a user by username.",
             "parameters": {
                 "type": "object",
-                "properties": [],
-                "required": []
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": ""
+                    }
+                },
+                "required": [
+                    "username"
+                ]
             }
         },
         {
@@ -2094,7 +3852,7 @@
             "description": "Recently added episodes\n\nReturns recently added episodes currently trending on MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -2103,7 +3861,7 @@
             "description": "Popular episodes\n\nReturns popular episodes currently trending on MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -2112,7 +3870,7 @@
             "description": "Recently added promotional videos\n\nReturns recently added promotional videos currently trending on MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         },
@@ -2121,7 +3879,7 @@
             "description": "Popular promotional videos\n\nReturns popular promotional videos currently trending on MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": [],
+                "properties": {},
                 "required": []
             }
         }

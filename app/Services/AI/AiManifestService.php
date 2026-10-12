@@ -26,13 +26,15 @@ final class AiManifestService
     public function fromSpec(array $spec): array
     {
         $endpoints = $this->endpoints($spec);
+        // the spec is needed to look up each operation's parameters
+        $tools = $this->tools($endpoints, $spec);
 
         return [
             'endpoints' => $endpoints,
-            'tools' => $this->tools($endpoints),
+            'tools' => $tools,
             'functions' => array_map(
                 static fn (array $tool) => $tool['function'],
-                $this->tools($endpoints)
+                $tools
             ),
         ];
     }
@@ -122,7 +124,8 @@ final class AiManifestService
                     'description' => trim($desc),
                     'parameters' => [
                         'type' => 'object',
-                        'properties' => $properties,
+                        // JSON Schema needs an object here; an empty PHP array would encode as []
+                        'properties' => $properties === [] ? new \stdClass : $properties,
                         'required' => array_values(array_unique($required)),
                     ],
                 ],
