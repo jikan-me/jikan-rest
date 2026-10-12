@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Route;
 | API routes (Jikan v4 + discontinued version stubs)
 |--------------------------------------------------------------------------
 | The v4 route table lives in routes/web.v4.php and is included below.
-| It still uses string controller actions ("Controller@method") together
-| with the group "namespace" attribute, which Laravel still supports.
+| Controller routes are class-based and named "v4.<resource>.<action>"; the
+| names key the per-endpoint cache TTLs (config/jikan.php).
 */
 
 $commonMiddleware = [

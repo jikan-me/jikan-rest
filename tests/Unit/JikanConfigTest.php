@@ -13,17 +13,17 @@ final class JikanConfigTest extends TestCase
     {
         $config = new JikanConfig([
             'per_endpoint_cache_ttl' => [
-                'AnimeController@main' => '86400',
-                'UserController@profile' => 300,
-                'GenreController@anime' => null,
-                'MagazineController@main' => '',
+                'v4.anime.main' => '86400',
+                'v4.user.profile' => 300,
+                'v4.genre.anime' => null,
+                'v4.magazine.main' => '',
             ],
         ]);
 
-        $this->assertSame(86400, $config->cacheTtlForEndpoint('AnimeController@main'));
-        $this->assertSame(300, $config->cacheTtlForEndpoint('UserController@profile'));
-        $this->assertNull($config->cacheTtlForEndpoint('GenreController@anime'));
-        $this->assertNull($config->cacheTtlForEndpoint('MagazineController@main'));
-        $this->assertNull($config->cacheTtlForEndpoint('Unknown@endpoint'));
+        $this->assertSame(86400, $config->cacheTtlForEndpoint('v4.anime.main'));
+        $this->assertSame(300, $config->cacheTtlForEndpoint('v4.user.profile'));
+        $this->assertNull($config->cacheTtlForEndpoint('v4.genre.anime'));
+        $this->assertNull($config->cacheTtlForEndpoint('v4.magazine.main'));
+        $this->assertNull($config->cacheTtlForEndpoint('v4.unknown.endpoint'));
     }
 }

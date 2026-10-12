@@ -36,6 +36,8 @@ on the Lumen release ("before") and what it is now.
   or file path. Status codes and `type`/`message` are unchanged.
 - **Non-numeric ids** (`/v4/anime/abc`, `/v4/manga/xyz`, characters, people, producers) are a
   `404`, as on the Lumen release.
+- **Per-endpoint cache TTL keys** in `config/jikan.php` (`per_endpoint_cache_ttl`) are now route names
+  (`v4.anime.main`) instead of `AnimeController@main`. Only matters if you override that map.
 - **CORS** is opt-in again via `CORS_MIDDLEWARE=true` (default `false`, as before). The app uses
   Laravel's built-in `HandleCors` (all origins, `GET`/`OPTIONS`); the custom `CorsMiddleware` is gone.
 - **Cache bypass removed.** The `auth: <APP_KEY>` request header that skipped the micro-cache

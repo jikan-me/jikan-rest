@@ -10,31 +10,29 @@ use Tests\TestCase;
 
 /**
  * Guards config('jikan.per_endpoint_cache_ttl') against the registered v4
- * route table. Adding a new controller action without a TTL entry (or leaving
- * a stale/renamed entry behind) fails the suite instead of silently falling
- * back to CACHE_DEFAULT_EXPIRE.
+ * route table. Adding a controller route without a TTL entry (or leaving a
+ * stale/renamed entry behind) fails the suite instead of silently falling
+ * back to CACHE_DEFAULT_EXPIRE. Entries are keyed by route name.
  */
 final class CacheTtlMapTest extends TestCase
 {
-    private const V4DB_NAMESPACE = 'App\\Http\\Controllers\\V4DB\\';
-
-    public function test_every_registered_v4_controller_action_has_a_cache_ttl_entry(): void
+    public function test_every_registered_v4_controller_route_has_a_cache_ttl_entry(): void
     {
-        $missing = array_values(array_diff_key(
-            $this->registeredV4Actions(),
+        $missing = array_keys(array_diff_key(
+            $this->registeredV4RouteNames(),
             config('jikan.per_endpoint_cache_ttl', [])
         ));
 
         sort($missing);
 
-        $this->assertSame([], $missing, 'v4 controller actions missing per_endpoint_cache_ttl entries: '.implode(', ', $missing));
+        $this->assertSame([], $missing, 'v4 routes missing per_endpoint_cache_ttl entries: '.implode(', ', $missing));
     }
 
     public function test_every_cache_ttl_entry_is_backed_by_a_registered_v4_route(): void
     {
-        $stale = array_values(array_diff_key(
+        $stale = array_keys(array_diff_key(
             config('jikan.per_endpoint_cache_ttl', []),
-            $this->registeredV4Actions()
+            $this->registeredV4RouteNames()
         ));
 
         sort($stale);
@@ -42,42 +40,51 @@ final class CacheTtlMapTest extends TestCase
         $this->assertSame([], $stale, 'per_endpoint_cache_ttl entries with no registered v4 route (dead keys): '.implode(', ', $stale));
     }
 
-    /**
-     * @return array<string, bool> map of "Controller@action" for every v4 route
-     *                             whose action lives under App\Http\Controllers\V4DB
-     */
-    private function registeredV4Actions(): array
+    public function test_every_v4_controller_route_is_named(): void
     {
-        $actions = [];
+        $unnamed = [];
+        foreach ($this->v4ControllerRoutes() as $route) {
+            if ((string) $route->getName() === '') {
+                $unnamed[] = $route->uri();
+            }
+        }
 
+        $this->assertSame([], $unnamed, 'v4 controller routes without a name: '.implode(', ', $unnamed));
+    }
+
+    /**
+     * @return array<string, bool> route name => true for every v4 controller route
+     */
+    private function registeredV4RouteNames(): array
+    {
+        $names = [];
+        foreach ($this->v4ControllerRoutes() as $route) {
+            $names[(string) $route->getName()] = true;
+        }
+
+        return $names;
+    }
+
+    /**
+     * @return list<Route>
+     */
+    private function v4ControllerRoutes(): array
+    {
+        $routes = [];
         foreach (RouteFacade::getRoutes()->getRoutes() as $route) {
             /** @var Route $route */
             if (! str_starts_with($route->uri(), 'v4')) {
                 continue;
             }
 
-            $name = $this->routeName($route);
-            if ($name !== null) {
-                $actions[$name] = true;
+            $controller = $route->getControllerClass();
+            if ($controller === null || ! str_contains($controller, 'V4DB')) {
+                continue;
             }
+
+            $routes[] = $route;
         }
 
-        return $actions;
-    }
-
-    /**
-     * Mirrors HttpHelper::getRouteName(): last "\" segment of the "uses" value.
-     */
-    private function routeName(Route $route): ?string
-    {
-        $uses = $route->getAction('uses');
-
-        if (! is_string($uses) || ! str_starts_with($uses, self::V4DB_NAMESPACE)) {
-            return null;
-        }
-
-        $parts = explode('\\', $uses);
-
-        return end($parts) ?: null;
+        return $routes;
     }
 }

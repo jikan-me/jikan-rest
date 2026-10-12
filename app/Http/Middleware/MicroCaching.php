@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Cache;
 class MicroCaching
 {
     private const NO_CACHING = [
-        'RandomController@anime',
-        'RandomController@manga',
-        'RandomController@characters',
-        'RandomController@people',
-        'RandomController@users',
+        'v4.random.anime',
+        'v4.random.manga',
+        'v4.random.characters',
+        'v4.random.people',
+        'v4.random.users',
     ];
 
     private readonly bool $isEnabled;
@@ -36,7 +36,7 @@ class MicroCaching
         if (! $this->isEnabled) {
             return $next($request);
         }
-        // "<Controller>@<method>" of the matched route (see HttpHelper::getRouteName()).
+        // Route name of the matched route, e.g. "v4.random.anime" (see HttpHelper::getRouteName()).
         if (\in_array(HttpHelper::getRouteName($request), self::NO_CACHING, true)) {
             return $next($request);
         }
