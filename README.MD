@@ -47,6 +47,10 @@ https://github.com/jikan-me/jikan-rest/tree/v3
 
 For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
+### Upgrading from the Lumen release
+
+See [docs/UPGRADING.md](docs/UPGRADING.md) for the environment-variable and behaviour changes.
+
 ## Public REST API
 If you don't want to host your instance, there's a public API available.
 
