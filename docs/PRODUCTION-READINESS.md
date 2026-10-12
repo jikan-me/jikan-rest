@@ -46,7 +46,7 @@ verification that a user-facing flow works, and neither is "should work".
 
 | Needed | Why | Needed by | If late |
 |---|---|---|---|
-| Real GitHub runner | CI first-green (PHP 8.3 matrix + Mongo service + Docker build) | Relaunch | CI ships unproven (logic verified locally only) |
+| Real GitHub runner | CI first-green (PHP 8.4 + Mongo service + Docker build) | Relaunch | CI ships unproven (logic verified locally only) |
 | Anime/manga data + parser fix (upstream jikan #598–602) | Detail endpoints return 200; search indexes populated | Relaunch | Endpoints 500 (documented upstream blocker) |
 | Typesense API key + prod collections | Production search | When search ships | `SCOUT_DRIVER=null` fallback (search off) |
 | Container registry / built image | Container distribution | Relaunch | Build on the runner |

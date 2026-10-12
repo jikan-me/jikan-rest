@@ -8,7 +8,7 @@ metadata:
 # jikan-rest
 
 A **read-only public JSON API** over MyAnimeList data: no auth, sessions, CSRF, Blade or Livewire. Laravel 13
-(PHP 8.3+, runtime 8.4), Octane/RoadRunner, MongoDB (`mongodb/laravel-mongodb`), the `jikan-me/jikan` parser,
+(PHP 8.4+), Octane/RoadRunner, MongoDB (`mongodb/laravel-mongodb`), the `jikan-me/jikan` parser,
 optional Scout/Typesense search. The generic Laravel skills in this folder apply except where they assume auth.
 
 ## Request flow

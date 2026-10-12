@@ -4,7 +4,7 @@
 # jikan-rest — Laravel 13 on Octane (RoadRunner), PHP 8.4 (Alpine)
 #
 # Replaces the old php:8.1.27-bullseye + RoadRunner 2.12.3 image, which could
-# not satisfy the project's composer platform requirements (php ^8.3,
+# not satisfy the project's composer platform requirements (php ^8.4,
 # mongodb/laravel-mongodb ^5 needs the modern MongoDB driver).
 #
 #   - Base: php:8.4-cli-alpine — Octane/RoadRunner workers are *CLI* processes,

@@ -1,9 +1,11 @@
 # Upgrading from the Lumen 9 release
 
-This release moves jikan-rest from Lumen 9 to Laravel 13 (PHP 8.3+, Octane/RoadRunner).
+This release moves jikan-rest from Lumen 9 to Laravel 13 (PHP 8.4+, Octane/RoadRunner).
 The public **v4 JSON contract is unchanged** for valid requests. This page lists everything
 an operator needs to know that is *not* a contract change. Each section notes what it was
 on the Lumen release ("before") and what it is now.
+
+**PHP 8.4 or newer is required** (`composer.json` `php: ^8.4`); the Docker image and CI use 8.4.
 
 ## New and changed environment variables
 

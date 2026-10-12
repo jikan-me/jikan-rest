@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.3', '8.4']
+        php: ['8.4']
     services:
       mongodb:
         image: mongo:8.0   # pinned to match docker-compose.yml (mongo:8.0)
@@ -72,7 +72,7 @@ jobs:
 
       - name: Install dependencies
         # Lock is resolved against config.platform = 8.4.26; --ignore-platform-req=php
-        # lets the 8.3 job install the identical lock without re-resolving.
+        # lets a runner with an older 8.4 patch release install the identical lock.
         run: |
           composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
 
