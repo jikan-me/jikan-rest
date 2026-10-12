@@ -23,6 +23,6 @@ final class SyntheticMongoDbTransactionGuardTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Refusing to truncate MongoDB database "jikan"');
 
-        $subject->beginDatabaseTransaction();
+        $subject->setUpSyntheticMongoDbTransaction();
     }
 }

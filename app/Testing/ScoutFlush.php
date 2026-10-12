@@ -22,7 +22,7 @@ trait ScoutFlush
         'App\\Profile',
     ];
 
-    public function runScoutFlush(): void
+    public function setUpScoutFlush(): void
     {
         if (config('scout.driver') === 'typesense') {
             /** @var Client $typeSenseClient */

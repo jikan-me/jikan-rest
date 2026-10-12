@@ -6,8 +6,6 @@ namespace Tests;
 
 use App\Exceptions\CustomTestException;
 use App\Testing\Concerns\MakesHttpRequestsEx;
-use App\Testing\ScoutFlush;
-use App\Testing\SyntheticMongoDbTransaction;
 use App\Testing\TestExceptionsHandler;
 use Faker\Factory as FakerFactory;
 use Faker\Generator;
@@ -175,15 +173,7 @@ abstract class TestCase extends BaseTestCase
         $this->faker->addProvider(new FakerEnumProvider($this->faker));
         $this->maxResultsPerPage = env('MAX_RESULTS_PER_PAGE', 25);
 
-        $database = env('DB_DATABASE', 'jikan_tests');
-        $this->app['config']->set('database.connections.mongodb.database', $database === 'jikan' ? 'jikan_tests' : $database);
         $this->app['config']->set('jikan.micro_caching_enabled', false);
-
-        // The connection may already be resolved (cached) from bootstrap against the
-        // default DB; force a re-resolve so tests hit the isolated DB.
-        DB::purge('mongodb');
-
-        $this->setUpTraits();
     }
 
     protected function tearDown(): void
@@ -192,23 +182,6 @@ abstract class TestCase extends BaseTestCase
         Carbon::setTestNow();
 
         parent::tearDown();
-    }
-
-    protected function setUpTraits()
-    {
-        $uses = array_flip(class_uses_recursive(get_class($this)));
-
-        parent::setUpTraits();
-
-        // Laravel's setUpTraits() looks for `begin` + trait short name, which doesn't
-        // match our Lumen-era trait methods; invoke them explicitly.
-        if (isset($uses[ScoutFlush::class])) {
-            $this->runScoutFlush();
-        }
-
-        if (isset($uses[SyntheticMongoDbTransaction::class])) {
-            $this->beginDatabaseTransaction();
-        }
     }
 
     public function assertPaginationData(TestResponse $response, int $expectedCount, ?int $expectedTotal = null, ?int $perPage = null): TestResponse

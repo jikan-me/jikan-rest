@@ -24,7 +24,7 @@ trait SyntheticMongoDbTransaction
         return self::$jikanModels;
     }
 
-    public function beginDatabaseTransaction(): void
+    public function setUpSyntheticMongoDbTransaction(): void
     {
         $database = env('DB_DATABASE', 'jikan_tests');
         $testDatabase = $database === 'jikan' ? 'jikan_tests' : $database;
