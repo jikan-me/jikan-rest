@@ -1,6 +1,6 @@
 {
-    "name": "jikan-rest/laravel",
-    "description": "Jikan - Unofficial MyAnimeList PHP API (Laravel 13 modernization fork).",
+    "name": "jikan-me/jikan-rest",
+    "description": "Jikan REST API - Unofficial MyAnimeList.net REST API",
     "keywords": [
         "framework",
         "laravel",
