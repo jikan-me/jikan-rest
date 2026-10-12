@@ -30,6 +30,8 @@ $router->get('/anime', [
 $router->group(
     [
         'prefix' => 'anime/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
     function () use ($router) {
         $router->get('/', [
@@ -112,7 +114,7 @@ $router->group(
             'uses' => 'AnimeController@streaming',
         ]);
     }
-)->where('id', '[0-9]+');
+);
 
 $router->get('/manga', [
     'uses' => 'SearchController@manga',
@@ -121,6 +123,8 @@ $router->get('/manga', [
 $router->group(
     [
         'prefix' => 'manga/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
     function () use ($router) {
         $router->get('/', [
@@ -175,7 +179,7 @@ $router->group(
             'uses' => 'MangaController@external',
         ]);
     }
-)->where('id', '[0-9]+');
+);
 
 $router->get('/characters', [
     'uses' => 'SearchController@character',
@@ -184,6 +188,8 @@ $router->get('/characters', [
 $router->group(
     [
         'prefix' => 'characters/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
     function () use ($router) {
         $router->get('/', [
@@ -210,7 +216,7 @@ $router->group(
             'uses' => 'CharacterController@pictures',
         ]);
     }
-)->where('id', '[0-9]+');
+);
 
 $router->get('/people', [
     'uses' => 'SearchController@people',
@@ -218,6 +224,8 @@ $router->get('/people', [
 $router->group(
     [
         'prefix' => 'people/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
     function () use ($router) {
         $router->get('/', [
@@ -244,7 +252,7 @@ $router->group(
             'uses' => 'PersonController@pictures',
         ]);
     }
-)->where('id', '[0-9]+');
+);
 
 $router->group(
     [
@@ -295,6 +303,8 @@ $router->get('/producers', [
 $router->group(
     [
         'prefix' => 'producers/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
     function () use ($router) {
         $router->get('/', [
@@ -309,7 +319,7 @@ $router->group(
             'uses' => 'ProducerController@external',
         ]);
     }
-)->where('id', '[0-9]+');
+);
 
 $router->group(
     [

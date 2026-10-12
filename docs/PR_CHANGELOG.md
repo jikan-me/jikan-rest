@@ -168,8 +168,14 @@ every dynamic endpoint 404 on Symfony 7, and documented an upstream scraper brea
 Symfony 7 only accepts **word characters** in inline route patterns. `{id:\d+}` failed
 to parse and compiled as a literal → a route regex with **zero variables** → every
 `/{id}` endpoint 404'd despite appearing in `route:list`. Converted all inline patterns
-to bare parameters plus `->where()` (`{id}` + `->where('id','[0-9]+')`, optional params
-as `{param?}`). Parity went 69 → 3 problems.
+to bare parameters plus a `where` constraint (`{id}` + `'where' => ['id' => '[0-9]+']` in the
+group attributes, or `->where()` on an individual route; optional params as `{param?}`).
+Parity went 69 → 3 problems.
+
+> **Correction (audit fixes):** the original port chained `->where('id', '[0-9]+')` onto
+> `Route::group(...)`, which silently does nothing (the router returns a throw-away
+> registrar), so `/v4/anime/abc` returned 400 instead of master's 404. The constraint now
+> lives in the group attributes and `tests/Integration/RouteConstraintsTest.php` guards it.
 
 ### 4. Spatie Laravel Data v3 → v4 API adoption
 - `Cast::cast()` / `DataPipe::handle()` / `prepareForPipeline()` signature changes
@@ -473,8 +479,14 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
 Symfony 7 only accepts **word characters** in inline route patterns. `{id:\d+}` failed
 to parse and compiled as a literal → a route regex with **zero variables** → every
 `/{id}` endpoint 404'd despite appearing in `route:list`. Converted all inline patterns
-to bare parameters plus `->where()` (`{id}` + `->where('id','[0-9]+')`, optional params
-as `{param?}`). Parity went 69 → 3 problems.
+to bare parameters plus a `where` constraint (`{id}` + `'where' => ['id' => '[0-9]+']` in the
+group attributes, or `->where()` on an individual route; optional params as `{param?}`).
+Parity went 69 → 3 problems.
+
+> **Correction (audit fixes):** the original port chained `->where('id', '[0-9]+')` onto
+> `Route::group(...)`, which silently does nothing (the router returns a throw-away
+> registrar), so `/v4/anime/abc` returned 400 instead of master's 404. The constraint now
+> lives in the group attributes and `tests/Integration/RouteConstraintsTest.php` guards it.
 
 ### 4. Spatie Laravel Data v3 → v4 API adoption
 - `Cast::cast()` / `DataPipe::handle()` / `prepareForPipeline()` signature changes
