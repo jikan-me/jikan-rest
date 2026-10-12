@@ -34,16 +34,18 @@ From `.backend-suite/arch-rules.json` (`layerBoundaries.rules`), enforced by
   `App\Http\`).
 
 Controllers are scanned from `app/Http/Controllers/V4DB/**` (`controllerDirs` —
-route coverage and api-consistency audits use this). Route actions use
-`Controller@method` strings (`route-coverage` resolves every action).
+route coverage and api-consistency audits use this). Route actions are class-based
+(`[Controller::class, 'method']`) and named `v4.<resource>.<action>` (`route-coverage`
+resolves every action).
 
 ## 3. Request path in detail
 
-1. **Routing** — `routes/` registers the v4 group by namespace + string
-   actions; `{id}` constraints use Symfony-safe `->where(...)` patterns.
+1. **Routing** — `routes/` registers the v4 group; actions are class-based and
+   named, and `{id}` constraints live in the group attributes (`'where' => [...]`).
 2. **Mediation** — `DefaultMediator` resolves a handler from a `DTO class =>
-   factory` map (built once per worker), so a request constructs only the
-   handler it dispatches (no ~65-handler build per request).
+   factory` map (built per request from the request's own container, so repositories
+   never outlive a request under Octane), and a request constructs only the handler
+   it dispatches (no ~65-handler build per request).
 3. **Handlers/services** — handlers translate commands to repository/service
    calls and produce the API response surface; repositories read/target Mongo.
 4. **Models** — `JikanApiModel` base; searchable models extend

@@ -10,13 +10,17 @@ Keep the v4 contract style: `{status, type, message}` errors, `pagination` +
 `data` envelope for lists, per-endpoint cache TTL.
 
 ## 1. Route
-`routes/web.v4.php` (inside the v4 group, string actions):
+`routes/web.v4.php` (inside the v4 group; class-based and **named** - the name keys the
+cache TTL, see step 9):
 
 ```php
-$router->get('/my-resource', [
-    'uses' => 'MyController@index',
-]);
+Route::get('/my-resource', [MyController::class, 'index'])
+    ->name('v4.my.index');
 ```
+
+For an `{id}` sub-resource, add it inside the resource's existing group (the group's
+`'where' => ['id' => '[0-9]+']` already constrains it). Never chain `->where()` after
+`Route::group(...)`: that is a silent no-op.
 
 Gate: `tools/dev/php artisan route:list` shows it; `backend-suite audit route-coverage` green.
 
@@ -80,9 +84,9 @@ spec/manifest diffs.
 
 ## 9. Wrap
 - Changelog entry (`docs/PR_CHANGELOG.md`).
-- If it's a high-volume/get-by-id path, add a per-endpoint TTL in
-  `config/jikan.php` (`per_endpoint_cache_ttl`) — `CacheTtlMapTest` enforces
-  completeness.
+- Add a per-endpoint TTL in `config/jikan.php` (`per_endpoint_cache_ttl`), keyed by the
+  route name (`'v4.my.index' => env('CACHE_DEFAULT_EXPIRE')`). `CacheTtlMapTest`
+  fails if a v4 controller route has no entry or has no name.
 - Parity: run `tools/parity/snapshot.php` + compare if the endpoint is in the
   parity set.
 

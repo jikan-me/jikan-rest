@@ -71,8 +71,12 @@ unmodified.
 - **Search**: models implement the Scout contract on
   `JikanApiSearchableModel` (`typesenseCollectionSchema()` /
   `typesenseSearchParameters()`); collections auto-create on import.
-- **Routes**: v4 uses `'uses' => 'Controller@method'` strings under the group
-  namespace (route-coverage + endpoint-parity audits depend on it).
+- **Routes**: v4 routes are class-based and named, in `routes/web.v4.php`:
+  `Route::get('/x', [XController::class, 'method'])->name('v4.<resource>.<action>')`.
+  The route name keys the per-endpoint cache TTL (`config/jikan.php`), and the
+  route-coverage / endpoint-parity / rate-limit / cache-ttl-coverage audits parse
+  this spelling (patterns: `.backend-suite/arch-rules.json`). Constrain `{id}` in
+  the group attributes (`'where' => [...]`); `group(...)->where()` is a no-op.
 - **Branch rule**: everything ships on `laravel-12` (no splits).
 - **Getting the tarpit right**: don't mutate `env()` outside config; keep the
   app `config:cache`-safe.
