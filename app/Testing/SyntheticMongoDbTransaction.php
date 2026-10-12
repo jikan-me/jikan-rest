@@ -33,17 +33,19 @@ trait SyntheticMongoDbTransaction
         $resolvedDatabase = $connection->getMongoDB()->getDatabaseName();
 
         /*
-         * Safety net: only ever truncate the isolated test database.
-         *
-         * Laravel's setUpTheTestEnvironment() calls our overridden setUpTraits()
-         * (dynamic dispatch) during parent::setUp() — BEFORE this TestCase's own
-         * setUp() has swapped the mongodb connection to the test DB. So
-         * beginDatabaseTransaction() can run against the production database
-         * (e.g. "jikan") first, truncating real data. Any mismatch now skips
-         * the truncation instead.
+         * Safety net: only ever truncate the isolated test database, and say so
+         * loudly otherwise. Silently skipping would leave tests running against
+         * stale data with no hint why they fail. (Tests\TestCase points the
+         * connection at the test DB in createApplication(), before any trait
+         * runs, so a mismatch here means a real misconfiguration.)
          */
         if ($resolvedDatabase !== $testDatabase) {
-            return;
+            throw new \RuntimeException(sprintf(
+                'Refusing to truncate MongoDB database "%s": tests must run against "%s". Set DB_DATABASE=%s.',
+                $resolvedDatabase,
+                $testDatabase,
+                $testDatabase
+            ));
         }
 
         $jikanModels = self::getJikanModels();

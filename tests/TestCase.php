@@ -148,6 +148,14 @@ abstract class TestCase extends BaseTestCase
         // Lumen built a fully-bootable app in bootstrap/app.php; Laravel 12 does not.
         $app->make(Kernel::class)->bootstrap();
 
+        // Point the Mongo connection at the isolated test database *before* any test
+        // trait runs. Laravel's parent::setUp() calls our setUpTraits() before this
+        // class's own setUp(), so swapping the database there came too late and the
+        // first cleanup pass saw the default (possibly production) database.
+        $database = env('DB_DATABASE', 'jikan_tests');
+        $app['config']->set('database.connections.mongodb.database', $database === 'jikan' ? 'jikan_tests' : $database);
+        $app['db']->purge('mongodb');
+
         // a http client which fails the tests if requests are leaking to MAL.
         $mockHttpClient = \Mockery::mock(HttpClientInterface::class);
         /** @noinspection PhpParamsInspection */
