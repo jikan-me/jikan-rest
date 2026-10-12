@@ -19,6 +19,16 @@ on the Lumen release ("before") and what it is now.
 | `CACHING`, `DB_CACHING`, `CACHE_META_EXPIRE`, `CACHE_PRODUCERS_EXPIRE`, `CACHE_404_EXPIRE`, `CACHE_MICROCACHE_EXPIRE`, `SOURCE`, `SOURCE_BAD_HEALTH_THRESHOLD`, `SWAGGER_VERSION` | in `.env.dist` | No longer read by the application (several were only consumed by the removed cache-refresh jobs); remove them from your environment. |
 | `INSIGHTS`, `INSIGHTS_MAX_STORE_TIME` | enabled the unfinished insights feature | Removed together with the feature (see below). |
 
+## Runtime and operations
+
+| Topic | Before (Lumen + `lumen-roadrunner`) | Now (Laravel + Octane/RoadRunner) |
+|---|---|---|
+| Worker pool | `.rr.yaml`, tuned through `RR_MAX_WORKER_MEMORY`, `RR_MAX_REQUEST_SIZE_MB`, `JIKAN_QUEUE_WORKER_PROCESS_NUM` | `OCTANE_WORKERS` (default `auto` = one per CPU) and `OCTANE_MAX_REQUESTS` (default `500`, workers are recycled after this many requests). `.rr.yaml` is no longer shipped. |
+| RoadRunner memory supervisor / max request size | `RR_MAX_WORKER_MEMORY` (128), `RR_MAX_REQUEST_SIZE_MB` (256) | **Not mapped.** Octane generates its own RoadRunner config. Use `OCTANE_MAX_REQUESTS` to bound worker memory growth, or supply your own RoadRunner v3 config with `OCTANE_RR_CONFIG=/path/to/.rr.yaml`. |
+| Queue workers | `laravel_queue_worker_1` RoadRunner service | `QUEUE_WORKERS=N` (see above). |
+| `APP_KEY` | not needed by Lumen | The container entrypoint generates one on first boot when none is supplied. Set `APP_KEY` (or `APP_KEY__FILE`) explicitly in production so it is stable across restarts. |
+| Scheduler | all indexers `->daily()` at 00:00 | Staggered `dailyAt()` between 00:10 and 01:30, with `withoutOverlapping()->onOneServer()`. `onOneServer` needs a cache store shared by all instances (`CACHE_DRIVER=redis`); with the per-process `array` store it is a no-op. |
+
 ## Behaviour changes
 
 - **Errors.** With `APP_DEBUG=false` the `error` and `trace` fields of error responses are now
