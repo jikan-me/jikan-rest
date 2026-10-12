@@ -50,7 +50,6 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Goutte\\": "app/Compat/Goutte/",
             "Database\\Factories\\": "database/factories/"
         },
         "files": [
