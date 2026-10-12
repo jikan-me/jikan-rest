@@ -1,6 +1,6 @@
 # jikan-rest — Phase-2 Audit: Laravel idiom, Symfony integration, architecture
 
-**Audited:** `/Users/irfan/Developer/jikan-rest` (fork of `jikan-me/jikan-rest`)
+**Audited:** the `jikan-rest` fork checkout (fork of `jikan-me/jikan-rest`)
 **Runtime:** Laravel `13.35.0` · PHP `8.4.26` · `mongodb/laravel-mongodb 5.11.0` · Octane `2.21.0` (RoadRunner) · Scout `11.9.0` (native Typesense) · spatie/laravel-data 4.x · Symfony resolved to **8.1.x** (framework) with scraper components on **7.4.x**
 **Scope:** service container quality, Symfony package correctness, architecture (mediator/handlers/repos, events, jobs, middleware, routing, Mongo, spatie/data) — deeper than docs/AUDIT.md and explicitly complementary to it.
 **Method:** static reading only. No app code was modified; nothing was run. Line numbers reflect the working tree (with the in-flight P0 batch; small shifts are possible).

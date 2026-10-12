@@ -58,7 +58,7 @@ Run a dev server on a different port with the Typesense driver. Do **not**
 permanently edit `config/scout.php` or `.env`.
 
 ```bash
-cd /Users/irfan/Developer/jikan-rest
+cd <path-to-your-jikan-rest-checkout>
 SCOUT_DRIVER=typesense \
 TYPESENSE_API_KEY=abcd \
 APP_URL=http://127.0.0.1:8002 \

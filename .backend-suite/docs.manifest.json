@@ -57,7 +57,7 @@
             "on": "2026-10-12"
         },
         "public-roadmap": {
-            "declined": "No public roadmap maintained; scope is docs/DESIGN.md + UPSTREAM_PR.md.",
+            "declined": "No public roadmap maintained; scope is docs/DESIGN.md + docs/UPSTREAM_PR.md.",
             "by": "Irfan Dahir",
             "on": "2026-10-12"
         },

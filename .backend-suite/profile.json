@@ -1,5 +1,5 @@
 {
-  "$schema": "../plugins/backend-suite/templates/profile.schema.json",
+  "$schema": "profile.schema.json",
   "_readme": "The only place project-specific facts live. Every field here is explained in profile.schema.json (canonical) \u2014 read that file alongside this one. Fill in every TODO, delete sections you genuinely do not have (only 'project', 'adapters', 'source' and 'docs' are required), then run `python3 \"${CLAUDE_PLUGIN_ROOT}/bin/doctor.py\"` before trusting anything else. Never put an absolute path, a client name, or a hostname in this file.",
   "profileVersion": 1,
   "project": {

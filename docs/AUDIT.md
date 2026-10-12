@@ -1,6 +1,6 @@
 # jikan-rest — Laravel 13 Conformance Audit
 
-**Audited:** `/Users/irfan/Developer/jikan-rest` (fork of `jikan-me/jikan-rest`)
+**Audited:** the `jikan-rest` fork checkout (fork of `jikan-me/jikan-rest`)
 **Runtime:** Laravel `13.35.0` · PHP `8.4.26` (Homebrew `php@8.4`) · `mongodb/laravel-mongodb 5.11.0` · Octane `2.21.0` (RoadRunner) · Scout `11.9.0` (native Typesense) · `phpunit 12.5.38` (installed) — all from `composer.lock`
 **Method:** static reading of source only; no app code was modified; no runs/tests executed. Line numbers are from the current working tree.
 **Date:** 2026-10-11
