@@ -149,6 +149,11 @@ class IncrementalIndexer extends Command
             }
 
             Storage::put("indexer/incremental/{$mediaType}_resume.save", $i);
+
+            // --delay: pause between requests so a large crawl does not hammer the API
+            if ($i < $idCount - 1) {
+                sleep((int) $this->option('delay'));
+            }
         }
 
         Storage::delete("indexer/incremental/{$mediaType}_resume.save");
