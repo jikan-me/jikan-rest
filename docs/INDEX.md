@@ -20,7 +20,11 @@
 | Docker / container usage | `docs/DOCKER.md` |
 | Typesense search spike/runbook | `docs/TYPESENSE_SPIKE.md` |
 | What to do after a full data index | `docs/POST_FULL_INDEX.md` |
-| Quality audits / context layer | `.backend-suite/` (profile, arch-rules, findings) |
+| What changed for operators vs the Lumen release? | `docs/UPGRADING.md` |
+| What went wrong before / traps to avoid | `.backend-suite/known-traps.json` |
+| Project conventions as an agent skill | `.ai/skills/jikan-rest/SKILL.md` |
+| Latest review pass (what was fixed, evidence) | `docs/PR_CHANGELOG.md` (Audit-fix pass) |
+| Quality audits / context layer | `.backend-suite/` (profile, arch-rules, known-traps, findings) |
 
 Think **"docs/INDEX.md first"** — if the answer isn't here, it's almost certainly
 in `docs/PR_CHANGELOG.md` or the `.backend-suite` findings.

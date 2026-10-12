@@ -10,6 +10,24 @@
 
 ---
 
+## Audit-fix pass (2026-10-13)
+
+An independent review of this branch found defects the green test suite could not see (it does not run under Octane, behind a proxy, from a fresh clone, or on a real CI runner). Fixed on top of the migration, one commit each:
+
+- **Octane state leak:** handler factories were resolved on the base app and shared across requests; now per request, with cloned query builders.
+- **Rate limiter:** keyed on the proxy address and on by default; now opt-in with `TRUSTED_PROXIES`.
+- **Fresh clone / Docker:** `bootstrap/cache` was untracked, so `composer install` and `route:cache` failed.
+- **Contract:** non-numeric ids returned 400, not master's 404 (the group-level `->where()` was a no-op).
+- **Operator knobs restored:** opt-in CORS and Sentry, 60s micro-cache, optional queue workers, Octane worker/recycle settings, `APP_KEY` generation, staggered non-overlapping scheduler.
+- **Errors:** `report_url` no longer embeds the exception message or file path outside debug.
+- **Laravel adoption:** class-based named routes, TTL map keyed on route names, strict models, native test helpers (integration suite about 2x faster).
+- **Pre-existing bugs fixed:** `Profile` lost `last_updates`/`external_links`; `indexer:incremental` could not run (unknown validation rule, `in` on an array argument, id count taken from array keys, mismatched failed-file name); the AI tool manifest carried no parameters.
+- **Context layer:** known traps, CLAUDE.md→AGENTS.md import, opencode wiring, route-aware suite audits, a jikan-rest skill, `docs/UPGRADING.md`.
+
+Verified: 55 unit + 275 integration tests (2833 assertions), PHPStan 0 errors, OpenAPI/AI catalog drift-free, 110 v4 routes, fresh-clone install. Not verified locally: Docker build, a real Octane run, GitHub Actions. Operator impact: `docs/UPGRADING.md`.
+
+---
+
 ## Summary
 
 Migrated jikan-rest from **Lumen 9** (archived Feb 2023; Laravel 9 security-EOL Feb 2024)

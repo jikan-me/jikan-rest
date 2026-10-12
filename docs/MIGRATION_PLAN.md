@@ -258,6 +258,16 @@ Route::get('/anime', [SearchController::class, 'anime']);
 3. **Search: Typesense only.** ElasticSearch support and its config/services are removed.
 4. **Local fork now, upstream contribution intended.** (§11)
 
+Decisions added by the 2026-10-13 audit-fix pass (details and evidence: `docs/PR_CHANGELOG.md`, operator impact: `docs/UPGRADING.md`):
+
+5. **Rate limiting is opt-in.** `RATE_LIMIT_PER_MINUTE` defaults to 0; enabling it requires `TRUSTED_PROXIES` and a shared cache (otherwise every client behind a proxy shares one bucket). The Lumen release had no limiter, so on-by-default was a behaviour change.
+6. **Routes are class-based and named** (`v4.<resource>.<action>`); the route name keys `per_endpoint_cache_ttl` and the micro-cache bypass list. `{id}` constraints live in the route-group attributes because `Route::group(...)->where()` is a silent no-op.
+7. **Octane request state is per request.** The mediator's handler-factory map is `scoped` and built from the request's container; `RepositoryQueryBase` hands out cloned builders. Nothing that captures a repository may be resolved through `$this->app`.
+8. **Operator knobs stay as on the Lumen release:** CORS is opt-in (`CORS_MIDDLEWARE`), Sentry is opt-in (`REPORTING` + `REPORTING_DRIVER`), micro-cache default 60s. The `auth: <APP_KEY>` cache-bypass header is removed (its refresh jobs were deleted).
+9. **Strict Eloquent models outside production** (`Model::shouldBeStrict`). It exposed `Profile::$fillable` lacking `last_updates` / `external_links`; completing it means cached `/v4/users/{u}/full` now returns `updates` and `external` like the uncached response.
+10. **Lumen test shims are retired** (stateless `getJsonWithParams()`, Laravel `setUp<Trait>` hooks). Test and assertion counts were unchanged by the conversion.
+11. **Suite wiring.** `CLAUDE.md` imports `AGENTS.md`; opencode reads the generated AGENTS.md block plus `opencode.json`. Client-UI audit sections (errorHandling, contractHeaders, formRequestValidation, routeModelBinding) are removed from `arch-rules.json` so those audits refuse instead of reporting a false zero. Generated audit baselines are not committed (they embed absolute paths); `baselines/.gitkeep` keeps the directory.
+
 ## 11. Upstream contribution strategy
 
 The intent is to contribute this back to `jikan-me/jikan-rest`, whose maintainers are conservative and currently stuck on the Lumen/Mongo-driver combination (PR #569). To make the work reviewable:

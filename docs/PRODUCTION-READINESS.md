@@ -30,8 +30,8 @@ verification that a user-facing flow works, and neither is "should work".
 |---|---|---|---|---|
 | 1 | Error and offline behaviour | ✅ | Irfan | Redacted v4 error envelope `{status,type,message}`; unhandled → generic envelope; standard 404 shape (incl. empty-data random endpoints); `/up` liveness 200 |
 | 2 | Config-cache safety / boot | ✅ | Irfan | `config:cache` green; boots fully from cached config (`env()` outside config removed) |
-| 3 | Security hardening | ✅ | Irfan | CORS restricted; cache-bypass header removed; rate limiting active; `APP_DEBUG=false` in prod; no secrets in source; `.env.dist` sane defaults |
-| 4 | Rate limiting | ✅ | Irfan | `throttle:v4` per-IP on public routes; audit `rate-limit` clean |
+| 3 | Security hardening | ✅ | Irfan | CORS opt-in (`CORS_MIDDLEWARE`); cache-bypass header removed; rate limiting available (opt-in); `APP_DEBUG=false` in prod; no secrets in source; `.env.dist` sane defaults |
+| 4 | Rate limiting | ⚠️ opt-in | Irfan | `throttle:v4` is attached to every public route; the limiter is **off by default** (`RATE_LIMIT_PER_MINUTE=0`). Enable only with `TRUSTED_PROXIES` set and `CACHE_DRIVER=redis`, otherwise clients behind a proxy share one bucket. Audit `rate-limit` clean |
 | 5 | Data handling & privacy | ✅ | Irfan | Read-only public MAL data, no PII collection/retention; search metrics internal (Mongo); Sentry optional (default off, 0.1 sample) |
 | 6 | Performance | ✅ | Irfan | Octane/RoadRunner workers; lazy handler resolution; chunked Typesense pagination verified >250 hits; soak: 12 iterations × 10 endpoints, byte-identical, zero worker restarts |
 | 7 | Test & quality suite | ✅ | Irfan | 292 tests / 2707 assertions green; parity harness zero new shape/status diffs; PHPStan level 6 baseline 0; Pint scoped; backend-suite audits clean (residuals documented) |

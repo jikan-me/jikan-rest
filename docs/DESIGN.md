@@ -35,7 +35,7 @@ MongoDB, served by Laravel 13.
 ## 3. Conventions
 
 - **Errors** — uniform envelope `{status, type, message}`; 404/500 standard
-  shapes; 429 from `throttle:v4` rate limiting.
+  shapes; 429 from the opt-in `throttle:v4` rate limiter (off unless `RATE_LIMIT_PER_MINUTE` > 0).
 - **Pagination** — `page`/`per_page` (config-capped), envelope
   `pagination.items.{count,total,per_page}`; `jikanPaginate()` handles Scout >
   250-hit chunking.

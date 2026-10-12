@@ -9,7 +9,7 @@
 - Base URL: `https://api.jikan.moe/v4/` (local: `http://localhost:8000/v4/`).
 - The v4 JSON contract is immutable for default requests; only additive opt-in
   parameters exist.
-- No auth. Rate-limited per IP. Errors use `{status, type, message}`.
+- No auth. Per-IP rate limiting is opt-in per deployment. Errors use `{status, type, message}`.
 - Data is scraped from MyAnimeList and cached (per-endpoint TTL).
 
 ## Docs
@@ -22,6 +22,7 @@
 - [Changelog / everything done](docs/PR_CHANGELOG.md) · [RFC/decisions](docs/RFC.md)
 - [Proposals](docs/proposals/2026-10-12-ai-llm-modernization.md)
 - [Upstream PR playbook](docs/UPSTREAM_PR.md)
+- [Upgrading from the Lumen release (env vars, behaviour changes)](docs/UPGRADING.md)
 
 ## Contract (machine-readable)
 - OpenAPI spec: `GET /v4/docs/openapi` (JSON; regenerate with `artisan l5-swagger:generate`)
