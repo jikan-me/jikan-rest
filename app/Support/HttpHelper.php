@@ -76,16 +76,14 @@ class HttpHelper
             return 'App\Undefined';
         }
 
-        $action = $route->getAction();
-        $uses = $action['uses'] ?? 'App\Undefined';
-
-        if (is_callable($uses)) {
-            return 'Closure';
+        // Key used by config('jikan.per_endpoint_cache_ttl') and MicroCaching:
+        // "<ControllerShortName>@<method>", e.g. "AnimeController@main".
+        $controller = $route->getControllerClass();
+        if ($controller === null) {
+            return $route->getActionName() === 'Closure' ? 'Closure' : 'App\Undefined';
         }
 
-        $parts = explode('\\', $uses);
-
-        return end($parts);
+        return class_basename($controller).'@'.$route->getActionMethod();
     }
 
     public static function getRequestUriHash(Request $request): string
