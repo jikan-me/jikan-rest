@@ -19,9 +19,6 @@ return [
     'github_rest' => env('GITHUB_REST', 'jikan-me/jikan-rest'),
     'github_api' => env('GITHUB_API', 'jikan-me/jikan'),
     'disable_user_lists' => env('DISABLE_USER_LISTS', false),
-    // Dedicated token for the internal cache-bypass (jobs refreshing cached
-    // responses). Empty by default — no bypass. Was previously env('APP_KEY').
-    'cache_bypass_token' => env('CACHE_BYPASS_TOKEN', ''),
     'microcaching_expire' => (int) env('MICROCACHING_EXPIRE', 60),
     // Per-IP requests/minute for the v4 API. 0 (default) disables the limiter.
     'rate_limit_per_minute' => (int) env('RATE_LIMIT_PER_MINUTE', 0),

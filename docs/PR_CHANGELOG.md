@@ -280,7 +280,8 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `trace` (file:line) behind `config('app.debug')`; error/report_url still emitted with
   the same shape for parity, values empty when debug is off.
 - **`APP_KEY` no longer doubles as a cache-bypass header** — replaced with a dedicated
-  `CACHE_BYPASS_TOKEN` (empty by default = no bypass); the cache-refresh jobs send it.
+  `CACHE_BYPASS_TOKEN`. **Later removed entirely:** the cache-refresh jobs that sent the header
+  were deleted, so the bypass had no consumer.
 
 ### 11. Phase-2 audit P1 batch (Laravel-13 regressions + latent bugs)
 - **MicroCaching `NO_CACHING` bypass was dead on Laravel 13** — Lumen's
@@ -594,7 +595,8 @@ us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped e
   `trace` (file:line) behind `config('app.debug')`; error/report_url still emitted with
   the same shape for parity, values empty when debug is off.
 - **`APP_KEY` no longer doubles as a cache-bypass header** — replaced with a dedicated
-  `CACHE_BYPASS_TOKEN` (empty by default = no bypass); the cache-refresh jobs send it.
+  `CACHE_BYPASS_TOKEN`. **Later removed entirely:** the cache-refresh jobs that sent the header
+  were deleted, so the bypass had no consumer.
 
 ### 11. Phase-2 audit P1 batch (Laravel-13 regressions + latent bugs)
 - **MicroCaching `NO_CACHING` bypass was dead on Laravel 13** — Lumen's

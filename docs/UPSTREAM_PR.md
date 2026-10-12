@@ -115,7 +115,7 @@ Octane-served endpoints. Links to the staged PR series below.
 | 6 | `feat: Octane with RoadRunner default` | octane + config (warm/flush), RR binary notes | FrankenPHP opt-in via `OCTANE_SERVER` |
 | 7 | `feat: search — Scout native Typesense engine` | driver removal, `typesense-php` stable pin, config `client-settings` | Typesense-only decision |
 | 8 | `chore: PHPUnit 12` | annotations→attributes, final-ctor migration, dead listener removal | |
-| 9 | `security: config-cache safety, rate limiting, error redaction, cache-bypass token` | env()→config, `throttle:v4`, Handler gating, `CACHE_BYPASS_TOKEN` | |
+| 9 | `security: config-cache safety, rate limiting, error redaction, cache-bypass removal` | env()→config, `throttle:v4`, Handler gating, cache-bypass header removed | |
 | 10 | `perf+fixes: Octane flush completeness, lazy handlers, Scout pagination, cache TTL guard, test-isolation` | flush set, `DefaultMediator` factories, chunked-total fix, TTL map re-sync + guard test, prod-DB guard | The test-isolation guard is critical (T2 commits) |
 | 11 | `feat: source heartbeat persisted in MongoDB` | `failovers` collection storage replacing `failovers.json`/lock files + prune/score logic | T1 commit |
 | 12 | `chore: observability — log channels, Sentry defaults, /up health` | `config/logging.php`, `config/sentry.php`, health route | |

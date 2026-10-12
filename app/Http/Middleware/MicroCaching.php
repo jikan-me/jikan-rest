@@ -49,14 +49,6 @@ class MicroCaching
             }
         }
 
-        // Allow bypass of caching if the dedicated cache-bypass token is
-        // supplied in the auth header (was previously APP_KEY). Empty token
-        // => no bypass.
-        $bypassToken = (string) config('jikan.cache_bypass_token');
-        if ($bypassToken !== '' && $request->header('auth') === $bypassToken) {
-            return $next($request);
-        }
-
         // cache /v*/* paths only
         if (
             empty($request->segments())

@@ -30,7 +30,7 @@ verification that a user-facing flow works, and neither is "should work".
 |---|---|---|---|---|
 | 1 | Error and offline behaviour | ✅ | Irfan | Redacted v4 error envelope `{status,type,message}`; unhandled → generic envelope; standard 404 shape (incl. empty-data random endpoints); `/up` liveness 200 |
 | 2 | Config-cache safety / boot | ✅ | Irfan | `config:cache` green; boots fully from cached config (`env()` outside config removed) |
-| 3 | Security hardening | ✅ | Irfan | CORS restricted; cache-bypass token; rate limiting active; `APP_DEBUG=false` in prod; no secrets in source; `.env.dist` sane defaults |
+| 3 | Security hardening | ✅ | Irfan | CORS restricted; cache-bypass header removed; rate limiting active; `APP_DEBUG=false` in prod; no secrets in source; `.env.dist` sane defaults |
 | 4 | Rate limiting | ✅ | Irfan | `throttle:v4` per-IP on public routes; audit `rate-limit` clean |
 | 5 | Data handling & privacy | ✅ | Irfan | Read-only public MAL data, no PII collection/retention; search metrics internal (Mongo); Sentry optional (default off, 0.1 sample) |
 | 6 | Performance | ✅ | Irfan | Octane/RoadRunner workers; lazy handler resolution; chunked Typesense pagination verified >250 hits; soak: 12 iterations × 10 endpoints, byte-identical, zero worker restarts |
