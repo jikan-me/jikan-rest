@@ -5,6 +5,10 @@ metadata:
   origin: ECC
 ---
 
+> **jikan-rest note:** this repository is a read-only public JSON API (no auth, sessions, CSRF,
+> Blade or Livewire). Examples below that use Sanctum, `actingAs()`, sessions or CSRF are generic
+> and do not apply here. See the `jikan-rest` skill for this project's actual conventions.
+
 # Laravel Development Patterns
 
 Production-grade Laravel architecture patterns for scalable, maintainable applications.
@@ -104,9 +108,10 @@ Prefer route-model binding and resource controllers for clarity.
 ```php
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('projects', ProjectController::class);
-});
+// jikan-rest: read-only public API - no auth middleware; every route is named.
+Route::get('/projects/{id}', [ProjectController::class, 'show'])
+    ->name('v4.project.show')
+    ->whereNumber('id');
 ```
 
 ### Route Model Binding (Scoped)
@@ -130,7 +135,7 @@ use App\Http\Controllers\Api\ConversationController;
 use App\Http\Controllers\Api\MessageController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->prefix('conversations')->group(function () {
+Route::prefix('conversations')->group(function () {
     Route::post('/', [ConversationController::class, 'store'])->name('conversations.store');
 
     Route::scopeBindings()->group(function () {

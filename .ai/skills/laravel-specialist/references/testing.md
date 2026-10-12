@@ -1,3 +1,7 @@
+> **jikan-rest note:** this repository is a read-only public JSON API (no auth, sessions, CSRF,
+> Blade or Livewire). Examples below that use Sanctum, `actingAs()`, sessions or CSRF are generic
+> and do not apply here. See the `jikan-rest` skill for this project's actual conventions.
+
 # Testing
 
 ## Feature Tests

@@ -1,22 +1,26 @@
 ---
 name: php-pro
-description: Use when building PHP applications with modern PHP 8.3+ features, Laravel, or Symfony frameworks. Invokes strict typing, PHPStan level 9, async patterns with Swoole, and PSR standards. Creates controllers, configures middleware, generates migrations, writes PHPUnit/Pest tests, defines typed DTOs and value objects, sets up dependency injection, and scaffolds REST/GraphQL APIs. Use when working with Eloquent, Doctrine, Composer, Psalm, ReactPHP, or any PHP API development.
+description: Use when building PHP applications with modern PHP 8.3+ features and Laravel. Invokes strict typing, PHPStan level 9, async patterns with Swoole, and PSR standards. Creates controllers, configures middleware, generates migrations, writes PHPUnit/Pest tests, defines typed DTOs and value objects, sets up dependency injection, and scaffolds REST/GraphQL APIs. Use when working with Eloquent, Doctrine, Composer, Psalm, ReactPHP, or any PHP API development.
 license: MIT
 metadata:
   author: https://github.com/Jeffallan
   company: https://synergetic.solutions
   version: "1.1.0"
   domain: language
-  triggers: PHP, Laravel, Symfony, Composer, PHPStan, PSR, PHP API, Eloquent, Doctrine
+  triggers: PHP, Laravel, Composer, PHPStan, PSR, PHP API, Eloquent, Doctrine
   role: specialist
   scope: implementation
   output-format: code
   related-skills: fullstack-guardian, fastapi-expert
 ---
 
+> **jikan-rest note:** this repository is a read-only public JSON API (no auth, sessions, CSRF,
+> Blade or Livewire). Examples below that use Sanctum, `actingAs()`, sessions or CSRF are generic
+> and do not apply here. See the `jikan-rest` skill for this project's actual conventions.
+
 # PHP Pro
 
-Senior PHP developer with deep expertise in PHP 8.3+, Laravel, Symfony, and modern PHP patterns with strict typing and enterprise architecture.
+Senior PHP developer with deep expertise in PHP 8.3+, Laravel, and modern PHP patterns with strict typing and enterprise architecture.
 
 ## Core Workflow
 
@@ -34,7 +38,6 @@ Load detailed guidance based on context:
 |-------|-----------|-----------|
 | Modern PHP | `references/modern-php-features.md` | Readonly, enums, attributes, fibers, types |
 | Laravel | `references/laravel-patterns.md` | Services, repositories, resources, jobs |
-| Symfony | `references/symfony-patterns.md` | DI, events, commands, voters |
 | Async PHP | `references/async-patterns.md` | Swoole, ReactPHP, fibers, streams |
 | Testing | `references/testing-quality.md` | PHPUnit, PHPStan, Pest, mocking |
 
@@ -204,7 +207,7 @@ When implementing a feature, deliver in this order:
 
 ## Knowledge Reference
 
-PHP 8.3+, Laravel 11, Symfony 7, Composer, PHPStan, Psalm, PHPUnit, Pest, Eloquent ORM, Doctrine, PSR standards, Swoole, ReactPHP, Redis, MySQL/PostgreSQL, REST/GraphQL APIs
+PHP 8.3+, Laravel 11, Composer, PHPStan, Psalm, PHPUnit, Pest, Eloquent ORM, Doctrine, PSR standards, Swoole, ReactPHP, Redis, MySQL/PostgreSQL, REST/GraphQL APIs
 
 Maintained by [@jeffallan](https://github.com/jeffallan), Principal Consultant at [Synergetic Solutions](https://synergetic.solutions)
 

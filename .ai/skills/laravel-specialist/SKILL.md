@@ -1,18 +1,22 @@
 ---
 name: laravel-specialist
-description: Build and configure Laravel 10+ applications, including creating Eloquent models and relationships, implementing Sanctum authentication, configuring Horizon queues, designing RESTful APIs with API resources, and building reactive interfaces with Livewire. Use when creating Laravel models, setting up queue workers, implementing Sanctum auth flows, building Livewire components, optimising Eloquent queries, or writing Pest/PHPUnit tests for Laravel features.
+description: Build and configure Laravel 10+ applications, including creating Eloquent models and relationships, designing RESTful APIs with API resources, and configuring queues. Use when creating Laravel models, setting up queue workers, optimising Eloquent queries, or writing Pest/PHPUnit tests for Laravel features.
 license: MIT
 metadata:
   author: https://github.com/Jeffallan
   company: https://synergetic.solutions
   version: "1.1.0"
   domain: backend
-  triggers: Laravel, Eloquent, PHP framework, Laravel API, Artisan, Blade templates, Laravel queues, Livewire, Laravel testing, Sanctum, Horizon
+  triggers: Laravel, Eloquent, PHP framework, Laravel API, Artisan, Laravel queues, Laravel testing
   role: specialist
   scope: implementation
   output-format: code
   related-skills: fullstack-guardian, test-master, devops-engineer, security-reviewer
 ---
+
+> **jikan-rest note:** this repository is a read-only public JSON API (no auth, sessions, CSRF,
+> Blade or Livewire). Examples below that use Sanctum, `actingAs()`, sessions or CSRF are generic
+> and do not apply here. See the `jikan-rest` skill for this project's actual conventions.
 
 # Laravel Specialist
 
@@ -35,7 +39,6 @@ Load detailed guidance based on context:
 | Eloquent ORM | `references/eloquent.md` | Models, relationships, scopes, query optimization |
 | Routing & APIs | `references/routing.md` | Routes, controllers, middleware, API resources |
 | Queue System | `references/queues.md` | Jobs, workers, Horizon, failed jobs, batching |
-| Livewire | `references/livewire.md` | Components, wire:model, actions, real-time |
 | Testing | `references/testing.md` | Feature tests, factories, mocking, Pest PHP |
 
 ## Constraints
@@ -219,30 +222,13 @@ final class PublishPost implements ShouldQueue
 <?php
 
 use App\Models\Post;
-use App\Models\User;
 
-it('returns a published post for authenticated users', function (): void {
-    $user = User::factory()->create();
-    $post = Post::factory()->published()->for($user, 'author')->create();
+it('returns a published post as JSON without authentication', function (): void {
+    $post = Post::factory()->published()->create();
 
-    $response = $this->actingAs($user)
-        ->getJson("/api/posts/{$post->id}");
-
-    $response->assertOk()
-        ->assertJsonPath('data.status', 'published')
-        ->assertJsonPath('data.author.id', $user->id);
-});
-
-it('queues a publish job when a draft is submitted', function (): void {
-    Queue::fake();
-    $user = User::factory()->create();
-    $post = Post::factory()->draft()->for($user, 'author')->create();
-
-    $this->actingAs($user)
-        ->postJson("/api/posts/{$post->id}/publish")
-        ->assertAccepted();
-
-    Queue::assertPushed(PublishPost::class, fn ($job) => $job->post->is($post));
+    $this->getJson("/api/posts/{$post->id}")
+        ->assertOk()
+        ->assertJsonPath('data.status', 'published');
 });
 ```
 
@@ -260,7 +246,7 @@ Run these at each workflow stage to confirm correctness before proceeding:
 
 ## Knowledge Reference
 
-Laravel 10+, Eloquent ORM, PHP 8.2+, API resources, Sanctum/Passport, queues, Horizon, Livewire, Inertia, Octane, Pest/PHPUnit, Redis, broadcasting, events/listeners, notifications, task scheduling
+Laravel 10+, Eloquent ORM, PHP 8.2+, API resources, queues, Octane, Pest/PHPUnit, Redis, events/listeners, task scheduling
 
 Maintained by [@jeffallan](https://github.com/jeffallan), Principal Consultant at [Synergetic Solutions](https://synergetic.solutions)
 
