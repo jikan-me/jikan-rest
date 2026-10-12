@@ -1,0 +1,10 @@
+{
+  "extraKnownMarketplaces": {
+    "backend-quality-suite": {
+      "source": { "source": "github", "repo": "irfan-dahir/backend-quality-suite" }
+    }
+  },
+  "enabledPlugins": {
+    "backend-suite@backend-quality-suite": true
+  }
+}
