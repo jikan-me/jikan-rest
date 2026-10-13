@@ -144,3 +144,40 @@ jobs:
           sleep 3
           curl -fsS http://127.0.0.1:8000/llms.txt | head -n 1
           test "$(curl -fsS http://127.0.0.1:8000/v4/ai/manifest.json | grep -c '"tools"')" -ge 1
+
+  coverage:
+    name: Coverage (xdebug · clover)
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:Y2kY4Q0VwrVnlA+iihSWX9ZUlpHew19c9XMzCVMUn4A=
+      DB_HOST: 127.0.0.1
+      DB_PORT: 27017
+      DB_DATABASE: jikan_tests
+      DB_USERNAME: ""
+      DB_PASSWORD: ""
+      CACHE_DRIVER: array
+      QUEUE_CONNECTION: sync
+      GITHUB_REPORTING: "false"
+      # SCOUT_DRIVER intentionally unset (engine-less Mongo $text), same as tests.
+    services:
+      mongodb:
+        image: mongo:8.0
+        ports: [27017:27017]
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          coverage: xdebug
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
+      - name: Run suite with coverage
+        run: vendor/bin/phpunit --coverage-clover coverage.xml
+      - uses: codecov/codecov-action@v4
+        with:
+          files: coverage.xml
+          fail_ci_if_error: false

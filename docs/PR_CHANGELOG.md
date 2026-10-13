@@ -908,3 +908,19 @@ page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANC
   at deploy (dropped health route, resurrected RR_STAGE, missing manifest).
 - Suite now **340 tests / 2,879 assertions / 0 failures** (engine-less; 3 engine
   tests self-skip; engine run: 3 tests / 12 assertions green).
+
+## 40. Deploy/integration coverage round 2 (local; NOT pushed)
+
+- **`OctaneBootSmokeTest`** — actually boots `octane:start` (RoadRunner) on a
+  spare port and smoke-checks `/up`; self-skips when the `rr` binary is absent
+  (gitignored; CI would `octane:install`). Catches app-boot/Octane regressions.
+- **`ConfigCacheBootTest`** — runs the real `config:cache` (exit 0), serves `/up`
+  from the cached config, clears afterwards.
+- **`ParityEndpointsContractTest`** — parity-in-suite, minimal: every endpoint in
+  `tools/parity/endpoints.txt` must resolve to a registered route (concrete
+  paths matched against parameterized `{id}`/Optional uris, query strings
+  dropped). Catches endpoint drift without a live server.
+- **CI `coverage` job** — xdebug/clover → `codecov-action@v4` (engine-less env,
+  mongo:8.0 service, mirrors the tests contract). Runner-gated like the rest.
+- Suite now **343 tests / 2,885 assertions / 0 failures** engine-less (3 engine
+  tests self-skip); engine run 3 / 12 green.
