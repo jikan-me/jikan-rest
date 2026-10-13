@@ -9,6 +9,8 @@ use App\Support\JikanConfig;
 use Illuminate\Support\Str;
 use Laravel\Scout\Builder;
 use Typesense\Documents;
+use Typesense\Exceptions\ApiException;
+use Typesense\Exceptions\TypesenseClientError;
 
 class TypeSenseScoutSearchService implements ScoutSearchService
 {
@@ -68,8 +70,21 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             }
             $options = $this->adaptToShortQueries($query, $modelTitleAttributeName, $options);
 
-            $results = $documents->search($options);
-            $this->recordSearchTelemetry($query, $results);
+            try {
+                $results = $documents->search($options);
+            } catch (\Throwable $e) {
+                // Missing/unreachable collection (e.g. not yet imported) or a
+                // malformed request: degrade to an empty result instead of 500,
+                // matching the graceful empty-index behaviour of other searches.
+                report($e);
+                $results = ['hits' => [], 'found' => 0, 'out_of' => 0, 'page' => 1,
+                            'request_params' => ['q' => $query, 'per_page' => $options['per_page'] ?? 250]];
+            }
+            try {
+                $this->recordSearchTelemetry($query, $results);
+            } catch (\Throwable $e) {
+                report($e);
+            }
 
             return $results;
         };

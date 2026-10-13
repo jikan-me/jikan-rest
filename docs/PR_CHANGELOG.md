@@ -815,3 +815,20 @@ the Typesense collection is missing). Robustness flags: **Octane worker crash ch
 under load** (~500 'Target class [config]' markers, 11 s p100 tail at c=200) —
 priority investigation; plus recs (graceful search when collection missing, bound
 page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANCE.md`.
+
+## 34. Robustness fixes for the search/attack surface (local, NOT pushed)
+
+- **Search graceful-empty (per requirement): missing/unreachable Typesense
+  collection ⇒ 200 EMPTY, never 500/404** — `SearchController::runSearch` guard
+  on every search action, plus handler-level (`SearchRequestHandler`) and
+  service/telemetry guards. Verified on Octane: characters/people/clubs/manga
+  `?q=` → 200 empty; anime/producers unaffected (real results).
+- **Negative cache for missing ids** (`jikan.scrape_miss_ttl`, default 60 s):
+  huge-id / nonexistent-id hits stop re-scraping MAL every time (was ~0.5-1.7 s
+  per request). In-process store ⇒ fast within a worker; fleet-wide benefit needs
+  a shared cache (Redis) — noted in the report.
+- Typesense touchpoints audited (search service, mixin, analytics read+write,
+  descriptor) — all guarded; full matrix in `docs/PERFORMANCE.md`.
+- `per_page` confirmed already capped at `max_results_per_page` (25); huge pages
+  return empty (no contract change).
+- Suite 331/2836 green; audits clean; octane + serve verified.

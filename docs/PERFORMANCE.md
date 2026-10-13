@@ -180,3 +180,22 @@ uncached sub-resource like `/v4/anime/21/staff` scrapes MAL on cache miss (bench
 3. **Cache/guard scrape-triggering lookups** — huge-id + uncached sub-resources should not hit MAL synchronously; use the cache-first contract consistently (and keep indexer/data coverage so staff/characters fetch from cache).
 4. **Octane worker crash churn** — prioritize investigation: `Target class [config]` under load implies a container state-isolation leak (the AI already fixed mediator factories per request; audit other per-request singletons + `octane.php` `flush`). Until resolved, keep workers ≤ cores and watch RR respawn rate.
 5. Everything above is consistent: rate-limit + validation are solid; the physics are payload-size and scrape-path related.
+
+### Robustness fixes applied (2026-10-13, part of the perf pass)
+1. **Search: missing/unreachable collection ⇒ EMPTY 200 (never 500/404)** — a
+   controller-level guard (`SearchController::runSearch`) now covers every search
+   action, with handler/service/telemetry guards as depth. Verified on Octane:
+   `/v4/characters?q=`, `/v4/manga?q=`, `/v4/people?q=`, `/v4/clubs?q=` → 200
+   empty; `/v4/anime?q=` and `/v4/producers?q=` unaffected.
+2. **Typesense touchpoints** (runtime): `TypeSenseScoutSearchService` (search —
+   guarded incl. `overrideSortingOrder`/descriptor retrieve), `ScoutBuilderMixin`
+   (engine pagination — under search guards), `DefaultSearchAnalyticsService`
+   (metrics read **and** write guarded), `TypeSenseCollectionDescriptor` (read —
+   no unguarded callers). Config/query-shape usages (`JikanConfig`,
+   `DefaultAnime/MangaRepository`, `SearchMetric`, `RepositoryQuery`) do not call
+   typesense directly at request time.
+3. **Negative cache for missing ids** (`scrape_miss_ttl`, 60 s default):
+   huge-id / nonexistent-id requests no longer re-scrape MAL on every hit.
+   Scoped per cache store: fast replays apply within a worker (in-process
+   `array` cache); fleet-wide benefit needs a **shared** store (Redis).
+4. **Pagination**: `per_page` was already clamped to the 25-page limit (`max_results_per_page`); huge `page` returns an empty page, not an unbounded response — confirmed, documented (no contract change needed).

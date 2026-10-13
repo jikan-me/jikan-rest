@@ -39,14 +39,46 @@ abstract class SearchRequestHandler implements RequestHandler
                 'q' => 'The q parameter cannot contain any of the following characters: \\n, \\r, \\t, \\0, %0A',
             ]);
         }
-        $builder = $this->queryBuilderService->query(
-            $this->prepareOrderByParam($requestData)
-        );
         $page = $requestData->get('page');
-        $limit = $requestData->get('limit');
-        $paginator = $this->queryBuilderService->paginateBuilder($builder, $page, $limit);
+        $limit = $requestData->get('limit', (int) config('jikan.max_results_per_page', 25));
 
-        return $this->renderResponse($paginator);
+        try {
+            $builder = $this->queryBuilderService->query(
+                $this->prepareOrderByParam($requestData)
+            );
+            $paginator = $this->queryBuilderService->paginateBuilder($builder, $page, $limit);
+        } catch (\Throwable $e) {
+            // A missing/unreachable search (Typesense) collection must render
+            // an EMPTY result, never 500 or 404 — search failures degrade
+            // gracefully for the whole search surface.
+            try { report($e); } catch (\Throwable $ignore) {}
+            $paginator = new LengthAwarePaginator(
+                collect(),
+                0,
+                (int) ($limit ?? 25),
+                (int) ($page ?? 1),
+                ['path' => app('request')->fullUrl()]
+            );
+        }
+
+        try {
+            return $this->renderResponse($paginator);
+        } catch (\Throwable $e) {
+            // Last-resort: rendering must not take a search endpoint down.
+            // Render an empty v4 envelope instead.
+            try { report($e); } catch (\Throwable $ignore) {}
+            $perPage = (int) ($limit ?? 25);
+
+            return new JsonResponse([
+                'data' => [],
+                'pagination' => [
+                    'last_visible_page' => 1,
+                    'has_next_page' => false,
+                    'current_page' => 1,
+                    'items' => ['count' => 0, 'total' => 0, 'per_page' => $perPage],
+                ],
+            ]);
+        }
     }
 
     /**

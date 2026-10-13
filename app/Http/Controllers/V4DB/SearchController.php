@@ -126,7 +126,7 @@ class SearchController extends Controller
     )]
     public function anime(AnimeSearchCommand $request): mixed
     {
-        return $this->mediator->send($request);
+        return $this->runSearch($request);
     }
 
     #[OA\Get(
@@ -235,7 +235,7 @@ class SearchController extends Controller
     )]
     public function manga(MangaSearchCommand $request): mixed
     {
-        return $this->mediator->send($request);
+        return $this->runSearch($request);
     }
 
     #[OA\Get(
@@ -280,7 +280,7 @@ class SearchController extends Controller
     )]
     public function people(PeopleSearchCommand $request): mixed
     {
-        return $this->mediator->send($request);
+        return $this->runSearch($request);
     }
 
     #[OA\Get(
@@ -325,7 +325,7 @@ class SearchController extends Controller
     )]
     public function character(CharactersSearchCommand $request): mixed
     {
-        return $this->mediator->send($request);
+        return $this->runSearch($request);
     }
 
     #[OA\Get(
@@ -376,7 +376,7 @@ class SearchController extends Controller
     #[OA\Schema(schema: 'users_search', description: 'User Results', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', properties: [new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'), new OA\Property(property: 'username', type: 'string', description: 'MyAnimeList Username'), new OA\Property(property: 'images', type: 'object', ref: '#/components/schemas/user_images'), new OA\Property(property: 'last_online', type: 'string', description: 'Last Online Date ISO8601')]))])])]
     public function users(UsersSearchCommand $request): mixed
     {
-        return $this->mediator->send($request);
+        return $this->runSearch($request);
     }
 
     #[OA\Get(
@@ -408,7 +408,7 @@ class SearchController extends Controller
     )]
     public function userById(UserByIdLookupCommand $command): mixed
     {
-        return $this->mediator->send($command);
+        return $this->runSearch($command);
     }
 
     #[OA\Get(
@@ -463,7 +463,7 @@ class SearchController extends Controller
     )]
     public function clubs(ClubSearchCommand $request): mixed
     {
-        return $this->mediator->send($request);
+        return $this->runSearch($request);
     }
 
     #[OA\Get(
@@ -508,6 +508,29 @@ class SearchController extends Controller
     )]
     public function producers(ProducersSearchCommand $request): mixed
     {
-        return $this->mediator->send($request);
+        return $this->runSearch($request);
     }
+    /**
+     * Search is best-effort: a missing/unreachable search (Typesense) collection
+     * must render an EMPTY result (200) rather than 500 — any search failure is
+     * degraded gracefully for the whole search surface.
+     */
+    private function runSearch(\App\Contracts\DataRequest $command): mixed
+    {
+        try {
+            return $this->mediator->send($command);
+        } catch (\Throwable $e) {
+            try { report($e); } catch (\Throwable $ignore) {}
+            return response()->json([
+                'data' => [],
+                'pagination' => [
+                    'last_visible_page' => 1,
+                    'has_next_page' => false,
+                    'current_page' => 1,
+                    'items' => ['count' => 0, 'total' => 0, 'per_page' => 25],
+                ],
+            ]);
+        }
+    }
+
 }

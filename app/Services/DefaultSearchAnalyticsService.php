@@ -38,24 +38,30 @@ final class DefaultSearchAnalyticsService implements SearchAnalyticsService
 
         $hitList = $hits->pluck('id')->values()->map(fn ($x) => (int) $x)->all();
 
-        if ($existingMetrics->count() > 0) {
-            /**
-             * @var SearchMetric $metric
-             */
-            $metric = $existingMetrics->first();
-            $metric->hits = $hitList;
-            $metric->hits_count = $hitsCount;
-            $metric->request_count = $metric->request_count + 1;
-            $metric->index_name = $indexName;
-            $metric->save();
-        } else {
-            SearchMetric::create([
-                'search_term' => $searchTerm,
-                'request_count' => 1,
-                'hits' => $hitList,
-                'hits_count' => $hitsCount,
-                'index_name' => $indexName,
-            ]);
+        try {
+            if ($existingMetrics->count() > 0) {
+                /**
+                 * @var SearchMetric $metric
+                 */
+                $metric = $existingMetrics->first();
+                $metric->hits = $hitList;
+                $metric->hits_count = $hitsCount;
+                $metric->request_count = $metric->request_count + 1;
+                $metric->index_name = $indexName;
+                $metric->save();
+            } else {
+                SearchMetric::create([
+                    'search_term' => $searchTerm,
+                    'request_count' => 1,
+                    'hits' => $hitList,
+                    'hits_count' => $hitsCount,
+                    'index_name' => $indexName,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            // Metrics are best-effort — a missing/unreachable Typesense metrics
+            // collection must never take a search endpoint down with it.
+            report($e);
         }
     }
 }

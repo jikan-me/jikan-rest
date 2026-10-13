@@ -10,6 +10,7 @@ use App\Support\CachedData;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\SerializerInterface;
 use MongoDB\BSON\UTCDateTime;
@@ -53,20 +54,42 @@ final class DefaultCachedScraperService implements CachedScraperService
      */
     public function find(int $id, string $cacheKey): CachedData
     {
-        $dbResults = $this->repository->getAllByMalId($id);
-        $results = $this->dbResultSetToCachedData($dbResults);
-
-        if ($results->isEmpty() || $results->isExpired()) {
-            $response = $this->repository->scrape($id);
-
-            $this->raiseNotFoundIfErrors($response);
-
-            $results = $this->updateCacheById($id, $cacheKey, $results, $response);
+        // Negative cache: a recently-scraped "not found" id is served fast
+        // (404) instead of paying another synchronous MAL scrape — boundaries
+        // the huge-id / non-existent-id request vector.
+        if (Cache::has($this->missKey($id))) {
+            throw new NotFoundHttpException;
         }
 
-        $this->raiseNotFoundIfEmpty($results);
+        try {
+            $dbResults = $this->repository->getAllByMalId($id);
+            $results = $this->dbResultSetToCachedData($dbResults);
 
-        return $results;
+            if ($results->isEmpty() || $results->isExpired()) {
+                $response = $this->repository->scrape($id);
+
+                $this->raiseNotFoundIfErrors($response);
+
+                $results = $this->updateCacheById($id, $cacheKey, $results, $response);
+            }
+
+            $this->raiseNotFoundIfEmpty($results);
+
+            return $results;
+        } catch (NotFoundHttpException $e) {
+            $this->rememberMiss($id);
+            throw $e;
+        }
+    }
+
+    private function missKey(int $id): string
+    {
+        return 'scrape:miss:'.$id;
+    }
+
+    private function rememberMiss(int $id): void
+    {
+        Cache::put($this->missKey($id), 1, (int) config('jikan.scrape_miss_ttl', 60));
     }
 
     public function findByKey(string $key, mixed $val, string $cacheKey): CachedData
