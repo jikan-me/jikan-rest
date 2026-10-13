@@ -874,3 +874,19 @@ page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANC
   a sampled manga id also 200. Existing `.failed` backlog (20k anime + manga) is
   retryable via `indexer:{anime,manga} --failed` once the current manga run finishes.
 - Suite 332/2836 green; audits clean.
+
+## 38. Coverage gap closed: store-path persistence tests; no other parser/store defects (local)
+
+- **Why the indexer 500s weren't caught in tests:** the suite covers the READ path
+  (fixtures seeded into Mongo -> response assertions) and blocks live scraping
+  (`CustomTestException`); nothing exercised the **scrape -> parse -> persist**
+  path where v5 fields (`external_links`/`streaming_links`) flow through model
+  `fill()` strictness. The AI's strict-models change had no persist regression test.
+- **Added `tests/Unit/ModelPersistenceTest.php`**: persists v5-shaped Anime +
+  Manga docs (with external/streaming links) through `DatabaseRepository::insert`
+  and asserts they land — this exact test fails if `$fillable` drops those fields.
+- **Residual sweep of the failed backlog (80 ids, post-fix)**: 78 -> 200; the only
+  non-200s are MAL **idle-timeouts** (network, retryable, not a parser/store bug).
+  Other-model scrape probes (characters/people/producers) -> 200; no other
+  fillable/parser gaps found.
+- Suite now 334 tests / 2841 assertions (0 failures, 1 engine-skip).
