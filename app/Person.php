@@ -45,7 +45,7 @@ class Person extends JikanApiSearchableModel
      */
     protected $fillable = [
         'mal_id', 'url', 'images', 'website_url', 'name', 'given_name', 'family_name',
-        'alternative_names', 'birthday', 'member_favorites', 'about', 'voice_acting_roles',
+        'alternative_names', 'alternate_names', 'external_links', 'birthday', 'member_favorites', 'about', 'voice_acting_roles',
         'anime_staff_positions', 'published_manga',
         'createdAt', 'modifiedAt',
     ];

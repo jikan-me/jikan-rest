@@ -958,3 +958,10 @@ p95 13.6s under mixed distinct-URL load), chunked catalog wildcard deep pages
 - **Clubs:** no id cache exists → populate lazily (user club-list scrapes) —
   documented.
 - `docs/POST_FULL_INDEX.md` gained a "Populate characters & people" step.
+
+## 44. Person fillable gap found via the new indexer (fixed)
+
+- `indexer:items people` surfaced the same strict-model class on `App\Person`:
+  the store writes `alternate_names` (and `external_links`) but `$fillable` allowed
+  `alternative_names` only → 500 at insert. Added both; **people sweep 10/10 clean**,
+  character sweep 25/25 clean. No further systemic gaps in the swept batches.
