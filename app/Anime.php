@@ -93,6 +93,9 @@ class Anime extends JikanApiSearchableModel
         'favorites', 'synopsis', 'background', 'premiered', 'broadcast', 'related',
         'producers', 'licensors', 'studios', 'genres', 'explicit_genres', 'themes',
         'demographics', 'opening_themes', 'ending_themes', 'trailer', 'approved', 'createdAt', 'modifiedAt',
+        'external_links', 'streaming_links',
+
+
     ];
 
     /**

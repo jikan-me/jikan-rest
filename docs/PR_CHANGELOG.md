@@ -859,3 +859,18 @@ page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANC
   (1 skipped = the engine test without a server).
 - Clarified metric: **332 tests vs 2,836 assertions** (assertions are the checks
   inside tests, not test count) — the suite is fully green.
+
+## 37. Root cause of the indexer failure explosion: mass-assignment on fillable (fixed)
+
+- **Why so many scrapes were failing:** not MAL throttling — a **500 mass-assignment
+  exception at insert**: `App\Anime`/`App\Manga` `$fillable` omitted
+  `external_links`/`streaming_links` (v5-parsed fields) after the AI's "full strict
+  models" change. Every scrape of an anime/manga carrying external/streaming links
+  was scraped from MAL successfully, then **rejected by Eloquent on save** → 500 →
+  recorded as failed. Throttling (429s) and a brief :8000 blip were minor on top.
+- **Fixed:** added `external_links` (+`streaming_links` on Anime) to `$fillable` on
+  `App\Anime` + `App\Manga`.
+- **Verified:** all 25 sampled previously-failed anime ids now return **200** (24 fast);
+  a sampled manga id also 200. Existing `.failed` backlog (20k anime + manga) is
+  retryable via `indexer:{anime,manga} --failed` once the current manga run finishes.
+- Suite 332/2836 green; audits clean.

@@ -77,6 +77,8 @@ class Manga extends JikanApiSearchableModel
         'scored_by', 'popularity', 'members', 'favorites', 'synopsis', 'background', 'related',
         'genres', 'explicit_genres', 'themes', 'demographics', 'authors', 'serializations',
         'createdAt', 'modifiedAt', 'approved',
+        'external_links',
+
     ];
 
     /**
