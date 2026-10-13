@@ -934,3 +934,14 @@ crash driver; guarded). Remaining bottlenecks: cold-data scrape-on-miss (mean 2.
 p95 13.6s under mixed distinct-URL load), chunked catalog wildcard deep pages
 (~1.5 rps, 13-23s), search round-trip (~115-300 rps). Full tables in
 `docs/PERFORMANCE.md` (Stress test section). For PR reporting.
+
+## 42. Indexer stopped; go-time pack prepared (local; NOT pushed)
+
+- **Indexer stopped 2026-10-13** (decision): anime **10,399** docs (+20,053
+  retryable via `--failed`), manga **2,191** (partial; run was throttled + hit
+  the fillable bug until fixed). Tests are hermetic (fixtures/engine-less) — no
+  live index needed; backfills re-runnable anytime.
+- **Go-time pack (local):** final PR metrics drafted (stress tables, suite 343/
+  2,885, robustness + search coverage), `UPSTREAM_PR.md` §7 updated, PR-body
+  draft prepared. Path: push 11 local commits -> PR body update -> post-index
+  parity/backfills whenever, then CI first-green on a runner.
