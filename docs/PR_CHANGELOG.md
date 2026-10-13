@@ -965,3 +965,41 @@ p95 13.6s under mixed distinct-URL load), chunked catalog wildcard deep pages
   the store writes `alternate_names` (and `external_links`) but `$fillable` allowed
   `alternative_names` only → 500 at insert. Added both; **people sweep 10/10 clean**,
   character sweep 25/25 clean. No further systemic gaps in the swept batches.
+
+## 45. Relational character/people indexer (two-phase) — supersedes the purarue path (2026-10-13)
+
+The purarue character/people caches are stale/dead-id-laden, so §43's
+`indexer:items character|people` (purarue) is not the right source. Replaced with
+a **relational, two-phase** pipeline that derives ids from our own live data:
+
+- **Phase A `indexer:harvest`** — walks the stored `anime`/`manga` collections and
+  harvests ids from the sub-resources (`anime/{id}/characters` = character ids +
+  voice-actor person ids; `anime/{id}/staff` = crew person ids unless `--no-staff`;
+  `manga/{id}/characters`; `manga.authors` = mangaka, no scrape). Deduped into
+  `storage/app/indexer/harvest_{character,people}.json`; `--kind`/`--resume`/
+  `--failed`/`--index`/`--limit`/`--reverse`.
+- **Phase B `indexer:items character|people --source=harvest`** — reads those id
+  files and self-scrapes each detail doc into `characters`/`people`. `--source=auto`
+  (default) routes character/people to harvest; anime/manga stay on purarue;
+  `--source=purarue` forces legacy.
+- **Verified (smoke):** 2 anime + 2 manga → **396 characters / 723 people**, 0
+  failures; Phase B populated correctly (dedup on re-run). No raw-Mongo in the
+  commands (typed Eloquent reads + JSON id files) so phpstan stays clean.
+- **Latent bug fixed:** `Anime::toSearchableArray()` / `Manga::toSearchableArray()`
+  accessed `aired['from']` / `published['from']` unguarded → "array offset on null"
+  whenever a doc without air dates was indexed. Surfaced once Typesense became
+  reachable (Scout observer actually ran). Now null-safe.
+- **Gates:** phpunit **343 tests / 2,897 assertions / 0 errors**; `phpstan` → OK;
+  `pint --test` clean.
+- **Docs:** `docs/INDEXER_SCALING.md` rewritten for the relational design;
+  `docs/POST_FULL_INDEX.md` step 0.5 updated to the two-phase commands.
+
+## 46. Search graceful-empty fallback was instantiating an interface (fixed)
+
+`SearchRequestHandler` imported `Illuminate\Contracts\Pagination\LengthAwarePaginator`
+(the contract) and called `new LengthAwarePaginator(...)` in the catch block — a
+latent fatal ("Cannot instantiate interface") that would fire exactly when search
+degraded (missing/unreachable Typesense collection). Now instantiates the concrete
+`Illuminate\Pagination\LengthAwarePaginator` (aliased), keeping the contract for
+type hints. Also type-lined `SearchController::runSearch()`'s generic `DataRequest<T>`
+param. `phpstan` full-project → OK.

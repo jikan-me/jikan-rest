@@ -246,8 +246,8 @@ class Manga extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
-            'start_date' => $this->convertToTimestamp($this->published['from']),
-            'end_date' => $this->convertToTimestamp($this->published['to']),
+            'start_date' => $this->convertToTimestamp($this->published['from'] ?? null),
+            'end_date' => $this->convertToTimestamp($this->published['to'] ?? null),
             'title' => $this->title,
             'title_transformed' => $this->simplifyStringForSearch($this->title),
             'title_english' => $this->title_english ?? '',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V4DB;
 
+use App\Contracts\DataRequest;
 use App\Dto\AnimeSearchCommand;
 use App\Dto\CharactersSearchCommand;
 use App\Dto\ClubSearchCommand;
@@ -10,7 +11,6 @@ use App\Dto\PeopleSearchCommand;
 use App\Dto\ProducersSearchCommand;
 use App\Dto\UserByIdLookupCommand;
 use App\Dto\UsersSearchCommand;
-use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
 class SearchController extends Controller
@@ -372,7 +372,7 @@ class SearchController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(schema: 'users_search', description: 'User Results', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', properties: [new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'), new OA\Property(property: 'username', type: 'string', description: 'MyAnimeList Username'), new OA\Property(property: 'images', type: 'object', ref: '#/components/schemas/user_images'), new OA\Property(property: 'last_online', type: 'string', description: 'Last Online Date ISO8601')]))])])]
     public function users(UsersSearchCommand $request): mixed
     {
@@ -510,17 +510,26 @@ class SearchController extends Controller
     {
         return $this->runSearch($request);
     }
+
     /**
      * Search is best-effort: a missing/unreachable search (Typesense) collection
      * must render an EMPTY result (200) rather than 500 — any search failure is
      * degraded gracefully for the whole search surface.
+     *
+     * @template T of \Illuminate\Http\Resources\Json\ResourceCollection|\Illuminate\Http\Resources\Json\JsonResource|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     *
+     * @param  DataRequest<T>  $command
      */
-    private function runSearch(\App\Contracts\DataRequest $command): mixed
+    private function runSearch(DataRequest $command): mixed
     {
         try {
             return $this->mediator->send($command);
         } catch (\Throwable $e) {
-            try { report($e); } catch (\Throwable $ignore) {}
+            try {
+                report($e);
+            } catch (\Throwable $ignore) {
+            }
+
             return response()->json([
                 'data' => [],
                 'pagination' => [
@@ -532,5 +541,4 @@ class SearchController extends Controller
             ]);
         }
     }
-
 }

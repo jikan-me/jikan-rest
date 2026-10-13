@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator as ConcreteLengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 
@@ -51,8 +52,11 @@ abstract class SearchRequestHandler implements RequestHandler
             // A missing/unreachable search (Typesense) collection must render
             // an EMPTY result, never 500 or 404 — search failures degrade
             // gracefully for the whole search surface.
-            try { report($e); } catch (\Throwable $ignore) {}
-            $paginator = new LengthAwarePaginator(
+            try {
+                report($e);
+            } catch (\Throwable $ignore) {
+            }
+            $paginator = new ConcreteLengthAwarePaginator(
                 collect(),
                 0,
                 (int) ($limit ?? 25),
@@ -66,7 +70,10 @@ abstract class SearchRequestHandler implements RequestHandler
         } catch (\Throwable $e) {
             // Last-resort: rendering must not take a search endpoint down.
             // Render an empty v4 envelope instead.
-            try { report($e); } catch (\Throwable $ignore) {}
+            try {
+                report($e);
+            } catch (\Throwable $ignore) {
+            }
             $perPage = (int) ($limit ?? 25);
 
             return new JsonResponse([

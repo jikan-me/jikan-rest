@@ -7,18 +7,24 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Generic MAL-id indexer for any family that has a purarue/mal-id-cache file
- * (anime, manga, character, people). Each id is scraped through the app's own
- * endpoint (config('app.url').'/v4/{family}/{id}'), which stores the parsed doc
- * in MongoDB — same self-scrape pattern as indexer:anime/indexer:manga.
+ * Generic MAL-id indexer. Each id is scraped through the app's own endpoint
+ * (config('app.url').'/v4/{family}/{id}'), which stores the parsed doc in
+ * MongoDB — same self-scrape pattern as indexer:anime/indexer:manga.
  *
- * Clubs have no id cache in purarue; they're populated lazily (e.g. from user
- * club-list scrapes) instead of a bulk walk.
+ * Id source (`--source`):
+ *  - `auto` (default): character/people read the **harvested** id sets produced
+ *    by `indexer:harvest` from our stored anime/manga relations (the purarue
+ *    character/people caches are stale); anime/manga read purarue.
+ *  - `harvest`: force the harvest collections for character/people.
+ *  - `purarue`: force the legacy purarue caches.
+ *
+ * Clubs have no id cache; they're populated lazily (user club-list scrapes).
  */
 class ItemsIndexer extends Command
 {
     protected $signature = 'indexer:items
                             {family : anime|manga|character|people}
+                            {--source=auto : auto|harvest|purarue — where to read ids from}
                             {--failed : Run only entries that failed to index last time}
                             {--resume : Resume from the last position}
                             {--reverse : Start from the end of the id list}
@@ -35,6 +41,7 @@ class ItemsIndexer extends Command
         'people' => ['cache' => 'people_cache', 'url' => '/v4/people/%d', 'key' => 'people'],
     ];
 
+    /** @var int[] */
     private array $ids = [];
 
     public function handle(): int
@@ -54,9 +61,20 @@ class ItemsIndexer extends Command
         $delay = (int) $this->option('delay');
         $index = (int) $this->option('index');
         $limit = (int) $this->option('limit');
+        $source = strtolower((string) $this->option('source'));
+        $fromHarvest = $source === 'harvest'
+            || ($source === 'auto' && in_array($family, ['character', 'people'], true));
 
         if ($failed && Storage::exists("indexer/indexer_{$key}.failed")) {
             $this->ids = $this->loadFailedMalIds($key);
+        } elseif ($fromHarvest) {
+            $this->ids = $this->harvestMalIds($family);
+            if ($this->ids === []) {
+                $this->error("No harvested ids for '{$family}'. Run `indexer:harvest` first, or pass --source=purarue.");
+
+                return self::FAILURE;
+            }
+            $this->info('Using '.count($this->ids)." harvested {$family} ids (source: harvest)");
         } elseif (! $failed) {
             $this->ids = $this->fetchMalIds($key, self::FAMILIES[$family]['cache']);
         }
@@ -76,7 +94,7 @@ class ItemsIndexer extends Command
         }
 
         $this->ids = array_values($this->ids);
-        Storage::put("indexer/indexer_{$key}.save", 0);
+        Storage::put("indexer/indexer_{$key}.save", '0');
 
         $count = count($this->ids);
         $this->info("{$count} entries available for {$family}");
@@ -91,7 +109,7 @@ class ItemsIndexer extends Command
             $id = (int) $this->ids[$i];
             $url = config('app.url').sprintf($urlFmt, $id);
 
-            echo "Indexing/Updating ".($i + 1)."/{$count} {$url} [MAL ID: {$id}] \n";
+            echo 'Indexing/Updating '.($i + 1)."/{$count} {$url} [MAL ID: {$id}] \n";
 
             try {
                 $response = json_decode((string) file_get_contents($url), true);
@@ -108,7 +126,7 @@ class ItemsIndexer extends Command
                 Storage::put("indexer/indexer_{$key}.failed", json_encode($failedIds));
             }
 
-            Storage::put("indexer/indexer_{$key}.save", $i);
+            Storage::put("indexer/indexer_{$key}.save", (string) $i);
             sleep($delay);
         }
 
@@ -118,6 +136,9 @@ class ItemsIndexer extends Command
         return self::SUCCESS;
     }
 
+    /**
+     * @return int[]
+     */
     private function fetchMalIds(string $key, string $cache): array
     {
         $url = "https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/{$cache}.json";
@@ -132,6 +153,9 @@ class ItemsIndexer extends Command
         return $ids;
     }
 
+    /**
+     * @return int[]
+     */
     private function loadFailedMalIds(string $key): array
     {
         if (! Storage::exists("indexer/indexer_{$key}.failed")) {
@@ -139,5 +163,21 @@ class ItemsIndexer extends Command
         }
 
         return (array) json_decode((string) Storage::get("indexer/indexer_{$key}.failed"));
+    }
+
+    /**
+     * Live character/person ids harvested from our stored anime/manga relations
+     * by `indexer:harvest` (replaces the stale purarue caches).
+     *
+     * @return int[]
+     */
+    private function harvestMalIds(string $family): array
+    {
+        $path = "indexer/harvest_{$family}.json";
+        if (! Storage::exists($path)) {
+            return [];
+        }
+
+        return array_map('intval', (array) json_decode((string) Storage::get($path), true));
     }
 }

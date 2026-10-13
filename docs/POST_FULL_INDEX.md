@@ -16,13 +16,28 @@ tools/dev/php -r 'require "vendor/autoload.php"; $d=(new MongoDB\Client("mongodb
 
 ### 0.5 Populate characters & people
 
+Characters/people are populated **relationally** — no stale external id cache.
+Phase A harvests live ids from the anime/manga we already store; Phase B scrapes
+each id's detail doc:
+
 ```bash
-# Generic id-cache indexer (purarue caches for anime/manga/character/people):
-tools/dev/php artisan indexer:items character --resume --delay=2   # ~68k ids
-tools/dev/php artisan indexer:items people    --resume --delay=2   # ~similar
+# Phase A — harvest ids from stored anime/manga relations (anime characters+staff,
+# manga characters+authors) into storage/app/indexer/harvest_{character,people}.json
+tools/dev/php artisan indexer:harvest --resume --delay=2
+
+# Phase B — scrape each harvested id into the characters/people collections
+tools/dev/php artisan indexer:items character --source=harvest --resume --delay=2
+tools/dev/php artisan indexer:items people    --source=harvest --resume --delay=2
 ```
-Clubs have no id cache (lazy scraping via user club lists). All families support
-`--resume`/`--failed`/`--reverse`/`--index`/`--limit` like the dedicated indexers.
+
+`indexer:items anime|manga` still uses the purarue caches (those are current);
+`character|people` default to `--source=harvest` (`--source=purarue` forces the
+legacy caches). All commands support `--resume`/`--failed`/`--reverse`/`--index`/
+`--limit`. Clubs have no id cache (lazy scraping via user club lists). See
+`docs/INDEXER_SCALING.md`.
+
+After Mongo is populated, import to Typesense for search:
+`scout:import "App\Character"` / `"App\Person"`.
 
 ## 1. Drain failures + prune
 

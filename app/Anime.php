@@ -95,7 +95,6 @@ class Anime extends JikanApiSearchableModel
         'demographics', 'opening_themes', 'ending_themes', 'trailer', 'approved', 'createdAt', 'modifiedAt',
         'external_links', 'streaming_links',
 
-
     ];
 
     /**
@@ -369,8 +368,8 @@ class Anime extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
-            'start_date' => $this->convertToTimestamp($this->aired['from']),
-            'end_date' => $this->convertToTimestamp($this->aired['to']),
+            'start_date' => $this->convertToTimestamp($this->aired['from'] ?? null),
+            'end_date' => $this->convertToTimestamp($this->aired['to'] ?? null),
             'title' => $this->title,
             'title_transformed' => $this->simplifyStringForSearch($this->title),
             'title_english' => $this->title_english ?? '',
