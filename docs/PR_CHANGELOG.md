@@ -845,3 +845,17 @@ page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANC
 - Perf note: wildcard pages ~2-3 s (chunk walk per page) — candidate for
   memoized chunks / keyset cursor later (WS-G/retrieval).
 - Docs: `docs/PERFORMANCE.md` Mongo+Typesense combo section + touchpoint matrix.
+
+## 36. Typesense-engine integration test added (local; NOT pushed)
+
+- New `tests/Integration/TypesenseSearchEndpointTest.php` — end-to-end through the
+  REAL Typesense engine: seeds producers into Mongo → imports to the `_testing`
+  collection → GET `/v4/producers?q=studio` → asserts Mongo-hydrated results
+  (contains the seeded ids + full entity fields) and graceful empty on a
+  non-match. Self-`markTestSkipped` when `SCOUT_DRIVER !== typesense` so the
+  engine-less CI run stays green.
+- Verified: with typesense → 1 test / 7 assertions pass; engine-less default suite
+  → test skips. Full suite now **332 tests / 2836 assertions, 0 failures**
+  (1 skipped = the engine test without a server).
+- Clarified metric: **332 tests vs 2,836 assertions** (assertions are the checks
+  inside tests, not test count) — the suite is fully green.
