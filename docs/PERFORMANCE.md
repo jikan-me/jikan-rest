@@ -220,3 +220,55 @@ End-to-end search stack (Typesense index + Mongo hydration) tested on Octane:
 - Typesense touchpoints (search service, engine mixin, analytics read+write,
   descriptor) all degrade to empty (200) rather than 500 when a collection is
   missing (search surface audit).
+
+## Stress test — full battery (2026-10-13, final; local, for PR #614)
+
+Runtime: Octane/RoadRunner **8 workers**, all optimizations applied (heartbeat
+debounce, gzip, 512M ceiling). `ab -k`; background indexer + mixed traffic caveat.
+
+### Endpoint battery (c=20)
+| Endpoint | RPS | p50 | p95 | p99 | max | fail |
+|---|---|---|---|---|---|---|
+| `/up` | 4,274 | — | — | — | — | 0 |
+| `/v4/anime/abc` (404 fast) | 4,512 | — | — | — | — | 0 |
+| `/llms.txt` | 3,135 | — | — | — | — | 0 |
+| `/v4/anime/21` | ~1,133–1,327 | 14ms | 23 | 100 | 334 | 0 |
+| `/v4/anime/966/full` | 1,063 | — | — | — | — | 0 |
+| `/v4/magazines` | 961 | — | — | — | — | 0 |
+| `/v4/top/anime` | 493 | — | — | — | — | 0 |
+| `/v4/seasons/now` | 287 | 66 | 75 | 80 | 89 | 0 |
+| search `anime?q=one` (typesense) | 115 | 167 | 213 | 229 | 249 | 0 |
+| search `producers?q=studio` (typesense) | 300 | — | — | — | — | 0 |
+| search no-hit | 359 | — | — | — | — | 0 |
+| **chunked wildcard `anime?q=*&page=11`** | **1.5** | **13s** | **18s** | **22s** | **23s** | 1 |
+
+### Concurrency curve (anime/21)
+| c | RPS | p50 | p95 | p99 | max |
+|---|---|---|---|---|---|
+| 1 | 243 | 3ms | 5 | 15 | 290 |
+| 10 | **1,748** | 6ms | 8 | 9 | 13 |
+| 50 | 1,218 | 31 | 88 | 112 | 247 |
+| 100 | 1,473 | 66 | 76 | 79 | 86 |
+| 200 | 1,206 | 136 | 384 | 408 | 487 |
+
+### Mixed cold-path reality (40 distinct ids, 40 workers, 240 req)
+Warm Mongo hits are fast; **cold/un-cached ids are scraper-bound**: mean 2.3 s,
+p95 13.6 s, p99 14.7 s, 10 errors (absent-on-MAL 404s + timeouts), effective
+~14 RPS. This is the honest cost of a scrape-on-miss design — mitigated by
+indexing first + the Mongo per-endpoint cache; adversarial cold traffic should
+be rate-limited (throttle is on) and ideally behind a warm prefetch.
+
+### Other measured
+- **gzip** is ~free on the server (seasons 286→298 RPS, p95 ≈ same) and cuts bytes
+  3–6× (seasons 109 KB→18 KB; full 22.9 KB→6.9 KB).
+- **Worker stability:** 0 `Target class [config]` crashes / 0 worker-restart issues
+  in this battery (vs ~500 crash markers earlier — search-path 500s were the
+  churn driver; guarding them fixed it).
+- **Chunked wildcard deep pages are expensive (~1.5 RPS, 13–23 s/p95–max)** — the
+  per-page full-chunk walk over 10k hits; flagged for memoized chunks/keyset (WS-G).
+
+### Net verdict
+Warm read/static paths: excellent (thousands RPS, ms latencies, clean tails to
+c=200). Search adds a typesense round-trip (~115–300 RPS). The bottlenecks that
+remain are (a) **cold data → synchronous MAL scrape**, (b) **catalog wildcard deep
+paging**, (c) payload size (gzip helps 3–6×, enabled). All documented for the PR.

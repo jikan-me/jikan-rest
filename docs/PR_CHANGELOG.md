@@ -924,3 +924,13 @@ page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANC
   mongo:8.0 service, mirrors the tests contract). Runner-gated like the rest.
 - Suite now **343 tests / 2,885 assertions / 0 failures** engine-less (3 engine
   tests self-skip); engine run 3 / 12 green.
+
+## 41. Full stress battery measured (local, NOT pushed — for PR #614)
+
+Full run (Octane 8w, optimizations on): endpoint battery (above table), concurrency
+curve (anime/21: c=10 ~1,748 rps, p50 6ms; robust to c=200, tails clean), gzip ~free
+(3-6x transfer cut), **0 worker crashes** (500-search-path churn was the earlier
+crash driver; guarded). Remaining bottlenecks: cold-data scrape-on-miss (mean 2.3s,
+p95 13.6s under mixed distinct-URL load), chunked catalog wildcard deep pages
+(~1.5 rps, 13-23s), search round-trip (~115-300 rps). Full tables in
+`docs/PERFORMANCE.md` (Stress test section). For PR reporting.
