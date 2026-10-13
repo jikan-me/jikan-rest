@@ -14,6 +14,16 @@ pgrep -f "indexer:"                                     # no survivors
 tools/dev/php -r 'require "vendor/autoload.php"; $d=(new MongoDB\Client("mongodb://localhost:27017"))->selectDatabase("jikan"); foreach(["anime","manga"] as $c) printf("%s=%d\n", $c, $d->selectCollection($c)->countDocuments());'
 ```
 
+### 0.5 Populate characters & people
+
+```bash
+# Generic id-cache indexer (purarue caches for anime/manga/character/people):
+tools/dev/php artisan indexer:items character --resume --delay=2   # ~68k ids
+tools/dev/php artisan indexer:items people    --resume --delay=2   # ~similar
+```
+Clubs have no id cache (lazy scraping via user club lists). All families support
+`--resume`/`--failed`/`--reverse`/`--index`/`--limit` like the dedicated indexers.
+
 ## 1. Drain failures + prune
 
 The indexers record 429/error ids to `storage/app/indexer/indexer_{anime,manga}.failed`.

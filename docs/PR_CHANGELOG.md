@@ -945,3 +945,16 @@ p95 13.6s under mixed distinct-URL load), chunked catalog wildcard deep pages
   2,885, robustness + search coverage), `UPSTREAM_PR.md` §7 updated, PR-body
   draft prepared. Path: push 11 local commits -> PR body update -> post-index
   parity/backfills whenever, then CI first-green on a runner.
+
+## 43. `indexer:items` — populate characters/people (and any id-cache family) (2026-10-13)
+
+- **New generic indexer** `indexer:items <family>` (anime|manga|character|people):
+  fetches the purarue/mal-id-cache id set and self-scrapes `/v4/{family}/{id}`
+  (stores the parsed doc in Mongo). Handles both cache shapes (`ids` flat list
+  for character/people, `{sfw,nsfw}` for anime/manga). Supports
+  `--resume/--failed/--reverse/--index/--delay/--limit` like the dedicated ones;
+  per-family save/failed state files.
+- **Verified:** `character` batch 2→5 docs (0 fails), `people` batch (0 fails).
+- **Clubs:** no id cache exists → populate lazily (user club-list scrapes) —
+  documented.
+- `docs/POST_FULL_INDEX.md` gained a "Populate characters & people" step.
