@@ -2,6 +2,7 @@
 
 namespace Tests\Integration;
 
+use App\Anime;
 use App\Producers;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
@@ -73,5 +74,32 @@ final class TypesenseSearchEndpointTest extends TestCase
         } finally {
             Producers::whereIn('mal_id', array_column(self::SEED, 'mal_id'))->get()->each->unsearchable();
         }
+    }
+
+    public function test_engine_chunked_deep_page_beyond_250(): void
+    {
+        $term = 'Deep Engine Searchable '.bin2hex(random_bytes(4));
+        Anime::factory(260)->create([
+            'title' => $term,
+            'titles' => [['type' => 'Default', 'title' => $term]],
+            'title_english' => $term,
+        ])->searchable();
+
+        $response = $this->get('/v4/anime?q='.$term.'&page=11');
+        $response->assertOk();
+        $body = $response->json();
+        $this->assertSame(260, $body['pagination']['items']['total'] ?? null, 'chunked total should cross >250 hits');
+        $this->assertNotEmpty($body['data'] ?? [], 'page 11 sits beyond the 250-hit chunk boundary');
+
+        Anime::where('title', $term)->get()->each->unsearchable();
+    }
+
+    public function test_missing_index_returns_empty_not_500(): void
+    {
+        // People is never seeded/imported in tests: a missing Typesense index
+        // must degrade to an EMPTY 200 (the runSearch guarantee), never 500.
+        $this->get('/v4/people?q=zzz_unsearchable')
+            ->assertOk()
+            ->assertJsonCount(0, 'data');
     }
 }

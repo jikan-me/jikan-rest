@@ -890,3 +890,21 @@ page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANC
   Other-model scrape probes (characters/people/producers) -> 200; no other
   fillable/parser gaps found.
 - Suite now 334 tests / 2841 assertions (0 failures, 1 engine-skip).
+
+## 39. Search/deployment coverage expanded (local; NOT pushed)
+
+- **Typesense-engine integration suite extended** (`TypesenseSearchEndpointTest`):
+  + **chunked >250 deep page** via the real engine (seeds 260 searchable anime,
+    `q=`+`page=11` asserts total 260 + non-empty beyond the chunk boundary);
+  + **missing-index graceful-empty** (`/v4/people?q=` → 200 empty, never 500).
+- **`ScoutFlush` null-safety fix**: setUp for a fresh env where a `_testing`
+  collection doesn't exist (or was dropped) threw `ObjectNotFound` — now skipped.
+- **NEW `DeploymentArtifactsTest`** (engine-less, 4 tests / 38 assertions):
+  health/ops surface (`/up`, `/llms.txt`, `/v4/ai/manifest.json`,
+  `/v4/docs/openapi`) + deployment-artifact invariants (Dockerfile base php:8.4,
+  `--ignore-platform-reqs`, `linux-headers`, RR arch auto-detect, no `RR_STAGE`;
+  compose services + mongo:8.0; CI `artifact-freshness`; legacy `tests.yml` gone;
+  committed AI artifacts present). Catches the class of regression that only bites
+  at deploy (dropped health route, resurrected RR_STAGE, missing manifest).
+- Suite now **340 tests / 2,879 assertions / 0 failures** (engine-less; 3 engine
+  tests self-skip; engine run: 3 tests / 12 assertions green).

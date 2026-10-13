@@ -3,6 +3,7 @@
 namespace App\Testing;
 
 use Typesense\Client;
+use Typesense\Exceptions\TypesenseClientError;
 
 /**
  * @codeCoverageIgnore
@@ -30,17 +31,21 @@ trait ScoutFlush
 
             foreach ($this->searchIndexModelCleanupList as $model) {
                 $modelInstance = new $model;
-                $collection = $typeSenseClient->getCollections()->{$modelInstance->searchableAs()};
+                try {
+                    $collection = $typeSenseClient->getCollections()->{$modelInstance->searchableAs()};
+                    // we count items by exporting
+                    $items = $collection->getDocuments()->export();
+                    if (strlen($items) > 1) {
+                        $collection->getDocuments()->delete([
+                            'filter_by' => 'mal_id:>0',
+                            'batch_size' => 500,
+                        ]);
 
-                // we count items by exporting
-                $items = $collection->getDocuments()->export();
-                if (strlen($items) > 1) {
-                    $collection->getDocuments()->delete([
-                        'filter_by' => 'mal_id:>0',
-                        'batch_size' => 500,
-                    ]);
-
-                    $collection->delete();
+                        $collection->delete();
+                    }
+                } catch (TypesenseClientError $e) {
+                    // A fresh environment may not have the _testing collection yet
+                    // (or it was dropped during a prior test) — nothing to flush.
                 }
             }
         } else {
