@@ -832,3 +832,16 @@ page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANC
 - `per_page` confirmed already capped at `max_results_per_page` (25); huge pages
   return empty (no contract change).
 - Suite 331/2836 green; audits clean; octane + serve verified.
+
+## 35. Mongo + Typesense combo verified; memory-ceiling fix (local, NOT pushed)
+
+- Imported the anime catalog into Typesense (`scout:import App\Anime`); verified
+  count alignment (10,321 == Mongo), result hydration (full Mongo entities),
+  filters + sort round-trip, and the **>250 chunked deep-pagination path**.
+- **Found + fixed: the chunked path OOM'd at the 128M CLI memory default when
+  hydrating 250-doc chunks over a 10k-result catalog.** Raised the per-runtime
+  ceiling via `PHP_MEMORY_LIMIT` (default 512M in `bootstrap/app.php`, env-tunable)
+  → `?q=*` returns 200 with correct totals on Octane.
+- Perf note: wildcard pages ~2-3 s (chunk walk per page) — candidate for
+  memoized chunks / keyset cursor later (WS-G/retrieval).
+- Docs: `docs/PERFORMANCE.md` Mongo+Typesense combo section + touchpoint matrix.

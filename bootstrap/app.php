@@ -7,6 +7,10 @@ use App\Http\Middleware\MicroCaching;
 use App\Http\Middleware\SourceHeartbeatMonitor;
 use Composer\InstalledVersions;
 use Illuminate\Foundation\Application;
+
+// Workload needs more than the 128M CLI default: large catalog searches hydrate
+// >250-hit chunked pages (e.g. `?q=*` on ~10k indexed anime) and OOM otherwise.
+ini_set('memory_limit', (string) (getenv('PHP_MEMORY_LIMIT') ?: '512M'));
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 

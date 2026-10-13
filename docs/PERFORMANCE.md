@@ -199,3 +199,24 @@ uncached sub-resource like `/v4/anime/21/staff` scrapes MAL on cache miss (bench
    Scoped per cache store: fast replays apply within a worker (in-process
    `array` cache); fleet-wide benefit needs a **shared** store (Redis).
 4. **Pagination**: `per_page` was already clamped to the 25-page limit (`max_results_per_page`); huge `page` returns an empty page, not an unbounded response — confirmed, documented (no contract change needed).
+
+## Mongo + Typesense combo verification (2026-10-13)
+
+End-to-end search stack (Typesense index + Mongo hydration) tested on Octane:
+
+- **Index/count alignment**: `anime_index` 10,321 == Mongo `anime` 10,321 (import via
+  `scout:import App\Anime`); producers 382 / magazines 1,498 aligned.
+- **Hydration**: `?q=` results are full Mongo entities (images/score/genres present);
+  spot-checked ids exist in Mongo. **Filters** (`genres=1`, sort `order_by=score desc`)
+  round-trip through Typesense into Mongo payloads.
+- **Chunked >250 (`?q=*`)**: with a 10,321-hit catalog the previous chunk paging
+  **OOM'd at the 128M CLI memory default** (Mongo hydration of 250-doc chunks).
+  Fixed repo-wide via `PHP_MEMORY_LIMIT` (default 512M, set in `bootstrap/app.php`
+  — applies to serve, CLI, and Octane workers). Verified on Octane: `?q=*` and
+  `?q=*&page=2` → 200, total 10,321, page ids no overlap.
+- **Perf note (edge)**: catalog-wildcard `?q=*` pages cost ~2-3 s/page (per-page
+  chunk walk re-fetch + 250-doc hydration). Fine for rare wildcards; a memoized
+  chunks-per-request or keyset cursor is a future optimization (WS-G/retrieval).
+- Typesense touchpoints (search service, engine mixin, analytics read+write,
+  descriptor) all degrade to empty (200) rather than 500 when a collection is
+  missing (search surface audit).
