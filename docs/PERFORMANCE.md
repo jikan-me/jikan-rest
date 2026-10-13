@@ -138,3 +138,45 @@ gzip: payload/transfer ~6× smaller when the client accepts it.
 - Remove/reduce per-request side-effecting I/O (heartbeat) — biggest win.
 - Serve with Octane + adequate workers; gzip responses; keep micro-cache off by default;
   cache config for boot; profile serialization next; add WS-G efficiency later.
+
+## End-to-end coverage + robustness benchmark (2026-10-13) — for PR #614
+
+### Coverage throughput (Octane/RoadRunner 4 workers, `ab -k -c 20`, n=2000)
+
+| Endpoint (type) | RPS | Notes |
+|---|---|---|
+| `/up` | 5,031 | pure route/middleware |
+| `/v4/anime/21` (detail) | 918 | Mongo read + serialization |
+| `/v4/magazines` (list) | 766 | |
+| `/v4/top/anime` (list) | 290 | |
+| `/v4/seasons/now` (list) | 209 | heavy payload |
+| `/v4/anime?q=one` (**search** — Typesense) | 91 | +typesense round-trip |
+| `/v4/producers?q=studio` (**search** — Typesense) | 237 | |
+
+### Single-request latency composition (avg of 3, warm-ish)
+`/v4/anime/abc` (404, no data) **~4 ms** = framework+middleware floor · `/v4/anime/21`
+~5–30 ms (worker-health dependent) · `/v4/producers?q=` ~19 ms · `/v4/anime?q=one` ~70 ms
+(typesense) · `/v4/seasons/now` ~33 ms · `/v4/anime/999999999999` ~1.7 s (scrape!) ·
+uncached sub-resource like `/v4/anime/21/staff` scrapes MAL on cache miss (bench hang).
+
+### Attack / edge vector results (status semantics)
+
+| Vector | Status | Finding |
+|---|---|---|
+| non-numeric id `/anime/abc` | 404 (fast) | route constraint OK |
+| `-1` | 404 | OK |
+| `0` | 400 | OK |
+| huge id `999999999999` | 404 but **~1.7 s** | triggers a scrapers-ish cache-miss path — DoS-ish |
+| `page=-1`, `order_by=bogus`, `sfw=garbage` | 400 | DTO validation OK |
+| `page=99999999&per_page=9999` | 200 | **no obvious bound enforcement** on per_page |
+| `?q=`, trailing slash, `//`, `/..`, `%2e%2e`, quoted filter | 200/403/404 | sane routing |
+| `/v4/characters?q=spike` | **500** | **search collection missing → unhandled exception** (inconsistent w/ anime search which degrades gracefully) |
+| c=200 (same URL) | 0 failed | but **p100 = 11 s** — queueing + worker churn |
+| concurrent hammering | — | **~500 worker-crash markers** (`Target class [config]`, RR respawn) |
+
+### Robustness recommendations (from this run)
+1. **Search graceful degradation** — a missing Typesense collection should 404/empty, not 500 (`characters?q=`). Unify with the anime-search path.
+2. **Bound `per_page`/`page`** app-wide (enforce max; also protects aggregation load).
+3. **Cache/guard scrape-triggering lookups** — huge-id + uncached sub-resources should not hit MAL synchronously; use the cache-first contract consistently (and keep indexer/data coverage so staff/characters fetch from cache).
+4. **Octane worker crash churn** — prioritize investigation: `Target class [config]` under load implies a container state-isolation leak (the AI already fixed mediator factories per request; audit other per-request singletons + `octane.php` `flush`). Until resolved, keep workers ≤ cores and watch RR respawn rate.
+5. Everything above is consistent: rate-limit + validation are solid; the physics are payload-size and scrape-path related.

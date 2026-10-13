@@ -803,3 +803,15 @@ classmap-authoritative (runtime image), Redis via docker (host port closed), Fra
 data routes (no driver in static binary). Full matrix so far in `docs/PERFORMANCE.md`
 (baseline, levers, after + PR takeaways). Suite green 331/2836; generate 0; endpoints:check 0;
 audits clean.
+
+## 33. End-to-end coverage + robustness benchmark (local, NOT pushed — for PR #614)
+
+Broadened the perf pass to the full surface + request vectors (Octane 4w): throughput
+matrix incl. **Typesense search** (anime/materialq ~91-237 rps), latency composition
+(404 floor ~4 ms; search +typesense round-trip; heavy lists ~33 ms), and an
+**attack/edge vector sweep** (bad ids/params -> correct 400/404; `%2e%2e` 403; huge-id
+~1.7 s scrape path; `per_page=9999` accepted unbounded; `/v4/characters?q=` -> 500 when
+the Typesense collection is missing). Robustness flags: **Octane worker crash churn
+under load** (~500 'Target class [config]' markers, 11 s p100 tail at c=200) —
+priority investigation; plus recs (graceful search when collection missing, bound
+page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANCE.md`.

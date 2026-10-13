@@ -139,20 +139,20 @@ locally — when they (or we) pick them up, they ship as separate PRs to
 
 ---
 
-## 7. Checklist before pushing
+## 7. Checklist before pushing (status updated 2026-10-13)
 
-- [ ] ~~Maintainer buy-in via the RFC (§4)~~ — **skipped by decision (2026-10-12): PR series opens directly**; field the §4 open questions during PR review instead
-- [ ] Parity: full green on the endpoints that can run (parser blockers documented)
-- [ ] Full suite green on a clean checkout (280/2673, known flake documented)
-- [ ] Composer: `name`/`description` finalized for the fork; `config.platform` pinned; `laravel/boost` (+ `.ai/skills/`) stance decided (§5 PR 1b)
-- [ ] Dockerfile (T3 ✅) + CI matrix (T4 ✅) green on a runner; drop local-only tooling references
-- [ ] Observability changes (log channels, Sentry defaults, `/up`) reconciled + verified in the suite (done locally)
-- [ ] Secrets: no real `APP_KEY`/tokens in source; `.env.dist` sane defaults
-- [ ] Decide Goutte-shim stance with maintainers (§4 Q3)
-- [ ] Decide `insights` + CORS removal with maintainers (§8) — fold into the deciding PR
-- [ ] Rebase `laravel-12` on `master`; keep the single PR's diff navigable (see §5 theme map)
-- [ ] Update this file + `PR_CHANGELOG.md` with the final push plan
-- [ ] Offer to co-maintain the migrated branch if upstream wants to defer
+- [ ] ~~Maintainer buy-in via the RFC (§4)~~ — **skipped by decision (2026-10-12): PR #614 is the vehicle**; field the §4 questions during review
+- [ ] **Parity: full green on the remotely-runnable endpoints** — pending the full data index (anime ~50% at 2026-10-13, manga queued; heavy MAL throttling → likely multi-day). Post-index: parity re-verify + ratchet, Typesense re-import, endpoint smoke (`docs/POST_FULL_INDEX.md`)
+- [ ] **Full suite green** — 331 / 2836 locally (perf/heartbeat + AI changes included); re-run on the exact commit going up
+- [ ] **Composer finalized** — name/description = `jikan-me/jikan-rest`; `php: ^8.4`; `jikan-me/jikan: ~5.0.0-beta`; Sentry `dont-discover`; Goutte autoload dropped
+- [x] **Dockerfile + compose validated locally** (Colima/arm64); **CI matrix + artifact-freshness job written** — first-green still needs a **real runner**
+- [x] Observability reconciled (`/up`, Sentry REPORTING-gated, log channels) verified in suite
+- [x] Secrets: no real tokens in source; `.env.dist` synced (Octane/CORS/Sentry/heartbeat keys)
+- [x] Goutte-stance moot — jikan v5 adopted (UP-06 resolved)
+- [ ] Decide `insights` removal + CORS stance with maintainers (**CORS restored as opt-in** to match master; insights still removed) — review conversation, not blocker
+- [ ] Rebase `laravel-12` on `origin/master` (master static ~4 months) at go-time
+- [ ] **Performance report** ready for the PR (`docs/PERFORMANCE.md` — matrix, wins: heartbeat debounce + gzip, robustness findings) — apply the report to the PR body when pushing
+- [ ] Offer to co-maintain the migrated branch if upstream prefers to defer
 
 ---
 
