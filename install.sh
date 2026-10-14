@@ -187,12 +187,13 @@ if [[ "$TYPESENSE" == "1" ]]; then
   if [[ ! -x "$TDIR/typesense-server" ]]; then
     mkdir -p "$TDIR"
     ARCH="$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')"; OS="$(uname | tr '[:upper:]' '[:lower:]')"
-    run curl -fsSL -o /tmp/typesense.tar.gz "https://dl.typesense.org/releases/26.0/typesense-server-26.0-${OS}-${ARCH}.tar.gz"
+    run curl -fsSL -o /tmp/typesense.tar.gz "https://dl.typesense.org/releases/27.0/typesense-server-27.0-${OS}-${ARCH}.tar.gz"
     run tar -xzf /tmp/typesense.tar.gz -C "$TDIR"
   fi
   ok "binary at $TDIR/typesense-server"
   grep -q '^TYPESENSE_API_KEY' .env || printf 'TYPESENSE_API_KEY=abcd\nSCOUT_DRIVER=typesense\n' >> .env
-  echo "    run: $TDIR/typesense-server --data-dir=/tmp/typesense-data --api-key=abcd --port=8108"
+  echo "    run: $TDIR/typesense-server --data-dir=/tmp/typesense-data --api-key=abcd --api-port=8108"
+  # (typesense has no --port flag; --api-port is the real one — v26+ renamed --listen-port)
 fi
 
 if [[ "$BACKEND_SUITE" == "1" ]]; then
