@@ -1003,3 +1003,17 @@ degraded (missing/unreachable Typesense collection). Now instantiates the concre
 `Illuminate\Pagination\LengthAwarePaginator` (aliased), keeping the contract for
 type hints. Also type-lined `SearchController::runSearch()`'s generic `DataRequest<T>`
 param. `phpstan` full-project → OK.
+
+## 47. Handoff: the run moved to another machine (2026-10-14)
+
+- Phase A harvest stopped cleanly at anime ~4.7k/10,399 (save rewound by 100 to
+  cover post-flush ids); the harvest id sets (60,259 characters / 25,354 people),
+  Mongo dump and native-typesense data were packed for the receiving machine
+  (instructions inside the pack: install → mongorestore → resume harvest).
+- `docs/INDEXER_SCALING.md`: replaced projected costs with **measured** ones
+  (steady ~19 s/entry ⇒ Phase A ≈ 2 days; harvested set sizes and the Phase B
+  multi-day implication) and added §6 "Moving the run to another machine"
+  (dump + indexer state + cheap typesense rebuild).
+- Env testing wrap-up (same day): native typesense flag fix + version align and
+  the `.env.dist` empty-value fix (§45/46 follow-ups) are in `7af754e`; compose/
+  Octane search-drift regression filed as issue **#616**.

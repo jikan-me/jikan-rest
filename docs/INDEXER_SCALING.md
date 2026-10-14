@@ -42,14 +42,20 @@ default to `--source=harvest` (`--source=purarue` forces the legacy caches).
 
 ## 2. Measured costs (2026-10-13, this machine)
 
-| Family | id source size | cold per-id | warm/cached | effective @ `--delay=2` |
+| Family | id source size | cold per-id | warm/cached | steady-state @ `--delay=2` |
 |---|---|---|---|---|
-| character | ~40–70k (harvested) | ~0.7 s | ~14 ms | ~2.7 s ⇒ days |
-| people | ~25–40k (harvested) | ~0.7 s | ~15 ms | ~2.7 s ⇒ days |
+| character | measured | ~0.7 s | ~14 ms | **~19 s/entry** incl. `/staff` pass |
+| people | measured | ~0.7 s | ~15 ms | ~19 s/entry |
 
-- Phase A is bounded by the stored catalog: **10,399 anime + 2,191 manga** ⇒
-  ~12.6k sub-resource scrapes (~4–7 h at `--delay=2`). Smoke test: 4 source docs
-  (2 anime + 2 manga) harvested **396 characters / 723 people**, 0 failures.
+- **Measured (2026-10-14, mid-run, cold pages + machine contention):** the early
+  ~4 s/entry sample undercounted steady state ≈ **19 s/entry** ⇒ Phase A for
+  10,399 anime ≈ **~2 days**.
+- **Harvested set sizes (grew far faster than planned):** at 4.7k anime ≈ 45%:
+  **60,259 characters / 25,354 people**. Final projection ≈ **~100k+ characters /
+  40–55k people** ⇒ Phase B is a **multi-day** detail scrape of that set — plan
+  `--delay=2` cadence + `--failed` sweeps (runbook below).
+- Smoke test: 4 source docs (2 anime + 2 manga) harvested 396 characters / 723
+  people, 0 failures.
 - MAL page timeout: `SOURCE_TIMEOUT` (default 10 s).
 
 ## 3. Failure handling
@@ -86,7 +92,29 @@ default to `--source=harvest` (`--source=purarue` forces the legacy caches).
   `/pictures`, …) cache on first request.
 - **Search:** after Mongo population, `scout:import "App\Character"` / `"App\Person"`.
 
-## 6. Production hardening noticed
+## 6. Moving the run to another machine (handoff)
+
+The whole run is reconstructable from three artifacts + the branch:
+
+1. `mongodump --db jikan` — the doc store (`anime`/`manga`) Phase A reads its id
+   list from, plus everything else.
+2. `storage/app/indexer/*` — harvest id sets + progress (`*.save`) + failure
+   (`*.failed`) files. The harvest JSONs are **cumulative and dedup-based**;
+   resuming re-walks from the saved index and merges. (When stopping mid-run,
+   rewind the `indexer_harvest_anime.save` number by ~100 to cover entries whose
+   ids were still in memory at the last flush.)
+3. Typesense data — portable, but cheapest to rebuild: restore Mongo, start
+   Typesense (native 27.0 binary or `docker-compose.typesense.yml`), then
+   `scout:import "App\Anime" "App\Manga"` (≈ seconds).
+
+```bash
+# new machine
+./install.sh --yes && mongorestore --db jikan <dump>/jikan
+tar -xzf indexer-state.tgz -C .            # -> storage/app/indexer/*
+tools/dev/php artisan indexer:harvest --resume --delay=2
+```
+
+## 7. Production hardening noticed
 
 `config/jikan.php` `rate_limit_per_minute` **defaults to 0 (unlimited)** — the
 `throttle:v4` middleware exists but the limit is off unless set. Set
