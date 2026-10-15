@@ -144,7 +144,7 @@ locally — when they (or we) pick them up, they ship as separate PRs to
 - [ ] ~~Maintainer buy-in via the RFC (§4)~~ — **skipped by decision (2026-10-12): PR #614 is the vehicle**; field the §4 questions during review
 - [ ] **Parity: full green on the remotely-runnable endpoints** — full index **stopped 2026-10-13** (decision): anime 10,399 docs + **20,053 retryable failed ids**; manga partial (2,191). Backfills are non-destructive and re-runnable anytime (`indexer:anime --failed`, `indexer:manga --failed`). Post-index (whenever run): parity re-verify + ratchet, Typesense re-import, endpoint smoke (`docs/POST_FULL_INDEX.md`). The suite (343 tests) is hermetic and does NOT depend on the live index.
 - [ ] **Full suite green** — 331 / 2836 locally (perf/heartbeat + AI changes included); re-run on the exact commit going up
-- [ ] **Composer finalized** — name/description = `jikan-me/jikan-rest`; `php: ^8.4.4`; `jikan-me/jikan: ~5.0.0-rc.1`; Sentry `dont-discover`; Goutte autoload dropped
+- [ ] **Composer finalized** — name/description = `jikan-me/jikan-rest`; `php: ^8.4.4`; `jikan-me/jikan: ~5.0.0-rc.2`; Sentry `dont-discover`; Goutte autoload dropped
 - [x] **Dockerfile + compose validated locally** (Colima/arm64); **CI matrix + artifact-freshness job written** — first-green still needs a **real runner**
 - [x] Observability reconciled (`/up`, Sentry REPORTING-gated, log channels) verified in suite
 - [x] Secrets: no real tokens in source; `.env.dist` synced (Octane/CORS/Sentry/heartbeat keys)

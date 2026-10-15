@@ -109,7 +109,7 @@ or `exec` an index run). Otherwise the empty-DB `ParserException`/404 is expecte
 - Verify indexes survived the write load:
   `db.anime.getIndexes()` → `schedule`, `season`, `top_airing`, `top_upcoming`
   (see `docs/DB_INDEXES.md`); text `search` indexes per collection.
-- Heartbeat: `/` + `/v4` `parser_version` should read **v5.0.0-rc.1**.
+- Heartbeat: `/` + `/v4` `parser_version` should read **v5.0.0-rc.2**.
 - Re-index after the jikan rc.1 upgrade (#617/#619): documents stored by earlier builds keep the old
   values until they are refreshed or their cache expires. Re-run `indexer:anime` / `indexer:manga`
   (manga relations gain the related-entries table; `aired` of single episodes becomes UTC midnight),
