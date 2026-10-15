@@ -119,6 +119,18 @@ class Handler extends ExceptionHandler
         // BadResponseException from Jikan PHP API
         // This is basically the response MyAnimeList returns to Jikan
         if ($e instanceof BadResponseException || $e instanceof JikanBadResponseException) {
+            // An upstream failure with no real HTTP status (code 0, or anything outside 100-599)
+            // would make Response throw "The HTTP status code "0" is not valid". Report it as a bad gateway.
+            if ($e->getCode() < 100 || $e->getCode() > 599) {
+                return response()
+                    ->json([
+                        'status' => 502,
+                        'type' => 'BadResponseException',
+                        'message' => 'Something went wrong, please try again later.',
+                        'error' => config('app.debug') ? $e->getMessage() : '',
+                    ], 502);
+            }
+
             switch ($e->getCode()) {
                 case 404:
                     //                    $this->set404Cache($request, $e);
