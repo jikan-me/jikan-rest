@@ -110,6 +110,11 @@ or `exec` an index run). Otherwise the empty-DB `ParserException`/404 is expecte
   `db.anime.getIndexes()` → `schedule`, `season`, `top_airing`, `top_upcoming`
   (see `docs/DB_INDEXES.md`); text `search` indexes per collection.
 - Heartbeat: `/` + `/v4` `parser_version` should read **v5.0.0-rc.1**.
+- Re-index after the jikan rc.1 upgrade (#617/#619): documents stored by earlier builds keep the old
+  values until they are refreshed or their cache expires. Re-run `indexer:anime` / `indexer:manga`
+  (manga relations gain the related-entries table; `aired` of single episodes becomes UTC midnight),
+  `indexer:genres` and `indexer:common`, and re-fetch user profiles (`about` is `null` instead of `""`,
+  statistics above 999 are no longer cut at the comma, last updates keep their progress).
 - Update the living records: parity counts + this batch in `docs/PR_CHANGELOG.md`,
   `docs/UPSTREAM_PR.md` §1 Verification, `docs/PRODUCTION-READINESS.md` gate rows,
   then push + refresh the PR description numbers.

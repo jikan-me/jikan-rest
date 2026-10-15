@@ -313,7 +313,7 @@ class AnimeControllerTest extends TestCase
             'title_japanese' => '俺はルフィ!海賊王になる男だ!',
             'title_romanji' => 'Ore wa Luffy! Kaizoku Ou ni Naru Otoko Da!',
             'duration' => 1475,
-            'aired' => '1999-10-20T00:00:00+09:00',
+            'aired' => '1999-10-20T00:00:00+00:00',
             'filler' => false,
             'recap' => false,
             'synopsis' => 'The series begins with an attack',
