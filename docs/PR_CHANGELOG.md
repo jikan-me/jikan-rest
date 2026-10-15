@@ -1038,3 +1038,37 @@ param. `phpstan` full-project → OK.
   `/manga/2/relations` 200 (were 500 `Undefined array key "related"`); `/manga/2/relations`
   gains Spin-Off and Other (table) entries; `/people/1870/manga` non-empty;
   `/users/Xinil/statistics` `episodes_watched` 8481 (no longer 8).
+
+## 19. jikan v5.0.0-rc.1 (issues #617 / #619)
+
+- `jikan-me/jikan` v5.0.0-beta.2 -> **v5.0.0-rc.1**; constraint `~5.0.0-rc.1` (still accepts
+  5.0.x). `composer.lock` change is the jikan package only (`plugin-api-version` stays 2.9.0).
+- Suite: one upgrade-caused failure, `HandlerParserExceptionTest`: since beta.3
+  `AnimeCard::getMembers()` returns `null` for a card without a member count (beta.2 threw), so
+  the test pins `null`; the ParserException -> 500 mapping test is unchanged. Nothing else moved
+  (`aired` UTC midnight, `getHelpfulCount()` and the card start dates are not asserted anywhere).
+- OpenAPI `nullable: true`: user `location`/`about` and the anime/manga statistics fields
+  (`days_watched`/`days_read`, `mean_score`, `total_entries`, `rewatched`/`reread`,
+  `episodes_watched`, `chapters_read`, `volumes_read`) on `user_profile`, `user_profile_full`,
+  `user_statistics`; person `favorites` and voice-role `role`; news `date`/`mal_id`; genre, magazine
+  and producer `mal_id`; users-search `last_online`; watch-episode `mal_id`; `mal_url.url`;
+  user and `entry_meta` `image_url`. `/users/{u}/reviews` uses the new
+  `pagination_nullable_last_page` schema. `/anime/{id}/characters` documents `favorites` (#593;
+  manga characters do not return it). Already nullable from earlier work: anime `duration`,
+  episode `score`/`url`/`forum_url`, `friends_since`, the shared image schemas.
+- Null safety: `ReviewsResource` tolerates missing pagination keys, `Person` favorites accessor and
+  search document tolerate `null` (search document uses 0), and the genre, magazine and producer
+  indexers skip list entries without a `mal_id` (they used to upsert on `null`).
+  `Rc1NullSafetyTest` covers these and asserts the generated OpenAPI.
+- Live smoke (port 8001, production flags): `/manga/2/relations` 3 groups (Adaptation, Spin-Off,
+  Other); `/anime/21/relations` 6 groups; `/manga/2/statistics` scores 1..10 each carry their own
+  number; `/anime/1/episodes` and `/anime/1/episodes/1` both `1998-10-24T00:00:00+00:00`;
+  `/users/Xinil/statistics` `episodes_watched` 8481, `total_entries` 399;
+  `/users/Xinil/reviews?page=2` (17 reviews) has `has_next_page` false; `/people/1870/manga` 14;
+  `/genres/manga` 79 (after `indexer:genres`); `/anime/1/userupdates` 75 rows.
+  114-route crawl: 113x 200, 1x 404 (`/random/users` on an empty users collection).
+- **Still broken in rc.1 (upstream):** `/anime/{id}/news` and `/manga/{id}/news` return empty `data`
+  (MyAnimeList's per-entry news page uses `h2.mb8` + `div.clearfix` items, rc.1 selects
+  `div.news-unit`; jikan#661), and `/manga/{id}/userupdates` returns empty `data` with
+  `has_next_page: true` (`MangaRecentlyUpdatedByUsersListParser` indexes `explode('/')[1]` on cells
+  like "-"; jikan#663). `/anime/{id}/userupdates` works.
