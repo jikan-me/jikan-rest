@@ -4160,7 +4160,7 @@
                                         "data": {
                                             "allOf": [
                                                 {
-                                                    "$ref": "#/components/schemas/pagination"
+                                                    "$ref": "#/components/schemas/pagination_nullable_last_page"
                                                 },
                                                 {
                                                     "properties": {
@@ -5032,7 +5032,8 @@
                                         },
                                         "last_online": {
                                             "description": "Last Online Date ISO8601",
-                                            "type": "string"
+                                            "type": "string",
+                                            "nullable": true
                                         }
                                     },
                                     "type": "object"
@@ -5200,7 +5201,8 @@
                                                 "properties": {
                                                     "mal_id": {
                                                         "description": "MyAnimeList ID",
-                                                        "type": "string"
+                                                        "type": "string",
+                                                        "nullable": true
                                                     },
                                                     "url": {
                                                         "description": "MyAnimeList URL",
@@ -5293,6 +5295,10 @@
                                 "role": {
                                     "description": "Character's Role",
                                     "type": "string"
+                                },
+                                "favorites": {
+                                    "description": "Number of users who have favorited this character",
+                                    "type": "integer"
                                 },
                                 "voice_actors": {
                                     "type": "array",
@@ -6638,7 +6644,8 @@
                     },
                     "url": {
                         "description": "MyAnimeList URL",
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -6660,7 +6667,8 @@
                     },
                     "url": {
                         "description": "MyAnimeList URL",
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -6678,7 +6686,8 @@
                     },
                     "image_url": {
                         "description": "Image URL",
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "name": {
                         "description": "Entry Name/Title",
@@ -6710,6 +6719,23 @@
                         "properties": {
                             "last_visible_page": {
                                 "type": "integer"
+                            },
+                            "has_next_page": {
+                                "type": "boolean"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "pagination_nullable_last_page": {
+                "properties": {
+                    "pagination": {
+                        "properties": {
+                            "last_visible_page": {
+                                "type": "integer",
+                                "nullable": true
                             },
                             "has_next_page": {
                                 "type": "boolean"
@@ -7168,7 +7194,8 @@
                 "properties": {
                     "mal_id": {
                         "description": "MyAnimeList ID",
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "name": {
                         "description": "Genre Name",
@@ -7209,7 +7236,8 @@
                 "properties": {
                     "mal_id": {
                         "description": "MyAnimeList ID",
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "name": {
                         "description": "Magazine Name",
@@ -7716,7 +7744,8 @@
                             "properties": {
                                 "mal_id": {
                                     "description": "MyAnimeList ID",
-                                    "type": "integer"
+                                    "type": "integer",
+                                    "nullable": true
                                 },
                                 "url": {
                                     "description": "MyAnimeList URL",
@@ -7728,7 +7757,8 @@
                                 },
                                 "date": {
                                     "description": "Post Date ISO8601",
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                 },
                                 "author_username": {
                                     "description": "Author MyAnimeList Username",
@@ -7851,7 +7881,8 @@
                     },
                     "favorites": {
                         "description": "Number of users who have favorited this entry",
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "about": {
                         "description": "Biography",
@@ -7894,7 +7925,8 @@
                             "properties": {
                                 "role": {
                                     "description": "Person's Character's role in the anime",
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                 },
                                 "anime": {
                                     "$ref": "#/components/schemas/anime_meta"
@@ -7977,7 +8009,8 @@
                     },
                     "favorites": {
                         "description": "Number of users who have favorited this entry",
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "about": {
                         "description": "Biography",
@@ -7996,7 +8029,8 @@
                             "properties": {
                                 "role": {
                                     "description": "Person's Character's role in the anime",
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                 },
                                 "anime": {
                                     "$ref": "#/components/schemas/anime_meta"
@@ -8125,7 +8159,8 @@
                 "properties": {
                     "mal_id": {
                         "description": "MyAnimeList ID",
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "url": {
                         "description": "MyAnimeList URL",
@@ -8296,6 +8331,11 @@
                         "type": "string",
                         "nullable": true
                     },
+                    "about": {
+                        "description": "User About (parsed HTML). Null when the user has no About text.",
+                        "type": "string",
+                        "nullable": true
+                    },
                     "statistics": {
                         "properties": {
                             "anime": {
@@ -8304,12 +8344,14 @@
                                     "days_watched": {
                                         "description": "Number of days spent watching Anime",
                                         "type": "number",
-                                        "format": "float"
+                                        "format": "float",
+                                        "nullable": true
                                     },
                                     "mean_score": {
                                         "description": "Mean Score",
                                         "type": "number",
-                                        "format": "float"
+                                        "format": "float",
+                                        "nullable": true
                                     },
                                     "watching": {
                                         "description": "Anime Watching",
@@ -8333,15 +8375,18 @@
                                     },
                                     "total_entries": {
                                         "description": "Total Anime entries on User list",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "rewatched": {
                                         "description": "Anime re-watched",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "episodes_watched": {
                                         "description": "Number of Anime Episodes Watched",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -8352,12 +8397,14 @@
                                     "days_read": {
                                         "description": "Number of days spent reading Manga",
                                         "type": "number",
-                                        "format": "float"
+                                        "format": "float",
+                                        "nullable": true
                                     },
                                     "mean_score": {
                                         "description": "Mean Score",
                                         "type": "number",
-                                        "format": "float"
+                                        "format": "float",
+                                        "nullable": true
                                     },
                                     "reading": {
                                         "description": "Manga Reading",
@@ -8381,19 +8428,23 @@
                                     },
                                     "total_entries": {
                                         "description": "Total Manga entries on User list",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "reread": {
                                         "description": "Manga re-read",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "chapters_read": {
                                         "description": "Number of Manga Chapters Read",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "volumes_read": {
                                         "description": "Number of Manga Volumes Read",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -8617,7 +8668,8 @@
                                             "properties": {
                                                 "image_url": {
                                                     "description": "Image URL JPG (225x335)",
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "nullable": true
                                                 }
                                             },
                                             "type": "object"
@@ -8627,7 +8679,8 @@
                                             "properties": {
                                                 "image_url": {
                                                     "description": "Image URL WEBP (225x335)",
-                                                    "type": "string"
+                                                    "type": "string",
+                                                    "nullable": true
                                                 }
                                             },
                                             "type": "object"
@@ -8637,7 +8690,8 @@
                                 },
                                 "last_online": {
                                     "description": "Last Online Date ISO8601",
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                 },
                                 "gender": {
                                     "description": "User Gender",
@@ -8649,7 +8703,8 @@
                                 },
                                 "location": {
                                     "description": "Location",
-                                    "type": "string"
+                                    "type": "string",
+                                    "nullable": true
                                 },
                                 "joined": {
                                     "description": "Joined Date ISO8601",
@@ -8661,12 +8716,14 @@
                                         "days_watched": {
                                             "description": "Number of days spent watching Anime",
                                             "type": "number",
-                                            "format": "float"
+                                            "format": "float",
+                                            "nullable": true
                                         },
                                         "mean_score": {
                                             "description": "Mean Score",
                                             "type": "number",
-                                            "format": "float"
+                                            "format": "float",
+                                            "nullable": true
                                         },
                                         "watching": {
                                             "description": "Anime Watching",
@@ -8690,15 +8747,18 @@
                                         },
                                         "total_entries": {
                                             "description": "Total Anime entries on User list",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "rewatched": {
                                             "description": "Anime re-watched",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "episodes_watched": {
                                             "description": "Number of Anime Episodes Watched",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         }
                                     },
                                     "type": "object"
@@ -8709,12 +8769,14 @@
                                         "days_read": {
                                             "description": "Number of days spent reading Manga",
                                             "type": "number",
-                                            "format": "float"
+                                            "format": "float",
+                                            "nullable": true
                                         },
                                         "mean_score": {
                                             "description": "Mean Score",
                                             "type": "number",
-                                            "format": "float"
+                                            "format": "float",
+                                            "nullable": true
                                         },
                                         "reading": {
                                             "description": "Manga Reading",
@@ -8738,19 +8800,23 @@
                                         },
                                         "total_entries": {
                                             "description": "Total Manga entries on User list",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "reread": {
                                             "description": "Manga re-read",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "chapters_read": {
                                             "description": "Number of Manga Chapters Read",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "volumes_read": {
                                             "description": "Number of Manga Volumes Read",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         }
                                     },
                                     "type": "object"
@@ -8811,12 +8877,14 @@
                                     "days_watched": {
                                         "description": "Number of days spent watching Anime",
                                         "type": "number",
-                                        "format": "float"
+                                        "format": "float",
+                                        "nullable": true
                                     },
                                     "mean_score": {
                                         "description": "Mean Score",
                                         "type": "number",
-                                        "format": "float"
+                                        "format": "float",
+                                        "nullable": true
                                     },
                                     "watching": {
                                         "description": "Anime Watching",
@@ -8840,15 +8908,18 @@
                                     },
                                     "total_entries": {
                                         "description": "Total Anime entries on User list",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "rewatched": {
                                         "description": "Anime re-watched",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "episodes_watched": {
                                         "description": "Number of Anime Episodes Watched",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
@@ -8859,12 +8930,14 @@
                                     "days_read": {
                                         "description": "Number of days spent reading Manga",
                                         "type": "number",
-                                        "format": "float"
+                                        "format": "float",
+                                        "nullable": true
                                     },
                                     "mean_score": {
                                         "description": "Mean Score",
                                         "type": "number",
-                                        "format": "float"
+                                        "format": "float",
+                                        "nullable": true
                                     },
                                     "reading": {
                                         "description": "Manga Reading",
@@ -8888,19 +8961,23 @@
                                     },
                                     "total_entries": {
                                         "description": "Total Manga entries on User list",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "reread": {
                                         "description": "Manga re-read",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "chapters_read": {
                                         "description": "Number of Manga Chapters Read",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     },
                                     "volumes_read": {
                                         "description": "Number of Manga Volumes Read",
-                                        "type": "integer"
+                                        "type": "integer",
+                                        "nullable": true
                                     }
                                 },
                                 "type": "object"
