@@ -15,7 +15,7 @@
         "ext-mongodb": "*",
         "ext-pcntl": "*",
         "darkaonline/l5-swagger": "^11.0",
-        "jikan-me/jikan": "~5.0.0-beta",
+        "jikan-me/jikan": "~5.0.0-rc.1",
         "jms/serializer": "^3.0",
         "laravel/framework": "^13.0",
         "laravel/octane": "^2.0",

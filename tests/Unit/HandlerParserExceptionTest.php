@@ -13,19 +13,18 @@ use Symfony\Component\DomCrawler\Crawler;
 use Tests\TestCase;
 
 /**
- * jikan v5.0.0-beta.2: an anime card without a member count raises ParserException from
- * MalClient (via a RuntimeException in AnimeCardParser::getMembers()), where it used to
- * escape as an uncaught \TypeError. The handler must answer it as a ParserException 500
+ * jikan v5.0.0-beta.3 changed AnimeCard::getMembers() to return null for a card without a
+ * member count (beta.2 raised ParserException, v4 an uncaught \TypeError). The handler must
+ * still answer any ParserException that the parser does raise as a ParserException 500
  * (never a generic 500 / crash).
  */
 final class HandlerParserExceptionTest extends TestCase
 {
-    public function test_card_without_member_count_throws_runtime_exception(): void
+    public function test_card_without_member_count_returns_null_members(): void
     {
         $parser = new AnimeCardParser(new Crawler('<div class="seasonal-anime"><div class="title">No members here</div></div>'));
 
-        $this->expectException(\RuntimeException::class);
-        $parser->getMembers();
+        $this->assertNull($parser->getMembers());
     }
 
     public function test_parser_exception_from_card_failure_renders_as_parser_exception_500(): void

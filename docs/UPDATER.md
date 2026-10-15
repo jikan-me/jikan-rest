@@ -13,7 +13,7 @@ what a release changed.
 | Layer | Example of what changes |
 |---|---|
 | Code | new image / `git pull` |
-| Dependencies | parser bump (e.g. `jikan-me/jikan` v5.0.0-beta -> beta.2) |
+| Dependencies | parser bump (e.g. `jikan-me/jikan` v5.0.0-beta -> rc.1) |
 | Stored data | fields added or fixed by the parser (manga relations, `friends_since`, producer fields) leave old Mongo documents stale |
 | Search index | Typesense collection schema changes need re-creation and `scout:import` |
 | Safety | preflight (PHP >= 8.4.4, ext-mongodb, Typesense reachable), backup, health check, rollback |

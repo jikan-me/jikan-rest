@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09d2bf3e410eaf551c89f382028db35a",
+    "content-hash": "ec8a7a9247110d8e978ecc965eab8a46",
     "packages": [
         {
             "name": "brick/math",
@@ -1427,16 +1427,16 @@
         },
         {
             "name": "jikan-me/jikan",
-            "version": "v5.0.0-beta.2",
+            "version": "v5.0.0-rc.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "2ed82bc5e7d2a3ef0fe37955592a996f79c413e0"
+                "reference": "8ca9b68a4ae335d594af320d9c1c53321fca6f33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/2ed82bc5e7d2a3ef0fe37955592a996f79c413e0",
-                "reference": "2ed82bc5e7d2a3ef0fe37955592a996f79c413e0",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/8ca9b68a4ae335d594af320d9c1c53321fca6f33",
+                "reference": "8ca9b68a4ae335d594af320d9c1c53321fca6f33",
                 "shasum": ""
             },
             "require": {
@@ -1478,7 +1478,7 @@
             "description": "Jikan is an unofficial MyAnimeList API",
             "support": {
                 "issues": "https://github.com/jikan-me/jikan/issues",
-                "source": "https://github.com/jikan-me/jikan/tree/v5.0.0-beta.2"
+                "source": "https://github.com/jikan-me/jikan/tree/v5.0.0-rc.1"
             },
             "funding": [
                 {
@@ -1486,7 +1486,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-10-15T09:49:38+00:00"
+            "time": "2026-10-15T18:10:42+00:00"
         },
         {
             "name": "jms/metadata",
@@ -12763,7 +12763,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "jikan-me/jikan": 10
+        "jikan-me/jikan": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,
