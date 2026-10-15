@@ -32,11 +32,6 @@ final class RouteSmokeCrawlTest extends TestCase
         'l5-swagger.default.oauth2_callback' => 'Swagger UI helper',
         'l5-swagger.default.docs' => 'serves the generated OpenAPI file, which is not built in CI',
         'l5-swagger.default.asset' => 'Swagger UI static assets',
-        // Known upstream defect: the pinned jikan-me/jikan MalClient::getNewsList() reads an
-        // undefined $this->ghoutte property, so both news routes 500 with any upstream. Remove
-        // these two entries once the parser is bumped.
-        'v4.anime.news' => 'vendor parser bug: MalClient::getNewsList uses undefined $ghoutte',
-        'v4.manga.news' => 'vendor parser bug: MalClient::getNewsList uses undefined $ghoutte',
     ];
 
     /** Fixture values for route parameters. */
