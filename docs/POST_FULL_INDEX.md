@@ -109,7 +109,7 @@ or `exec` an index run). Otherwise the empty-DB `ParserException`/404 is expecte
 - Verify indexes survived the write load:
   `db.anime.getIndexes()` → `schedule`, `season`, `top_airing`, `top_upcoming`
   (see `docs/DB_INDEXES.md`); text `search` indexes per collection.
-- Heartbeat: `/` + `/v4` `parser_version` should read **v5.0.0-beta**.
+- Heartbeat: `/` + `/v4` `parser_version` should read **v5.0.0-beta.2**.
 - Update the living records: parity counts + this batch in `docs/PR_CHANGELOG.md`,
   `docs/UPSTREAM_PR.md` §1 Verification, `docs/PRODUCTION-READINESS.md` gate rows,
   then push + refresh the PR description numbers.

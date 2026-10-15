@@ -1017,3 +1017,24 @@ param. `phpstan` full-project → OK.
 - Env testing wrap-up (same day): native typesense flag fix + version align and
   the `.env.dist` empty-value fix (§45/46 follow-ups) are in `7af754e`; compose/
   Octane search-drift regression filed as issue **#616**.
+
+## 18. jikan v5.0.0-beta.2 (issue #617)
+
+- `jikan-me/jikan` v5.0.0-beta -> **v5.0.0-beta.2**; `composer.json` `php` raised to
+  `^8.4.4` (jikan refuses 8.4.0-8.4.3: php-src GH-17481). `composer.lock` change is scoped
+  to the jikan package (its new `symfony/clock` / `symfony/dom-crawler` requirements were
+  already satisfied by locked versions).
+- No fixture or assertion needed changing: `licensors`, `friends_since` and `last_updates`
+  assertions in the suite come from full documents / `Carbon::now()` and still pass.
+- OpenAPI: `friends_since` (user friends) and profile `about` are `nullable`. Article `views`
+  is not exposed by any endpoint here; the shared `relation` schema has a free-form string
+  `relation`, so manga table relation types need no schema change. `storage/api-docs` is
+  generated and git-ignored.
+- `HandlerParserExceptionTest` pins the anime-card-without-members -> `ParserException` 500
+  mapping; the anime/manga news routes are no longer skipped in `RouteSmokeCrawlTest`
+  (`MalClient::getNewsList()` works again).
+- Live smoke crawl against MAL (114 requests): `/anime/1/news` and `/manga/2/news` 200 (MAL
+  serves no news items for those pages, so `data` is empty); `/anime/1/relations` and
+  `/manga/2/relations` 200 (were 500 `Undefined array key "related"`); `/manga/2/relations`
+  gains Spin-Off and Other (table) entries; `/people/1870/manga` non-empty;
+  `/users/Xinil/statistics` `episodes_watched` 8481 (no longer 8).
