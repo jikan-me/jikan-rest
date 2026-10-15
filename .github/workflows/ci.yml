@@ -172,6 +172,8 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: 8.4
+          # Same extensions as the other jobs: composer.lock needs ext-mongodb, composer.json ext-pcntl.
+          extensions: mongodb-stable, pcntl
           coverage: xdebug
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --no-scripts --prefer-dist
