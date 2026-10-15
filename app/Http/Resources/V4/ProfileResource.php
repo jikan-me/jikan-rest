@@ -131,7 +131,7 @@ use OpenApi\Attributes as OA;
                             ),
                         ],
                     ),
-                    new OA\Property(property: 'about', type: 'string', description: 'User About. NOTE: About information is customizable by users through BBCode on MyAnimeList. This means users can add multimedia content, different text sizes, etc. Due to this freeform, Jikan returns parsed HTML. Validate on your end!'),
+                    new OA\Property(property: 'about', type: 'string', description: 'User About. NOTE: About information is customizable by users through BBCode on MyAnimeList. This means users can add multimedia content, different text sizes, etc. Due to this freeform, Jikan returns parsed HTML. Validate on your end! Null when the user has no About text.', nullable: true),
                 ],
             ),
         ),
