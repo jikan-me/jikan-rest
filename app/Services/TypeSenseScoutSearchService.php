@@ -6,11 +6,10 @@ use App\Contracts\Repository;
 use App\Contracts\SearchAnalyticsService;
 use App\JikanApiSearchableModel;
 use App\Support\JikanConfig;
+use App\Support\SearchEngineFailure;
 use Illuminate\Support\Str;
 use Laravel\Scout\Builder;
 use Typesense\Documents;
-use Typesense\Exceptions\ApiException;
-use Typesense\Exceptions\TypesenseClientError;
 
 class TypeSenseScoutSearchService implements ScoutSearchService
 {
@@ -73,10 +72,15 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             try {
                 $results = $documents->search($options);
             } catch (\Throwable $e) {
-                // Missing/unreachable collection (e.g. not yet imported) or a
-                // malformed request: degrade to an empty result instead of 500,
-                // matching the graceful empty-index behaviour of other searches.
+                // Missing/unreachable collection (e.g. not yet imported): degrade
+                // to an empty result instead of 500, matching the graceful
+                // empty-index behaviour of other searches. Auth/config errors
+                // (401/403, bad API key) and anything else are reported and rethrown
+                // so a misconfigured deployment is not silently serving nothing.
                 report($e);
+                if (! SearchEngineFailure::isDegradable($e)) {
+                    throw $e;
+                }
                 $results = ['hits' => [], 'found' => 0, 'out_of' => 0, 'page' => 1,
                             'request_params' => ['q' => $query, 'per_page' => $options['per_page'] ?? 250]];
             }

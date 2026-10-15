@@ -11,6 +11,7 @@ use App\Dto\PeopleSearchCommand;
 use App\Dto\ProducersSearchCommand;
 use App\Dto\UserByIdLookupCommand;
 use App\Dto\UsersSearchCommand;
+use App\Support\SearchEngineFailure;
 use OpenApi\Attributes as OA;
 
 class SearchController extends Controller
@@ -512,9 +513,10 @@ class SearchController extends Controller
     }
 
     /**
-     * Search is best-effort: a missing/unreachable search (Typesense) collection
-     * must render an EMPTY result (200) rather than 500 — any search failure is
-     * degraded gracefully for the whole search surface.
+     * Search is best-effort for engine outages: a missing/unreachable search
+     * (Typesense) collection renders an EMPTY result (200) rather than 500.
+     * Anything else (404s such as an unknown user, validation, auth/config
+     * errors, bugs) propagates to the exception handler.
      *
      * @template T of \Illuminate\Http\Resources\Json\ResourceCollection|\Illuminate\Http\Resources\Json\JsonResource|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      *
@@ -525,6 +527,10 @@ class SearchController extends Controller
         try {
             return $this->mediator->send($command);
         } catch (\Throwable $e) {
+            if (! SearchEngineFailure::isDegradable($e)) {
+                throw $e;
+            }
+
             try {
                 report($e);
             } catch (\Throwable $ignore) {
