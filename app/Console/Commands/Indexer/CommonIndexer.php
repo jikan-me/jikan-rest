@@ -66,6 +66,9 @@ class CommonIndexer extends Command
         $itemCount = count($results);
         echo "Parsed {$itemCount} magazines\n";
         foreach ($results as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // magazine without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('magazines')
                 ->updateOrInsert(
                     [

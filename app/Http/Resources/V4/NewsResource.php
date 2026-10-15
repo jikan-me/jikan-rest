@@ -16,10 +16,10 @@ use OpenApi\Attributes as OA;
             items: new OA\Items(
                 type: 'object',
                 properties: [
-                    new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
+                    new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID', nullable: true),
                     new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
                     new OA\Property(property: 'title', type: 'string', description: 'Title'),
-                    new OA\Property(property: 'date', type: 'string', description: 'Post Date ISO8601'),
+                    new OA\Property(property: 'date', type: 'string', description: 'Post Date ISO8601', nullable: true),
                     new OA\Property(property: 'author_username', type: 'string', description: 'Author MyAnimeList Username'),
                     new OA\Property(property: 'author_url', type: 'string', description: 'Author Profile URL'),
                     new OA\Property(property: 'forum_url', type: 'string', description: 'Forum topic URL'),

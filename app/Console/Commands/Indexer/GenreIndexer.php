@@ -67,6 +67,9 @@ class GenreIndexer extends Command
         $itemCount = count($results['genres']);
         echo "Parsed {$itemCount} anime genres\n";
         foreach ($results['genres'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('genres_anime')
                 ->updateOrInsert(
                     [
@@ -85,6 +88,9 @@ class GenreIndexer extends Command
         $itemCount = count($results['explicit_genres']);
         echo "Parsed {$itemCount} anime explicit_genres\n";
         foreach ($results['explicit_genres'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('explicit_genres_anime')
                 ->updateOrInsert(
                     [
@@ -103,6 +109,9 @@ class GenreIndexer extends Command
         $itemCount = count($results['themes']);
         echo "Parsed {$itemCount} anime themes\n";
         foreach ($results['themes'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('themes_anime')
                 ->updateOrInsert(
                     [
@@ -121,6 +130,9 @@ class GenreIndexer extends Command
         $itemCount = count($results['demographics']);
         echo "Parsed {$itemCount} anime demographics\n";
         foreach ($results['demographics'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('demographics_anime')
                 ->updateOrInsert(
                     [
@@ -158,6 +170,9 @@ class GenreIndexer extends Command
         $itemCount = count($results['genres']);
         echo "Parsed {$itemCount} manga genres\n";
         foreach ($results['genres'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('genres_manga')
                 ->updateOrInsert(
                     [
@@ -176,6 +191,9 @@ class GenreIndexer extends Command
         $itemCount = count($results['explicit_genres']);
         echo "Parsed {$itemCount} manga explicit_genres\n";
         foreach ($results['explicit_genres'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('explicit_genres_manga')
                 ->updateOrInsert(
                     [
@@ -194,6 +212,9 @@ class GenreIndexer extends Command
         $itemCount = count($results['themes']);
         echo "Parsed {$itemCount} manga themes\n";
         foreach ($results['themes'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('themes_manga')
                 ->updateOrInsert(
                     [
@@ -212,6 +233,9 @@ class GenreIndexer extends Command
         $itemCount = count($results['demographics']);
         echo "Parsed {$itemCount} manga demographics\n";
         foreach ($results['demographics'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('demographics_manga')
                 ->updateOrInsert(
                     [

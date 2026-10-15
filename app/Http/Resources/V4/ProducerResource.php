@@ -12,7 +12,7 @@ use OpenApi\Attributes as OA;
     schema: 'producer',
     description: 'Producers Resource',
     properties: [
-        new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
+        new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID', nullable: true),
         new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
         new OA\Property(
             property: 'titles',

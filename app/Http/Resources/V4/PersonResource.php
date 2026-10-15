@@ -26,7 +26,7 @@ use OpenApi\Attributes as OA;
             items: new OA\Items(type: 'string'),
         ),
         new OA\Property(property: 'birthday', type: 'string', description: 'Birthday Date ISO8601', nullable: true),
-        new OA\Property(property: 'favorites', type: 'integer', description: 'Number of users who have favorited this entry'),
+        new OA\Property(property: 'favorites', type: 'integer', description: 'Number of users who have favorited this entry', nullable: true),
         new OA\Property(property: 'about', type: 'string', description: 'Biography', nullable: true),
     ],
 )]

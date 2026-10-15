@@ -12,7 +12,7 @@ use OpenApi\Attributes as OA;
     schema: 'magazine',
     description: 'Magazine Resource',
     properties: [
-        new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
+        new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID', nullable: true),
         new OA\Property(property: 'name', type: 'string', description: 'Magazine Name'),
         new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
         new OA\Property(property: 'count', type: 'integer', description: 'Magazine\'s manga count'),

@@ -22,7 +22,7 @@ use MongoDB\BSON\UTCDateTime;
  * @property array<string, mixed> $alternate_names
  * @property UTCDateTime|null $birthday
  * @property int $favorites
- * @property int $member_favorites
+ * @property int|null $member_favorites
  * @property string|null $about
  * @property array<string, mixed> $voice_acting_roles
  * @property array<string, mixed> $anime_staff_positions
@@ -82,7 +82,7 @@ class Person extends JikanApiSearchableModel
     /** @noinspection PhpUnused */
     public function getFavoritesAttribute(): mixed
     {
-        return $this->attributes['member_favorites'];
+        return $this->attributes['member_favorites'] ?? null;
     }
 
     /** @noinspection PhpUnused */
@@ -122,7 +122,7 @@ class Person extends JikanApiSearchableModel
             'given_name' => $this->given_name,
             'family_name' => $this->family_name,
             'alternate_names' => $this->alternate_names,
-            'member_favorites' => $this->member_favorites,
+            'member_favorites' => (int) ($this->member_favorites ?? 0),
             'birthday' => $this->convertToTimestamp($this->birthday),
         ];
     }

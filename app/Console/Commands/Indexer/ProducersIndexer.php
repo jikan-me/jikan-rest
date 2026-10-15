@@ -154,6 +154,9 @@ class ProducersIndexer extends Command
         )['producers'];
 
         foreach ($producers as $producer) {
+            if (($producer['mal_id'] ?? null) === null) {
+                continue; // producer without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $this->ids[] = $producer['mal_id'];
         }
 

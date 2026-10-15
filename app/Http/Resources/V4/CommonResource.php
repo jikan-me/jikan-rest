@@ -95,7 +95,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
         new OA\Property(property: 'type', type: 'string', description: 'Type of resource'),
         new OA\Property(property: 'name', type: 'string', description: 'Resource Name/Title'),
-        new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
+        new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL', nullable: true),
     ],
 )]
 
@@ -107,7 +107,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
         new OA\Property(property: 'type', type: 'string', description: 'Type of resource'),
         new OA\Property(property: 'title', type: 'string', description: 'Resource Name/Title'),
-        new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
+        new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL', nullable: true),
     ],
 )]
 
@@ -118,7 +118,7 @@ use OpenApi\Attributes as OA;
     properties: [
         new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
         new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
-        new OA\Property(property: 'image_url', type: 'string', description: 'Image URL'),
+        new OA\Property(property: 'image_url', type: 'string', description: 'Image URL', nullable: true),
         new OA\Property(property: 'name', type: 'string', description: 'Entry Name/Title'),
     ],
 )]
@@ -147,6 +147,21 @@ use OpenApi\Attributes as OA;
             type: 'object',
             properties: [
                 new OA\Property(property: 'last_visible_page', type: 'integer'),
+                new OA\Property(property: 'has_next_page', type: 'boolean'),
+            ],
+        ),
+    ],
+)]
+
+#[OA\Schema(
+    schema: 'pagination_nullable_last_page',
+    type: 'object',
+    properties: [
+        new OA\Property(
+            property: 'pagination',
+            type: 'object',
+            properties: [
+                new OA\Property(property: 'last_visible_page', type: 'integer', nullable: true),
                 new OA\Property(property: 'has_next_page', type: 'boolean'),
             ],
         ),

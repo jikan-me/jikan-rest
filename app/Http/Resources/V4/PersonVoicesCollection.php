@@ -16,7 +16,7 @@ use OpenApi\Attributes as OA;
             items: new OA\Items(
                 type: 'object',
                 properties: [
-                    new OA\Property(property: 'role', type: 'string', description: 'Person\'s Character\'s role in the anime'),
+                    new OA\Property(property: 'role', type: 'string', description: 'Person\'s Character\'s role in the anime', nullable: true),
                     new OA\Property(property: 'anime', type: 'object', description: 'The anime in which the person is voice acting in', ref: '#/components/schemas/anime_meta'),
                     new OA\Property(property: 'character', type: 'object', description: 'The character the person is voice acting for', ref: '#/components/schemas/character_meta'),
                 ],

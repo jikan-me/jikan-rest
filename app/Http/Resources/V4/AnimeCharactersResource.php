@@ -28,6 +28,7 @@ use OpenApi\Attributes as OA;
                         ],
                     ),
                     new OA\Property(property: 'role', type: 'string', description: 'Character\'s Role'),
+                    new OA\Property(property: 'favorites', type: 'integer', description: 'Number of users who have favorited this character'),
                     new OA\Property(
                         property: 'voice_actors',
                         type: 'array',

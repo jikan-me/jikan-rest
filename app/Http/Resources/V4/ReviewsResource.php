@@ -111,8 +111,8 @@ class ReviewsResource extends JsonResource
     {
         return [
             'pagination' => [
-                'last_visible_page' => $this['last_visible_page'],
-                'has_next_page' => $this['has_next_page'],
+                'last_visible_page' => $this['last_visible_page'] ?? null,
+                'has_next_page' => $this['has_next_page'] ?? false,
             ],
             'data' => $this['results'],
         ];

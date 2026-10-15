@@ -374,7 +374,7 @@ class SearchController extends Controller
         ],
     )]
 
-    #[OA\Schema(schema: 'users_search', description: 'User Results', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', properties: [new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'), new OA\Property(property: 'username', type: 'string', description: 'MyAnimeList Username'), new OA\Property(property: 'images', type: 'object', ref: '#/components/schemas/user_images'), new OA\Property(property: 'last_online', type: 'string', description: 'Last Online Date ISO8601')]))])])]
+    #[OA\Schema(schema: 'users_search', description: 'User Results', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', properties: [new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'), new OA\Property(property: 'username', type: 'string', description: 'MyAnimeList Username'), new OA\Property(property: 'images', type: 'object', ref: '#/components/schemas/user_images'), new OA\Property(property: 'last_online', type: 'string', description: 'Last Online Date ISO8601', nullable: true)]))])])]
     public function users(UsersSearchCommand $request): mixed
     {
         return $this->runSearch($request);
