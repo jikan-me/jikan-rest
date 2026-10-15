@@ -5,7 +5,7 @@ The public **v4 JSON contract is unchanged** for valid requests. This page lists
 an operator needs to know that is *not* a contract change. Each section notes what it was
 on the Lumen release ("before") and what it is now.
 
-**PHP 8.4 or newer is required** (`composer.json` `php: ^8.4`); the Docker image and CI use 8.4.
+**PHP 8.4.4 or newer is required** (`composer.json` `php: ^8.4.4`; jikan v5 refuses 8.4.0-8.4.3, which have an HTML5-parser bug, php-src GH-17481, that can corrupt UTF-8); the Docker image and CI use 8.4.
 
 ## New and changed environment variables
 

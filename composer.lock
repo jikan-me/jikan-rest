@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77cd9e9994458611e0911888a0722dbf",
+    "content-hash": "09d2bf3e410eaf551c89f382028db35a",
     "packages": [
         {
             "name": "brick/math",
@@ -1427,33 +1427,35 @@
         },
         {
             "name": "jikan-me/jikan",
-            "version": "v5.0.0-beta",
+            "version": "v5.0.0-beta.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jikan-me/jikan.git",
-                "reference": "50b5929a08a635c59e9713f7dbc998a9bdf842cf"
+                "reference": "2ed82bc5e7d2a3ef0fe37955592a996f79c413e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/50b5929a08a635c59e9713f7dbc998a9bdf842cf",
-                "reference": "50b5929a08a635c59e9713f7dbc998a9bdf842cf",
+                "url": "https://api.github.com/repos/jikan-me/jikan/zipball/2ed82bc5e7d2a3ef0fe37955592a996f79c413e0",
+                "reference": "2ed82bc5e7d2a3ef0fe37955592a996f79c413e0",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^8.4",
+                "php": "^8.4.4",
                 "symfony/browser-kit": "^8.0",
+                "symfony/clock": "^7.4 || ^8.0",
                 "symfony/css-selector": "^8.0",
+                "symfony/dom-crawler": "^7.4 || ^8.0",
                 "symfony/http-client": "^8.0"
             },
             "require-dev": {
                 "brianium/paratest": "^7.3",
-                "doctrine/collections": "^1.5",
                 "friendsofphp/php-cs-fixer": "^3.8",
+                "infection/infection": "^0.35.7",
                 "jikan-me/jikan-fixtures": "dev-master",
                 "php-parallel-lint/php-parallel-lint": "^1.4",
                 "phpro/grumphp": "^2",
-                "squizlabs/php_codesniffer": "^3.3"
+                "phpstan/phpstan": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -1476,7 +1478,7 @@
             "description": "Jikan is an unofficial MyAnimeList API",
             "support": {
                 "issues": "https://github.com/jikan-me/jikan/issues",
-                "source": "https://github.com/jikan-me/jikan/tree/v5.0.0-beta"
+                "source": "https://github.com/jikan-me/jikan/tree/v5.0.0-beta.2"
             },
             "funding": [
                 {
@@ -1484,7 +1486,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-10-11T20:26:45+00:00"
+            "time": "2026-10-15T09:49:38+00:00"
         },
         {
             "name": "jms/metadata",
@@ -12766,7 +12768,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.4",
+        "php": "^8.4.4",
         "ext-json": "*",
         "ext-mongodb": "*",
         "ext-pcntl": "*"

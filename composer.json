@@ -10,7 +10,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^8.4",
+        "php": "^8.4.4",
         "ext-json": "*",
         "ext-mongodb": "*",
         "ext-pcntl": "*",
