@@ -62,4 +62,50 @@ If Redis is taking too long to restart, follow this: https://stackoverflow.com/a
 5. `sudo service supervisor start`
 
 
+## Typesense segfaults on start under WSL2 (kernel without `/proc/self/io`)
+
+Symptom: a native `typesense-server` binary (tested with 27.1) crashes with a
+segmentation fault right after start-up on WSL2. Cause: some WSL2 kernels
+(seen on 6.18.x) do not expose `/proc/self/io`, which Typesense reads for its
+process metrics, and it dereferences the missing file.
+
+Workaround (development environment only): preload a tiny shim that redirects
+opens of `/proc/self/io` to a file containing zeroed counters.
+
+```sh
+mkdir -p /tmp/shim && cd /tmp/shim
+printf 'rchar: 0
+wchar: 0
+syscr: 0
+syscw: 0
+read_bytes: 0
+write_bytes: 0
+cancelled_write_bytes: 0
+' > fakeio.txt
+cat > shim.c <<'EOF'
+#define _GNU_SOURCE
+#include <dlfcn.h>
+#include <fcntl.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+#define FAKE "/tmp/shim/fakeio.txt"
+#define FIX(p) ((p) && !strcmp((p), "/proc/self/io") ? FAKE : (p))
+#define OPEN(name) int name(const char *p, int f, ...) { static int (*r)(const char *, int, ...); if (!r) r = dlsym(RTLD_NEXT, #name); va_list a; va_start(a, f); int m = va_arg(a, int); va_end(a); return r(FIX(p), f, m); }
+#define OPENAT(name) int name(int d, const char *p, int f, ...) { static int (*r)(int, const char *, int, ...); if (!r) r = dlsym(RTLD_NEXT, #name); va_list a; va_start(a, f); int m = va_arg(a, int); va_end(a); return r(d, FIX(p), f, m); }
+#define FOPEN(name) FILE *name(const char *p, const char *m) { static FILE *(*r)(const char *, const char *); if (!r) r = dlsym(RTLD_NEXT, #name); return r(FIX(p), m); }
+OPEN(open) OPEN(open64) OPENAT(openat) OPENAT(openat64) FOPEN(fopen) FOPEN(fopen64)
+EOF
+gcc -shared -fPIC -o shim.so shim.c -ldl
+LD_PRELOAD=/tmp/shim/shim.so ./typesense-server --data-dir=./data --api-key=testkey --api-port=8109
+```
+
+The shim intercepts `open`, `open64`, `openat`, `openat64`, `fopen` and
+`fopen64` for exactly the path `/proc/self/io` and opens the zeroed
+`fakeio.txt` (`rchar`, `wchar`, `syscr`, `syscw`, `read_bytes`, `write_bytes`,
+`cancelled_write_bytes`) instead; every other path passes through untouched.
+
+This is a local dev-environment workaround, not a Jikan or Typesense bug fix.
+It is not needed with the official Docker image on a normal kernel, nor in CI.
+
 More troubleshooting Q/A on the way, please let me know if there's anything else I should add onto here.
