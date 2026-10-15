@@ -589,12 +589,6 @@ parameters:
 			path: app/Features/QueryCurrentAnimeSeasonHandler.php
 
 		-
-			message: '#^Call to an undefined method App\\Support\\CachedData\:\:get\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Features/QueryMangaListOfUserHandler.php
-
-		-
 			message: '#^Method App\\Features\\QueryRandomCharacterHandler\:\:resource\(\) has parameter \$results with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
 			identifier: missingType.generics
 			count: 1
@@ -1265,12 +1259,6 @@ parameters:
 			identifier: missingType.generics
 			count: 1
 			path: app/Services/DefaultScoutSearchService.php
-
-		-
-			message: '#^Access to an undefined property App\\Dto\\QueryListOfUserCommand\:\:\$status\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Services/JikanUserListRequestMapperService.php
 
 		-
 			message: '#^Method App\\Services\\MongoSearchService\:\:search\(\) never returns Illuminate\\Database\\Eloquent\\Builder so it can be removed from the return type\.$#'

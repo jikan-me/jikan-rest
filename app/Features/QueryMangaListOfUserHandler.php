@@ -31,11 +31,11 @@ final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
 
     public function resource(CachedData $results): JsonResource
     {
-        if ($results->isEmpty() || count($results->get('manga')) === 0) {
+        if ($results->isEmpty() || ! isset($results['manga']) || count($results['manga']) === 0) {
             return new UserProfileMangaListCollection([]);
         }
 
-        $listResults = $results->get('manga');
+        $listResults = $results['manga'];
         foreach ($listResults as &$result) {
             $result = (new UserProfileMangaListResource($result));
         }
