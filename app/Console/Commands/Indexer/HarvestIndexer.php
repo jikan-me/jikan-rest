@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\Storage;
  */
 class HarvestIndexer extends Command
 {
+    use FetchesWithTimeout;
+
     protected $signature = 'indexer:harvest
                             {--kind=all : all|anime|manga}
                             {--no-staff : Skip the anime /staff pass (characters + voice actors only)}
@@ -34,6 +36,7 @@ class HarvestIndexer extends Command
                             {--reverse : Start from the end of the id list}
                             {--index=0 : Start from a specific index}
                             {--delay=2 : Seconds between requests}
+                            {--timeout=30 : Seconds before a single HTTP request is abandoned}
                             {--limit=0 : Stop after N entries (0 = all)}';
 
     protected $description = 'Harvest character/person MAL ids from stored anime/manga (relational indexer, phase A)';
@@ -203,10 +206,7 @@ class HarvestIndexer extends Command
     private function fetch(string $path): array
     {
         $url = config('app.url').$path;
-        $body = @file_get_contents($url);
-        if ($body === false) {
-            throw new \RuntimeException("unreachable {$url}");
-        }
+        $body = $this->httpGet($url);
         $json = json_decode($body, true);
         if (! is_array($json)) {
             throw new \RuntimeException("invalid JSON from {$url}");

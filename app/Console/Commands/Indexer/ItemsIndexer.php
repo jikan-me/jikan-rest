@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Storage;
  */
 class ItemsIndexer extends Command
 {
+    use FetchesWithTimeout;
+
     protected $signature = 'indexer:items
                             {family : anime|manga|character|people}
                             {--source=auto : auto|harvest|purarue — where to read ids from}
@@ -30,6 +32,7 @@ class ItemsIndexer extends Command
                             {--reverse : Start from the end of the id list}
                             {--index=0 : Start from a specific index}
                             {--delay=3 : Seconds between requests}
+                            {--timeout=30 : Seconds before a single HTTP request is abandoned}
                             {--limit=0 : Stop after N entries (0 = all)}';
 
     protected $description = 'Index a family of MAL entries (anime|manga|character|people) by MAL id';
@@ -112,7 +115,7 @@ class ItemsIndexer extends Command
             echo 'Indexing/Updating '.($i + 1)."/{$count} {$url} [MAL ID: {$id}] \n";
 
             try {
-                $response = json_decode((string) file_get_contents($url), true);
+                $response = json_decode($this->httpGet($url), true);
                 if (isset($response['error']) && $response['status'] != 404) {
                     echo "[SKIPPED] Failed to fetch {$url} - {$response['error']}\n";
                     $failedIds[] = $id;
@@ -143,7 +146,7 @@ class ItemsIndexer extends Command
     {
         $url = "https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/{$cache}.json";
         $this->info("Fetching {$cache} from {$url}");
-        $decoded = json_decode((string) file_get_contents($url), true);
+        $decoded = json_decode($this->httpGet($url), true);
 
         $ids = $decoded['ids'] ?? array_merge($decoded['sfw'] ?? [], $decoded['nsfw'] ?? []);
         $ids = array_values(array_unique(array_map('intval', (array) $ids)));
