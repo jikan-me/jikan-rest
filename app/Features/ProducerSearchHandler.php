@@ -12,7 +12,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class ProducerSearchHandler extends SearchRequestHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -20,9 +20,9 @@ class ProducerSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @inheritDoc
+     * @param  LengthAwarePaginator<int, mixed>  $paginator
      */
-    protected function renderResponse(LengthAwarePaginator $paginator)
+    protected function renderResponse(LengthAwarePaginator $paginator): ProducerCollection
     {
         return new ProducerCollection($paginator);
     }

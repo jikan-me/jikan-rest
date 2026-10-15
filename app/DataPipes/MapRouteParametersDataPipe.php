@@ -3,8 +3,8 @@
 namespace App\DataPipes;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Spatie\LaravelData\DataPipes\DataPipe;
+use Spatie\LaravelData\Support\Creation\CreationContext;
 use Spatie\LaravelData\Support\DataClass;
 
 /**
@@ -14,14 +14,18 @@ use Spatie\LaravelData\Support\DataClass;
  */
 final class MapRouteParametersDataPipe implements DataPipe
 {
-    public function handle(mixed $payload, DataClass $class, Collection $properties): Collection
+    /**
+     * @param  array<string, mixed>  $properties
+     * @return array<string, mixed>
+     */
+    public function handle(mixed $payload, DataClass $class, array $properties, CreationContext $creationContext): array
     {
         if ($payload instanceof Request) {
             foreach ($class->properties as $dataProperty) {
                 $routeParamVal = $payload->route($dataProperty->inputMappedName ?? $dataProperty->name);
 
-                if (!is_null($routeParamVal)) {
-                    $properties->put($dataProperty->name, $routeParamVal);
+                if (! is_null($routeParamVal)) {
+                    $properties[$dataProperty->name] = $routeParamVal;
                 }
             }
         }

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# CI build: tests + static analysis + style.
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+./script/test
+"$PWD/tools/dev/php" -d error_reporting=24575 -d memory_limit=-1 vendor/bin/phpstan analyse --no-progress
+"$PWD/tools/dev/php" vendor/bin/pint --test
+echo "cibuild ok."

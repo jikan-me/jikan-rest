@@ -1,0 +1,17 @@
+{
+    "data": [
+        "@list",
+        {
+            "entry": [
+                "@list",
+                {
+                    "mal_id": "@int",
+                    "name": "@string",
+                    "type": "@string",
+                    "url": "@string"
+                }
+            ],
+            "relation": "@string"
+        }
+    ]
+}

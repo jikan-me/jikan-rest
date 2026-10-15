@@ -6,7 +6,6 @@ use App\Dto\UserFullLookupCommand;
 use App\Http\Resources\V4\ProfileFullResource;
 use App\Support\CachedData;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @extends UserLookupHandler<UserFullLookupCommand>

@@ -3,9 +3,9 @@
 namespace App\Features;
 
 use App\Dto\MangaNewsLookupCommand;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use App\Support\CachedData;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Manga\MangaNewsRequest;
 
@@ -19,13 +19,17 @@ final class MangaNewsLookupHandler extends RequestHandlerWithScraperCache
         return MangaNewsLookupCommand::class;
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
+        $id = $requestParams->get('id');
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => $jikan->getNewsList(new MangaNewsRequest($id, $page)),
-            $requestParams->get("page", 1)
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getNewsList(new MangaNewsRequest($id, $page)),
+            $requestParams->get('page', 1)
         );
     }
 }

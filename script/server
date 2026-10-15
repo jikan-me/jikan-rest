@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Start the app: SERVER=serve|roadrunner|frankenphp (default roadrunner).
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SERVER="${SERVER:-roadrunner}"
+./install.sh --check >/dev/null
+case "$SERVER" in
+  serve)      exec "$PWD/tools/dev/php" artisan serve --host=127.0.0.1 --port=8000 ;;
+  roadrunner) exec env OCTANE_SERVER=roadrunner "$PWD/tools/dev/php" artisan octane:start --server=roadrunner --port=8000 ;;
+  frankenphp)
+    FDIR="${FPHP_DIR:-/tmp/frankenphp}"
+    export PATH="$FDIR:$PATH"
+    exec env OCTANE_SERVER=frankenphp "$PWD/tools/dev/php" artisan octane:start --server=frankenphp --port=8000 ;;
+  *) echo "SERVER=$SERVER not in {serve,roadrunner,frankenphp}"; exit 2 ;;
+esac

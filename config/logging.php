@@ -1,7 +1,8 @@
 <?php
 
-use Monolog\Handler\StreamHandler;
+use Monolog\Handler\NullHandler;
 use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Processor\PsrLogMessageProcessor;
 
 return [
 
@@ -29,8 +30,7 @@ return [
     |
     */
 
-    'deprecations' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
-
+    'deprecations' => env('LOG_DEPRECATIONS_CHANNEL', 'daily'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,16 +56,15 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/lumen.log'),
+            'path' => storage_path('logs/jikan.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/daily/lumen.log'),
+            'path' => storage_path('logs/daily/jikan.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => 14,
-//            'replace_placeholders' => true, // enabled by default on 10.x - IDK what it does
         ],
 
         'slack' => [
@@ -86,7 +85,7 @@ return [
                 'port' => env('PAPERTRAIL_PORT'),
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
-            'processors' => [Monolog\Processor\PsrLogMessageProcessor::class],
+            'processors' => [PsrLogMessageProcessor::class],
         ],
 
         'syslog' => [
@@ -104,7 +103,7 @@ return [
 
         'null' => [
             'driver' => 'monolog',
-            'handler' => \Monolog\Handler\NullHandler::class,
+            'handler' => NullHandler::class,
         ],
 
         'emergency' => [

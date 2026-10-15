@@ -19,7 +19,7 @@ final class QueryRandomCharacterHandler extends QueryRandomItemHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

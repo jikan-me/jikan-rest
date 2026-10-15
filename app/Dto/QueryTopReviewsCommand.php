@@ -19,7 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryTopReviewsCommand extends QueryTopItemsCommand implements DataRequest
 {
-    use HasRequestFingerprint, HasPreliminaryParameter, HasSpoilersParameter, PreparesData;
+    use HasPreliminaryParameter, HasRequestFingerprint, HasSpoilersParameter, PreparesData;
 
     #[WithCast(EnumCast::class, TopReviewsTypeEnum::class), EnumValidation(TopReviewsTypeEnum::class)]
     public TopReviewsTypeEnum|Optional $type;

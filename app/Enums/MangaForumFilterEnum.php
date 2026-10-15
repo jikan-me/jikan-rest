@@ -2,7 +2,6 @@
 
 namespace App\Enums;
 
-
 use Spatie\Enum\Laravel\Enum;
 
 /**
@@ -10,6 +9,4 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self chapters()
  * @method static self other()
  */
-final class MangaForumFilterEnum extends Enum
-{
-}
+final class MangaForumFilterEnum extends Enum {}

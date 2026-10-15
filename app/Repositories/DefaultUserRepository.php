@@ -2,13 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repository;
 use App\Contracts\UserRepository;
 use App\Profile;
 
-/**
- * @implements Repository<Profile>
- */
 final class DefaultUserRepository extends DatabaseRepository implements UserRepository
 {
     public function __construct()

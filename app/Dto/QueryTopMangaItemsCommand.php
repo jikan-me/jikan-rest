@@ -10,7 +10,6 @@ use App\Enums\MangaTypeEnum;
 use App\Enums\TopMangaFilterEnum;
 use App\Http\Resources\V4\MangaCollection;
 use App\Rules\Attributes\EnumValidation;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
 
@@ -19,7 +18,7 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryTopMangaItemsCommand extends QueryTopItemsCommand implements DataRequest
 {
-    use PreparesData, HasSfwParameter;
+    use HasSfwParameter, PreparesData;
 
     #[WithCast(EnumCast::class, MangaTypeEnum::class), EnumValidation(MangaTypeEnum::class)]
     public MangaTypeEnum|Optional $type;

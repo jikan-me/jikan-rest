@@ -2,18 +2,16 @@
 
 namespace App\Console\Commands\Indexer;
 
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Jikan\Request\Schedule\ScheduleRequest;
 use Jikan\Request\Seasonal\SeasonalRequest;
-
 
 class CurrentSeasonIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
+     *
      * @var string
      */
     protected $signature = 'indexer:anime-current-season';
@@ -52,7 +50,7 @@ class CurrentSeasonIndexer extends Command
         $results = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getSeasonal(new SeasonalRequest()),
+                    ->getSeasonal(new SeasonalRequest),
                 'json'
             ),
             true
@@ -60,6 +58,7 @@ class CurrentSeasonIndexer extends Command
 
         if (HttpHelper::hasError($results)) {
             echo "FAILED: {$results->original['error']}\n";
+
             return;
         }
 
@@ -67,7 +66,7 @@ class CurrentSeasonIndexer extends Command
         $itemCount = count($anime);
         echo "Anime in current season: {$itemCount} entries\n";
         foreach ($anime as $i => $entry) {
-            $url = env('APP_URL') . "/v4/anime/{$entry['mal_id']}";
+            $url = config('app.url')."/v4/anime/{$entry['mal_id']}";
 
             file_get_contents($url);
             sleep(3); // prevent rate-limit
@@ -79,6 +78,6 @@ class CurrentSeasonIndexer extends Command
             }
         }
 
-        echo str_pad("Indexing complete", 100).PHP_EOL;
+        echo str_pad('Indexing complete', 100).PHP_EOL;
     }
 }

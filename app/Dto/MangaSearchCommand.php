@@ -9,7 +9,6 @@ use App\Enums\MangaStatusEnum;
 use App\Enums\MangaTypeEnum;
 use App\Http\Resources\V4\MangaCollection;
 use App\Rules\Attributes\EnumValidation;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Attributes\Validation\StringType;
@@ -31,8 +30,8 @@ final class MangaSearchCommand extends MediaSearchCommand implements DataRequest
     public string|Optional $magazines;
 
     #[
-        MapInputName("order_by"),
-        MapOutputName("order_by"),
+        MapInputName('order_by'),
+        MapOutputName('order_by'),
         EnumValidation(MangaOrderByEnum::class),
         WithCast(EnumCast::class, MangaOrderByEnum::class)
     ]

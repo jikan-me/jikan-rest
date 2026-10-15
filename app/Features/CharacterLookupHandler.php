@@ -7,7 +7,6 @@ use App\Http\Resources\V4\CharacterResource;
 use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @extends ItemLookupHandler<CharacterLookupCommand, JsonResponse>
@@ -20,7 +19,7 @@ final class CharacterLookupHandler extends ItemLookupHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class IncrementalIndexer extends Command
 {
-    /**
-     * @var bool
-     */
     private bool $cancelled = false;
 
     /**
@@ -23,20 +20,29 @@ class IncrementalIndexer extends Command
     {--resume : Resume from the last position}
     {--failed : Run only entries that failed to index last time}';
 
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Index or update only the anime/manga MAL ids that are new since the last run';
+
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'mediaType' => ['The media type to index.', 'Valid values: anime, manga']
+            'mediaType' => ['The media type to index.', 'Valid values: anime, manga'],
         ];
     }
 
+    /**
+     * @return array{0: string, 1: string}
+     */
     private function getExistingIds(string $mediaType): array
     {
-        $existingIdsHash = "";
-        $existingIdsRaw = "";
+        $existingIdsHash = '';
+        $existingIdsRaw = '';
 
-        if (Storage::exists("indexer/incremental/$mediaType.json"))
-        {
+        if (Storage::exists("indexer/incremental/$mediaType.json")) {
             $existingIdsRaw = Storage::get("indexer/incremental/$mediaType.json");
             $existingIdsHash = sha1($existingIdsRaw);
         }
@@ -44,39 +50,35 @@ class IncrementalIndexer extends Command
         return [$existingIdsHash, $existingIdsRaw];
     }
 
+    /**
+     * @return array<string, array<int, int>>
+     */
     private function getIdsToFetch(string $mediaType): array
     {
         $idsToFetch = [];
         [$existingIdsHash, $existingIdsRaw] = $this->getExistingIds($mediaType);
 
-        if ($this->cancelled)
-        {
+        if ($this->cancelled) {
             return [];
         }
 
-        $newIdsRaw = file_get_contents("https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/${mediaType}_cache.json");
+        $newIdsRaw = file_get_contents("https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/{$mediaType}_cache.json");
         $newIdsHash = sha1($newIdsRaw);
 
         /** @noinspection PhpConditionAlreadyCheckedInspection */
-        if ($this->cancelled)
-        {
+        if ($this->cancelled) {
             return [];
         }
 
-        if ($newIdsHash !== $existingIdsHash)
-        {
+        if ($newIdsHash !== $existingIdsHash) {
             $newIds = json_decode($newIdsRaw, true);
             $existingIds = json_decode($existingIdsRaw, true);
 
-            if (is_null($existingIds) || count($existingIds) === 0)
-            {
+            if (is_null($existingIds) || count($existingIds) === 0) {
                 $idsToFetch = $newIds;
-            }
-            else
-            {
-                foreach (["sfw", "nsfw"] as $t)
-                {
-                    $idsToFetch[$t] = array_diff($existingIds[$t], $newIds[$t]);
+            } else {
+                foreach (['sfw', 'nsfw'] as $t) {
+                    $idsToFetch[$t] = array_diff($newIds[$t], $existingIds[$t]);
                 }
             }
 
@@ -86,27 +88,31 @@ class IncrementalIndexer extends Command
         return $idsToFetch;
     }
 
+    /**
+     * @return array<int, int>
+     */
     private function getFailedIdsToFetch(string $mediaType): array
     {
         return json_decode(Storage::get("indexer/incremental/{$mediaType}_failed.json"));
     }
 
+    /**
+     * @param  array<string, array<int, int>>  $idsToFetch
+     */
     private function fetchIds(string $mediaType, array $idsToFetch, bool $resume): void
     {
         $index = 0;
         $success = [];
         $failedIds = [];
-        $idCount = count($idsToFetch);
-        if ($resume && Storage::exists("indexer/incremental/{$mediaType}_resume.save"))
-        {
-            $index = (int)Storage::get("indexer/incremental/{$mediaType}_resume.save");
+        // `$idsToFetch` is ['sfw' => [...], 'nsfw' => [...]]; count the ids, not the keys.
+        $ids = array_merge($idsToFetch['sfw'] ?? [], $idsToFetch['nsfw'] ?? []);
+        $idCount = count($ids);
+        if ($resume && Storage::exists("indexer/incremental/{$mediaType}_resume.save")) {
+            $index = (int) Storage::get("indexer/incremental/{$mediaType}_resume.save");
             $this->info("Resuming from index: $index");
         }
 
-        $ids = array_merge($idsToFetch['sfw'], $idsToFetch['nsfw']);
-
-        if ($index > 0 && !isset($ids[$index]))
-        {
+        if ($index > 0 && ! isset($ids[$index])) {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
         }
@@ -115,46 +121,47 @@ class IncrementalIndexer extends Command
 
         $this->info("$idCount $mediaType entries available");
 
-        for ($i = $index; $i <= ($idCount - 1); $i++)
-        {
-            if ($this->cancelled)
-            {
+        for ($i = $index; $i <= ($idCount - 1); $i++) {
+            if ($this->cancelled) {
                 return;
             }
 
-            $id = $ids[$index];
+            $id = $ids[$i];
 
-            $url = env('APP_URL') . "/v4/$mediaType/$id";
-            $this->info("Indexing/Updating " . ($i + 1) . "/$idCount $url [MAL ID: $id]");
+            $url = config('app.url')."/v4/$mediaType/$id";
+            $this->info('Indexing/Updating '.($i + 1)."/$idCount $url [MAL ID: $id]");
 
-            try
-            {
+            try {
                 $response = json_decode(file_get_contents($url), true);
-                if (!isset($response['error']) || $response['status'] == 404)
-                {
-                    continue;
-                }
 
-                $this->error("[SKIPPED] Failed to fetch $url - {$response['error']}");
-            }
-            catch (\Exception)
-            {
+                // a 404 means the entry no longer exists upstream: skip quietly
+                if (isset($response['error']) && (int) $response['status'] !== 404) {
+                    $this->error("[SKIPPED] Failed to fetch $url - {$response['error']}");
+                    $failedIds[] = $id;
+                    Storage::put("indexer/incremental/{$mediaType}_failed.json", json_encode($failedIds));
+                } else {
+                    $success[] = $id;
+                }
+            } catch (\Exception) {
                 $this->warn("[SKIPPED] Failed to fetch $url");
                 $failedIds[] = $id;
-                Storage::put("indexer/incremental/$mediaType.failed", json_encode($failedIds));
+                Storage::put("indexer/incremental/{$mediaType}_failed.json", json_encode($failedIds));
             }
 
-            $success[] = $id;
-            Storage::put("indexer/incremental/{$mediaType}_resume.save", $index);
+            Storage::put("indexer/incremental/{$mediaType}_resume.save", $i);
+
+            // --delay: pause between requests so a large crawl does not hammer the API
+            if ($i < $idCount - 1) {
+                sleep((int) $this->option('delay'));
+            }
         }
 
         Storage::delete("indexer/incremental/{$mediaType}_resume.save");
 
         $this->info("--- Indexing of $mediaType is complete.");
-        $this->info(count($success) . ' entries indexed or updated.');
-        if (count($failedIds) > 0)
-        {
-            $this->info(count($failedIds) . ' entries failed to index or update. Re-run with --failed to requeue failed entries only.');
+        $this->info(count($success).' entries indexed or updated.');
+        if (count($failedIds) > 0) {
+            $this->info(count($failedIds).' entries failed to index or update. Re-run with --failed to requeue failed entries only.');
         }
 
         // finalize the latest state
@@ -169,18 +176,30 @@ class IncrementalIndexer extends Command
                 'mediaType' => $this->argument('mediaType'),
                 'delay' => $this->option('delay'),
                 'resume' => $this->option('resume') ?? false,
-                'failed' => $this->option('failed') ?? false
+                'failed' => $this->option('failed') ?? false,
             ],
             [
-                'mediaType' => 'required|in:anime,manga',
+                // `mediaType*` is an array argument: `in` rejects an array unless `array` is also
+                // applied, so every valid invocation used to fail validation.
+                'mediaType' => 'required|array',
+                'mediaType.*' => 'in:anime,manga',
                 'delay' => 'integer|min:1',
-                'resume' => 'bool|prohibited_with:failed',
-                'failed' => 'bool|prohibited_with:resume'
+                'resume' => 'bool',
+                'failed' => 'bool',
             ]
         );
 
         if ($validator->fails()) {
             $this->error($validator->errors()->toJson());
+
+            return 1;
+        }
+
+        // Laravel has no `prohibited_with` rule (the old rules threw BadMethodCallException on
+        // every run), and `prohibits` would treat a false flag as present, so check explicitly.
+        if ($this->option('resume') && $this->option('failed')) {
+            $this->error('--resume and --failed cannot be used together.');
+
             return 1;
         }
 
@@ -193,30 +212,24 @@ class IncrementalIndexer extends Command
         /**
          * @var $mediaTypes array
          */
-        $mediaTypes = $this->argument("mediaType");
+        $mediaTypes = $this->argument('mediaType');
 
-        foreach ($mediaTypes as $mediaType)
-        {
+        foreach ($mediaTypes as $mediaType) {
             $idsToFetch = [];
 
             // if "--failed" option is specified just run the failed ones
-            if ($onlyFailed && Storage::exists("indexer/incremental/{$mediaType}_failed.json"))
-            {
-                $idsToFetch["sfw"] = $this->getFailedIdsToFetch($mediaType);
-            }
-            else
-            {
+            if ($onlyFailed && Storage::exists("indexer/incremental/{$mediaType}_failed.json")) {
+                $idsToFetch['sfw'] = $this->getFailedIdsToFetch($mediaType);
+            } else {
                 $idsToFetch = $this->getIdsToFetch($mediaType);
             }
 
-            if ($this->cancelled)
-            {
+            if ($this->cancelled) {
                 return 127;
             }
 
-            $idCount = count($idsToFetch);
-            if ($idCount === 0)
-            {
+            $idCount = array_sum(array_map('count', $idsToFetch));
+            if ($idCount === 0) {
                 continue;
             }
 

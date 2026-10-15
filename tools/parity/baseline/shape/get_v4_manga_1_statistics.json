@@ -1,0 +1,18 @@
+{
+    "data": {
+        "completed": "@int",
+        "dropped": "@int",
+        "on_hold": "@int",
+        "plan_to_read": "@int",
+        "reading": "@int",
+        "scores": [
+            "@list",
+            {
+                "percentage": "@int",
+                "score": "@volatile",
+                "votes": "@int"
+            }
+        ],
+        "total": "@int"
+    }
+}

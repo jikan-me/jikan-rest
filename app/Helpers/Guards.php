@@ -1,17 +1,18 @@
 <?php
+
 namespace App\Helpers;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 abstract class Guards
 {
     /**
      * @throws \InvalidArgumentException
      */
-    static function shouldBeMongoDbModel(object|string $modelClass): void
+    public static function shouldBeMongoDbModel(object|string $modelClass): void
     {
-        if (!in_array(Model::class, class_parents($modelClass))) {
-            throw new \InvalidArgumentException("$modelClass should inherit from \Jenssegers\Mongodb\Eloquent\Model.");
+        if (! in_array(Model::class, class_parents($modelClass))) {
+            throw new \InvalidArgumentException("$modelClass should inherit from \MongoDB\Laravel\Eloquent\Model.");
         }
     }
 }

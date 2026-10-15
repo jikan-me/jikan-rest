@@ -1,42 +1,19 @@
 <?php
 
-
 namespace App\Http\Resources\V4;
 
+use OpenApi\Attributes as OA;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+#[OA\Schema(schema: 'genres', type: 'object', description: 'Genres Collection Resource', properties: [
+    new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', ref: '#/components/schemas/genre')),
+])]
 class GenreCollection extends ResourceCollection
 {
-
     /**
      * The resource that this resource collects.
      *
      * @var string
      */
     public $collects = 'App\Http\Resources\V4\GenreResource';
-
-    /**
-     * Transform the resource collection into an array.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return array
-     *
-     *  @OA\Schema(
-     *      schema="genres",
-     *      description="Genres Collection Resource",
-     *
-     *      @OA\Property(
-     *          property="data",
-     *          type="array",
-     *          @OA\Items(
-     *              type="object",
-     *              ref="#/components/schemas/genre"
-     *          ),
-     *      ),
-     *  )
-     */
-    public function toArray($request)
-    {
-        return $this->collection;
-    }
 }

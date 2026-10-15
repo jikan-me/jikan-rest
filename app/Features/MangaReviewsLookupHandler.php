@@ -5,10 +5,10 @@ namespace App\Features;
 use App\Dto\MangaReviewsLookupCommand;
 use App\Features\Concerns\ResolvesMediaReviewParams;
 use App\Http\Resources\V4\ReviewsResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
-use App\Support\CachedData;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Manga\MangaReviewsRequest;
 
@@ -29,6 +29,9 @@ final class MangaReviewsLookupHandler extends RequestHandlerWithScraperCache
         return new ReviewsResource($results);
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $reviewRequestParams = $this->getReviewRequestParams($requestParams);
@@ -37,10 +40,10 @@ final class MangaReviewsLookupHandler extends RequestHandlerWithScraperCache
 
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => $jikan->getMangaReviews(new MangaReviewsRequest(
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getMangaReviews(new MangaReviewsRequest(
                 $id, $page, $sort, $spoilers, $preliminary
             )),
-            $requestParams->get("page", 1)
+            $requestParams->get('page', 1)
         );
     }
 }

@@ -1,118 +1,151 @@
-version: '3.8'
-volumes:
-  mongo-data: { }
-  redis-data: { }
-  typesense-data: { }
+# ---------------------------------------------------------------------------
+# jikan-rest local stack — Laravel 13 on Octane (RoadRunner) + MongoDB
+#
+# Builds the app from ./Dockerfile and brings up MongoDB, Redis and Typesense
+# for local development. Typesense lives in docker-compose.typesense.yml and is
+# imported via the top-level `include:` — a single source of truth, no drift
+# between the two files. `docker compose -f docker-compose.typesense.yml ...`
+# still works for a typesense-only instance.
+#
+# Requirements: Docker (BuildKit) + Compose v2.20+ (for `include:`).
+#
+# Quick start
+#   docker compose up -d --build
+#   curl -fsS http://localhost:8080/up           # -> 200 "OK"
+#   docker compose ps                            # all services healthy
+#
+# The app image fetches the RoadRunner binary with arch detection inside the
+# Dockerfile, so no build arg is needed on any platform (see Dockerfile + docs).
+# Full build/run/env/seed/health documentation: DOCKER.md
+# ---------------------------------------------------------------------------
 
-networks:
-  jikan_network: { }
+name: jikan-rest
 
-secrets:
-  db_username:
-    file: db_username.txt
-  db_password:
-    file: db_password.txt
-  db_admin_username:
-    file: db_admin_username.txt
-  db_admin_password:
-    file: db_admin_password.txt
-  redis_password:
-    file: redis_password.txt
-  typesense_api_key:
-    file: typesense_api_key.txt
+include:
+  - docker-compose.typesense.yml
 
 services:
-  jikan_rest:
-    image: "docker.io/jikanme/jikan-rest:${_JIKAN_API_VERSION:-latest}"
-    user: "${APP_UID:-10001}:${APP_GID:-10001}"
-    networks:
-      - jikan_network
-    secrets:
-      - db_username
-      - db_password
-      - typesense_api_key
-      - redis_password
-    environment:
-      PS1: '\[\033[1;32m\]\[\033[1;36m\][\u@\h] \[\033[1;34m\]\w\[\033[0;35m\] \[\033[1;36m\]# \[\033[0m\]'
-    env_file:
-      - ./docker/config/.env.compose
+  app:
+    build:
+      context: .
+      # (RoadRunner binary is fetched with arch detection inside the Dockerfile.)
+    image: jikan-rest:local
+    container_name: jikan-rest
+    restart: unless-stopped
+    stop_grace_period: 30s
+    # The image ENTRYPOINT (docker-entrypoint.sh) prepares .env and then execs
+    # 'php artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8080'.
+    # Pass extra Octane flags here, e.g. command: ["--workers=8"].
     ports:
-      - '8080:8080/tcp'
-    hostname: jikan-rest-api
-    healthcheck:
-      test: [ 'CMD-SHELL', 'wget --spider -q "http://127.0.0.1:2114/health?plugin=http"' ]
-      interval: 2s
-      timeout: 2s
-    links:
-      - mongodb:mongodb
-      - redis:redis
-      - typesense:typesense
-    depends_on:
-      mongodb: { condition: service_healthy }
-      redis: { condition: service_healthy }
-      typesense: { condition: service_started }
+      - "8080:8080"
+    environment:
+      # --- App -----------------------------------------------------------------
+      APP_ENV: "${APP_ENV:-production}"
+      APP_DEBUG: "${APP_DEBUG:-false}"
+      APP_URL: "${APP_URL:-http://localhost:8080}"
+      # Required by Laravel for encryption-backed features. Generate on the host
+      # (`php artisan key:generate`) and pass e.g. APP_KEY=base64:... to compose
+      # via the shell environment or a .env file (see DOCKER.md).
+      APP_KEY: "${APP_KEY:-}"
 
-  mongodb:
-    image: docker.io/mongo:focal
-    hostname: mongodb
+      # --- MongoDB (service `mongo`; no auth on the local instance) -----------
+      DB_HOST: mongo
+      DB_PORT: 27017
+      DB_DATABASE: "${DB_DATABASE:-jikan}"
+      DB_USERNAME: "${DB_USERNAME:-}"
+      DB_PASSWORD: "${DB_PASSWORD:-}"
+
+      # --- Redis (optional — only used when CACHE_DRIVER=redis) ----------------
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # No auth on the local instance: leave REDIS_PASSWORD unset (config falls
+      # back to null). If you enable auth, set REDIS_PASSWORD to the matching
+      # value and restart redis with --requirepass.
+
+      # --- Typesense (service imported via include) ----------------------------
+      TYPESENSE_HOST: typesense
+      TYPESENSE_PORT: 8108
+      TYPESENSE_PROTOCOL: http
+      TYPESENSE_API_KEY: "${TYPESENSE_API_KEY:-abcd}"
+
+      # --- Search: OFF by default (Scout null engine) --------------------------
+      # Enable with:  SCOUT_DRIVER=typesense docker compose up -d app
+      SCOUT_DRIVER: "${SCOUT_DRIVER:-null}"
+      SCOUT_QUEUE: "${SCOUT_QUEUE:-false}"
+
+      # --- Cache: per-worker in-memory unless you opt into Redis --------------
+      # Enable with:  CACHE_DRIVER=redis docker compose up -d app
+      CACHE_DRIVER: "${CACHE_DRIVER:-array}"
+
+      CORS_MIDDLEWARE: "${CORS_MIDDLEWARE:-false}"
+
+      # --- Error reporting / queue workers (see .env.dist) ---------------------
+      REPORTING: "${REPORTING:-false}"
+      REPORTING_DRIVER: "${REPORTING_DRIVER:-sentry}"
+      SENTRY_LARAVEL_DSN: "${SENTRY_LARAVEL_DSN:-}"
+      QUEUE_WORKERS: "${QUEUE_WORKERS:-0}"
+
+      # --- Reverse proxy / rate limiting (see .env.dist) ------------------------
+      TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
+      RATE_LIMIT_PER_MINUTE: "${RATE_LIMIT_PER_MINUTE:-0}"
+
+      # --- Octane (RoadRunner) — matches config/octane.php default -------------
+      OCTANE_SERVER: "${OCTANE_SERVER:-roadrunner}"
+      OCTANE_HTTPS: "${OCTANE_HTTPS:-false}"
+      OCTANE_WORKERS: "${OCTANE_WORKERS:-auto}"
+      OCTANE_MAX_REQUESTS: "${OCTANE_MAX_REQUESTS:-500}"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      typesense:
+        condition: service_healthy
+      redis:
+        condition: service_started # optional dependency
+    healthcheck:
+      # /up (routes/api.php) is a bare 200 "OK" closure with no DB dependency —
+      # verifies the Octane worker is serving without coupling to Mongo readiness.
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  mongo:
+    image: mongo:8.0
+    container_name: jikan-mongo
+    restart: unless-stopped
+    ports:
+      # Local dev convenience; drop the stanza if you already run MongoDB on 27017.
+      - "127.0.0.1:27017:27017"
     volumes:
       - mongo-data:/data/db
-      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    ports:
-      - 27017/tcp
-    command: "--wiredTigerCacheSizeGB ${MONGO_CACHE_SIZE_GB:-1.0}"
-    networks:
-      - jikan_network
-    secrets:
-      - db_username
-      - db_password
-      - db_admin_username
-      - db_admin_password
-    environment:
-      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/db_admin_username
-      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_admin_password
-      MONGO_INITDB_DATABASE: jikan_admin
+    # No auth by default (matches the unauthenticated mongo:27017 DSN that
+    # config/database.php builds when DB_USERNAME is empty). For auth, set
+    # MONGO_INITDB_ROOT_USERNAME/PASSWORD and DB_USERNAME/DB_PASSWORD together.
     healthcheck:
-      test: [ 'CMD-SHELL', 'mongosh mongodb://localhost:27017 --quiet --eval "db.runCommand(\"ping\").ok"' ]
-      interval: 30s
-      timeout: 10s
+      # mongosh ships with mongo:8.0; 'db.runCommand("ping").ok' -> 1 when up.
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand('ping').ok"]
+      interval: 15s
+      timeout: 5s
       retries: 5
+      start_period: 10s
 
   redis:
-    image: docker.io/redis:6-alpine
-    hostname: redis
-    secrets:
-      - redis_password
-    networks:
-      - jikan_network
-    command:
-      - /bin/sh
-      - -c
-      - redis-server --requirepass "$$(cat /run/secrets/redis_password)"
+    image: redis:7-alpine
+    container_name: jikan-redis
+    restart: unless-stopped
     volumes:
-      - redis-data:/data:rw
-    ports:
-      - '6379/tcp'
+      - redis-data:/data
+    # No auth on the local instance. Uncomment to reach redis-cli from the host:
+    # ports:
+    #   - "127.0.0.1:6379:6379"
     healthcheck:
-      test: [ 'CMD-SHELL', 'redis-cli -a "$$(cat /run/secrets/redis_password)" ping | grep -q PONG' ]
-      interval: 500ms
-      timeout: 1s
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
-  typesense:
-    image: docker.io/typesense/typesense:0.24.1
-    hostname: typesense
-    entrypoint: /bin/sh
-    secrets:
-      - typesense_api_key
-    networks:
-      - jikan_network
-    command:
-      - -c
-      - TYPESENSE_API_KEY="$$(cat /run/secrets/typesense_api_key)" /opt/typesense-server --data-dir /data
-    deploy:
-      restart_policy:
-        condition: none
-    volumes:
-      - typesense-data:/data
-    ports:
-      - "8108/tcp"
+volumes:
+  mongo-data:
+  redis-data:
+  # typesense-data is declared in docker-compose.typesense.yml (single source of truth).

@@ -1,4 +1,7 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests;
 
 use Database\Factories\AnimeFactory;

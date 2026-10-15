@@ -13,6 +13,7 @@ use Jikan\Model\Common\DateProp;
 class CarbonDateRange
 {
     private ?Carbon $fromObj = null;
+
     private ?Carbon $untilObj = null;
 
     public function __construct(?Carbon $from, ?Carbon $to)
@@ -23,19 +24,17 @@ class CarbonDateRange
 
     public function __toString()
     {
-        $result = "";
+        $result = '';
         if ($this->untilObj === null && $this->fromObj !== null && $this->fromObj->day == 1 && $this->fromObj->month == 1) {
             $result = "{$this->fromObj->year}";
+        } elseif ($this->untilObj === null && $this->fromObj !== null && $this->fromObj->day == 1) {
+            $result = $this->fromObj->format('M, Y');
+        } elseif ($this->untilObj === null && $this->fromObj !== null) {
+            $result = $this->fromObj->format('M d, Y');
+        } elseif ($this->untilObj !== null && $this->fromObj !== null) {
+            $result = "{$this->fromObj->format('M d, Y')} to {$this->untilObj->format('M d, Y')}";
         }
-        else if ($this->untilObj === null && $this->fromObj !== null && $this->fromObj->day == 1) {
-            $result = $this->fromObj->format("M, Y");
-        }
-        else if ($this->untilObj === null && $this->fromObj !== null) {
-            $result = $this->fromObj->format("M d, Y");
-        }
-        else if ($this->untilObj !== null && $this->fromObj !== null) {
-            $result = "{$this->fromObj->format("M d, Y")} to {$this->untilObj->format("M d, Y")}";
-        }
+
         return $result;
     }
 

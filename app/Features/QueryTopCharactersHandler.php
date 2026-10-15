@@ -16,13 +16,10 @@ final class QueryTopCharactersHandler implements RequestHandler
     public function __construct(
         private readonly CharacterRepository $repository,
         private readonly QueryBuilderPaginatorService $paginatorService
-    )
-    {
-    }
+    ) {}
 
     /**
-     * @param QueryTopCharactersCommand $request
-     * @return CharacterCollection
+     * @param  QueryTopCharactersCommand  $request
      */
     public function handle($request): CharacterCollection
     {
@@ -30,7 +27,7 @@ final class QueryTopCharactersHandler implements RequestHandler
         $topItemsQuery = $this->repository->topCharacters()->filter($requestParams);
 
         $results = $this->paginatorService->paginate(
-            $topItemsQuery, $requestParams->get("limit"), $requestParams->get("page")
+            $topItemsQuery, $requestParams->get('limit'), $requestParams->get('page')
         );
 
         return new CharacterCollection($results);

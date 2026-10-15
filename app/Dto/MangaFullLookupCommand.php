@@ -7,6 +7,4 @@ use Illuminate\Http\JsonResponse;
 /**
  * @extends LookupDataCommand<JsonResponse>
  */
-final class MangaFullLookupCommand extends LookupDataCommand
-{
-}
+final class MangaFullLookupCommand extends LookupDataCommand {}

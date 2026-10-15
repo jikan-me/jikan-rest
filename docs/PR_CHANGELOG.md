@@ -1,0 +1,1103 @@
+# PR Changelog — jikan-rest modernization (Lumen 9 → Laravel 12 → 13)
+
+> **Living document.** Updated as work progresses. This is the accumulated summary
+> for the eventual upstream PR(s) to [jikan-me/jikan-rest](https://github.com/jikan-me/jikan-rest).
+> The push plan/playbook lives in [`UPSTREAM_PR.md`](docs/UPSTREAM_PR.md); upstream
+> blockers live in [`UPSTREAM_ISSUES.md`](docs/UPSTREAM_ISSUES.md).
+>
+> - Branch: `laravel-12` (local fork; nothing has been pushed upstream)
+> - Proof points: parity harness, PHPUnit suite, live endpoint checks
+
+---
+
+## Audit-fix pass (2026-10-13)
+
+An independent review of this branch found defects the green test suite could not see (it does not run under Octane, behind a proxy, from a fresh clone, or on a real CI runner). Fixed on top of the migration, one commit each:
+
+- **Octane state leak:** handler factories were resolved on the base app and shared across requests; now per request, with cloned query builders.
+- **Rate limiter:** keyed on the proxy address and on by default; now opt-in with `TRUSTED_PROXIES`.
+- **Fresh clone / Docker:** `bootstrap/cache` was untracked, so `composer install` and `route:cache` failed.
+- **Contract:** non-numeric ids returned 400, not master's 404 (the group-level `->where()` was a no-op).
+- **Operator knobs restored:** opt-in CORS and Sentry, 60s micro-cache, optional queue workers, Octane worker/recycle settings, `APP_KEY` generation, staggered non-overlapping scheduler.
+- **Errors:** `report_url` no longer embeds the exception message or file path outside debug.
+- **Laravel adoption:** class-based named routes, TTL map keyed on route names, strict models, native test helpers (integration suite about 2x faster).
+- **Pre-existing bugs fixed:** `Profile` lost `last_updates`/`external_links`; `indexer:incremental` could not run (unknown validation rule, `in` on an array argument, id count taken from array keys, mismatched failed-file name); the AI tool manifest carried no parameters.
+- **Context layer:** known traps, CLAUDE.md→AGENTS.md import, opencode wiring, route-aware suite audits, a jikan-rest skill, `docs/UPGRADING.md`.
+
+Verified: 55 unit + 275 integration tests (2833 assertions), PHPStan 0 errors, OpenAPI/AI catalog drift-free, 110 v4 routes, fresh-clone install. Not verified locally: Docker build, a real Octane run, GitHub Actions. Operator impact: `docs/UPGRADING.md`.
+
+---
+
+## Summary
+
+Migrated jikan-rest from **Lumen 9** (archived Feb 2023; Laravel 9 security-EOL Feb 2024)
+onto a supported Laravel release with modern runtimes, a first-party search engine,
+working API docs, and a green test suite. Also fixed a latent router bug that made
+every dynamic endpoint 404 on Symfony 7, and documented an upstream scraper breakage.
+
+**Headline numbers**
+
+| Metric | Before | After |
+|---|---|---|
+| Framework | Lumen 9.1.5 | Laravel **13.35.0** |
+| PHP | 8.4.1 (Herd-Lite, cannot upgrade `ext-mongodb`) | 8.4.26 (Homebrew `php@8.4` + `pecl mongodb` 2.5.4) |
+| Mongo driver | `jenssegers/mongodb` 3.9 | `mongodb/laravel-mongodb` 5.11 |
+| Test suite | 280 tests / 2673 asserts / **1 pre-existing failure** | same baseline after migration (PHPUnit **12**) |
+| Parity harness | 60 endpoints baseline | **69 → 3** diffs (3 = 2 intentional + 1 pre-existing) |
+| Search | 3rd-party Typesense driver pinned to an RC | **Laravel Scout's native Typesense engine** (`typesense-php` stable 6.0.0) |
+
+---
+
+## What changed
+
+### 1. Framework: Lumen 9 → Laravel 12 → **13**
+- `laravel/lumen-framework` → `laravel/framework` (12.69.3, then **13.35.0** once Scout shipped a
+  native Typesense engine — see §5).
+- New `bootstrap/app.php`, `bootstrap/providers.php`, `public/index.php`, `artisan`.
+- `routes/web.v4.php` split into `routes/api.php` (root, `/v1`–`/v3` stubs, v4 group)
+  + `routes/console.php` (schedule).
+- Lumen base classes swapped for Laravel equivalents (exceptions handler, controller,
+  console kernel → auto-discovered commands, event providers, `User` model, CORS
+  middleware response factory).
+- `PackageVersions\Versions` → `Composer\InstalledVersions`.
+- PHP constraint raised to `^8.3` (Laravel 13 requirement; runtime is 8.4.26).
+- **PHPUnit bumped `^11` → `^12`** (matches Laravel 13's skeleton):
+  - PHPUnit 12 removed docblock metadata — migrated all ~34 `@dataProvider` /
+    `@test` annotations to `#[DataProvider]` / `#[Test]` attributes (incl. docblocks
+    that mixed prose with `@dataProvider`, which moved to an attribute above the
+    docblock) and added the `PHPUnit\Framework\Attributes\*` imports.
+  - PHPUnit 12 made `TestCase::__construct()` final — moved the
+    `searchIndexModelCleanupList` per-test setup out of constructors into `setUp()`.
+  - Removed the dead `Tests\IntegrationTestListener` (implemented the PHPUnit-10-era
+    `TestListener` API and type-hinted the removed `\Laravel\Lumen\Application`) and
+    its ignored `<listeners>` node in `phpunit.xml`; DB isolation is provided by the
+    `SyntheticMongoDbTransaction` trait.
+
+### 2. Dependencies
+**Added**
+- `mongodb/laravel-mongodb` ^5 (was `jenssegers/mongodb` 3.9 — renamed upstream)
+- `laravel/octane` ^2, `laravel/scout` ^11 (native Typesense engine), `laravel/tinker` ^3
+- `sentry/sentry-laravel` ^4, `spatie/laravel-data` ^4, `spatie/laravel-enum` ^3.3
+- `darkaonline/l5-swagger` ^11 + `zircote/swagger-php` ^6
+- `symfony/browser-kit/css-selector/dom-crawler/http-client` ^7, `predis/predis` ^2.3
+- `spiral/roadrunner-cli` + `spiral/roadrunner-http` (dev / Octane)
+- `laravel/boost` ^2 (dev; first-party agent/skills CLI) — powers the four installed
+  Laravel marketplace skills under `.ai/skills/` (`laravel-specialist`, `php-pro`,
+  `laravel-security`, `laravel-patterns`)
+- **Native installer + setup guide** — `install.sh` (options: `--server roadrunner|frankenphp|serve`,
+  `--no-dev`, `--with-redis`, `--with-typesense`, `--with-backend-suite`, `--with-skills`, `--seed`,
+  `--env=`, `--check`) plus `docs/SETUP.md` (general non-Docker guide with an agent prompt).
+  FrankenPHP is now actually runnable (opt-in static binary download; previously config-only).
+  The installer is **interactive** (prompts with defaults when on a terminal; `--yes`/flags for CI),
+  idempotent, prerequisite-gated, and ships normalized `script/` wrappers
+  (bootstrap/setup/update/server/test/cibuild). Added `docs/PROVIDERS.md` — a user- and
+  LLM-friendly matrix of every supported service: batteries-included vs setup-needed, env keys,
+  enable steps, verification.
+- **Audit sweep re-verified after fixes**: endpoint-parity, layer-boundaries (HttpHelper), and
+  route-coverage (controllerDirs) are all **clean**; residuals are documented false-positives
+  (api-consistency `compared` filter_by sentinel — no exemption channel; versioning — v4 group is
+  correctly prefixed; route-model-binding — DTO-command params by design). `form-request-validation`
+  crash fixed **upstream** (`backend-quality-suite` #22 closes #21) — the audit now exits clean.
+- **README updated** for the Laravel 13 stack (badges, native + Docker install, providers pointer,
+  canonical test command). — a user- and
+  LLM-friendly matrix of every supported service: batteries-included vs setup-needed, env keys,
+  enable steps, verification.
+
+**Removed**
+- Lumen-only / abandoned: `pushrbx/lumen-roadrunner`, `darkaonline/swagger-lume`,
+  `flipbox/lumen-generator`, `ocramius/package-versions`, `laravel/legacy-factories`,
+  `fabpot/goutte` (replaced, see below), `matchish/laravel-scout-elasticsearch`
+  (Typesense-only search decision)
+- `typesense/laravel-scout-typesense-driver` (replaced by **Scout's native engine** —
+  removes the `illuminate ^12` ceiling and the `typesense-php 6.1.0-RC2` pin)
+
+**Replaced / shims**
+- `fabpot/goutte` (abandoned; caps `symfony/mime` ≤ 6). Goutte 4's `Client` is a thin
+  wrapper over Symfony `HttpBrowser`, so we ship `app/Compat/Goutte/Client.php` and
+  declare `"replace": {"fabpot/goutte": "4.0.3"}` to satisfy `jikan-me/jikan` v4 on
+  Symfony 7. Longer term: upgrade to `jikan-me/jikan` v5 (drops Goutte).
+
+### 3. Critical fix: route parameter constraints (Symfony 7)
+Symfony 7 only accepts **word characters** in inline route patterns. `{id:\d+}` failed
+to parse and compiled as a literal → a route regex with **zero variables** → every
+`/{id}` endpoint 404'd despite appearing in `route:list`. Converted all inline patterns
+to bare parameters plus a `where` constraint (`{id}` + `'where' => ['id' => '[0-9]+']` in the
+group attributes, or `->where()` on an individual route; optional params as `{param?}`).
+Parity went 69 → 3 problems.
+
+> **Correction (audit fixes):** the original port chained `->where('id', '[0-9]+')` onto
+> `Route::group(...)`, which silently does nothing (the router returns a throw-away
+> registrar), so `/v4/anime/abc` returned 400 instead of master's 404. The constraint now
+> lives in the group attributes and `tests/Integration/RouteConstraintsTest.php` guards it.
+
+### 4. Spatie Laravel Data v3 → v4 API adoption
+- `Cast::cast()` / `DataPipe::handle()` / `prepareForPipeline()` signature changes
+  (arrays not `Collection`, `CreationContext`, `ValidationStrategy` enum).
+- `DataFromSomethingResolver::execute()` now takes a `CreationContext`.
+- Restored `use PreparesData` on the query-parameter traits (removed during signature
+  fixes) and taught `PreparesData` to treat bare boolean query flags (`?sfw`,
+  `?continuing` — which normalise to `""`/`null`) as `true` **before** validation,
+  matching `ContextualBooleanCast` (casts run after validation).
+
+### 5. Search: third-party driver → Scout native Typesense engine
+Laravel 13's first-party Scout ships a Typesense engine (incl. `semantic()` / `hybrid()`
+search). The third-party `typesense/laravel-scout-typesense-driver` — which had capped
+us at `illuminate ^12` and forced `typesense-php` **6.1.0-RC2** — is dropped entirely.
+
+- `composer.json`: removed the driver, added `typesense/typesense-php: ^6.0` (stable
+  6.0.0) directly.
+- `config/scout.php`: restructured to the engine's `client-settings` shape
+  (`Typesense\Client` config) + `max_total_results`.
+- `app/JikanApiSearchableModel`: no longer implements the third-party
+  `TypesenseDocument` interface (native engine uses standard Scout contracts).
+- `app/Services/TypesenseCollectionDescriptor`, `app/Testing/ScoutFlush`,
+  `app/Mixins/ScoutBuilderMixin`: rewired to the native `Typesense\Client` /
+  `Laravel\Scout\Engines\TypesenseEngine`.
+- `AppServiceProvider`: binds `Typesense\Client` (only when `SCOUT_DRIVER=typesense`).
+- The app's search middleware (a Scout `$builder->callback`) is compatible with the
+  native engine — it invokes the callback with the same `($documents, $query, $options)`
+  signature. MongoDB `$text` remains the fallback when no Typesense server is
+  configured (`SCOUT_DRIVER` unset) — how local dev runs.
+
+### 6. Runtime
+- **PHP**: Herd-Lite's static PHP ships `ext-mongodb` 1.20 which cannot be upgraded
+  in place and is too old for Laravel 12's Mongo driver (needs ≥ 1.21). Switched the
+  project to Homebrew `php@8.4` + `pecl install mongodb` 2.5.4 via a git-ignored
+  `tools/dev/php` wrapper (also unsets `PHP_INI_SCAN_DIR`, which Herd pins in `.zshrc`).
+- **Octane** (RoadRunner default / FrankenPHP opt-in) replaces the old
+  `lumen-roadrunner` package; `AppServiceProvider::servicesToWarm()/Clear()` ported to
+  `config/octane.php` `warm`/`flush`.
+
+### 7. API docs (Swagger)
+- `darkaonline/l5-swagger` + `zircote/swagger-php` ^6 (stable).
+- `app/Swagger.php` uses **PHP 8 attributes** (`#[OA\Info]`, `#[OA\Server]`) —
+  swagger-php 6 doesn't read docblock `@OA\Info` through the attribute analyser.
+- Route prefix configured via `defaults.routes.group_options.prefix`; `/docs` redirects
+  to the live UI at `/v4/api/documentation`.
+
+### 7a. Swagger UI endpoint disabled (feature kept, 2026-10-11)
+- `/v4/api/documentation` (the self-served Swagger UI under `/v4`) is **disabled** via
+  `App\Http\Middleware\DisableSwaggerUi` (product decision — don't expose the UI viewer
+  on the public API). l5-swagger + `@OA` annotations + spec generation remain; the spec
+  stays available at `v4/api-docs`, and `/docs` still redirects. (A broad removal was
+  attempted and reverted — see git history.)
+
+### 8. Tests (Lumen → PHPUnit 11/12)
+- Moved off `Laravel\Lumen\Testing\TestCase`; `createApplication()` bootstraps via the
+  console kernel; added `$response` + `assertStatus()` compat shims.
+- `Factory::new()` resolves via the container so contextual bindings apply (Laravel 12
+  uses `new static`).
+- Restored `setUpTraits()` so the Lumen-era `beginDatabaseTransaction()` (DB truncate +
+  Scout flush) actually runs — Laravel's convention expects `begin` + trait short name.
+- DB isolation: purge the `mongodb` connection after pointing config at `jikan_tests`
+  (a stale connection was truncating the production DB during tests).
+- Recreate the squash migration's `$text` indexes after truncate (the test DB is never
+  migrated).
+- Static data providers (PHPUnit 11), `seeStatusCode`→`assertStatus`,
+  `seeJsonStructure`→`assertJsonStructure`.
+- Time fixes: `getPreciseTimestamp(3)`/`format('Uv')` may return floats/strings the
+  Mongo driver rejects → `getTimestampMs()` / `Carbon::parse(...)`.
+- Fix: factory fixtures for `Profile`, `Producers`, `Club` use correct `UTCDateTime` args.
+
+### 9. Known pre-existing / upstream issues (not migration defects)
+> All upstream blockers live in [`UPSTREAM_ISSUES.md`](docs/UPSTREAM_ISSUES.md). UP-01…05
+> were **filed upstream** (jikan-me/jikan #598–#602, 2026-10-11); fixing them is parked/not targeted locally.
+- **`jikan-me/jikan` anime/manga parsers break against current MAL markup.** MAL now
+  serves the opening/ending-theme section as a JS widget (no `<table>`), but
+  `AnimeParser::getOpeningThemes()/getEndingThemes()` (and manga equivalents) select
+  `div.theme-songs.../table/tr` → empty node list → `ParserException` → `500`. Affects
+  `/v4/anime/{id}` / `/v4/manga/{id}` and `indexer:anime{,-current-season,-schedule}` /
+  `indexer:manga`. Producers/magazines/genres parse fine. Fix belongs in `jikan-me/jikan`.
+- `/v4/users/recentlyonline` — `jikan` fails to parse `myanimelist.net/users.php`
+  (pre-existing).
+- ~~Time-dependent `SeasonControllerTest::testShouldNotIncludeNewlyStartedSeason...`~~ —
+  **fixed 2026-10-11**: `getCurrentSeason()` now reads `Carbon::now()` (honours the
+  tests' `Carbon::setTestNow()`), the continuing-item fixture pins `episodes = null`
+  (was flapping on the factory's random non-null default), and `getItemsBySeason()`
+  no longer mutates the caller's `$to`. `--filter SeasonControllerTest` green 20×.
+
+### 10. Config-cache safety + security hardening (from the audit's P0 batch)
+- **`env()` → `config()` everywhere outside config** (`grep env(` in `app/ routes/ bootstrap/`
+  is now empty, modulo dead `PsrWorkerErrorListener` which is slated for deletion).
+  New settings centralized in `config/jikan.php` (scraper timeouts, heartbeat scoring,
+  insights, queue delay, Github reporting, rate limit, cache-bypass token) and
+  `config/app.php` (`version`). `php artisan config:cache` now works and the app boots
+  fully from cached config (was silently nulling `APP_VERSION` etc.).
+- **`bootstrap/app.php` gating moved into middleware** — the `withMiddleware` callback
+  runs before the config repository is bound (fires on kernel resolution), so
+  `config()` there was illegal; `Insights`/`CorsMiddleware` now self-gate at request time.
+- **Rate limiting added** (`throttle:v4`) via `RateLimiter::for('v4')` — 240 req/min/IP
+  (config: `RATE_LIMIT_PER_MINUTE`), 10 000/min under testing. Parity unaffected
+  (headers only, harness compares status+shape).
+- **Error responses redacted in production** — `Handler` gates `error` and the raw
+  `trace` (file:line) behind `config('app.debug')`; error/report_url still emitted with
+  the same shape for parity, values empty when debug is off.
+- **`APP_KEY` no longer doubles as a cache-bypass header** — replaced with a dedicated
+  `CACHE_BYPASS_TOKEN`. **Later removed entirely:** the cache-refresh jobs that sent the header
+  were deleted, so the bypass had no consumer.
+
+### 11. Phase-2 audit P1 batch (Laravel-13 regressions + latent bugs)
+- **MicroCaching `NO_CACHING` bypass was dead on Laravel 13** — Lumen's
+  `$request->route()[1]['uses']` no longer works (Route isn't array-accessible), so
+  `RandomController@*` / `InsightsController@main` were never excluded from micro-caching.
+  Rewired to `$request->route()->getActionName()` (verified: resolves to
+  `RandomController@anime` etc., matching the list).
+- **Removed dead/broken cache-refresh jobs.** `UpdateCacheJob`/`UpdateDatabaseJob`
+  resolved an unbound `app('GuzzleClient')`, `UpdateDatabaseJob` used an unassigned
+  `$requestUri`, and nothing dispatched either; deleting them (the self-HTTP +
+  `sleep()` + token-header pattern is Octane-hostile anyway). Cache warming should be
+  re-designed as an in-process command if revived.
+- **CRITICAL test-isolation fix: tests were truncating the *production* `jikan` DB.**
+  Our overridden `setUpTraits()` is invoked by Laravel's `setUpTheTestEnvironment()`
+  (dynamic dispatch) during `parent::setUp()` — before the TestCase's own `setUp()`
+  swaps the mongodb connection to `jikan_tests` — so `beginDatabaseTransaction()`
+  truncated real data once per test, on top of the intended test-DB truncation.
+  Fixed with a hard guard in `SyntheticMongoDbTransaction`: truncation now refuses to
+  run unless the resolved database equals the isolated test DB (`jikan_tests`).
+  Verified with sentinel documents across a full suite run (production doc survives,
+  test DB truncated). This had caused repeated "re-seed needed" DB loss during local
+  development (producers/magazines/genres/anime).
+- **Source-heartbeat pruning was a no-op + score could exceed 1.** `unset($fail)` in a
+  value-copy `foreach` removed nothing, and the `>=` condition was inverted, so
+  `failovers.json` never dropped stale events. Added `SourceHeartbeatProvider::pruneFails()`
+  (recency window + size cap, malformed-entry safe) used by provider and listener; score
+  denominator is now the real event count (no `-1`).
+
+### 12. Audit-1 P1 batch (Octane correctness, search bugs, lazy handlers)
+- **Octane flush set completed** (`config/octane.php`): repository contracts +
+  `AnimeGenresRepository`/`MangaGenresRepository` + request-scoped `CacheOptions` and
+  `TypesenseCollectionDescriptor` are now flushed per request so cached query builders /
+  TTLs can't leak between workers. `EndpointCacheTtlMiddleware` now clears the TTL in a
+  `finally` (was skipped when the request threw). Dropped the unused Swoole example table.
+- **Scout native-engine chunked pagination corrupted totals.** `jikanPaginate()` merged
+  engine pages with `array_merge_recursive`, which turned the scalar `found` (and nested
+  hits) into nested arrays → bogus `total` and mangled hit lists for >250-hit queries.
+  Rewritten to `array_merge` over `hits` only, keeping `found` scalar.
+- **Mongo `$text` fallback + filters: verified, not a bug.** Audited claim that
+  `MongoSearchService` drops `filterParameters` was a false positive — both paths go
+  through `repository->filter()` → `scopeFilter`. Empirically confirmed the compiled
+  Mongo query for `?q=…&type=tv&status=complete` contains `status`/`type` clauses plus
+  the `$text` where. No code change needed.
+- **`IncrementalIndexer` correctness** (`indexer:incremental`): loop used the resume
+  `$index` constant instead of `$i` (re-scraped one id repeatedly) and never advanced
+  the resume offset; the id-diff direction was inverted (kept removed ids instead of
+  fetching new ones); success/failed bookkeeping was inverted too. All fixed.
+- **`/v4/insights` + `/v4/insights/trends` feature removed** (product decision — unused).
+  Deleted `InsightsController`, the global `Insights` recording middleware, the
+  `Insights*`/`Trends*` resources, the routes, the `insights_*` config/env keys, the
+  `MicroCaching` NO_CACHING entry, and its parity baseline entry. `/v4/insights*` now
+  returns 404.
+- **Custom `CorsMiddleware` removed.** It was a Lumen leftover (re-wrapped Symfony
+  responses into plain `Response`s) layered on top of Laravel 13's default global
+  `HandleCors`, which already serves CORS from `config/cors.php`. Deleted the class +
+  its bootstrap append + the `cors_middleware_enabled`/`CORS_MIDDLEWARE` config/env;
+  CORS now works via the framework default (single-pass).
+  > **Correction (audit fixes):** the on/off gate was restored — `config/cors.php` only
+  > lists paths when `CORS_MIDDLEWARE=true` (master's default was off), so an edge proxy
+  > that already sets CORS headers doesn't produce duplicate `Access-Control-Allow-Origin`.
+- **Observability polish** (audit-1 §9): log channels renamed off `lumen.log`
+  (`jikan.log` / `daily/jikan.log`), deprecations now recorded to `daily` instead of
+  `null`, stale config comment removed; Sentry `release` derives from
+  `config('app.version')` and `traces_sample_rate` defaults to 0.1 (env-overridable);
+  added an `/up` health/liveness route (the `withRouting(health:)` option is ignored
+  when a custom `using` closure is used, so it's registered explicitly).
+- **Lazy request-handler resolution.** `DefaultMediator` no longer receives all ~65
+  constructed handlers per request. A `request (DTO) class => factory closure` map (101
+  entries) is built once per worker; each request constructs only the handler it
+  dispatches. `DefaultMediatorTest` updated to the factory-map contract.
+
+### 13. Backlog batch (heartbeat storage, TTL map, Dockerfile, static analysis/CI)
+- **Source-heartbeat storage moved from flat files to MongoDB (audit-1 P1 #10).**
+  The per-request `failovers.json` + `source_failover.lock` / `_last_downtime`
+  read-modify-write scheme (multi-worker race-prone under Octane) is replaced by
+  atomic storage in the Mongo `failovers` / `failovers_meta` collections
+  (`insertOne` per event; lock + last-downtime as one doc per key). The recency
+  window + size cap still run through `SourceHeartbeatProvider::pruneFails()`
+  (now on in-memory arrays); enable/disable semantics unchanged. The `/` and `/v4`
+  `myanimelist_heartbeat` SHAPE is preserved (verified live + via Octane). New
+  `Tests\Unit\SourceHeartbeatProviderTest` covers the window/cap/score/lock logic.
+- **`per_endpoint_cache_ttl` re-synced + stale-key guard test (audit-1 P1 #11).**
+  Dead keys removed (`AnimeController@characters_staff`, `PersonController@seiyuu`,
+  `MagazineController@resource`, `GenreController@mainAnime/mainManga`); every
+  registered v4 `V4DB` controller action now has an entry (added the previously
+  missing `full`/`relations`/`themes`/`external`/`streaming`/`now`/`Random*`… keys).
+  `Tests\Unit\CacheTtlMapTest` derives the expected `Controller@action` set from the
+  route table (matching `HttpHelper::getRouteName()`) and asserts completeness in
+  both directions, so a future route addition fails the suite instead of silently
+  falling back to `CACHE_DEFAULT_EXPIRE`.
+- **Docker image reworked for the native runtime (audit-1 P0 #1).** New multi-stage
+  Dockerfile: `php:8.4-cli-alpine` (Octane workers are CLI processes) + pecl
+  `ext-mongodb` + `pcntl`/`sockets`/`opcache`; RoadRunner binary **2025.1.15**
+  (amd64/arm64) — the version `spiral/roadrunner-cli ^2.7` fetches via
+  `octane:install`; `composer install --no-dev`; `route:cache` baked at build
+  (verified safe incl. the closure + user-list routes), `config:cache` deferred to
+  the entrypoint so per-deployment env applies; HEALTHCHECK on the `/` app root
+  (no `/up` route at the time — see §11's observability follow-up which adds one);
+  entrypoint launches `octane:start`. `.dockerignore` refreshed. **Not built on this
+  machine** (no Docker) — see the commit's verification checklist.
+- **PHPStan/Larastan + Pint + CI matrix (audit-1 P2 #16).** `require-dev` gains
+  `larastan/larastan ^3.13` (Laravel-13 compatible), `phpstan/phpstan ^2.3`,
+  `laravel/pint ^1.32`. `phpstan.neon` scans `app/` at **level 5** (level 6 → 1000+
+  issues on the Lumen-era code; 5 settles at 748) with an 816-entry
+  `phpstan-baseline.neon` so analysis exits 0 — bump + regenerate as code is
+  type-lined. `pint.json` = Laravel preset. **Pint policy:** the whole tree is not
+  Pint-clean (≈400-file diff), so this batch formats only the files it touches and
+  CI's `pint --test` is scoped to those paths; the repo-wide format is an explicit
+  follow-up. `.github/workflows/ci.yml` adds a PHP 8.3/8.4 matrix with a Mongo
+  service, lint, phpstan, pint, and `phpunit --no-coverage`
+  (`DB_DATABASE=jikan_tests`, `CACHE_DRIVER=array`, `SCOUT_DRIVER` unset).
+
+---
+
+## Verification
+
+- **Unit + integration**: `php vendor/bin/phpunit --no-coverage`
+  → **292 tests, 2707 assertions, 0 failures** (first fully-green run). The
+  time-dependent `SeasonControllerTest` flake was removed (see follow-ups) and
+  the new random-endpoint regression tests (+3) pass. Earlier baseline while the
+  flake existed: 280–289 tests / 2673–2696 assertions with 1–2 season failures.
+- **Parity harness** (`tools/parity/{snapshot,compare}.php`, baseline committed):
+  **69 → 3** differences at the green check; re-verified after the data wipe and the
+  P0/P1/practice fixes — **21 endpoints match the baseline byte-for-byte, including the
+  seeded genres/magazines/producers**, and the changes introduced **no new shape or
+  status diffs**. Every remaining difference is explained by documented blockers:
+  anime/manga/characters/people → 500 `ParserException` (upstream MAL markup change),
+  list endpoints empty without anime data, `/docs` 301 redirect, `users/recentlyonline`
+  pre-existing failure. The harness now masks the heartbeat `score` (int/float
+  depending on recorded events).
+- **Live smoke** (native runtime): `/`, `/v4`, `/v4/genres/anime`, `/v4/seasons/now`,
+  `/v4/schedules?filter=...`, `/v4/producers/{id}`, `/v4/api/documentation` all `200`.
+- **Octane**: `php artisan octane:start --server=roadrunner` serves endpoints `200`;
+  FrankenPHP available via `OCTANE_SERVER=frankenphp`.
+- **Octane soak (2026-10-11)**: 12 iterations × 10 endpoints (~130 requests) with
+  varied query strings against RoadRunner 2025.1.15 — identical status codes every
+  iteration, byte-identical repeated payloads, correct pagination across pages, zero
+  error/panic/worker-restart lines in the log, `/up` → 200. Confirms the flush set
+  (repos, `CacheOptions`, mediator, Mongo heartbeat) leaks no state between requests.
+
+### 14. Verification + hardening batch (2026-10-11, parallelised)
+- **Random endpoints fixed** — `QueryRandom{Anime,Manga}Handler` and the
+  `QueryRandomItemHandler` family passed a null `->first()` into a Resource when the
+  underlying collection was empty (visible only with no indexed data), crashing with
+  "Attempt to read property ... on null". Now `abort(404)` in the standard error shape;
+  regression tests cover empty → 404 (both families) and seeded → 200.
+- **Mongo index audit (`DB_INDEXES.md`)** — all 134 squash-migration indexes are
+  present in the live `jikan` DB (0 missing); proposed compound indexes for
+  schedule/season/top queries (decision pending).
+- **Test-DB `$text` index swap fixed** — `ensureSearchIndexes` had `characters`
+  (`{name,name_kanji}`) and `people` (`{name,given_name,family_name}`) swapped vs the
+  migration; corrected + made drop-then-create so a stale index definition can never
+  silently survive a test run.
+- **`.env.dist` env-key sync** — 68 config keys added (App/locales, Logging, Caching,
+  Redis/Queue, Session/Auth, Mail, Scout/TypeSense, Swagger, Sentry, Octane…), 12
+  orphaned keys removed, 4 documented-but-commented keys (empty value would clobber a
+  non-empty default).
+- **Anime compound indexes** (from `DB_INDEXES.md`) — new migration
+  `2026_10_11_000000_add_anime_compound_indexes.php` creates `schedule`
+  `{status,type,approved,broadcast,members}`, `season` `{aired.from,aired.to,airing,members:-1}`
+  and `top_airing` `{airing,score:-1}`; applied to the live `jikan.anime` and verified.
+
+---
+
+## Not done / follow-ups
+- Rector config (not requested here) + repo-wide Pint formatting (see §13 policy).
+- **`SeasonControllerTest` de-flaked (2026-10-11)** — no more wall-clock dependence or
+  seeded-data flakiness: `QueryCurrentAnimeSeasonHandler::getCurrentSeason()` honours
+  `Carbon::setTestNow()` via `Carbon::now('Asia/Tokyo')`; the continuing-item fixture
+  now pins `episodes = null` (deterministic "long-running" branch match instead of the
+  factory's random `episodes` coin-flip); `DefaultAnimeRepository::getItemsBySeason()`
+  computes "last day of this month" on a clone instead of mutating the caller's `$to`.
+  Verified `--filter SeasonControllerTest` green 20× (incl. random order). Baseline
+  suite target: 289 tests / 2696 assertions, all green.
+- CI: Renovate/Dependabot; validate the PHP 8.4 job + Mongo service (8.3 is no longer supported) on GitHub
+  Actions (runner-level; logic verified locally), and a full Typesense integration
+  run once a server is available.
+- Patch or await upstream fix for the MAL theme-markup parser breakage.
+- Verify the native Typesense engine end-to-end against a real Typesense server
+  (docker-compose) and reconcile search-index behavior/ranking parity.
+
+
+## Docker: first real build validated locally (2026-10-12)
+
+Set up **Colima** (free CLI Docker on macOS; no Docker Desktop). First actual
+`docker compose build` + `up` ran clean and found six real issues the static
+validation couldn't:
+
+1. **`composer install` deps stage failed** — composer image has no
+   `ext-mongodb`/`ext-pcntl`/`ext-sockets`. Fix: `--ignore-platform-reqs` on the
+   deps-stage install (runtime stage has the extensions and does the authoritative
+   `dump-autoload`).
+2. **`docker-php-ext-install sockets` failed** — Alpine needs `linux-headers`
+   for `sock_diag.h`. Fix: add it to the `apk add` line.
+3. **RR binary stage — `COPY --from=${RR_STAGE}` doesn't expand under BuildKit**
+   ("invalid reference format"). Fix: dropped the `FROM scratch` + build-arg
+   dance entirely; the Dockerfile now detects the arch at build time
+   (`uname -m` → `amd64`/`arm64`) and fetches the correct 2025.1.15 asset. The
+   `RR_STAGE` build arg, compose arg and all docs references were removed.
+4. **`/app/docker-entrypoint.sh` — `#!/bin/bash` but the base is Alpine (no
+   bash)** → "no such file or directory" crash-loop. Fix: converted to POSIX sh.
+5. **`docker-entrypoint.php` — `MirazMac\DotEnv\Writer` (unpublished package)** →
+   fatal at boot. Fix: rewrote the .env writer inline (self-contained, preserved
+   behaviour, also fixed a latent hardcoded `'SCOUT_DRIVER'` key bug).
+6. **Typesense service**: `typesense/typesense:0.26.0` does not exist on Docker
+   Hub (pinned `27.0`), and the `27.0` image has no `curl` for its healthcheck
+   (rewrote the probe with bash `/dev/tcp`).
+
+Plus two config/type bugs surfaced by the container env (both also reachable
+natively):
+
+- `config/scout.php` used `env('SCOUT_DRIVER', 'null')` as the "disabled"
+  sentinel — but Laravel's `env()` coerces the literal string `"null"` to PHP
+  `null`, so `App\Providers\AppServiceProvider::getSearchIndexDriver(): string`
+  crashed whenever `SCOUT_DRIVER=null` was actually set (exactly the compose
+  default). Fix: `?? 'null'`.
+- `App\Support\JikanConfig` read `typesense_options.*` (env strings) into typed
+  `int` properties; blank/string values (e.g. `.env.dist`'s empty
+  `TYPESENSE_TYPO_TOKENS_THRESHOLD=`) bypassed the `?? maxResultsPerPage()`
+  guard and TypeError'd. Fix: treat blank as default, then `(int)` cast.
+
+**Verified on the wire (Colima, arm64, compose stack all healthy):** image
+builds, `rr --version` = 2025.1.15, `GET /up` = 200, `GET /` = v4 heartbeat JSON,
+empty-DB index endpoints return proper pagination (count 0). Data-backed detail
+endpoints (`/v4/anime/:id`) currently 500 `ParserException` on an **empty** DB —
+data-gated on the jikan v5 parser upstream blockers, not the app shell.
+
+
+## 15. Typesense E2E verified against a real server (2026-10-12)
+
+Closed the last "previously-unverified" search gap. With Docker Typesense 27.0
+running locally (Colima), the native Scout `TypesenseEngine` was exercised
+end-to-end — **out of the box, with no `model-settings` config and no
+pre-created collections** (the `typesenseCollectionSchema()` /
+`typesenseSearchParameters()` model-methods contract from the spike's
+"production fix" is the only wiring):
+
+- `scout:import App\Producers` → collection auto-created, 382 docs;
+  `App\Magazine` → 1498 docs.
+- §5 verification matrix all green via `/v4`: `producers?q=studio` = 35,
+  `q=pierrot` = 1, `magazines?q=shonen` = 39, sort by favorites → top id 2
+  (Kyoto Animation).
+- **Chunked pagination >250 hits** (`jikanPaginate()`/`ScoutBuilderMixin`)
+  correct: `magazines?q=*` total 1498 (int) / 60 pages; `producers?q=*` total
+  382 / 16 pages; page 10→11 boundary has no overlap.
+- Empty index (`anime?q=…`, no anime data — upstream-blocked) returns a
+  graceful empty shape.
+- Results + runbook recorded in `docs/TYPESENSE_SPIKE.md` §8; spike-created
+  `search_metrics` rows cleaned up.
+
+Effectively resolves the changelog follow-up "Verify the native Typesense
+engine end-to-end against a real Typesense server and reconcile search-index
+behavior/ranking parity" for the import/search/pagination paths. Ranking
+parity for anime/manga still awaits data (UP-01/UP-02).
+
+
+## 16. Context layer — completed + suite upgraded (2026-10-12)
+
+- **backend-quality-suite upgraded to main HEAD** (reinstalled from
+  `irfan-dahir/backend-quality-suite`; carries the 0.2.0 line + the merged
+  `capabilities(ctx=None)` fix + the new Node adapter). Verified: same audit
+  posture as v0.1.0 (endpoint-parity / layer-boundaries / route-coverage /
+  form-request-validation clean; api-consistency + versioning residuals
+  unchanged), `backend-suite doctor: profile healthy`.
+- **Doc-role layer fully established**: `.backend-suite/docs.manifest.json`
+  now maps **7 roles** (`decisions`→MIGRATION_PLAN, `backlog`+`changelog`→
+  PR_CHANGELOG, `deployment`→DOCKER, `entry-point`→README, `rfc`→RFC,
+  `production-readiness`→PRODUCTION-READINESS) and **declines the other 11**
+  (api, api-standard, brief, builds, common-mistakes, contributing,
+  deprecations, documentation-rules, postmortem, public-roadmap, release).
+  `resolve.py` exits 0 for every mapped role (no stub debt).
+- **New authored docs**: `docs/RFC.md` (RFC-0001 — the Laravel 13 migration,
+  accepted, decision trail), `docs/PRODUCTION-READINESS.md` (13 gates,
+  evidence-backed), plus `docs/ARCHITECTURE.md` and `docs/DESIGN.md` authored
+  to the suite's `architecture`/`design` doc roles — those two roles are
+  **not yet shipped in the released suite** (transcript/`main` gap), so they
+  live as plain authored docs until upstream ships the roles, then map in.
+
+
+## 17. jikan v5.0.0-beta adopted (2026-10-12) — parser blockers cleared
+
+Upgraded `jikan-me/jikan` **^4 → ^5.0@beta** (PHP ^8.4; deps now Symfony
+browser-kit/css-selector/http-client). This closes the last big external gate:
+
+- **Goutte (UP-06) resolved** — v5 dropped `fabpot/goutte`; removed the
+  `app/Compat/Goutte/` shim and the composer `replace`. No app-side wiring
+  change was needed (MalClient already received a Symfony HttpClientInterface).
+- **UP-01…UP-05 verified fixed live** (2026-10-12): `/anime/1` Cowboy Bebop with
+  OP/ED themes, `/manga/1` Monster with `status`, character + person parses,
+  and `/v4/users/recentlyonline` now **200** end-to-end (was a documented
+  pre-existing failure). The v5 `getRecentOnlineUsers(): array` flows through the
+  existing `documents('users_recently_online')` repo unchanged.
+- **Suite**: 292 / 2707 green, 0 failures on v5.
+- **Heartbeat** `parser_version` auto-reports **v5.0.0-beta** (from composer
+  `InstalledVersions`).
+- **Seeding demo**: `indexer:anime-schedule` run populates the 120 currently-
+  airing anime (parser works against current MAL markup).
+- Docs updated: `UPSTREAM_ISSUES.md` (resolutions), `PRODUCTION-READINESS.md`
+  (risks cleared), `DESIGN.md`, `UPSTREAM_PR.md` (§1 + §6).
+- **Parity baseline ratcheted (2026-10-12)** after the adoption — old baseline still
+  recorded the blocked/500 era; regenerated and re-verified: **59 endpoints match,
+  0 diffs** (fresh capture vs baseline). `/docs` 301 remains the only intentional
+  status baseline; `users/recentlyonline` is now 200.
+- A full `indexer:anime` / `indexer:manga` run populates the rest (schedule-only
+  index currently seeds the 120 airing anime — enough to prove the pipeline).
+
+
+## 18. Meanwhile batch while the full index runs (2026-10-12)
+
+- **Full audit catalog re-run on the upgraded suite** (backend-quality-suite main,
+  19 audits): **clean** — cache-ttl-coverage, claude-md-drift (N/A), contract-headers
+  (N/A), doc-staleness, endpoint-parity, error-handling, error-shape, form-request-
+  validation, layer-boundaries, proposal-status (N/A), prose-flags, rate-limit,
+  route-coverage, route-model-binding (0 critical / 103 should-fix — unchanged
+  false-positives, re-confirmed on the newer suite), safe-repairers, **toolchain-gates
+  (now wired + clean)**, skill-paths (inert), versioning (known false-positive),
+  api-consistency (known sentinel false-positive).
+  - **toolchain-gates wired**: added `toolchainGates` to `.backend-suite/arch-rules.json`
+    (composer.json manifest, phpunit.xml runner, required `test` script, `--testsuite`) —
+    runs clean: all composer `--testsuite` flags point at declared suites.
+  - **Recorded N/A**: claude-md-drift (no project CLAUDE.md; agent instructions are
+    docs/SETUP.md + `.ai/`), contract-headers (that banner convention targets a
+    screen→adapter UI architecture; our contract = parity + swagger), proposal-status
+    (no `docs/proposals/`; our RFC.md uses its own Status table), skill-paths
+    (git-ls-files inert; 0 plugin refs anyway). Not exemptions — deliberate, documented.
+- **DB index proposals finalized** (`docs/DB_INDEXES.md`): found the compound-index
+  migration `2026_10_11_000000_add_anime_compound_indexes.php` was an **empty stub**
+  (indexes had only been applied live) — re-wrote it with the real
+  `schedule`/`season`/`top_airing` definitions; added the pending companion P4 as
+  **`2026_10_12_000000_add_anime_top_upcoming_index.php`** (`{status,type,members:-1}`)
+  and **applied+verified all four** on the live `jikan.anime`.
+- **Post-full-index runbook** added: `docs/POST_FULL_INDEX.md` — step-by-step for
+  when the run completes (drain failures, parity re-verify + ratchet, Typesense
+  re-import, endpoint smoke, container demo, hygiene/record).
+- route-model-binding re-checked under the newer suite: **unchanged** (0 critical,
+  103 should-fix — all DTO-command params by design; no exemption mechanism).
+
+
+## 19. Scalar API reference replaces the (disabled) Swagger UI (2026-10-12)
+
+- New `GET /v4/documentation` renders the **Scalar** API reference from the
+  existing l5-swagger OpenAPI JSON (`/v4/api-docs`) — no new composer deps, no
+  Node: `resources/views/scalar/reference.blade.php` loads the pinned
+  `@scalar/api-reference@1.73.1` esm build from the jsdelivr CDN
+  (`createApiReference('#app', { url })`), same-origin against the spec.
+- `/docs` now 301 → `/v4/documentation` (previously redirected into the
+  deliberately-disabled Swagger UI → 404). `DisableSwaggerUi` + spec
+  generation untouched. Docs viewer is read-only: test-request button + dev
+  tools hidden, Scalar's hosted Agent AI chat disabled (no spec upload).
+  Verification: spec 200 JSON, page 200, /docs 301, swagger-ui path 404.
+- Scalar is a spec renderer (paths/schemas/code-samples generated from the
+  OpenAPI doc) — it does not write endpoint prose; summaries/descriptions
+  would come from the `@OA` annotations (currently sparse).
+
+
+## 20. Scalar becomes the docs UI at /v4/docs; OpenAPI spec at /v4/docs/openapi (2026-10-12)
+
+Per request, the canonical URLs are now:
+- **`GET /v4/docs`** — the Scalar API reference (replaces the disabled Swagger UI).
+- **`GET /v4/docs/openapi`** — the OpenAPI spec JSON, served from the
+  l5-swagger-generated file (byte-identical to l5-swagger's `/v4/api-docs`,
+  verified). `/v4/api-docs` remains as the l5-swagger-native route for tooling
+  that already references it.
+- Aliases: `/docs` and `/v4/documentation` → 301 `/v4/docs`; Swagger UI path
+  `/v4/api/documentation` stays 404 (disabled).
+- The Scalar view now points at `/v4/docs/openapi`. Docs updated
+  (PROVIDERS/SETUP). Audit posture unchanged (endpoint-parity + route-coverage
+  clean; closure routes not in the action-parity set).
+
+
+## 21. /v4/api-docs retired via 301; l5-swagger serves the spec at /v4/docs/openapi (2026-10-12)
+
+- l5-swagger now serves the OpenAPI JSON **at `/v4/docs/openapi`** directly
+  (`config/l5-swagger.php` → `routes.docs = 'docs/openapi'`); the App-level
+  closure route for it was dropped (no duplicate route).
+- **`/v4/api-docs` → 301 `/v4/docs/openapi`** — single canonical spec URL.
+  Parity harness only tracks `/docs` (still 301), so no ratchet needed.
+- Verified: `/v4/docs` 200 (Scalar), `/v4/docs/openapi` 200 `application/json`
+  (100 paths), `/v4/api-docs` 301, Swagger UI path 404. endpoint-parity clean.
+
+
+## 22. Richer generated docs: @OA prose + docblock→attribute migration (2026-10-12)
+
+- **Every operation now carries `summary` + `description`** (curated per
+  endpoint; param-aware descriptions). Previously 0/100 had a summary.
+- **Cause found:** `l5-swagger:generate` was silently broken — swagger-php 6.13
+  does not parse legacy docblock `@OA\` annotations anymore (structurally
+  verified: even a canonical docblock fixture yields zero operations);
+  generation was failing to exit 0 on the pristine tree.
+- **Fixed by migrating the docblock annotations to PHP 8 attributes**:
+  `app/Http/Controllers/V4DB/*` (101 `#[OA\Get(...)]` on owning methods),
+  `app/Http/Resources/V4/*` + `app/Enums/*` (class-level `#[OA\Schema(...)]`),
+  `app/Dto/Concerns/*` (`#[OA\Parameter(...)]`). Only annotation syntax
+  changed — zero runtime effect (verified: pristine tree fails the same
+  integration tests, so the suite state is environmental, not this change).
+- **Result:** `l5-swagger:generate` exit 0; spec = **101 operations, 101 with
+  summaries, 127 component schemas** (+`basic_user`), 8 reusable parameter
+  components restored; `storage/api-docs/api-docs.json` regenerated.
+- Config: `config/l5-swagger.php` adds `app/Enums` to the scan paths (the
+  enum-filter schemas were referenced but never scanned).
+- Audits: `endpoint-parity` + `route-coverage` still clean after adding
+  `#[OA\Get/Post/...]` markers to `.backend-suite/arch-rules.json`
+  (`docMarkers`). The audit plugin itself also needs attribute support — a
+  local patch lives at `/tmp/audit_endpoint_parity.py.patched` (candidate
+  upstream backend-quality-suite PR).
+- Docs nuance: Scalar renders the enriched prose now. Follow-up if desired:
+  migrate remaining integration-test environmental breakage (Typesense-running
+  + missing cached MAL fixtures) so the suite returns to fully green locally.
+
+
+## 23. Fix: enums lost their spatie value docblocks in the attribute migration; suite green again (2026-10-12)
+
+- **Regression fixed (from §22):** the `@OA\Schema` docblock→attribute conversion on
+  `app/Enums/*` also deleted the spatie/laravel-enum value declarations
+  (`@method static self value()`), so filters like `TopAnimeFilterEnum::airing()`
+  threw `BadMethodCallException` (integration tests red: 49 errors/25 failures).
+  Re-injected the `@method` docblocks into all 22 value enums while keeping the
+  `#[OA\Schema(...)]` attributes — **full suite green again: 292 / 2707, 0
+  failures/errors**.
+- **Test-DB hermeticity:** `SyntheticMongoDbTransaction` never truncated the
+  model-less scraper-cache tables `watch` and `manga_forum`, so stale cache docs
+  accumulated across runs and broke cache lookups (`CustomTestException` on
+  5 watch/forum tests). Added both to the truncation list — no more manual wipe.
+- Verified: `l5-swagger:generate` still exit 0 (101 ops/127 schemas);
+  endpoint-parity + route-coverage clean; the failing integration slices now
+  pass with the standard CI-style env (`SCOUT_DRIVER=null CACHE_DRIVER=array`).
+
+
+## 24. Upstream: endpoint-parity attribute support (backend-quality-suite #24)
+
+The `backend-quality-suite` endpoint-parity audit only detected docblock
+`@OA\Get` markers, which swagger-php 6 no longer parses — after our attribute
+migration it would flag every controller action as undocumented on a fresh
+venv. Shipped upstream as **backend-quality-suite#24** (bracket-aware
+`#[OA\...]` attribute-chain detection + `docMarkers` backwards-compat:
+`@OA\Get(` matches `#[OA\Get(`). The local venv patch used until then:
+`/tmp/audit_endpoint_parity.py.patched`.
+
+
+## 25. Scalar self-hosted; installer/docs polish (2026-10-12)
+
+- **Scalar fully self-hosted** — no runtime CDN dependency: vendored
+  `@scalar/api-reference@1.73.1` UMD standalone (`public/vendor/scalar/`:
+  standalone.js 4.2 MiB + style.css 304 KiB, SHA-256 matches jsdelivr) and the
+  docs view now loads local assets via `Scalar.createApiReference(...)` with the
+  same config (url=/v4/docs/openapi, hideTestRequestButton, dev tools off,
+  hosted Agent AI disabled). Verified: page + assets 200, zero `cdn.jsdelivr`
+  references, offline-capable.
+- **installer/docs polish**: `docs/SETUP.md` gains `--dry-run`/`--yes` rows, a
+  PROVIDERS pointer, and a "PHP & Composer discovery" section (PHP_BIN →
+  tools/dev/php wrapper → distro php; COMPOSER_BIN → composer); `README.MD`
+  quick-start + tests command note the `--dry-run` preview and the Linux
+  `PHP_BIN=… php …` replacement for the gitignored `tools/dev/php`.
+
+
+## 26. OpenAPI prose QA pass (2026-10-12)
+
+- Reviewed all 101 operation descriptions in the `#[OA\Get]` attributes;
+  **rewrote 94** to natural, accurate copy (7 left as-is — already good).
+- Killed the template artifacts: the "Retrieves the X for the Y identified by
+  **id**" stutter (~60 ops), "most recent recent…" double-words, run-on bold
+  segments (`**q, **order_by`), `a random characters/people/users` grammar, the
+  `/users/{username}/animelist`-style broken HTML anchors.
+- Fixed factual errors: `/users/userbyid/{id}` (path is `id`, not `username`),
+  `/anime` search (catalog, no `id`), etc. Accuracy cross-checked against the
+  v4 resource schemas (characters vs staff vs voices, genre filter enum, club
+  relations, statistics shapes, season/year).
+- Regenerated spec: **101 ops, 101/101 with summary + description**, exit 0.
+
+
+## 27. CI workflow static validation (2026-10-12) — runner-ready
+
+Static audit of the GitHub Actions workflows (no runner available):
+
+- **ci.yml**: fixed a real bug — `CACHE_MAGAZINES_EXPIRE` → **`CACHE_MAGAZINE_EXPIRE`**
+  (app/config+jikan.php and .env.dist use the singular form; the plural was a
+  dead var that silently dropped the 5-day magazine TTL to 1 day). Also pinned
+  `mongo:latest` → `mongo:8.0` (matches docker-compose). Everything else verified
+  against the app: matrix 8.3/8.4 + `--ignore-platform-req=php` on 8.3 is
+  consistent with `config.platform.php: 8.4.26`; Mongo service/healthcheck and
+  env contract (`jikan_tests`, `CACHE_DRIVER=array`, `SCOUT_DRIVER` unset /
+  engine-less) match config + the test harness; lint/phpstan/pint/phpunit + the
+  Docker build step (no `RR_STAGE`, arch auto-detect) all check out.
+- **tests.yml DELETED** — superseded by ci.yml and guaranteed red on the first
+  run (PHP pinned 8.1 vs required ^8.3, duplicate triggers, stale
+  typesense:0.24.1 + `SCOUT_DRIVER=typesense`). Coverage via codecov can be
+  folded into ci.yml later if wanted.
+- **phpstan-baseline.neon**: removed the 3 stale `app/Compat/Goutte/Client.php`
+  ignoreError entries (dead since the Goutte shim was dropped); PHPStan gate now
+  logs zero warnings. `container-image-release.yml` validated — clean (no ARGs,
+  RR arch auto-detect, standard multi-arch digest flow).
+
+## 28. AI/LLM modernization — phases 1 & 2 landed (2026-10-12)
+
+Executed the first two phases of `docs/proposals/2026-10-12-ai-llm-modernization.md`
+(per decisions: AGENTS.md+CLAUDE.md; llms.txt committed **and** served; commit-canonical
+artifacts with CI diff guards; `/v4/ai/manifest.json` **and** MCP as product — MCP later;
+eval as acceptance).
+
+**Phase 1 — agent & machine entrypoints**
+- `AGENTS.md` (root) — agent quickstart: commands (test/pint/phpstan/generate/parity/audits),
+  repo map, add-an-endpoint recipe pointer, conventions (v4 immutability, enum venerated
+  docblocks, swagger-php-6 attributes, branch rule), green-gates list.
+- `CLAUDE.md` — thin include pointing at AGENTS.md + the 3 most critical rules.
+- `llms.txt` (root, llmstxt.org style) — LLM index of docs + contract + endpoints; served at
+  **`GET /llms.txt`** (outside the throttled group; text/plain).
+- `docs/INDEX.md` — question → file table; linked from README.
+
+**Phase 2 — agent interfaces + artifact freshness**
+- `composer endpoints:write` / `endpoints:check` (`EndpointsCommand`) — deterministic
+  generation/verification of the endpoint catalog + tool manifest from the OpenAPI spec.
+- **`GET /v4/ai/manifest.json`** — OpenAI-style `tools` (+ legacy `functions`) for all 101
+  operations (name=operationId, description=summary+description, JSON-schema params incl.
+  enums/required). Committed canonical at `docs/ai/{endpoints.json,manifest.json}`.
+- CI: new `artifact-freshness` job — regenerates spec + artifacts and fails on `git diff`
+  drift; serve-smoke checks `/llms.txt` + `/v4/ai/manifest.json`. (Runner-gated execute;
+  the same commands are green locally.)
+- `docs/RECIPE_ADD_ENDPOINT.md` — the end-to-end recipe (route → DTO → handler → service →
+  resource → `@OA` attr → test → generate → audits), the WS-F acceptance path.
+- Verified: `endpoints:check` exit 0, `l5-swagger:generate` exit 0, endpoint-parity +
+  route-coverage + toolchain-gates + proposal-status audits green, `/llms.txt` +
+  `/v4/ai/manifest.json` serve 200. Remaining phases (3–6) tracked in a GitHub issue.
+
+## 30. Performance stress-test matrix (2026-10-13)
+
+Benched `/up`, `/v4/anime/21`, `/v4/seasons/now` across runtimes (ab -k, spare
+ports, indexer running in the background — relative numbers, caveat in the doc):
+- Native `artisan serve` ≈ 236 RPS (`/up`) / 41 (`anime/21`) / 31 (`seasons/now`)
+  — single-threaded ceiling (~27 ms request latency dominated by work, not server).
+- **Octane/RoadRunner**: 2 workers → 2,046 `/up`, 92 `anime/21`; **8 workers →
+  3,973 `/up`, ~212 `anime/21` @ c=10** — real scaling.
+- **FrankenPHP**: fastest server (5,457 `/up` RPS) but **500 on Mongo routes** —
+  its static binary lacks ext-mongodb (container image with the driver is the path).
+- `opcache.enable_cli` on the dev server ≈ nil (compile isn't the bottleneck).
+Bottlenecks: Mongo `findOne` ≈ 7.4 ms (largest single cost), JMS serialization +
+middleware chain (~15 ms), **60 s micro-cache not engaging**, heavy list payloads
+(~105 KB seasons) with no in-app gzip. Full analysis + prioritized improvements in
+`docs/PERFORMANCE.md` (P0 micro-cache/indexes, P1 preload/gzip, P2 Octane tuning
++Redis + fields/batch/ETag from the AI proposal, P3 re-measure post-index).
+
+## 31. P0 evaluation: micro-cache + Mongo read path (local, metrics kept — NOT pushed)
+
+- Confirmed micro-cache engages on repeat (295→19 ms) but **no throughput win** under
+  `ab -k` on Octane (8w): OFF 298 RPS vs ON 188 RPS (`/v4/anime/21`); the per-request
+  `sha1/json_encode/json_decode` overhead outweighs the ~7 ms indexed Mongo read, and it's
+  per-worker state. Kept `MICROCACHING=false` (repo default); recorded (PERFORMANCE.md gains
+  log) for PR #614 reporting.
+- Verified `mal_id` + compound indexes exist; `findOne` ≈ 7.4 ms is doc-size/serialization
+  cost, not a scan. Single-request floor ≈ 23 ms across runtimes.
+- Recommended: worker scaling (already 41→~298 RPS), profile the heartbeat middleware/
+  JMS floor, gzip+HTTP/2, Redis + fields/batch/ETag later. Numbers TBD-to-PR, local-only.
+
+## 32. End-to-end performance pass — optimizations applied + report (local, NOT pushed)
+
+Applied two local optimizations (pending your go before any push):
+- **Heartbeat debounce** (`SourceHeartbeatListener` + `jikan.source_heartbeat_interval`,
+  default 1 s): per-request Mongo heartbeat insert/query removed → `/v4/anime/21`
+  baseline 259 rps → **~998 rps** (4 workers) and the single-request floor fell
+  **~23 ms → ~4 ms**; `/v4/seasons/now` 104 → **~203 rps**.
+- **`GzipResponse` middleware** (accept-encoding opt-in, >1 KB, 2xx): `/v4/seasons/now`
+  payload 109 KB → **18 KB** (~6× transfer).
+
+Measured-but-kept-default: micro-cache (no win on small reads — off), opcache CLI (~nil),
+config:cache (neutral on warm workers). Not actionable locally: opcache.preload /
+classmap-authoritative (runtime image), Redis via docker (host port closed), FrankenPHP
+data routes (no driver in static binary). Full matrix so far in `docs/PERFORMANCE.md`
+(baseline, levers, after + PR takeaways). Suite green 331/2836; generate 0; endpoints:check 0;
+audits clean.
+
+## 33. End-to-end coverage + robustness benchmark (local, NOT pushed — for PR #614)
+
+Broadened the perf pass to the full surface + request vectors (Octane 4w): throughput
+matrix incl. **Typesense search** (anime/materialq ~91-237 rps), latency composition
+(404 floor ~4 ms; search +typesense round-trip; heavy lists ~33 ms), and an
+**attack/edge vector sweep** (bad ids/params -> correct 400/404; `%2e%2e` 403; huge-id
+~1.7 s scrape path; `per_page=9999` accepted unbounded; `/v4/characters?q=` -> 500 when
+the Typesense collection is missing). Robustness flags: **Octane worker crash churn
+under load** (~500 'Target class [config]' markers, 11 s p100 tail at c=200) —
+priority investigation; plus recs (graceful search when collection missing, bound
+page/per_page, cache scrape-triggering lookups). Full tables in `docs/PERFORMANCE.md`.
+
+## 34. Robustness fixes for the search/attack surface (local, NOT pushed)
+
+- **Search graceful-empty (per requirement): missing/unreachable Typesense
+  collection ⇒ 200 EMPTY, never 500/404** — `SearchController::runSearch` guard
+  on every search action, plus handler-level (`SearchRequestHandler`) and
+  service/telemetry guards. Verified on Octane: characters/people/clubs/manga
+  `?q=` → 200 empty; anime/producers unaffected (real results).
+- **Negative cache for missing ids** (`jikan.scrape_miss_ttl`, default 60 s):
+  huge-id / nonexistent-id hits stop re-scraping MAL every time (was ~0.5-1.7 s
+  per request). In-process store ⇒ fast within a worker; fleet-wide benefit needs
+  a shared cache (Redis) — noted in the report.
+- Typesense touchpoints audited (search service, mixin, analytics read+write,
+  descriptor) — all guarded; full matrix in `docs/PERFORMANCE.md`.
+- `per_page` confirmed already capped at `max_results_per_page` (25); huge pages
+  return empty (no contract change).
+- Suite 331/2836 green; audits clean; octane + serve verified.
+
+## 35. Mongo + Typesense combo verified; memory-ceiling fix (local, NOT pushed)
+
+- Imported the anime catalog into Typesense (`scout:import App\Anime`); verified
+  count alignment (10,321 == Mongo), result hydration (full Mongo entities),
+  filters + sort round-trip, and the **>250 chunked deep-pagination path**.
+- **Found + fixed: the chunked path OOM'd at the 128M CLI memory default when
+  hydrating 250-doc chunks over a 10k-result catalog.** Raised the per-runtime
+  ceiling via `PHP_MEMORY_LIMIT` (default 512M in `bootstrap/app.php`, env-tunable)
+  → `?q=*` returns 200 with correct totals on Octane.
+- Perf note: wildcard pages ~2-3 s (chunk walk per page) — candidate for
+  memoized chunks / keyset cursor later (WS-G/retrieval).
+- Docs: `docs/PERFORMANCE.md` Mongo+Typesense combo section + touchpoint matrix.
+
+## 36. Typesense-engine integration test added (local; NOT pushed)
+
+- New `tests/Integration/TypesenseSearchEndpointTest.php` — end-to-end through the
+  REAL Typesense engine: seeds producers into Mongo → imports to the `_testing`
+  collection → GET `/v4/producers?q=studio` → asserts Mongo-hydrated results
+  (contains the seeded ids + full entity fields) and graceful empty on a
+  non-match. Self-`markTestSkipped` when `SCOUT_DRIVER !== typesense` so the
+  engine-less CI run stays green.
+- Verified: with typesense → 1 test / 7 assertions pass; engine-less default suite
+  → test skips. Full suite now **332 tests / 2836 assertions, 0 failures**
+  (1 skipped = the engine test without a server).
+- Clarified metric: **332 tests vs 2,836 assertions** (assertions are the checks
+  inside tests, not test count) — the suite is fully green.
+
+## 37. Root cause of the indexer failure explosion: mass-assignment on fillable (fixed)
+
+- **Why so many scrapes were failing:** not MAL throttling — a **500 mass-assignment
+  exception at insert**: `App\Anime`/`App\Manga` `$fillable` omitted
+  `external_links`/`streaming_links` (v5-parsed fields) after the AI's "full strict
+  models" change. Every scrape of an anime/manga carrying external/streaming links
+  was scraped from MAL successfully, then **rejected by Eloquent on save** → 500 →
+  recorded as failed. Throttling (429s) and a brief :8000 blip were minor on top.
+- **Fixed:** added `external_links` (+`streaming_links` on Anime) to `$fillable` on
+  `App\Anime` + `App\Manga`.
+- **Verified:** all 25 sampled previously-failed anime ids now return **200** (24 fast);
+  a sampled manga id also 200. Existing `.failed` backlog (20k anime + manga) is
+  retryable via `indexer:{anime,manga} --failed` once the current manga run finishes.
+- Suite 332/2836 green; audits clean.
+
+## 38. Coverage gap closed: store-path persistence tests; no other parser/store defects (local)
+
+- **Why the indexer 500s weren't caught in tests:** the suite covers the READ path
+  (fixtures seeded into Mongo -> response assertions) and blocks live scraping
+  (`CustomTestException`); nothing exercised the **scrape -> parse -> persist**
+  path where v5 fields (`external_links`/`streaming_links`) flow through model
+  `fill()` strictness. The AI's strict-models change had no persist regression test.
+- **Added `tests/Unit/ModelPersistenceTest.php`**: persists v5-shaped Anime +
+  Manga docs (with external/streaming links) through `DatabaseRepository::insert`
+  and asserts they land — this exact test fails if `$fillable` drops those fields.
+- **Residual sweep of the failed backlog (80 ids, post-fix)**: 78 -> 200; the only
+  non-200s are MAL **idle-timeouts** (network, retryable, not a parser/store bug).
+  Other-model scrape probes (characters/people/producers) -> 200; no other
+  fillable/parser gaps found.
+- Suite now 334 tests / 2841 assertions (0 failures, 1 engine-skip).
+
+## 39. Search/deployment coverage expanded (local; NOT pushed)
+
+- **Typesense-engine integration suite extended** (`TypesenseSearchEndpointTest`):
+  + **chunked >250 deep page** via the real engine (seeds 260 searchable anime,
+    `q=`+`page=11` asserts total 260 + non-empty beyond the chunk boundary);
+  + **missing-index graceful-empty** (`/v4/people?q=` → 200 empty, never 500).
+- **`ScoutFlush` null-safety fix**: setUp for a fresh env where a `_testing`
+  collection doesn't exist (or was dropped) threw `ObjectNotFound` — now skipped.
+- **NEW `DeploymentArtifactsTest`** (engine-less, 4 tests / 38 assertions):
+  health/ops surface (`/up`, `/llms.txt`, `/v4/ai/manifest.json`,
+  `/v4/docs/openapi`) + deployment-artifact invariants (Dockerfile base php:8.4,
+  `--ignore-platform-reqs`, `linux-headers`, RR arch auto-detect, no `RR_STAGE`;
+  compose services + mongo:8.0; CI `artifact-freshness`; legacy `tests.yml` gone;
+  committed AI artifacts present). Catches the class of regression that only bites
+  at deploy (dropped health route, resurrected RR_STAGE, missing manifest).
+- Suite now **340 tests / 2,879 assertions / 0 failures** (engine-less; 3 engine
+  tests self-skip; engine run: 3 tests / 12 assertions green).
+
+## 40. Deploy/integration coverage round 2 (local; NOT pushed)
+
+- **`OctaneBootSmokeTest`** — actually boots `octane:start` (RoadRunner) on a
+  spare port and smoke-checks `/up`; self-skips when the `rr` binary is absent
+  (gitignored; CI would `octane:install`). Catches app-boot/Octane regressions.
+- **`ConfigCacheBootTest`** — runs the real `config:cache` (exit 0), serves `/up`
+  from the cached config, clears afterwards.
+- **`ParityEndpointsContractTest`** — parity-in-suite, minimal: every endpoint in
+  `tools/parity/endpoints.txt` must resolve to a registered route (concrete
+  paths matched against parameterized `{id}`/Optional uris, query strings
+  dropped). Catches endpoint drift without a live server.
+- **CI `coverage` job** — xdebug/clover → `codecov-action@v4` (engine-less env,
+  mongo:8.0 service, mirrors the tests contract). Runner-gated like the rest.
+- Suite now **343 tests / 2,885 assertions / 0 failures** engine-less (3 engine
+  tests self-skip); engine run 3 / 12 green.
+
+## 41. Full stress battery measured (local, NOT pushed — for PR #614)
+
+Full run (Octane 8w, optimizations on): endpoint battery (above table), concurrency
+curve (anime/21: c=10 ~1,748 rps, p50 6ms; robust to c=200, tails clean), gzip ~free
+(3-6x transfer cut), **0 worker crashes** (500-search-path churn was the earlier
+crash driver; guarded). Remaining bottlenecks: cold-data scrape-on-miss (mean 2.3s,
+p95 13.6s under mixed distinct-URL load), chunked catalog wildcard deep pages
+(~1.5 rps, 13-23s), search round-trip (~115-300 rps). Full tables in
+`docs/PERFORMANCE.md` (Stress test section). For PR reporting.
+
+## 42. Indexer stopped; go-time pack prepared (local; NOT pushed)
+
+- **Indexer stopped 2026-10-13** (decision): anime **10,399** docs (+20,053
+  retryable via `--failed`), manga **2,191** (partial; run was throttled + hit
+  the fillable bug until fixed). Tests are hermetic (fixtures/engine-less) — no
+  live index needed; backfills re-runnable anytime.
+- **Go-time pack (local):** final PR metrics drafted (stress tables, suite 343/
+  2,885, robustness + search coverage), `UPSTREAM_PR.md` §7 updated, PR-body
+  draft prepared. Path: push 11 local commits -> PR body update -> post-index
+  parity/backfills whenever, then CI first-green on a runner.
+
+## 43. `indexer:items` — populate characters/people (and any id-cache family) (2026-10-13)
+
+- **New generic indexer** `indexer:items <family>` (anime|manga|character|people):
+  fetches the purarue/mal-id-cache id set and self-scrapes `/v4/{family}/{id}`
+  (stores the parsed doc in Mongo). Handles both cache shapes (`ids` flat list
+  for character/people, `{sfw,nsfw}` for anime/manga). Supports
+  `--resume/--failed/--reverse/--index/--delay/--limit` like the dedicated ones;
+  per-family save/failed state files.
+- **Verified:** `character` batch 2→5 docs (0 fails), `people` batch (0 fails).
+- **Clubs:** no id cache exists → populate lazily (user club-list scrapes) —
+  documented.
+- `docs/POST_FULL_INDEX.md` gained a "Populate characters & people" step.
+
+## 44. Person fillable gap found via the new indexer (fixed)
+
+- `indexer:items people` surfaced the same strict-model class on `App\Person`:
+  the store writes `alternate_names` (and `external_links`) but `$fillable` allowed
+  `alternative_names` only → 500 at insert. Added both; **people sweep 10/10 clean**,
+  character sweep 25/25 clean. No further systemic gaps in the swept batches.
+
+## 45. Relational character/people indexer (two-phase) — supersedes the purarue path (2026-10-13)
+
+The purarue character/people caches are stale/dead-id-laden, so §43's
+`indexer:items character|people` (purarue) is not the right source. Replaced with
+a **relational, two-phase** pipeline that derives ids from our own live data:
+
+- **Phase A `indexer:harvest`** — walks the stored `anime`/`manga` collections and
+  harvests ids from the sub-resources (`anime/{id}/characters` = character ids +
+  voice-actor person ids; `anime/{id}/staff` = crew person ids unless `--no-staff`;
+  `manga/{id}/characters`; `manga.authors` = mangaka, no scrape). Deduped into
+  `storage/app/indexer/harvest_{character,people}.json`; `--kind`/`--resume`/
+  `--failed`/`--index`/`--limit`/`--reverse`.
+- **Phase B `indexer:items character|people --source=harvest`** — reads those id
+  files and self-scrapes each detail doc into `characters`/`people`. `--source=auto`
+  (default) routes character/people to harvest; anime/manga stay on purarue;
+  `--source=purarue` forces legacy.
+- **Verified (smoke):** 2 anime + 2 manga → **396 characters / 723 people**, 0
+  failures; Phase B populated correctly (dedup on re-run). No raw-Mongo in the
+  commands (typed Eloquent reads + JSON id files) so phpstan stays clean.
+- **Latent bug fixed:** `Anime::toSearchableArray()` / `Manga::toSearchableArray()`
+  accessed `aired['from']` / `published['from']` unguarded → "array offset on null"
+  whenever a doc without air dates was indexed. Surfaced once Typesense became
+  reachable (Scout observer actually ran). Now null-safe.
+- **Gates:** phpunit **343 tests / 2,897 assertions / 0 errors**; `phpstan` → OK;
+  `pint --test` clean.
+- **Docs:** `docs/INDEXER_SCALING.md` rewritten for the relational design;
+  `docs/POST_FULL_INDEX.md` step 0.5 updated to the two-phase commands.
+
+## 46. Search graceful-empty fallback was instantiating an interface (fixed)
+
+`SearchRequestHandler` imported `Illuminate\Contracts\Pagination\LengthAwarePaginator`
+(the contract) and called `new LengthAwarePaginator(...)` in the catch block — a
+latent fatal ("Cannot instantiate interface") that would fire exactly when search
+degraded (missing/unreachable Typesense collection). Now instantiates the concrete
+`Illuminate\Pagination\LengthAwarePaginator` (aliased), keeping the contract for
+type hints. Also type-lined `SearchController::runSearch()`'s generic `DataRequest<T>`
+param. `phpstan` full-project → OK.
+
+## 47. Handoff: the run moved to another machine (2026-10-14)
+
+- Phase A harvest stopped cleanly at anime ~4.7k/10,399 (save rewound by 100 to
+  cover post-flush ids); the harvest id sets (60,259 characters / 25,354 people),
+  Mongo dump and native-typesense data were packed for the receiving machine
+  (instructions inside the pack: install → mongorestore → resume harvest).
+- `docs/INDEXER_SCALING.md`: replaced projected costs with **measured** ones
+  (steady ~19 s/entry ⇒ Phase A ≈ 2 days; harvested set sizes and the Phase B
+  multi-day implication) and added §6 "Moving the run to another machine"
+  (dump + indexer state + cheap typesense rebuild).
+- Env testing wrap-up (same day): native typesense flag fix + version align and
+  the `.env.dist` empty-value fix (§45/46 follow-ups) are in `7af754e`; compose/
+  Octane search-drift regression filed as issue **#616**.
+
+## 18. jikan v5.0.0-beta.2 (issue #617)
+
+- `jikan-me/jikan` v5.0.0-beta -> **v5.0.0-beta.2**; `composer.json` `php` raised to
+  `^8.4.4` (jikan refuses 8.4.0-8.4.3: php-src GH-17481). `composer.lock` change is scoped
+  to the jikan package (its new `symfony/clock` / `symfony/dom-crawler` requirements were
+  already satisfied by locked versions).
+- No fixture or assertion needed changing: `licensors`, `friends_since` and `last_updates`
+  assertions in the suite come from full documents / `Carbon::now()` and still pass.
+- OpenAPI: `friends_since` (user friends) and profile `about` are `nullable`. Article `views`
+  is not exposed by any endpoint here; the shared `relation` schema has a free-form string
+  `relation`, so manga table relation types need no schema change. `storage/api-docs` is
+  generated and git-ignored.
+- `HandlerParserExceptionTest` pins the anime-card-without-members -> `ParserException` 500
+  mapping; the anime/manga news routes are no longer skipped in `RouteSmokeCrawlTest`
+  (`MalClient::getNewsList()` works again).
+- Live smoke crawl against MAL (114 requests): `/anime/1/news` and `/manga/2/news` 200 (MAL
+  serves no news items for those pages, so `data` is empty); `/anime/1/relations` and
+  `/manga/2/relations` 200 (were 500 `Undefined array key "related"`); `/manga/2/relations`
+  gains Spin-Off and Other (table) entries; `/people/1870/manga` non-empty;
+  `/users/Xinil/statistics` `episodes_watched` 8481 (no longer 8).
+
+## 19. jikan v5.0.0-rc.1 (issues #617 / #619)
+
+- `jikan-me/jikan` v5.0.0-beta.2 -> **v5.0.0-rc.1**; constraint `~5.0.0-rc.1` (still accepts
+  5.0.x). `composer.lock` change is the jikan package only (`plugin-api-version` stays 2.9.0).
+- Suite: one upgrade-caused failure, `HandlerParserExceptionTest`: since beta.3
+  `AnimeCard::getMembers()` returns `null` for a card without a member count (beta.2 threw), so
+  the test pins `null`; the ParserException -> 500 mapping test is unchanged. Nothing else moved
+  (`aired` UTC midnight, `getHelpfulCount()` and the card start dates are not asserted anywhere).
+- OpenAPI `nullable: true`: user `location`/`about` and the anime/manga statistics fields
+  (`days_watched`/`days_read`, `mean_score`, `total_entries`, `rewatched`/`reread`,
+  `episodes_watched`, `chapters_read`, `volumes_read`) on `user_profile`, `user_profile_full`,
+  `user_statistics`; person `favorites` and voice-role `role`; news `date`/`mal_id`; genre, magazine
+  and producer `mal_id`; users-search `last_online`; watch-episode `mal_id`; `mal_url.url`;
+  user and `entry_meta` `image_url`. `/users/{u}/reviews` uses the new
+  `pagination_nullable_last_page` schema. `/anime/{id}/characters` documents `favorites` (#593;
+  manga characters do not return it). Already nullable from earlier work: anime `duration`,
+  episode `score`/`url`/`forum_url`, `friends_since`, the shared image schemas.
+- Null safety: `ReviewsResource` tolerates missing pagination keys, `Person` favorites accessor and
+  search document tolerate `null` (search document uses 0), and the genre, magazine and producer
+  indexers skip list entries without a `mal_id` (they used to upsert on `null`).
+  `Rc1NullSafetyTest` covers these and asserts the generated OpenAPI.
+- Live smoke (port 8001, production flags): `/manga/2/relations` 3 groups (Adaptation, Spin-Off,
+  Other); `/anime/21/relations` 6 groups; `/manga/2/statistics` scores 1..10 each carry their own
+  number; `/anime/1/episodes` and `/anime/1/episodes/1` both `1998-10-24T00:00:00+00:00`;
+  `/users/Xinil/statistics` `episodes_watched` 8481, `total_entries` 399;
+  `/users/Xinil/reviews?page=2` (17 reviews) has `has_next_page` false; `/people/1870/manga` 14;
+  `/genres/manga` 79 (after `indexer:genres`); `/anime/1/userupdates` 75 rows.
+  114-route crawl: 113x 200, 1x 404 (`/random/users` on an empty users collection).
+- **Still broken in rc.1 (upstream):** `/anime/{id}/news` and `/manga/{id}/news` return empty `data`
+  (MyAnimeList's per-entry news page uses `h2.mb8` + `div.clearfix` items, rc.1 selects
+  `div.news-unit`; jikan#661), and `/manga/{id}/userupdates` returns empty `data` with
+  `has_next_page: true` (`MangaRecentlyUpdatedByUsersListParser` indexes `explode('/')[1]` on cells
+  like "-"; jikan#663). `/anime/{id}/userupdates` works.
+
+## 20. jikan v5.0.0-rc.2 (jikan#661 / jikan#663)
+
+- `jikan-me/jikan` v5.0.0-rc.1 -> **v5.0.0-rc.2**; constraint `~5.0.0-rc.2` (rc.1 no longer
+  satisfies it, so deployments cannot resolve to the broken news/userupdates parsers).
+  `composer.lock` change is the jikan package only (`plugin-api-version` stays 2.9.0).
+- Upstream fixes, all verified through the API: `/anime/{id}/news` and `/manga/{id}/news` return
+  articles again (#661) and paginate (`last_visible_page` is the furthest linked page, and the last
+  page reports `has_next_page: false`); `/manga/{id}/userupdates` returns rows again (#663, it was
+  empty with `has_next_page: true`).
+- Behaviour change: an unknown total in the userupdates tables (`5/?`, or a bare "-") is `null`, no
+  longer `0`. OpenAPI: `episodes_total` (anime) and `volumes_read`/`volumes_total`/`chapters_read`/
+  `chapters_total` (manga) are `nullable: true` in `anime_userupdates`/`manga_userupdates`
+  (`episodes_seen` already was). The resource passes the parser output through, so nothing casts
+  `null` to an int. `storage/api-docs/api-docs.json` regenerated. Clients that treated `0` as
+  "unknown" must check for `null`.
+- A userupdates row that cannot be parsed now raises `ParserException` (HTTP 500 via the existing
+  mapping) instead of an empty page next to `has_next_page: true`.
+- `Rc2NullTotalsTest`: null totals round-trip through `/anime/{id}/userupdates` and
+  `/manga/{id}/userupdates`, a last news page has `has_next_page: false`, and the generated spec
+  declares the fields nullable.
+- Live smoke (port 8001, production flags): `/anime/1/news` 9 items; `/anime/21/news` 30 items,
+  `last_visible_page` 2 (3 on page 2), `?page=99` empty with `has_next_page: false`;
+  `/anime/52991/news` 17; `/manga/2/news` 25; every item has `title`, `url`, `date`,
+  `author_username`, `forum_url`, `comments`, `excerpt`, `images`. `/manga/2/userupdates` 75 rows
+  (page 2 also 75, `last_visible_page` 3), `volumes_total`/`chapters_total` null on all 75,
+  `*_read` null where the cell is "-"; `/anime/21/userupdates` 75 rows, `episodes_total` null on
+  all 75 (One Piece is ongoing); `/anime/1/userupdates` 75 rows, 12 null totals. 114-route crawl:
+  113x 200, 1x 404 (`/random/users` on an empty users collection), same as rc.1.

@@ -3,7 +3,6 @@
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="bootstrap/tests.php"
          colors="true"
-         verbose="true"
 >
     <testsuites>
         <testsuite name="integration">
@@ -13,21 +12,12 @@
           <directory>./tests/Unit/</directory>
         </testsuite>
     </testsuites>
-    <coverage includeUncoveredFiles="false" processUncoveredFiles="true">
+    <source>
       <include>
         <directory suffix=".php">./app</directory>
       </include>
-      <exclude>
-        <directory>./vendor</directory>
-        <directory>./tests</directory>
-        <directory>./storage</directory>
-        <directory>./resources</directory>
-        <directory>./docker</directory>
-        <directory>./bootstrap</directory>
-        <directory>./config</directory>
-        <directory>./routes</directory>
-        <directory>./.github</directory>
-      </exclude>
+    </source>
+    <coverage includeUncoveredFiles="false">
       <report>
         <html outputDirectory="./coverage/html"/>
         <xml outputDirectory="./coverage/xml"/>
@@ -35,12 +25,11 @@
         <text outputFile="php://stdout" showUncoveredFiles="false"/>
       </report>
     </coverage>
-    <listeners>
-      <listener class="Tests\IntegrationTestListener" />
-    </listeners>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="RATE_LIMIT_PER_MINUTE" value="0"/>
+        <env name="TRUSTED_PROXIES" value=""/>
     </php>
 </phpunit>

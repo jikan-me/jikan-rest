@@ -1,11 +1,30 @@
 <?php
 
+use App\Http\Controllers\V4DB\AnimeController;
+use App\Http\Controllers\V4DB\CharacterController;
+use App\Http\Controllers\V4DB\ClubController;
+use App\Http\Controllers\V4DB\GenreController;
+use App\Http\Controllers\V4DB\MagazineController;
+use App\Http\Controllers\V4DB\MangaController;
+use App\Http\Controllers\V4DB\PersonController;
+use App\Http\Controllers\V4DB\ProducerController;
+use App\Http\Controllers\V4DB\RandomController;
+use App\Http\Controllers\V4DB\RecommendationsController;
+use App\Http\Controllers\V4DB\ReviewsController;
+use App\Http\Controllers\V4DB\ScheduleController;
+use App\Http\Controllers\V4DB\SearchController;
+use App\Http\Controllers\V4DB\SeasonController;
+use App\Http\Controllers\V4DB\TopController;
+use App\Http\Controllers\V4DB\UserController;
+use App\Http\Controllers\V4DB\WatchController;
+use App\Providers\SourceHeartbeatProvider;
+use Illuminate\Support\Facades\Route;
 
-$router->get('/', function () use ($router) {
+Route::get('/', function () {
     return response()->json([
         'author_url' => 'https://github.com/irfan-dahir',
         'discord_url' => 'http://discord.jikan.moe',
-        'version' => env('APP_VERSION'),
+        'version' => config('app.version'),
         'parser_version' => JIKAN_PARSER_VERSION,
         'website_url' => 'https://jikan.moe',
         'documentation_url' => 'https://docs.api.jikan.moe/',
@@ -14,563 +33,358 @@ $router->get('/', function () use ($router) {
         'production_api_url' => 'https://api.jikan.moe/v4/',
         'status_url' => 'https://status.jikan.moe',
         'myanimelist_heartbeat' => [
-            'status' => \App\Providers\SourceHeartbeatProvider::getHeartbeatStatus(),
-            'score' => \App\Providers\SourceHeartbeatProvider::getHeartbeatScore(),
-            'down' => \App\Providers\SourceHeartbeatProvider::isFailoverEnabled(),
-            'last_downtime' => \App\Providers\SourceHeartbeatProvider::getLastDowntime()
-        ]
+            'status' => SourceHeartbeatProvider::getHeartbeatStatus(),
+            'score' => SourceHeartbeatProvider::getHeartbeatScore(),
+            'down' => SourceHeartbeatProvider::isFailoverEnabled(),
+            'last_downtime' => SourceHeartbeatProvider::getLastDowntime(),
+        ],
     ]);
-});
+})->name('v4.root');
 
-$router->get('/anime', [
-    'uses' => 'SearchController@anime'
-]);
+Route::get('/anime', [SearchController::class, 'anime'])->name('v4.search.anime');
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'anime/{id:[0-9]+}'
+        'prefix' => 'anime/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
-    function () use ($router) {
-        $router->get('/', [
-            'uses' => 'AnimeController@main'
-        ]);
+    function () {
+        Route::get('/', [AnimeController::class, 'main'])->name('v4.anime.main');
 
-        $router->get('/full', [
-            'uses' => 'AnimeController@full'
-        ]);
+        Route::get('/full', [AnimeController::class, 'full'])->name('v4.anime.full');
 
-        $router->get('/characters', [
-            'uses' => 'AnimeController@characters'
-        ]);
+        Route::get('/characters', [AnimeController::class, 'characters'])->name('v4.anime.characters');
 
-        $router->get('/staff', [
-            'uses' => 'AnimeController@staff'
-        ]);
+        Route::get('/staff', [AnimeController::class, 'staff'])->name('v4.anime.staff');
 
-        $router->get('/episodes', [
-            'uses' => 'AnimeController@episodes'
-        ]);
+        Route::get('/episodes', [AnimeController::class, 'episodes'])->name('v4.anime.episodes');
 
-        $router->get('/episodes/{episodeId:[0-9]+}', [
-            'uses' => 'AnimeController@episode'
-        ]);
+        Route::get('/episodes/{episodeId}', [AnimeController::class, 'episode'])
+            ->name('v4.anime.episode')
+            ->where('episodeId', '[0-9]+');
 
-        $router->get('/news', [
-            'uses' => 'AnimeController@news'
-        ]);
+        Route::get('/news', [AnimeController::class, 'news'])->name('v4.anime.news');
 
-        $router->get('/forum', [
-            'uses' => 'AnimeController@forum'
-        ]);
+        Route::get('/forum', [AnimeController::class, 'forum'])->name('v4.anime.forum');
 
-        $router->get('/videos', [
-            'uses' => 'AnimeController@videos'
-        ]);
+        Route::get('/videos', [AnimeController::class, 'videos'])->name('v4.anime.videos');
 
-        $router->get('/videos/episodes', [
-            'uses' => 'AnimeController@videosEpisodes'
-        ]);
+        Route::get('/videos/episodes', [AnimeController::class, 'videosEpisodes'])->name('v4.anime.videosEpisodes');
 
-        $router->get('/pictures', [
-            'uses' => 'AnimeController@pictures'
-        ]);
+        Route::get('/pictures', [AnimeController::class, 'pictures'])->name('v4.anime.pictures');
 
-        $router->get('/statistics', [
-            'uses' => 'AnimeController@stats'
-        ]);
+        Route::get('/statistics', [AnimeController::class, 'stats'])->name('v4.anime.stats');
 
-        $router->get('/moreinfo', [
-            'uses' => 'AnimeController@moreInfo'
-        ]);
+        Route::get('/moreinfo', [AnimeController::class, 'moreInfo'])->name('v4.anime.moreInfo');
 
-        $router->get('/recommendations', [
-            'uses' => 'AnimeController@recommendations'
-        ]);
+        Route::get('/recommendations', [AnimeController::class, 'recommendations'])->name('v4.anime.recommendations');
 
-        $router->get('/userupdates', [
-            'uses' => 'AnimeController@userupdates'
-        ]);
+        Route::get('/userupdates', [AnimeController::class, 'userupdates'])->name('v4.anime.userupdates');
 
-        $router->get('/reviews', [
-            'uses' => 'AnimeController@reviews'
-        ]);
+        Route::get('/reviews', [AnimeController::class, 'reviews'])->name('v4.anime.reviews');
 
-        $router->get('/relations', [
-            'uses' => 'AnimeController@relations'
-        ]);
+        Route::get('/relations', [AnimeController::class, 'relations'])->name('v4.anime.relations');
 
-        $router->get('/themes', [
-            'uses' => 'AnimeController@themes'
-        ]);
+        Route::get('/themes', [AnimeController::class, 'themes'])->name('v4.anime.themes');
 
-        $router->get('/external', [
-            'uses' => 'AnimeController@external'
-        ]);
+        Route::get('/external', [AnimeController::class, 'external'])->name('v4.anime.external');
 
-        $router->get('/streaming', [
-            'uses' => 'AnimeController@streaming'
-        ]);
+        Route::get('/streaming', [AnimeController::class, 'streaming'])->name('v4.anime.streaming');
     }
 );
 
-$router->get('/manga', [
-    'uses' => 'SearchController@manga'
-]);
+Route::get('/manga', [SearchController::class, 'manga'])->name('v4.search.manga');
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'manga/{id:[0-9]+}'
+        'prefix' => 'manga/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
-    function () use ($router) {
-        $router->get('/', [
-            'uses' => 'MangaController@main'
-        ]);
+    function () {
+        Route::get('/', [MangaController::class, 'main'])->name('v4.manga.main');
 
-        $router->get('/full', [
-            'uses' => 'MangaController@full'
-        ]);
+        Route::get('/full', [MangaController::class, 'full'])->name('v4.manga.full');
 
-        $router->get('/characters', [
-            'uses' => 'MangaController@characters'
-        ]);
+        Route::get('/characters', [MangaController::class, 'characters'])->name('v4.manga.characters');
 
-        $router->get('/news', [
-            'uses' => 'MangaController@news'
-        ]);
+        Route::get('/news', [MangaController::class, 'news'])->name('v4.manga.news');
 
-        $router->get('/forum', [
-            'uses' => 'MangaController@forum'
-        ]);
+        Route::get('/forum', [MangaController::class, 'forum'])->name('v4.manga.forum');
 
-        $router->get('/pictures', [
-            'uses' => 'MangaController@pictures'
-        ]);
+        Route::get('/pictures', [MangaController::class, 'pictures'])->name('v4.manga.pictures');
 
-        $router->get('/statistics', [
-            'uses' => 'MangaController@stats'
-        ]);
+        Route::get('/statistics', [MangaController::class, 'stats'])->name('v4.manga.stats');
 
-        $router->get('/moreinfo', [
-            'uses' => 'MangaController@moreInfo'
-        ]);
+        Route::get('/moreinfo', [MangaController::class, 'moreInfo'])->name('v4.manga.moreInfo');
 
-        $router->get('/recommendations', [
-            'uses' => 'MangaController@recommendations'
-        ]);
+        Route::get('/recommendations', [MangaController::class, 'recommendations'])->name('v4.manga.recommendations');
 
-        $router->get('/userupdates', [
-            'uses' => 'MangaController@userupdates'
-        ]);
+        Route::get('/userupdates', [MangaController::class, 'userupdates'])->name('v4.manga.userupdates');
 
-        $router->get('/reviews', [
-            'uses' => 'MangaController@reviews'
-        ]);
+        Route::get('/reviews', [MangaController::class, 'reviews'])->name('v4.manga.reviews');
 
-        $router->get('/relations', [
-            'uses' => 'MangaController@relations'
-        ]);
+        Route::get('/relations', [MangaController::class, 'relations'])->name('v4.manga.relations');
 
-        $router->get('/external', [
-            'uses' => 'MangaController@external'
-        ]);
+        Route::get('/external', [MangaController::class, 'external'])->name('v4.manga.external');
     }
 );
 
-$router->get('/characters', [
-    'uses' => 'SearchController@character'
-]);
+Route::get('/characters', [SearchController::class, 'character'])->name('v4.search.character');
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'characters/{id:[0-9]+}'
+        'prefix' => 'characters/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
-    function () use ($router) {
-        $router->get('/', [
-            'uses' => 'CharacterController@main'
-        ]);
+    function () {
+        Route::get('/', [CharacterController::class, 'main'])->name('v4.character.main');
 
-        $router->get('/full', [
-            'uses' => 'CharacterController@full'
-        ]);
+        Route::get('/full', [CharacterController::class, 'full'])->name('v4.character.full');
 
-        $router->get('/anime', [
-            'uses' => 'CharacterController@anime'
-        ]);
+        Route::get('/anime', [CharacterController::class, 'anime'])->name('v4.character.anime');
 
-        $router->get('/voices', [
-            'uses' => 'CharacterController@voices'
-        ]);
+        Route::get('/voices', [CharacterController::class, 'voices'])->name('v4.character.voices');
 
-        $router->get('/manga', [
-            'uses' => 'CharacterController@manga'
-        ]);
+        Route::get('/manga', [CharacterController::class, 'manga'])->name('v4.character.manga');
 
-        $router->get('/pictures', [
-            'uses' => 'CharacterController@pictures'
-        ]);
+        Route::get('/pictures', [CharacterController::class, 'pictures'])->name('v4.character.pictures');
     }
 );
 
-$router->get('/people', [
-    'uses' => 'SearchController@people'
-]);
-$router->group(
+Route::get('/people', [SearchController::class, 'people'])->name('v4.search.people');
+Route::group(
     [
-        'prefix' => 'people/{id:[0-9]+}'
+        'prefix' => 'people/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
-    function () use ($router) {
-        $router->get('/', [
-            'uses' => 'PersonController@main'
-        ]);
+    function () {
+        Route::get('/', [PersonController::class, 'main'])->name('v4.person.main');
 
-        $router->get('/full', [
-            'uses' => 'PersonController@full'
-        ]);
+        Route::get('/full', [PersonController::class, 'full'])->name('v4.person.full');
 
-        $router->get('/anime', [
-            'uses' => 'PersonController@anime'
-        ]);
+        Route::get('/anime', [PersonController::class, 'anime'])->name('v4.person.anime');
 
-        $router->get('/voices', [
-            'uses' => 'PersonController@voices'
-        ]);
+        Route::get('/voices', [PersonController::class, 'voices'])->name('v4.person.voices');
 
-        $router->get('/manga', [
-            'uses' => 'PersonController@manga'
-        ]);
+        Route::get('/manga', [PersonController::class, 'manga'])->name('v4.person.manga');
 
-        $router->get('/pictures', [
-            'uses' => 'PersonController@pictures'
-        ]);
+        Route::get('/pictures', [PersonController::class, 'pictures'])->name('v4.person.pictures');
     }
 );
 
-
-$router->group(
+Route::group(
     [
-        'prefix' => 'seasons'
+        'prefix' => 'seasons',
     ],
-    function () use ($router) {
-        $router->get('/', [
-            'uses' => 'SeasonController@archive'
-        ]);
+    function () {
+        Route::get('/', [SeasonController::class, 'archive'])->name('v4.season.archive');
 
-        $router->get('/now', [
-            'uses' => 'SeasonController@now'
-        ]);
+        Route::get('/now', [SeasonController::class, 'now'])->name('v4.season.now');
 
-        $router->get('/upcoming', [
-            'uses' => 'SeasonController@later'
-        ]);
+        Route::get('/upcoming', [SeasonController::class, 'later'])->name('v4.season.later');
 
-        $router->get('/{year:[0-9]{4}}/{season:[A-Za-z]+}', [
-            'uses' => 'SeasonController@main'
-        ]);
+        Route::get('/{year}/{season}', [SeasonController::class, 'main'])->name('v4.season.main');
     }
 );
 
-$router->get('schedules[/{filter:[A-Za-z]+}]', [
-    'uses' => 'ScheduleController@main'
-]);
+Route::get('schedules/{filter?}', [ScheduleController::class, 'main'])
+    ->name('v4.schedule.main')
+    ->where('filter', '[A-Za-z]+');
 
-$router->group(
+Route::get('/producers', [SearchController::class, 'producers'])->name('v4.search.producers');
+
+Route::group(
     [
-        'prefix' => 'producers'
+        'prefix' => 'producers/{id}',
+        // Must live in the group attributes: `group(...)->where()` is a silent no-op.
+        'where' => ['id' => '[0-9]+'],
     ],
-    function() use ($router) {
-        $router->get('/', [
-            'uses' => 'SearchController@producers',
-        ]);
+    function () {
+        Route::get('/', [ProducerController::class, 'main'])->name('v4.producer.main');
 
-        $router->get('/{id:[0-9]+}', [
-            'uses' => 'ProducerController@main'
-        ]);
+        Route::get('/full', [ProducerController::class, 'full'])->name('v4.producer.full');
+
+        Route::get('/external', [ProducerController::class, 'external'])->name('v4.producer.external');
     }
 );
 
-$router->get('/producers', [
-    'uses' => 'SearchController@producers'
-]);
-
-$router->group(
+Route::group(
     [
-        'prefix' => 'producers/{id:[0-9]+}'
+        'prefix' => 'magazines',
     ],
-    function () use ($router) {
-        $router->get('/', [
-            'uses' => 'ProducerController@main'
-        ]);
-
-        $router->get('/full', [
-            'uses' => 'ProducerController@full'
-        ]);
-
-        $router->get('/external', [
-            'uses' => 'ProducerController@external'
-        ]);
+    function () {
+        Route::get('/', [MagazineController::class, 'main'])->name('v4.magazine.main');
     }
 );
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'magazines'
+        'prefix' => 'users',
     ],
-    function() use ($router) {
-        $router->get('/', [
-            'uses' => 'MagazineController@main',
-        ]);
-    }
-);
+    function () {
+        Route::get('/', [SearchController::class, 'users'])->name('v4.search.users');
 
+        Route::get('/recentlyonline', [UserController::class, 'recentlyOnline'])->name('v4.user.recentlyOnline');
 
-$router->group(
-    [
-        'prefix' => 'users'
-    ],
-    function () use ($router) {
-        $router->get('/', [
-            'uses' => 'SearchController@users'
-        ]);
+        Route::get('/userbyid/{id}', [SearchController::class, 'userById'])
+            ->name('v4.search.userById')
+            ->where('id', '[0-9]+');
 
-        $router->get('/recentlyonline', [
-            'uses' => 'UserController@recentlyOnline'
-        ]);
-
-        $router->get('/userbyid/{id:[0-9]+}', [
-            'uses' => 'SearchController@userById'
-        ]);
-
-        $router->group(
+        Route::group(
             [
-                'prefix' => '/{username:[\w\-]+}'
+                'prefix' => '/{username}',
             ],
-            function () use ($router) {
-                $router->get('/', [
-                    'uses' => 'UserController@profile'
-                ]);
+            function () {
+                Route::get('/', [UserController::class, 'profile'])->name('v4.user.profile');
 
-                $router->get('/full', [
-                    'uses' => 'UserController@full'
-                ]);
+                Route::get('/full', [UserController::class, 'full'])->name('v4.user.full');
 
-                $router->get('/statistics', [
-                    'uses' => 'UserController@statistics'
-                ]);
+                Route::get('/statistics', [UserController::class, 'statistics'])->name('v4.user.statistics');
 
-                $router->get('/favorites', [
-                    'uses' => 'UserController@favorites'
-                ]);
+                Route::get('/favorites', [UserController::class, 'favorites'])->name('v4.user.favorites');
 
-                $router->get('/userupdates', [
-                    'uses' => 'UserController@userupdates'
-                ]);
+                Route::get('/userupdates', [UserController::class, 'userupdates'])->name('v4.user.userupdates');
 
-                $router->get('/about', [
-                    'uses' => 'UserController@about'
-                ]);
+                Route::get('/about', [UserController::class, 'about'])->name('v4.user.about');
 
-                $router->get('/history[/{type:[A-Za-z]+}]', [
-                    'uses' => 'UserController@history'
-                ]);
+                Route::get('/history/{type?}', [UserController::class, 'history'])
+                    ->name('v4.user.history')
+                    ->where('type', '[A-Za-z]+');
 
-                $router->get('/friends', [
-                    'uses' => 'UserController@friends'
-                ]);
+                Route::get('/friends', [UserController::class, 'friends'])->name('v4.user.friends');
 
-                if (env('DISABLE_USER_LISTS') === false) {
-                    $router->get('/animelist[/{status:[A-Za-z]+}]', [
-                        'uses' => 'UserController@animelist'
-                    ]);
+                if (config('jikan.disable_user_lists') === false) {
+                    Route::get('/animelist/{status?}', [UserController::class, 'animelist'])
+                        ->name('v4.user.animelist')
+                        ->where('status', '[A-Za-z]+');
 
-                    $router->get('/mangalist[/{status:[A-Za-z]+}]', [
-                        'uses' => 'UserController@mangalist'
-                    ]);
+                    Route::get('/mangalist/{status?}', [UserController::class, 'mangalist'])
+                        ->name('v4.user.mangalist')
+                        ->where('status', '[A-Za-z]+');
                 }
 
-                $router->get('/recommendations', [
-                    'uses' => 'UserController@recommendations'
-                ]);
+                Route::get('/recommendations', [UserController::class, 'recommendations'])->name('v4.user.recommendations');
 
-                $router->get('/reviews', [
-                    'uses' => 'UserController@reviews'
-                ]);
+                Route::get('/reviews', [UserController::class, 'reviews'])->name('v4.user.reviews');
 
-                $router->get('/clubs', [
-                    'uses' => 'UserController@clubs'
-                ]);
+                Route::get('/clubs', [UserController::class, 'clubs'])->name('v4.user.clubs');
 
-                $router->get('/external', [
-                    'uses' => 'UserController@external'
-                ]);
+                Route::get('/external', [UserController::class, 'external'])->name('v4.user.external');
             }
         );
     }
 );
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'genres'
+        'prefix' => 'genres',
     ],
-    function () use ($router) {
+    function () {
 
-        $router->get('/anime', [
-            'uses' => 'GenreController@anime'
-        ]);
+        Route::get('/anime', [GenreController::class, 'anime'])->name('v4.genre.anime');
 
-        $router->get('/manga', [
-            'uses' => 'GenreController@manga'
-        ]);
+        Route::get('/manga', [GenreController::class, 'manga'])->name('v4.genre.manga');
     }
 );
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'top'
+        'prefix' => 'top',
     ],
-    function () use ($router) {
-        $router->get('/anime', [
-            'uses' => 'TopController@anime'
-        ]);
+    function () {
+        Route::get('/anime', [TopController::class, 'anime'])->name('v4.top.anime');
 
-        $router->get('/manga', [
-            'uses' => 'TopController@manga'
-        ]);
+        Route::get('/manga', [TopController::class, 'manga'])->name('v4.top.manga');
 
-        $router->get('/characters', [
-            'uses' => 'TopController@characters'
-        ]);
+        Route::get('/characters', [TopController::class, 'characters'])->name('v4.top.characters');
 
-        $router->get('/people', [
-            'uses' => 'TopController@people'
-        ]);
+        Route::get('/people', [TopController::class, 'people'])->name('v4.top.people');
 
-        $router->get('/reviews', [
-            'uses' => 'TopController@reviews'
-        ]);
+        Route::get('/reviews', [TopController::class, 'reviews'])->name('v4.top.reviews');
     }
 );
 
-$router->get('/clubs', [
-    'uses' => 'SearchController@clubs'
-]);
+Route::get('/clubs', [SearchController::class, 'clubs'])->name('v4.search.clubs');
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'clubs'
+        'prefix' => 'clubs',
     ],
-    function () use ($router) {
+    function () {
 
-        $router->get('/{id:[0-9]+}', [
-            'uses' => 'ClubController@main'
-        ]);
+        Route::get('/{id}', [ClubController::class, 'main'])
+            ->name('v4.club.main')
+            ->where('id', '[0-9]+');
 
-        $router->get('/{id:[0-9]+}/members', [
-            'uses' => 'ClubController@members'
-        ]);
+        Route::get('/{id}/members', [ClubController::class, 'members'])
+            ->name('v4.club.members')
+            ->where('id', '[0-9]+');
 
-        $router->get('/{id:[0-9]+}/staff', [
-            'uses' => 'ClubController@staff'
-        ]);
+        Route::get('/{id}/staff', [ClubController::class, 'staff'])
+            ->name('v4.club.staff')
+            ->where('id', '[0-9]+');
 
-        $router->get('/{id:[0-9]+}/relations', [
-            'uses' => 'ClubController@relations'
-        ]);
+        Route::get('/{id}/relations', [ClubController::class, 'relations'])
+            ->name('v4.club.relations')
+            ->where('id', '[0-9]+');
     }
 );
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'reviews'
+        'prefix' => 'reviews',
     ],
-    function () use ($router) {
+    function () {
 
-        $router->get('/anime', [
-            'uses' => 'ReviewsController@anime'
-        ]);
+        Route::get('/anime', [ReviewsController::class, 'anime'])->name('v4.reviews.anime');
 
-        $router->get('/manga', [
-            'uses' => 'ReviewsController@manga'
-        ]);
+        Route::get('/manga', [ReviewsController::class, 'manga'])->name('v4.reviews.manga');
     }
 );
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'recommendations'
+        'prefix' => 'recommendations',
     ],
-    function () use ($router) {
-        $router->get('/anime', [
-            'uses' => 'RecommendationsController@anime'
-        ]);
+    function () {
+        Route::get('/anime', [RecommendationsController::class, 'anime'])->name('v4.recommendations.anime');
 
-        $router->get('/manga', [
-            'uses' => 'RecommendationsController@manga'
-        ]);
+        Route::get('/manga', [RecommendationsController::class, 'manga'])->name('v4.recommendations.manga');
     }
 );
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'watch'
+        'prefix' => 'watch',
     ],
-    function () use ($router) {
-        $router->get('/episodes', [
-            'uses' => 'WatchController@recentEpisodes'
-        ]);
+    function () {
+        Route::get('/episodes', [WatchController::class, 'recentEpisodes'])->name('v4.watch.recentEpisodes');
 
-        $router->get('/episodes/popular', [
-            'uses' => 'WatchController@popularEpisodes'
-        ]);
+        Route::get('/episodes/popular', [WatchController::class, 'popularEpisodes'])->name('v4.watch.popularEpisodes');
 
-        $router->get('/promos', [
-            'uses' => 'WatchController@recentPromos'
-        ]);
+        Route::get('/promos', [WatchController::class, 'recentPromos'])->name('v4.watch.recentPromos');
 
-        $router->get('/promos/popular', [
-            'uses' => 'WatchController@popularPromos'
-        ]);
+        Route::get('/promos/popular', [WatchController::class, 'popularPromos'])->name('v4.watch.popularPromos');
     }
 );
 
-$router->group(
+Route::group(
     [
-        'prefix' => 'random'
+        'prefix' => 'random',
     ],
-    function() use ($router) {
-        $router->get('/anime', [
-            'uses' => 'RandomController@anime',
-        ]);
+    function () {
+        Route::get('/anime', [RandomController::class, 'anime'])->name('v4.random.anime');
 
-        $router->get('/manga', [
-            'uses' => 'RandomController@manga',
-        ]);
+        Route::get('/manga', [RandomController::class, 'manga'])->name('v4.random.manga');
 
-        $router->get('/characters', [
-            'uses' => 'RandomController@characters',
-        ]);
+        Route::get('/characters', [RandomController::class, 'characters'])->name('v4.random.characters');
 
-        $router->get('/people', [
-            'uses' => 'RandomController@people',
-        ]);
+        Route::get('/people', [RandomController::class, 'people'])->name('v4.random.people');
 
-        $router->get('/users', [
-            'uses' => 'RandomController@users',
-        ]);
-    }
-);
-
-
-$router->group(
-    [
-        'prefix' => 'insights'
-    ],
-    function() use ($router) {
-        $router->get('/', [
-            'uses' => 'InsightsController@main'
-        ]);
-
-        $router->get('/trends', [
-            'uses' => 'InsightsController@trends'
-        ]);
+        Route::get('/users', [RandomController::class, 'users'])->name('v4.random.users');
     }
 );

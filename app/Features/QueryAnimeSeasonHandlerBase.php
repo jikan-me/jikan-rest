@@ -16,27 +16,25 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**
  * @template TRequest of QueryAnimeSeasonCommand
+ *
  * @implements RequestHandler<TRequest, JsonResponse>
  */
 abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
 {
-    public function __construct(protected readonly AnimeRepository $repository)
-    {
-    }
+    public function __construct(protected readonly AnimeRepository $repository) {}
 
     /**
-     * @param QueryAnimeSeasonCommand $request
-     * @return JsonResponse
+     * @param  QueryAnimeSeasonCommand  $request
      */
     public function handle($request): JsonResponse
     {
         $requestParams = collect($request->all());
-        $type = $requestParams->has("filter") ? $request->filter : null;
+        $type = $requestParams->has('filter') ? $request->filter : null;
         $results = $this->getSeasonItems($request, $type);
         // apply sfw, kids and unapproved filters
         /** @noinspection PhpUndefinedMethodInspection */
         $results = $results->filter($requestParams);
-        $results = $results->paginate($request->limit, ["*"], null, $request->page);
+        $results = $results->paginate($request->limit, ['*'], null, $request->page);
 
         $animeCollection = new AnimeCollection($results);
         $response = $animeCollection->response();
@@ -45,12 +43,13 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
     }
 
     /**
-     * @param TRequest $request
-     * @param ?AnimeTypeEnum $type
-     * @return Builder
+     * @param  TRequest  $request
      */
-    protected abstract function getSeasonItems($request, ?AnimeTypeEnum $type): Builder;
+    abstract protected function getSeasonItems($request, ?AnimeTypeEnum $type): Builder;
 
+    /**
+     * @return array{0: Carbon, 1: Carbon}
+     */
     protected function getSeasonRange(int $year, AnimeSeasonEnum $season): array
     {
         [$monthStart, $monthEnd] = match ($season->value) {
@@ -67,11 +66,11 @@ abstract class QueryAnimeSeasonHandlerBase implements RequestHandler
 
         $to = Carbon::createFromDate($year, $monthEnd, 1)
             ->setTimezone(new \DateTimeZone('UTC'))
-            ->setTime(0,0);
+            ->setTime(0, 0);
 
         return [
             $from,
-            $to
+            $to,
         ];
     }
 }

@@ -9,6 +9,4 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self episode()
  * @method static self other()
  */
-final class AnimeForumFilterEnum extends Enum
-{
-}
+final class AnimeForumFilterEnum extends Enum {}

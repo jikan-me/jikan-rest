@@ -1,0 +1,127 @@
+{
+    "data": {
+        "approved": "@bool",
+        "authors": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "background": "@string",
+        "chapters": "@int",
+        "demographics": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "explicit_genres": [
+            "@list"
+        ],
+        "external": "@null",
+        "favorites": "@int",
+        "genres": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "images": {
+            "jpg": {
+                "image_url": "@string",
+                "large_image_url": "@string",
+                "small_image_url": "@string"
+            },
+            "webp": {
+                "image_url": "@string",
+                "large_image_url": "@string",
+                "small_image_url": "@string"
+            }
+        },
+        "mal_id": "@int",
+        "members": "@int",
+        "popularity": "@int",
+        "published": {
+            "from": "@string",
+            "prop": {
+                "from": {
+                    "day": "@int",
+                    "month": "@int",
+                    "year": "@int"
+                },
+                "to": {
+                    "day": "@int",
+                    "month": "@int",
+                    "year": "@int"
+                }
+            },
+            "string": "@string",
+            "to": "@string"
+        },
+        "publishing": "@bool",
+        "rank": "@int",
+        "relations": [
+            "@list",
+            {
+                "entry": [
+                    "@list",
+                    {
+                        "mal_id": "@int",
+                        "name": "@string",
+                        "type": "@string",
+                        "url": "@string"
+                    }
+                ],
+                "relation": "@string"
+            }
+        ],
+        "score": "@volatile",
+        "scored": "@float",
+        "scored_by": "@int",
+        "serializations": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "status": "@string",
+        "synopsis": "@string",
+        "themes": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "title": "@string",
+        "title_english": "@string",
+        "title_japanese": "@string",
+        "title_synonyms": [
+            "@list"
+        ],
+        "titles": [
+            "@list",
+            {
+                "title": "@string",
+                "type": "@string"
+            }
+        ],
+        "type": "@string",
+        "url": "@string",
+        "volumes": "@int"
+    }
+}

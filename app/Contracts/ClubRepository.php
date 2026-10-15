@@ -5,8 +5,6 @@ namespace App\Contracts;
 use App\Club;
 
 /**
- * @implements Repository<Club>
+ * @extends Repository<Club>
  */
-interface ClubRepository extends Repository
-{
-}
+interface ClubRepository extends Repository {}

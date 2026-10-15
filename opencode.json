@@ -1,0 +1,11 @@
+{
+  "mcp": {
+    "backend-suite": {
+      "type": "local",
+      "command": [
+        "backend-suite",
+        "mcp"
+      ]
+    }
+  }
+}

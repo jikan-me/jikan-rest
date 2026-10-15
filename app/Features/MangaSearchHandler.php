@@ -3,10 +3,8 @@
 namespace App\Features;
 
 use App\Dto\MangaSearchCommand;
-use App\Enums\MangaOrderByEnum;
 use App\Http\Resources\V4\MangaCollection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 /**
  * @extends SearchRequestHandler<MangaSearchCommand, MangaCollection>
@@ -14,7 +12,7 @@ use Illuminate\Support\Collection;
 class MangaSearchHandler extends SearchRequestHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -22,9 +20,9 @@ class MangaSearchHandler extends SearchRequestHandler
     }
 
     /**
-     * @inheritDoc
+     * @param  LengthAwarePaginator<int, mixed>  $paginator
      */
-    protected function renderResponse(LengthAwarePaginator $paginator)
+    protected function renderResponse(LengthAwarePaginator $paginator): MangaCollection
     {
         return new MangaCollection($paginator);
     }

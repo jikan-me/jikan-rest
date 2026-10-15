@@ -1,7 +1,7 @@
 [![Jikan](https://i.imgur.com/ccx3pxo.png)](#jikan-rest-api-v4---unofficial-myanimelistnet-rest-api)
 
 # Jikan REST API v4 - Unofficial MyAnimeList.net REST API
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^8.1-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![PHP](https://img.shields.io/badge/PHP-^8.3-blue.svg?style=flat)]() [![Laravel](https://img.shields.io/badge/Laravel-13-red.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe)
 
 Jikan is a REST API for [MyAnimeList.net](https://myanimelist.net). It scrapes the website to satisfy the need for API functionality that MyAnimeList.net lacks.
 
@@ -20,17 +20,36 @@ https://github.com/jikan-me/jikan-rest/tree/v3
 
 ⚠ v3 is discontinued and will no longer receive any updates.
 
-### Manual installation
-Please read the [manual installation guide](https://github.com/jikan-me/jikan-rest/wiki).
+**For agents & AI:** start at [`AGENTS.md`](AGENTS.md) (agent quickstart), [`llms.txt`](llms.txt) /
+`GET /llms.txt` (LLM index), [`docs/INDEX.md`](docs/INDEX.md) (question → file), the OpenAPI spec at
+`GET /v4/docs/openapi`, and the function-calling manifest at `GET /v4/ai/manifest.json`.
+
+### Installation (self-host)
+
+**Stack:** Laravel 13 · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb` v5) · Octane (RoadRunner default / FrankenPHP opt-in) · PHPUnit 12 · Laravel Scout search. Run it natively **or** with Docker.
+
+- **Composer / native (recommended)** — see the [setup guide](docs/SETUP.md):
+  ```bash
+  ./install.sh            # interactive — prompts with defaults
+  ./install.sh --yes      # accept defaults (CI-safe)
+  ./install.sh --dry-run  # preview every step, execute nothing
+  ./script/server         # start RoadRunner on :8000
+  ```
+  Every service toggle (Redis, Typesense, backend-quality-suite, skills, seeding)
+  and the default-to-prod shape are in [docs/SETUP.md](docs/SETUP.md) and the
+  [providers matrix](docs/PROVIDERS.md). Shortcut scope of what is included by
+  default vs what needs setup: **search works out of the box** (Mongo `$text`);
+  **Octane RoadRunner is the default runtime**; **FrankenPHP and Typesense are opt-in**.
+- **Docker** — see the [container usage guide](docs/DOCKER.md):
+  ```bash
+  docker compose up -d --build
+  ```
+
 For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
-### 🐳 Docker Installation
-We distribute the app as a container image, so you can just run it:
-```bash
-docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikanme/jikan-rest:latest
-```
+### Upgrading from the Lumen release
 
-For more information please refer to our [container usage guide](container_usage.md).
+See [docs/UPGRADING.md](docs/UPGRADING.md) for the environment-variable and behaviour changes.
 
 ## Public REST API
 If you don't want to host your instance, there's a public API available.
@@ -62,9 +81,12 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
 ## Running Tests
 
-`php vendor/bin/phpunit tests`
+`tools/dev/php vendor/bin/phpunit --no-coverage`
 
-Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
+`tools/dev/php` resolves the local PHP wrapper (macOS Homebrew `php@8.4`); on Linux or a
+fresh clone, replace it with `PHP_BIN=… php …` (e.g. `PHP_BIN=/usr/bin/php8.4 php vendor/bin/phpunit --no-coverage`).
+
+Note: Some tests hit MyAnimeList and may be affected by their rate limit (HTTP 429).
 
 ---
 ## Backers

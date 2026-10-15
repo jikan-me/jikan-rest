@@ -1,0 +1,21 @@
+{
+    "data": [
+        "@list",
+        {
+            "count": "@int",
+            "mal_id": "@int",
+            "name": "@string",
+            "url": "@string"
+        }
+    ],
+    "pagination": {
+        "current_page": "@int",
+        "has_next_page": "@bool",
+        "items": {
+            "count": "@int",
+            "per_page": "@int",
+            "total": "@int"
+        },
+        "last_visible_page": "@int"
+    }
+}

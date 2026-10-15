@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Update the project after a fresh pull (bootstrap + refresh caches).
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+./script/bootstrap
+"$PWD/tools/dev/php" artisan optimize:clear >/dev/null
+echo "project updated."
