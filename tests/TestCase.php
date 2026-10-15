@@ -211,11 +211,14 @@ abstract class TestCase extends BaseTestCase
         $httpClient = \Mockery::mock(HttpClientInterface::class);
         $response = \Mockery::mock(ResponseInterface::class);
         /** @noinspection PhpParamsInspection */
-        $httpClient->allows()->request(\Mockery::any(), \Mockery::any(), \Mockery::any())->andReturn($response);
+        // any arity: MalClient::getUser*List() calls request('GET', $path) with two arguments
+        $httpClient->allows('request')->andReturn($response);
         $response->allows([
             'getStatusCode' => 404,
             'getHeaders' => [],
             'getContent' => '',
+            // MalClient::getUser*List() builds its error message from getInfo('url')
+            'getInfo' => 'https://myanimelist.net/mock-upstream',
         ]);
         $this->app->instance('HttpClient', $httpClient);
         $this->app->instance('JikanParser', new MalClient($httpClient));
