@@ -9395,19 +9395,23 @@
                                         },
                                         "volumes_read": {
                                             "description": "Number of volumes read",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "volumes_total": {
                                             "description": "Total number of volumes",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "chapters_read": {
                                             "description": "Number of chapters read",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "chapters_total": {
                                             "description": "Total number of chapters",
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "nullable": true
                                         },
                                         "date": {
                                             "description": "Last updated date ISO8601",

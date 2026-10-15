@@ -1072,3 +1072,32 @@ param. `phpstan` full-project → OK.
   `div.news-unit`; jikan#661), and `/manga/{id}/userupdates` returns empty `data` with
   `has_next_page: true` (`MangaRecentlyUpdatedByUsersListParser` indexes `explode('/')[1]` on cells
   like "-"; jikan#663). `/anime/{id}/userupdates` works.
+
+## 20. jikan v5.0.0-rc.2 (jikan#661 / jikan#663)
+
+- `jikan-me/jikan` v5.0.0-rc.1 -> **v5.0.0-rc.2**; constraint `~5.0.0-rc.2` (rc.1 no longer
+  satisfies it, so deployments cannot resolve to the broken news/userupdates parsers).
+  `composer.lock` change is the jikan package only (`plugin-api-version` stays 2.9.0).
+- Upstream fixes, all verified through the API: `/anime/{id}/news` and `/manga/{id}/news` return
+  articles again (#661) and paginate (`last_visible_page` is the furthest linked page, and the last
+  page reports `has_next_page: false`); `/manga/{id}/userupdates` returns rows again (#663, it was
+  empty with `has_next_page: true`).
+- Behaviour change: an unknown total in the userupdates tables (`5/?`, or a bare "-") is `null`, no
+  longer `0`. OpenAPI: `episodes_total` (anime) and `volumes_read`/`volumes_total`/`chapters_read`/
+  `chapters_total` (manga) are `nullable: true` in `anime_userupdates`/`manga_userupdates`
+  (`episodes_seen` already was). The resource passes the parser output through, so nothing casts
+  `null` to an int. `storage/api-docs/api-docs.json` regenerated. Clients that treated `0` as
+  "unknown" must check for `null`.
+- A userupdates row that cannot be parsed now raises `ParserException` (HTTP 500 via the existing
+  mapping) instead of an empty page next to `has_next_page: true`.
+- `Rc2NullTotalsTest`: null totals round-trip through `/anime/{id}/userupdates` and
+  `/manga/{id}/userupdates`, a last news page has `has_next_page: false`, and the generated spec
+  declares the fields nullable.
+- Live smoke (port 8001, production flags): `/anime/1/news` 9 items; `/anime/21/news` 30 items,
+  `last_visible_page` 2 (3 on page 2), `?page=99` empty with `has_next_page: false`;
+  `/anime/52991/news` 17; `/manga/2/news` 25; every item has `title`, `url`, `date`,
+  `author_username`, `forum_url`, `comments`, `excerpt`, `images`. `/manga/2/userupdates` 75 rows
+  (page 2 also 75, `last_visible_page` 3), `volumes_total`/`chapters_total` null on all 75,
+  `*_read` null where the cell is "-"; `/anime/21/userupdates` 75 rows, `episodes_total` null on
+  all 75 (One Piece is ongoing); `/anime/1/userupdates` 75 rows, 12 null totals. 114-route crawl:
+  113x 200, 1x 404 (`/random/users` on an empty users collection), same as rc.1.

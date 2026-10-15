@@ -50,6 +50,10 @@ on the Lumen release ("before") and what it is now.
 - **New endpoints.** `GET /up` (liveness), `GET /llms.txt`, `GET /v4/ai/manifest.json`,
   `GET /v4/docs` (Scalar API reference), `GET /v4/docs/openapi` (OpenAPI JSON). `/v4/api-docs`
   now 301-redirects to `/v4/docs/openapi`, and `/docs` and `/v4/documentation` to `/v4/docs`.
+- **Unknown totals are `null`.** With jikan v5.0.0-rc.2 an unknown total in
+  `/v4/anime/{id}/userupdates` and `/v4/manga/{id}/userupdates` (MyAnimeList shows `5/?`) is `null`
+  instead of `0`; the manga `volumes_read`/`chapters_read` are `null` for a "-" cell. The OpenAPI
+  schemas mark these fields `nullable: true`. Clients that treated `0` as unknown must check `null`.
 - **Operational setup.** Dependencies are resolved against PHP 8.4 and `ext-mongodb` ≥ 2.5.
   A fresh clone needs `composer install`, which relies on the tracked
   `bootstrap/cache/.gitignore` placeholder.
