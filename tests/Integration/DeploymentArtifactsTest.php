@@ -51,6 +51,33 @@ final class DeploymentArtifactsTest extends TestCase
         $this->assertFileExists(base_path('docker-entrypoint.php'));
     }
 
+    public function test_env_dist_has_no_empty_path_traps_and_docs_page_renders(): void
+    {
+        // The container copies .env.dist -> .env; an uncommented EMPTY
+        // VIEW_COMPILED_PATH= used to cache view.compiled='' and 500 /v4/docs.
+        $envDist = (string) file_get_contents(base_path('.env.dist'));
+        $this->assertDoesNotMatchRegularExpression('/^VIEW_COMPILED_PATH=\s*$/m', $envDist);
+        $this->assertDoesNotMatchRegularExpression('/^OCTANE_STATE_FILE=\s*$/m', $envDist);
+
+        $original = getenv('VIEW_COMPILED_PATH');
+        putenv('VIEW_COMPILED_PATH=');
+        $_ENV['VIEW_COMPILED_PATH'] = $_SERVER['VIEW_COMPILED_PATH'] = '';
+        try {
+            $config = require base_path('config/view.php');
+            $this->assertNotEmpty($config['compiled'], 'empty VIEW_COMPILED_PATH must fall back to storage/framework/views');
+        } finally {
+            if ($original === false) {
+                putenv('VIEW_COMPILED_PATH');
+                unset($_ENV['VIEW_COMPILED_PATH'], $_SERVER['VIEW_COMPILED_PATH']);
+            } else {
+                putenv('VIEW_COMPILED_PATH='.$original);
+                $_ENV['VIEW_COMPILED_PATH'] = $_SERVER['VIEW_COMPILED_PATH'] = $original;
+            }
+        }
+
+        $this->get('/v4/docs')->assertOk();
+    }
+
     public function test_compose_files_are_sanctioned(): void
     {
         $this->assertFileExists(base_path('docker-compose.yml'));
