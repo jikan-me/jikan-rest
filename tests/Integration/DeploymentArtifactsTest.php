@@ -95,7 +95,9 @@ final class DeploymentArtifactsTest extends TestCase
     {
         $ci = file_get_contents(base_path('.github/workflows/ci.yml'));
         $this->assertStringContainsString('artifact-freshness', $ci);
-        $this->assertStringContainsString('mongo:8.0', $ci, 'CI Mongo must be pinned like compose');
+        // CI pins an explicit Mongo minor. It runs 7.0, not compose's 8.0: MongoDB 8.0+ refuses
+        // to start on kernel >= 6.19 (SERVER-121912), which GitHub runners now ship.
+        $this->assertMatchesRegularExpression('/image: mongo:\d+\.\d+\b/', $ci, 'CI Mongo must be pinned to a minor version');
         $this->assertFileDoesNotExist(base_path('.github/workflows/tests.yml'), 'legacy tests.yml must stay deleted');
 
         foreach (['AGENTS.md', 'CLAUDE.md', 'llms.txt', 'docs/INDEX.md',
