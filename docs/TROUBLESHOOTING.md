@@ -114,3 +114,13 @@ This is a local dev-environment workaround, not a Jikan or Typesense bug fix.
 It is not needed with the official Docker image on a normal kernel, nor in CI.
 
 More troubleshooting Q/A on the way, please let me know if there's anything else I should add onto here.
+
+## MongoDB exits at startup: "Linux kernel versions 6.19 and newer"
+
+MongoDB 8.0 refuses to start on Linux kernel 6.19 or newer and logs
+`MongoDB cannot start: Linux kernel versions 6.19 and newer has a known incompatibility`
+([SERVER-121912](https://jira.mongodb.org/browse/SERVER-121912)). This affects the
+`mongo` container on hosts with a new kernel, including GitHub's Ubuntu 26 runners
+(CI pins `ubuntu-24.04` for that reason). Run MongoDB on a host with an older kernel,
+or move to a MongoDB release that has the fix once one is available.
+

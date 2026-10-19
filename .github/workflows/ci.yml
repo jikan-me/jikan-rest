@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # mongo:8.0 refuses kernel >= 6.19 (SERVER-121912); ubuntu-latest moves to Ubuntu 26
     name: PHP ${{ matrix.php }} · Mongo
     strategy:
       fail-fast: false
@@ -111,7 +111,7 @@ jobs:
           tail -50 storage/logs/laravel.log 2>/dev/null || true
   artifact-freshness:
     name: Agent artifacts — spec, manifest, catalog
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # mongo:8.0 refuses kernel >= 6.19 (SERVER-121912); ubuntu-latest moves to Ubuntu 26
     env:
       APP_ENV: testing
       APP_KEY: base64:Y2kY4Q0VwrVnlA+iihSWX9ZUlpHew19c9XMzCVMUn4A=
@@ -147,7 +147,7 @@ jobs:
 
   coverage:
     name: Coverage (xdebug · clover)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # mongo:8.0 refuses kernel >= 6.19 (SERVER-121912); ubuntu-latest moves to Ubuntu 26
     env:
       APP_ENV: testing
       APP_KEY: base64:Y2kY4Q0VwrVnlA+iihSWX9ZUlpHew19c9XMzCVMUn4A=
