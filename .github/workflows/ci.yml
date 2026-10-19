@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   tests:
-    runs-on: ubuntu-24.04  # mongo:8.0 refuses kernel >= 6.19 (SERVER-121912); ubuntu-latest moves to Ubuntu 26
+    runs-on: ubuntu-latest
     name: PHP ${{ matrix.php }} · Mongo
     strategy:
       fail-fast: false
@@ -22,7 +22,7 @@ jobs:
         php: ['8.4']
     services:
       mongodb:
-        image: mongo:8.0   # pinned to match docker-compose.yml (mongo:8.0)
+        image: mongo:7.0   # 8.0+ refuses kernel >= 6.19 (SERVER-121912), which GitHub runners now ship
         ports:
           - 27017:27017
         options: >-
@@ -111,7 +111,7 @@ jobs:
           tail -50 storage/logs/laravel.log 2>/dev/null || true
   artifact-freshness:
     name: Agent artifacts — spec, manifest, catalog
-    runs-on: ubuntu-24.04  # mongo:8.0 refuses kernel >= 6.19 (SERVER-121912); ubuntu-latest moves to Ubuntu 26
+    runs-on: ubuntu-latest
     env:
       APP_ENV: testing
       APP_KEY: base64:Y2kY4Q0VwrVnlA+iihSWX9ZUlpHew19c9XMzCVMUn4A=
@@ -147,7 +147,7 @@ jobs:
 
   coverage:
     name: Coverage (xdebug · clover)
-    runs-on: ubuntu-24.04  # mongo:8.0 refuses kernel >= 6.19 (SERVER-121912); ubuntu-latest moves to Ubuntu 26
+    runs-on: ubuntu-latest
     env:
       APP_ENV: testing
       APP_KEY: base64:Y2kY4Q0VwrVnlA+iihSWX9ZUlpHew19c9XMzCVMUn4A=
@@ -162,7 +162,7 @@ jobs:
       # SCOUT_DRIVER intentionally unset (engine-less Mongo $text), same as tests.
     services:
       mongodb:
-        image: mongo:8.0
+        image: mongo:7.0   # see the note on the first job
         ports: [27017:27017]
         options: >-
           --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
