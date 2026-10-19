@@ -2,20 +2,21 @@
 
 namespace App\Listeners;
 
-use App\Events\ExampleEvent;
 use App\Events\SourceHeartbeatEvent;
 use App\Providers\SourceHeartbeatProvider;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
-use League\Flysystem\FileNotFoundException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+/**
+ * Records source-health heartbeats into MongoDB (atomic insertOne per event,
+ * previously a non-atomic failovers.json read-modify-write) and manages the
+ * failover lock / last-downtime markers, which live in Mongo too.
+ */
 class SourceHeartbeatListener
 {
-
     private Logger $logger;
+
+    private static float $lastRecordAt = 0.0;
 
     /**
      * Create the event listener.
@@ -25,17 +26,17 @@ class SourceHeartbeatListener
     public function __construct()
     {
         $this->logger = new Logger('source-health-monitor');
-        $this->logger->pushHandler(new StreamHandler(storage_path().'/logs/source-health-monitor.log'), env('APP_DEBUG') ? Logger::DEBUG : Logger::WARNING);
+        $this->logger->pushHandler(new StreamHandler(storage_path().'/logs/source-health-monitor.log'), config('app.debug') ? Logger::DEBUG : Logger::WARNING);
 
         if (SourceHeartbeatProvider::isFailoverEnabled()) {
-            $lastFailoverLockTimestamp = $this->getLastFailoverLockTimestamp();
+            $lastFailoverLockTimestamp = SourceHeartbeatProvider::getFailoverLockTimestamp();
 
-            if (env('APP_DEBUG', false)) {
+            if (config('app.debug')) {
                 $this->logger->debug('Failover is RUNNING');
             }
 
             // Disable failover if it has expired
-            if (time() > ($lastFailoverLockTimestamp + env('SOURCE_BAD_HEALTH_RECHECK'))) {
+            if (time() > ($lastFailoverLockTimestamp + config('jikan.source_bad_health_recheck'))) {
                 // Disable failover if successful requests score
                 $this->attemptDisableFailover();
             }
@@ -45,14 +46,23 @@ class SourceHeartbeatListener
     /**
      * Handle the event.
      *
-     * @param  ExampleEvent  $event
      * @return void
      */
     public function handle(SourceHeartbeatEvent $event)
     {
+        // Perf: the previous code wrote a Mongo heartbeat + score query per
+        // request. Debounce to at most one record per interval (default 1s);
+        // health granularity is unchanged for an upstream-health indicator.
+        $interval = (float) config('jikan.source_heartbeat_interval', 1.0);
+        $now = microtime(true);
+        if ($now - self::$lastRecordAt < $interval) {
+            return;
+        }
+        self::$lastRecordAt = $now;
+
         $eventCount = $this->insertFail($event);
 
-        if (env('APP_DEBUG', false)) {
+        if (config('app.debug')) {
             $this->logger->debug('Event count: '.$eventCount);
         }
 
@@ -61,44 +71,43 @@ class SourceHeartbeatListener
         }
     }
 
-    private function insertFail(SourceHeartbeatEvent $event) : int
+    /**
+     * Atomically record the heartbeat event; returns the number of events
+     * currently recorded within the recency window.
+     */
+    private function insertFail(SourceHeartbeatEvent $event): int
     {
-        $fails = $this->getRecentFails();
-        $fails[] = [time(), $event->status, $event->health];
+        SourceHeartbeatProvider::recordEvent($event->status, $event->health);
 
-        $failsJson = json_encode($fails);
-        Storage::put('failovers.json', $failsJson);
-
-        return count($fails);
+        return count(SourceHeartbeatProvider::getRecentEvents());
     }
 
-    private function enableFailover()
+    private function enableFailover(): void
     {
-        // create lock file
-        Storage::put('source_failover.lock', '');
-        Storage::put('source_failover_last_downtime', time());
+        // Atomically upsert the lock + last-downtime markers in Mongo.
+        SourceHeartbeatProvider::setFailoverLock(time());
+        SourceHeartbeatProvider::setLastDowntime(time());
 
-        if (env('APP_DEBUG', false)) {
+        if (config('app.debug')) {
             $this->logger->debug('Failover ENABLED');
         }
     }
 
-    private function disableFailover()
+    private function disableFailover(): void
     {
-        // delete lock file
-        Storage::delete('source_failover.lock');
-
-        // Delete meta
-        Storage::delete('failovers.json');
+        // Remove the lock and the recorded events (the old file scheme dropped
+        // both failovers.json and the lock file when failover was disabled).
+        SourceHeartbeatProvider::clearFailoverLock();
+        SourceHeartbeatProvider::clearEvents();
     }
 
     private function attemptDisableFailover(): bool
     {
         $score = $this->getSuccessfulRequestsScore();
 
-        if ($score >= env('SOURCE_GOOD_HEALTH_SCORE', 0.9)) {
+        if ($score >= config('jikan.source_good_health_score')) {
             $this->disableFailover();
-            if (env('APP_DEBUG', false)) {
+            if (config('app.debug')) {
                 $this->logger->debug('Failover disabled; Score: '.$score);
                 $this->logger->debug('Failover DISABLED');
             }
@@ -109,51 +118,19 @@ class SourceHeartbeatListener
         return false;
     }
 
-    private function getLastFailoverLockTimestamp(): int
+    /**
+     * @return array<int, mixed>
+     */
+    private function getRecentFails(): array
     {
-        try {
-            return Storage::lastModified('source_failover.lock');
-        } catch (\Exception $e) {
-            return 0;
-        }
+        return SourceHeartbeatProvider::getRecentEvents();
     }
 
-    private function getRecentFails()
-    {
-        try {
-            $failsJson = Storage::get('failovers.json');
-            $fails = json_decode($failsJson, true);
-        } catch (\Exception $e) {
-        }
-
-        $fails = $fails ?? [];
-
-        // remove any fails greater than SOURCE_BAD_HEALTH_RANGE
-        foreach ($fails as $fail) {
-
-            if (!isset($fail[0])) {
-                unset($fail);
-                continue;
-            }
-
-            if ($fail[0] >= (time()-env('SOURCE_BAD_HEALTH_RANGE'))) {
-                unset($fail);
-            }
-        }
-
-        // slice
-        if (count($fails) > env('SOURCE_BAD_HEALTH_MAX_STORE')) {
-            $fails = array_slice($fails, 0 - env('SOURCE_BAD_HEALTH_MAX_STORE'));
-        }
-
-        return $fails;
-    }
-
-    private function getSuccessfulRequestsScore() : float
+    private function getSuccessfulRequestsScore(): float
     {
         $fails = $this->getRecentFails();
         $score = 0;
-        $totalFails = count($fails) - 1;
+        $totalFails = count($fails);
 
         foreach ($fails as $fail) {
             if ((int) $fail[2] === SourceHeartbeatEvent::GOOD_HEALTH) {
@@ -163,7 +140,7 @@ class SourceHeartbeatListener
 
         $scored = $score / max($totalFails, 1);
 
-        if(env('APP_DEBUG', false)) {
+        if (config('app.debug')) {
             $this->logger->debug('Failover successful requests score: '.$scored);
         }
 

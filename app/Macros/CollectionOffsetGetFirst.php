@@ -6,7 +6,8 @@ use App\JikanApiModel;
 use Illuminate\Support\Collection;
 
 /**
- * @mixin Collection
+ * @mixin Collection<array-key, mixed>
+ *
  * @method offsetGetFirst(string $offset, mixed $default = null)
  */
 final class CollectionOffsetGetFirst
@@ -20,14 +21,11 @@ final class CollectionOffsetGetFirst
             $firstItem = $this->first();
             if (is_array($firstItem)) {
                 $result = collect($firstItem)->get($offset, $default);
-            }
-            else if ($firstItem instanceof JikanApiModel) {
+            } elseif ($firstItem instanceof JikanApiModel) {
                 $result = $firstItem[$offset];
-            }
-            else if ($firstItem instanceof Collection) {
+            } elseif ($firstItem instanceof Collection) {
                 $result = $firstItem->get($offset, $default);
-            }
-            else {
+            } else {
                 $result = $default;
             }
 

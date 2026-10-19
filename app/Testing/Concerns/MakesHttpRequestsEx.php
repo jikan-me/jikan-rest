@@ -1,5 +1,8 @@
 <?php
+
 namespace App\Testing\Concerns;
+
+use Illuminate\Testing\TestResponse;
 
 /**
  * @codeCoverageIgnore
@@ -8,29 +11,21 @@ trait MakesHttpRequestsEx
 {
     protected function getBaseUri(): string
     {
-        return "/";
+        return '/';
     }
 
     /**
-     * Visit the given URI with a JSON GET request.
-     * @param string $uri
-     * @param array $headers
-     * @return self
+     * GET the endpoint with the given query parameters and return the response.
+     *
+     * When $uri is given it is requested verbatim and $params is NOT appended
+     * (this is how the helper has always behaved).
+     *
+     * @param  array<string, mixed>  $params
      */
-    public function getJson(string $uri, array $headers = []): self
+    public function getJsonWithParams(array $params, ?string $uri = null): TestResponse
     {
-        return $this->json('GET', $uri, [], $headers);
-    }
+        $uri ??= $this->getBaseUri().'?'.http_build_query($params);
 
-    /**
-     * @param array $params
-     * @return array
-     */
-    public function getJsonResponse(array $params, ?string $baseUri = null): array
-    {
-        $parameters = http_build_query($params);
-        $uri = $baseUri ?? $this->getBaseUri() . "?" . $parameters;
-        $this->getJson($uri);
-        return $this->response->json();
+        return $this->getJson($uri);
     }
 }

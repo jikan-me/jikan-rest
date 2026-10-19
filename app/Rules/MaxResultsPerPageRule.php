@@ -7,6 +7,7 @@ use Illuminate\Contracts\Validation\Rule;
 final class MaxResultsPerPageRule implements Rule
 {
     private mixed $value;
+
     private int $fallbackLimit;
 
     public function __construct($fallbackLimit = 25)
@@ -18,11 +19,11 @@ final class MaxResultsPerPageRule implements Rule
     {
         $this->value = $value;
 
-        if (!is_numeric($value)) {
+        if (! is_numeric($value)) {
             return false;
         }
 
-        if (!is_int($value)) {
+        if (! is_int($value)) {
             $value = intval($value);
         }
 
@@ -33,9 +34,10 @@ final class MaxResultsPerPageRule implements Rule
         return true;
     }
 
-    public function message(): array|string
+    public function message(): string
     {
         $mrpp = max_results_per_page($this->fallbackLimit);
+
         return "Value {$this->value} is higher than the configured '$mrpp' max value.";
     }
 }

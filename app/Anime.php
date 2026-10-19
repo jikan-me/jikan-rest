@@ -6,29 +6,85 @@ use App\Concerns\FilteredByLetter;
 use App\Concerns\MediaFilters;
 use App\Enums\AnimeRatingEnum;
 use App\Enums\AnimeTypeEnum;
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use Carbon\CarbonImmutable;
 use Database\Factories\AnimeFactory;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
-use Jikan\Helper\Constants;
-use Jikan\Jikan;
-use Jikan\Request\Anime\AnimeRequest;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\App;
+use Jikan\Helper\Constants;
+use Jikan\Request\Anime\AnimeRequest;
+use Laravel\Scout\Builder;
+use MongoDB\BSON\UTCDateTime;
 use MongoDB\Model\BSONDocument;
 
+/**
+ * Mongo-backed anime document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $url
+ * @property string $title
+ * @property string|null $title_english
+ * @property string|null $title_japanese
+ * @property array<string, mixed> $title_synonyms
+ * @property array<string, mixed> $titles
+ * @property array<string, mixed> $images
+ * @property string $type
+ * @property string|null $source
+ * @property int|null $episodes
+ * @property string $status
+ * @property bool|null $airing
+ * @property array<string, mixed>|null $aired
+ * @property string|null $duration
+ * @property string|null $rating
+ * @property float|null $score
+ * @property int|null $scored_by
+ * @property int|null $rank
+ * @property int|null $popularity
+ * @property int|null $members
+ * @property int|null $favorites
+ * @property string|null $synopsis
+ * @property string|null $background
+ * @property string|null $premiered
+ * @property array<string, mixed>|null $broadcast
+ * @property array<string, mixed> $related
+ * @property array<string, mixed> $producers
+ * @property array<string, mixed> $licensors
+ * @property array<string, mixed> $studios
+ * @property array<string, mixed> $genres
+ * @property array<string, mixed> $explicit_genres
+ * @property array<string, mixed> $themes
+ * @property array<string, mixed> $demographics
+ * @property array<string, mixed> $opening_themes
+ * @property array<string, mixed> $ending_themes
+ * @property array<string, mixed>|null $trailer
+ * @property array<string, mixed>|null $streaming
+ * @property array<string, mixed>|null $streaming_links
+ * @property array<string, mixed>|null $external_links
+ * @property array<string, mixed>|null $theme
+ * @property array<string, mixed>|null $relations
+ * @property bool|null $approved
+ * @property string $season
+ * @property int|null $year
+ * @property UTCDateTime|null $createdAt
+ * @property UTCDateTime|null $modifiedAt
+ *
+ * @use HasFactory<AnimeFactory>
+ */
 class Anime extends JikanApiSearchableModel
 {
-    use HasFactory, MediaFilters, FilteredByLetter;
+    use FilteredByLetter, HasFactory, MediaFilters;
 
     protected array $filters = [
-        "order_by", "status", "type", "sort", "max_score", "min_score", "score", "rating", "start_date", "end_date",
-        "producer", "producers", "letter", "genres", "genres_exclude", "sfw", "unapproved", "kids"
+        'order_by', 'status', 'type', 'sort', 'max_score', 'min_score', 'score', 'rating', 'start_date', 'end_date',
+        'producer', 'producers', 'letter', 'genres', 'genres_exclude', 'sfw', 'unapproved', 'kids',
     ];
+
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'url', 'title', 'title_english', 'title_japanese', 'title_synonyms',
@@ -36,13 +92,15 @@ class Anime extends JikanApiSearchableModel
         'duration', 'rating', 'score', 'scored_by', 'rank', 'popularity', 'members',
         'favorites', 'synopsis', 'background', 'premiered', 'broadcast', 'related',
         'producers', 'licensors', 'studios', 'genres', 'explicit_genres', 'themes',
-        'demographics', 'opening_themes', 'ending_themes', 'trailer', 'approved', 'createdAt', 'modifiedAt'
+        'demographics', 'opening_themes', 'ending_themes', 'trailer', 'approved', 'createdAt', 'modifiedAt',
+        'external_links', 'streaming_links',
+
     ];
 
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = ['season', 'year', 'themes'];
 
@@ -56,68 +114,72 @@ class Anime extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
-        '_id', 'premiered', 'request_hash', 'expiresAt'
+        '_id', 'premiered', 'request_hash', 'expiresAt',
     ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->displayNameFieldName = "title";
+        $this->displayNameFieldName = 'title';
     }
 
-    public function setSeasonAttribute($value)
+    public function setSeasonAttribute(mixed $value): void
     {
         // noop
         // this attribute is calculated
     }
 
-    public function getSeasonAttribute()
+    public function getSeasonAttribute(): ?string
     {
         $premiered = array_key_exists('premiered', $this->attributes) ? $this->attributes['premiered'] : null;
 
         if (empty($premiered)
             || is_null($premiered)
-            || !preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
+            || ! preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
         ) {
             return null;
         }
 
         $season = explode(' ', $premiered)[0];
+
         return strtolower($season);
     }
 
-    public function setYearAttribute($value)
+    public function setYearAttribute(mixed $value): void
     {
         // noop
         // this attribute is calculated
     }
 
-    public function getYearAttribute()
+    public function getYearAttribute(): ?int
     {
         $premiered = array_key_exists('premiered', $this->attributes) ? $this->attributes['premiered'] : null;
 
         if (empty($premiered)
             || is_null($premiered)
-            || !is_string($premiered)
-            || !preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
+            || ! is_string($premiered)
+            || ! preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
         ) {
             return null;
         }
 
-        return (int)explode(' ', $premiered)[1];
+        return (int) explode(' ', $premiered)[1];
     }
 
-    public function setBroadcastAttribute($value)
+    public function setBroadcastAttribute(mixed $value): void
     {
         $this->attributes['broadcast'] = $this->adaptBroadcastValue($value);
     }
 
-    public function getBroadcastAttribute()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getBroadcastAttribute(): array
     {
-        if (array_key_exists("broadcast", $this->attributes)) {
+        if (array_key_exists('broadcast', $this->attributes)) {
             return $this->adaptBroadcastValue($this->attributes['broadcast']);
         }
 
@@ -125,37 +187,52 @@ class Anime extends JikanApiSearchableModel
             'day' => null,
             'time' => null,
             'timezone' => null,
-            'string' => null
+            'string' => null,
         ];
     }
 
-    public function getThemesAttribute()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getThemesAttribute(): array
     {
         $result = [];
-        if (array_key_exists("themes", $this->attributes)) {
-            $result = $this->attributes["themes"];
+        if (array_key_exists('themes', $this->attributes)) {
+            $result = $this->attributes['themes'];
         }
 
         return $result;
     }
 
     /** @noinspection PhpUnused */
-    public function filterByType(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, AnimeTypeEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function filterByType(Builder|\Illuminate\Database\Eloquent\Builder $query, AnimeTypeEnum $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("type", $value->label);
+        return $query->where('type', $value->label);
     }
 
     /** @noinspection PhpUnused */
-    public function filterByRating(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, AnimeRatingEnum $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function filterByRating(Builder|\Illuminate\Database\Eloquent\Builder $query, AnimeRatingEnum $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query->where("rating", $value->label);
+        return $query->where('rating', $value->label);
     }
 
     /** @noinspection PhpUnused */
-    public function filterByStartDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function filterByStartDate(Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
-            ->where("aired.from", ">=",
+            ->where('aired.from', '>=',
                 $value
                     ->setTime(0, 0)
                     ->setTimezone(new \DateTimeZone('UTC'))
@@ -164,10 +241,14 @@ class Anime extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
-    public function filterByEndDate(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function filterByEndDate(Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
-            ->where("aired.to", "<=",
+            ->where('aired.to', '<=',
                 $value
                     ->setTime(0, 0)
                     ->setTimezone(new \DateTimeZone('UTC'))
@@ -175,14 +256,19 @@ class Anime extends JikanApiSearchableModel
             );
     }
 
-    public function filterByProducer(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function filterByProducer(Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (empty($value)) {
             return $query;
         }
 
-        $producer = (int)$value;
-        return $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producer) {
+        $producer = (int) $value;
+
+        return $query->where(function (\MongoDB\Laravel\Eloquent\Builder $query) use ($producer) {
             return $query->where('producers.mal_id', $producer)
                 ->orWhere('licensors.mal_id', $producer)
                 ->orWhere('studios.mal_id', $producer);
@@ -190,7 +276,11 @@ class Anime extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
-    public function filterByProducers(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function filterByProducers(Builder|\Illuminate\Database\Eloquent\Builder $query, string $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (empty($value)) {
             return $query;
@@ -199,14 +289,14 @@ class Anime extends JikanApiSearchableModel
         /* @var \Illuminate\Support\Collection $producers */
         $producers = collect(explode(',', $value))->filter();
 
-        return $query->where(function (\Jenssegers\Mongodb\Eloquent\Builder $query) use ($producers) {
-            $firstProducer = (int)$producers->first();
+        return $query->where(function (\MongoDB\Laravel\Eloquent\Builder $query) use ($producers) {
+            $firstProducer = (int) $producers->first();
             $query = $query->where('producers.mal_id', $firstProducer)
                 ->orWhere('licensors.mal_id', $firstProducer)
                 ->orWhere('studios.mal_id', $firstProducer);
 
             foreach ($producers->skip(1) as $producer) {
-                $producer = (int)$producer;
+                $producer = (int) $producer;
                 $query = $query->orWhere('producers.mal_id', $producer)
                     ->orWhere('licensors.mal_id', $producer)
                     ->orWhere('studios.mal_id', $producer);
@@ -217,30 +307,45 @@ class Anime extends JikanApiSearchableModel
     }
 
     /** @noinspection PhpUnused */
-    public function scopeExceptItemsWithAdultRating(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function scopeExceptItemsWithAdultRating(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_HENTAI)
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_EROTICA)
-            ->where("rating", "!=", AnimeRatingEnum::rx()->label)
-            ->where("genres.mal_id", "!=", Constants::GENRE_ANIME_HENTAI);
+            ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_HENTAI)
+            ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_EROTICA)
+            ->where('rating', '!=', AnimeRatingEnum::rx()->label)
+            ->where('genres.mal_id', '!=', Constants::GENRE_ANIME_HENTAI);
     }
 
     /** @noinspection PhpUnused */
-    public function scopeExceptKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function scopeExceptKidsItems(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
-            ->where("demographics.mal_id", "!=", Constants::GENRE_ANIME_KIDS);
+            ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_KIDS);
     }
 
     /** @noinspection PhpUnused */
-    public function scopeOnlyKidsItems(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $query): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Builder<static>|\Illuminate\Database\Eloquent\Builder<static>  $query
+     * @return Builder<static>|\Illuminate\Database\Eloquent\Builder<static>
+     */
+    public function scopeOnlyKidsItems(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
         return $query
-            ->where("demographics.mal_id", Constants::GENRE_ANIME_KIDS);
+            ->where('demographics.mal_id', Constants::GENRE_ANIME_KIDS);
     }
 
-    public static function scrape(int $id)
+    /**
+     * @return array<string, mixed>
+     */
+    public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getAnime(new AnimeRequest($id));
 
@@ -256,26 +361,26 @@ class Anime extends JikanApiSearchableModel
     /**
      * Converts the model to an index-able data array.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toSearchableArray(): array
     {
         return [
-            'id' => (string)$this->mal_id,
-            'mal_id' => (int)$this->mal_id,
-            'start_date' => $this->convertToTimestamp($this->aired['from']),
-            'end_date' => $this->convertToTimestamp($this->aired['to']),
+            'id' => (string) $this->mal_id,
+            'mal_id' => (int) $this->mal_id,
+            'start_date' => $this->convertToTimestamp($this->aired['from'] ?? null),
+            'end_date' => $this->convertToTimestamp($this->aired['to'] ?? null),
             'title' => $this->title,
             'title_transformed' => $this->simplifyStringForSearch($this->title),
-            'title_english' => $this->title_english ?? "",
+            'title_english' => $this->title_english ?? '',
             'title_english_transformed' => $this->simplifyStringForSearch($this->title_english),
             'title_japanese' => $this->title_japanese,
             'title_japanese_transformed' => $this->simplifyStringForSearch($this->title_japanese),
             'title_synonyms' => collect($this->titles ?? [])
-                                    ->filter(fn($v, $k) => !in_array($v["type"], ["Default", "English", "Japanese"]))
-                                    ->pluck("title")
-                                    ->values()
-                                    ->all(),
+                ->filter(fn ($v, $k) => ! in_array($v['type'], ['Default', 'English', 'Japanese']))
+                ->pluck('title')
+                ->values()
+                ->all(),
             'type' => $this->type,
             'source' => $this->source,
             'episodes' => $this->episodes,
@@ -295,10 +400,13 @@ class Anime extends JikanApiSearchableModel
             'studios' => $this->getMalIdsOfField($this->studios),
             'licensors' => $this->getMalIdsOfField($this->licensors),
             'genres' => $this->getMalIdsOfField($this->genres),
-            'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres)
+            'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres),
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getCollectionSchema(): array
     {
         return [
@@ -313,14 +421,14 @@ class Anime extends JikanApiSearchableModel
                     'type' => 'string',
                     'optional' => false,
                     'infix' => true,
-                    'sort' => true
+                    'sort' => true,
                 ],
                 [
                     'name' => 'title_transformed',
                     'type' => 'string',
                     'optional' => false,
                     'infix' => true,
-                    'sort' => true
+                    'sort' => true,
                 ],
                 [
                     'name' => 'title_japanese',
@@ -328,7 +436,7 @@ class Anime extends JikanApiSearchableModel
                     'optional' => true,
                     'locale' => 'jp',
                     'infix' => true,
-                    'sort' => false
+                    'sort' => false,
                 ],
                 [
                     'name' => 'title_japanese_transformed',
@@ -336,37 +444,37 @@ class Anime extends JikanApiSearchableModel
                     'optional' => true,
                     'locale' => 'jp',
                     'infix' => true,
-                    'sort' => false
+                    'sort' => false,
                 ],
                 [
                     'name' => 'title_english',
                     'type' => 'string',
                     'optional' => true,
                     'infix' => true,
-                    'sort' => true
+                    'sort' => true,
                 ],
                 [
                     'name' => 'title_english_transformed',
                     'type' => 'string',
                     'optional' => true,
                     'infix' => true,
-                    'sort' => true
+                    'sort' => true,
                 ],
                 [
                     'name' => 'title_synonyms',
                     'type' => 'string[]',
                     'optional' => true,
                     'infix' => true,
-                    'sort' => false
-                ]
-            ]
+                    'sort' => false,
+                ],
+            ],
         ];
     }
 
     /**
      * The fields to be queried against. See https://typesense.org/docs/0.21.0/api/documents.html#search.
      *
-     * @return array
+     * @return string[]
      */
     public function typesenseQueryBy(): array
     {
@@ -381,40 +489,45 @@ class Anime extends JikanApiSearchableModel
         ];
     }
 
-    public function getTypeSenseQueryByWeights(): string|null
+    public function getTypeSenseQueryByWeights(): ?string
     {
-        return "2,2,1,1,3,3,1";
+        return '2,2,1,1,3,3,1';
     }
 
     /**
      * Returns which fields the search index should sort on when searching
-     * @return array|null
+     *
+     * @return array<int, array<string, string>>|null
      */
-    public function getSearchIndexSortBy(): array|null
+    public function getSearchIndexSortBy(): ?array
     {
         return [
             [
-                "field" => "_text_match(buckets:".text_match_buckets().")",
-                "direction" => "desc"
+                'field' => '_text_match(buckets:'.text_match_buckets().')',
+                'direction' => 'desc',
             ],
             [
-                "field" => "popularity",
-                "direction" => "asc"
+                'field' => 'popularity',
+                'direction' => 'asc',
             ],
             [
-                "field" => "rank",
-                "direction" => "asc"
-            ]
+                'field' => 'rank',
+                'direction' => 'asc',
+            ],
         ];
     }
 
+    /**
+     * @param  array<string, mixed>|string|null|BSONDocument  $broadcast
+     * @return array<string, mixed>
+     */
     private function adaptBroadcastValue(array|string|null|BSONDocument $broadcast): array
     {
         $null_value = [
             'day' => null,
             'time' => null,
             'timezone' => null,
-            'string' => null
+            'string' => null,
         ];
         if (is_null($broadcast)) {
             return $null_value;
@@ -428,12 +541,12 @@ class Anime extends JikanApiSearchableModel
             return $broadcast->getArrayCopy();
         }
 
-        if (!preg_match('~(.*) at (.*) \(~', $broadcast, $matches)) {
+        if (! preg_match('~(.*) at (.*) \(~', $broadcast, $matches)) {
             return [
                 'day' => null,
                 'time' => null,
                 'timezone' => null,
-                'string' => $broadcast
+                'string' => $broadcast,
             ];
         }
 
@@ -442,14 +555,14 @@ class Anime extends JikanApiSearchableModel
                 'day' => $matches[1],
                 'time' => $matches[2],
                 'timezone' => 'Asia/Tokyo',
-                'string' => $broadcast
+                'string' => $broadcast,
             ];
         }
 
         return $null_value;
     }
 
-    protected static function newFactory()
+    protected static function newFactory(): Factory
     {
         return App::make(AnimeFactory::class);
     }

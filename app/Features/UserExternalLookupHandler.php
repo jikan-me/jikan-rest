@@ -6,7 +6,6 @@ use App\Dto\UserExternalLookupCommand;
 use App\Http\Resources\V4\ExternalLinksResource;
 use App\Support\CachedData;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @extends UserLookupHandler<UserExternalLookupCommand>

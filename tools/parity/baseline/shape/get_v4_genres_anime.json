@@ -1,0 +1,11 @@
+{
+    "data": [
+        "@list",
+        {
+            "count": "@int",
+            "mal_id": "@int",
+            "name": "@string",
+            "url": "@string"
+        }
+    ]
+}

@@ -1,0 +1,41 @@
+{
+    "data": [
+        "@list",
+        {
+            "entry": {
+                "images": {
+                    "jpg": {
+                        "image_url": "@string",
+                        "large_image_url": "@string",
+                        "small_image_url": "@string"
+                    },
+                    "webp": {
+                        "image_url": "@string",
+                        "large_image_url": "@string",
+                        "small_image_url": "@string"
+                    }
+                },
+                "mal_id": "@int",
+                "title": "@string",
+                "url": "@string"
+            },
+            "title": "@string",
+            "trailer": {
+                "embed_url": "@string",
+                "images": {
+                    "image_url": "@null",
+                    "large_image_url": "@null",
+                    "maximum_image_url": "@null",
+                    "medium_image_url": "@null",
+                    "small_image_url": "@null"
+                },
+                "url": "@null",
+                "youtube_id": "@null"
+            }
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

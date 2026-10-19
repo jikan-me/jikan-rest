@@ -8,18 +8,34 @@ composer.phar
 .phpunit.result.cache
 .env.v4
 /storage/app/indexer
-/storage/app/failovers.json
-/storage/app/source_failover_last_downtime
-/storage/app/source_failover.lock
 # Temp dirs & trash
 /temp
 /tmp
 /coverage
 .DS_Store
 *.cache
+# Local dev-only helper (hardcoded Homebrew php@8.4 path)
+/tools/dev/
+# Local-only notes / dev config
+/LOCAL_SETUP.md
+/php.dev.ini
 db_username.txt
 db_admin_username.txt
 db_password.txt
 db_admin_password.txt
 redis_password.txt
 typesense_api_key.txt
+
+**/caddy
+frankenphp
+frankenphp-worker.php
+
+# Octane RoadRunner binary (downloaded dev tool)
+/rr
+
+# Laravel bootstrap cache (generated)
+bootstrap/cache/*.php
+.rr.yaml
+
+# Created by Storage::fake() during tests
+/storage/framework/testing/

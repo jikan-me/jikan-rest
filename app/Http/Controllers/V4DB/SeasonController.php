@@ -7,188 +7,169 @@ use App\Dto\QueryCurrentAnimeSeasonCommand;
 use App\Dto\QuerySpecificAnimeSeasonCommand;
 use App\Dto\QueryUpcomingAnimeSeasonCommand;
 use Exception;
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 
-/**
- *
- */
 class SeasonController extends Controller
 {
     /**
-     * @OA\Get(
-     *     path="/seasons/now",
-     *     operationId="getSeasonNow",
-     *     tags={"seasons"},
-     *
-     *     @OA\Parameter(
-     *       name="filter",
-     *       description="Entry types",
-     *       in="query",
-     *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
-     *     ),
-     *
-     *     @OA\Parameter(ref="#/components/parameters/sfw"),
-     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
-     *     @OA\Parameter(ref="#/components/parameters/continuing"),
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
-     *     @OA\Response(
-     *         response="200",
-     *         description="Returns current seasonal anime",
-     *          @OA\JsonContent(
-     *               ref="#/components/schemas/anime_search"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error: Bad request. When required parameters were not supplied.",
-     *     ),
-     * ),
      * @throws Exception
      */
-    public function now(QueryCurrentAnimeSeasonCommand $command)
+    #[OA\Get(
+        path: '/seasons/now',
+        operationId: 'getSeasonNow',
+        summary: 'Current anime season',
+        description: 'Returns the anime currently airing this season. Can be filtered by **filter** and supports pagination via **page**.',
+        tags: ['seasons'],
+        parameters: [
+            new OA\Parameter(
+                name: 'filter',
+                description: 'Entry types',
+                in: 'query',
+                schema: new OA\Schema(type: 'string', enum: ['tv', 'movie', 'ova', 'special', 'ona', 'music']),
+            ),
+            new OA\Parameter(ref: '#/components/parameters/sfw'),
+            new OA\Parameter(ref: '#/components/parameters/unapproved'),
+            new OA\Parameter(ref: '#/components/parameters/continuing'),
+            new OA\Parameter(ref: '#/components/parameters/page'),
+            new OA\Parameter(ref: '#/components/parameters/limit'),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Returns current seasonal anime',
+                content: new OA\JsonContent(ref: '#/components/schemas/anime_search'),
+            ),
+            new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
+        ],
+    )]
+    public function now(QueryCurrentAnimeSeasonCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
 
     /**
-     * @OA\Get(
-     *     path="/seasons/{year}/{season}",
-     *     operationId="getSeason",
-     *     tags={"seasons"},
-     *
-     *     @OA\Parameter(
-     *       name="year",
-     *       in="path",
-     *       required=true,
-     *       @OA\Schema(type="integer")
-     *     ),
-     *
-     *     @OA\Parameter(
-     *       name="season",
-     *       in="path",
-     *       required=true,
-     *       @OA\Schema(type="string")
-     *     ),
-     *
-     *     @OA\Parameter(
-     *       name="filter",
-     *       description="Entry types",
-     *       in="query",
-     *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
-     *     ),
-     *
-     *     @OA\Parameter(ref="#/components/parameters/sfw"),
-     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
-     *     @OA\Parameter(ref="#/components/parameters/continuing"),
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
-     *     @OA\Response(
-     *         response="200",
-     *         description="Returns seasonal anime",
-     *          @OA\JsonContent(
-     *               ref="#/components/schemas/anime_search"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error: Bad request. When required parameters were not supplied.",
-     *     ),
-     * ),
      * @throws Exception
      */
-    public function main(QuerySpecificAnimeSeasonCommand $command)
+    #[OA\Get(
+        path: '/seasons/{year}/{season}',
+        operationId: 'getSeason',
+        summary: 'Seasonal anime',
+        description: 'Returns the anime that aired in a specific **year** and **season**. Can be filtered by **filter** and supports pagination via **page**.',
+        tags: ['seasons'],
+        parameters: [
+            new OA\Parameter(
+                name: 'year',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'integer'),
+            ),
+            new OA\Parameter(
+                name: 'season',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
+                name: 'filter',
+                description: 'Entry types',
+                in: 'query',
+                schema: new OA\Schema(type: 'string', enum: ['tv', 'movie', 'ova', 'special', 'ona', 'music']),
+            ),
+            new OA\Parameter(ref: '#/components/parameters/sfw'),
+            new OA\Parameter(ref: '#/components/parameters/unapproved'),
+            new OA\Parameter(ref: '#/components/parameters/continuing'),
+            new OA\Parameter(ref: '#/components/parameters/page'),
+            new OA\Parameter(ref: '#/components/parameters/limit'),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Returns seasonal anime',
+                content: new OA\JsonContent(ref: '#/components/schemas/anime_search'),
+            ),
+            new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
+        ],
+    )]
+    public function main(QuerySpecificAnimeSeasonCommand $command): mixed
+    {
+        return $this->mediator->send($command);
+    }
+
+    #[OA\Get(
+        path: '/seasons',
+        operationId: 'getSeasonsList',
+        summary: 'Seasons list',
+        description: 'Lists the years and seasons with available anime archives.',
+        tags: ['seasons'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Returns available list of seasons',
+                content: new OA\JsonContent(ref: '#/components/schemas/seasons'),
+            ),
+            new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
+        ],
+    )]
+    
+    #[OA\Schema(
+        schema: 'seasons',
+        description: 'List of available seasons',
+        properties: [
+            new OA\Property(
+                property: 'data',
+                type: 'array',
+                items: new OA\Items(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'year', type: 'integer', description: 'Year'),
+                        new OA\Property(
+                            property: 'seasons',
+                            type: 'array',
+                            description: 'List of available seasons',
+                            items: new OA\Items(type: 'string'),
+                        ),
+                    ],
+                ),
+            ),
+        ],
+    )]
+    public function archive(QueryAnimeSeasonListCommand $command): mixed
     {
         return $this->mediator->send($command);
     }
 
     /**
-     *  @OA\Get(
-     *     path="/seasons",
-     *     operationId="getSeasonsList",
-     *     tags={"seasons"},
-     *
-     *     @OA\Response(
-     *         response="200",
-     *         description="Returns available list of seasons",
-     *          @OA\JsonContent(
-     *               ref="#/components/schemas/seasons"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error: Bad request. When required parameters were not supplied.",
-     *     ),
-     * ),
-     *
-     * @OA\Schema(
-     *     schema="seasons",
-     *     description="List of available seasons",
-     *
-     *      @OA\Property(
-     *          property="data",
-     *          type="array",
-     *
-     *          @OA\Items(
-     *              type="object",
-     *              @OA\Property(
-     *                   property="year",
-     *                   type="integer",
-     *                   description="Year"
-     *              ),
-     *              @OA\Property(
-     *                   property="seasons",
-     *                   type="array",
-     *                   description="List of available seasons",
-     *                   @OA\Items(
-     *                       type="string"
-     *                   ),
-     *              ),
-     *          ),
-     *      ),
-     * ),
-     */
-    public function archive(QueryAnimeSeasonListCommand $command)
-    {
-        return $this->mediator->send($command);
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/seasons/upcoming",
-     *     operationId="getSeasonUpcoming",
-     *     tags={"seasons"},
-     *
-     *     @OA\Parameter(
-     *       name="filter",
-     *       description="Entry types",
-     *       in="query",
-     *       @OA\Schema(type="string",enum={"tv","movie","ova","special","ona","music"})
-     *     ),
-     *
-     *     @OA\Parameter(ref="#/components/parameters/sfw"),
-     *     @OA\Parameter(ref="#/components/parameters/unapproved"),
-     *     @OA\Parameter(ref="#/components/parameters/continuing"),
-     *     @OA\Parameter(ref="#/components/parameters/page"),
-     *     @OA\Parameter(ref="#/components/parameters/limit"),
-     *
-     *     @OA\Response(
-     *         response="200",
-     *         description="Returns upcoming season's anime",
-     *          @OA\JsonContent(
-     *               ref="#/components/schemas/anime_search"
-     *          )
-     *     ),
-     *     @OA\Response(
-     *         response="400",
-     *         description="Error: Bad request. When required parameters were not supplied.",
-     *     ),
-     * ),
      * @throws Exception
      */
-    public function later(QueryUpcomingAnimeSeasonCommand $command)
+    #[OA\Get(
+        path: '/seasons/upcoming',
+        operationId: 'getSeasonUpcoming',
+        summary: 'Upcoming anime season',
+        description: 'Returns the anime of the upcoming season. Can be filtered by **filter** and supports pagination via **page**.',
+        tags: ['seasons'],
+        parameters: [
+            new OA\Parameter(
+                name: 'filter',
+                description: 'Entry types',
+                in: 'query',
+                schema: new OA\Schema(type: 'string', enum: ['tv', 'movie', 'ova', 'special', 'ona', 'music']),
+            ),
+            new OA\Parameter(ref: '#/components/parameters/sfw'),
+            new OA\Parameter(ref: '#/components/parameters/unapproved'),
+            new OA\Parameter(ref: '#/components/parameters/continuing'),
+            new OA\Parameter(ref: '#/components/parameters/page'),
+            new OA\Parameter(ref: '#/components/parameters/limit'),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Returns upcoming season\'s anime',
+                content: new OA\JsonContent(ref: '#/components/schemas/anime_search'),
+            ),
+            new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
+        ],
+    )]
+    public function later(QueryUpcomingAnimeSeasonCommand $command): mixed
     {
         return $this->mediator->send($command);
     }

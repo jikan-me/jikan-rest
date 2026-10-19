@@ -4,10 +4,10 @@ namespace App\Features;
 
 use App\Dto\MangaForumLookupCommand;
 use App\Http\Resources\V4\ForumResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
-use App\Support\CachedData;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Manga\MangaForumRequest;
 
@@ -26,15 +26,18 @@ final class MangaForumLookupHandler extends RequestHandlerWithScraperCache
         return new ForumResource($results);
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
-        $filter = $requestParams->get("filter");
+        $id = $requestParams->get('id');
+        $filter = $requestParams->get('filter');
 
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => collect(
-                ["topics" => $jikan->getMangaForum(new MangaForumRequest($id, $filter))]
+            fn (MalClient $jikan, ?int $page = null) => collect(
+                ['topics' => $jikan->getMangaForum(new MangaForumRequest($id, $filter))]
             )
         );
     }

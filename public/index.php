@@ -1,33 +1,35 @@
 <?php
+
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+
+define('LARAVEL_START', microtime(true));
+
 /*
 |--------------------------------------------------------------------------
-| Create The Application
+| Check If The Application Is Under Maintenance
 |--------------------------------------------------------------------------
-|
-| First we need to get an application instance. This creates an instance
-| of the application / container and bootstraps the application so it
-| is ready to receive HTTP / Console requests from the environment.
-|
 */
 
-$app = require __DIR__.'/../bootstrap/app.php';
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+*/
+
+require __DIR__.'/../vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
 | Run The Application
 |--------------------------------------------------------------------------
-|
-| Once we have the application, we can handle the incoming request
-| through the kernel, and send the associated response back to
-| the client's browser allowing them to enjoy the creative
-| and wonderful application we have prepared for them.
-|
 */
 
-ob_start("ob_gzhandler");
+/** @var Application $app */
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
-if (!env('APP_DEBUG')) {
-    header("Content-Type: application/json");
-}
-
-$app->run();
+$app->handleRequest(Request::capture());

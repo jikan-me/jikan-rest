@@ -9,8 +9,6 @@ For an entire list of commands, you can run `php artisan list`
     - [Clear](#queue-clear)
 - [Cache](#cache)
     - [Remove](#cache-remove)
-    - [Change Cache Driver](#cache-change-cache-driver)
-    - [Change Cache Method](#cache-change-cache-method)
 - [Indexer](#indexer)
     - [Anime](#indexer-anime)
     - [Manga](#indexer-manga)
@@ -31,7 +29,7 @@ Command: `queue:clear`
 
 Example: `php artisan queue:clear`
 
-This will empty any cache updater jobs that are currently in queue if you're using the [Queue Cache Method](https://github.com/jikan-me/jikan-rest/blob/master/README.md#06-configuring-how-jikan-handles-expired-cache-optional)
+This will empty any jobs that are currently in the queue (e.g. queued Scout imports when `SCOUT_QUEUE=true`).
 
 ### Cache
 
@@ -48,19 +46,7 @@ In v3.4+, the request is defined in the response headers as `X-Request-Hash` as 
 
 In v4+, the request is defined only in the response header.
 
-#### Cache: Change Cache Driver
-Command: `cache:driver {driver}`
-
-Example: `cache:driver redis`
-
-[Read more on how it works](https://github.com/jikan-me/jikan-rest/blob/master/README.md#05-configuring-how-jikan-caches-optional)
-
-#### Cache: Change Cache Method
-Command: `cache:method {method}`
-
-Example: `cache:method queue`
-
-[Read more on how it works](https://github.com/jikan-me/jikan-rest/blob/master/README.md#06-configuring-how-jikan-handles-expired-cache-optional)
+The cache store is chosen with `CACHE_DRIVER` (or `CACHE_STORE`) in `.env` (default `file`); see `docs/UPGRADING.md`.
 
 ### Indexer
 #### Indexer: Anime

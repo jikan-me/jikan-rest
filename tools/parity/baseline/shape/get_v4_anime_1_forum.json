@@ -1,0 +1,20 @@
+{
+    "data": [
+        "@list",
+        {
+            "author_url": "@string",
+            "author_username": "@string",
+            "comments": "@int",
+            "date": "@string",
+            "last_comment": {
+                "author_url": "@string",
+                "author_username": "@string",
+                "date": "@string",
+                "url": "@string"
+            },
+            "mal_id": "@int",
+            "title": "@string",
+            "url": "@string"
+        }
+    ]
+}

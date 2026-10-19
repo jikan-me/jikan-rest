@@ -4,19 +4,16 @@ namespace App\Repositories;
 
 use App\Anime;
 use App\Contracts\AnimeRepository;
-use App\Contracts\Repository;
 use App\Enums\AnimeScheduleFilterEnum;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as ScoutBuilder;
 use MongoDB\BSON\UTCDateTime;
 
-/**
- * @implements Repository<Anime>
- */
 final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRepository
 {
     public function __construct()
@@ -24,87 +21,113 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         parent::__construct(fn () => Anime::query(), fn ($x, $y) => Anime::search($x, $y));
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function getTopAiringItems(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->orderByScore()
-            ->where("airing", true);
+            ->where('airing', true);
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->orderByPopularity()
-            ->where("status", AnimeStatusEnum::upcoming()->label);
+            ->where('status', AnimeStatusEnum::upcoming()->label);
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder
     {
         $builder = $this->queryable();
 
         $this->excludeNsfwItems($builder);
+
         return $builder;
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function excludeNsfwItems($builder): EloquentBuilder|ScoutBuilder
     {
         return $builder->exceptItemsWithAdultRating();
     }
 
+    /**
+     * @return Collection<int, Anime>|EloquentBuilder|Builder<Anime>
+     */
     public function excludeUnapprovedItems($builder): Collection|EloquentBuilder|ScoutBuilder
     {
         return $builder
-            ->where("approved", true);
+            ->where('approved', true);
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function excludeKidsItems($builder): EloquentBuilder|ScoutBuilder
     {
         return $builder->exceptKidsItems();
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->queryable()
-            ->orderBy("members", "desc");
+            ->orderBy('members', 'desc');
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->queryable()
-            ->orderBy("favorites", "desc");
+            ->orderBy('favorites', 'desc');
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function orderByRank(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->queryable()
-            ->whereNotNull("rank")
-            ->where("rank", ">", 0)
-            ->orderBy("rank");
+            ->whereNotNull('rank')
+            ->where('rank', '>', 0)
+            ->orderBy('rank');
     }
 
     public function getCurrentlyAiring(
         ?AnimeScheduleFilterEnum $filter = null
-    ): EloquentBuilder
-    {
+    ): EloquentBuilder {
         /*
          * all have status as currently airing
          * all have premiered, but they're not necessarily the current season or year
          * all have aired date, but they're not necessarily the current date/season
          */
         $queryable = $this->queryable(true)
-                          ->orderBy("members")
-                          ->where("type", AnimeTypeEnum::tv()->label)
-                          ->where("status", AnimeStatusEnum::airing()->label);
+            ->orderBy('members')
+            ->where('type', AnimeTypeEnum::tv()->label)
+            ->where('status', AnimeStatusEnum::airing()->label);
 
-        if (!is_null($filter)) {
+        if (! is_null($filter)) {
             if ($filter->isWeekDay()) {
-                $queryable = $queryable->where("broadcast", "like", "{$filter->label}%");
-            }
-            else {
-                $queryable = $queryable->where("broadcast", $filter->label);
+                $queryable = $queryable->where('broadcast', 'like', "{$filter->label}%");
+            } else {
+                $queryable = $queryable->where('broadcast', $filter->label);
             }
         }
 
@@ -117,13 +140,12 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
         ?AnimeTypeEnum $type = null,
         ?string $premiered = null,
         bool $includeContinuingItems = false
-    ): EloquentBuilder
-    {
+    ): EloquentBuilder {
         $queryable = $this->queryable(true);
 
         $airedFilter = ['aired.from' => [
             '$gte' => $from->toAtomString(),
-            '$lte' => $to->modify('last day of this month')->toAtomString()
+            '$lte' => (clone $to)->modify('last day of this month')->toAtomString(),
         ]];
 
         $finalFilter = [];
@@ -139,9 +161,9 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                 [
                     'premiered' => null,
                     'aired.string' => [
-                        '$nin' => ["{$from->year} to ?"]
+                        '$nin' => ["{$from->year} to ?"],
                     ],
-                    ...$airedFilter
+                    ...$airedFilter,
                 ],
             ];
             if ($includeContinuingItems) {
@@ -151,14 +173,14 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                     'aired.from' => ['$lte' => $from->toAtomString()],
                     'aired.to' => null,
                     'episodes' => null,
-                    'airing' => true
+                    'airing' => true,
                 ];
                 // We want to include those which are currently airing, and  their aired.to is past the date of the
                 // current season start.
                 $finalFilter['$or'][] = [
                     'aired.from' => ['$lte' => $from->toAtomString()],
                     'aired.to' => ['$gte' => $from->toAtomString()],
-                    'airing' => true
+                    'airing' => true,
                 ];
                 // In many cases MAL doesn't show the date until an airing show is going to be aired. So we need to get
                 // clever here.
@@ -174,14 +196,14 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                                         '$dateDiff' => [
                                             'startDate' => [
                                                 '$dateFromString' => [
-                                                    'dateString' => '$aired.from'
-                                                ]
+                                                    'dateString' => '$aired.from',
+                                                ],
                                             ],
                                             'endDate' => new UTCDateTime($from),
-                                            'unit' => 'month'
-                                        ]
+                                            'unit' => 'month',
+                                        ],
                                     ],
-                                    3 // there are 3 months in a season, so anything that started in 3 months or less will be included
+                                    3, // there are 3 months in a season, so anything that started in 3 months or less will be included
                                 ],
                             ],
                             [
@@ -190,31 +212,31 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
                                         '$dateDiff' => [
                                             'startDate' => [
                                                 '$dateFromString' => [
-                                                    'dateString' => '$aired.from'
-                                                ]
+                                                    'dateString' => '$aired.from',
+                                                ],
                                             ],
                                             'endDate' => new UTCDateTime($from),
-                                            'unit' => 'month'
-                                        ]
+                                            'unit' => 'month',
+                                        ],
                                     ],
-                                    0
-                                ]
-                            ]
-                        ]
+                                    0,
+                                ],
+                            ],
+                        ],
                     ],
                     'aired.to' => null,
                     'episodes' => ['$gte' => 14],
-                    'airing' => true
+                    'airing' => true,
                 ];
             }
         } else {
             $finalFilter = array_merge($finalFilter, $airedFilter);
             $finalFilter['aired.string'] = [
-                '$nin' => ["{$from->year} to ?"]
+                '$nin' => ["{$from->year} to ?"],
             ];
         }
 
-        if (!is_null($type)) {
+        if (! is_null($type)) {
             $finalFilter['type'] = $type->label;
         }
 
@@ -225,21 +247,23 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
 
     public function getUpcomingSeasonItems(
         ?AnimeTypeEnum $type = null
-    ): EloquentBuilder
-    {
-        $queryable = $this->queryable(true)->where("status", AnimeStatusEnum::upcoming()->label);
+    ): EloquentBuilder {
+        $queryable = $this->queryable(true)->where('status', AnimeStatusEnum::upcoming()->label);
 
-        if (!is_null($type)) {
-            $queryable = $queryable->where("type", $type->label);
+        if (! is_null($type)) {
+            $queryable = $queryable->where('type', $type->label);
         }
 
-        return $queryable->orderBy("members", "desc");
+        return $queryable->orderBy('members', 'desc');
     }
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function orderByScore(): EloquentBuilder|ScoutBuilder
     {
         return $this
             ->queryable()
-            ->orderBy("score", "desc");
+            ->orderBy('score', 'desc');
     }
 }

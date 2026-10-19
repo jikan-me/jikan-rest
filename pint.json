@@ -1,0 +1,17 @@
+{
+    "preset": "laravel",
+    "paths": [
+        "app",
+        "bootstrap",
+        "config",
+        "database",
+        "routes",
+        "tests"
+    ],
+    "exclude": [
+        "app/Compat"
+    ],
+    "rules": {
+        "php_unit_method_casing": false
+    }
+}

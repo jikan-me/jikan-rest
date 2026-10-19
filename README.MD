@@ -1,7 +1,7 @@
 [![Jikan](https://i.imgur.com/ccx3pxo.png)](#jikan-rest-api-v4---unofficial-myanimelistnet-rest-api)
 
 # Jikan REST API v4 - Unofficial MyAnimeList.net REST API
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![stable](https://img.shields.io/badge/PHP-^8.1-blue.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![PHP](https://img.shields.io/badge/PHP-^8.4.4-blue.svg?style=flat)]() [![Laravel](https://img.shields.io/badge/Laravel-13-red.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe)
 
 Jikan is a REST API for [MyAnimeList.net](https://myanimelist.net). It scrapes the website to satisfy the need for API functionality that MyAnimeList.net lacks.
 
@@ -20,17 +20,53 @@ https://github.com/jikan-me/jikan-rest/tree/v3
 
 ⚠ v3 is discontinued and will no longer receive any updates.
 
-### Manual installation
-Please read the [manual installation guide](https://github.com/jikan-me/jikan-rest/wiki).
-For any additional help, join our [Discord server](http://discord.jikan.moe/).
+**For agents & AI:** start at [`AGENTS.md`](AGENTS.md) (agent quickstart), [`llms.txt`](llms.txt) /
+`GET /llms.txt` (LLM index), [`docs/INDEX.md`](docs/INDEX.md) (question → file), the OpenAPI spec at
+`GET /v4/docs/openapi`, and the function-calling manifest at `GET /v4/ai/manifest.json`.
 
-### 🐳 Docker Installation
-We distribute the app as a container image, so you can just run it:
+### Self-hosting
+
+This repository is the self-hostable Jikan REST API: you run your own instance of the
+`/v4` API against MyAnimeList. Current release: **4.3.0**.
+
+**Stack:** Laravel 13 · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb` v5) · Octane (RoadRunner default / FrankenPHP opt-in) · PHPUnit 12 · Laravel Scout search · parser [jikan-me/jikan](https://github.com/jikan-me/jikan) v5.
+
+**Requirements**
+
+- PHP **8.4.4 or newer** with `ext-mongodb` ≥ 2.5 and `ext-pcntl` (Composer 2)
+- MongoDB server 8.0 (the Docker stack uses `mongo:8.0`; CI temporarily runs 7.0, see [TROUBLESHOOTING](docs/TROUBLESHOOTING.md))
+- Optional: Redis (shared cache across containers), Typesense 27 (search; off by default, Mongo `$text` is the fallback)
+
+**Quick start: Docker** (see [docs/DOCKER.md](docs/DOCKER.md))
+
 ```bash
-docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikanme/jikan-rest:latest
+docker compose up -d --build                 # app + MongoDB + Redis + Typesense
+docker compose exec app php artisan migrate  # one-time: create the MongoDB indexes
+curl http://localhost:8080/up                # 200 OK
 ```
 
-For more information please refer to our [container usage guide](container_usage.md).
+Set `APP_URL` to the public URL of your instance and `APP_KEY` to a stable key in production.
+
+**Quick start: bare metal** (see [docs/SETUP.md](docs/SETUP.md); `./install.sh` automates these steps)
+
+```bash
+composer install
+cp .env.dist .env && php artisan key:generate   # then set APP_URL and the DB_* values
+php artisan migrate
+php artisan octane:install --server=roadrunner  # downloads the RoadRunner binary
+php artisan octane:start --server=roadrunner --port=8000
+```
+
+A fresh instance has an empty database; entries are fetched from MyAnimeList on first request.
+To pre-populate (search, top, seasons), run the indexers, see [COMMANDS.MD](COMMANDS.MD) and
+[docs/POST_FULL_INDEX.md](docs/POST_FULL_INDEX.md). Services and options: [docs/PROVIDERS.md](docs/PROVIDERS.md).
+
+For any additional help, join our [Discord server](http://discord.jikan.moe/).
+
+### Upgrading from 4.2.x
+
+4.3.0 keeps the same `/v4` API but runs on a new platform (Laravel 13 instead of Lumen 9).
+Read [docs/UPGRADING.md](docs/UPGRADING.md) before upgrading a 4.2.x instance.
 
 ## Public REST API
 If you don't want to host your instance, there's a public API available.
@@ -62,9 +98,18 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
 ## Running Tests
 
-`php vendor/bin/phpunit tests`
+```bash
+composer phpunit                       # = php vendor/bin/phpunit --no-coverage
+```
 
-Note: Tests may fail due to rate limit from MyAnimeList (HTTP 429)
+The suite needs a running MongoDB (it uses the `DB_*` settings; point `DB_DATABASE` at a
+database you do not mind being dropped). Run it with `--no-coverage` unless you have a coverage
+driver installed.
+
+Note: Some tests hit MyAnimeList and may be affected by their rate limit (HTTP 429).
+
+Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) (checks, commit style, PR
+expectations). Report security issues privately as described in [SECURITY.md](SECURITY.md).
 
 ---
 ## Backers

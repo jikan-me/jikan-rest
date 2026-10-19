@@ -3,7 +3,6 @@
 namespace App\Features;
 
 use App\Dto\QueryMangaListOfUserCommand;
-use App\Http\Resources\V4\UserProfileAnimeListCollection;
 use App\Http\Resources\V4\UserProfileMangaListCollection;
 use App\Http\Resources\V4\UserProfileMangaListResource;
 use App\Support\CachedData;
@@ -19,11 +18,11 @@ use Jikan\Request\User\UserMangaListRequest;
 final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
 {
     /**
-     * @param QueryMangaListOfUserCommand $request
+     * @param  QueryMangaListOfUserCommand  $request
      */
     public function handle($request)
     {
-        $requestParams = collect(["jikanParserRequest" => $request->toJikanParserRequest()]);
+        $requestParams = collect(['jikanParserRequest' => $request->toJikanParserRequest()]);
         $requestFingerPrint = $request->getFingerPrint();
         $results = $this->getScraperData($requestFingerPrint, $requestParams);
 
@@ -32,11 +31,11 @@ final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
 
     public function resource(CachedData $results): JsonResource
     {
-        if ($results->isEmpty()) {
-            return new UserProfileAnimeListCollection([]);
+        if ($results->isEmpty() || ! isset($results['manga']) || count($results['manga']) === 0) {
+            return new UserProfileMangaListCollection([]);
         }
 
-        $listResults = $results->get("manga");
+        $listResults = $results['manga'];
         foreach ($listResults as &$result) {
             $result = (new UserProfileMangaListResource($result));
         }
@@ -45,23 +44,27 @@ final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
         return QueryMangaListOfUserCommand::class;
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         /**
          * @var UserMangaListRequest $jikanParserRequest
          */
-        $jikanParserRequest = $requestParams->get("jikanParserRequest");
+        $jikanParserRequest = $requestParams->get('jikanParserRequest');
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => ["anime" => $jikan->getUserMangaList($jikanParserRequest)],
-            $requestParams->get("page", 1)
+            fn (MalClient $jikan, ?int $page = null) => ['manga' => $jikan->getUserMangaList($jikanParserRequest)],
+            $requestParams->get('page', 1)
         );
     }
 }

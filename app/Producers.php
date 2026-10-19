@@ -3,22 +3,43 @@
 namespace App;
 
 use App\Concerns\FilteredByLetter;
+use Database\Factories\ProducersFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jikan\Request\Producer\ProducerRequest;
+use MongoDB\BSON\UTCDateTime;
 
+/**
+ * Mongo-backed producer document. Attributes are magic (from the collection); the
+ * documented ones are those the app/resources actually read.
+ *
+ * @property int $mal_id
+ * @property string $url
+ * @property array<string, mixed> $images
+ * @property array<string, mixed>|null $titles
+ * @property UTCDateTime|null $established
+ * @property int $favorites
+ * @property string|null $about
+ * @property int $count
+ * @property array<string, mixed>|null $external_links
+ * @property UTCDateTime|null $createdAt
+ * @property UTCDateTime|null $modifiedAt
+ *
+ * @use HasFactory<ProducersFactory>
+ */
 class Producers extends JikanApiSearchableModel
 {
     use FilteredByLetter, HasFactory;
-    protected array $filters = ["order_by", "sort", "letter"];
+
+    protected array $filters = ['order_by', 'sort', 'letter'];
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
-        'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'external', 'count',
-        'createdAt', 'modifiedAt'
+        'mal_id', 'url', 'images', 'titles', 'established', 'favorites', 'about', 'name', 'external_links', 'count',
+        'createdAt', 'modifiedAt',
     ];
 
     /**
@@ -31,19 +52,22 @@ class Producers extends JikanApiSearchableModel
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
-        '_id', 'request_hash', 'expiresAt'
+        '_id', 'request_hash', 'expiresAt',
     ];
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->displayNameFieldName = "titles.0.title";
+        $this->displayNameFieldName = 'titles.0.title';
     }
 
-    public static function scrape(int $id)
+    /**
+     * @return array<string, mixed>
+     */
+    public static function scrape(int $id): array
     {
         $data = app('JikanParser')->getProducer(new ProducerRequest($id));
 
@@ -57,21 +81,27 @@ class Producers extends JikanApiSearchableModel
         return $data;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toSearchableArray(): array
     {
-        $titles = !is_null($this->titles) ? collect($this->titles)->map(fn ($x) => $x["title"])->toArray() : [''];
+        $titles = ! is_null($this->titles) ? collect($this->titles)->map(fn ($x) => $x['title'])->toArray() : [''];
 
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
-            'url' => !is_null($this->url) ? $this->url : '',
+            'url' => ! is_null($this->url) ? $this->url : '',
             'titles' => implode(', ', $titles),
             'established' => $this->convertToTimestamp($this->established),
             'favorites' => $this->favorites,
-            'count' => $this->count
+            'count' => $this->count,
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getCollectionSchema(): array
     {
         return [
@@ -86,16 +116,16 @@ class Producers extends JikanApiSearchableModel
                     'type' => 'string',
                     'optional' => false,
                     'infix' => true,
-                    'sort' => true
+                    'sort' => true,
                 ],
                 [
                     'name' => 'url',
                     'type' => 'string',
                     'optional' => false,
                     'infix' => true,
-                    'sort' => true
+                    'sort' => true,
                 ],
-            ]
+            ],
         ];
     }
 
@@ -103,7 +133,7 @@ class Producers extends JikanApiSearchableModel
     {
         return [
             'url',
-            'titles'
+            'titles',
         ];
     }
 

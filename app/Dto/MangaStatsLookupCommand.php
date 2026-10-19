@@ -2,12 +2,9 @@
 
 namespace App\Dto;
 
-
 use Illuminate\Http\JsonResponse;
 
 /**
  * @extends LookupDataCommand<JsonResponse>
  */
-final class MangaStatsLookupCommand extends LookupDataCommand
-{
-}
+final class MangaStatsLookupCommand extends LookupDataCommand {}

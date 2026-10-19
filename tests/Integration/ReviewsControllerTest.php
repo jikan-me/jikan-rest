@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Facades\DB;
@@ -7,8 +11,8 @@ use Tests\TestCase;
 
 class ReviewsControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testAnimeReviews()
     {
@@ -72,12 +76,12 @@ class ReviewsControllerTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         ]);
-        DB::table("reviews")->insert($document);
+        DB::table('reviews')->insert($document);
         $this->get('/v4/reviews/anime')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -102,30 +106,30 @@ class ReviewsControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
                         'user' => [
                             'username',
                             'url',
                             'images' => [
                                 'jpg' => [
-                                    'image_url'
+                                    'image_url',
                                 ],
                                 'webp' => [
-                                    'image_url'
-                                ]
-                            ]
+                                    'image_url',
+                                ],
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -183,12 +187,12 @@ class ReviewsControllerTest extends TestCase
                         ],
                     ],
                 ],
-            ]
+            ],
         ]);
-        DB::table("reviews")->insert($document);
+        DB::table('reviews')->insert($document);
         $this->get('/v4/reviews/manga')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -213,30 +217,30 @@ class ReviewsControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
                         'user' => [
                             'username',
                             'url',
                             'images' => [
                                 'jpg' => [
-                                    'image_url'
+                                    'image_url',
                                 ],
                                 'webp' => [
-                                    'image_url'
-                                ]
-                            ]
+                                    'image_url',
+                                ],
+                            ],
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 }

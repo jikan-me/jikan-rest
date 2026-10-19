@@ -3,12 +3,8 @@
 namespace App\Repositories;
 
 use App\Contracts\ProducerRepository;
-use App\Contracts\Repository;
 use App\Producers;
 
-/**
- * @implements Repository<Producers>
- */
 final class DefaultProducerRepository extends DatabaseRepository implements ProducerRepository
 {
     public function __construct()

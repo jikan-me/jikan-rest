@@ -5,12 +5,12 @@ namespace App\Features;
 use App\Dto\MangaGenreListCommand;
 
 /**
- * @implements GenreListHandler<MangaGenreListCommand>
+ * @extends GenreListHandler<MangaGenreListCommand>
  */
 final class MangaGenreListHandler extends GenreListHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

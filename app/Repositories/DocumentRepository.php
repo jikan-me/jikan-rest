@@ -13,13 +13,16 @@ final class DocumentRepository extends DatabaseRepository
 
     public function __construct(string $tableName)
     {
-        parent::__construct(fn() => DB::table($tableName), fn($x, $y) => throw new \Exception("Not supported"));
+        parent::__construct(fn () => DB::table($tableName), fn ($x, $y) => throw new \Exception('Not supported'));
         $this->tableName = $tableName;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function scrape(int|string $id): array
     {
-        throw new \Exception("Not supported");
+        throw new \Exception('Not supported');
     }
 
     public function tableName(): string
@@ -27,6 +30,9 @@ final class DocumentRepository extends DatabaseRepository
         return $this->tableName;
     }
 
+    /**
+     * @param  array<string, mixed>  $attributes
+     */
     public function insert(array $attributes): bool
     {
         // override the parent method, because these records are not search indexed
@@ -35,6 +41,6 @@ final class DocumentRepository extends DatabaseRepository
 
     public function createEntity()
     {
-        throw new \Exception("Not supported");
+        throw new \Exception('Not supported');
     }
 }

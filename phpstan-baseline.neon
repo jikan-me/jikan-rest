@@ -1,0 +1,1549 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to function is_null\(\) with mixed will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 2
+			path: app/Anime.php
+
+		-
+			message: '#^Class App\\Anime uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Method App\\Anime\:\:newFactory\(\) return type with generic class Illuminate\\Database\\Eloquent\\Factories\\Factory does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Anime.php
+
+		-
+			message: '#^Parameter \#1 \$field\|column of method Laravel\\Scout\\Builder\<static\(App\\Anime\)\>\:\:where\(\) expects array\<int\|string, mixed\>\|\(Closure\(\(\$operator is null \? Illuminate\\Database\\Eloquent\\Builder\<static\> \: Illuminate\\Database\\Query\\Builder\)\)\: mixed\)\|Illuminate\\Contracts\\Database\\Query\\Expression\|string, Closure\(MongoDB\\Laravel\\Eloquent\\Builder\)\: \(Illuminate\\Database\\Eloquent\\Builder\<static\>&MongoDB\\Laravel\\Eloquent\\Builder\) given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Anime.php
+
+		-
+			message: '#^Method App\\Casts\\ContextualBooleanCast\:\:cast\(\) has parameter \$context with generic class Spatie\\LaravelData\\Support\\Creation\\CreationContext but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Casts/ContextualBooleanCast.php
+
+		-
+			message: '#^Method App\\Casts\\EnumCast\:\:cast\(\) has parameter \$context with generic class Spatie\\LaravelData\\Support\\Creation\\CreationContext but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Casts/EnumCast.php
+
+		-
+			message: '#^Static method Spatie\\LaravelData\\Exceptions\\CannotCastEnum\:\:create\(\) invoked with 2 parameters, 3 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: app/Casts/EnumCast.php
+
+		-
+			message: '#^Class App\\Character uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Character.php
+
+		-
+			message: '#^Class App\\Club uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Club.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 3
+			path: app/Console/Commands/Indexer/AnimeIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, int given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Console/Commands/Indexer/AnimeIndexer.php
+
+		-
+			message: '#^Method App\\Console\\Commands\\Indexer\\AnimeScheduleIndexer\:\:handle\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: app/Console/Commands/Indexer/AnimeScheduleIndexer.php
+
+		-
+			message: '#^Dead catch \- Exception is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Console/Commands/Indexer/CurrentSeasonIndexer.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 4
+			path: app/Console/Commands/Indexer/IncrementalIndexer.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: app/Console/Commands/Indexer/IncrementalIndexer.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$mediaTypes array\)\: Unexpected token "\$mediaTypes", expected type at offset 20 on line 2$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: app/Console/Commands/Indexer/IncrementalIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$callback of method Illuminate\\Console\\Command\:\:trap\(\) expects callable\(int\)\: void, Closure\(\)\: true given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Console/Commands/Indexer/IncrementalIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, int given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Console/Commands/Indexer/IncrementalIndexer.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 3
+			path: app/Console/Commands/Indexer/MangaIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, int given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Console/Commands/Indexer/MangaIndexer.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 3
+			path: app/Console/Commands/Indexer/ProducersIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, int given\.$#'
+			identifier: argument.type
+			count: 2
+			path: app/Console/Commands/Indexer/ProducersIndexer.php
+
+		-
+			message: '#^Method App\\Contracts\\AnimeRepository\:\:excludeKidsItems\(\) has parameter \$builder with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Contracts/AnimeRepository.php
+
+		-
+			message: '#^Method App\\Contracts\\AnimeRepository\:\:excludeNsfwItems\(\) has parameter \$builder with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Contracts/AnimeRepository.php
+
+		-
+			message: '#^Method App\\Contracts\\AnimeRepository\:\:excludeUnapprovedItems\(\) has parameter \$builder with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Contracts/AnimeRepository.php
+
+		-
+			message: '#^Interface App\\Contracts\\GenreRepository extends generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Contracts/GenreRepository.php
+
+		-
+			message: '#^Method App\\Contracts\\GenreRepository\:\:all\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Contracts/GenreRepository.php
+
+		-
+			message: '#^Method App\\Contracts\\GenreRepository\:\:genres\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Contracts/GenreRepository.php
+
+		-
+			message: '#^Method App\\Contracts\\GenreRepository\:\:getDemographics\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Contracts/GenreRepository.php
+
+		-
+			message: '#^Method App\\Contracts\\GenreRepository\:\:getExplicitItems\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Contracts/GenreRepository.php
+
+		-
+			message: '#^Method App\\Contracts\\GenreRepository\:\:getThemes\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Contracts/GenreRepository.php
+
+		-
+			message: '#^Type mixed in generic type App\\Contracts\\DataRequest\<mixed\> in PHPDoc tag @param for parameter \$requestData is not subtype of template type T of Illuminate\\Http\\JsonResponse\|Illuminate\\Http\\Resources\\Json\\JsonResource\|Illuminate\\Http\\Response of interface App\\Contracts\\DataRequest\.$#'
+			identifier: generics.notSubtype
+			count: 1
+			path: app/Contracts/Mediator.php
+
+		-
+			message: '#^Method App\\Contracts\\Repository\:\:getAllByMalId\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Contracts/Repository.php
+
+		-
+			message: '#^Method App\\Contracts\\Repository\:\:random\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Contracts/Repository.php
+
+		-
+			message: '#^PHPDoc tag @return contains generic type Illuminate\\Contracts\\Database\\Query\\Builder\<App\\JikanApiModel\> but interface Illuminate\\Contracts\\Database\\Query\\Builder is not generic\.$#'
+			identifier: generics.notGeneric
+			count: 1
+			path: app/Contracts/RepositoryQuery.php
+
+		-
+			message: '#^Method App\\DataPipes\\MapRouteParametersDataPipe\:\:handle\(\) has parameter \$creationContext with generic class Spatie\\LaravelData\\Support\\Creation\\CreationContext but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/DataPipes/MapRouteParametersDataPipe.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: app/Dto/Concerns/PreparesData.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/LookupByUsernameCommand.php
+
+		-
+			message: '#^Method App\\Dto\\LookupByUsernameCommand\:\:fromRequest\(\) should return static\(App\\Dto\\LookupByUsernameCommand\<T of Illuminate\\Http\\JsonResponse\|Illuminate\\Http\\Resources\\Json\\JsonResource\|Illuminate\\Http\\Response\>\)\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/LookupByUsernameCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/LookupDataCommand.php
+
+		-
+			message: '#^Method App\\Dto\\LookupDataCommand\:\:fromRequest\(\) should return static\(App\\Dto\\LookupDataCommand\<T of Illuminate\\Http\\JsonResponse\|Illuminate\\Http\\Resources\\Json\\JsonResource\|Illuminate\\Http\\Response\>\)\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/LookupDataCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryAnimeRecommendationsCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryAnimeRecommendationsCommand\:\:fromRequest\(\) should return App\\Dto\\QueryAnimeRecommendationsCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryAnimeRecommendationsCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryAnimeSchedulesCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryAnimeSchedulesCommand\:\:fromRequest\(\) should return App\\Dto\\QueryAnimeSchedulesCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryAnimeSchedulesCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryAnimeSeasonCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryAnimeSeasonCommand\:\:fromRequest\(\) should return static\(App\\Dto\\QueryAnimeSeasonCommand\)\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryAnimeSeasonCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryAnimeSeasonListCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryAnimeSeasonListCommand\:\:fromRequest\(\) should return App\\Dto\\QueryAnimeSeasonListCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryAnimeSeasonListCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryListOfUserCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryListOfUserCommand\:\:fromRequest\(\) should return static\(App\\Dto\\QueryListOfUserCommand\)\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryListOfUserCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryMangaRecommendationsCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryMangaRecommendationsCommand\:\:fromRequest\(\) should return App\\Dto\\QueryMangaRecommendationsCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryMangaRecommendationsCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryPopularEpisodesCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryPopularEpisodesCommand\:\:fromRequest\(\) should return App\\Dto\\QueryPopularEpisodesCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryPopularEpisodesCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryPopularPromoVideosCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryPopularPromoVideosCommand\:\:fromRequest\(\) should return App\\Dto\\QueryPopularPromoVideosCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryPopularPromoVideosCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryRecentlyAddedEpisodesCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryRecentlyAddedEpisodesCommand\:\:fromRequest\(\) should return App\\Dto\\QueryRecentlyAddedEpisodesCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryRecentlyAddedEpisodesCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryRecentlyAddedPromoVideosCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryRecentlyAddedPromoVideosCommand\:\:fromRequest\(\) should return App\\Dto\\QueryRecentlyAddedPromoVideosCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryRecentlyAddedPromoVideosCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryRecentlyOnlineUsersCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryRecentlyOnlineUsersCommand\:\:fromRequest\(\) should return App\\Dto\\QueryRecentlyOnlineUsersCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryRecentlyOnlineUsersCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryReviewsCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryReviewsCommand\:\:fromRequest\(\) should return static\(App\\Dto\\QueryReviewsCommand\)\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryReviewsCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QuerySpecificAnimeSeasonCommand\:\:messages\(\) has parameter \$args with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Dto/QuerySpecificAnimeSeasonCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/QueryTopReviewsCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryTopReviewsCommand\:\:fromRequest\(\) should return App\\Dto\\QueryTopReviewsCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/QueryTopReviewsCommand.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\LaravelData\\Contracts\\BaseData\:\:\$fingerprint\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Dto/UsersSearchCommand.php
+
+		-
+			message: '#^Method App\\Dto\\UsersSearchCommand\:\:fromRequest\(\) should return App\\Dto\\UsersSearchCommand\|null but returns Spatie\\LaravelData\\Contracts\\BaseData\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Dto/UsersSearchCommand.php
+
+		-
+			message: '#^Method App\\Enums\\AnimeListAiringStatusFilterEnum\:\:labels\(\) never returns Closure\(string\)\: string so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Enums/AnimeListAiringStatusFilterEnum.php
+
+		-
+			message: '#^Method App\\Enums\\AnimeListAiringStatusFilterEnum\:\:labels\(\) never returns array\<string, string\> so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Enums/AnimeListAiringStatusFilterEnum.php
+
+		-
+			message: '#^Method App\\Enums\\AnimeListAiringStatusFilterEnum\:\:labels\(\) should return array\<string, string\>\|\(Closure\(string\)\: string\) but returns array\{airing\: 1, finished\: 2, complete\: 2, to_be_aired\: 3, not_yet_aired\: 3, tba\: 3, nya\: 3\}\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Enums/AnimeListAiringStatusFilterEnum.php
+
+		-
+			message: '#^Method App\\Enums\\GenderEnum\:\:labels\(\) should return array\<string, string\> but returns array\<string, int\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Enums/GenderEnum.php
+
+		-
+			message: '#^Method App\\Enums\\PeopleOrderByEnum\:\:labels\(\) never returns Closure\(string\)\: string so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Enums/PeopleOrderByEnum.php
+
+		-
+			message: '#^Method App\\Enums\\UserAnimeListOrderByEnum\:\:labels\(\) should return array\<string, string\> but returns array\<string, int\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Enums/UserAnimeListOrderByEnum.php
+
+		-
+			message: '#^Method App\\Enums\\UserMangaListOrderByEnum\:\:labels\(\) should return array\<string, string\> but returns array\<string, int\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Enums/UserMangaListOrderByEnum.php
+
+		-
+			message: '#^Method App\\Enums\\UserMangaListStatusFilterEnum\:\:labels\(\) should return array\<string, string\> but returns array\<string, int\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Enums/UserMangaListStatusFilterEnum.php
+
+		-
+			message: '#^Class App\\Episode uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Episode.php
+
+		-
+			message: '#^Parameter \#1 \$exception of static method App\\Exceptions\\GithubReport\:\:make\(\) expects Exception, Throwable given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Exceptions/Handler.php
+
+		-
+			message: '#^Variable \$id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/AnimeReviewsLookupHandler.php
+
+		-
+			message: '#^Variable \$preliminary might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/AnimeReviewsLookupHandler.php
+
+		-
+			message: '#^Variable \$sort might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/AnimeReviewsLookupHandler.php
+
+		-
+			message: '#^Variable \$spoilers might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/AnimeReviewsLookupHandler.php
+
+		-
+			message: '#^Call to an undefined method App\\Support\\CachedData\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/CharacterAnimeLookupHandler.php
+
+		-
+			message: '#^Call to an undefined method App\\Support\\CachedData\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/CharacterMangaLookupHandler.php
+
+		-
+			message: '#^Call to an undefined method App\\Support\\CachedData\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/CharacterVoicesLookupHandler.php
+
+		-
+			message: '#^Variable \$id might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/MangaReviewsLookupHandler.php
+
+		-
+			message: '#^Variable \$preliminary might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/MangaReviewsLookupHandler.php
+
+		-
+			message: '#^Variable \$sort might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/MangaReviewsLookupHandler.php
+
+		-
+			message: '#^Variable \$spoilers might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/MangaReviewsLookupHandler.php
+
+		-
+			message: '#^Call to an undefined method App\\Support\\CachedData\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/PersonAnimeLookupHandler.php
+
+		-
+			message: '#^Call to an undefined method App\\Support\\CachedData\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/PersonMangaLookupHandler.php
+
+		-
+			message: '#^Call to an undefined method App\\Support\\CachedData\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/PersonVoicesLookupHandler.php
+
+		-
+			message: '#^Call to an undefined method App\\Support\\CachedData\:\:get\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Features/QueryAnimeListOfUserHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/QueryAnimeSchedulesHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/QueryAnimeSeasonHandlerBase.php
+
+		-
+			message: '#^Match arm comparison between 12 and 12 is always true\.$#'
+			identifier: match.alwaysTrue
+			count: 1
+			path: app/Features/QueryCurrentAnimeSeasonHandler.php
+
+		-
+			message: '#^Method App\\Features\\QueryRandomCharacterHandler\:\:resource\(\) has parameter \$results with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Features/QueryRandomCharacterHandler.php
+
+		-
+			message: '#^Method App\\Features\\QueryRandomItemHandler\:\:__construct\(\) has parameter \$repository with generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Features/QueryRandomItemHandler.php
+
+		-
+			message: '#^Method App\\Features\\QueryRandomItemHandler\:\:resource\(\) has parameter \$results with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Features/QueryRandomItemHandler.php
+
+		-
+			message: '#^Method App\\Features\\QueryRandomPersonHandler\:\:resource\(\) has parameter \$results with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Features/QueryRandomPersonHandler.php
+
+		-
+			message: '#^Method App\\Features\\QueryRandomUserHandler\:\:resource\(\) has parameter \$results with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Features/QueryRandomUserHandler.php
+
+		-
+			message: '#^Variable \$preliminary might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/QueryReviewsHandler.php
+
+		-
+			message: '#^Variable \$sort might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/QueryReviewsHandler.php
+
+		-
+			message: '#^Variable \$spoilers might not be defined\.$#'
+			identifier: variable.undefined
+			count: 1
+			path: app/Features/QueryReviewsHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Anime\>\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/QueryTopAnimeItemsHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Character\>\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/QueryTopCharactersHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Manga\>\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/QueryTopMangaItemsHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Person\>\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/QueryTopPeopleHandler.php
+
+		-
+			message: '#^Call to an undefined method TRequest of App\\Contracts\\DataRequest\:\:all\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/RequestHandlerWithScraperCache.php
+
+		-
+			message: '#^Call to an undefined method TRequest of App\\Contracts\\DataRequest\:\:getFingerPrint\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/RequestHandlerWithScraperCache.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Features/RequestHandlerWithScraperCache.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Features/RequestHandlerWithScraperCache.php
+
+		-
+			message: '#^Call to an undefined method TRequest of App\\Contracts\\DataRequest\:\:all\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Features/SearchRequestHandler.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Features/SearchRequestHandler.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Features/SearchRequestHandler.php
+
+		-
+			message: '#^Generic type App\\Features\\RequestHandlerWithScraperCache\<App\\Dto\\UserHistoryLookupCommand\> in PHPDoc tag @extends does not specify all template types of class App\\Features\\RequestHandlerWithScraperCache\: TRequest, TResponse$#'
+			identifier: generics.lessTypes
+			count: 1
+			path: app/Features/UserHistoryLookupHandler.php
+
+		-
+			message: '#^Property App\\Filters\\BaseClause\:\:\$filter has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Filters/BaseClause.php
+
+		-
+			message: '#^Property App\\Filters\\BaseClause\:\:\$query has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Filters/BaseClause.php
+
+		-
+			message: '#^Property App\\Filters\\BaseClause\:\:\$values has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Filters/BaseClause.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: app/Filters/FilterQueryString.php
+
+		-
+			message: '#^Method App\\Filters\\WhereClause\:\:andWhere\(\) has parameter \$filter with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Filters/WhereClause.php
+
+		-
+			message: '#^Method App\\Filters\\WhereClause\:\:andWhere\(\) has parameter \$query with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Filters/WhereClause.php
+
+		-
+			message: '#^Method App\\Filters\\WhereClause\:\:andWhere\(\) has parameter \$values with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Filters/WhereClause.php
+
+		-
+			message: '#^Method App\\Filters\\WhereClause\:\:orWhere\(\) has parameter \$filter with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Filters/WhereClause.php
+
+		-
+			message: '#^Method App\\Filters\\WhereClause\:\:orWhere\(\) has parameter \$values with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Filters/WhereClause.php
+
+		-
+			message: '#^Class App\\GenreAnime uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/GenreAnime.php
+
+		-
+			message: '#^Class App\\GenreManga uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/GenreManga.php
+
+		-
+			message: '#^Property App\\Http\\Resources\\V4\\AnimeCollection\:\:\$pagination has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Http/Resources/V4/AnimeCollection.php
+
+		-
+			message: '#^Property App\\Http\\Resources\\V4\\CharacterCollection\:\:\$pagination has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Http/Resources/V4/CharacterCollection.php
+
+		-
+			message: '#^Property App\\Http\\Resources\\V4\\ClubCollection\:\:\$pagination has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Http/Resources/V4/ClubCollection.php
+
+		-
+			message: '#^Property App\\Http\\Resources\\V4\\MagazineCollection\:\:\$pagination has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Http/Resources/V4/MagazineCollection.php
+
+		-
+			message: '#^Property App\\Http\\Resources\\V4\\MangaCollection\:\:\$pagination has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Http/Resources/V4/MangaCollection.php
+
+		-
+			message: '#^Property App\\Http\\Resources\\V4\\PersonCollection\:\:\$pagination has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Http/Resources/V4/PersonCollection.php
+
+		-
+			message: '#^Property App\\Http\\Resources\\V4\\ProducerCollection\:\:\$pagination has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: app/Http/Resources/V4/ProducerCollection.php
+
+		-
+			message: '#^Trait App\\IsoDateFormatter is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/IsoDateFormatter.php
+
+		-
+			message: '#^Method App\\JikanApiModel\:\:scopeRandom\(\) has parameter \$query with generic class MongoDB\\Laravel\\Eloquent\\Builder but does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/JikanApiModel.php
+
+		-
+			message: '#^Method App\\JikanApiModel\:\:scopeRandom\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/JikanApiModel.php
+
+		-
+			message: '#^Call to an undefined method App\\JikanApiSearchableModel\:\:withTrashed\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/JikanApiSearchableModel.php
+
+		-
+			message: '#^Method App\\JikanApiSearchableModel\:\:simplifyStringForSearch\(\) has parameter \$val with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/JikanApiSearchableModel.php
+
+		-
+			message: '#^Method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:to2dArrayWithDottedKeys\(\) invoked with 2 parameters, 0\-1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: app/JikanApiSearchableModel.php
+
+		-
+			message: '#^Method Monolog\\Logger\:\:pushHandler\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
+			count: 1
+			path: app/Listeners/SourceHeartbeatListener.php
+
+		-
+			message: '#^Call to function is_array\(\) with \$this\(App\\Macros\\CollectionOffsetGetFirst\) will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: app/Macros/CollectionOffsetGetFirst.php
+
+		-
+			message: '#^Instanceof between \$this\(App\\Macros\\CollectionOffsetGetFirst\) and App\\JikanApiModel will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
+			count: 1
+			path: app/Macros/CollectionOffsetGetFirst.php
+
+		-
+			message: '#^Instanceof between \$this\(App\\Macros\\CollectionOffsetGetFirst\) and Illuminate\\Support\\Collection will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
+			count: 1
+			path: app/Macros/CollectionOffsetGetFirst.php
+
+		-
+			message: '#^Parameter \#1 \$key of method Illuminate\\Support\\Collection\<\*NEVER\*,\*NEVER\*\>\:\:get\(\) expects null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Macros/CollectionOffsetGetFirst.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Macros/CollectionOffsetGetFirst.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Macros/CollectionOffsetGetFirst.php
+
+		-
+			message: '#^PHPDoc tag @var with type Illuminate\\Http\\Response is not subtype of native type \$this\(App\\Macros\\ResponseJikanCacheFlags\)\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: app/Macros/ResponseJikanCacheFlags.php
+
+		-
+			message: '#^Argument of an invalid type \$this\(App\\Macros\\To2dArrayWithDottedKeys\) supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: app/Macros/To2dArrayWithDottedKeys.php
+
+		-
+			message: '#^Call to an undefined method App\\Macros\\To2dArrayWithDottedKeys\:\:getDepth\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Macros/To2dArrayWithDottedKeys.php
+
+		-
+			message: '#^Call to an undefined method App\\Macros\\To2dArrayWithDottedKeys\:\:toArray\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Macros/To2dArrayWithDottedKeys.php
+
+		-
+			message: '#^PHPDoc tag @var with type \$this\(App\\Macros\\To2dArrayWithDottedKeys\) is not subtype of native type RecursiveIteratorIterator\<IteratorAggregate\|RecursiveIterator\>\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: app/Macros/To2dArrayWithDottedKeys.php
+
+		-
+			message: '#^Class App\\Magazine uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Magazine.php
+
+		-
+			message: '#^Class App\\Manga uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Method App\\Manga\:\:newFactory\(\) return type with generic class Illuminate\\Database\\Eloquent\\Factories\\Factory does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Manga.php
+
+		-
+			message: '#^Call to protected method engine\(\) of class Laravel\\Scout\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: method.protected
+			count: 1
+			path: app/Mixins/ScoutBuilderMixin.php
+
+		-
+			message: '#^Call to protected method getTotalCount\(\) of class Laravel\\Scout\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: method.protected
+			count: 1
+			path: app/Mixins/ScoutBuilderMixin.php
+
+		-
+			message: '#^PHPDoc tag @var with type Laravel\\Scout\\Builder is not subtype of native type \$this\(App\\Mixins\\ScoutBuilderMixin\)\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: app/Mixins/ScoutBuilderMixin.php
+
+		-
+			message: '#^Class App\\Person uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Person.php
+
+		-
+			message: '#^Call to function is_null\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: app/Producers.php
+
+		-
+			message: '#^Class App\\Producers uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Producers.php
+
+		-
+			message: '#^Class App\\Profile uses generic trait Illuminate\\Database\\Eloquent\\Factories\\HasFactory but does not specify its types\: TFactory$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Profile.php
+
+		-
+			message: '#^Method App\\Providers\\AppServiceProvider\:\:getSearchIndexDriver\(\) has parameter \$app with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Method App\\Providers\\AppServiceProvider\:\:getSearchIndexesEnabledConfig\(\) has parameter \$app with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Method App\\Providers\\AppServiceProvider\:\:getSearchService\(\) has parameter \$repository with generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Unsafe call to private method App\\Providers\\AppServiceProvider\:\:getSearchIndexDriver\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Method App\\Providers\\SerializerFactory\:\:convertBsonDateTime\(\) has parameter \$visitor with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Method App\\Providers\\SerializerFactory\:\:convertCarbonDateRange\(\) has parameter \$visitor with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Method App\\Providers\\SerializerFactory\:\:convertDateRange\(\) has parameter \$visitor with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Method App\\Providers\\SerializerFactory\:\:convertDateTimeImmutable\(\) has parameter \$visitor with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Method App\\Providers\\SerializerFactory\:\:convertDateTimeImmutable\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Method App\\Providers\\SerializerFactory\:\:convertMalUrl\(\) has parameter \$visitor with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Method App\\Providers\\SerializerFactory\:\:convertMalUrlv2\(\) has parameter \$visitor with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Static method App\\Providers\\SerializerFactory\:\:convertMalUrlv2\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: app/Providers/SerializerFactory.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Connection\:\:getDatabase\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Providers/SourceHeartbeatProvider.php
+
+		-
+			message: '#^Method App\\Repositories\\AnimeGenresRepository\:\:all\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/AnimeGenresRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\AnimeGenresRepository\:\:genres\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/AnimeGenresRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\AnimeGenresRepository\:\:getDemographics\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/AnimeGenresRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\AnimeGenresRepository\:\:getExplicitItems\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/AnimeGenresRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\AnimeGenresRepository\:\:getThemes\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/AnimeGenresRepository.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\:\:newModelInstance\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\:\:random\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Class App\\Repositories\\DatabaseRepository implements generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\DatabaseRepository\:\:getAllByMalId\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\DatabaseRepository\:\:random\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\DefaultAnimeRepository\:\:excludeKidsItems\(\) has parameter \$builder with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Repositories/DefaultAnimeRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\DefaultAnimeRepository\:\:excludeNsfwItems\(\) has parameter \$builder with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Repositories/DefaultAnimeRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\DefaultAnimeRepository\:\:excludeUnapprovedItems\(\) has parameter \$builder with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Repositories/DefaultAnimeRepository.php
+
+		-
+			message: '#^Parameter \#1 \$sql of method Illuminate\\Database\\Query\\Builder\:\:whereRaw\(\) expects Illuminate\\Contracts\\Database\\Query\\Expression\|literal\-string, array\{''\$or''\: array\{array\{premiered\: string\}, array\{premiered\: null, ''aired\.string''\: array\{''\$nin''\: array\{non\-falsy\-string\}\}, ''aired\.from''\: array\{''\$gte''\: string, ''\$lte''\: string\}\}, array\{''aired\.from''\: array\{''\$lte''\: string\}, ''aired\.to''\: null, episodes\: null, airing\: true\}, array\{''aired\.from''\: array\{''\$lte''\: string\}, ''aired\.to''\: array\{''\$gte''\: string\}, airing\: true\}, array\{''\$expr''\: array\{''\$and''\: array\{array\{''\$lte''\: array\{array\{''\$dateDiff''\: array\{startDate\: array\{''\$dateFromString''\: array\{dateString\: ''\$aired\.from''\}\}, endDate\: MongoDB\\BSON\\UTCDateTime, unit\: ''month''\}\}, 3\}\}, array\{''\$gt''\: array\{array\{''\$dateDiff''\: array\{startDate\: array\{''\$dateFromString''\: array\{dateString\: ''\$aired\.from''\}\}, endDate\: MongoDB\\BSON\\UTCDateTime, unit\: ''month''\}\}, 0\}\}\}\}, ''aired\.to''\: null, episodes\: array\{''\$gte''\: 14\}, airing\: true\}\}\|array\{array\{premiered\: string\}, array\{premiered\: null, ''aired\.string''\: array\{''\$nin''\: array\{non\-falsy\-string\}\}, ''aired\.from''\: array\{''\$gte''\: string, ''\$lte''\: string\}\}\}, type\?\: string\}\|array\{''aired\.from''\: array\{''\$gte''\: string, ''\$lte''\: string\}, ''aired\.string''\: array\{''\$nin''\: array\{non\-falsy\-string\}\}, type\?\: string\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Repositories/DefaultAnimeRepository.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\:\:exceptItemsWithAdultRating\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Repositories/DefaultMangaRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\MangaGenresRepository\:\:all\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/MangaGenresRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\MangaGenresRepository\:\:genres\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/MangaGenresRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\MangaGenresRepository\:\:getDemographics\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/MangaGenresRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\MangaGenresRepository\:\:getExplicitItems\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/MangaGenresRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\MangaGenresRepository\:\:getThemes\(\) return type with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Repositories/MangaGenresRepository.php
+
+		-
+			message: '#^Method App\\Rules\\MaxResultsPerPageRule\:\:__construct\(\) has parameter \$fallbackLimit with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Rules/MaxResultsPerPageRule.php
+
+		-
+			message: '#^Call to an undefined method App\\SearchMetric\:\:withTrashed\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/SearchMetric.php
+
+		-
+			message: '#^Property ''hits'' does not exist in model\.$#'
+			identifier: rules.modelAppends
+			count: 1
+			path: app/SearchMetric.php
+
+		-
+			message: '#^Call to an undefined method JMS\\Serializer\\SerializerInterface\:\:toArray\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DefaultCachedScraperService.php
+
+		-
+			message: '#^Method App\\Services\\DefaultCachedScraperService\:\:__construct\(\) has parameter \$repository with generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/DefaultCachedScraperService.php
+
+		-
+			message: '#^Unable to resolve the template type TUnwrapKey in call to static method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:unwrap\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/DefaultCachedScraperService.php
+
+		-
+			message: '#^Unable to resolve the template type TUnwrapValue in call to static method Illuminate\\Support\\Collection\<\(int\|string\),mixed\>\:\:unwrap\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/DefaultCachedScraperService.php
+
+		-
+			message: '#^Method App\\Services\\DefaultPrivateFieldMapperService\:\:map\(\) has parameter \$instance with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Services/DefaultPrivateFieldMapperService.php
+
+		-
+			message: '#^Method App\\Services\\DefaultQueryBuilderService\:\:__construct\(\) has Exception in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
+			count: 1
+			path: app/Services/DefaultQueryBuilderService.php
+
+		-
+			message: '#^Method App\\Services\\DefaultQueryBuilderService\:\:query\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/DefaultQueryBuilderService.php
+
+		-
+			message: '#^Method App\\Services\\DefaultScoutSearchService\:\:__construct\(\) has parameter \$repository with generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/DefaultScoutSearchService.php
+
+		-
+			message: '#^Method App\\Services\\DefaultScoutSearchService\:\:search\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/DefaultScoutSearchService.php
+
+		-
+			message: '#^Method App\\Services\\MongoSearchService\:\:search\(\) never returns Illuminate\\Database\\Eloquent\\Builder so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Services/MongoSearchService.php
+
+		-
+			message: '#^Method App\\Services\\MongoSearchService\:\:search\(\) never returns Laravel\\Scout\\Builder so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Services/MongoSearchService.php
+
+		-
+			message: '#^Method App\\Services\\MongoSearchService\:\:search\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/MongoSearchService.php
+
+		-
+			message: '#^Method App\\Services\\MongoSearchService\:\:search\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/MongoSearchService.php
+
+		-
+			message: '#^Method App\\Services\\MongoSearchService\:\:search\(\) should return Illuminate\\Database\\Eloquent\\Builder\|Laravel\\Scout\\Builder but returns MongoDB\\Laravel\\Query\\Builder\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/MongoSearchService.php
+
+		-
+			message: '#^PHPDoc tag @var with type MongoDB\\Laravel\\Query\\Builder is not subtype of native type Illuminate\\Database\\Eloquent\\Builder\|Laravel\\Scout\\Builder\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: app/Services/MongoSearchService.php
+
+		-
+			message: '#^Parameter \#1 \$sql of method Illuminate\\Database\\Query\\Builder\:\:whereRaw\(\) expects Illuminate\\Contracts\\Database\\Query\\Expression\|literal\-string, array\{''\$text''\: array\{''\$search''\: string\}\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/MongoSearchService.php
+
+		-
+			message: '#^Method App\\Services\\PrivateFieldMapperService\:\:map\(\) has parameter \$instance with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Services/PrivateFieldMapperService.php
+
+		-
+			message: '#^Method App\\Services\\QueryBuilderService\:\:query\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/QueryBuilderService.php
+
+		-
+			message: '#^Method App\\Services\\ScoutSearchService\:\:search\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/ScoutSearchService.php
+
+		-
+			message: '#^PHPDoc tag @param references unknown parameter\: \$modelClass$#'
+			identifier: parameter.notFound
+			count: 1
+			path: app/Services/ScoutSearchService.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/SearchEngineSearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchEngineSearchService\:\:__construct\(\) has parameter \$repository with generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchEngineSearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchEngineSearchService\:\:search\(\) never returns Illuminate\\Database\\Eloquent\\Builder so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Services/SearchEngineSearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchEngineSearchService\:\:search\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchEngineSearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchEngineSearchService\:\:search\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchEngineSearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchService\:\:query\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchService\:\:query\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchService\:\:search\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchService\:\:search\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchService\:\:setFilterParameters\(\) has parameter \$requestParameters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchService.php
+
+		-
+			message: '#^Method App\\Services\\SearchServiceBase\:\:__construct\(\) has parameter \$repository with generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchServiceBase.php
+
+		-
+			message: '#^Method App\\Services\\SearchServiceBase\:\:query\(\) return type with generic class Illuminate\\Database\\Eloquent\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchServiceBase.php
+
+		-
+			message: '#^Method App\\Services\\SearchServiceBase\:\:query\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchServiceBase.php
+
+		-
+			message: '#^Method App\\Services\\SearchServiceBase\:\:setFilterParameters\(\) has parameter \$requestParameters with generic class Illuminate\\Support\\Collection but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchServiceBase.php
+
+		-
+			message: '#^Property App\\Services\\SearchServiceBase\:\:\$filterParameters with generic class Illuminate\\Support\\Collection does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/SearchServiceBase.php
+
+		-
+			message: '#^Call to function is_null\(\) with null will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/TypeSenseScoutSearchService.php
+
+		-
+			message: '#^Method App\\Services\\TypeSenseScoutSearchService\:\:__construct\(\) has parameter \$repository with generic interface App\\Contracts\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/TypeSenseScoutSearchService.php
+
+		-
+			message: '#^Method App\\Services\\TypeSenseScoutSearchService\:\:search\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Services/TypeSenseScoutSearchService.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/TypeSenseScoutSearchService.php
+
+		-
+			message: '#^Unable to resolve the template type TSubject in call to static method Illuminate\\Support\\Str\:\:replace\(\)$#'
+			identifier: argument.templateType
+			count: 2
+			path: app/Services/TypeSenseScoutSearchService.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/TypeSenseScoutSearchService.php
+
+		-
+			message: '#^Unable to resolve the template type TKey in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/TypesenseCollectionDescriptor.php
+
+		-
+			message: '#^Unable to resolve the template type TValue in call to function collect$#'
+			identifier: argument.templateType
+			count: 1
+			path: app/Services/TypesenseCollectionDescriptor.php
+
+		-
+			message: '#^Class App\\Support\\CachedData implements generic interface ArrayAccess but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/CachedData.php
+
+		-
+			message: '#^Method App\\Support\\CachedData\:\:__call\(\) has parameter \$method with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Support/CachedData.php
+
+		-
+			message: '#^Method App\\Support\\CachedData\:\:__call\(\) has parameter \$parameters with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: app/Support/CachedData.php
+
+		-
+			message: '#^Method App\\Support\\CachedData\:\:mixedToTimestamp\(\) should return int\|null but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Support/CachedData.php
+
+		-
+			message: '#^Method App\\Support\\DefaultMediator\:\:__construct\(\) has parameter \$handlerFactories with generic interface App\\Contracts\\RequestHandler but does not specify its types\: TRequest, TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/DefaultMediator.php
+
+		-
+			message: '#^Property App\\Support\\DefaultMediator\:\:\$resolvedHandlers with generic interface App\\Contracts\\RequestHandler does not specify its types\: TRequest, TResponse$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/DefaultMediator.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Support/RepositoryQuery.php
+
+		-
+			message: '#^Class App\\Support\\RepositoryQuery implements generic interface App\\Contracts\\RepositoryQuery but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/RepositoryQuery.php
+
+		-
+			message: '#^Method App\\Support\\RepositoryQueryBase\:\:searchable\(\) return type with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/RepositoryQueryBase.php
+
+		-
+			message: '#^Property App\\Support\\RepositoryQueryBase\:\:\$searchableBuilder with generic class Laravel\\Scout\\Builder does not specify its types\: TModel$#'
+			identifier: missingType.generics
+			count: 1
+			path: app/Support/RepositoryQueryBase.php
+
+		-
+			message: '#^Trait App\\Testing\\Concerns\\MakesHttpRequestsEx is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Testing/Concerns/MakesHttpRequestsEx.php
+
+		-
+			message: '#^Trait App\\Testing\\JikanDataGenerator is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Testing/JikanDataGenerator.php
+
+		-
+			message: '#^Trait App\\Testing\\ScoutFlush is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Testing/ScoutFlush.php
+
+		-
+			message: '#^Trait App\\Testing\\SyntheticMongoDbTransaction is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Testing/SyntheticMongoDbTransaction.php

@@ -5,15 +5,23 @@ concurrency:
 permissions:
   packages: write
   contents: read
+# Releases: push a git tag `vX.Y.Z` (e.g. `git tag v4.3.0 && git push origin v4.3.0`).
+# That builds the Dockerfile for amd64 + arm64 and publishes, to both
+# ghcr.io/jikan-me/jikan-rest and Docker Hub jikanme/jikan-rest:
+#   X.Y.Z, X.Y and latest   (pre-release tags such as v4.3.1-rc.1 get only X.Y.Z-rc.1)
+# Manual runs (workflow_dispatch) publish the given tag plus `latest-nightly`;
+# they never touch `latest` or the X.Y / X.Y.Z release tags.
+# Secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN (GITHUB_TOKEN is used for ghcr.io).
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
   workflow_dispatch:
     inputs:
       image_tag:
-        description: 'Image tag'
+        description: 'Image tag for a manual/nightly build, e.g. nightly-20261019 (not "latest" or a version number)'
         required: true
-        default: 'v4.0.0-nightly-<put_date_here>'
 
 env:
   REGISTRY_IMAGE: ghcr.io/jikan-me/jikan-rest
@@ -29,6 +37,16 @@ jobs:
           - linux/arm64
     name: Build App container image
     steps:
+      - name: Reject reserved manual tags
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+        run: |
+          if [[ "$IMAGE_TAG" == latest || "$IMAGE_TAG" =~ ^v?[0-9]+(\.[0-9]+){1,2}$ ]]; then
+            echo "::error::'$IMAGE_TAG' is reserved for tag-triggered releases; pick e.g. nightly-$(date +%Y%m%d)"
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -50,14 +68,14 @@ jobs:
             org.opencontainers.image.description=REST API for Jikan
             org.opencontainers.image.url=https://jikan.moe
             org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
-            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/docs/container_usage.md
             org.opencontainers.image.revision=${{ github.sha }}
           annotations: |
             org.opencontainers.image.title=Jikan REST API
             org.opencontainers.image.description=REST API for Jikan
             org.opencontainers.image.url=https://jikan.moe
             org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
-            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/docs/container_usage.md
             org.opencontainers.image.revision=${{ github.sha }}
 
       - name: Login to GitHub Container Registry
@@ -128,11 +146,19 @@ jobs:
             org.opencontainers.image.description=REST API for Jikan
             org.opencontainers.image.url=https://jikan.moe
             org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
-            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/docs/container_usage.md
             org.opencontainers.image.revision=${{ github.sha }}
+          # `latest` is added explicitly below, never implicitly.
+          flavor: |
+            latest=false
+          # semver tags strip the leading `v` (v4.3.0 -> 4.3.0, 4.3); {{major}}.{{minor}}
+          # is skipped for pre-releases. Only a non-prerelease git tag gets `latest`.
           tags: |
-            type=raw,value=${{ inputs.image_tag || github.ref_name }}
-            type=raw,value=${{ github.ref_type == 'tag' && 'latest' || 'latest-nightly' }}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable=${{ github.ref_type == 'tag' && !contains(github.ref_name, '-') }}
+            type=raw,value=${{ inputs.image_tag }},enable=${{ github.event_name == 'workflow_dispatch' }}
+            type=raw,value=latest-nightly,enable=${{ github.event_name == 'workflow_dispatch' }}
             type=sha
 
       - name: Login to GitHub Container Registry

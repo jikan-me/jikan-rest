@@ -2,22 +2,69 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model;
-use Typesense\LaravelTypesense\Interfaces\TypesenseDocument;
-
-abstract class JikanApiSearchableModel extends JikanApiModel implements TypesenseDocument
+/**
+ * Mongo-backed searchable model base. Attributes are magic (from the collection);
+ * documented below are the shared ones the app reads.
+ *
+ * @property int $mal_id
+ */
+abstract class JikanApiSearchableModel extends JikanApiModel
 {
     use JikanSearchable;
 
     /**
      * @return string[]
      */
-    public abstract function typesenseQueryBy(): array;
+    abstract public function typesenseQueryBy(): array;
+
+    /**
+     * The Typesense schema to be created (native Laravel Scout TypesenseEngine
+     * contract — the engine fills 'name' if absent).
+     *
+     * @return array<string, mixed>
+     */
+    public function typesenseCollectionSchema(): array
+    {
+        return $this->getCollectionSchema();
+    }
+
+    /**
+     * Native Laravel Scout TypesenseEngine search parameters. The engine merges
+     * these over its defaults, so providing query_by here lets
+     * SCOUT_DRIVER=typesense work out of the box (no model-settings config
+     * needed). Weights/sort stay wired through the legacy hooks when a model
+     * overrides them.
+     *
+     * @return array<string, mixed>
+     */
+    public function typesenseSearchParameters(): array
+    {
+        $parameters = ['query_by' => implode(',', $this->typesenseQueryBy())];
+
+        $weights = $this->getTypeSenseQueryByWeights();
+        if ($weights !== null) {
+            $parameters['query_by_weights'] = $weights;
+        }
+
+        $sortBy = $this->getSearchIndexSortBy();
+        if ($sortBy !== null) {
+            // legacy shape: [['field' => 'x', 'direction' => 'desc'], ...]
+            $parameters['sort_by'] = implode(',', array_map(
+                function (array $sort): string {
+                    return (string) ($sort['field'] ?? (string) key($sort))
+                        .':'.(string) ($sort['direction'] ?? reset($sort));
+                },
+                $sortBy
+            ));
+        }
+
+        return $parameters;
+    }
 
     /**
      * The Typesense schema to be created.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getCollectionSchema(): array
     {
@@ -34,26 +81,22 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
                     'name' => $titleAttributeName,
                     'type' => 'string',
                     'sort' => true,
-                    'optional' => false
-                ]
-            ]
+                    'optional' => false,
+                ],
+            ],
         ];
     }
 
     /**
      * Get the name of the index associated with the model.
-     *
-     * @return string
      */
     public function searchableAs(): string
     {
-        return strtolower($this->table) . '_index' . (env("APP_ENV") === "testing" ? "_testing" : "");
+        return strtolower($this->table).'_index'.(app()->environment('testing') ? '_testing' : '');
     }
 
     /**
      * Get the value used to index the model.
-     *
-     * @return mixed
      */
     public function getScoutKey(): mixed
     {
@@ -62,8 +105,6 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
 
     /**
      * Get the key name used to index the model.
-     *
-     * @return mixed
      */
     public function getScoutKeyName(): mixed
     {
@@ -73,28 +114,30 @@ abstract class JikanApiSearchableModel extends JikanApiModel implements Typesens
     /**
      * Returns what weights to use on query_by fields.
      * https://typesense.org/docs/0.23.0/api/documents.html#search-parameters
-     * @return string|null
      */
-    public function getTypeSenseQueryByWeights(): string|null
+    public function getTypeSenseQueryByWeights(): ?string
     {
         return null;
     }
 
     /**
      * Returns which fields the search index should sort on when searching
-     * @return array|null
      */
-    public function getSearchIndexSortBy(): array|null
+    /**
+     * @return array<int, array<string, string>>|null
+     */
+    public function getSearchIndexSortBy(): ?array
     {
         return null;
     }
 
     protected function simplifyStringForSearch($val): string
     {
-        if (!$val) {
-            return "";
+        if (! $val) {
+            return '';
         }
-        return preg_replace("/[^[:alnum:][:space:]]/u", ' ', $val) ?? "";
+
+        return preg_replace('/[^[:alnum:][:space:]]/u', ' ', $val) ?? '';
     }
 
     public function getTitleAttributeName(): string
