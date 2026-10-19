@@ -117,10 +117,15 @@ More troubleshooting Q/A on the way, please let me know if there's anything else
 
 ## MongoDB exits at startup: "Linux kernel versions 6.19 and newer"
 
-MongoDB 8.0 and newer refuse to start on Linux kernel 6.19 or newer and log
+MongoDB 8.0.34 and earlier refuse to start on Linux kernel 6.19 or newer and log
 `MongoDB cannot start: Linux kernel versions 6.19 and newer has a known incompatibility`
-([SERVER-121912](https://jira.mongodb.org/browse/SERVER-121912), a tcmalloc/rseq problem;
-no fixed MongoDB release yet). It affects the `mongo:8.0` container on any host with a new
-kernel, including GitHub's current runners. CI therefore runs `mongo:7.0`, which the driver
-(`mongodb/laravel-mongodb` 5, ext-mongodb 2.x) supports. If your host runs kernel 6.19+, use
-`mongo:7.0` (set the image in `docker-compose.yml`) or a host with an older kernel.
+([SERVER-121912](https://jira.mongodb.org/browse/SERVER-121912), a tcmalloc/rseq problem).
+This hits hosts such as Ubuntu 26.04 and Ubuntu 24.04 HWE/Azure kernels, including GitHub's
+runners. MongoDB 8.0.35 fixes the check for kernels 7.0.14+, including Ubuntu's numbering
+([SERVER-131779](https://jira.mongodb.org/browse/SERVER-131779)).
+
+- **Stay on MongoDB 8.0** (the supported version). Once `mongo:8.0.35` or newer is on
+  Docker Hub, use it on 6.19+ kernels.
+- Until then, use a host with an older kernel, or, **for new installs only**, run `mongo:7.0`
+  temporarily (set the image in `docker-compose.yml`). 7.0 cannot open data written by 8.0.
+- CI runs `mongo:7.0` temporarily for this reason and moves back to 8.0 with 8.0.35.

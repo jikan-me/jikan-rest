@@ -15,11 +15,18 @@ upgrade. Plan a fresh image/environment rather than an in-place `composer update
 | MongoDB PHP extension | 1.x | **`ext-mongodb` 2.x, ≥ 2.5** (required by `mongodb/mongodb` 2.5 / `mongodb/laravel-mongodb` ^5) |
 | Framework | Lumen 9 | Laravel 13 (`laravel/framework` ^13.0) |
 | HTTP server | `lumen-roadrunner`, RoadRunner 2.12.3 | Laravel Octane ^2 + RoadRunner (binary 2025.1.15 in the image); `ext-pcntl` is required (the image also installs `ext-sockets`) |
-| MongoDB server | `mongo:focal` in compose | `mongo:8.0` (what `docker-compose.yml` and CI run) |
+| MongoDB server | `mongo:focal` in compose | **`mongo:8.0`** (`docker-compose.yml`; the supported target). CI temporarily runs `mongo:7.0` because 8.0.34 and earlier refuse to start on GitHub runners' kernels ([SERVER-121912](https://jira.mongodb.org/browse/SERVER-121912)); it moves back to 8.0 once 8.0.35 is published |
 | Typesense (optional) | 0.24.1 | 27.0 (`docker-compose.typesense.yml`, `typesense/typesense-php` ^6); search is off by default (`SCOUT_DRIVER=null`) |
 | Parser | jikan-me/jikan 4.x | jikan-me/jikan v5.0.0 (^5.0) |
 
 ### What changed for operators
+
+- **MongoDB server upgrade.** 4.2.x's compose used `mongo:focal` (MongoDB 4.x/5.x era); 4.3.0
+  targets **MongoDB 8.0**. MongoDB upgrades one major version at a time: back up first, then
+  step through each release (e.g. 5.0 → 6.0 → 7.0 → 8.0), setting `featureCompatibilityVersion`
+  to the new version after each step. See MongoDB's
+  [standalone upgrade guide](https://www.mongodb.com/docs/manual/release-notes/8.0-upgrade-standalone/).
+  On Linux kernel 6.19+ hosts see [TROUBLESHOOTING.md](TROUBLESHOOTING.md#mongodb-exits-at-startup-linux-kernel-versions-619-and-newer).
 
 - **Environment variables.** Start from the new `.env.dist`; the full before/after table is in
   [New and changed environment variables](#new-and-changed-environment-variables). Highlights:
