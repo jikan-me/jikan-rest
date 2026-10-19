@@ -105,7 +105,7 @@ them as `VAR=value docker compose ...` or in a root `.env` file.
 | `SCOUT_DRIVER` | `null` | **Search off by default.** Flip to `typesense` (with `TYPESENSE_API_KEY`) to enable scout — see §5. |
 | `TYPESENSE_HOST` / `TYPESENSE_PORT` | `typesense` / `8108` | |
 | `TYPESENSE_API_KEY` | `abcd` | Shared by the `typesense` service **and** the app — override once: `TYPESENSE_API_KEY=my-key docker compose up -d` |
-| `CACHE_DRIVER` | `file` | `storage/framework/cache/data`, shared by all Octane workers in the container. Do not use `array` under Octane: it is flushed before every request, so nothing is cached between requests. To share across containers: `CACHE_DRIVER=redis docker compose up -d app` |
+| `CACHE_DRIVER` | `file` | `storage/framework/cache`, shared by all Octane workers in the container. Do not use `array` under Octane: it is flushed before every request, so nothing is cached between requests. To share across containers: `CACHE_DRIVER=redis docker compose up -d app` |
 | `OCTANE_SERVER` | `roadrunner` | Matches `config/octane.php`; keep as-is. |
 | `JIKAN_ENABLE_PERIODICAL_FULL_INDEXER` | — | Set `true` to schedule a weekly full anime/manga re-index on Mondays 01:00 (supercronic). |
 

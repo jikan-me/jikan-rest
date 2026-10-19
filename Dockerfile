@@ -94,27 +94,35 @@ RUN set -eux \
     && chmod +x /usr/local/bin/rr \
     && rm -rf /tmp/rr /tmp/rr.tar.gz
 
-COPY --from=vendor /app/vendor /app/vendor
-COPY . /app
+# --- Non-root user ------------------------------------------------------------
+# Created before the code is copied so COPY --chown can set ownership in the same
+# layer (a separate `chown -R /app` layer took ~65 s and duplicated /app, vendor
+# included, in the image). /app itself must be owned by jikanapi: the entrypoint
+# writes /app/.env and removes /app/.rr.yaml at startup.
+RUN set -eux \
+    && adduser -D -s /sbin/nologin -u 10001 -h /nonexistent jikanapi \
+    && chown jikanapi:jikanapi /app
 
-# --- Optimize ----------------------------------------------------------------
+COPY --chown=jikanapi:jikanapi --from=vendor /app/vendor /app/vendor
+COPY --chown=jikanapi:jikanapi . /app
+
+USER jikanapi:jikanapi
+
+# --- Optimize + storage --------------------------------------------------------
 # route:cache is safe on this app (Laravel 13 serialises the handful of closure
 # routes; the DISABLE_USER_LISTS-gated user-list routes are baked in — keep the
 # runtime value in sync with the build, i.e. false). config:cache is deferred to
 # the entrypoint so runtime env vars (DB_HOST & co) apply to the cached config.
+# Runs as jikanapi so the generated files (vendor/composer, bootstrap/cache) are
+# owned by the runtime user. storage/ and bootstrap/cache stay world-writable so
+# the image also works when run with an arbitrary --user.
 RUN set -eux \
-    && composer dump-autoload -n --optimize --no-dev --classmap-authoritative \
-    && php artisan route:cache
-
-# --- Non-root user + storage ------------------------------------------------
-RUN set -eux \
-    && adduser -D -s /sbin/nologin -u 10001 -h /nonexistent jikanapi \
-    && mkdir -p storage/framework/cache/data storage/framework/views storage/logs \
-    && chown -R jikanapi:jikanapi /app \
+    && COMPOSER_HOME=/tmp/composer composer dump-autoload -n --optimize --no-dev --classmap-authoritative \
+    && rm -rf /tmp/composer \
+    && php artisan route:cache \
+    && mkdir -p storage/framework/cache storage/framework/views storage/logs \
     && chmod -R a+w storage/ bootstrap/cache \
     && chmod +x /app/docker-entrypoint.sh
-
-USER jikanapi:jikanapi
 
 EXPOSE 8080
 EXPOSE 2114
