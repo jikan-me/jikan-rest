@@ -87,6 +87,12 @@ The `jikan-rest` container will require a `.env` file mounted where you configur
 docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikanme/jikan-rest:latest
 ```
 
+> **Image versions:** from 4.3.0 on, images are published to Docker Hub by tagging a release
+> (`vX.Y.Z` → `jikanme/jikan-rest:X.Y.Z`, `:X.Y` and `:latest`). Until `v4.3.0` has been
+> published there, `jikanme/jikan-rest:latest` is still the old 4.2.x image — build 4.3.0 from
+> source instead (`docker compose up -d --build`, see [`DOCKER.md`](DOCKER.md), or the
+> `docker build` example below) and pin a version tag (e.g. `jikanme/jikan-rest:4.3`) once it exists.
+
 - Container listens on port `8080` for http requests
 - By mounting your .env file on the container via `-v ./.env:/app/.env` command line option for `docker run` you can
   configure Jikan API.
@@ -107,7 +113,7 @@ docker build -t jikan-rest:nightly .
 docker run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env jikan-rest:nightly
 ```
 
-> Most of the time it's enough to just use the image from [Docker Hub](https://hub.docker.com/r/jikanme/jikan-rest).
+> Once a 4.3.x image is published, it's usually enough to use the image from [Docker Hub](https://hub.docker.com/r/jikanme/jikan-rest).
 
 ### Docker compose usage
 

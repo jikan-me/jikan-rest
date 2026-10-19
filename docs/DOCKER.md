@@ -59,6 +59,14 @@ docker run --rm --entrypoint /usr/local/bin/rr jikan-rest:local --version
 > Cross-builds work automatically: under emulation the build container sees the
 > target architecture, so the matching RoadRunner binary is fetched.
 
+### 2.3 Published images
+
+Pushing a git tag `vX.Y.Z` runs `.github/workflows/container-image-release.yml`, which
+builds this Dockerfile (amd64 + arm64) and publishes `jikanme/jikan-rest:X.Y.Z`, `:X.Y` and
+`:latest` (pre-release tags such as `v4.3.1-rc.1` get only their own tag, never `:latest`),
+plus the same tags on `ghcr.io/jikan-me/jikan-rest`. Until `v4.3.0` is published,
+`jikanme/jikan-rest:latest` is the old 4.2.x image, so build from source as above.
+
 ---
 
 ## 3. Run
