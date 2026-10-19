@@ -1063,7 +1063,7 @@ parameters:
 			path: app/Providers/SerializerFactory.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Connection\:\:getMongoDB\(\)\.$#'
+			message: '#^Call to an undefined method Illuminate\\Database\\Connection\:\:getDatabase\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: app/Providers/SourceHeartbeatProvider.php

@@ -196,6 +196,6 @@ class SourceHeartbeatProvider extends ServiceProvider
 
     private static function database(): Database
     {
-        return DB::connection('mongodb')->getMongoDB();
+        return DB::connection('mongodb')->getDatabase();
     }
 }

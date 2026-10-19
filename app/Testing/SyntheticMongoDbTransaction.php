@@ -30,7 +30,7 @@ trait SyntheticMongoDbTransaction
         $testDatabase = $database === 'jikan' ? 'jikan_tests' : $database;
 
         $connection = DB::connection('mongodb');
-        $resolvedDatabase = $connection->getMongoDB()->getDatabaseName();
+        $resolvedDatabase = $connection->getDatabase()->getDatabaseName();
 
         /*
          * Safety net: only ever truncate the isolated test database, and say so
@@ -145,7 +145,7 @@ trait SyntheticMongoDbTransaction
             'users' => ['fields' => ['internal_username' => 'text']],
         ];
 
-        $mongodb = DB::connection('mongodb')->getMongoDB();
+        $mongodb = DB::connection('mongodb')->getDatabase();
 
         foreach ($definitions as $collection => $def) {
             $options = ['name' => 'search'];
