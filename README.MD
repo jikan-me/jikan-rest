@@ -108,6 +108,9 @@ driver installed.
 
 Note: Some tests hit MyAnimeList and may be affected by their rate limit (HTTP 429).
 
+Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) (checks, commit style, PR
+expectations). Report security issues privately as described in [SECURITY.md](SECURITY.md).
+
 ---
 ## Backers
 
