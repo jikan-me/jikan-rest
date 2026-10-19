@@ -6,7 +6,7 @@ use OpenApi\Attributes as OA;
 
 #[OA\Info(
     title: 'Jikan REST API v4',
-    version: '4.2.2',
+    version: '4.3.0',
     description: 'Unofficial MyAnimeList.net REST API',
     contact: new OA\Contact(
         name: 'API Support',

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-_JIKAN_API_VERSION=v4.0.0
+_JIKAN_API_VERSION=v4.3.0
 SUBSTITUTE_VERSION=$_JIKAN_API_VERSION
 if [ -x "$(command -v git)" ]; then
   # check if we have checked out a tag or not

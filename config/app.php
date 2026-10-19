@@ -6,7 +6,7 @@ return [
     'debug' => (bool) env('APP_DEBUG', false),
     'url' => env('APP_URL', 'http://localhost'),
     // Jikan API version reported in the root/v4 info payloads (was read via env() in routes).
-    'version' => env('APP_VERSION', '4.2.2'),
+    'version' => env('APP_VERSION', '4.3.0'),
     'timezone' => env('APP_TIMEZONE', 'UTC'),
     'locale' => env('APP_LOCALE', 'en'),
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),

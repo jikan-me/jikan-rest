@@ -15,7 +15,7 @@ class Controller extends BaseController
      * @OA\OpenApi(
      *
      *     @OA\Info(
-     *         version="4.0.0",
+     *         version="4.3.0",
      *         title="Jikan API",
      *         description=API_DESCRIPTION,
      *
