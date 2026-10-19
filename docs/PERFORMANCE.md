@@ -57,7 +57,8 @@ absolutes. Tests were run on spare ports alongside the indexer's `:8000` server
 ### P2 — scale & architecture
 - **Octane tuning:** workers ≈ core count, bounded `max-requests` (the AI's
   configurable envs), reload-on-deploy. Add **Redis** for a shared hot-id LRU +
-  cross-worker cache/rate-limit when scale demands (replaces per-worker arrays).
+  cross-container cache/rate-limit when scale demands (the default `file` store
+  is shared only by the workers of one container).
 - **Contract-level efficiency (proposal WS-G):** `fields`, bounded batch reads,
   ETag/conditional — directly cut bytes/tokens and 304s for repeat consumers.
 - **FrankenPHP:** pursue via a **container image with ext-mongodb** (documented in
@@ -196,8 +197,10 @@ uncached sub-resource like `/v4/anime/21/staff` scrapes MAL on cache miss (bench
    typesense directly at request time.
 3. **Negative cache for missing ids** (`scrape_miss_ttl`, 60 s default):
    huge-id / nonexistent-id requests no longer re-scrape MAL on every hit.
-   Scoped per cache store: fast replays apply within a worker (in-process
-   `array` cache); fleet-wide benefit needs a **shared** store (Redis).
+   Scoped per cache store: with the default `file` store, replays are fast for
+   all workers of one container; fleet-wide benefit needs a **shared** store
+   (Redis). With `array` it does nothing under Octane, because Octane flushes
+   the array store before every request.
 4. **Pagination**: `per_page` was already clamped to the 25-page limit (`max_results_per_page`); huge `page` returns an empty page, not an unbounded response — confirmed, documented (no contract change needed).
 
 ## Mongo + Typesense combo verification (2026-10-13)

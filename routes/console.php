@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Schedule;
 | The indexers are staggered (they all used to start at 00:00 together) and
 | guarded with withoutOverlapping(). onOneServer() makes a replicated
 | deployment run each indexer on a single instance; it relies on a cache store
-| shared by all instances (CACHE_DRIVER=redis). With the default per-process
-| `array` store it is a harmless no-op, i.e. today's behaviour.
+| shared by all instances (CACHE_DRIVER=redis). With a container-local store
+| (the default `file`, or `array`) it only de-duplicates within one instance.
 */
 
 // Update scheduled anime and current season data daily

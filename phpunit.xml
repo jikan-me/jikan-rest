@@ -28,6 +28,7 @@
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
+        <env name="CACHE_STORE" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="RATE_LIMIT_PER_MINUTE" value="0"/>
         <env name="TRUSTED_PROXIES" value=""/>

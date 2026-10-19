@@ -73,9 +73,10 @@ services:
       SCOUT_DRIVER: "${SCOUT_DRIVER:-null}"
       SCOUT_QUEUE: "${SCOUT_QUEUE:-false}"
 
-      # --- Cache: per-worker in-memory unless you opt into Redis --------------
-      # Enable with:  CACHE_DRIVER=redis docker compose up -d app
-      CACHE_DRIVER: "${CACHE_DRIVER:-array}"
+      # --- Cache: file store (shared by the workers in this container) --------
+      # `array` is flushed before every Octane request, so it caches nothing.
+      # Share across containers with:  CACHE_DRIVER=redis docker compose up -d app
+      CACHE_DRIVER: "${CACHE_DRIVER:-file}"
 
       CORS_MIDDLEWARE: "${CORS_MIDDLEWARE:-false}"
 

@@ -94,7 +94,7 @@ return [
     'structure_caching' => [
         'directories' => [app_path('Dto')],
         'cache' => [
-            'store' => env('CACHE_DRIVER', 'file'),
+            'store' => env('CACHE_STORE', env('CACHE_DRIVER', 'file')),
             'prefix' => 'laravel-data',
         ],
         'reflection_discovery' => [

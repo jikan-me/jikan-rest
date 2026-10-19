@@ -109,6 +109,7 @@ RUN set -eux \
 # --- Non-root user + storage ------------------------------------------------
 RUN set -eux \
     && adduser -D -s /sbin/nologin -u 10001 -h /nonexistent jikanapi \
+    && mkdir -p storage/framework/cache/data storage/framework/views storage/logs \
     && chown -R jikanapi:jikanapi /app \
     && chmod -R a+w storage/ bootstrap/cache \
     && chmod +x /app/docker-entrypoint.sh

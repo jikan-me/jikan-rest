@@ -14,7 +14,7 @@ on the Lumen release ("before") and what it is now.
 | `REPORTING`, `REPORTING_DRIVER` | `REPORTING=true` + `REPORTING_DRIVER=sentry` registered Sentry | **Same contract.** Sentry is registered only when both are set; it is excluded from package auto-discovery. Default `false`. |
 | `SENTRY_LARAVEL_DSN`, `SENTRY_TRACES_SAMPLE_RATE` | placeholder DSN, `0.5` | empty DSN, `0.1` |
 | `MICROCACHING_EXPIRE` | default `60` | default `60` (an interim revision of this branch had changed it to `5`) |
-| `RATE_LIMIT_PER_MINUTE` | did not exist (no throttling) | **New, default `0` = disabled.** Per-IP requests per minute for `/v4`. Enable only with a shared cache (`CACHE_DRIVER=redis`; the `array` store is per worker) and `TRUSTED_PROXIES`. |
+| `RATE_LIMIT_PER_MINUTE` | did not exist (no throttling) | **New, default `0` = disabled.** Per-IP requests per minute for `/v4`. Enable only with a shared cache (`CACHE_DRIVER=redis`; the default `file` store is shared only within one container, and `array` is flushed before every Octane request) and `TRUSTED_PROXIES`. |
 | `TRUSTED_PROXIES` | did not exist | **New.** Comma-separated IPs/CIDRs of your reverse proxy / load balancer, or `*`. Needed so `request()->ip()` is the real client. Empty = trust nothing. |
 | `QUEUE_WORKERS` | RoadRunner ran one `laravel_queue_worker_1` process (`JIKAN_QUEUE_WORKER_PROCESS_NUM`) | **New, default `0`.** The container entrypoint starts this many `queue:work` processes. Set it if you use `SCOUT_QUEUE=true` or dispatch jobs. |
 | `CACHE_MAGAZINES_EXPIRE` | documented in `.env.dist` | The endpoint TTL map reads **`CACHE_MAGAZINE_EXPIRE`** (singular). The plural name was only consumed by the cache-refresh jobs, which were removed. |
@@ -29,7 +29,7 @@ on the Lumen release ("before") and what it is now.
 | RoadRunner memory supervisor / max request size | `RR_MAX_WORKER_MEMORY` (128), `RR_MAX_REQUEST_SIZE_MB` (256) | **Not mapped.** Octane generates its own RoadRunner config. Use `OCTANE_MAX_REQUESTS` to bound worker memory growth, or supply your own RoadRunner v3 config with `OCTANE_RR_CONFIG=/path/to/.rr.yaml`. |
 | Queue workers | `laravel_queue_worker_1` RoadRunner service | `QUEUE_WORKERS=N` (see above). |
 | `APP_KEY` | not needed by Lumen | The container entrypoint generates one on first boot when none is supplied. Set `APP_KEY` (or `APP_KEY__FILE`) explicitly in production so it is stable across restarts. |
-| Scheduler | all indexers `->daily()` at 00:00 | Staggered `dailyAt()` between 00:10 and 01:30, with `withoutOverlapping()->onOneServer()`. `onOneServer` needs a cache store shared by all instances (`CACHE_DRIVER=redis`); with the per-process `array` store it is a no-op. |
+| Scheduler | all indexers `->daily()` at 00:00 | Staggered `dailyAt()` between 00:10 and 01:30, with `withoutOverlapping()->onOneServer()`. `onOneServer` needs a cache store shared by all instances (`CACHE_DRIVER=redis`); with a container-local store (`file`, the default, or `array`) it only de-duplicates within one container. |
 
 ## Behaviour changes
 
