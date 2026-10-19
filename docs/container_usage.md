@@ -1,5 +1,11 @@
 # 🐳 Running Jikan API in a container
 
+> **4.3.0:** the maintained Docker instructions are in [`DOCKER.md`](DOCKER.md)
+> (`docker compose up -d --build`, then `docker compose exec app php artisan migrate`).
+> This page describes the older `container-setup.sh` / published-image flow; parts of it
+> (secret files, the `jikanme/jikan-rest` Docker Hub image) predate 4.3.0. Upgrading a 4.2.x
+> instance: see [`UPGRADING.md`](UPGRADING.md).
+
 The most easiest way to get started is to use our container setup cli script after checking out the repo with git (linux only):
 
 ```bash
@@ -9,9 +15,8 @@ The most easiest way to get started is to use our container setup cli script aft
 This will:
 
 - Prompt you for the required passwords and usernames
-- Sets up a production ready setup with `redis`, `typesense` and `mongodb` (almost same as the public api at `api.jikan.moe`)
-- Sets mongodb to use max 1gb of memory
-- Configures jikan-api to add CORS headers to responses.
+- Starts the `docker-compose.yml` stack (`app`, `mongodb`, `redis`, and `typesense` via `docker-compose.typesense.yml`)
+- CORS headers are off by default (`CORS_MIDDLEWARE=false`); set `CORS_MIDDLEWARE=true` if your proxy does not add them.
 
 > **Note**: The script supports both `docker` and `podman`. In case of `podman` please bare in mind that sometimes the container name resolution doesn't work on the container network. 
 > In those cases you might have to install `aardvark-dns` package. On `Arch Linux` podman uses `netavark` network by default (in 2023) so you will need to install the before mentioned package.
@@ -66,7 +71,7 @@ You need to stop the app first:
 ./container-setup.sh stop
 ```
 
-Then remove the jikan-api image from your local storage and pull the new one. Set the `JIKAN_API_VERSION` environment variable to the latest image tag. This can be either `latest` or the version `v4.0.0-11`.
+Then remove the jikan-api image from your local storage and pull the new one. Set the `JIKAN_API_VERSION` environment variable to the latest image tag. This can be either `latest` or a version tag such as `v4.3.0`.
 
 ```bash
 JIKAN_API_VERSION=latest ./container-setup.sh start
@@ -117,8 +122,8 @@ files**: the local MongoDB/Redis run without authentication by default (drop the
 
 Full build / run / env (`APP_KEY`, `TYPESENSE_API_KEY`, `SCOUT_DRIVER`,
 `CACHE_DRIVER`) / seeding / health instructions are in
-[`DOCKER.md`](docs/DOCKER.md). On Apple Silicon, build with
-`RR_STAGE=rr-arm64 docker compose up -d --build`.
+[`DOCKER.md`](DOCKER.md). On Apple Silicon no build argument is needed: the Dockerfile
+detects the architecture and fetches the matching RoadRunner binary.
 
 > The old secret-file flow (db_username.txt / redis_password.txt /
 > typesense_api_key.txt + `docker/config/.env.compose`) is kept for the
@@ -131,7 +136,7 @@ If you build the container image yourself with podman, the resulting image forma
 To make the health checks work in that situation you need to run the container the following way:
 
 ```bash
-podman run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env --health-start-period=5s --health-cmd="curl --fail http://localhost:2114/health?plugin=http || exit 1" jikan-rest:nightly
+podman run -d --name=jikan-rest -p 8080:8080 -v ./.env:/app/.env --health-start-period=5s --health-cmd="wget -q -O /dev/null http://127.0.0.1:8080/up || exit 1" jikan-rest:nightly
 ```
 
 ### Configuration of the container
@@ -158,9 +163,9 @@ There are additional configuration options:
 
 | Name                                 | Description                                                                                                                                                                                         |
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| RR_MAX_WORKER_MEMORY                 | (Number) Configures the available memory in megabytes for the php scripts                                                                                                                           |
-| RR_MAX_REQUEST_SIZE_MB               | (Number) Configures the max allowed request body size in megabytes                                                                                                                                  |
-| JIKAN_QUEUE_WORKER_PROCESS_NUM       | (Number) Configures the number of running queue worker processes. (You want to increase this if you experience huge load)                                                                           |
+| OCTANE_WORKERS                       | (Number or `auto`) Octane/RoadRunner worker processes. Default `auto` (one per CPU core). Replaces `RR_MAX_WORKER_MEMORY` tuning.                                                                    |
+| OCTANE_MAX_REQUESTS                  | (Number) Requests a worker serves before it is recycled (bounds memory growth). Default `500`.                                                                                                      |
+| QUEUE_WORKERS                        | (Number) `php artisan queue:work` processes started by the entrypoint. Default `0`. Replaces `JIKAN_QUEUE_WORKER_PROCESS_NUM`.                                                                     |
 | JIKAN_ENABLE_PERIODICAL_FULL_INDEXER | (Bool) Configures whether to run the anime/manga indexer every week, which would crawl all anime/manga at first then it would just grab the latest anime/manga entries from MAL. Defaults to false. |
 
 You can read more about additional configuration options on
@@ -168,16 +173,12 @@ the [Configuration Wiki page](https://github.com/jikan-me/jikan-rest/wiki/Config
 
 ## Some facts about the container image
 
-- Jikan uses RoadRunner as an application server within the container.
-- Both `wget` and `curl` exists in the container image.
-- The script in `docker-entrypoint.php` sets safe defaults. Because of this by default the app won't behave the same way
-  as the publicly available version of the app at [https://api.jikan.moe/v4](https://api.jikan.moe/v4). The default
-  settings:
-  - No redis caching
-  - No search index usage (inaccurate search results)
-- Via Roadrunner multiple processes are running in the container, and their logs are aggregated and forwarded
-  to `stdout`.
-  - These processes are:
-    - the php processes ingesting the http requests
-    - [Supercronic](https://github.com/aptible/supercronic), which runs cron jobs.
-    - Queue workers for populating the search index and other background jobs.
+- Jikan uses Laravel Octane on RoadRunner as the application server within the container (port 8080, healthcheck `GET /up`).
+- Both `wget` and `curl` exist in the container image.
+- The entrypoint (`docker-entrypoint.sh` + `docker-entrypoint.php`) sets safe defaults:
+  - file cache (`CACHE_DRIVER=file`), no Redis caching
+  - no search engine (`SCOUT_DRIVER=null`, Mongo `$text` fallback)
+- Processes running in the container:
+  - the Octane/RoadRunner workers serving HTTP requests
+  - [Supercronic](https://github.com/aptible/supercronic), which runs the Laravel scheduler
+  - `QUEUE_WORKERS` queue workers (none by default), for queued search imports and other background jobs.

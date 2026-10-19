@@ -32,7 +32,7 @@ tools/dev/php vendor/bin/phpunit --no-coverage
 | `--with-typesense` | Download a native Typesense server (`/tmp/typesense`) + set `SCOUT_DRIVER=typesense`. |
 | `--with-backend-suite` | `pip install` the `backend-quality-suite` CLI into `/tmp/bsq-venv` (drift audits — see `.backend-suite/`). |
 | `--with-skills` | `composer require --dev laravel/boost` + install the four marketplace skills under `.ai/skills/`. |
-| `--seed` | Run the unblocked indexers (genres + magazines). Anime/manga await jikan v5 (see `docs/UPSTREAM_ISSUES.md`). |
+| `--seed` | Run the quick indexers (genres + magazines). Anime/manga: run `indexer:anime` / `indexer:manga` yourself (long; see `docs/POST_FULL_INDEX.md`). |
 | `--env=local\|production` | Set `APP_ENV`. |
 | `--check` | Prerequisites only. |
 | `--dry-run` | Preview every step, print what would run/download — **nothing is executed**. |
@@ -82,7 +82,7 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 2. **MongoDB** — `brew install mongodb-community && brew services start mongodb-community`
    (default DB `jikan`, test DB `jikan_tests`).
 3. **Deps** — `tools/dev/php /opt/homebrew/bin/composer install`
-4. **Env** — `cp .env.dist .env && tools/dev/php artisan key:generate`
+4. **Env** — `cp .env.dist .env && tools/dev/php artisan key:generate`, then `tools/dev/php artisan migrate` (MongoDB indexes)
    `.env.dist` is the **canonical env reference** (all ~116 keys the app reads); only `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_KEY` should differ from it.
 5. **Runtime**
    - RoadRunner (default): `tools/dev/php artisan octane:install --server=roadrunner` then
@@ -93,7 +93,7 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 6. **Verify**
    ```bash
    curl http://127.0.0.1:8000/up                       # 200 OK
-   tools/dev/php vendor/bin/phpunit --no-coverage       # 292 tests / 2707 asserts
+   tools/dev/php vendor/bin/phpunit --no-coverage       # all green
    tools/dev/php artisan config:cache                   # config-cache safe
    ```
 
@@ -104,7 +104,7 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 | Concern | Default | Options |
 |---|---|---|
 | Search | Mongo `$text` (no server needed) | Typesense via `SCOUT_DRIVER=typesense` + native binary or `docker compose` |
-| Cache | `array` (local) | Redis in prod (`CACHE_DRIVER=redis`) |
+| Cache | `file` (`CACHE_DRIVER=file`; do not use `array` under Octane) | Redis to share across containers (`CACHE_DRIVER=redis`) |
 | Runtime | RoadRunner | FrankenPHP (`OCTANE_SERVER=frankenphp`), `php artisan serve`, or Docker |
 | Static analysis | PHPStan level 6 (baseline-pinned) + Pint | `composer phpstan` · `composer pint` |
 | API docs | Scalar reference at `v4/docs`; OpenAPI spec at `v4/docs/openapi` (l5-swagger-generated; legacy `/v4/api-docs` 301s there) | Swagger UI endpoint disabled by design |
@@ -131,7 +131,7 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 >    `--server frankenphp`.
 > 3. Start the server (RoadRunner unless another `--server` was chosen) and verify:
 >    `curl http://127.0.0.1:8000/up` → `200`, `curl http://127.0.0.1:8000/v4/genres/anime` → `200`.
-> 4. Run `tools/dev/php vendor/bin/phpunit --no-coverage` → 292 tests / 2707 assertions green,
+> 4. Run `tools/dev/php vendor/bin/phpunit --no-coverage` → all tests green,
 >    and `tools/dev/php artisan config:cache` boots.
 > 5. If `--with-backend-suite` was requested, run the key audits
 >    (`rate-limit`, `cache-ttl-coverage`, `error-shape`) and report results.
@@ -145,5 +145,5 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 - `docs/PROVIDERS.md` — providers/services: what's included vs needs setup (LLM-friendly digest).
 - `script/` — normalized install wrappers (`setup` · `bootstrap` · `update` · `server` · `test` · `cibuild`).
 - `docs/LOCAL_SETUP.md` — machine-specific notes for the original dev box.
-- `docs/TROUBLESHOOTING.md` · `docs/UPSTREAM_ISSUES.md` (what waits on jikan v5) ·
+- `docs/TROUBLESHOOTING.md` · `docs/UPSTREAM_ISSUES.md` (parser issues, resolved by jikan v5) ·
   `.backend-suite/` (quality audits) · `.ai/skills/` (agent skills).

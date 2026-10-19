@@ -22,7 +22,7 @@
 - [Changelog / everything done](docs/PR_CHANGELOG.md) · [RFC/decisions](docs/RFC.md)
 - [Proposals](docs/proposals/2026-10-12-ai-llm-modernization.md)
 - [Upstream PR playbook](docs/UPSTREAM_PR.md)
-- [Upgrading from the Lumen release (env vars, behaviour changes)](docs/UPGRADING.md)
+- [Upgrading 4.2.x → 4.3.0 (platform migration: env vars, behaviour changes)](docs/UPGRADING.md)
 
 ## Contract (machine-readable)
 - OpenAPI spec: `GET /v4/docs/openapi` (JSON; regenerate with `artisan l5-swagger:generate`)

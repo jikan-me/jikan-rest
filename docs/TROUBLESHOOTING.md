@@ -2,7 +2,7 @@
 
 ## My local instance keeps returning HTTP 500
 
-First off, check `storage/logs/lumen.log`.
+First off, check the log: `storage/logs/daily/jikan-YYYY-MM-DD.log` (default `LOG_CHANNEL=stack` → daily), or `docker compose logs app` in Docker.
 
 **1. If you're getting a lot of Redis errors along the lines of `BGSAVE` failing.**
 You probably have a low RAM resource, switch over to file caching `CACHE_DRIVER=file`.
@@ -12,6 +12,8 @@ Redis throws this error even if you have about 1/4 of your RAM free. This is bec
 You can stop Redis from haggling you and override that by running the following command: `redis-cli config set stop-writes-on-bgsave-error no`
 
 **2. Jikan is failing to cache (when `CACHE_DRIVER=file`) because the "disk is out of space" - but you're sure you have enough space available.**
+
+> Legacy (pre-4.3, Lumen + supervisor/apache deployments). 4.3.0 runs on Octane; see `docs/DOCKER.md` / `docs/SETUP.md`.
 
 Sorry! This is due to a bug on a previous release ([Issue #59](https://github.com/jikan-me/jikan-rest/issues/59)), please make sure you're upto date.
 
@@ -51,6 +53,9 @@ If Redis is taking too long to restart, follow this: https://stackoverflow.com/a
 `php artisan cache:clear`
 
 ## I want to clear the Cache Updater Queue
+
+> Legacy (pre-4.3): the cache-updater jobs were removed in 4.3.0, so there is no updater queue to clear. Kept for older deployments.
+
 1. `sudo service supervisor stop`
 
 2. `redis-cli --scan --pattern queue_update:* | xargs redis-cli del` or alternatively replace `del` with `unlink` to have it done in the background ([Redis 4.0.0 required](https://redis.io/commands/unlink))

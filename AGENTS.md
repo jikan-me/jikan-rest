@@ -42,7 +42,7 @@ committed canonical: **do not hand-edit** — regenerate, and `endpoints:check` 
 ## Repo map
 
 - `docs/INDEX.md` — question → file map (start here)
-- `docs/AGENTS.md` / `AGENTS.md` — this agent guide
+- `AGENTS.md` — this agent guide (`CLAUDE.md` for Claude Code)
 - `llms.txt` — LLM index of docs + contract (also served at `GET /llms.txt`)
 - `docs/ARCHITECTURE.md`, `docs/DESIGN.md` — how / scope
 - `docs/SETUP.md`, `docs/PROVIDERS.md` — native setup + services matrix
@@ -86,8 +86,8 @@ unmodified.
 
 ## Gates that must stay green
 
-1. `vendor/bin/phpunit --no-coverage` → 292/2707, 0 failures.
-2. `l5-swagger:generate` → exit 0; `artisan endpoints:check` → exit 0.
+1. `vendor/bin/phpunit --no-coverage` (or `composer phpunit`) → 0 failures.
+2. `l5-swagger:generate` → exit 0; `composer endpoints:check` → exit 0.
 3. Audits: `endpoint-parity`, `route-coverage`, `toolchain-gates`,
    `proposal-status` → exit 0.
 4. `git diff --exit-code` on generated artifacts after regeneration.

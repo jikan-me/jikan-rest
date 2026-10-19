@@ -1,13 +1,13 @@
 # Local Setup (macOS, native — no Docker)
 
 This documents how this checkout is set up to run locally on this machine.
-It is **untracked** helper documentation.
+It is machine-specific helper documentation from the migration; the general instructions are `docs/SETUP.md` and `README.MD`.
 
 ## What is installed
 
 | Component | Version | How |
 |-----------|---------|-----|
-| PHP       | 8.4.26  | **Homebrew `php@8.4`** + `pecl install mongodb` (2.5.4). Herd Lite's PHP is not used: it bundles `ext-mongodb` 1.20, which cannot be upgraded in place and is too old for the Laravel 12 Mongo driver. Run PHP via `tools/dev/php`. |
+| PHP       | 8.4.26  | **Homebrew `php@8.4`** + `pecl install mongodb` (2.5.4). Herd Lite's PHP is not used: it bundles `ext-mongodb` 1.20, which cannot be upgraded in place and is too old for the `mongodb/laravel-mongodb` v5 driver. Run PHP via `tools/dev/php`. |
 | Composer  | 2.8.12  | Homebrew (already present) |
 | MongoDB   | 9.0.2   | `brew install mongodb-community` (managed by `brew services`) |
 
@@ -21,10 +21,9 @@ stack (Mongo + Redis + Typesense) is not used here. The app runs directly with P
   - `APP_KEY` generated via `php artisan key:generate`
   - MongoDB defaults kept (`DB_CONNECTION=mongodb`, `DB_HOST=localhost`, `DB_PORT=27017`, `DB_DATABASE=jikan`)
 - `php.dev.ini` — project-local PHP config used to run the dev server.
-  Lumen forces `error_reporting(-1)` when `APP_DEBUG=true`, and the locked
-  Laravel 9 / Lumen 9 dependencies emit huge numbers of `E_DEPRECATED` notices
-  on PHP 8.4. This ini sets `display_errors=Off` so those notices stay out of
-  HTTP responses (they are still logged). Real exceptions are still rendered by
+  It sets `display_errors=Off` so PHP 8.4 `E_DEPRECATED` notices from
+  dependencies stay out of HTTP responses (they are still logged). (Written for
+  the Lumen 9 release, where this was severe; on Laravel 13 it is optional.) Real exceptions are still rendered by
   the framework error handler.
 
 ## Run it
@@ -63,13 +62,13 @@ curl http://127.0.0.1:8000/v4/anime/1  # requires MyAnimeList access (see below)
    php artisan list | grep indexer   # indexer:genres, indexer:anime, indexer:manga, ...
    ```
    This cannot succeed without MAL connectivity.
-3. **Search engine.** Typesense/Elasticsearch are not installed; search falls
-   back to database queries (`SCOUT_DRIVER` unset), which is fine for local use.
+3. **Search engine.** Typesense is not installed; search falls
+   back to database queries (`SCOUT_DRIVER=null`), which is fine for local use.
 
 ## Tests
 
 ```bash
-php vendor/bin/phpunit tests
+php vendor/bin/phpunit --no-coverage   # or: composer phpunit
 ```
 
 The upstream README notes tests may fail due to MyAnimeList rate limiting

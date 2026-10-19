@@ -2,7 +2,7 @@
 
 | Question | Read |
 |---|---|
-| What is this? How do I run it? | `docs/SETUP.md`, `docs/README.MD` (root) |
+| What is this? How do I run it? | `README.MD` (root), `docs/SETUP.md` |
 | Agent quickstart / conventions / commands | `AGENTS.md` (root; `CLAUDE.md` for Claude Code) |
 | LLM/API index + contract pointers | `llms.txt` (root; also `GET /llms.txt`) |
 | How is the app structured? | `docs/ARCHITECTURE.md` |
@@ -20,7 +20,7 @@
 | Docker / container usage | `docs/DOCKER.md` |
 | Typesense search spike/runbook | `docs/TYPESENSE_SPIKE.md` |
 | What to do after a full data index | `docs/POST_FULL_INDEX.md` |
-| What changed for operators vs the Lumen release? | `docs/UPGRADING.md` |
+| Upgrading 4.2.x → 4.3.0 / what changed for operators vs the Lumen release? | `docs/UPGRADING.md` |
 | What went wrong before / traps to avoid | `.backend-suite/known-traps.json` |
 | Project conventions as an agent skill | `.ai/skills/jikan-rest/SKILL.md` |
 | Latest review pass (what was fixed, evidence) | `docs/PR_CHANGELOG.md` (Audit-fix pass) |

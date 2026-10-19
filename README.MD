@@ -1,7 +1,7 @@
 [![Jikan](https://i.imgur.com/ccx3pxo.png)](#jikan-rest-api-v4---unofficial-myanimelistnet-rest-api)
 
 # Jikan REST API v4 - Unofficial MyAnimeList.net REST API
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![PHP](https://img.shields.io/badge/PHP-^8.3-blue.svg?style=flat)]() [![Laravel](https://img.shields.io/badge/Laravel-13-red.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/jikan-me/jikan-rest.svg)](http://isitmaintained.com/project/jikan-me/jikan-rest "Percentage of issues still open") [![PHP](https://img.shields.io/badge/PHP-^8.4.4-blue.svg?style=flat)]() [![Laravel](https://img.shields.io/badge/Laravel-13-red.svg?style=flat)]() [![Discord Server](https://img.shields.io/discord/460491088004907029.svg?style=flat&logo=discord)](http://discord.jikan.moe)
 
 Jikan is a REST API for [MyAnimeList.net](https://myanimelist.net). It scrapes the website to satisfy the need for API functionality that MyAnimeList.net lacks.
 
@@ -24,32 +24,49 @@ https://github.com/jikan-me/jikan-rest/tree/v3
 `GET /llms.txt` (LLM index), [`docs/INDEX.md`](docs/INDEX.md) (question → file), the OpenAPI spec at
 `GET /v4/docs/openapi`, and the function-calling manifest at `GET /v4/ai/manifest.json`.
 
-### Installation (self-host)
+### Self-hosting
 
-**Stack:** Laravel 13 · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb` v5) · Octane (RoadRunner default / FrankenPHP opt-in) · PHPUnit 12 · Laravel Scout search. Run it natively **or** with Docker.
+This repository is the self-hostable Jikan REST API: you run your own instance of the
+`/v4` API against MyAnimeList. Current release: **4.3.0**.
 
-- **Composer / native (recommended)** — see the [setup guide](docs/SETUP.md):
-  ```bash
-  ./install.sh            # interactive — prompts with defaults
-  ./install.sh --yes      # accept defaults (CI-safe)
-  ./install.sh --dry-run  # preview every step, execute nothing
-  ./script/server         # start RoadRunner on :8000
-  ```
-  Every service toggle (Redis, Typesense, backend-quality-suite, skills, seeding)
-  and the default-to-prod shape are in [docs/SETUP.md](docs/SETUP.md) and the
-  [providers matrix](docs/PROVIDERS.md). Shortcut scope of what is included by
-  default vs what needs setup: **search works out of the box** (Mongo `$text`);
-  **Octane RoadRunner is the default runtime**; **FrankenPHP and Typesense are opt-in**.
-- **Docker** — see the [container usage guide](docs/DOCKER.md):
-  ```bash
-  docker compose up -d --build
-  ```
+**Stack:** Laravel 13 · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb` v5) · Octane (RoadRunner default / FrankenPHP opt-in) · PHPUnit 12 · Laravel Scout search · parser [jikan-me/jikan](https://github.com/jikan-me/jikan) v5.
+
+**Requirements**
+
+- PHP **8.4.4 or newer** with `ext-mongodb` ≥ 2.5 and `ext-pcntl` (Composer 2)
+- MongoDB server (the Docker stack and CI use `mongo:8.0`)
+- Optional: Redis (shared cache across containers), Typesense 27 (search; off by default, Mongo `$text` is the fallback)
+
+**Quick start: Docker** (see [docs/DOCKER.md](docs/DOCKER.md))
+
+```bash
+docker compose up -d --build                 # app + MongoDB + Redis + Typesense
+docker compose exec app php artisan migrate  # one-time: create the MongoDB indexes
+curl http://localhost:8080/up                # 200 OK
+```
+
+Set `APP_URL` to the public URL of your instance and `APP_KEY` to a stable key in production.
+
+**Quick start: bare metal** (see [docs/SETUP.md](docs/SETUP.md); `./install.sh` automates these steps)
+
+```bash
+composer install
+cp .env.dist .env && php artisan key:generate   # then set APP_URL and the DB_* values
+php artisan migrate
+php artisan octane:install --server=roadrunner  # downloads the RoadRunner binary
+php artisan octane:start --server=roadrunner --port=8000
+```
+
+A fresh instance has an empty database; entries are fetched from MyAnimeList on first request.
+To pre-populate (search, top, seasons), run the indexers, see [COMMANDS.MD](COMMANDS.MD) and
+[docs/POST_FULL_INDEX.md](docs/POST_FULL_INDEX.md). Services and options: [docs/PROVIDERS.md](docs/PROVIDERS.md).
 
 For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
-### Upgrading from the Lumen release
+### Upgrading from 4.2.x
 
-See [docs/UPGRADING.md](docs/UPGRADING.md) for the environment-variable and behaviour changes.
+4.3.0 keeps the same `/v4` API but runs on a new platform (Laravel 13 instead of Lumen 9).
+Read [docs/UPGRADING.md](docs/UPGRADING.md) before upgrading a 4.2.x instance.
 
 ## Public REST API
 If you don't want to host your instance, there's a public API available.
@@ -81,10 +98,13 @@ For any additional help, join our [Discord server](http://discord.jikan.moe/).
 
 ## Running Tests
 
-`tools/dev/php vendor/bin/phpunit --no-coverage`
+```bash
+composer phpunit                       # = php vendor/bin/phpunit --no-coverage
+```
 
-`tools/dev/php` resolves the local PHP wrapper (macOS Homebrew `php@8.4`); on Linux or a
-fresh clone, replace it with `PHP_BIN=… php …` (e.g. `PHP_BIN=/usr/bin/php8.4 php vendor/bin/phpunit --no-coverage`).
+The suite needs a running MongoDB (it uses the `DB_*` settings; point `DB_DATABASE` at a
+database you do not mind being dropped). Run it with `--no-coverage` unless you have a coverage
+driver installed.
 
 Note: Some tests hit MyAnimeList and may be affected by their rate limit (HTTP 429).
 

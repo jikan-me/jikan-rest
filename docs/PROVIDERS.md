@@ -27,7 +27,7 @@ Installer: `./install.sh` (interactive) or the `${FLAG}`s below. Wrappers:
 | **PHPStan (L6) + Pint** | ✅ dev | vendor | `composer phpstan` · `composer pint` | exit 0 / pass |
 | **backend-quality-suite** | No — optional | Python CLI (`--with-backend-suite`) | pip into `/tmp/bsq-venv`, `PATH` incl. `tools/dev` | `backend-suite doctor` healthy |
 | **Laravel skills** | No — optional | `laravel/boost` (`--with-skills`) | `.ai/skills/*` | `boost:list-skills` |
-| **Parity harness** | ✅ (dev) | none | `tools/parity/snapshot.sh` ↔ `compare.php` | 60-endpoint diff |
+| **Parity harness** | ✅ (dev) | none | `tools/parity/snapshot.php` ↔ `compare.php` | 60-endpoint diff |
 | **Docker** | No — needs Docker host | `docker compose up -d --build` | compose (app/mongo/redis/typesense) | `/up` on `:8080` |
 | **CI (GitHub Actions)** | ✅ written | a GitHub runner | push → workflow | workflow green |
 
