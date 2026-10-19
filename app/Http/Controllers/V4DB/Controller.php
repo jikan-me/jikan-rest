@@ -18,7 +18,6 @@ class Controller extends BaseController
      *         version="4.0.0",
      *         title="Jikan API",
      *         description=API_DESCRIPTION,
-     *         termsOfService="https://jikan.moe/terms",
      *
      *         @OA\Contact(
      *             name="API Support (Discord)",
