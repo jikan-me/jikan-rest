@@ -1101,3 +1101,11 @@ param. `phpstan` full-project → OK.
   `*_read` null where the cell is "-"; `/anime/21/userupdates` 75 rows, `episodes_total` null on
   all 75 (One Piece is ongoing); `/anime/1/userupdates` 75 rows, 12 null totals. 114-route crawl:
   113x 200, 1x 404 (`/random/users` on an empty users collection), same as rc.1.
+
+## 21. jikan v5.0.0 (2026-10-19)
+
+- `jikan-me/jikan` v5.0.0-rc.2 -> **v5.0.0** (first stable v5 tag; code identical to rc.2, the
+  tag differs only in docs). Constraint `~5.0.0-rc.2` -> `^5.0`; the lock's jikan stability flag
+  is gone. `composer.lock` change is the jikan package only (`plugin-api-version` stays 2.9.0).
+- Release version set to **4.3.0** (same /v4 contract, Laravel 13 runtime); `docs/UPGRADING.md`
+  has the 4.2.x -> 4.3.0 self-hoster guide.
