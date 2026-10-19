@@ -46,6 +46,20 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * An upstream 404 from MyAnimeList (Jikan\Exception\BadResponseException with code 404)
+     * is an expected "resource does not exist" answer, not an error: don't log it.
+     * Other upstream codes (429, 5xx, ...) are still reported.
+     */
+    protected function shouldntReport(\Throwable $e)
+    {
+        if ($e instanceof JikanBadResponseException && $e->getCode() === 404) {
+            return true;
+        }
+
+        return parent::shouldntReport($e);
+    }
+
+    /**
      * @throws Exception
      */
     public function report(\Throwable $e): void
