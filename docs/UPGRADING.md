@@ -54,6 +54,11 @@ on the Lumen release ("before") and what it is now.
   `/v4/anime/{id}/userupdates` and `/v4/manga/{id}/userupdates` (MyAnimeList shows `5/?`) is `null`
   instead of `0`; the manga `volumes_read`/`chapters_read` are `null` for a "-" cell. The OpenAPI
   schemas mark these fields `nullable: true`. Clients that treated `0` as unknown must check `null`.
+- **Score percentages are decimals.** In `GET /v4/anime/{id}/statistics` and
+  `GET /v4/manga/{id}/statistics`, `data.scores[].percentage` is now a decimal number such as
+  `1.4` (jikan v5 parses it as a float); the Lumen release returned integers. Whole values are
+  still serialised without a fraction (`25`), so clients must accept any JSON number there. The
+  OpenAPI schema already documents it as `number` (`float`).
 - **Operational setup.** Dependencies are resolved against PHP 8.4 and `ext-mongodb` ≥ 2.5.
   A fresh clone needs `composer install`, which relies on the tracked
   `bootstrap/cache/.gitignore` placeholder.
