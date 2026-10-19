@@ -4,13 +4,14 @@ namespace App\Services;
 
 use App\Contracts\CachedScraperService;
 use App\Contracts\Repository;
-use App\Support\HttpHelper;
 use App\JikanApiModel;
 use App\Support\CachedData;
+use App\Support\HttpHelper;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Jikan\Exception\BadResponseException as JikanBadResponseException;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\SerializerInterface;
 use MongoDB\BSON\UTCDateTime;
@@ -57,7 +58,13 @@ final class DefaultCachedScraperService implements CachedScraperService
         // Negative cache: a recently-scraped "not found" id is served fast
         // (404) instead of paying another synchronous MAL scrape — boundaries
         // the huge-id / non-existent-id request vector.
-        if (Cache::has($this->missKey($id))) {
+        // The cached value records which 404 shape the first miss produced, so a
+        // replay is byte-identical to the original response.
+        $miss = Cache::get($this->missKey($id));
+        if ($miss === self::MISS_UPSTREAM_404) {
+            throw new JikanBadResponseException('Resource does not exist (cached miss)', 404);
+        }
+        if ($miss !== null) {
             throw new NotFoundHttpException;
         }
 
@@ -77,19 +84,31 @@ final class DefaultCachedScraperService implements CachedScraperService
 
             return $results;
         } catch (NotFoundHttpException $e) {
-            $this->rememberMiss($id);
+            $this->rememberMiss($id, self::MISS_NOT_FOUND);
+            throw $e;
+        } catch (JikanBadResponseException $e) {
+            // MAL answering 404 surfaces from the parser as a Jikan
+            // BadResponseException (not NotFoundHttpException) — the common
+            // case for non-existent ids, so it must be negative-cached too.
+            if ($e->getCode() === 404) {
+                $this->rememberMiss($id, self::MISS_UPSTREAM_404);
+            }
             throw $e;
         }
     }
+
+    private const MISS_NOT_FOUND = 1;
+
+    private const MISS_UPSTREAM_404 = 2;
 
     private function missKey(int $id): string
     {
         return 'scrape:miss:'.$id;
     }
 
-    private function rememberMiss(int $id): void
+    private function rememberMiss(int $id, int $kind): void
     {
-        Cache::put($this->missKey($id), 1, (int) config('jikan.scrape_miss_ttl', 60));
+        Cache::put($this->missKey($id), $kind, (int) config('jikan.scrape_miss_ttl', 60));
     }
 
     public function findByKey(string $key, mixed $val, string $cacheKey): CachedData

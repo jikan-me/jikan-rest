@@ -9,6 +9,8 @@ use App\Contracts\Repository;
 use App\Profile;
 use App\Services\DefaultCachedScraperService;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Jikan\Exception\BadResponseException;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\SerializerInterface;
 use Mockery;
@@ -220,6 +222,28 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $result = $sut->find($malId, $testRequestHash);
 
         $this->assertEquals($mockModel->toArray(), $result->toArray());
+    }
+
+    public function testUpstream404IsNegativeCachedAndReplayedWithSameException()
+    {
+        $malId = 987654321;
+        Cache::forget('scrape:miss:'.$malId);
+        [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->getAllByMalId($malId)->once()->andReturns(collect());
+        // MAL 404 surfaces as a Jikan BadResponseException — scraped exactly once:
+        $repositoryMock->expects()->scrape($malId)->once()
+            ->andThrow(new BadResponseException('404 on MAL', 404));
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient, $serializerMock);
+        foreach ([1, 2] as $attempt) {
+            try {
+                $sut->find($malId, $this->requestHash());
+                $this->fail("attempt {$attempt}: expected a 404 BadResponseException");
+            } catch (BadResponseException $e) {
+                $this->assertSame(404, $e->getCode(), "attempt {$attempt}");
+            }
+        }
+        Cache::forget('scrape:miss:'.$malId);
     }
 
     public function testIfFindUpdatesExpiredDbItem()
