@@ -3,7 +3,7 @@
 > For use after the full indexing run completes (`indexer:anime` → `indexer:manga`,
 > launched 2026-10-12, ~30,393 anime + a manga id set back-to-back against the app
 > on `:8000`). Turn the finished index into *verified* state without scrambling.
-> Context: jikan v5.0.0-beta fixes the parser blockers (`docs/UPSTREAM_ISSUES.md`);
+> Context: jikan v5 fixes the parser blockers (`docs/UPSTREAM_ISSUES.md`);
 > the data this run produces is the first complete dataset since the migration.
 
 ## 0. Confirm completion
@@ -109,12 +109,17 @@ or `exec` an index run). Otherwise the empty-DB `ParserException`/404 is expecte
 - Verify indexes survived the write load:
   `db.anime.getIndexes()` → `schedule`, `season`, `top_airing`, `top_upcoming`
   (see `docs/DB_INDEXES.md`); text `search` indexes per collection.
-- Heartbeat: `/` + `/v4` `parser_version` should read **v5.0.0-rc.2**.
-- Re-index after the jikan rc.1 upgrade (#617/#619): documents stored by earlier builds keep the old
-  values until they are refreshed or their cache expires. Re-run `indexer:anime` / `indexer:manga`
-  (manga relations gain the related-entries table; `aired` of single episodes becomes UTC midnight),
-  `indexer:genres` and `indexer:common`, and re-fetch user profiles (`about` is `null` instead of `""`,
-  statistics above 999 are no longer cut at the comma, last updates keep their progress).
+- Heartbeat: `/` + `/v4` `parser_version` should read the installed jikan v5 version (**v5.0.0**).
+- Re-fetch data stored by earlier builds (4.2.x or pre-v5 parser): documents keep the old values
+  until they are refreshed or their cache expires. Re-run `indexer:anime` / `indexer:manga`,
+  `indexer:genres` and `indexer:common`, and re-fetch user data. Affected (same list as
+  `docs/UPGRADING.md`, "Required one-time steps"):
+  - single-episode `aired` dates (`+09:00` → UTC midnight);
+  - manga relations (gain the related-entries table);
+  - user friends `friends_since` and profile `about` (`null` instead of `""`);
+  - user statistics above 999 (no longer cut at the comma);
+  - user profile last updates (keep their progress);
+  - review pagination (`has_next_page` on `/users/{u}/reviews`).
 - Update the living records: parity counts + this batch in `docs/PR_CHANGELOG.md`,
   `docs/UPSTREAM_PR.md` §1 Verification, `docs/PRODUCTION-READINESS.md` gate rows,
   then push + refresh the PR description numbers.
