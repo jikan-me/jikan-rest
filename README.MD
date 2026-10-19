@@ -34,7 +34,7 @@ This repository is the self-hostable Jikan REST API: you run your own instance o
 **Requirements**
 
 - PHP **8.4.4 or newer** with `ext-mongodb` ≥ 2.5 and `ext-pcntl` (Composer 2)
-- MongoDB server (the Docker stack and CI use `mongo:8.0`)
+- MongoDB server 8.0 (the Docker stack uses `mongo:8.0`; CI temporarily runs 7.0, see [TROUBLESHOOTING](docs/TROUBLESHOOTING.md))
 - Optional: Redis (shared cache across containers), Typesense 27 (search; off by default, Mongo `$text` is the fallback)
 
 **Quick start: Docker** (see [docs/DOCKER.md](docs/DOCKER.md))

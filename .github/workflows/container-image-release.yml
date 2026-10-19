@@ -68,14 +68,14 @@ jobs:
             org.opencontainers.image.description=REST API for Jikan
             org.opencontainers.image.url=https://jikan.moe
             org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
-            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/docs/container_usage.md
             org.opencontainers.image.revision=${{ github.sha }}
           annotations: |
             org.opencontainers.image.title=Jikan REST API
             org.opencontainers.image.description=REST API for Jikan
             org.opencontainers.image.url=https://jikan.moe
             org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
-            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/docs/container_usage.md
             org.opencontainers.image.revision=${{ github.sha }}
 
       - name: Login to GitHub Container Registry
@@ -146,7 +146,7 @@ jobs:
             org.opencontainers.image.description=REST API for Jikan
             org.opencontainers.image.url=https://jikan.moe
             org.opencontainers.image.source=https://github.com/jikan-me/jikan-rest
-            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/container_usage.md
+            org.opencontainers.image.documentation=https://github.com/jikan-me/jikan-rest/blob/master/docs/container_usage.md
             org.opencontainers.image.revision=${{ github.sha }}
           # `latest` is added explicitly below, never implicitly.
           flavor: |
