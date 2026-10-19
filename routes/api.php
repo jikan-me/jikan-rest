@@ -29,7 +29,7 @@ Route::get('/', function () {
         'documentation_url' => 'https://docs.api.jikan.moe/',
         'github_url' => 'https://github.com/jikan-me/jikan-rest',
         'parser_github_url' => 'https://github.com/jikan-me/jikan',
-        'production_api_url' => 'https://api.jikan.moe/v4/',
+        'production_api_url' => rtrim((string) config('app.url'), '/').'/v4/',
         'status_url' => 'https://status.jikan.moe',
         'myanimelist_heartbeat' => [
             'status' => SourceHeartbeatProvider::getHeartbeatStatus(),
@@ -57,9 +57,14 @@ Route::redirect('/v4/documentation', '/v4/docs', 301);
 Route::get('/llms.txt', function () {
     $index = base_path('llms.txt');
 
-    return is_file($index)
-        ? response()->file($index, ['Content-Type' => 'text/plain; charset=utf-8'])
-        : response()->json(['error' => 'llms.txt not found'], 404);
+    if (! is_file($index)) {
+        return response()->json(['error' => 'llms.txt not found'], 404);
+    }
+
+    // Advertise this instance, not a hosted one: the base URL comes from APP_URL.
+    $body = str_replace('{{BASE_URL}}', rtrim((string) config('app.url'), '/').'/v4/', (string) file_get_contents($index));
+
+    return response($body, 200, ['Content-Type' => 'text/plain; charset=utf-8']);
 });
 
 // AI tool-calling manifest (committed canonical at docs/ai/manifest.json;

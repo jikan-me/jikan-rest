@@ -15,7 +15,7 @@
     },
     "servers": [
         {
-            "url": "https://api.jikan.moe/v4",
+            "url": "/v4",
             "description": "Jikan REST API"
         }
     ],

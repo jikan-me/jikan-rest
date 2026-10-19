@@ -20,7 +20,7 @@ use OpenApi\Attributes as OA;
 
 #[OA\Server(
     description: 'Jikan REST API',
-    url: 'https://api.jikan.moe/v4'
+    url: '/v4'
 )]
 
 #[OA\ExternalDocumentation(

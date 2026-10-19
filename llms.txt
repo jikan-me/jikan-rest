@@ -6,7 +6,7 @@
 > Scalar. Machine/AI-first pointers are below.
 
 ## Notes
-- Base URL: `https://api.jikan.moe/v4/` (local: `http://localhost:8000/v4/`).
+- Base URL: `{{BASE_URL}}` (this instance's `APP_URL` + `/v4/`).
 - The v4 JSON contract is immutable for default requests; only additive opt-in
   parameters exist.
 - No auth. Per-IP rate limiting is opt-in per deployment. Errors use `{status, type, message}`.

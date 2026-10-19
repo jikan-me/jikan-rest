@@ -30,7 +30,7 @@ Route::get('/', function () {
         'documentation_url' => 'https://docs.api.jikan.moe/',
         'github_url' => 'https://github.com/jikan-me/jikan-rest',
         'parser_github_url' => 'https://github.com/jikan-me/jikan',
-        'production_api_url' => 'https://api.jikan.moe/v4/',
+        'production_api_url' => rtrim((string) config('app.url'), '/').'/v4/',
         'status_url' => 'https://status.jikan.moe',
         'myanimelist_heartbeat' => [
             'status' => SourceHeartbeatProvider::getHeartbeatStatus(),

@@ -48,7 +48,7 @@ return [
             'validator_url' => null,
 
             'constants' => [
-                'L5_SWAGGER_CONST_HOST' => env('APP_URL', 'http://localhost:8000/v4'),
+                'L5_SWAGGER_CONST_HOST' => rtrim((string) env('APP_URL', 'http://localhost:8000'), '/').'/v4',
             ],
         ],
     ],

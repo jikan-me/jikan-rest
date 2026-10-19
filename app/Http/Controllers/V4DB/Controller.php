@@ -32,7 +32,7 @@ class Controller extends BaseController
      *
      *     @OA\Server(
      *         description="Jikan REST API",
-     *         url="https://api.jikan.moe/v4",
+     *         url="/v4",
      *     ),
      *
      *     @OA\ExternalDocumentation(
