@@ -2,7 +2,8 @@
 # Fulfil project dependencies (composer). Pattern: github/scripts-to-rule-them-all.
 set -euo pipefail
 cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PHP="${PHP_BIN:-$PWD/tools/dev/php}"
+# PHP: $PHP_BIN, else the gitignored local wrapper tools/dev/php, else php on PATH.
+if [[ -n "${PHP_BIN:-}" ]]; then PHP="$PHP_BIN"; elif [[ -x "$PWD/tools/dev/php" ]]; then PHP="$PWD/tools/dev/php"; else PHP="$(command -v php)"; fi
 COMPOSER="${COMPOSER_BIN:-$(command -v composer || echo /opt/homebrew/bin/composer)}"
 "$PHP" "$COMPOSER" install --no-interaction
 echo "dependencies up to date."

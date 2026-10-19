@@ -129,7 +129,7 @@ $periodical_full_indexer_key = 'JIKAN_ENABLE_PERIODICAL_FULL_INDEXER';
 if (isset($current_env[$periodical_full_indexer_key]) && in_array($current_env[$periodical_full_indexer_key], [1, '1', 'true', 'True', 'TRUE'], true)) {
     $supercronic_schedule = file_get_contents('/etc/supercronic/laravel');
     $supercronic_schedule .= PHP_EOL;
-    $supercronic_schedule .= '0 1 * * 1 php /app/artisan indexer:anime --fail && php /app/artisan indexer:anime --resume && php /app/artisan indexer:manga --fail && php /app/artisan indexer:manga --resume';
+    $supercronic_schedule .= '0 1 * * 1 php /app/artisan indexer:anime --failed && php /app/artisan indexer:anime --resume && php /app/artisan indexer:manga --failed && php /app/artisan indexer:manga --resume';
     $supercronic_schedule .= PHP_EOL;
     file_put_contents('/etc/supercronic/laravel', $supercronic_schedule);
     $current_time = time();
