@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Builder;
 use Spatie\Enum\Laravel\Enum;
 
 // Custom app helpers. (Native framework helpers — config_path, rescue, app_path,
@@ -28,5 +30,21 @@ if (! function_exists('ensureEnumPrimitiveValue')) {
         }
 
         return $value;
+    }
+}
+
+if (! function_exists('is_scout_query_builder')) {
+    /**
+     * @template TModel of Model|\MongoDB\Laravel\Eloquent\Model
+     *
+     * @param  Builder<TModel>|Illuminate\Database\Eloquent\Builder<TModel>  $builder
+     *
+     * @phpstan-assert-if-true Builder<TModel>  $builder
+     *
+     * @phpstan-assert-if-false Illuminate\Database\Eloquent\Builder<TModel>  $builder
+     */
+    function is_scout_query_builder(Builder|Illuminate\Database\Eloquent\Builder $builder): bool
+    {
+        return $builder instanceof Builder;
     }
 }
