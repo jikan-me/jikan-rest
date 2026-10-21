@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 trait FilterResolver
 {
-    private function resolve(string $filterName, mixed $values): mixed
+    public function resolve(string $filterName, mixed $values): mixed
     {
         if ($this->isCustomFilter($filterName)) {
             return $this->resolveCustomFilter($filterName, $values);

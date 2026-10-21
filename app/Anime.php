@@ -11,6 +11,7 @@ use Carbon\CarbonImmutable;
 use Database\Factories\AnimeFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Jikan\Helper\Constants;
 use Jikan\Request\Anime\AnimeRequest;
@@ -231,13 +232,14 @@ class Anime extends JikanApiSearchableModel
      */
     public function filterByStartDate(Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('aired.from', '>=',
-                $value
-                    ->setTime(0, 0)
-                    ->setTimezone(new \DateTimeZone('UTC'))
-                    ->toAtomString()
-            );
+        $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('start_date', ['>=', $compareVal->getTimestamp()]);
+        } else {
+            $query = $query->where('published.from', '>=', $compareVal->toAtomString());
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -247,13 +249,22 @@ class Anime extends JikanApiSearchableModel
      */
     public function filterByEndDate(Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('aired.to', '<=',
-                $value
-                    ->setTime(0, 0)
-                    ->setTimezone(new \DateTimeZone('UTC'))
-                    ->toAtomString()
-            );
+        $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('(end_date', [
+                '<=', $compareVal->getTimestamp(),
+                ' || end_date:=', 'null',
+                ')',
+            ]);
+        } else {
+            $query = $query
+                ->where('aired.to', function ($queryInner) use ($compareVal) {
+                    return $queryInner->where('aired.to', '<=', $compareVal->toAtomString())
+                        ->orWhere('aired.to', null);
+                });
+        }
+
+        return $query;
     }
 
     /**
@@ -268,11 +279,22 @@ class Anime extends JikanApiSearchableModel
 
         $producer = (int) $value;
 
-        return $query->where(function (\MongoDB\Laravel\Eloquent\Builder $query) use ($producer) {
-            return $query->where('producers.mal_id', $producer)
-                ->orWhere('licensors.mal_id', $producer)
-                ->orWhere('studios.mal_id', $producer);
-        });
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('(producers', [
+                '=', $producer,
+                ' || licensors:=', $producer,
+                ' || studios:=', $producer,
+                ')',
+            ]);
+        } else {
+            $query = $query->where(function ($query) use ($producer) {
+                return $query->where('producers.mal_id', $producer)
+                    ->orWhere('licensors.mal_id', $producer)
+                    ->orWhere('studios.mal_id', $producer);
+            });
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -286,24 +308,35 @@ class Anime extends JikanApiSearchableModel
             return $query;
         }
 
-        /* @var \Illuminate\Support\Collection $producers */
         $producers = collect(explode(',', $value))->filter();
 
-        return $query->where(function (\MongoDB\Laravel\Eloquent\Builder $query) use ($producers) {
-            $firstProducer = (int) $producers->first();
-            $query = $query->where('producers.mal_id', $firstProducer)
-                ->orWhere('licensors.mal_id', $firstProducer)
-                ->orWhere('studios.mal_id', $firstProducer);
+        if (is_scout_query_builder($query)) {
+            $producerFilterList = '['.$producers->implode(', ').']';
+            $query = $query->where('(producers', [
+                '=', $producerFilterList,
+                ' || licensors:=', $producerFilterList,
+                ' || studios:=', $producerFilterList,
+                ')',
+            ]);
+        } else {
+            $query = $query->where(function (\MongoDB\Laravel\Eloquent\Builder $query) use ($producers) {
+                $firstProducer = (int) $producers->first();
+                $query = $query->where('producers.mal_id', $firstProducer)
+                    ->orWhere('licensors.mal_id', $firstProducer)
+                    ->orWhere('studios.mal_id', $firstProducer);
 
-            foreach ($producers->skip(1) as $producer) {
-                $producer = (int) $producer;
-                $query = $query->orWhere('producers.mal_id', $producer)
-                    ->orWhere('licensors.mal_id', $producer)
-                    ->orWhere('studios.mal_id', $producer);
-            }
+                foreach ($producers->skip(1) as $producer) {
+                    $producer = (int) $producer;
+                    $query = $query->orWhere('producers.mal_id', $producer)
+                        ->orWhere('licensors.mal_id', $producer)
+                        ->orWhere('studios.mal_id', $producer);
+                }
 
-            return $query;
-        });
+                return $query;
+            });
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -313,11 +346,21 @@ class Anime extends JikanApiSearchableModel
      */
     public function scopeExceptItemsWithAdultRating(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_HENTAI)
-            ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_EROTICA)
-            ->where('rating', '!=', AnimeRatingEnum::rx()->label)
-            ->where('genres.mal_id', '!=', Constants::GENRE_ANIME_HENTAI);
+        if (is_scout_query_builder($query)) {
+            $query = $query
+                ->where('demographics', ['!=', Constants::GENRE_ANIME_HENTAI])
+                ->where('demographics', ['!=', Constants::GENRE_ANIME_EROTICA])
+                ->where('rating', ['!=', AnimeRatingEnum::rx()->label])
+                ->where('genres', ['!=', Constants::GENRE_ANIME_HENTAI]);
+        } else {
+            $query = $query
+                ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_HENTAI)
+                ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_EROTICA)
+                ->where('rating', '!=', AnimeRatingEnum::rx()->label)
+                ->where('genres.mal_id', '!=', Constants::GENRE_ANIME_HENTAI);
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -327,8 +370,13 @@ class Anime extends JikanApiSearchableModel
      */
     public function scopeExceptKidsItems(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_KIDS);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('demographics', ['!=', Constants::GENRE_ANIME_KIDS]);
+        } else {
+            $query = $query->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_KIDS);
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -338,8 +386,13 @@ class Anime extends JikanApiSearchableModel
      */
     public function scopeOnlyKidsItems(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('demographics.mal_id', Constants::GENRE_ANIME_KIDS);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('demographics', Constants::GENRE_ANIME_KIDS);
+        } else {
+            $query = $query->where('demographics.mal_id', Constants::GENRE_ANIME_KIDS);
+        }
+
+        return $query;
     }
 
     /**

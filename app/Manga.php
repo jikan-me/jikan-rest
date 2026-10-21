@@ -118,12 +118,15 @@ class Manga extends JikanApiSearchableModel
      */
     public function filterByStartDate(Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('published.from', '>=',
-                $value->setTime(0, 0)
-                    ->setTimezone(new \DateTimeZone('UTC'))
-                    ->toAtomString()
-            );
+        $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
+
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('start_date', ['>=', $compareVal->getTimestamp()]);
+        } else {
+            $query = $query->where('published.from', '>=', $compareVal->toAtomString());
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -143,12 +146,22 @@ class Manga extends JikanApiSearchableModel
      */
     public function filterByEndDate(Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('published.to', '<=',
-                $value->setTime(0, 0)
-                    ->setTimezone(new \DateTimeZone('UTC'))
-                    ->toAtomString()
-            );
+        $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
+
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('(end_date', [
+                '<=', $compareVal->getTimestamp(),
+                ' || end_date:=', 'null',
+                ')',
+            ]);
+        } else {
+            $query = $query->where(function ($query) use ($compareVal) {
+                return $query->where('published.to', '<=', $compareVal->toAtomString())
+                    ->orWhere('published.to', null);
+            });
+        }
+
+        return $query;
     }
 
     /**
@@ -163,8 +176,13 @@ class Manga extends JikanApiSearchableModel
 
         $magazine = (int) $value;
 
-        return $query
-            ->where('serializations.mal_id', $magazine);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('magazines', $magazine);
+        } else {
+            $query = $query->where('serializations.mal_id', $magazine);
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -178,10 +196,16 @@ class Manga extends JikanApiSearchableModel
             return $query;
         }
 
-        /** @var array<int, int> $magazines */
-        $magazines = collect(explode(',', $value))->filter()->map(fn ($x) => (int) $x)->toArray();
+        $magazines = collect(explode(',', $value))->filter()->map(fn ($x) => (int) $x);
 
-        return $query->whereIn('serializations.mal_id', $magazines);
+        if (is_scout_query_builder($query)) {
+            $magazineFilterList = '['.$magazines->implode(', ').']';
+            $query = $query->where('magazines', $magazineFilterList);
+        } else {
+            $query = $query->whereIn('serializations.mal_id', $magazines->toArray());
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -191,11 +215,21 @@ class Manga extends JikanApiSearchableModel
      */
     public function scopeExceptItemsWithAdultRating(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('type', '!=', MangaTypeEnum::doujin()->label)
-            ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_HENTAI)
-            ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_EROTICA)
-            ->where('genres.mal_id', '!=', Constants::GENRE_MANGA_HENTAI);
+        if (is_scout_query_builder($query)) {
+            $query = $query
+                ->where('type', ['!=', MangaTypeEnum::doujin()->label])
+                ->where('demographics', ['!=', Constants::GENRE_MANGA_HENTAI])
+                ->where('demographics', ['!=', Constants::GENRE_MANGA_EROTICA])
+                ->where('genres', ['!=', Constants::GENRE_MANGA_HENTAI]);
+        } else {
+            $query = $query
+                ->where('type', '!=', MangaTypeEnum::doujin()->label)
+                ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_HENTAI)
+                ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_EROTICA)
+                ->where('genres.mal_id', '!=', Constants::GENRE_MANGA_HENTAI);
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -205,8 +239,13 @@ class Manga extends JikanApiSearchableModel
      */
     public function scopeExceptKidsItems(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_KIDS);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('demographics', ['!=', Constants::GENRE_MANGA_KIDS]);
+        } else {
+            $query = $query->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_KIDS);
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -216,8 +255,13 @@ class Manga extends JikanApiSearchableModel
      */
     public function scopeOnlyKidsItems(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('demographics.mal_id', Constants::GENRE_MANGA_KIDS);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('demographics', Constants::GENRE_MANGA_KIDS);
+        } else {
+            $query = $query->where('demographics.mal_id', Constants::GENRE_MANGA_KIDS);
+        }
+
+        return $query;
     }
 
     /**
