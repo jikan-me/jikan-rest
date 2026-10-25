@@ -1,0 +1,14 @@
+{
+    "data": {
+        "aired": "@string",
+        "duration": "@int",
+        "filler": "@bool",
+        "mal_id": "@int",
+        "recap": "@bool",
+        "synopsis": "@string",
+        "title": "@string",
+        "title_japanese": "@string",
+        "title_romanji": "@string",
+        "url": "@string"
+    }
+}

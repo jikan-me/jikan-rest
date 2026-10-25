@@ -25,22 +25,25 @@ final class AnimeForumLookupHandler extends RequestHandlerWithScraperCache
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
         return AnimeForumLookupCommand::class;
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
-        $topic = $requestParams->get("filter", AnimeForumFilterEnum::all()->value);
+        $id = $requestParams->get('id');
+        $topic = $requestParams->get('filter', AnimeForumFilterEnum::all()->value);
 
         return $this->scraperService->findList(
             $requestFingerPrint,
             fn (MalClient $jikan, ?int $page = null) => collect(
-                ["topics" => $jikan->getAnimeForum(new AnimeForumRequest($id,  $topic))]
+                ['topics' => $jikan->getAnimeForum(new AnimeForumRequest($id, $topic))]
             )
         );
     }

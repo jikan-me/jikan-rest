@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Services;
 
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Builder;
 
 final class DefaultQueryBuilderService implements QueryBuilderService
 {
@@ -12,27 +15,33 @@ final class DefaultQueryBuilderService implements QueryBuilderService
     public function __construct(
         private readonly SearchService $searchService,
         private readonly QueryBuilderPaginatorService $paginatorService
-    )
-    {
-    }
+    ) {}
 
-    public function query(Collection $requestParameters): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder
+    /**
+     * @param  Collection<array-key, mixed>  $requestParameters
+     * @return Builder<Model>|\Illuminate\Database\Eloquent\Builder
+     */
+    public function query(Collection $requestParameters): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        if ($requestParameters->get("q", "") !== "" && !$requestParameters->has("letter")) {
+        if ($requestParameters->get('q', '') !== '' && !$requestParameters->has('letter')) {
             $searchEngineOptions = $this->getSearchEngineOptions($requestParameters);
             $builder = $this->searchService->setFilterParameters($requestParameters)
-                ->search($requestParameters->get("q"), $searchEngineOptions["order_by"], $searchEngineOptions["sort_direction_descending"]);
+                ->search($requestParameters->get('q'), $searchEngineOptions['order_by'], $searchEngineOptions['sort_direction_descending']);
         } else {
             $builder = $this->searchService->setFilterParameters($requestParameters)->query();
-            if (!$requestParameters->has("order_by")) {
-                $builder = $builder->orderBy("mal_id");
+            if (!$requestParameters->has('order_by')) {
+                $builder = $builder->orderBy('mal_id');
             }
         }
 
         return $builder;
     }
 
-    public function paginate(\Illuminate\Database\Eloquent\Builder|\Laravel\Scout\Builder $builder, ?int $page = null, ?int $limit = null): array
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder<Model>|Builder<Model>  $builder
+     * @return array<string, mixed>
+     */
+    public function paginate(\Illuminate\Database\Eloquent\Builder|Builder $builder, ?int $page = null, ?int $limit = null): array
     {
         $paginated = $this->paginateBuilder($builder, $page, $limit);
 
@@ -46,32 +55,40 @@ final class DefaultQueryBuilderService implements QueryBuilderService
             'total' => $paginated->total(),
             'current_page' => $paginated->currentPage(),
             'last_page' => $paginated->lastPage(),
-            'data' => $items
+            'data' => $items,
         ];
     }
 
-    public function paginateBuilder(\Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder $builder, ?int $page = null, ?int $limit = null): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    /**
+     * @param  \Illuminate\Database\Eloquent\Builder<Model>|Builder<Model>  $builder
+     * @return LengthAwarePaginator<int, mixed>
+     */
+    public function paginateBuilder(\Illuminate\Database\Eloquent\Builder|Builder $builder, ?int $page = null, ?int $limit = null): LengthAwarePaginator
     {
         return $this->paginatorService->paginate($builder, $limit, $page);
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParameters
+     * @return array<string, mixed>
+     */
     private function getSearchEngineOptions(Collection $requestParameters): array
     {
-        $orderBy = $requestParameters->get("order_by");
-        $sort = $requestParameters->get("sort");
+        $orderBy = $requestParameters->get('order_by');
+        $sort = $requestParameters->get('sort');
         $searchOptions = [];
 
         // todo: validate whether the specified field exists on the model
         if (!empty($orderBy)) {
-            $searchOptions["order_by"] = $orderBy;
+            $searchOptions['order_by'] = $orderBy;
         } else {
-            $searchOptions["order_by"] = null;
+            $searchOptions['order_by'] = null;
         }
 
-        if (!empty($sort) && in_array($sort, ["asc", "desc"])) {
-            $searchOptions["sort_direction_descending"] = $sort == "desc";
+        if (!empty($sort) && in_array($sort, ['asc', 'desc'])) {
+            $searchOptions['sort_direction_descending'] = $sort == 'desc';
         } else {
-            $searchOptions["sort_direction_descending"] = false;
+            $searchOptions['sort_direction_descending'] = false;
         }
 
         return $searchOptions;

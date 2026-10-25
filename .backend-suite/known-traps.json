@@ -1,0 +1,149 @@
+{
+  "_readme": "This project's own registry of known traps — situations that look safe but aren't, worth telling an agent (or a new teammate) at the start of a session rather than leaving them to be rediscovered the expensive way. Full field contract: plugins/backend-suite/templates/known-traps.schema.json. Delete this whole file (or leave 'entries' empty) if you don't have any yet; every other config file works without it. Populate it the way you'd write a CLAUDE.md 'gotchas' section — each entry is one trap, not a category of traps.",
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "octane-base-app-singleton",
+      "title": "Resolving through $this->app in a provider leaks state across Octane requests",
+      "trigger": "Writing or editing a service-provider binding or closure that resolves services through $this->app, or that captures repository / query-builder instances in a singleton, while the API runs under Octane/Swoole.",
+      "trap": "$this->app is the long-lived base application, not the per-request sandbox, so anything resolved through it lives for the whole worker. Repositories cache mutable query builders, so where() clauses accumulate across requests and results come back wrong or empty. PHPUnit never runs under Octane, so the suite stays green.",
+      "correctAction": "Resolve through the container passed to the closure (->give(fn ($app) => ...), scoped() bindings), never $this->app. Keep per-request state scoped or listed in config/octane.php 'flush'. RepositoryQueryBase hands out clones. OctaneStateIsolationTest guards the mediator path.",
+      "severity": "high",
+      "scope": "repo",
+      "tags": [
+        "octane",
+        "container",
+        "state"
+      ],
+      "source": "app/Providers/AppServiceProvider.php; tests/Unit/OctaneStateIsolationTest.php"
+    },
+    {
+      "id": "throttle-needs-trusted-proxies",
+      "title": "The v4 rate limit needs TRUSTED_PROXIES and a shared cache store",
+      "trigger": "Setting RATE_LIMIT_PER_MINUTE above 0 (it defaults to 0 = off) on a deployment behind nginx, Cloudflare or a load balancer.",
+      "trap": "The limiter keys on request()->ip(). Without TRUSTED_PROXIES every client resolves to the proxy address and shares one bucket, so the whole API returns 429 once total traffic passes the limit. With the default array cache the counters are also per worker process.",
+      "correctAction": "Set TRUSTED_PROXIES to the edge (IPs/CIDRs) and CACHE_DRIVER=redis before enabling the limiter. RateLimitTest shows the intended behaviour.",
+      "severity": "high",
+      "scope": "repo",
+      "tags": [
+        "rate-limit",
+        "proxy",
+        "cache"
+      ],
+      "source": "docs/UPGRADING.md; tests/Integration/RateLimitTest.php"
+    },
+    {
+      "id": "bootstrap-cache-dir",
+      "title": "bootstrap/cache must exist in a fresh clone",
+      "trigger": "Deleting bootstrap/cache/.gitignore, or tidying the ignore rules for bootstrap/cache.",
+      "trap": "A fresh clone has no bootstrap/cache directory, so composer install fails in package:discover and the Docker build's route:cache step fails. CI hides it because it installs with --no-scripts.",
+      "correctAction": "Keep the tracked bootstrap/cache/.gitignore placeholder (and the .dockerignore exception for it).",
+      "severity": "medium",
+      "scope": "repo",
+      "tags": [
+        "build",
+        "composer",
+        "docker"
+      ],
+      "source": "bootstrap/cache/.gitignore; .dockerignore"
+    },
+    {
+      "id": "route-group-where-is-noop",
+      "title": "Route::group(...)->where() silently does nothing",
+      "trigger": "Constraining a route group's parameter by chaining ->where() after Route::group(...).",
+      "trap": "Router::group() returns the router, so ->where() builds a throw-away registrar and the constraint is never applied. Non-numeric ids then reach validation (400) instead of 404. Route-level ->where() on a single route does work.",
+      "correctAction": "Put the constraint in the group attributes: ['prefix' => 'anime/{id}', 'where' => ['id' => '[0-9]+']]. RouteConstraintsTest guards every id-prefixed v4 route.",
+      "severity": "high",
+      "scope": "repo",
+      "tags": [
+        "routing",
+        "contract"
+      ],
+      "source": "routes/web.v4.php; tests/Integration/RouteConstraintsTest.php"
+    },
+    {
+      "id": "duplicate-route-last-wins",
+      "title": "A second route with the same method and URI silently replaces the first",
+      "trigger": "Registering a route whose method and URI already exist (for example in a second group).",
+      "trap": "Laravel keys routes by method + URI and does not complain, so the earlier registration becomes dead code and the last one wins. master carried a dead duplicate producers group for exactly this reason.",
+      "correctAction": "Check php artisan route:list before adding a route, and delete superseded registrations instead of leaving them behind.",
+      "severity": "medium",
+      "scope": "repo",
+      "tags": [
+        "routing"
+      ],
+      "source": "routes/web.v4.php"
+    },
+    {
+      "id": "env-outside-config",
+      "title": "env() outside config files returns null once config is cached",
+      "trigger": "Calling env() or Env::get() anywhere except config/*.php (or the pre-config closures in bootstrap/app.php).",
+      "trap": "The container entrypoint always runs `php artisan config:cache`. Once config is cached, .env is no longer loaded, so env() returns null and the code silently falls back to its default.",
+      "correctAction": "Read settings through config('jikan.*') (add the key to config/jikan.php) and cast the value there.",
+      "severity": "high",
+      "scope": "repo",
+      "tags": [
+        "config",
+        "docker"
+      ],
+      "source": "config/jikan.php; docker-entrypoint.sh"
+    },
+    {
+      "id": "array-cache-in-production",
+      "title": "CACHE_DRIVER=array is per worker process",
+      "trigger": "Running more than one Octane worker or container with the default CACHE_DRIVER=array and relying on a cache-backed feature.",
+      "trap": "Micro-caching, rate-limit counters and scheduler locks (onOneServer / withoutOverlapping) are then per process, so they do not coordinate across workers or replicas.",
+      "correctAction": "Use CACHE_DRIVER=redis in any deployment with more than one worker or instance.",
+      "severity": "medium",
+      "scope": "repo",
+      "tags": [
+        "cache",
+        "octane",
+        "scheduler"
+      ],
+      "source": "docs/UPGRADING.md; routes/console.php"
+    },
+    {
+      "id": "stale-package-manifest",
+      "title": "bootstrap/cache/packages.php is not rebuilt automatically",
+      "trigger": "Changing composer packages or extra.laravel.dont-discover (for example excluding sentry/sentry-laravel) in a checkout that already has bootstrap/cache/packages.php.",
+      "trap": "composer.json has no post-autoload-dump package:discover script, and Laravel only builds the package manifest when the file is missing. The old manifest keeps auto-registering providers you removed or excluded.",
+      "correctAction": "Run php artisan package:discover, or delete bootstrap/cache/packages.php and services.php, after changing packages.",
+      "severity": "medium",
+      "scope": "repo",
+      "tags": [
+        "composer",
+        "providers"
+      ],
+      "source": "composer.json; bootstrap/cache"
+    },
+    {
+      "id": "tests-truncate-the-database",
+      "title": "Integration tests truncate every collection in the configured database",
+      "trigger": "Running phpunit with DB_DATABASE (or the Mongo connection) pointing at a database that holds real data.",
+      "trap": "SyntheticMongoDbTransaction truncates around 45 collections before every test. TestCase maps DB_DATABASE=jikan to jikan_tests and the trait throws on any other mismatch, but a differently named real database would still be wiped.",
+      "correctAction": "Run tests only against a dedicated database (DB_DATABASE=jikan_tests); never point DB_* at production.",
+      "severity": "high",
+      "scope": "repo",
+      "tags": [
+        "testing",
+        "mongodb"
+      ],
+      "source": "app/Testing/SyntheticMongoDbTransaction.php; tests/TestCase.php"
+    },
+    {
+      "id": "enum-docblocks-are-load-bearing",
+      "title": "Enum value docblocks in app/Enums are not decoration",
+      "trigger": "Editing an enum in app/Enums, or the OpenAPI Schema attribute next to its docblock, and tidying the @method docblock lines.",
+      "trap": "The enums are docblock-first (spatie/enum): the @method static self value() lines declare the cases. Removing them removes the values.",
+      "correctAction": "Keep the @method docblock lines when editing the OpenAPI attribute next to them.",
+      "severity": "medium",
+      "scope": "repo",
+      "tags": [
+        "enums",
+        "openapi"
+      ],
+      "source": "CLAUDE.md (rule 3); app/Enums"
+    }
+  ]
+}

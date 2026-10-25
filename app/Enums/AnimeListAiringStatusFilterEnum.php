@@ -2,9 +2,8 @@
 
 namespace App\Enums;
 
-
-use Spatie\Enum\Laravel\Enum;
 use Jikan\Helper\Constants as JikanConstants;
+use Spatie\Enum\Laravel\Enum;
 
 /**
  * @method static self airing()

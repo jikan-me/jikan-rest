@@ -1,61 +1,65 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Profile;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Jikan\Model\Recommendations\UserRecommendations;
-use Jikan\Model\User\Friends;
 use Jikan\Model\User\AnimeStats;
-use Jikan\Model\User\MangaStats;
+use Jikan\Model\User\Favorites;
+use Jikan\Model\User\Friends;
 use Jikan\Model\User\LastUpdates;
+use Jikan\Model\User\MangaStats;
 use Jikan\Model\User\Profile as JikanProfile;
 use Jikan\Model\User\Reviews\UserReviews;
 use Jikan\MyAnimeList\MalClient;
+use Jikan\Parser\User\Profile\AnimeStatsParser;
 use Jikan\Parser\User\Profile\FavoritesParser;
 use Jikan\Parser\User\Profile\LastUpdatesParser;
 use Jikan\Parser\User\Profile\MangaStatsParser;
 use Jikan\Parser\User\Profile\UserProfileParser;
 use Jikan\Request\User\UserRecommendationsRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
-    public function userNameProvider(): array
+    public static function userNameProvider(): array
     {
         return [
-            "nekomata1037" => ["nekomata1037"],
-            "ExampleUser123" => ["ExampleUser123"],
+            'nekomata1037' => ['nekomata1037'],
+            'ExampleUser123' => ['ExampleUser123'],
         ];
     }
 
-    /**
-     * @dataProvider userNameProvider
-     * @param string $username
-     */
+    #[DataProvider('userNameProvider')]
     public function testUserProfile(string $username)
     {
         Profile::factory()->createOne([
-            "username" => $username,
-            "internal_username" => $username
+            'username' => $username,
+            'internal_username' => $username,
         ]);
         $this->get('/v4/users/'.$username)
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => [
                 'mal_id',
                 'username',
                 'url',
                 'images' => [
                     'jpg' => [
-                        'image_url'
+                        'image_url',
                     ],
                     'webp' => [
-                        'image_url'
-                    ]
+                        'image_url',
+                    ],
                 ],
                 'last_online',
                 'gender',
@@ -65,10 +69,10 @@ class UserControllerTest extends TestCase
             ]]);
     }
 
+    #[DataProvider('userNameProvider')]
     /**
      * Tests if the scraped item from upstream is inserted correctly in the database.
-     * @dataProvider userNameProvider
-     * @param string $username
+     *
      * @throws \Exception
      */
     public function testUserProfileScrapeAndInsert(string $username)
@@ -84,40 +88,40 @@ class UserControllerTest extends TestCase
             ->andReturn($username);
         $userProfileParser->allows()
             ->getProfileUrl()
-            ->andReturn("https://myanimelist.net/profile/".$username);
+            ->andReturn('https://myanimelist.net/profile/'.$username);
         $userProfileParser->allows()
             ->getProfileImageUrl()
-            ->andReturn("https://myanimelist.cdn-dena.com/images/userimages/1.jpg");
+            ->andReturn('https://myanimelist.cdn-dena.com/images/userimages/1.jpg');
         $userProfileParser->allows()
             ->getLastOnline()
             ->andReturn(Carbon::now()->toDateTimeImmutable());
         $userProfileParser->allows()
             ->getImageUrl()
-            ->andReturn("https://myanimelist.cdn-dena.com/images/userimages/1.jpg");
+            ->andReturn('https://myanimelist.cdn-dena.com/images/userimages/1.jpg');
         $userProfileParser->allows()
             ->getGender()
             ->andReturn(null);
         $userProfileParser->allows()
             ->getBirthday()
-            ->andReturn(\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339, "1990-10-01T00:00:00+00:00"));
+            ->andReturn(\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339, '1990-10-01T00:00:00+00:00'));
         $userProfileParser->allows()
             ->getLocation()
-            ->andReturn("Mars");
+            ->andReturn('Mars');
         $userProfileParser->allows()
             ->getJoinDate()
-            ->andReturn(\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339, "2000-10-01T00:00:00+00:00"));
-        $animeStatsParser = \Mockery::mock(\Jikan\Parser\User\Profile\AnimeStatsParser::class)->makePartial();
+            ->andReturn(\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339, '2000-10-01T00:00:00+00:00'));
+        $animeStatsParser = \Mockery::mock(AnimeStatsParser::class)->makePartial();
         $animeStatsParser->allows([
-            "getDaysWatched" => 0,
-            "getMeanScore" => 0,
-            "getWatching" => 0,
-            "getCompleted" => 0,
-            "getOnHold" => 0,
-            "getDropped" => 0,
-            "getPlanToWatch" => 0,
-            "getTotalEntries" => 0,
-            "getRewatched" => 0,
-            "getEpisodesWatched" => 0
+            'getDaysWatched' => 0,
+            'getMeanScore' => 0,
+            'getWatching' => 0,
+            'getCompleted' => 0,
+            'getOnHold' => 0,
+            'getDropped' => 0,
+            'getPlanToWatch' => 0,
+            'getTotalEntries' => 0,
+            'getRewatched' => 0,
+            'getEpisodesWatched' => 0,
         ]);
         $animeStats = AnimeStats::fromParser($animeStatsParser);
         $userProfileParser->allows()
@@ -125,17 +129,17 @@ class UserControllerTest extends TestCase
             ->andReturn($animeStats);
         $mangaStatsParser = \Mockery::mock(MangaStatsParser::class)->makePartial();
         $mangaStatsParser->allows([
-            "getDaysRead" => 0,
-            "getMeanScore" => 0,
-            "getReading" => 0,
-            "getCompleted" => 0,
-            "getOnHold" => 0,
-            "getDropped" => 0,
-            "getPlanToRead" => 0,
-            "getTotalEntries" => 0,
-            "getReread" => 0,
-            "getChaptersRead" => 0,
-            "getVolumesRead" => 0
+            'getDaysRead' => 0,
+            'getMeanScore' => 0,
+            'getReading' => 0,
+            'getCompleted' => 0,
+            'getOnHold' => 0,
+            'getDropped' => 0,
+            'getPlanToRead' => 0,
+            'getTotalEntries' => 0,
+            'getReread' => 0,
+            'getChaptersRead' => 0,
+            'getVolumesRead' => 0,
         ]);
         $mangaStats = MangaStats::fromParser($mangaStatsParser);
         $userProfileParser->allows()
@@ -143,12 +147,12 @@ class UserControllerTest extends TestCase
             ->andReturn($mangaStats);
         $favoritesParser = \Mockery::mock(FavoritesParser::class)->makePartial();
         $favoritesParser->allows([
-            "getAnime" => [],
-            "getManga" => [],
-            "getCharacters" => [],
-            "getPeople" => []
+            'getAnime' => [],
+            'getManga' => [],
+            'getCharacters' => [],
+            'getPeople' => [],
         ]);
-        $favorites = \Jikan\Model\User\Favorites::fromParser($favoritesParser);
+        $favorites = Favorites::fromParser($favoritesParser);
         $userProfileParser->allows()
             ->getFavorites()
             ->andReturn($favorites);
@@ -174,7 +178,6 @@ class UserControllerTest extends TestCase
             ->getUserLastUpdates()
             ->andReturn($lastUpdates);
 
-
         $resultData = JikanProfile::fromParser($userProfileParser);
         /** @noinspection PhpParamsInspection */
         $jikanParser->allows()
@@ -184,18 +187,18 @@ class UserControllerTest extends TestCase
         $this->app->instance('JikanParser', $jikanParser);
 
         $this->get('/v4/users/'.$username)
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => [
                 'mal_id',
                 'username',
                 'url',
                 'images' => [
                     'jpg' => [
-                        'image_url'
+                        'image_url',
                     ],
                     'webp' => [
-                        'image_url'
-                    ]
+                        'image_url',
+                    ],
                 ],
                 'last_online',
                 'gender',
@@ -207,67 +210,67 @@ class UserControllerTest extends TestCase
 
     public function testUserStatistics()
     {
-        $username = "nekomata1037";
+        $username = 'nekomata1037';
         Profile::factory()->createOne([
-            "username" => $username,
-            "internal_username" => $username
+            'username' => $username,
+            'internal_username' => $username,
         ]);
         $this->get('/v4/users/nekomata1037/statistics')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => [
 
                 'anime' => [
-                     'days_watched',
-                     'mean_score',
-                     'watching',
-                     'completed',
-                     'on_hold',
-                     'dropped',
-                     'plan_to_watch',
-                     'total_entries',
-                     'rewatched',
-                     'episodes_watched'
-                 ],
-                 'manga' => [
-                     'days_read',
-                     'mean_score',
-                     'reading',
-                     'completed',
-                     'on_hold',
-                     'dropped',
-                     'plan_to_read',
-                     'total_entries',
-                     'reread',
-                     'chapters_read',
-                     'volumes_read'
-                 ],
+                    'days_watched',
+                    'mean_score',
+                    'watching',
+                    'completed',
+                    'on_hold',
+                    'dropped',
+                    'plan_to_watch',
+                    'total_entries',
+                    'rewatched',
+                    'episodes_watched',
+                ],
+                'manga' => [
+                    'days_read',
+                    'mean_score',
+                    'reading',
+                    'completed',
+                    'on_hold',
+                    'dropped',
+                    'plan_to_read',
+                    'total_entries',
+                    'reread',
+                    'chapters_read',
+                    'volumes_read',
+                ],
             ]]);
     }
 
     public function testUserAbout()
     {
-        $username = "nekomata1037";
+        $username = 'nekomata1037';
         Profile::factory()->createOne([
-            "username" => $username,
-            "internal_username" => $username
+            'username' => $username,
+            'internal_username' => $username,
         ]);
         $this->get('/v4/users/nekomata1037/about')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => [
                 'about',
             ]]);
     }
 
     public function testUserFavorites()
     {
-        $username = "nekomata1037";
+        $username = 'nekomata1037';
         Profile::factory()->createOne([
-            "username" => $username,
-            "internal_username" => $username
+            'username' => $username,
+            'internal_username' => $username,
         ]);
         $this->get('/v4/users/nekomata1037/favorites')
-            ->seeStatusCode(200)
-            ->seeJsonStructure(['data'=>[
+            ->assertStatus(200)
+            ->assertJsonStructure(['data' => [
                 'anime' => [
                     [
                         'mal_id',
@@ -276,18 +279,18 @@ class UserControllerTest extends TestCase
                             'jpg' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                             'webp' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                         ],
                         'title',
                         'type',
-                        'start_year'
-                    ]
+                        'start_year',
+                    ],
                 ],
                 'manga' => [
                     [
@@ -297,18 +300,18 @@ class UserControllerTest extends TestCase
                             'jpg' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                             'webp' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                         ],
                         'title',
                         'type',
-                        'start_year'
-                    ]
+                        'start_year',
+                    ],
                 ],
                 'characters' => [
                     [
@@ -323,7 +326,7 @@ class UserControllerTest extends TestCase
                             ],
                         ],
                         'name',
-                    ]
+                    ],
                 ],
                 'people' => [
                     [
@@ -335,13 +338,11 @@ class UserControllerTest extends TestCase
                             ],
                         ],
                         'name',
-                    ]
-                ]
+                    ],
+                ],
 
             ]]);
     }
-
-
 
     public function testUserAnimeHistory()
     {
@@ -352,29 +353,29 @@ class UserControllerTest extends TestCase
                         'mal_id' => $this->faker->numberBetween(2, 9999),
                         'type' => 'anime',
                         'name' => $this->faker->name(),
-                        'url' => $this->faker->url()
+                        'url' => $this->faker->url(),
                     ],
                     'increment' => 1,
-                    'date' => Carbon::now()->toAtomString()
-                ]
-            ]
+                    'date' => Carbon::now()->toAtomString(),
+                ],
+            ],
         ]);
-        DB::table("users_history")->insert($document);
+        DB::table('users_history')->insert($document);
         $this->get('/v4/users/purplepinapples/history/anime')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'entry' => [
                             'mal_id',
                             'type',
                             'name',
-                            'url'
+                            'url',
                         ],
                         'increment',
-                        'date'
-                    ]
-                ]
+                        'date',
+                    ],
+                ],
             ]);
     }
 
@@ -387,20 +388,20 @@ class UserControllerTest extends TestCase
                         'mal_id' => $this->faker->numberBetween(2, 9999),
                         'type' => 'manga',
                         'name' => $this->faker->name(),
-                        'url' => $this->faker->url()
+                        'url' => $this->faker->url(),
                     ],
                     'increment' => 1,
-                    'date' => Carbon::now()->toAtomString()
-                ]
-            ]
+                    'date' => Carbon::now()->toAtomString(),
+                ],
+            ],
         ]);
-        DB::table("users_history")->insert($document);
+        DB::table('users_history')->insert($document);
         $this->get('/v4/users/nekomata1037/history/manga')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
 
-                ]
+                ],
             ]);
     }
 
@@ -410,22 +411,22 @@ class UserControllerTest extends TestCase
             'user' => [
                 'username' => $this->faker->userName(),
                 'url' => $this->faker->url(),
-                "images" => [
-                    "jpg" => [
-                        "image_url" => $this->faker->url()
+                'images' => [
+                    'jpg' => [
+                        'image_url' => $this->faker->url(),
                     ],
-                    "webp" => [
-                        "image_url" => $this->faker->url()
-                    ]
+                    'webp' => [
+                        'image_url' => $this->faker->url(),
+                    ],
                 ],
             ],
             'last_online' => Carbon::now()->toAtomString(),
-            'friends_since' => Carbon::now()->toAtomString()
+            'friends_since' => Carbon::now()->toAtomString(),
         ]]);
-        DB::table("users_friends")->insert($document);
+        DB::table('users_friends')->insert($document);
         $this->get('/v4/users/nekomata1037/friends')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -437,17 +438,17 @@ class UserControllerTest extends TestCase
                             'url',
                             'images' => [
                                 'jpg' => [
-                                    'image_url'
+                                    'image_url',
                                 ],
                                 'webp' => [
-                                    'image_url'
-                                ]
-                            ]
+                                    'image_url',
+                                ],
+                            ],
                         ],
                         'last_online',
-                        'friends_since'
-                    ]
-                ]
+                        'friends_since',
+                    ],
+                ],
             ]);
     }
 
@@ -457,11 +458,11 @@ class UserControllerTest extends TestCase
         /** @noinspection PhpParamsInspection */
         $jikanParser->allows()
             ->getUserFriends(\Mockery::any())
-            ->andReturn(new Friends());
+            ->andReturn(new Friends);
         $this->app->instance('JikanParser', $jikanParser);
 
         $this->get('/v4/users/nekomata1037/friends?page=200')
-            ->seeStatusCode(200);
+            ->assertStatus(200);
     }
 
     public function testUserRecommendations()
@@ -486,7 +487,7 @@ class UserControllerTest extends TestCase
                             ],
                         ],
                         'title' => 'Hajime no Ippo',
-                    ]
+                    ],
                 ],
                 'content' => 'Hajime no Ippo and Kenichi are very similar, mostly by looking at the main characters. Makunouchi is a weakling, Kenichi is a weakling. However, they both train hard and become stronger in order to achieve their goals. Makounouchi wants to know what it means to be "strong", and Kenichi wants to become stronger to protect his friends from harm.',
                 'date' => '2008-01-20T00:00:00+00:00',
@@ -494,12 +495,12 @@ class UserControllerTest extends TestCase
                     'url' => 'https://myanimelist.net/profile/Xinil',
                     'username' => 'Xinil',
                 ],
-            ]
+            ],
         ]);
-        DB::table("users_recommendations")->insert($document);
+        DB::table('users_recommendations')->insert($document);
         $this->get('/v4/users/xinil/recommendations')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -515,22 +516,22 @@ class UserControllerTest extends TestCase
                                     'jpg' => [
                                         'image_url',
                                         'small_image_url',
-                                        'large_image_url'
+                                        'large_image_url',
                                     ],
                                     'webp' => [
                                         'image_url',
                                         'small_image_url',
-                                        'large_image_url'
+                                        'large_image_url',
                                     ],
                                 ],
-                                'title'
-                            ]
+                                'title',
+                            ],
                         ],
                         'content',
                         'date',
-                        'user'
-                    ]
-                ]
+                        'user',
+                    ],
+                ],
             ]);
     }
 
@@ -541,18 +542,18 @@ class UserControllerTest extends TestCase
         /** @noinspection PhpParamsInspection */
         $jikanParser->allows()
             ->getUserRecommendations(\Mockery::type(UserRecommendationsRequest::class))
-            ->andReturn(new UserRecommendations());
+            ->andReturn(new UserRecommendations);
         $this->app->instance('JikanParser', $jikanParser);
 
         $this->get('/v4/users/xinil/recommendations?page=200')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
                 ],
                 'data' => [
-                ]
+                ],
             ]);
     }
 
@@ -605,10 +606,10 @@ class UserControllerTest extends TestCase
                 'title' => 'Asatte Dance',
             ],
         ]]);
-        DB::table("users_reviews")->insert($document);
+        DB::table('users_reviews')->insert($document);
         $this->get('/v4/users/xinil/reviews')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -632,18 +633,18 @@ class UserControllerTest extends TestCase
                                 'jpg' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                                 'webp' => [
                                     'image_url',
                                     'small_image_url',
-                                    'large_image_url'
+                                    'large_image_url',
                                 ],
                             ],
-                            'title'
+                            'title',
                         ],
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -653,11 +654,11 @@ class UserControllerTest extends TestCase
         /** @noinspection PhpParamsInspection */
         $jikanParser->allows()
             ->getUserReviews(\Mockery::any())
-            ->andReturn(new UserReviews());
+            ->andReturn(new UserReviews);
         $this->app->instance('JikanParser', $jikanParser);
 
         $this->get('/v4/users/xinil/reviews?page=200')
-            ->seeStatusCode(200);
+            ->assertStatus(200);
     }
 
     public function testUserClubs()
@@ -665,12 +666,12 @@ class UserControllerTest extends TestCase
         $document = $this->dummyResultsDocument('/v4/users/nekomata1037/clubs', 'users', [[
             'mal_id' => 1,
             'name' => 'a',
-            'url' => $this->faker->url()
+            'url' => $this->faker->url(),
         ]]);
         DB::table('users_clubs')->insert($document);
         $this->get('/v4/users/nekomata1037/clubs')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'pagination' => [
                     'last_visible_page',
                     'has_next_page',
@@ -680,8 +681,8 @@ class UserControllerTest extends TestCase
                         'mal_id',
                         'name',
                         'url',
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 }

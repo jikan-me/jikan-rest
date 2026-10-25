@@ -7,6 +7,9 @@ use Spatie\LaravelData\Optional;
 
 final class DefaultPrivateFieldMapperService implements PrivateFieldMapperService
 {
+    /**
+     * @param  array<string, mixed>  $values
+     */
     public function map($instance, array $values): mixed
     {
         $cls = get_class($instance);

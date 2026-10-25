@@ -8,6 +8,4 @@ use App\Http\Resources\V4\GenreCollection;
 /**
  * @implements DataRequest<GenreCollection>
  */
-final class MangaGenreListCommand extends GenreListCommand implements DataRequest
-{
-}
+final class MangaGenreListCommand extends GenreListCommand implements DataRequest {}

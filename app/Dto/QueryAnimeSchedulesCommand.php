@@ -17,14 +17,13 @@ use App\Rules\Attributes\EnumValidation;
 use Illuminate\Http\JsonResponse;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Attributes\MapOutputName;
 
 /**
  * @implements DataRequest<JsonResponse>
  */
 final class QueryAnimeSchedulesCommand extends Data implements DataRequest
 {
-    use HasLimitParameter, HasRequestFingerprint, HasPageParameter, PreparesData, HasSfwParameter, HasKidsParameter, HasUnapprovedParameter, MapsRouteParameters;
+    use HasKidsParameter, HasLimitParameter, HasPageParameter, HasRequestFingerprint, HasSfwParameter, HasUnapprovedParameter, MapsRouteParameters, PreparesData;
 
     #[
         WithCast(EnumCast::class, AnimeScheduleFilterEnum::class),

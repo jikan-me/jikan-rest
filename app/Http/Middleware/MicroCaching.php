@@ -2,22 +2,20 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use App\Support\JikanConfig;
 use Closure;
-use Illuminate\Support\Env;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Jikan\Exception\BadResponseException;
 
 class MicroCaching
 {
     private const NO_CACHING = [
-        'RandomController@anime',
-        'RandomController@manga',
-        'RandomController@characters',
-        'RandomController@people',
-        'RandomController@users',
-        'InsightsController@main'
+        'v4.random.anime',
+        'v4.random.manga',
+        'v4.random.characters',
+        'v4.random.people',
+        'v4.random.users',
     ];
 
     private readonly bool $isEnabled;
@@ -30,8 +28,7 @@ class MicroCaching
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -39,16 +36,8 @@ class MicroCaching
         if (!$this->isEnabled) {
             return $next($request);
         }
-        if (isset($request->route()[1]['uses'])) {
-            $route = explode('\\', $request->route()[1]['uses']);
-            $route = end($route);
-            if (\in_array($route, self::NO_CACHING)) {
-                return $next($request);
-            }
-        }
-
-        // Allow bypass of caching if APP_KEY supplied in auth header
-        if ($request->header('auth') === env('APP_KEY')) {
+        // Route name of the matched route, e.g. "v4.random.anime" (see HttpHelper::getRouteName()).
+        if (\in_array(HttpHelper::getRouteName($request), self::NO_CACHING, true)) {
             return $next($request);
         }
 
@@ -82,7 +71,7 @@ class MicroCaching
                 json_encode(
                     $response->getData()
                 ),
-                env('MICROCACHING_EXPIRE', 60)
+                config('jikan.microcaching_expire')
             );
 
         } catch (\Exception $e) {
@@ -92,5 +81,4 @@ class MicroCaching
 
         return $response;
     }
-
 }

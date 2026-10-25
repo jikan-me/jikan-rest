@@ -7,31 +7,28 @@ use App\Contracts\RequestHandler;
 use App\Dto\QueryAnimeSchedulesCommand;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Support\CachedData;
-use Illuminate\Support\Env;
 
 /**
  * @implements RequestHandler<QueryAnimeSchedulesCommand, AnimeCollection>
  */
 final class QueryAnimeSchedulesHandler implements RequestHandler
 {
-    public function __construct(private readonly AnimeRepository $repository)
-    {
-    }
+    public function __construct(private readonly AnimeRepository $repository) {}
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle($request)
     {
         $requestParams = collect($request->all());
-        $limit = $requestParams->get("limit");
+        $limit = $requestParams->get('limit');
         $results = $this->repository->getCurrentlyAiring($request->filter);
         // apply sfw, kids and unapproved filters
         /** @noinspection PhpUndefinedMethodInspection */
         $results = $results->filter($requestParams);
         $results = $results->paginate(
             $limit,
-            ["*"],
+            ['*'],
             null,
             $request->page
         );
@@ -45,7 +42,7 @@ final class QueryAnimeSchedulesHandler implements RequestHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

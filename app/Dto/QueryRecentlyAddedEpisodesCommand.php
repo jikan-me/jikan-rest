@@ -2,7 +2,6 @@
 
 namespace App\Dto;
 
-
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
 use Illuminate\Http\JsonResponse;

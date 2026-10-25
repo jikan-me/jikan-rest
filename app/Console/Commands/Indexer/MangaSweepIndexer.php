@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Indexer;
 
-use App\Exceptions\Console\CommandAlreadyRunningException;
 use App\Exceptions\Console\FileNotFoundException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -10,8 +9,6 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * Class MangaSweepIndexer
- *
- * @package App\Console\Commands\Indexer
  */
 class MangaSweepIndexer extends Command
 {
@@ -44,6 +41,7 @@ class MangaSweepIndexer extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws FileNotFoundException
      */
     public function handle()
@@ -70,8 +68,10 @@ class MangaSweepIndexer extends Command
     }
 
     /**
-     * @return array
      * @url https://github.com/purarue/mal-id-cache
+     */
+    /**
+     * @return array<int, int>
      */
     private function fetchMalIds(): array
     {

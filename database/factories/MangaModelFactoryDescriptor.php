@@ -10,10 +10,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MangaModelFactoryDescriptor implements MediaModelFactoryDescriptor
 {
-
     public function activityMarkerKeyName(): string
     {
-        return "published";
+        return 'published';
     }
 
     public function typeParamMap(): array
@@ -33,7 +32,7 @@ class MangaModelFactoryDescriptor implements MediaModelFactoryDescriptor
 
     public function mediaName(): string
     {
-        return "manga";
+        return 'manga';
     }
 
     public function genreQueryBuilder(): Builder
@@ -48,6 +47,6 @@ class MangaModelFactoryDescriptor implements MediaModelFactoryDescriptor
 
     public function activityMarkerLogicalKeyName(): string
     {
-        return "publishing";
+        return 'publishing';
     }
 }

@@ -11,7 +11,6 @@ use App\Enums\AnimeTypeEnum;
 use App\Enums\TopAnimeFilterEnum;
 use App\Http\Resources\V4\AnimeCollection;
 use App\Rules\Attributes\EnumValidation;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
 
@@ -20,7 +19,7 @@ use Spatie\LaravelData\Optional;
  */
 final class QueryTopAnimeItemsCommand extends QueryTopItemsCommand implements DataRequest
 {
-    use PreparesData, HasSfwParameter;
+    use HasSfwParameter, PreparesData;
 
     #[WithCast(EnumCast::class, AnimeTypeEnum::class), EnumValidation(AnimeTypeEnum::class)]
     public AnimeTypeEnum|Optional $type;

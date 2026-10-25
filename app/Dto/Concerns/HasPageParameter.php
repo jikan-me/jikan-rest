@@ -2,18 +2,16 @@
 
 namespace App\Dto\Concerns;
 
-use OpenApi\Annotations as OA;
+use OpenApi\Attributes as OA;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Numeric;
 use Spatie\LaravelData\Optional;
 
-/**
- *  @OA\Parameter(
- *    name="page",
- *    in="query",
- *    @OA\Schema(type="integer")
- *  ),
- */
+#[OA\Parameter(
+    name: 'page',
+    in: 'query',
+    schema: new OA\Schema(type: 'integer'),
+)]
 trait HasPageParameter
 {
     #[Numeric, Min(1)]

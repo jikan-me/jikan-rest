@@ -6,16 +6,15 @@ use App\Exceptions\Console\FileNotFoundException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-
 /**
  * Class AnimeIndexer
- * @package App\Console\Commands\Indexer
  */
 class AnimeIndexer extends Command
 {
     /**
      * The name and signature of the console command.
      *`
+     *
      * @var string
      */
     protected $signature = 'indexer:anime
@@ -33,7 +32,7 @@ class AnimeIndexer extends Command
     protected $description = 'Index all anime';
 
     /**
-     * @var array
+     * @var array<int, int>
      */
     private array $ids;
 
@@ -52,6 +51,7 @@ class AnimeIndexer extends Command
      * Execute the console command.
      *
      * @return void
+     *
      * @throws FileNotFoundException
      */
     public function handle()
@@ -63,8 +63,8 @@ class AnimeIndexer extends Command
         $delay = $this->option('delay') ?? 3;
         $index = $this->option('index') ?? 0;
 
-        $index = (int)$index;
-        $delay = (int)$delay;
+        $index = (int) $index;
+        $delay = (int) $delay;
 
         $this->info("Info: AnimeIndexer uses purarue/mal-id-cache fetch available MAL IDs and updates/indexes them\n\n");
 
@@ -83,7 +83,7 @@ class AnimeIndexer extends Command
 
         // Resume
         if ($resume && Storage::exists('indexer/indexer_anime.save')) {
-            $index = (int)Storage::get('indexer/indexer_anime.save');
+            $index = (int) Storage::get('indexer/indexer_anime.save');
 
             $this->info("Resuming from index: {$index}");
         }
@@ -106,9 +106,9 @@ class AnimeIndexer extends Command
         for ($i = $index; $i <= ($count - 1); $i++) {
             $id = $this->ids[$i];
 
-            $url = env('APP_URL') . "/v4/anime/{$id}";
+            $url = config('app.url')."/v4/anime/{$id}";
 
-            echo "Indexing/Updating " . ($i + 1) . "/{$count} {$url} [MAL ID: {$id}] \n";
+            echo 'Indexing/Updating '.($i + 1)."/{$count} {$url} [MAL ID: {$id}] \n";
 
             try {
                 $response = json_decode(file_get_contents($url), true);
@@ -133,15 +133,17 @@ class AnimeIndexer extends Command
         Storage::delete('indexer/indexer_anime.save');
 
         echo "---------\nIndexing complete\n";
-        echo count($success) . " entries indexed or updated\n";
-        echo count($failedIds) . " entries failed to index or update. Re-run with --failed to requeue failed entries only\n";
+        echo count($success)." entries indexed or updated\n";
+        echo count($failedIds)." entries failed to index or update. Re-run with --failed to requeue failed entries only\n";
     }
 
     /**
-     * @return array
      * @url https://github.com/purarue/mal-id-cache
      */
-    private function fetchMalIds() : array
+    /**
+     * @return array<int, int>
+     */
+    private function fetchMalIds(): array
     {
         $this->info("Fetching MAL ID Cache https://raw.githubusercontent.com/purarue/mal-id-cache/master/cache/anime_cache.json...\n");
 
@@ -158,10 +160,12 @@ class AnimeIndexer extends Command
     }
 
     /**
-     * @return array
      * @throws FileNotFoundException
      */
-    private function loadFailedMalIds() : array
+    /**
+     * @return array<int, int>
+     */
+    private function loadFailedMalIds(): array
     {
         if (!Storage::exists('indexer/indexer_anime.failed')) {
             throw new FileNotFoundException('"indexer/indexer_anime.failed" does not exist');
@@ -169,5 +173,4 @@ class AnimeIndexer extends Command
 
         return json_decode(Storage::get('indexer/indexer_anime.failed'));
     }
-
 }

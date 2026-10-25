@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Anime;
 use App\CarbonDateRange;
 use App\Enums\AnimeOrderByEnum;
@@ -8,22 +12,24 @@ use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class AnimeSearchEndpointTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
-        $this->searchIndexModelCleanupList = ["App\\Anime"];
+        parent::setUp();
+        $this->searchIndexModelCleanupList = ['App\\Anime'];
     }
 
     protected function getBaseUri(): string
     {
-        return "/v4/anime";
+        return '/v4/anime';
     }
 
     private function generateFiveSpecificAndTenRandomElementsInDb(array $params): array
@@ -41,127 +47,127 @@ class AnimeSearchEndpointTest extends TestCase
         return $f->raw()[0];
     }
 
-    public function limitParameterCombinationsProvider(): array
+    public static function limitParameterCombinationsProvider(): array
     {
         return [
-            "query string = `?limit=5`" => [
-                5, []
+            'query string = `?limit=5`' => [
+                5, [],
             ],
-            "query string = `?limit=5&type=tv`" => [5, ["type" => "tv"]],
-            "query string = `?limit=5&type=tv&min_score=7`" => [
-                5, ["type" => "tv", "min_score" => 7]
+            'query string = `?limit=5&type=tv`' => [5, ['type' => 'tv']],
+            'query string = `?limit=5&type=tv&min_score=7`' => [
+                5, ['type' => 'tv', 'min_score' => 7],
             ],
-            "query string = `?limit=5&type=tv&max_score=6`" => [
-                5, ["type" => "tv", "max_score" => 6]
+            'query string = `?limit=5&type=tv&max_score=6`' => [
+                5, ['type' => 'tv', 'max_score' => 6],
             ],
-            "query string = `?limit=5&type=tv&status=complete&max_score=8`" => [
-                5, ["type" => "tv", "status" => "complete", "max_score" => 8]
+            'query string = `?limit=5&type=tv&status=complete&max_score=8`' => [
+                5, ['type' => 'tv', 'status' => 'complete', 'max_score' => 8],
             ],
-            "query string = `?limit=5&type=movie&status=complete&max_score=8`" => [
-                5, ["type" => "movie", "status" => "complete", "max_score" => 8]
-            ]
+            'query string = `?limit=5&type=movie&status=complete&max_score=8`' => [
+                5, ['type' => 'movie', 'status' => 'complete', 'max_score' => 8],
+            ],
         ];
     }
 
-    public function partialDatesParameterProvider(): array
+    public static function partialDatesParameterProvider(): array
     {
         return [
-            [["start_date" => "2012"]],
-            [["start_date" => "2012-05"]],
-            [["end_date" => "2015"]],
-            [["end_date" => "2015-05"]]
+            [['start_date' => '2012']],
+            [['start_date' => '2012-05']],
+            [['end_date' => '2015']],
+            [['end_date' => '2015-05']],
         ];
     }
 
-    public function startDatesParameterProvider(): array
+    public static function startDatesParameterProvider(): array
     {
         return [
-            [["start_date" => "2012-05-12"]],
-            [["start_date" => "2012-04-01"]],
-            [["start_date" => "2012-04-28"]],
-            [["start_date" => "2012-06-05", "page" => 1]],
+            [['start_date' => '2012-05-12']],
+            [['start_date' => '2012-04-01']],
+            [['start_date' => '2012-04-28']],
+            [['start_date' => '2012-06-05', 'page' => 1]],
         ];
     }
 
-    public function endDatesParameterProvider(): array
+    public static function endDatesParameterProvider(): array
     {
         return [
-            [["end_date" => "2012-05-12"]],
-            [["end_date" => "2012-05-12", "page" => 1]],
+            [['end_date' => '2012-05-12']],
+            [['end_date' => '2012-05-12', 'page' => 1]],
         ];
     }
 
-    public function startAndEndDatesParameterProvider(): array
+    public static function startAndEndDatesParameterProvider(): array
     {
         return [
-            [["start_date" => "2021-01-01", "end_date" => "2021-03-22"]],
-            [["start_date" => "2021-01-01", "end_date" => "2021-03-22", "page" => 1]],
+            [['start_date' => '2021-01-01', 'end_date' => '2021-03-22']],
+            [['start_date' => '2021-01-01', 'end_date' => '2021-03-22', 'page' => 1]],
         ];
     }
 
-    public function genresParameterCombinationsProvider(): array
+    public static function genresParameterCombinationsProvider(): array
     {
         return [
-            [["genres" => "1,2"]],
-            [["genres_exclude" => "4,5", "type" => "tv"]],
-            [["genres" => "1,2", "genres_exclude" => "3", "min_score" => 8, "type" => "tv", "status" => "complete", "page" => 1]],
+            [['genres' => '1,2']],
+            [['genres_exclude' => '4,5', 'type' => 'tv']],
+            [['genres' => '1,2', 'genres_exclude' => '3', 'min_score' => 8, 'type' => 'tv', 'status' => 'complete', 'page' => 1]],
         ];
     }
 
-    public function emptyDateRangeProvider(): array
+    public static function emptyDateRangeProvider(): array
     {
         return [
-            [["start_date" => ""]],
-            [["end_date" => ""]],
-            [["end_date" => "", "start_date" => ""]],
+            [['start_date' => '']],
+            [['end_date' => '']],
+            [['end_date' => '', 'start_date' => '']],
         ];
     }
 
-    public function commonParameterProvider(): array
+    public static function commonParameterProvider(): array
     {
         return [
-            "status = airing" => [["status" => "airing"]],
-            "status = complete" => [["status" => "complete"]],
-            "status = upcoming" => [["status" => "upcoming"]],
-            "status = Airing" => [["status" => "Airing"]],
-            "status = Complete" => [["status" => "Complete"]],
-            "status = Upcoming" => [["status" => "Upcoming"]],
-            "max_score = 8" => [["max_score" => "8"]],
-            "min_score = 6" => [["min_score" => "6"]],
-            "max_score = 7, min_score = 3" => [["max_score" => "7", "min_score" => "3"]],
-            "rating = pg" => [["rating" => "pg"]],
-            "rating = rx" => [["rating" => "rx"]],
-            "rating = r" => [["rating" => "r"]],
-            "rating = pg13" => [["rating" => "pg13"]],
-            "rating = g" => [["rating" => "g"]],
-            "rating = r17" => [["rating" => "r17"]],
-            "type = movie" => [["type" => "movie"]],
-            "type = ova" => [["type" => "ova"]],
-            "type = special" => [["type" => "special"]],
-            "score = 8 and producers = 11" => [["score" => "8", "producers" => "11"]],
+            'status = airing' => [['status' => 'airing']],
+            'status = complete' => [['status' => 'complete']],
+            'status = upcoming' => [['status' => 'upcoming']],
+            'status = Airing' => [['status' => 'Airing']],
+            'status = Complete' => [['status' => 'Complete']],
+            'status = Upcoming' => [['status' => 'Upcoming']],
+            'max_score = 8' => [['max_score' => '8']],
+            'min_score = 6' => [['min_score' => '6']],
+            'max_score = 7, min_score = 3' => [['max_score' => '7', 'min_score' => '3']],
+            'rating = pg' => [['rating' => 'pg']],
+            'rating = rx' => [['rating' => 'rx']],
+            'rating = r' => [['rating' => 'r']],
+            'rating = pg13' => [['rating' => 'pg13']],
+            'rating = g' => [['rating' => 'g']],
+            'rating = r17' => [['rating' => 'r17']],
+            'type = movie' => [['type' => 'movie']],
+            'type = ova' => [['type' => 'ova']],
+            'type = special' => [['type' => 'special']],
+            'score = 8 and producers = 11' => [['score' => '8', 'producers' => '11']],
         ];
     }
 
-    public function invalidScoreParameterProvider(): array
+    public static function invalidScoreParameterProvider(): array
     {
         return [
-            [["max_score" => "634638"]],
-            [["min_score" => "673473"]],
-            [["max_score" => "72344", "min_score" => "3532325"]],
-            [["max_score" => 1, "min_score" => 5]],
+            [['max_score' => '634638']],
+            [['min_score' => '673473']],
+            [['max_score' => '72344', 'min_score' => '3532325']],
+            [['max_score' => 1, 'min_score' => 5]],
         ];
     }
 
-    public function invalidRatingParameterProvider(): array
+    public static function invalidRatingParameterProvider(): array
     {
         return [
-            [["rating" => "6263ssd"], 0],
-            [["rating" => "rx1"], 0],
-            [["rating" => "pg133"], 0]
+            [['rating' => '6263ssd'], 0],
+            [['rating' => 'rx1'], 0],
+            [['rating' => 'pg133'], 0],
         ];
     }
 
-    public function orderByFieldMappingProvider(): array
+    public static function orderByFieldMappingProvider(): array
     {
         $orderByFieldMappings = AnimeOrderByEnum::toArray();
         $params = [];
@@ -173,128 +179,119 @@ class AnimeSearchEndpointTest extends TestCase
         return $params;
     }
 
-    public function letterParameterProvider(): array
+    public static function letterParameterProvider(): array
     {
-        $letters = range("a", "f");
+        $letters = range('a', 'f');
         $result = [];
         foreach ($letters as $letter) {
-            $result[] = [["letter" => $letter], 5];
+            $result[] = [['letter' => $letter], 5];
         }
 
         return $result;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function shouldReturnMethodNotAllowedResponseIfMethodNotAllowed()
     {
-        $this->json("POST", "/v4/anime", ["title" => "Dum"])
-            ->seeStatusCode(405);
+        $this->json('POST', '/v4/anime', ['title' => 'Dum'])
+            ->assertStatus(405);
     }
 
-    /**
-     * @dataProvider limitParameterCombinationsProvider
-     */
+    #[DataProvider('limitParameterCombinationsProvider')]
     public function testLimitParameter(int $limitCount, array $additionalParams)
     {
-        Anime::factory( 25)
+        Anime::factory(25)
             ->overrideFromQueryStringParameters($additionalParams)
             ->create();
 
-        $content = $this->getJsonResponse([
-            "limit" => $limitCount,
-            ...$additionalParams
+        $jsonResponse = $this->getJsonWithParams([
+            'limit' => $limitCount,
+            ...$additionalParams,
         ]);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData($limitCount, 25, $limitCount);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount($limitCount, $content["data"]);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, $limitCount, 25, $limitCount);
+        $this->assertIsArray($content['data']);
+        $this->assertCount($limitCount, $content['data']);
     }
 
-    /**
-     * @dataProvider emptyDateRangeProvider
-     */
+    #[DataProvider('emptyDateRangeProvider')]
     public function testSearchByEmptyDatesShouldNotRaiseValidationError($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
 
-        $this->seeStatusCode(200);
+        $jsonResponse->assertStatus(200);
     }
 
-    /**
-     * @dataProvider partialDatesParameterProvider
-     */
+    #[DataProvider('partialDatesParameterProvider')]
     public function testSearchByStartDateShouldRaiseIfPartialDate($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(400);
-        $this->assertEquals("ValidationException", data_get($content, "type"));
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
-    /**
-     * @dataProvider startDatesParameterProvider
-     */
+    #[DataProvider('startDatesParameterProvider')]
     public function testSearchByStartDate($params)
     {
         $overrides = $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $actualStartDate = Carbon::parse(data_get($content, "data.0.aired.from"));
-        $paramStartDate = Carbon::parse($overrides["aired"]["from"]);
+        $actualStartDate = Carbon::parse(data_get($content, 'data.0.aired.from'));
+        $paramStartDate = Carbon::parse($overrides['aired']['from']);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(5);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertGreaterThanOrEqual(0, $paramStartDate->diff($actualStartDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
-        $this->assertCount(5, $content["data"]);
+        $this->assertCount(5, $content['data']);
     }
 
-    /**
-     * @dataProvider endDatesParameterProvider
-     */
+    #[DataProvider('endDatesParameterProvider')]
     public function testSearchByEndDate($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $actualEndDate = Carbon::parse(data_get($content, "data.0.aired.to"));
+        $actualEndDate = Carbon::parse(data_get($content, 'data.0.aired.to'));
         $paramEndDate = Carbon::parse($params['end_date']);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(5);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertGreaterThanOrEqual(1, $actualEndDate->diff($paramEndDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
-        $this->assertCount(5, $content["data"]);
+        $this->assertCount(5, $content['data']);
     }
 
-    /**
-     * @dataProvider startAndEndDatesParameterProvider
-     */
+    #[DataProvider('startAndEndDatesParameterProvider')]
     public function testSearchByStartAndEndDate($params)
     {
         $overrides = $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $actualStartDate = Carbon::parse(data_get($content, "data.0.aired.from"));
-        $paramStartDate = Carbon::parse($overrides["aired"]["from"]);
-        $actualEndDate = Carbon::parse(data_get($content, "data.0.aired.to"));
-        $paramEndDate = Carbon::parse($overrides["aired"]["to"]);
+        $actualStartDate = Carbon::parse(data_get($content, 'data.0.aired.from'));
+        $paramStartDate = Carbon::parse($overrides['aired']['from']);
+        $actualEndDate = Carbon::parse(data_get($content, 'data.0.aired.to'));
+        $paramEndDate = Carbon::parse($overrides['aired']['to']);
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(5);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
         $this->assertGreaterThanOrEqual(0, $paramStartDate->diff($actualStartDate)->days);
         $this->assertLessThanOrEqual(0, $actualEndDate->diff($paramEndDate)->days);
         // we created 5 elements according to parameters, so we expect 5 of them.
-        $this->assertCount(5, $content["data"]);
+        $this->assertCount(5, $content['data']);
     }
 
     public function testSearchWithStartDateEqualToParam()
@@ -303,24 +300,25 @@ class AnimeSearchEndpointTest extends TestCase
         // if the start date parameter's value exactly matches
         // with one item in the database.
         // this is mainly focused on mongodb features
-        $startDate = "2015-02-01";
+        $startDate = '2015-02-01';
         $carbonStartDate = Carbon::parse($startDate);
         $fo = Anime::factory(5);
         $fo->create($fo->serializeStateDefinition([
-            "aired" => new CarbonDateRange(Carbon::parse("2002-01-01"), Carbon::parse("2002-02-02"))
+            'aired' => new CarbonDateRange(Carbon::parse('2002-01-01'), Carbon::parse('2002-02-02')),
         ]));
         $f = Anime::factory(1);
         $f->create($f->serializeStateDefinition([
-            "aired" => new CarbonDateRange($carbonStartDate, null)
+            'aired' => new CarbonDateRange($carbonStartDate, null),
         ]));
 
-        $content = $this->getJsonResponse(["start_date" => $startDate]);
-        $actualStartDate = Carbon::parse(data_get($content, "data.0.aired.from"));
+        $jsonResponse = $this->getJsonWithParams(['start_date' => $startDate]);
+        $content = $jsonResponse->json();
+        $actualStartDate = Carbon::parse(data_get($content, 'data.0.aired.from'));
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(1);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 1);
         $this->assertEquals(0, $carbonStartDate->diff($actualStartDate)->days);
-        $this->assertCount(1, $content["data"]);
+        $this->assertCount(1, $content['data']);
     }
 
     public function testSearchWithEndDateEqualToParam()
@@ -329,80 +327,79 @@ class AnimeSearchEndpointTest extends TestCase
         // if the end date parameter's value exactly matches
         // with one item in the database.
         // this is mainly focused on mongodb features
-        $endDate = "2015-03-28";
+        $endDate = '2015-03-28';
         $carbonEndDate = Carbon::parse($endDate);
         $fo = Anime::factory(5);
         $fo->create($fo->serializeStateDefinition([
-            "aired" => new CarbonDateRange(Carbon::parse("2022-01-01"), Carbon::parse("2022-02-02"))
+            'aired' => new CarbonDateRange(Carbon::parse('2022-01-01'), Carbon::parse('2022-02-02')),
         ]));
         $f = Anime::factory(1);
         $f->create($f->serializeStateDefinition([
-            "aired" => new CarbonDateRange(Carbon::parse("2015-01-05"), $carbonEndDate)
+            'aired' => new CarbonDateRange(Carbon::parse('2015-01-05'), $carbonEndDate),
         ]));
 
-        $content = $this->getJsonResponse(["end_date" => $endDate]);
-        $actualEndDate = Carbon::parse(data_get($content, "data.0.aired.to"));
+        $jsonResponse = $this->getJsonWithParams(['end_date' => $endDate]);
+        $content = $jsonResponse->json();
+        $actualEndDate = Carbon::parse(data_get($content, 'data.0.aired.to'));
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(1);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 1);
         $this->assertEquals(0, $carbonEndDate->diff($actualEndDate)->days);
-        $this->assertCount(1, $content["data"]);
+        $this->assertCount(1, $content['data']);
     }
 
-    /**
-     * @dataProvider genresParameterCombinationsProvider
-     */
+    #[DataProvider('genresParameterCombinationsProvider')]
     public function testSearchByGenres($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(5);
-        $this->assertIsArray($content["data"]);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
+        $this->assertIsArray($content['data']);
         // we created 5 elements according to parameters, so we expect 5 of them.
-        $this->assertCount(5, $content["data"]);
+        $this->assertCount(5, $content['data']);
     }
 
     public function testSearchByInvalidStatusParameter()
     {
         $params = [
-            "status" => "gibberish"
+            'status' => 'gibberish',
         ];
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(400);
-        $this->assertEquals("ValidationException", data_get($content, "type"));
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
-    /**
-     * @dataProvider invalidScoreParameterProvider
-     */
+    #[DataProvider('invalidScoreParameterProvider')]
     public function testSearchByInvalidScoreParameters($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(400);
-        $this->assertEquals("ValidationException", data_get($content, "type"));
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
-    /**
-     * @dataProvider commonParameterProvider
-     */
+    #[DataProvider('commonParameterProvider')]
     public function testSearchByCommonParams($params)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
 
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(5);
-        $this->assertIsArray($content["data"]);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
+        $this->assertIsArray($content['data']);
         // we created 5 elements according to parameters, so we expect 5 of them.
-        $this->assertCount(5, $content["data"]);
+        $this->assertCount(5, $content['data']);
     }
 
     public function testSearchByExplicitDefaultMinMaxScores()
@@ -410,30 +407,29 @@ class AnimeSearchEndpointTest extends TestCase
         // test for https://github.com/jikan-me/jikan-rest/issues/309
         Anime::factory(5)
             ->state(new Sequence(
-                ["score" => null],
-                ["score" => $this->faker->randomFloat(2, 1.0, 9.99)],
-                ["score" => $this->faker->randomFloat(2, 1.0, 9.99)],
-                ["score" => $this->faker->randomFloat(2, 1.0, 9.99)],
-                ["score" => $this->faker->randomFloat(2, 1.0, 9.99)],
+                ['score' => null],
+                ['score' => $this->faker->randomFloat(2, 1.0, 9.99)],
+                ['score' => $this->faker->randomFloat(2, 1.0, 9.99)],
+                ['score' => $this->faker->randomFloat(2, 1.0, 9.99)],
+                ['score' => $this->faker->randomFloat(2, 1.0, 9.99)],
             ))
             ->overrideFromQueryStringParameters([
-                "genres" => "1,2"
+                'genres' => '1,2',
             ])
             ->create();
-        $content = $this->getJsonResponse([
-            "genres" => "1,2",
-            "min_score" => "0.0",
-            "max_score" => "10.0"
+        $jsonResponse = $this->getJsonWithParams([
+            'genres' => '1,2',
+            'min_score' => '0.0',
+            'max_score' => '10.0',
         ]);
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(5);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount(5, $content["data"]);
+        $content = $jsonResponse->json();
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 5);
+        $this->assertIsArray($content['data']);
+        $this->assertCount(5, $content['data']);
     }
 
-    /**
-     * @dataProvider orderByFieldMappingProvider
-     */
+    #[DataProvider('orderByFieldMappingProvider')]
     public function testOrderByQueryStringParameter(string $paramName, string $orderByField)
     {
         $expectedCount = 3;
@@ -442,136 +438,138 @@ class AnimeSearchEndpointTest extends TestCase
          * @var Collection $items
          */
         $items = $f->createManyWithOrder($orderByField);
-        $content = $this->getJsonResponse([
-            "order_by" => $paramName
+        $jsonResponse = $this->getJsonWithParams([
+            'order_by' => $paramName,
         ]);
+        $content = $jsonResponse->json();
 
-        $expectedItems = $items->map(fn($elem) => data_get($elem, $orderByField));
-        $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, $orderByField));
+        $expectedItems = $items->map(fn ($elem) => data_get($elem, $orderByField));
+        $actualItems = collect($content['data'])->map(fn ($elem) => data_get($elem, $orderByField));
 
         if ($actualItems->first() instanceof Carbon && $expectedItems->first() instanceof Carbon) {
-            $expectedItems = $expectedItems->map(fn(Carbon $elem) => $elem->getTimestamp());
-            $actualItems = $actualItems->map(fn(Carbon $elem) => $elem->getTimestamp());
+            $expectedItems = $expectedItems->map(fn (Carbon $elem) => $elem->getTimestamp());
+            $actualItems = $actualItems->map(fn (Carbon $elem) => $elem->getTimestamp());
         }
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData($expectedCount);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount($expectedCount, $content["data"]);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, $expectedCount);
+        $this->assertIsArray($content['data']);
+        $this->assertCount($expectedCount, $content['data']);
         $this->assertCollectionsStrictlyEqual($expectedItems, $actualItems);
     }
 
     public function testOrderingByScoreWithKeywordSearch()
     {
         // test for issue https://github.com/jikan-me/jikan-rest/issues/332
-        $title = "awesome anime";
+        $title = 'awesome anime';
         $items = Anime::factory(3)->state(new Sequence(
-            ["score" => 8.05],
-            ["score" => 7.15],
-            ["score" => 6.51],
+            ['score' => 8.05],
+            ['score' => 7.15],
+            ['score' => 6.51],
         ))->create([
-            "titles" => [
+            'titles' => [
                 [
-                    "type" => "Default",
-                    "title" => $title
-                ]
+                    'type' => 'Default',
+                    'title' => $title,
+                ],
             ],
-            "title" => $title,
-            "title_english" => $title,
-            "title_japanese" => $title,
-            "title_synonyms" => [$title],
+            'title' => $title,
+            'title_english' => $title,
+            'title_japanese' => $title,
+            'title_synonyms' => [$title],
         ]);
         Anime::factory(3)->state(new Sequence(
-            ["score" => 3.05],
-            ["score" => 4.15],
-            ["score" => 1.51],
+            ['score' => 3.05],
+            ['score' => 4.15],
+            ['score' => 1.51],
         ))->create();
 
-        $content = $this->getJsonResponse([
-            "order_by" => "score",
-            "q" => "awesome",
-            "page" => 1,
-            "sort" => "desc",
-            "limit" => 15
+        $jsonResponse = $this->getJsonWithParams([
+            'order_by' => 'score',
+            'q' => 'awesome',
+            'page' => 1,
+            'sort' => 'desc',
+            'limit' => 15,
         ]);
+        $content = $jsonResponse->json();
 
-        $expectedItems = $items->map(fn($elem) => data_get($elem, "score"));
-        $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, "score"));
+        $expectedItems = $items->map(fn ($elem) => data_get($elem, 'score'));
+        $actualItems = collect($content['data'])->map(fn ($elem) => data_get($elem, 'score'));
 
-        $this->assertPaginationData(3, 3, 15);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount(3, $content["data"]);
+        $this->assertPaginationData($jsonResponse, 3, 3, 15);
+        $this->assertIsArray($content['data']);
+        $this->assertCount(3, $content['data']);
         $this->assertCollectionsStrictlyEqual($expectedItems, $actualItems);
     }
 
-    /**
-     * @dataProvider invalidRatingParameterProvider
-     */
+    #[DataProvider('invalidRatingParameterProvider')]
     public function testSearchByInvalidRatingParameters($params, $expectedCount)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(400);
-        $this->assertEquals("ValidationException", data_get($content, "type"));
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
-    /**
-     * @dataProvider letterParameterProvider
-     */
+    #[DataProvider('letterParameterProvider')]
     public function testSearchByLetter($params, $expectedCount)
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb($params);
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData($expectedCount);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount($expectedCount, $content["data"]);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, $expectedCount);
+        $this->assertIsArray($content['data']);
+        $this->assertCount($expectedCount, $content['data']);
     }
 
     public function testSearchByInvalidLetterParameter()
     {
         $this->generateFiveSpecificAndTenRandomElementsInDb([
-            "letter" => "a"
+            'letter' => 'a',
         ]);
-        $content = $this->getJsonResponse([
-            "letter" => "asd"
+        $jsonResponse = $this->getJsonWithParams([
+            'letter' => 'asd',
         ]);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(400);
-        $this->assertEquals("ValidationException", data_get($content, "type"));
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($content, 'type'));
     }
 
     public function testTypeSenseSearchPagination()
     {
         // this should test https://github.com/jikan-me/jikan-rest/issues/298
-        $title = "awesome anime";
+        $title = 'awesome anime';
         // typesense api only returns 250 hits max on one page
         Anime::factory(255)->create([
-            "titles" => [
+            'titles' => [
                 [
-                    "type" => "Default",
-                    "title" => $title
-                ]
+                    'type' => 'Default',
+                    'title' => $title,
+                ],
             ],
-            "title" => $title,
-            "title_english" => $title,
-            "title_japanese" => $title,
-            "title_synonyms" => [$title],
+            'title' => $title,
+            'title_english' => $title,
+            'title_japanese' => $title,
+            'title_synonyms' => [$title],
         ]);
         Anime::factory(5)->create();
 
-        $content = $this->getJsonResponse([
-            "q" => "awesome",
-            "page" => 2
+        $jsonResponse = $this->getJsonWithParams([
+            'q' => 'awesome',
+            'page' => 2,
         ]);
+        $content = $jsonResponse->json();
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData(25, 255);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount(25, $content["data"]);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, 25, 255);
+        $this->assertIsArray($content['data']);
+        $this->assertCount(25, $content['data']);
         // https://github.com/jikan-me/jikan-rest/issues/298 shows that the array indexes start at 25, not from 0
-        $this->assertArrayHasKey(0, $content["data"]);
+        $this->assertArrayHasKey(0, $content['data']);
     }
 }

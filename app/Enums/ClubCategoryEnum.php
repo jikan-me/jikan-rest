@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use OpenApi\Attributes as OA;
 use Spatie\Enum\Laravel\Enum;
 
 /**
@@ -17,18 +18,8 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self music()
  * @method static self other()
  * @method static self schools()
- *
- * @OA\Schema(
- *   schema="club_search_query_category",
- *   description="Club Search Query Category",
- *   type="string",
- *   enum={
- *      "anime","manga","actors_and_artists","characters",
- *      "cities_and_neighborhoods","companies","conventions","games",
- *      "japan","music","other","schools"
- *   }
- * )
  */
+#[OA\Schema(schema: 'club_search_query_category', description: 'Club Search Query Category', type: 'string', enum: ['anime', 'manga', 'actors_and_artists', 'characters', 'cities_and_neighborhoods', 'companies', 'conventions', 'games', 'japan', 'music', 'other', 'schools'])]
 final class ClubCategoryEnum extends Enum
 {
     protected static function labels(): array
@@ -45,7 +36,7 @@ final class ClubCategoryEnum extends Enum
             'japan' => 'Japan',
             'music' => 'Music',
             'other' => 'Other',
-            'schools' => 'Schools'
+            'schools' => 'Schools',
         ];
     }
 }

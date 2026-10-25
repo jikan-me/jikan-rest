@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'mongodb'),
+    'default' => env('QUEUE_CONNECTION', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,10 +37,10 @@ return [
         'database' => [
             'driver' => 'mongodb',
             'connection' => 'mongodb',
-            'dsn'=> "mongodb+srv://".env('DB_USERNAME', 'jikan').":".env('DB_PASSWORD', '')."@".env('MONGODB_DSN', ''),
+            'dsn' => 'mongodb+srv://'.env('DB_USERNAME', 'jikan').':'.env('DB_PASSWORD', '').'@'.env('MONGODB_DSN', ''),
             'table' => env('QUEUE_TABLE', 'jobs'),
             'queue' => 'low',
-//            'retry_after' => 60,
+            //            'retry_after' => 60,
         ],
 
         'beanstalkd' => [
@@ -63,7 +63,7 @@ return [
             'connection' => env('QUEUE_REDIS_CONNECTION', 'default'),
             'queue' => 'low',
             'retry_after' => 60,
-//            'block_for' => 5,
+            //            'block_for' => 5,
         ],
 
     ],
@@ -80,7 +80,7 @@ return [
     */
 
     'failed' => [
-        'driver' => env('QUEUE_CONNECTION', 'mongodb'),
+        'driver' => env('QUEUE_CONNECTION', 'database'),
         'database' => env('DB_DATABASE', 'jikan'),
         'table' => env('QUEUE_FAILED_TABLE', 'failed_jobs'),
     ],

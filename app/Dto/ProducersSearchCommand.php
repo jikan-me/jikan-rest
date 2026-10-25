@@ -17,7 +17,7 @@ use Spatie\LaravelData\Optional;
  */
 final class ProducersSearchCommand extends SearchCommand implements DataRequest
 {
-    #[MapInputName("order_by"), MapOutputName("order_by"),
+    #[MapInputName('order_by'), MapOutputName('order_by'),
         WithCast(EnumCast::class, ProducerOrderByEnum::class), EnumValidation(ProducerOrderByEnum::class)]
     public ProducerOrderByEnum|Optional $orderBy;
 }

@@ -16,12 +16,11 @@ class QueryTopPeopleHandler implements RequestHandler
     public function __construct(
         private readonly PeopleRepository $repository,
         private readonly QueryBuilderPaginatorService $paginatorService
-    )
-    {
-    }
+    ) {}
 
     /**
-     * @param QueryTopPeopleCommand $request
+     * @param  QueryTopPeopleCommand  $request
+     *
      * @returns PersonCollection
      */
     public function handle($request): PersonCollection
@@ -30,14 +29,14 @@ class QueryTopPeopleHandler implements RequestHandler
         $topItemsQuery = $this->repository->topPeople()->filter($requestParams);
 
         $results = $this->paginatorService->paginate(
-            $topItemsQuery, $requestParams->get("limit"), $requestParams->get("page")
+            $topItemsQuery, $requestParams->get('limit'), $requestParams->get('page')
         );
 
         return new PersonCollection($results);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

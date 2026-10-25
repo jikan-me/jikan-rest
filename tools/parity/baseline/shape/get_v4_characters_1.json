@@ -1,0 +1,22 @@
+{
+    "data": {
+        "about": "@string",
+        "favorites": "@int",
+        "images": {
+            "jpg": {
+                "image_url": "@string"
+            },
+            "webp": {
+                "image_url": "@string",
+                "small_image_url": "@string"
+            }
+        },
+        "mal_id": "@int",
+        "name": "@string",
+        "name_kanji": "@string",
+        "nicknames": [
+            "@list"
+        ],
+        "url": "@string"
+    }
+}

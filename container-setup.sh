@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-_JIKAN_API_VERSION=v4.0.0
+_JIKAN_API_VERSION=v4.3.0
 SUBSTITUTE_VERSION=$_JIKAN_API_VERSION
 if [ -x "$(command -v git)" ]; then
   # check if we have checked out a tag or not
@@ -166,22 +166,22 @@ case "${1:-}" in
     validate_prereqs
     ensure_secrets
     echo "Indexing anime..."
-    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:anime
+    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec app php /app/artisan indexer:anime
     echo "Indexing manga..."
-    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:manga
+    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec app php /app/artisan indexer:manga
     echo "Indexing characters and people..."
-    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:common
+    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec app php /app/artisan indexer:common
     echo "Indexing genres..."
-    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:genres
+    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec app php /app/artisan indexer:genres
     echo "Indexing producers..."
-    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:producers
+    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec app php /app/artisan indexer:producers
     echo "Indexing done!"
     ;;
   "index-incrementally")
     validate_prereqs
     ensure_secrets
     echo "Indexing..."
-    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec jikan_rest php /app/artisan indexer:incremental anime manga
+    "${DOCKER_COMPOSE_CMD[@]}" -p "$DOCKER_COMPOSE_PROJECT_NAME" exec app php /app/artisan indexer:incremental anime manga
     echo "Indexing done!"
     ;;
   *)

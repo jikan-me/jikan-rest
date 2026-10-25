@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Macros;
 
 use Illuminate\Support\Collection;
@@ -23,7 +24,7 @@ final class To2dArrayWithDottedKeys
 
                 if (!is_array($value)) {
                     $flatArray[
-                    $prefix . implode('.', array_slice($path, 0, $iterator->getDepth() + 1))
+                    $prefix.implode('.', array_slice($path, 0, $iterator->getDepth() + 1))
                     ] = $value;
                 }
             }

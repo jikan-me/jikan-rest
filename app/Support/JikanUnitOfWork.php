@@ -10,11 +10,9 @@ use App\Contracts\MagazineRepository;
 use App\Contracts\MangaRepository;
 use App\Contracts\PeopleRepository;
 use App\Contracts\ProducerRepository;
-use App\Contracts\Repository;
 use App\Contracts\UnitOfWork;
 use App\Contracts\UserRepository;
 use App\Repositories\AnimeGenresRepository;
-use App\Repositories\DatabaseRepository;
 use App\Repositories\DocumentRepository;
 use App\Repositories\MangaGenresRepository;
 
@@ -31,9 +29,7 @@ final class JikanUnitOfWork implements UnitOfWork
         private readonly UserRepository $userRepository,
         private readonly AnimeGenresRepository $animeGenresRepository,
         private readonly MangaGenresRepository $mangaGenresRepository
-    )
-    {
-    }
+    ) {}
 
     public function anime(): AnimeRepository
     {
@@ -83,16 +79,6 @@ final class JikanUnitOfWork implements UnitOfWork
     public function mangaGenres(): GenreRepository
     {
         return $this->mangaGenresRepository;
-    }
-
-    /**
-     * @param class-string $modelClass
-     * @return Repository
-     * @noinspection PhpUndefinedMethodInspection
-     */
-    private function getRepository(string $modelClass): Repository
-    {
-        return new DatabaseRepository(fn () => $modelClass::query(), fn ($x, $y) => $modelClass::search($x, $y));
     }
 
     public function documents(string $tableName): DocumentRepository

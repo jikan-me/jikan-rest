@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Database\Factories\EpisodeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Jikan\Jikan;
+use MongoDB\Laravel\Eloquent\Model;
 
+/**
+ * @use HasFactory<EpisodeFactory>
+ */
 class Episode extends Model
 {
     use HasFactory;
@@ -13,17 +16,17 @@ class Episode extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'mal_id', 'title', 'title_japanese', 'title_romanji', 'aired', 'filler', 'recap', 'video_url', 'forum_url', 'synopsis',
-        'createdAt', 'modifiedAt'
+        'createdAt', 'modifiedAt',
     ];
 
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = [];
 
@@ -37,10 +40,9 @@ class Episode extends Model
     /**
      * The attributes excluded from the model's JSON form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
-        '_id', 'request_hash'
+        '_id', 'request_hash',
     ];
-
 }

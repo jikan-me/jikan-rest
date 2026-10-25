@@ -6,7 +6,6 @@ use App\Dto\UserAboutLookupCommand;
 use App\Http\Resources\V4\ProfileAboutResource;
 use App\Support\CachedData;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @extends UserLookupHandler<UserAboutLookupCommand>

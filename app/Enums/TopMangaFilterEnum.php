@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use OpenApi\Attributes as OA;
 use Spatie\Enum\Laravel\Enum;
 
 /**
@@ -9,14 +10,6 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self upcoming()
  * @method static self bypopularity()
  * @method static self favorite()
- *
- * @OA\Schema(
- *   schema="top_manga_filter",
- *   description="Top items filter types",
- *   type="string",
- *   enum={"publishing","upcoming","bypopularity","favorite"}
- * )
  */
-final class TopMangaFilterEnum extends Enum
-{
-}
+#[OA\Schema(schema: 'top_manga_filter', description: 'Top items filter types', type: 'string', enum: ['publishing', 'upcoming', 'bypopularity', 'favorite'])]
+final class TopMangaFilterEnum extends Enum {}

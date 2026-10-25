@@ -2,7 +2,8 @@
 
 namespace App\Testing;
 
-use Typesense\LaravelTypesense\Typesense;
+use Typesense\Client;
+use Typesense\Exceptions\TypesenseClientError;
 
 /**
  * @codeCoverageIgnore
@@ -10,44 +11,46 @@ use Typesense\LaravelTypesense\Typesense;
 trait ScoutFlush
 {
     protected array $searchIndexModelCleanupList = [
-        "App\\Anime",
-        "App\\Manga",
-        "App\\Character",
-        "App\\GenreAnime",
-        "App\\GenreManga",
-        "App\\Person",
-        "App\\Club",
-        "App\\Magazine",
-        "App\\Producers",
-        "App\\Profile",
+        'App\\Anime',
+        'App\\Manga',
+        'App\\Character',
+        'App\\GenreAnime',
+        'App\\GenreManga',
+        'App\\Person',
+        'App\\Club',
+        'App\\Magazine',
+        'App\\Producers',
+        'App\\Profile',
     ];
 
-    public function runScoutFlush(): void
+    public function setUpScoutFlush(): void
     {
-        if (config("scout.driver") === "typesense") {
-            /**
-             * @var Typesense $typeSenseClient
-             */
-            $typeSenseClient = app(Typesense::class);
-            // more optimized approach for quicker tests.
+        if (config('scout.driver') === 'typesense') {
+            /** @var Client $typeSenseClient */
+            $typeSenseClient = app(Client::class);
+
             foreach ($this->searchIndexModelCleanupList as $model) {
                 $modelInstance = new $model;
-                $collection = $typeSenseClient->getCollectionIndex($modelInstance);
-                // we count items by exporting
-                $items = $collection->documents->export();
-                if (strlen($items) > 1) {
-                    $typeSenseClient->deleteDocuments($collection, [
-                        "filter_by" => "mal_id:>0",
-                        "batch_size" => 500
-                    ]);
+                try {
+                    $collection = $typeSenseClient->getCollections()->{$modelInstance->searchableAs()};
+                    // we count items by exporting
+                    $items = $collection->getDocuments()->export();
+                    if (strlen($items) > 1) {
+                        $collection->getDocuments()->delete([
+                            'filter_by' => 'mal_id:>0',
+                            'batch_size' => 500,
+                        ]);
 
-                    $typeSenseClient->deleteCollection($modelInstance->searchableAs());
+                        $collection->delete();
+                    }
+                } catch (TypesenseClientError $e) {
+                    // A fresh environment may not have the _testing collection yet
+                    // (or it was dropped during a prior test) — nothing to flush.
                 }
             }
-        }
-        else {
+        } else {
             foreach ($this->searchIndexModelCleanupList as $model) {
-                $this->artisan("scout:flush", ["model" => $model]);
+                $this->artisan('scout:flush', ['model' => $model]);
             }
         }
     }

@@ -4,10 +4,10 @@ namespace App\Features;
 
 use App\Dto\MangaStatsLookupCommand;
 use App\Http\Resources\V4\MangaStatisticsResource;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
-use App\Support\CachedData;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\Manga\MangaStatsRequest;
 
@@ -26,12 +26,16 @@ final class MangaStatsLookupHandler extends RequestHandlerWithScraperCache
         return new MangaStatisticsResource($results);
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
+        $id = $requestParams->get('id');
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => $jikan->getMangaStats(new MangaStatsRequest($id))
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getMangaStats(new MangaStatsRequest($id))
         );
     }
 }

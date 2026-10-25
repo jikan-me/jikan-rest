@@ -13,10 +13,9 @@ use Spatie\LaravelData\Attributes\Validation\Between;
 use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Attributes\WithCast;
 
-
 final class QuerySpecificAnimeSeasonCommand extends QueryAnimeSeasonCommand
 {
-    use MapsRouteParameters, HasSfwParameter, HasKidsParameter, HasUnapprovedParameter;
+    use HasKidsParameter, HasSfwParameter, HasUnapprovedParameter, MapsRouteParameters;
 
     #[Required, Between(1000, 2999)]
     public int $year;
@@ -26,10 +25,13 @@ final class QuerySpecificAnimeSeasonCommand extends QueryAnimeSeasonCommand
 
     protected static int $defaultLimit = 30;
 
+    /**
+     * @return array<string, string>
+     */
     public static function messages(...$args): array
     {
         return [
-            "season.enum" => "Invalid season supplied."
+            'season.enum' => 'Invalid season supplied.',
         ];
     }
 }

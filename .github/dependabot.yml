@@ -1,18 +1,25 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
+# Dependency update policy.
+#
+# composer: weekly, all packages, with minor/patch bumps grouped to keep PR noise down. The
+# parser (jikan-me/*) is excluded from the group so every bump gets its own PR and its own review.
+# github-actions: monthly.
 version: 2
 updates:
-  - package-ecosystem: "composer" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "composer"
+    directory: "/"
     schedule:
-      interval: "daily"
-    allow:
-      - dependency-name: "jikan*"
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "jikan-me/*"
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
-

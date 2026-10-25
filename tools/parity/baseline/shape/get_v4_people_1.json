@@ -1,0 +1,19 @@
+{
+    "data": {
+        "about": "@string",
+        "alternate_names": "@null",
+        "birthday": "@string",
+        "family_name": "@string",
+        "favorites": "@int",
+        "given_name": "@string",
+        "images": {
+            "jpg": {
+                "image_url": "@string"
+            }
+        },
+        "mal_id": "@int",
+        "name": "@string",
+        "url": "@string",
+        "website_url": "@null"
+    }
+}

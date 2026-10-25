@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Start the app: SERVER=serve|swoole|frankenphp (default swoole; needs ext-swoole).
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# PHP: $PHP_BIN, else the gitignored local wrapper tools/dev/php, else php on PATH.
+if [[ -n "${PHP_BIN:-}" ]]; then PHP="$PHP_BIN"; elif [[ -x "$PWD/tools/dev/php" ]]; then PHP="$PWD/tools/dev/php"; else PHP="$(command -v php)"; fi
+SERVER="${SERVER:-swoole}"
+./install.sh --check >/dev/null
+case "$SERVER" in
+  serve)      exec "$PHP" artisan serve --host=127.0.0.1 --port=8000 ;;
+  swoole)     exec env OCTANE_SERVER=swoole "$PHP" artisan octane:start --server=swoole --port=8000 ;;
+  frankenphp)
+    FDIR="${FPHP_DIR:-/tmp/frankenphp}"
+    export PATH="$FDIR:$PATH"
+    exec env OCTANE_SERVER=frankenphp "$PHP" artisan octane:start --server=frankenphp --port=8000 ;;
+  *) echo "SERVER=$SERVER not in {serve,swoole,frankenphp}"; exit 2 ;;
+esac
