@@ -5,58 +5,64 @@ namespace Tests\Integration;
 use Tests\TestCase;
 
 /**
- * Boots the actual Octane (RoadRunner) server and smoke-checks `/up`.
- * Self-skips when the `rr` binary isn't present (it's gitignored; CI would
- * `octane:install` first), keeping fresh-checkout runs green.
+ * Boots the actual Octane server on Swoole and smoke-checks `/up`.
+ * Self-skips when ext-swoole isn't loaded (fresh local checkouts); CI loads
+ * the extension in the main test job, so it runs for real there.
  */
 final class OctaneBootSmokeTest extends TestCase
 {
+    /** @var resource|null */
     private $proc;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        if (!is_file(base_path('rr'))) {
-            $this->markTestSkipped('RoadRunner binary not present — run octane:install or install.sh.');
+        if (!extension_loaded('swoole') && !extension_loaded('openswoole')) {
+            $this->markTestSkipped('ext-swoole is not loaded — install it (pecl install swoole) to boot Octane.');
         }
     }
 
-    public function test_octane_roadrunner_boots_and_serves_up(): void
+    public function test_octane_swoole_boots_and_serves_up(): void
     {
         $port = 8105;
-        $cmd = [PHP_BINARY, 'artisan', 'octane:start', '--server=roadrunner',
-            '--host=127.0.0.1', '--port='.$port, '--workers=1'];
+        $stateFile = sys_get_temp_dir().'/jikan-octane-smoke-'.getmypid().'.json';
+        $cmd = [PHP_BINARY, 'artisan', 'octane:start', '--server=swoole',
+            '--host=127.0.0.1', '--port='.$port, '--workers=1', '--task-workers=1'];
+        $env = getenv() + ['OCTANE_STATE_FILE' => $stateFile];
         $pipes = [];
-        $proc = proc_open($cmd, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, base_path());
+        $proc = proc_open($cmd, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, base_path(), $env);
         $this->proc = $proc;
 
         try {
-            $ok = false;
-            for ($i = 0; $i < 20; $i++) {
-                $code = @file_get_contents("http://127.0.0.1:{$port}/up");
-                if ($code === 'OK') {
-                    $ok = true;
+            $body = false;
+            for ($i = 0; $i < 40; $i++) {
+                $body = @file_get_contents("http://127.0.0.1:{$port}/up");
+                if ($body === 'OK') {
                     break;
                 }
-                usleep(500_000);
+                usleep(250_000);
             }
-            $this->assertTrue($ok, 'Octane /up did not respond within ~10s');
+            $this->assertSame('OK', $body, 'Octane (Swoole) /up did not respond within ~10s');
         } finally {
-            if (is_resource($proc)) {
-                proc_terminate($proc);
-                proc_close($proc);
-            }
-            @unlink(base_path('.rr.yaml'));
+            $this->stop();
+            @unlink($stateFile);
         }
+    }
+
+    private function stop(): void
+    {
+        if (is_resource($this->proc)) {
+            // SIGTERM lets the Swoole master stop its workers and free the port.
+            proc_terminate($this->proc, 15);
+            proc_close($this->proc);
+        }
+        $this->proc = null;
     }
 
     protected function tearDown(): void
     {
-        if (is_resource($this->proc)) {
-            proc_terminate($this->proc);
-            proc_close($this->proc);
-        }
+        $this->stop();
         parent::tearDown();
     }
 }

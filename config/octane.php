@@ -56,7 +56,7 @@ return [
     |
     */
 
-    'server' => env('OCTANE_SERVER', 'roadrunner'),
+    'server' => env('OCTANE_SERVER', 'swoole'),
 
     /*
     |--------------------------------------------------------------------------
@@ -76,13 +76,17 @@ return [
     | Workers and worker recycling
     |--------------------------------------------------------------------------
     |
-    | `octane:start` falls back to these when --workers / --max-requests are not
-    | given. Replaces the pool settings that used to live in .rr.yaml
-    | (JIKAN_* / RR_* env vars). `auto` = one worker per CPU core.
+    | `octane:start` falls back to these when --workers / --task-workers /
+    | --max-requests are not given. `auto` = one worker per CPU core.
+    | Swoole task workers only run Octane's internal tick (the app dispatches no
+    | tasks), so one is enough; 0 is not usable here because octane:start treats
+    | it as "unset" and falls back to `auto`.
     |
     */
 
     'workers' => env('OCTANE_WORKERS', 'auto'),
+
+    'task_workers' => env('OCTANE_TASK_WORKERS', 1),
 
     'max_requests' => (int) env('OCTANE_MAX_REQUESTS', 500),
 
@@ -173,7 +177,7 @@ return [
     ],
 
     'flush' => [
-        // In RoadRunner we want to reset the repositories after each request,
+        // Workers are long-lived, so reset the repositories after each request,
         // because we cache the query builders in them.
         // Ported from AppServiceProvider::servicesToClear().
         JikanUnitOfWork::class,
@@ -291,19 +295,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | RoadRunner Options
+    | Swoole
     |--------------------------------------------------------------------------
     |
-    | The following options are only used when the RoadRunner server is the
-    | server powering your application. You may customize the path to the
-    | worker binary here, which is useful for zero-downtime deployments
-    | where the application is served from a symlinked "current" path.
+    | Octane's default Swoole options are used (enable_coroutine=false, one
+    | reactor per worker, max_request from --max-requests). Coroutine hooks
+    | stay off on purpose: ext-mongodb is not hookable, so Mongo calls are plain
+    | synchronous calls inside each worker process.
     |
     */
 
-    'roadrunner' => [
-        'command' => env('OCTANE_ROADRUNNER_COMMAND', 'vendor/bin/roadrunner-worker'),
-        'http_middleware' => env('OCTANE_ROADRUNNER_HTTP_MIDDLEWARE', 'static'),
+    'swoole' => [
+        // Merged over Octane's defaults; empty on purpose.
+        'options' => [],
     ],
 
 ];

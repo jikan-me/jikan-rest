@@ -30,12 +30,8 @@ typesense_api_key.txt
 frankenphp
 frankenphp-worker.php
 
-# Octane RoadRunner binary (downloaded dev tool)
-/rr
-
 # Laravel bootstrap cache (generated)
 bootstrap/cache/*.php
-.rr.yaml
 
 # Created by Storage::fake() during tests
 /storage/framework/testing/

@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# jikan-rest local stack — Laravel 13 on Octane (RoadRunner) + MongoDB
+# jikan-rest local stack — Laravel 13 on Octane (Swoole) + MongoDB
 #
 # Builds the app from ./Dockerfile and brings up MongoDB, Redis and Typesense
 # for local development. Typesense lives in docker-compose.typesense.yml and is
@@ -14,8 +14,8 @@
 #   curl -fsS http://localhost:8080/up           # -> 200 "OK"
 #   docker compose ps                            # all services healthy
 #
-# The app image fetches the RoadRunner binary with arch detection inside the
-# Dockerfile, so no build arg is needed on any platform (see Dockerfile + docs).
+# The app image builds ext-swoole from PECL inside the Dockerfile, so no build
+# arg is needed on any platform (see Dockerfile + docs).
 # Full build/run/env/seed/health documentation: DOCKER.md
 # ---------------------------------------------------------------------------
 
@@ -28,13 +28,12 @@ services:
   app:
     build:
       context: .
-      # (RoadRunner binary is fetched with arch detection inside the Dockerfile.)
     image: jikan-rest:local
     container_name: jikan-rest
     restart: unless-stopped
     stop_grace_period: 30s
     # The image ENTRYPOINT (docker-entrypoint.sh) prepares .env and then execs
-    # 'php artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8080'.
+    # 'php artisan octane:start --server=swoole --host=0.0.0.0 --port=8080 ...'.
     # Pass extra Octane flags here, e.g. command: ["--workers=8"].
     ports:
       - "8080:8080"
@@ -90,11 +89,12 @@ services:
       TRUSTED_PROXIES: "${TRUSTED_PROXIES:-}"
       RATE_LIMIT_PER_MINUTE: "${RATE_LIMIT_PER_MINUTE:-0}"
 
-      # --- Octane (RoadRunner) — matches config/octane.php default -------------
-      OCTANE_SERVER: "${OCTANE_SERVER:-roadrunner}"
+      # --- Octane (Swoole) — matches config/octane.php default ----------------
+      OCTANE_SERVER: "${OCTANE_SERVER:-swoole}"
       OCTANE_HTTPS: "${OCTANE_HTTPS:-false}"
       OCTANE_WORKERS: "${OCTANE_WORKERS:-auto}"
       OCTANE_MAX_REQUESTS: "${OCTANE_MAX_REQUESTS:-500}"
+      OCTANE_TASK_WORKERS: "${OCTANE_TASK_WORKERS:-1}"
     depends_on:
       mongo:
         condition: service_healthy

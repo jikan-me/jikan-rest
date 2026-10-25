@@ -45,10 +45,18 @@ final class DeploymentArtifactsTest extends TestCase
         $this->assertStringContainsString('php:8.4', $dockerfile, 'base image must be PHP 8.4');
         $this->assertStringContainsString('--ignore-platform-reqs', $dockerfile, 'deps stage needs platform-req bypass');
         $this->assertStringContainsString('linux-headers', $dockerfile, 'Alpine sockets build needs linux-headers');
-        $this->assertStringContainsString('uname -m', $dockerfile, 'RR arch must be auto-detected, not a build arg');
+        $this->assertStringContainsString('pecl install swoole', $dockerfile, 'Octane runs on Swoole: the image must build ext-swoole');
+        $this->assertStringContainsString('docker-php-ext-enable mongodb brotli swoole', $dockerfile);
+        $this->assertStringNotContainsString('roadrunner-server/roadrunner', $dockerfile, 'RoadRunner was removed in 4.3.0');
+        $this->assertStringNotContainsString('/usr/local/bin/rr', $dockerfile);
         $this->assertStringNotContainsString('RR_STAGE', $dockerfile, 'the legacy RR_STAGE arg must stay gone');
         $this->assertFileExists(base_path('docker-entrypoint.sh'));
         $this->assertFileExists(base_path('docker-entrypoint.php'));
+
+        $entrypoint = (string) file_get_contents(base_path('docker-entrypoint.sh'));
+        $this->assertStringContainsString('octane:start --server=swoole', $entrypoint);
+        $this->assertStringNotContainsString('rr-config', $entrypoint);
+        $this->assertStringContainsString("env('OCTANE_SERVER', 'swoole')", (string) file_get_contents(base_path('config/octane.php')));
     }
 
     public function test_env_dist_has_no_empty_path_traps_and_docs_page_renders(): void
@@ -58,6 +66,8 @@ final class DeploymentArtifactsTest extends TestCase
         $envDist = (string) file_get_contents(base_path('.env.dist'));
         $this->assertDoesNotMatchRegularExpression('/^VIEW_COMPILED_PATH=\s*$/m', $envDist);
         $this->assertDoesNotMatchRegularExpression('/^OCTANE_STATE_FILE=\s*$/m', $envDist);
+        $this->assertMatchesRegularExpression('/^OCTANE_SERVER=swoole$/m', $envDist);
+        $this->assertDoesNotMatchRegularExpression('/^#?\s*OCTANE_(RR_CONFIG|ROADRUNNER_\w+)=/m', $envDist, 'RoadRunner env vars were removed');
 
         $original = getenv('VIEW_COMPILED_PATH');
         putenv('VIEW_COMPILED_PATH=');
@@ -86,6 +96,8 @@ final class DeploymentArtifactsTest extends TestCase
             $this->assertStringContainsString($service, $compose, "compose must define service {$service}");
         }
         $this->assertStringNotContainsString('RR_STAGE', $compose);
+        $this->assertStringContainsString('OCTANE_SERVER: "${OCTANE_SERVER:-swoole}"', $compose);
+        $this->assertStringNotContainsStringIgnoringCase('roadrunner', $compose);
 
         $this->assertFileExists(base_path('docker-compose.typesense.yml'));
         $this->assertStringContainsString('typesense/typesense:', file_get_contents(base_path('docker-compose.typesense.yml')));

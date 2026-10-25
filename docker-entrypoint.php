@@ -136,5 +136,3 @@ if (isset($current_env[$periodical_full_indexer_key]) && in_array($current_env[$
     $current_time = time();
     echo json_encode(['level' => 'info', 'ts' => "$current_time.0", 'logger' => 'container_entrypoint', 'msg' => 'Full anime/manga indexer is enabled. They will run every Monday at 1am.']).PHP_EOL;
 }
-// Note: Octane/RoadRunner owns the RoadRunner .rr.yaml (overridden via -o
-// flags at start time), so no RR v2 YAML preprocessing is performed here.

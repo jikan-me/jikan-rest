@@ -34,8 +34,7 @@ if [ -f /etc/supercronic/laravel ] ; then
   trap 'kill "$SUPERVISOR_PID" 2>/dev/null || true' TERM INT EXIT
 fi
 
-# Optional queue workers (replaces the old RoadRunner `laravel_queue_worker_1`
-# service). Set QUEUE_WORKERS=N to run N `queue:work` processes.
+# Optional queue workers. Set QUEUE_WORKERS=N to run N `queue:work` processes.
 queue_workers="${QUEUE_WORKERS:-0}"
 i=0
 while [ "$i" -lt "$queue_workers" ]; do
@@ -43,13 +42,10 @@ while [ "$i" -lt "$queue_workers" ]; do
   i=$((i + 1))
 done
 
-# Octane (RoadRunner) generates its own .rr.yaml on start and overrides the
-# important bits via -o flags; drop any legacy v3 config that was shipped.
-rm -f /app/.rr.yaml
-
-# A custom RoadRunner config can be supplied via OCTANE_RR_CONFIG.
-if [ -n "${OCTANE_RR_CONFIG:-}" ] ; then
-  set -- --rr-config="$OCTANE_RR_CONFIG" "$@"
-fi
-
-exec php /app/artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8080 "$@"
+# Octane on Swoole. Pool sizing comes from the env (see .env.dist); extra
+# arguments passed to the container are appended and win over these.
+exec php /app/artisan octane:start --server=swoole --host=0.0.0.0 --port=8080 \
+  --workers="${OCTANE_WORKERS:-auto}" \
+  --task-workers="${OCTANE_TASK_WORKERS:-1}" \
+  --max-requests="${OCTANE_MAX_REQUESTS:-500}" \
+  "$@"

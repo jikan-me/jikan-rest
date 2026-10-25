@@ -63,7 +63,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl,intl,mbstring,mongodb-stable,opcache,sockets,pcntl,redis,brotli
+          # swoole: OctaneBootSmokeTest boots the real Octane server (it skips without it).
+          extensions: curl,intl,mbstring,mongodb-stable,opcache,sockets,pcntl,redis,brotli,swoole
           coverage: none
           tools: composer
 

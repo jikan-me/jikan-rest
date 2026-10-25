@@ -8,7 +8,7 @@
 # re-run. See docs/SETUP.md and the normalized script/ wrappers.
 #
 # Flags
-#   --server roadrunner|frankenphp|serve   runtime (default roadrunner)
+#   --server swoole|frankenphp|serve       runtime (default swoole; needs ext-swoole)
 #   --env=local|production                 cardinal env (default local)
 #   --no-dev                               composer --no-dev (production deps)
 #   --with-redis|--with-typesense|--with-backend-suite|--with-skills|--seed
@@ -43,7 +43,7 @@ if [[ -z "$PHP" ]]; then
 fi
 COMPOSER="${COMPOSER_BIN:-$(command -v composer || true)}"
 
-SERVER="${SERVER:-roadrunner}"
+SERVER="${SERVER:-swoole}"
 APP_ENV_MODE="local"
 DEV_DEPS=1
 REDIS=0; TYPESENSE=0; BACKEND_SUITE=0; SKILLS=0; SEED=0
@@ -114,7 +114,7 @@ done
 if is_tty && [[ "$YES" != "1" ]]; then
   printf '\n%s interactive? press Enter to accept the default at each prompt.\n' "$VERSION"
   ask_list "Application environment" "local,production" "local"; APP_ENV_MODE="$REPLY_LIST"
-  ask_list "Runtime server" "roadrunner,frankenphp,serve" "roadrunner"; SERVER="$REPLY_LIST"
+  ask_list "Runtime server" "swoole,frankenphp,serve" "swoole"; SERVER="$REPLY_LIST"
   ask_yn "Install dev dependencies (PHPUnit, PHPStan, Pint, …)" "y"; [[ "$REPLY_YN" == "n" ]] && DEV_DEPS=0
   printf '\nOptional integrations (each defaults to no):\n'
   ask_yn "  Redis (cache/queue)" "n"; [[ "$REPLY_YN" == "y" ]] && REDIS=1
@@ -225,19 +225,19 @@ fi
 start_hint() {
   case "$SERVER" in
     serve)      echo "  tools/dev/php artisan serve --host=127.0.0.1 --port=8000" ;;
-    roadrunner) echo "  OCTANE_SERVER=roadrunner tools/dev/php artisan octane:start --server=roadrunner --port=8000" ;;
+    swoole)     echo "  OCTANE_SERVER=swoole tools/dev/php artisan octane:start --server=swoole --port=8000" ;;
     frankenphp) echo "  OCTANE_SERVER=frankenphp tools/dev/php artisan octane:start --server=frankenphp --port=8000" ;;
   esac
 }
 
 case "$SERVER" in
   serve) : ;;
-  roadrunner)
-    if [[ ! -x ./rr ]]; then
-      say "Downloading RoadRunner binary"
-      run "$PHP" artisan octane:install --server=roadrunner
+  swoole)
+    if "$PHP" -r 'exit(extension_loaded("swoole") || extension_loaded("openswoole") ? 0 : 1);'; then
+      ok "ext-swoole $("$PHP" -r 'echo phpversion("swoole") ?: phpversion("openswoole");')"
+    else
+      warn "ext-swoole missing — install it (pecl install swoole) or use --server serve"
     fi
-    [[ -x ./rr ]] && ok "rr binary ($(./rr --version 2>/dev/null | head -1))" || warn "rr binary missing — run octane:install or install.sh again"
     ;;
   frankenphp)
     say "FrankenPHP (opt-in — binary not shipped in-repo)"
@@ -256,7 +256,7 @@ case "$SERVER" in
     fi
     ok "binary at $FDIR/frankenphp"
     ;;
-  *) die "unknown --server=$SERVER (roadrunner|frankenphp|serve)" ;;
+  *) die "unknown --server=$SERVER (swoole|frankenphp|serve)" ;;
 esac
 
 # --------------------------------------------------------------------- summary

@@ -1,24 +1,26 @@
 # syntax=docker/dockerfile:1
 
 # ---------------------------------------------------------------------------
-# jikan-rest — Laravel 13 on Octane (RoadRunner), PHP 8.4 (Alpine)
+# jikan-rest — Laravel 13 on Octane (Swoole), PHP 8.4 (Alpine)
 #
 # Replaces the old php:8.1.27-bullseye + RoadRunner 2.12.3 image, which could
 # not satisfy the project's composer platform requirements (php ^8.4.4,
 # mongodb/laravel-mongodb ^5 needs the modern MongoDB driver).
 #
-#   - Base: php:8.4.27-cli-alpine — Octane/RoadRunner workers are *CLI* processes,
+#   - Base: php:8.4.27-cli-alpine — Octane/Swoole workers are *CLI* processes,
 #     not php-fpm, so the CLI variant is the correct runtime. Pinned to the
 #     patch release (8.4.27 fixes GHSA-w8hw-w9fx-j79w / GHSA-6wmf-4rv5-p3rp) so
 #     builds are reproducible; composer.json pins "config.platform.php" to the
 #     same 8.4.27. Bump both together.
-#   - ext-mongodb and ext-brotli via pecl (recent stable; brotli backs the
-#     CompressResponse middleware), plus pcntl + sockets + opcache.
+#   - ext-swoole, ext-mongodb and ext-brotli via pecl (recent stable; swoole is
+#     the Octane server, brotli backs the CompressResponse middleware), plus
+#     pcntl + sockets + opcache. Swoole is built with its PECL defaults
+#     (openssl and brotli detected from the build deps; no curl/database
+#     hooks). Octane runs Swoole with coroutines disabled, which suits the
+#     non-hookable ext-mongodb. openssl-dev is a build-only dependency; it also
+#     gives ext-mongodb TLS support (libssl3 is in the base image).
 #     ext-json is compiled in on PHP 8.4; ctype/curl/mbstring/openssl/etc. are
 #     bundled in the official Alpine images.
-#   - RoadRunner binary 2025.1.15 — the current stable that spiral/roadrunner-cli
-#     (dev requirement ^2.7) downloads through `php artisan octane:install`
-#     (vendor/bin/rr get-binary), and >= Octane's required 2023.3.0.
 #   - config:cache runs at container start (after .env/secrets are prepared) so
 #     per-deployment env vars are honoured; route:cache is baked at build time
 #     (verified: closures are serialisable on Laravel 13 and the DISABLE_USER_LISTS
@@ -38,19 +40,13 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 # --no-scripts keeps post-root-package-install from copying .env (the entrypoint
 # prepares .env from .env.dist at startup). --no-autoloader: dumped later.
-# --ignore-platform-reqs: the composer image has no ext-mongodb/pcntl/sockets;
+# --ignore-platform-reqs: the composer image has no ext-mongodb/pcntl/sockets/swoole;
 # the runtime stage (which has them) does the authoritative dump-autoload.
 RUN composer install -n --no-dev --no-interaction --no-progress \
     --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
 
 #################################
-# 2) RoadRunner server binary   #
-#################################
-# Downloaded inside the app stage with arch detection (amalgamated below) —
-# avoids the ARG-in-COPY --from quirk and builds correctly on both arches.
-
-#################################
-# 3) Application image          #
+# 2) Application image          #
 #################################
 FROM php:8.4.27-cli-alpine AS app
 
@@ -59,11 +55,12 @@ FROM php:8.4.27-cli-alpine AS app
 # Requests from the app are served by Octane workers; opcache+JIT are tuned for
 # a long-lived CLI worker.
 RUN set -eux \
-    && apk add --no-cache git curl ca-certificates brotli-libs \
-    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers brotli-dev \
+    && apk add --no-cache git curl ca-certificates brotli-libs libstdc++ \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers brotli-dev openssl-dev \
     && pecl install mongodb \
     && pecl install brotli \
-    && docker-php-ext-enable mongodb brotli \
+    && yes '' | pecl install swoole \
+    && docker-php-ext-enable mongodb brotli swoole \
     && docker-php-ext-install pcntl sockets opcache \
     && apk del --purge .build-deps \
     && rm -rf /tmp/pear
@@ -84,26 +81,15 @@ RUN set -eux \
     && mkdir -p /etc/supercronic \
     && echo '*/1 * * * * php /app/artisan schedule:run' > /etc/supercronic/laravel
 
-# --- Copy code + binary artifacts -------------------------------------------
+# --- Copy code -----------------------------------------------------------------
 WORKDIR /app
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
-
-# RoadRunner binary 2025.1.15 (arch detected at build time).
-RUN set -eux \
-    && ARCH="$(uname -m | sed 's/x86_64/amd64/; s/aarch64/arm64/')" \
-    && wget -q "https://github.com/roadrunner-server/roadrunner/releases/download/v2025.1.15/roadrunner-2025.1.15-linux-${ARCH}.tar.gz" \
-        -O /tmp/rr.tar.gz \
-    && mkdir -p /tmp/rr \
-    && tar -xzf /tmp/rr.tar.gz -C /tmp/rr --strip-components=1 \
-    && mv /tmp/rr/rr /usr/local/bin/rr \
-    && chmod +x /usr/local/bin/rr \
-    && rm -rf /tmp/rr /tmp/rr.tar.gz
 
 # --- Non-root user ------------------------------------------------------------
 # Created before the code is copied so COPY --chown can set ownership in the same
 # layer (a separate `chown -R /app` layer took ~65 s and duplicated /app, vendor
 # included, in the image). /app itself must be owned by jikanapi: the entrypoint
-# writes /app/.env and removes /app/.rr.yaml at startup.
+# writes /app/.env at startup.
 RUN set -eux \
     && adduser -D -s /sbin/nologin -u 10001 -h /nonexistent jikanapi \
     && chown jikanapi:jikanapi /app
@@ -130,7 +116,6 @@ RUN set -eux \
     && chmod +x /app/docker-entrypoint.sh
 
 EXPOSE 8080
-EXPOSE 2114
 
 # GET /up (routes/api.php) returns a bare 200 "OK" with no DB dependency —
 # verifies the Octane worker is serving without coupling readiness to MongoDB.
