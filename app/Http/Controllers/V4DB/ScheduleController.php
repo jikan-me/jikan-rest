@@ -52,8 +52,6 @@ class ScheduleController extends Controller
     #[OA\Schema(schema: 'schedules', description: 'Anime resources currently airing', allOf: [new OA\Schema(ref: '#/components/schemas/pagination_plus'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', ref: '#/components/schemas/anime'))])])]
     public function main(QueryAnimeSchedulesCommand $command): mixed
     {
-        \Log::info('ScheduleController::main called', ['filter' => request()->filter]);
-
         return $this->mediator->send($command);
     }
 
