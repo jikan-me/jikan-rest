@@ -7,10 +7,11 @@
 # not satisfy the project's composer platform requirements (php ^8.4.4,
 # mongodb/laravel-mongodb ^5 needs the modern MongoDB driver).
 #
-#   - Base: php:8.4-cli-alpine — Octane/RoadRunner workers are *CLI* processes,
-#     not php-fpm, so the CLI variant is the correct runtime (a float on the
-#     8.4 line; composer.json pins "config.platform.php" to 8.4.26 so the lock
-#     resolves identically regardless of the container's patch level).
+#   - Base: php:8.4.27-cli-alpine — Octane/RoadRunner workers are *CLI* processes,
+#     not php-fpm, so the CLI variant is the correct runtime. Pinned to the
+#     patch release (8.4.27 fixes GHSA-w8hw-w9fx-j79w / GHSA-6wmf-4rv5-p3rp) so
+#     builds are reproducible; composer.json pins "config.platform.php" to the
+#     same 8.4.27. Bump both together.
 #   - ext-mongodb via pecl (recent stable), plus pcntl + sockets + opcache.
 #     ext-json is compiled in on PHP 8.4; ctype/curl/mbstring/openssl/etc. are
 #     bundled in the official Alpine images.
@@ -50,7 +51,7 @@ RUN composer install -n --no-dev --no-interaction --no-progress \
 #################################
 # 3) Application image          #
 #################################
-FROM php:8.4-cli-alpine AS app
+FROM php:8.4.27-cli-alpine AS app
 
 # --- PHP extensions ---------------------------------------------------------
 # $PHPIZE_DEPS is provided by the official image (build toolchain for pecl).

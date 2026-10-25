@@ -75,7 +75,7 @@ jobs:
         run: composer audit --locked --abandoned=report
 
       - name: Install dependencies
-        # Lock is resolved against config.platform = 8.4.26; --ignore-platform-req=php
+        # Lock is resolved against config.platform = 8.4.27; --ignore-platform-req=php
         # lets a runner with an older 8.4 patch release install the identical lock.
         run: |
           composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
@@ -176,7 +176,7 @@ jobs:
           extensions: mongodb-stable, pcntl
           coverage: xdebug
       - name: Install dependencies
-        run: composer install --no-interaction --no-progress --no-scripts --prefer-dist
+        run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
       - name: Run suite with coverage
         run: vendor/bin/phpunit --coverage-clover coverage.xml
       - uses: codecov/codecov-action@v4

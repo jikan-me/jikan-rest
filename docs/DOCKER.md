@@ -6,7 +6,7 @@ served by the RoadRunner binary on port 8080.
 
 | File | Purpose |
 |---|---|
-| `Dockerfile` | App image: PHP 8.4-cli-alpine + RoadRunner 2025.1.15, `composer` deps cached, `route:cache` baked, HEALTHCHECK on `/up` |
+| `Dockerfile` | App image: PHP 8.4.27-cli-alpine + RoadRunner 2025.1.15, `composer` deps cached, `route:cache` baked, HEALTHCHECK on `/up` |
 | `docker-compose.yml` | Full local stack: `app` (built from the Dockerfile) + `mongo` + `redis`, imports Typesense |
 | `docker-compose.typesense.yml` | Typesense service — single source of truth, imported via `include:` (also runnable standalone) |
 | `DOCKER.md` | This file |
