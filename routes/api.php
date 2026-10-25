@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 $commonMiddleware = [
-    'gzip',
+    'compress',
     'source-health-monitor',
     'microcaching',
     'cache-ttl',

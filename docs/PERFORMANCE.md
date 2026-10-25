@@ -119,7 +119,7 @@ floor for anime/21 ≈ **23 ms**.
 | Lever | Result | Action |
 |---|---|---|
 | **Heartbeat per-request Mongo write/query** | THE bottleneck | **Debounced to ≤1 write/interval (1 s default)** — `SourceHeartbeatListener` |
-| **Response compression (gzip)** | seasons 109 KB → **18 KB** (~6×) | **Applied** — `GzipResponse` middleware (opt-in on Accept-Encoding) |
+| **Response compression (br/gzip)** | seasons 109 KB → **18 KB** gzip (~6×) | **Applied** — `CompressResponse` middleware (Brotli when ext-brotli is loaded and the client accepts `br`, else gzip; negotiated on Accept-Encoding) |
 | Worker count (Octane) | 2w → 4w → 8w scales | Use ≈ cores; keep configurable |
 | Micro-cache (60 s, in-process) | No win on small reads (off 298 vs on 188 rps, 8w) | Kept OFF; Redis+piggyback only |
 | opcache.enable_cli (dev server) | ~nil | Keep default; compile not the cost |

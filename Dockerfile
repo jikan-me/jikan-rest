@@ -12,7 +12,8 @@
 #     patch release (8.4.27 fixes GHSA-w8hw-w9fx-j79w / GHSA-6wmf-4rv5-p3rp) so
 #     builds are reproducible; composer.json pins "config.platform.php" to the
 #     same 8.4.27. Bump both together.
-#   - ext-mongodb via pecl (recent stable), plus pcntl + sockets + opcache.
+#   - ext-mongodb and ext-brotli via pecl (recent stable; brotli backs the
+#     CompressResponse middleware), plus pcntl + sockets + opcache.
 #     ext-json is compiled in on PHP 8.4; ctype/curl/mbstring/openssl/etc. are
 #     bundled in the official Alpine images.
 #   - RoadRunner binary 2025.1.15 — the current stable that spiral/roadrunner-cli
@@ -58,11 +59,14 @@ FROM php:8.4.27-cli-alpine AS app
 # Requests from the app are served by Octane workers; opcache+JIT are tuned for
 # a long-lived CLI worker.
 RUN set -eux \
-    && apk add --no-cache git curl ca-certificates $PHPIZE_DEPS linux-headers \
+    && apk add --no-cache git curl ca-certificates brotli-libs \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS linux-headers brotli-dev \
     && pecl install mongodb \
-    && docker-php-ext-enable mongodb \
+    && pecl install brotli \
+    && docker-php-ext-enable mongodb brotli \
     && docker-php-ext-install pcntl sockets opcache \
-    && apk del --purge $PHPIZE_DEPS
+    && apk del --purge .build-deps \
+    && rm -rf /tmp/pear
 
 RUN { \
         echo 'opcache.enable=1'; \

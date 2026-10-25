@@ -63,7 +63,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl,intl,mbstring,mongodb-stable,opcache,sockets,pcntl,redis
+          extensions: curl,intl,mbstring,mongodb-stable,opcache,sockets,pcntl,redis,brotli
           coverage: none
           tools: composer
 
@@ -125,7 +125,7 @@ jobs:
           php-version: 8.4
           # composer.lock requires ext-mongodb ^2.5 (and composer.json ext-pcntl);
           # without them `composer install` fails before any check runs.
-          extensions: mongodb-stable, pcntl
+          extensions: mongodb-stable, pcntl, brotli
           coverage: none
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
@@ -173,7 +173,7 @@ jobs:
         with:
           php-version: 8.4
           # Same extensions as the other jobs: composer.lock needs ext-mongodb, composer.json ext-pcntl.
-          extensions: mongodb-stable, pcntl
+          extensions: mongodb-stable, pcntl, brotli
           coverage: xdebug
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
