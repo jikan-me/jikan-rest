@@ -170,7 +170,7 @@ class AnimeController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(schema: 'anime_episodes', description: 'Anime Episodes Resource', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', properties: [new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'), new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL. This is the URL of the episode\'s video. If there is no video url, this will be null.', nullable: true), new OA\Property(property: 'title', type: 'string', description: 'Title'), new OA\Property(property: 'title_japanese', type: 'string', description: 'Title Japanese', nullable: true), new OA\Property(property: 'title_romanji', type: 'string', description: 'title_romanji', nullable: true), new OA\Property(property: 'aired', type: 'string', description: 'Aired Date ISO8601', nullable: true), new OA\Property(property: 'score', type: 'float', description: 'Aggregated episode score (1.00 - 5.00) based on MyAnimeList user voting', minimum: 1, maximum: 5, nullable: true), new OA\Property(property: 'filler', type: 'boolean', description: 'Filler episode'), new OA\Property(property: 'recap', type: 'boolean', description: 'Recap episode'), new OA\Property(property: 'forum_url', type: 'string', description: 'Episode discussion forum URL', nullable: true)]))])])]
     public function episodes(AnimeEpisodesLookupCommand $command): mixed
     {
@@ -239,7 +239,7 @@ class AnimeController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(schema: 'anime_news', description: 'Anime News Resource', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(ref: '#/components/schemas/news')])]
     public function news(AnimeNewsLookupCommand $command): mixed
     {
@@ -333,7 +333,7 @@ class AnimeController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(schema: 'anime_videos_episodes', description: 'Anime Videos Episodes Resource', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', properties: [new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID or Episode Number'), new OA\Property(property: 'title', type: 'string', description: 'Episode Title'), new OA\Property(property: 'episode', type: 'string', description: 'Episode Subtitle'), new OA\Property(property: 'url', type: 'string', description: 'Episode Page URL'), new OA\Property(property: 'images', ref: '#/components/schemas/common_images')]))])])]
     public function videosEpisodes(AnimeVideosEpisodesLookupCommand $command): mixed
     {

@@ -72,7 +72,7 @@ class MangaIndexer extends Command
             $this->ids = $this->loadFailedMalIds();
         }
 
-        if (! $failed) {
+        if (!$failed) {
             $this->ids = $this->fetchMalIds();
         }
 
@@ -89,7 +89,7 @@ class MangaIndexer extends Command
         }
 
         // check if index even exists
-        if ($index > 0 && ! isset($this->ids[$index])) {
+        if ($index > 0 && !isset($this->ids[$index])) {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
         }
@@ -167,7 +167,7 @@ class MangaIndexer extends Command
      */
     private function loadFailedMalIds(): array
     {
-        if (! Storage::exists('indexer/indexer_manga.failed')) {
+        if (!Storage::exists('indexer/indexer_manga.failed')) {
             throw new FileNotFoundException('"indexer/indexer_manga.failed" does not exist');
         }
 

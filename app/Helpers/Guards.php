@@ -11,7 +11,7 @@ abstract class Guards
      */
     public static function shouldBeMongoDbModel(object|string $modelClass): void
     {
-        if (! in_array(Model::class, class_parents($modelClass))) {
+        if (!in_array(Model::class, class_parents($modelClass))) {
             throw new \InvalidArgumentException("$modelClass should inherit from \MongoDB\Laravel\Eloquent\Model.");
         }
     }

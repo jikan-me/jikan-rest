@@ -39,7 +39,7 @@ final class ParityEndpointsContractTest extends TestCase
                     break;
                 }
             }
-            if (! $hit) {
+            if (!$hit) {
                 $missing[] = $line;
             }
         }

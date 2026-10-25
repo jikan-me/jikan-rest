@@ -123,7 +123,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ->where('type', AnimeTypeEnum::tv()->label)
             ->where('status', AnimeStatusEnum::airing()->label);
 
-        if (! is_null($filter)) {
+        if (!is_null($filter)) {
             if ($filter->isWeekDay()) {
                 $queryable = $queryable->where('broadcast', 'like', "{$filter->label}%");
             } else {
@@ -236,7 +236,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
             ];
         }
 
-        if (! is_null($type)) {
+        if (!is_null($type)) {
             $finalFilter['type'] = $type->label;
         }
 
@@ -250,7 +250,7 @@ final class DefaultAnimeRepository extends DatabaseRepository implements AnimeRe
     ): EloquentBuilder {
         $queryable = $this->queryable(true)->where('status', AnimeStatusEnum::upcoming()->label);
 
-        if (! is_null($type)) {
+        if (!is_null($type)) {
             $queryable = $queryable->where('type', $type->label);
         }
 

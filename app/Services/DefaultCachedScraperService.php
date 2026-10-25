@@ -151,7 +151,7 @@ final class DefaultCachedScraperService implements CachedScraperService
      */
     private function dbResultSetToCachedData(Collection $dbResults): CachedData
     {
-        if (! $dbResults->isEmpty()) {
+        if (!$dbResults->isEmpty()) {
             $item = $dbResults->first();
 
             return $this->dbRecordToCachedData($item);

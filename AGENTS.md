@@ -27,13 +27,15 @@ fresh clones use your distro php or `PHP_BIN=/path/to/php tools/dev/php …`.
 | Task | Command |
 |---|---|
 | Tests | `tools/dev/php vendor/bin/phpunit --no-coverage` |
-| Lint | `tools/dev/php vendor/bin/pint --test app routes config tests` |
+| Lint | `tools/dev/php vendor/bin/pint --test` |
 | Static analysis | `tools/dev/php -d error_reporting=24575 vendor/bin/phpstan analyse --no-progress` |
 | Regenerate OpenAPI spec | `tools/dev/php artisan l5-swagger:generate` |
 | Regenerate agent catalog+manifest | `tools/dev/php composer endpoints:write` |
 | Parity harness | `tools/dev/php tools/parity/snapshot.php …` + `compare.php` |
 | Audit suite | `/path/to/backend-suite audit <name>` (see `.backend-suite/`) |
 | Full data index | `tools/dev/php artisan indexer:anime` / `indexer:manga` (long) |
+
+Formatting is defined by `pint.json`; run `vendor/bin/pint` before committing.
 
 Generated artifacts (`storage/api-docs/api-docs.json`, `docs/ai/*`) are
 committed canonical: **do not hand-edit** — regenerate, and `endpoints:check` /

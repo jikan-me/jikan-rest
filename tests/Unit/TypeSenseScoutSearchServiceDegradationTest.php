@@ -4,8 +4,8 @@ namespace Tests\Unit;
 
 use App\Contracts\Repository;
 use App\Contracts\SearchAnalyticsService;
-use App\Services\TypeSenseScoutSearchService;
 use App\Services\TypesenseCollectionDescriptor;
+use App\Services\TypeSenseScoutSearchService;
 use App\Support\JikanConfig;
 use App\Support\SearchEngineFailure;
 use Illuminate\Http\Client\ConnectionException;

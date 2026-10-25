@@ -29,8 +29,6 @@ use OpenApi\Attributes as OA;
 )]
 class AnimeRelationsResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

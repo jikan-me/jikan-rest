@@ -149,7 +149,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             // value => label  key pairs
             // we store labels in the database
             $typeOverride = collect($this->descriptor->typeParamMap())->get(strtolower($additionalParams['type']));
-            if (! is_null($typeOverride)) {
+            if (!is_null($typeOverride)) {
                 $overrides['type'] = $typeOverride;
             }
         }
@@ -175,14 +175,14 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             $overrides['score'] = floatval($additionalParams['score']);
         }
 
-        if ($additionalParams->has('min_score') && ! $additionalParams->has('max_score')) {
+        if ($additionalParams->has('min_score') && !$additionalParams->has('max_score')) {
             $min_score = floatval($additionalParams['min_score']);
             if ($this->isScoreValueValid($min_score)) {
                 $overrides['score'] = $this->faker->randomFloat(2, floatval($additionalParams['min_score']), 9.99);
             }
         }
 
-        if (! $additionalParams->has('min_score') && $additionalParams->has('max_score')) {
+        if (!$additionalParams->has('min_score') && $additionalParams->has('max_score')) {
             $max_score = floatval($additionalParams['max_score']);
 
             if ($this->isScoreValueValid($max_score)) {
@@ -202,7 +202,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         if ($additionalParams->has('status')) {
             $statusParamMap = $this->descriptor->statusParamMap();
             $statusOverride = collect($statusParamMap)->get(strtolower($additionalParams['status']));
-            if (! is_null($statusOverride)) {
+            if (!is_null($statusOverride)) {
                 $overrides['status'] = $statusOverride;
             } else {
                 $overrides['status'] = $this->faker->randomElement(array_values($statusParamMap));
@@ -219,7 +219,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
 
         if ($this->descriptor->hasRatingParam() && $additionalParams->has('rating')) {
             $v = AnimeRatingEnum::tryFrom(strtolower($additionalParams['rating']));
-            if (! is_null($v)) {
+            if (!is_null($v)) {
                 $overrides['rating'] = $v->label;
             }
         }
@@ -239,15 +239,15 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             }
         }
 
-        if ($additionalParams->has('start_date') && ! empty($additionalParams['start_date'])
-            && ! $additionalParams->has('end_date')) {
+        if ($additionalParams->has('start_date') && !empty($additionalParams['start_date'])
+            && !$additionalParams->has('end_date')) {
             $startDate = $this->adaptDateString($additionalParams['start_date']);
             $dt = Carbon::parse($startDate)->addDays($this->faker->numberBetween(1, 25));
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($dt, null);
         }
 
-        if ($additionalParams->has('end_date') && ! empty($additionalParams['end_date'])
-            && ! $additionalParams->has('start_date')) {
+        if ($additionalParams->has('end_date') && !empty($additionalParams['end_date'])
+            && !$additionalParams->has('start_date')) {
             $endDate = $this->adaptDateString($additionalParams['end_date']);
             $to = Carbon::parse($endDate);
             $from = $to->copy()->subDays($this->faker->randomElement([30, 60, 90, 120, 180]));
@@ -255,7 +255,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         }
 
         if ($additionalParams->has(['start_date', 'end_date'])
-            && ! empty($additionalParams['start_date']) && ! empty($additionalParams['end_date'])) {
+            && !empty($additionalParams['start_date']) && !empty($additionalParams['end_date'])) {
             $startDate = $this->adaptDateString($additionalParams['start_date']);
             $from = Carbon::parse($startDate);
             $endDate = $this->adaptDateString($additionalParams['end_date']);
@@ -307,14 +307,14 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             $overrides['score'] = $randomScore;
         }
 
-        if ($additionalParams->has('min_score') && ! $additionalParams->has('max_score')) {
+        if ($additionalParams->has('min_score') && !$additionalParams->has('max_score')) {
             $min_score = floatval($additionalParams['min_score']);
             if ($this->isScoreValueValid($min_score)) {
                 $overrides['score'] = $this->faker->randomFloat(2, 1.00, floatval($additionalParams['min_score']) - 0.01);
             }
         }
 
-        if (! $additionalParams->has('min_score') && $additionalParams->has('max_score')) {
+        if (!$additionalParams->has('min_score') && $additionalParams->has('max_score')) {
             $max_score = $additionalParams['max_score'];
             if ($this->isScoreValueValid($max_score)) {
                 $overrides['score'] = $this->faker->randomFloat(2, floatval($additionalParams['max_score']) + 0.01, 9.99);
@@ -362,7 +362,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         }
 
         if (($additionalParams->has('genres') && $additionalParams->has('genres_exclude')) || (
-            ! $additionalParams->has('genres') && $additionalParams->has('genres_exclude')
+            !$additionalParams->has('genres') && $additionalParams->has('genres_exclude')
         )) {
             $overrides['genres'] = [];
             // use the "genres_exclude" values to add genres to the anime item
@@ -402,15 +402,15 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
             }
         }
 
-        if ($additionalParams->has('start_date') && ! empty($additionalParams['start_date'])
-            && ! $additionalParams->has('end_date')) {
+        if ($additionalParams->has('start_date') && !empty($additionalParams['start_date'])
+            && !$additionalParams->has('end_date')) {
             $startDate = $this->adaptDateString($additionalParams['start_date']);
             $dt = Carbon::parse($startDate)->subDays($this->faker->randomElement([30, 60, 90, 120, 180]));
             $overrides[$activityMarkerKeyName] = new CarbonDateRange($dt, null);
         }
 
-        if ($additionalParams->has('end_date') && ! empty($additionalParams['end_date'])
-            && ! $additionalParams->has('start_date')) {
+        if ($additionalParams->has('end_date') && !empty($additionalParams['end_date'])
+            && !$additionalParams->has('start_date')) {
             $endDate = $this->adaptDateString($additionalParams['end_date']);
             $to = Carbon::parse($endDate)->addDays($this->faker->randomElement([30, 60, 90, 120, 180]));
             $from = $to->copy()->subDays($this->faker->randomElement([30, 60, 90, 120, 180]));
@@ -418,7 +418,7 @@ abstract class JikanMediaModelFactory extends JikanModelFactory implements Media
         }
 
         if ($additionalParams->has('start_date') && $additionalParams->has('end_date')
-            && ! empty($additionalParams['start_date']) && ! empty($additionalParams['end_date'])) {
+            && !empty($additionalParams['start_date']) && !empty($additionalParams['end_date'])) {
             $originalFrom = Carbon::parse($this->adaptDateString($additionalParams['start_date']));
             $originalTo = Carbon::parse($this->adaptDateString($additionalParams['end_date']));
             $interval = $originalTo->diff($originalFrom);

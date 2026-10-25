@@ -101,7 +101,7 @@ final class ClubFactory extends JikanModelFactory
 
         if ($additionalParams->has('type')) {
             $typeOverride = collect(ClubTypeEnum::toArray())->get(strtolower($additionalParams['type']));
-            if (! is_null($typeOverride)) {
+            if (!is_null($typeOverride)) {
                 $overrides['type'] = $typeOverride;
             }
         }
@@ -112,7 +112,7 @@ final class ClubFactory extends JikanModelFactory
 
         if ($additionalParams->has('category')) {
             $categoryOverride = collect(ClubCategoryEnum::toArray())->get(strtolower($additionalParams['category']));
-            if (! is_null($categoryOverride)) {
+            if (!is_null($categoryOverride)) {
                 $overrides['category'] = $categoryOverride;
             }
         }

@@ -101,7 +101,7 @@ final class DeploymentArtifactsTest extends TestCase
         $this->assertFileDoesNotExist(base_path('.github/workflows/tests.yml'), 'legacy tests.yml must stay deleted');
 
         foreach (['AGENTS.md', 'CLAUDE.md', 'llms.txt', 'docs/INDEX.md',
-                  'docs/ai/endpoints.json', 'docs/ai/manifest.json'] as $artifact) {
+            'docs/ai/endpoints.json', 'docs/ai/manifest.json'] as $artifact) {
             $this->assertFileExists(base_path($artifact), "deployment artifact missing: {$artifact}");
         }
     }

@@ -28,7 +28,7 @@ final class DefaultMediator implements Mediator
     {
         $className = get_class($requestData);
 
-        if (! isset($this->handlerFactories[$className])) {
+        if (!isset($this->handlerFactories[$className])) {
             return response()->json([
                 'message' => 'Programmer error: Request handler not found for request.',
             ], 500);

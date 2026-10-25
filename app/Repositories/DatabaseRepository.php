@@ -6,6 +6,7 @@ use App\Contracts\Repository;
 use App\JikanApiModel;
 use App\Support\RepositoryQuery;
 use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class DatabaseRepository extends RepositoryQuery implements Repository
@@ -74,7 +75,7 @@ class DatabaseRepository extends RepositoryQuery implements Repository
         // the meta fields are assigned directly below; keeping them out of fill() avoids
         // tripping strict models for keys that are never meant to be mass-assigned
         $metaFields = ['request_hash', 'modifiedAt', 'createdAt'];
-        $modelInstance->fill(\Illuminate\Support\Arr::except($attributes, $metaFields));
+        $modelInstance->fill(Arr::except($attributes, $metaFields));
         foreach ($metaFields as $metaField) {
             if (array_key_exists($metaField, $attributes)) {
                 $modelInstance->$metaField = $attributes[$metaField];

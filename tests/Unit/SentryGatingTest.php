@@ -4,6 +4,8 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\PackageManifest;
+use Sentry\Laravel\ServiceProvider;
 use Tests\TestCase;
 
 /**
@@ -16,14 +18,14 @@ final class SentryGatingTest extends TestCase
     {
         $this->assertFalse(config('jikan.reporting'));
         $this->assertFalse($this->app->bound('sentry'));
-        $this->assertNull($this->app->getProvider(\Sentry\Laravel\ServiceProvider::class));
+        $this->assertNull($this->app->getProvider(ServiceProvider::class));
     }
 
     public function test_sentry_is_not_part_of_package_auto_discovery(): void
     {
-        $discovered = array_keys($this->app->make(\Illuminate\Foundation\PackageManifest::class)->config('providers') ?? []);
+        $discovered = array_keys($this->app->make(PackageManifest::class)->config('providers') ?? []);
 
-        $this->assertNotContains(\Sentry\Laravel\ServiceProvider::class, $discovered);
-        $this->assertNotContains('sentry/sentry-laravel', array_keys($this->app->make(\Illuminate\Foundation\PackageManifest::class)->manifest));
+        $this->assertNotContains(ServiceProvider::class, $discovered);
+        $this->assertNotContains('sentry/sentry-laravel', array_keys($this->app->make(PackageManifest::class)->manifest));
     }
 }

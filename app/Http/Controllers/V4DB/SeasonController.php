@@ -110,7 +110,7 @@ class SeasonController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(
         schema: 'seasons',
         description: 'List of available seasons',

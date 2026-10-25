@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Http\Middleware\CompressResponse;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -39,7 +40,7 @@ class CompressResponseTest extends TestCase
 
     private function requireBrotli(): void
     {
-        if (! function_exists('brotli_compress')) {
+        if (!function_exists('brotli_compress')) {
             $this->markTestSkipped('ext-brotli is not installed');
         }
     }
@@ -150,7 +151,7 @@ class CompressResponseTest extends TestCase
 
     public function test_aliases_and_api_routes_use_the_middleware(): void
     {
-        $aliases = app(\Illuminate\Contracts\Http\Kernel::class)->getRouteMiddleware();
+        $aliases = app(Kernel::class)->getRouteMiddleware();
         $this->assertSame(CompressResponse::class, $aliases['compress']);
         $this->assertSame(CompressResponse::class, $aliases['gzip'], 'legacy alias kept for custom route files');
 

@@ -78,11 +78,11 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 // (401/403, bad API key) and anything else are reported and rethrown
                 // so a misconfigured deployment is not silently serving nothing.
                 report($e);
-                if (! SearchEngineFailure::isDegradable($e)) {
+                if (!SearchEngineFailure::isDegradable($e)) {
                     throw $e;
                 }
                 $results = ['hits' => [], 'found' => 0, 'out_of' => 0, 'page' => 1,
-                            'request_params' => ['q' => $query, 'per_page' => $options['per_page'] ?? 250]];
+                    'request_params' => ['q' => $query, 'per_page' => $options['per_page'] ?? 250]];
             }
             try {
                 $this->recordSearchTelemetry($query, $results);
@@ -134,7 +134,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
     private function setQueryByWeights(array $options, JikanApiSearchableModel $modelInstance): array
     {
         $queryByWeights = $modelInstance->getTypeSenseQueryByWeights();
-        if (! is_null($queryByWeights)) {
+        if (!is_null($queryByWeights)) {
             $options['query_by_weights'] = $queryByWeights;
         }
 
@@ -148,7 +148,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
     private function setSortOrder(array $options, JikanApiSearchableModel $modelInstance): array
     {
         $sortByFields = $modelInstance->getSearchIndexSortBy();
-        if (! is_null($sortByFields)) {
+        if (!is_null($sortByFields)) {
             $sortBy = '';
             foreach ($sortByFields as $f) {
                 $sortBy .= $f['field'].':'.$f['direction'];
@@ -156,7 +156,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             }
             $sortBy = rtrim($sortBy, ',');
             $options['sort_by'] = $sortBy;
-        } elseif (is_null($sortByFields) && ! array_key_exists('sort_by', $options)) {
+        } elseif (is_null($sortByFields) && !array_key_exists('sort_by', $options)) {
             $options['sort_by'] = '_text_match:desc';
         }
 
@@ -190,7 +190,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
         // fixme end
 
         // override ordering field
-        if (! is_null($orderByField) && in_array($orderByField, $modelAttrNames)) {
+        if (!is_null($orderByField) && in_array($orderByField, $modelAttrNames)) {
             $options['sort_by'] = "$orderByField:".($sortDirectionDescending ? 'desc' : 'asc').',_text_match(buckets:'.$this->jikanConfig->textMatchBuckets().'):desc';
         }
 

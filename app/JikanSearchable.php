@@ -15,7 +15,7 @@ trait JikanSearchable
     {
         $field = $this->{$fieldName};
 
-        if (! is_array($field) && ! is_object($field)) {
+        if (!is_array($field) && !is_object($field)) {
             return $field;
         }
 

@@ -24,7 +24,7 @@ final class MapRouteParametersDataPipe implements DataPipe
             foreach ($class->properties as $dataProperty) {
                 $routeParamVal = $payload->route($dataProperty->inputMappedName ?? $dataProperty->name);
 
-                if (! is_null($routeParamVal)) {
+                if (!is_null($routeParamVal)) {
                     $properties[$dataProperty->name] = $routeParamVal;
                 }
             }

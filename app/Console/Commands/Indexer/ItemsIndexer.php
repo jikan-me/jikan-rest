@@ -50,7 +50,7 @@ class ItemsIndexer extends Command
     public function handle(): int
     {
         $family = strtolower($this->argument('family'));
-        if (! isset(self::FAMILIES[$family])) {
+        if (!isset(self::FAMILIES[$family])) {
             $this->error("Unknown family '{$family}' (anime|manga|character|people)."
                 ." 'club' has no id cache — populate via lazy scraping / user club lists instead.");
 
@@ -78,7 +78,7 @@ class ItemsIndexer extends Command
                 return self::FAILURE;
             }
             $this->info('Using '.count($this->ids)." harvested {$family} ids (source: harvest)");
-        } elseif (! $failed) {
+        } elseif (!$failed) {
             $this->ids = $this->fetchMalIds($key, self::FAMILIES[$family]['cache']);
         }
 
@@ -91,7 +91,7 @@ class ItemsIndexer extends Command
             $this->info("Resuming from index: {$index}");
         }
 
-        if ($index > 0 && ! isset($this->ids[$index])) {
+        if ($index > 0 && !isset($this->ids[$index])) {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
         }
@@ -161,7 +161,7 @@ class ItemsIndexer extends Command
      */
     private function loadFailedMalIds(string $key): array
     {
-        if (! Storage::exists("indexer/indexer_{$key}.failed")) {
+        if (!Storage::exists("indexer/indexer_{$key}.failed")) {
             throw new FileNotFoundException("indexer/indexer_{$key}.failed does not exist");
         }
 
@@ -177,7 +177,7 @@ class ItemsIndexer extends Command
     private function harvestMalIds(string $family): array
     {
         $path = "indexer/harvest_{$family}.json";
-        if (! Storage::exists($path)) {
+        if (!Storage::exists($path)) {
             return [];
         }
 

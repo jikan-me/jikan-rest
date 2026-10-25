@@ -48,7 +48,7 @@ class ScheduleController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(schema: 'schedules', description: 'Anime resources currently airing', allOf: [new OA\Schema(ref: '#/components/schemas/pagination_plus'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', ref: '#/components/schemas/anime'))])])]
     public function main(QueryAnimeSchedulesCommand $command): mixed
     {

@@ -21,7 +21,7 @@ class OrderbyClause extends BaseClause
 
     protected function validate(mixed $value): bool
     {
-        return ! in_array(null, (array) $value);
+        return !in_array(null, (array) $value);
     }
 
     /**
@@ -35,7 +35,7 @@ class OrderbyClause extends BaseClause
 
             $exploded = explode(',', $value);
 
-            if (! empty($exploded[1]) and in_array($exploded[1], ['asc', 'desc'])) {
+            if (!empty($exploded[1]) and in_array($exploded[1], ['asc', 'desc'])) {
                 $normalized[$exploded[0]] = $exploded[1];
 
                 continue;

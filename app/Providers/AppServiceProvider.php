@@ -62,6 +62,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Jikan\MyAnimeList\MalClient;
 use Laravel\Scout\Builder as ScoutBuilder;
+use Sentry\State\Scope;
 use Symfony\Component\HttpClient\HttpClient;
 use Typesense\Client;
 
@@ -84,7 +85,7 @@ class AppServiceProvider extends ServiceProvider
         // throw outside production; production keeps the lenient behaviour. The
         // discarded-attributes check is what exposed Profile::$fillable lacking
         // last_updates / external_links (DatabaseRepository::insert() relies on fill()).
-        Model::shouldBeStrict(! $this->app->isProduction());
+        Model::shouldBeStrict(!$this->app->isProduction());
 
         $this->registerMacros();
         // the registration of request handlers should happen after the load of all service providers.
@@ -132,7 +133,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(JikanConfig::class, fn () => new JikanConfig(config('jikan')));
         $this->app->singleton(SearchAnalyticsService::class,
-            ! $this->app->environment('testing') ? DefaultSearchAnalyticsService::class :
+            !$this->app->environment('testing') ? DefaultSearchAnalyticsService::class :
                 DummySearchAnalyticsService::class);
         $this->app->alias(JikanConfig::class, 'jikan-config');
         // cache options class is used to share the request scope level cache settings
@@ -156,7 +157,7 @@ class AppServiceProvider extends ServiceProvider
      */
     private function registerSentry(): void
     {
-        if (! config('jikan.reporting') || strtolower((string) config('jikan.reporting_driver')) !== 'sentry') {
+        if (!config('jikan.reporting') || strtolower((string) config('jikan.reporting_driver')) !== 'sentry') {
             return;
         }
 
@@ -165,7 +166,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->register(\Sentry\Laravel\Tracing\ServiceProvider::class);
 
         $this->app->booted(function (): void {
-            \Sentry\configureScope(function (\Sentry\State\Scope $scope): void {
+            \Sentry\configureScope(function (Scope $scope): void {
                 $scope->setTag('rest.jikan.version', (string) config('app.version'));
                 $scope->setTag('parser.jikan.version', (string) JIKAN_PARSER_VERSION);
             });

@@ -23,7 +23,7 @@ class EndpointsCommand extends Command
     public function handle(AiManifestService $service): int
     {
         $specPath = storage_path('api-docs/api-docs.json');
-        if (! is_file($specPath)) {
+        if (!is_file($specPath)) {
             $this->error('OpenAPI spec missing — run php artisan l5-swagger:generate first.');
 
             return self::FAILURE;
@@ -56,7 +56,7 @@ class EndpointsCommand extends Command
             return $this->check($files, $dir);
         }
 
-        if (! is_dir($dir) && ! mkdir($dir, 0775, true) && ! is_dir($dir)) {
+        if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
             $this->error("Cannot create {$dir}");
 
             return self::FAILURE;
@@ -76,7 +76,7 @@ class EndpointsCommand extends Command
         foreach ($builders as $name => $build) {
             $want = $this->encode($build());
             $path = $dir.'/'.$name;
-            if (! is_file($path) || file_get_contents($path) !== $want) {
+            if (!is_file($path) || file_get_contents($path) !== $want) {
                 $drift++;
                 $this->error("STALE: {$path} — run `composer endpoints:write` and commit the result.");
                 if ($this->option('diff') && is_file($path)) {

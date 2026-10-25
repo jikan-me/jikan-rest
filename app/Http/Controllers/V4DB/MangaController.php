@@ -135,7 +135,7 @@ class MangaController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(schema: 'manga_news', description: 'Manga News Resource', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(ref: '#/components/schemas/news')])]
     public function news(MangaNewsLookupCommand $command): mixed
     {
@@ -200,7 +200,7 @@ class MangaController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(
         schema: 'manga_pictures',
         description: 'Manga Pictures',

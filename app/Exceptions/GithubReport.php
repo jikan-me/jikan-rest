@@ -63,7 +63,7 @@ class GithubReport
         }
 
         $report->instanceType = 'UNKNOWN';
-        if (! app()->environment('testing')) {
+        if (!app()->environment('testing')) {
             if (array_key_exists('SERVER_NAME', $_SERVER)) {
                 $report->instanceType = $_SERVER['SERVER_NAME'] === 'api.jikan.moe' ? 'OFFICIAL' : 'HOSTED';
             } else {

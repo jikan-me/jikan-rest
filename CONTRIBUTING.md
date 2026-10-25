@@ -15,17 +15,15 @@ Follow the self-hosting section of the [README](README.MD) and [docs/SETUP.md](d
 
 ## Checks
 
-Run these before opening a pull request (CI runs PHPUnit, PHPStan and a scoped Pint check):
+Run these before opening a pull request (CI runs PHPUnit, PHPStan and Pint):
 
 ```bash
 composer phpunit                         # = vendor/bin/phpunit --no-coverage (needs MongoDB)
 composer phpstan                         # PHPStan, must report 0 errors
-vendor/bin/pint --test path/to/File.php  # code style for the files you touched
+vendor/bin/pint --test                   # code style (whole repo, rules in pint.json)
 ```
 
-The tree is not fully Pint-clean yet (Lumen-era formatting), so run Pint on the files you
-changed rather than `composer pint` on everything, and don't mix mass reformatting into a
-feature PR. CI checks the files listed in `.github/workflows/ci.yml`.
+Formatting is defined by `pint.json`; run `vendor/bin/pint` before committing.
 
 Point `DB_DATABASE` at a throwaway database when running the tests
 (e.g. `DB_DATABASE=jikan_tests composer phpunit`) — the suite drops it.

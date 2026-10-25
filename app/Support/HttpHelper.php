@@ -19,7 +19,7 @@ class HttpHelper
     public static function requestType(Request $request): string
     {
         $requestType = $request->segments()[1];
-        if (! \in_array($request->segments()[0], ['v1', 'v2', 'v3', 'v4'])) {
+        if (!\in_array($request->segments()[0], ['v1', 'v2', 'v3', 'v4'])) {
             $requestType = $request->segments()[0];
         }
 
@@ -37,7 +37,7 @@ class HttpHelper
      */
     public static function serializeEmptyObjects(string $requestType, array $data): array
     {
-        if (! ($requestType === 'anime' || $requestType === 'manga')) {
+        if (!($requestType === 'anime' || $requestType === 'manga')) {
             return $data;
         }
 
@@ -72,7 +72,7 @@ class HttpHelper
     public static function getRouteName(Request $request): string
     {
         $route = $request->route();
-        if (! $route) {
+        if (!$route) {
             return 'App\Undefined';
         }
 

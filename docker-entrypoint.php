@@ -32,7 +32,7 @@ function env_file_set(string $path, array $values): int
 
     $added = 0;
     foreach ($values as $key => $value) {
-        if (! in_array($key, $previous, true)) {
+        if (!in_array($key, $previous, true)) {
             $added++;
         }
         $kept[] = $key.'='.env_quote((string) $value);
@@ -84,7 +84,7 @@ $current_env = getenv();
 
 // First boot of a pristine image: materialise .env from .env.dist and overlay
 // the safe defaults from the container environment.
-if (! file_exists('.env')) {
+if (!file_exists('.env')) {
     copy('.env.dist', '.env');
     $values = [];
     foreach ($safe_defaults as $env_var_name => $env_var_default) {
@@ -98,12 +98,13 @@ if (! file_exists('.env')) {
 // .env so the Octane workers (which may not inherit the environment) see them.
 $secrets = [];
 foreach ($current_env as $env_key => $env_value_raw) {
-    if (! str_contains($env_key, '__FILE')) {
+    if (!str_contains($env_key, '__FILE')) {
         continue;
     }
     $secret_path = $env_value_raw;
-    if (! is_string($secret_path) || ! file_exists($secret_path)) {
+    if (!is_string($secret_path) || !file_exists($secret_path)) {
         echo "Couldn't load secret: ".$secret_path.PHP_EOL;
+
         continue;
     }
     $original_key = str_replace('__FILE', '', $env_key);

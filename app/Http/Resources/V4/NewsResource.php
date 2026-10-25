@@ -33,8 +33,6 @@ use OpenApi\Attributes as OA;
 )]
 class NewsResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

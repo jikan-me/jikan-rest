@@ -23,13 +23,13 @@ final class DefaultQueryBuilderService implements QueryBuilderService
      */
     public function query(Collection $requestParameters): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        if ($requestParameters->get('q', '') !== '' && ! $requestParameters->has('letter')) {
+        if ($requestParameters->get('q', '') !== '' && !$requestParameters->has('letter')) {
             $searchEngineOptions = $this->getSearchEngineOptions($requestParameters);
             $builder = $this->searchService->setFilterParameters($requestParameters)
                 ->search($requestParameters->get('q'), $searchEngineOptions['order_by'], $searchEngineOptions['sort_direction_descending']);
         } else {
             $builder = $this->searchService->setFilterParameters($requestParameters)->query();
-            if (! $requestParameters->has('order_by')) {
+            if (!$requestParameters->has('order_by')) {
                 $builder = $builder->orderBy('mal_id');
             }
         }
@@ -79,13 +79,13 @@ final class DefaultQueryBuilderService implements QueryBuilderService
         $searchOptions = [];
 
         // todo: validate whether the specified field exists on the model
-        if (! empty($orderBy)) {
+        if (!empty($orderBy)) {
             $searchOptions['order_by'] = $orderBy;
         } else {
             $searchOptions['order_by'] = null;
         }
 
-        if (! empty($sort) && in_array($sort, ['asc', 'desc'])) {
+        if (!empty($sort) && in_array($sort, ['asc', 'desc'])) {
             $searchOptions['sort_direction_descending'] = $sort == 'desc';
         } else {
             $searchOptions['sort_direction_descending'] = false;

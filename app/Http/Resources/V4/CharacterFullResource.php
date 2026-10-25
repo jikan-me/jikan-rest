@@ -62,8 +62,6 @@ use OpenApi\Attributes as OA;
 )]
 class CharacterFullResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

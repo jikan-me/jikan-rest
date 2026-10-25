@@ -58,7 +58,7 @@ class MangaSweepIndexer extends Command
         $remove = [];
 
         foreach ($results as $result) {
-            if (! array_key_exists($result['mal_id'], $malIds)) {
+            if (!array_key_exists($result['mal_id'], $malIds)) {
                 $remove[] = $result['_id'];
             }
         }

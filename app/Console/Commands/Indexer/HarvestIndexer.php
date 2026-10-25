@@ -61,7 +61,7 @@ class HarvestIndexer extends Command
         $kind = strtolower((string) $this->option('kind'));
         $kinds = $kind === 'all' ? ['anime', 'manga'] : [$kind];
         foreach ($kinds as $k) {
-            if (! in_array($k, ['anime', 'manga'], true)) {
+            if (!in_array($k, ['anime', 'manga'], true)) {
                 $this->error("Unknown kind '{$k}' (all|anime|manga).");
 
                 return self::FAILURE;
@@ -118,7 +118,7 @@ class HarvestIndexer extends Command
         }
 
         $this->ids = array_values($this->ids);
-        if ($index > 0 && ! isset($this->ids[$index])) {
+        if ($index > 0 && !isset($this->ids[$index])) {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
         }
@@ -184,7 +184,7 @@ class HarvestIndexer extends Command
             }
         }
 
-        if ($kind === 'anime' && ! $this->option('no-staff')) {
+        if ($kind === 'anime' && !$this->option('no-staff')) {
             $staff = $this->fetch("/v4/anime/{$id}/staff");
             foreach ($staff['data'] ?? [] as $entry) {
                 if (isset($entry['person']['mal_id'])) {
@@ -208,7 +208,7 @@ class HarvestIndexer extends Command
         $url = config('app.url').$path;
         $body = $this->httpGet($url);
         $json = json_decode($body, true);
-        if (! is_array($json)) {
+        if (!is_array($json)) {
             throw new \RuntimeException("invalid JSON from {$url}");
         }
         if (isset($json['error']) && (int) ($json['status'] ?? 0) !== 404) {
@@ -253,7 +253,7 @@ class HarvestIndexer extends Command
     private function loadHarvestSet(string $family): array
     {
         $path = "indexer/harvest_{$family}.json";
-        if (! Storage::exists($path)) {
+        if (!Storage::exists($path)) {
             return [];
         }
         $ids = array_map('intval', (array) json_decode((string) Storage::get($path), true));
@@ -281,7 +281,7 @@ class HarvestIndexer extends Command
      */
     private function loadFailed(string $key): array
     {
-        if (! Storage::exists("indexer/indexer_{$key}.failed")) {
+        if (!Storage::exists("indexer/indexer_{$key}.failed")) {
             throw new FileNotFoundException("indexer/indexer_{$key}.failed does not exist");
         }
 

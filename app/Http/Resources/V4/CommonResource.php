@@ -396,7 +396,4 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'title', type: 'string', description: 'Title value'),
     ],
 )]
-class CommonResource extends JsonResource
-{
-
-}
+class CommonResource extends JsonResource {}

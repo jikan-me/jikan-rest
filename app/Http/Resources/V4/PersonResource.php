@@ -32,8 +32,6 @@ use OpenApi\Attributes as OA;
 )]
 class PersonResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

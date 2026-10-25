@@ -26,7 +26,6 @@ class RandomController extends Controller
      * }
      * ),
      */
-
     #[OA\Get(
         path: '/random/anime',
         operationId: 'getRandomAnime',

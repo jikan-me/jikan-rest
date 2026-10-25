@@ -24,7 +24,7 @@ class RouteConstraintsTest extends TestCase
         foreach (RouteFacade::getRoutes() as $route) {
             /** @var Route $route */
             foreach (self::RESOURCES as $resource) {
-                if (! str_starts_with($route->uri(), "v4/$resource/{id}")) {
+                if (!str_starts_with($route->uri(), "v4/$resource/{id}")) {
                     continue;
                 }
                 $checked++;

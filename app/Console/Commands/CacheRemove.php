@@ -40,7 +40,7 @@ class CacheRemove extends Command
     {
         $fingerprint = $this->argument('key');
 
-        if (! Cache::has($fingerprint)) {
+        if (!Cache::has($fingerprint)) {
             $this->error('Cache does not exist');
         }
 

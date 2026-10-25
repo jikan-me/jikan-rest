@@ -89,17 +89,8 @@ jobs:
         run: php -d error_reporting=24575 vendor/bin/phpstan analyse --no-progress --memory-limit=1G
 
       - name: Code style (Pint)
-        # The repo is NOT fully Pint-clean yet (the diff for the whole tree is
-        # enormous — Lumen-era formatting). `pint --test` is therefore scoped to
-        # the files already brought up to the Laravel preset; extend the list as
-        # more of the codebase is formatted. `pint fix .` (or expanding this
-        # list) must exit cleanly before widening.
-        run: |
-          vendor/bin/pint --test \
-            app/Listeners/SourceHeartbeatListener.php \
-            app/Providers/SourceHeartbeatProvider.php \
-            tests/Unit/SourceHeartbeatProviderTest.php \
-            tests/Unit/CacheTtlMapTest.php
+        # Whole repo, rules from pint.json (Laravel preset, `!$var`).
+        run: vendor/bin/pint --test
 
       - name: Run PHPUnit suite
         run: vendor/bin/phpunit --no-coverage

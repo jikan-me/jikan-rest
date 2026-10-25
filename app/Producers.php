@@ -86,12 +86,12 @@ class Producers extends JikanApiSearchableModel
      */
     public function toSearchableArray(): array
     {
-        $titles = ! is_null($this->titles) ? collect($this->titles)->map(fn ($x) => $x['title'])->toArray() : [''];
+        $titles = !is_null($this->titles) ? collect($this->titles)->map(fn ($x) => $x['title'])->toArray() : [''];
 
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
-            'url' => ! is_null($this->url) ? $this->url : '',
+            'url' => !is_null($this->url) ? $this->url : '',
             'titles' => implode(', ', $titles),
             'established' => $this->convertToTimestamp($this->established),
             'favorites' => $this->favorites,

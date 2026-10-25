@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Club;
 use App\Dto\ClubLookupCommand;
 use App\Dto\ClubMembersLookupCommand;
 use App\Dto\ClubRelationLookupCommand;
 use App\Dto\ClubStaffLookupCommand;
-use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
 class ClubController extends Controller
@@ -68,7 +66,7 @@ class ClubController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(
         schema: 'club_member',
         description: 'Club Member',

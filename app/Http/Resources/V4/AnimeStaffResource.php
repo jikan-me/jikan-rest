@@ -40,8 +40,6 @@ use OpenApi\Attributes as OA;
 )]
 class AnimeStaffResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

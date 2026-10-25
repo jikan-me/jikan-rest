@@ -4,7 +4,6 @@ namespace Tests\Integration;
 
 use App\Contracts\DataRequest;
 use App\Contracts\Mediator;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 use Typesense\Exceptions\ObjectNotFound;

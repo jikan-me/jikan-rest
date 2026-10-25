@@ -57,7 +57,7 @@ Route::redirect('/v4/documentation', '/v4/docs', 301);
 Route::get('/llms.txt', function () {
     $index = base_path('llms.txt');
 
-    if (! is_file($index)) {
+    if (!is_file($index)) {
         return response()->json(['error' => 'llms.txt not found'], 404);
     }
 

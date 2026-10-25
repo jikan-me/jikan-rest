@@ -23,7 +23,7 @@ $outDir = rtrim($options['out'] ?? __DIR__.'/baseline', '/');
 $endpointsFile = $options['endpoints'] ?? __DIR__.'/endpoints.txt';
 $timeout = (int) ($options['timeout'] ?? 30);
 
-if (! is_file($endpointsFile)) {
+if (!is_file($endpointsFile)) {
     fwrite(STDERR, "endpoints file not found: {$endpointsFile}\n");
     exit(2);
 }
@@ -108,7 +108,7 @@ foreach ($lines as $line) {
     $error = curl_error($ch) ?: null;
     curl_close($ch);
 
-    if (! is_string($body)) {
+    if (!is_string($body)) {
         $body = '';
     }
 

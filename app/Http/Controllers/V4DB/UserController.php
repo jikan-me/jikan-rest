@@ -262,7 +262,7 @@ class UserController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(schema: 'user_friends', description: 'User Friends', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', allOf: [new OA\Schema(properties: [new OA\Property(property: 'user', type: 'object', ref: '#/components/schemas/user_meta')]), new OA\Schema(properties: [new OA\Property(property: 'last_online', type: 'string', description: 'Last Online Date ISO8601 format'), new OA\Property(property: 'friends_since', type: 'string', description: 'Friends Since Date ISO8601 format. Null when MyAnimeList shows no friends-since date.', nullable: true)])]))])])]
     public function friends(UserFriendsLookupCommand $command): mixed
     {
@@ -293,7 +293,7 @@ class UserController extends Controller
             new OA\Response(
                 response: 200,
                 description: 'Returns user anime list',
-                content: new OA\JsonContent(),
+                content: new OA\JsonContent,
             ),
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
@@ -327,7 +327,7 @@ class UserController extends Controller
             new OA\Response(
                 response: 200,
                 description: 'Returns user manga list',
-                content: new OA\JsonContent(),
+                content: new OA\JsonContent,
             ),
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
@@ -423,7 +423,7 @@ class UserController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(schema: 'user_clubs', description: 'User Clubs', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(type: 'object', properties: [new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'), new OA\Property(property: 'name', type: 'string', description: 'Club Name'), new OA\Property(property: 'url', type: 'string', description: 'Club URL')]))])])]
     public function clubs(UserClubsLookupCommand $command): mixed
     {

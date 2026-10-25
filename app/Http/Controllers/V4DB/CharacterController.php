@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\V4DB;
 
-use App\Anime;
-use App\Character;
 use App\Dto\CharacterAnimeLookupCommand;
 use App\Dto\CharacterFullLookupCommand;
 use App\Dto\CharacterLookupCommand;
 use App\Dto\CharacterMangaLookupCommand;
 use App\Dto\CharacterPicturesLookupCommand;
 use App\Dto\CharacterVoicesLookupCommand;
-use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
 class CharacterController extends Controller
@@ -186,7 +183,7 @@ class CharacterController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(
         schema: 'character_pictures',
         description: 'Character Pictures',

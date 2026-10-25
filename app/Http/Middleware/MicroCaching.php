@@ -33,7 +33,7 @@ class MicroCaching
      */
     public function handle($request, Closure $next)
     {
-        if (! $this->isEnabled) {
+        if (!$this->isEnabled) {
             return $next($request);
         }
         // Route name of the matched route, e.g. "v4.random.anime" (see HttpHelper::getRouteName()).
@@ -44,7 +44,7 @@ class MicroCaching
         // cache /v*/* paths only
         if (
             empty($request->segments())
-            || ! isset($request->segments()[1])
+            || !isset($request->segments()[1])
         ) {
             return $next($request);
         }

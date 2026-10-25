@@ -4,6 +4,7 @@ namespace App\Dto;
 
 use App\Dto\Concerns\HasSfwParameter;
 use App\Dto\Concerns\HasUnapprovedParameter;
+use App\Dto\Concerns\PreparesData;
 use Carbon\CarbonImmutable;
 use Illuminate\Validation\Validator;
 use Spatie\LaravelData\Attributes\MapInputName;
@@ -23,7 +24,7 @@ use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 
 class MediaSearchCommand extends SearchCommand
 {
-    use \App\Dto\Concerns\PreparesData, HasSfwParameter, HasUnapprovedParameter;
+    use HasSfwParameter, HasUnapprovedParameter, PreparesData;
 
     #[MapInputName('min_score'), MapOutputName('min_score'), Between(0.00, 10.00), Numeric]
     public float|Optional $minScore;
@@ -59,7 +60,7 @@ class MediaSearchCommand extends SearchCommand
 
     public static function withValidator(Validator $validator): void
     {
-        $validator->sometimes('min_score', 'lte:max_score', fn ($input) => ! empty($input->max_score));
-        $validator->sometimes('max_score', 'gte:min_score', fn ($input) => ! empty($input->min_score));
+        $validator->sometimes('min_score', 'lte:max_score', fn ($input) => !empty($input->max_score));
+        $validator->sometimes('max_score', 'gte:min_score', fn ($input) => !empty($input->min_score));
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-use Spatie\Enum\Laravel\Enum;
 use OpenApi\Attributes as OA;
+use Spatie\Enum\Laravel\Enum;
 
 /**
  * @method static self manga()
@@ -14,7 +14,6 @@ use OpenApi\Attributes as OA;
  * @method static self manhwa()
  * @method static self manhua()
  */
-
 #[OA\Schema(schema: 'manga_search_query_type', description: 'Available Manga types', type: 'string', enum: ['manga', 'novel', 'lightnovel', 'oneshot', 'doujin', 'manhwa', 'manhua'])]
 final class MangaTypeEnum extends Enum
 {

@@ -20,7 +20,7 @@ class WhereClause extends BaseClause
 
     protected function validate(mixed $value): bool
     {
-        return ! in_array(null, (array) $value);
+        return !in_array(null, (array) $value);
     }
 
     /**

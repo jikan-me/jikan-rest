@@ -35,8 +35,6 @@ use OpenApi\Attributes as OA;
 )]
 class ClubRelationsResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

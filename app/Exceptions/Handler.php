@@ -81,7 +81,7 @@ class Handler extends ExceptionHandler
              * Redis
              * Remove sensitive information from production
              */
-            if (! config('app.debug')) {
+            if (!config('app.debug')) {
                 $githubReport->setError(' ');
             }
 
@@ -251,7 +251,7 @@ class Handler extends ExceptionHandler
 
     private function reportToSentry(Exception|\Throwable $e): void
     {
-        if (! app()->bound('sentry')) {
+        if (!app()->bound('sentry')) {
             return;
         }
 

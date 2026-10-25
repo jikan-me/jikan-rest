@@ -99,8 +99,6 @@ use OpenApi\Attributes as OA;
 )]
 class ReviewsResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

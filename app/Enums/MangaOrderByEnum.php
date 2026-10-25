@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-use Spatie\Enum\Laravel\Enum;
 use OpenApi\Attributes as OA;
+use Spatie\Enum\Laravel\Enum;
 
 /**
  * @method static self mal_id()
@@ -19,7 +19,6 @@ use OpenApi\Attributes as OA;
  * @method static self members()
  * @method static self favorites()
  */
-
 #[OA\Schema(schema: 'manga_search_query_orderby', description: 'Available Manga order_by properties', type: 'string', enum: ['mal_id', 'title', 'start_date', 'end_date', 'chapters', 'volumes', 'score', 'scored_by', 'rank', 'popularity', 'members', 'favorites'])]
 final class MangaOrderByEnum extends Enum
 {

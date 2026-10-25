@@ -27,8 +27,6 @@ use OpenApi\Attributes as OA;
 )]
 class StreamingLinksResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

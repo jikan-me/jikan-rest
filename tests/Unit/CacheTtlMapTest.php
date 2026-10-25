@@ -73,12 +73,12 @@ final class CacheTtlMapTest extends TestCase
         $routes = [];
         foreach (RouteFacade::getRoutes()->getRoutes() as $route) {
             /** @var Route $route */
-            if (! str_starts_with($route->uri(), 'v4')) {
+            if (!str_starts_with($route->uri(), 'v4')) {
                 continue;
             }
 
             $controller = $route->getControllerClass();
-            if ($controller === null || ! str_contains($controller, 'V4DB')) {
+            if ($controller === null || !str_contains($controller, 'V4DB')) {
                 continue;
             }
 

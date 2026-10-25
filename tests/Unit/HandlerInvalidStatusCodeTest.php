@@ -9,8 +9,9 @@ use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\Request as PsrRequest;
 use GuzzleHttp\Psr7\Response as PsrResponse;
 use Illuminate\Http\Request;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Jikan\Exception\BadResponseException as JikanBadResponseException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 /**
@@ -19,7 +20,7 @@ use Tests\TestCase;
  */
 final class HandlerInvalidStatusCodeTest extends TestCase
 {
-    private function render(\Throwable $e): \Symfony\Component\HttpFoundation\Response
+    private function render(\Throwable $e): Response
     {
         return $this->app->make(Handler::class)->render(Request::create('/v4/anime/1'), $e);
     }

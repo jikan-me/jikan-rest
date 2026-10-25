@@ -27,8 +27,6 @@ use OpenApi\Attributes as OA;
 )]
 class ExternalLinksResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

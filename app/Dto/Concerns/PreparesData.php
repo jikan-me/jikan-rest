@@ -21,7 +21,7 @@ trait PreparesData
         $properties = collect($properties);
 
         // let's always set the limit parameter to the globally configured default value
-        if (property_exists(static::class, 'limit') && ! $properties->has('limit')) {
+        if (property_exists(static::class, 'limit') && !$properties->has('limit')) {
             $properties->put('limit', max_results_per_page(
                 property_exists(static::class, 'defaultLimit') ? static::$defaultLimit : null));
         }
@@ -56,13 +56,13 @@ trait PreparesData
                 // if the property is optional (or nullable) and the value is an empty
                 // string, we want to ignore it.
                 if ($propertyVal === ''
-                    && ! $property->type->acceptsType('bool')
+                    && !$property->type->acceptsType('bool')
                     && ($property->type->isOptional || $property->type->acceptsValue(null))
                 ) {
                     $propertyVal = null;
                 }
 
-                if (! is_null($propertyVal)) {
+                if (!is_null($propertyVal)) {
                     $properties->put($propertyRawName, $propertyVal);
                 } else {
                     $properties->forget($propertyRawName);

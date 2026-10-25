@@ -31,7 +31,7 @@ final class QueryMangaListOfUserHandler extends RequestHandlerWithScraperCache
 
     public function resource(CachedData $results): JsonResource
     {
-        if ($results->isEmpty() || ! isset($results['manga']) || count($results['manga']) === 0) {
+        if ($results->isEmpty() || !isset($results['manga']) || count($results['manga']) === 0) {
             return new UserProfileMangaListCollection([]);
         }
 

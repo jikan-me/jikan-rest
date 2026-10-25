@@ -255,7 +255,7 @@ class Manga extends JikanApiSearchableModel
             'title_japanese' => $this->title_japanese,
             'title_japanese_transformed' => $this->simplifyStringForSearch($this->title_japanese),
             'title_synonyms' => collect($this->titles ?? [])
-                ->filter(fn ($v, $k) => ! in_array($v['type'], ['Default', 'English', 'Japanese']))
+                ->filter(fn ($v, $k) => !in_array($v['type'], ['Default', 'English', 'Japanese']))
                 ->pluck('title')
                 ->values()
                 ->all(),

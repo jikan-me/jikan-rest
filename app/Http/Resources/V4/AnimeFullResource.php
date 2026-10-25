@@ -144,8 +144,6 @@ use OpenApi\Attributes as OA;
 )]
 class AnimeFullResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

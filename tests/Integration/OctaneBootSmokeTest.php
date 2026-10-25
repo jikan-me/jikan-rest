@@ -17,7 +17,7 @@ final class OctaneBootSmokeTest extends TestCase
     {
         parent::setUp();
 
-        if (! is_file(base_path('rr'))) {
+        if (!is_file(base_path('rr'))) {
             $this->markTestSkipped('RoadRunner binary not present — run octane:install or install.sh.');
         }
     }
@@ -26,7 +26,7 @@ final class OctaneBootSmokeTest extends TestCase
     {
         $port = 8105;
         $cmd = [PHP_BINARY, 'artisan', 'octane:start', '--server=roadrunner',
-                '--host=127.0.0.1', '--port='.$port, '--workers=1'];
+            '--host=127.0.0.1', '--port='.$port, '--workers=1'];
         $pipes = [];
         $proc = proc_open($cmd, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes, base_path());
         $this->proc = $proc;

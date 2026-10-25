@@ -61,7 +61,7 @@ trait MediaFilters
      */
     public function filterByGenres(Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        if (! is_string($value) || empty($value)) {
+        if (!is_string($value) || empty($value)) {
             return $query;
         }
         $genres = explode(',', $value);
@@ -88,7 +88,7 @@ trait MediaFilters
      */
     public function filterByGenresExclude(Builder|\Illuminate\Database\Eloquent\Builder $query, mixed $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        if (! is_string($value) || empty($value)) {
+        if (!is_string($value) || empty($value)) {
             return $query;
         }
         $genres = explode(',', $value);
@@ -122,7 +122,7 @@ trait MediaFilters
      */
     public function filterByUnapproved(Builder|\Illuminate\Database\Eloquent\Builder $query, ?bool $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return ! $value ? $query->where('approved', true) : $query;
+        return !$value ? $query->where('approved', true) : $query;
     }
 
     /**

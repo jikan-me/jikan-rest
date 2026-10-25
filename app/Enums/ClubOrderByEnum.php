@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-use Spatie\Enum\Laravel\Enum;
 use OpenApi\Attributes as OA;
+use Spatie\Enum\Laravel\Enum;
 
 /**
  * @method static self mal_id()
@@ -11,7 +11,6 @@ use OpenApi\Attributes as OA;
  * @method static self members_count()
  * @method static self created()
  */
-
 #[OA\Schema(schema: 'club_search_query_orderby', description: 'Club Search Query OrderBy', type: 'string', enum: ['mal_id', 'name', 'members_count', 'created'])]
 final class ClubOrderByEnum extends Enum
 {

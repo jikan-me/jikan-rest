@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Support\HttpHelper;
 use App\Support\CacheOptions;
+use App\Support\HttpHelper;
 use App\Support\JikanConfig;
 use Closure;
 use Illuminate\Http\Request;

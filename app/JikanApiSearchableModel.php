@@ -133,7 +133,7 @@ abstract class JikanApiSearchableModel extends JikanApiModel
 
     protected function simplifyStringForSearch($val): string
     {
-        if (! $val) {
+        if (!$val) {
             return '';
         }
 

@@ -2,8 +2,8 @@
 
 namespace App\Enums;
 
-use Spatie\Enum\Laravel\Enum;
 use OpenApi\Attributes as OA;
+use Spatie\Enum\Laravel\Enum;
 
 /**
  * @method static self all()
@@ -13,7 +13,6 @@ use OpenApi\Attributes as OA;
  * @method static self dropped()
  * @method static self plantowatch()
  */
-
 #[OA\Schema(schema: 'user_anime_list_status_filter', description: 'User\'s anime list status filter options', type: 'string', enum: ['all', 'watching', 'completed', 'onhold', 'dropped', 'plantowatch'])]
 final class AnimeListStatusEnum extends Enum
 {

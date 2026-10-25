@@ -30,7 +30,7 @@ class CompressResponse
     {
         $response = $next($request);
 
-        if (! $response instanceof Response
+        if (!$response instanceof Response
             || $response instanceof StreamedResponse
             || $response instanceof BinaryFileResponse) {
             return $response;
@@ -43,7 +43,7 @@ class CompressResponse
         }
 
         $body = $response->getContent();
-        if (! is_string($body) || strlen($body) < self::MIN_BYTES) {
+        if (!is_string($body) || strlen($body) < self::MIN_BYTES) {
             return $response;
         }
 
@@ -56,7 +56,7 @@ class CompressResponse
             'gzip' => gzencode($body, self::GZIP_LEVEL),
             default => false,
         };
-        if (! is_string($compressed)) {
+        if (!is_string($compressed)) {
             return $response;
         }
 
@@ -92,7 +92,7 @@ class CompressResponse
 
     private function brotli(string $body): string|false
     {
-        if (! $this->brotliAvailable()) {
+        if (!$this->brotliAvailable()) {
             return false;
         }
 

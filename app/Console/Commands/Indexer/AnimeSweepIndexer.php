@@ -58,7 +58,7 @@ class AnimeSweepIndexer extends Command
         $remove = [];
 
         foreach ($results as $result) {
-            if (! array_key_exists($result['mal_id'], $malIds)) {
+            if (!array_key_exists($result['mal_id'], $malIds)) {
                 echo 'Removing https://myanimelist.net/anime/'.$result['mal_id']."\n";
                 $remove[] = $result['_id'];
             }

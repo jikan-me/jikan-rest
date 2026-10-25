@@ -138,7 +138,7 @@ class Anime extends JikanApiSearchableModel
 
         if (empty($premiered)
             || is_null($premiered)
-            || ! preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
+            || !preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
         ) {
             return null;
         }
@@ -160,8 +160,8 @@ class Anime extends JikanApiSearchableModel
 
         if (empty($premiered)
             || is_null($premiered)
-            || ! is_string($premiered)
-            || ! preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
+            || !is_string($premiered)
+            || !preg_match('~(Winter|Spring|Summer|Fall|)\s([\d+]{4})~', $premiered)
         ) {
             return null;
         }
@@ -377,7 +377,7 @@ class Anime extends JikanApiSearchableModel
             'title_japanese' => $this->title_japanese,
             'title_japanese_transformed' => $this->simplifyStringForSearch($this->title_japanese),
             'title_synonyms' => collect($this->titles ?? [])
-                ->filter(fn ($v, $k) => ! in_array($v['type'], ['Default', 'English', 'Japanese']))
+                ->filter(fn ($v, $k) => !in_array($v['type'], ['Default', 'English', 'Japanese']))
                 ->pluck('title')
                 ->values()
                 ->all(),
@@ -541,7 +541,7 @@ class Anime extends JikanApiSearchableModel
             return $broadcast->getArrayCopy();
         }
 
-        if (! preg_match('~(.*) at (.*) \(~', $broadcast, $matches)) {
+        if (!preg_match('~(.*) at (.*) \(~', $broadcast, $matches)) {
             return [
                 'day' => null,
                 'time' => null,

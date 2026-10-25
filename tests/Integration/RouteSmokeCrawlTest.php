@@ -68,8 +68,8 @@ final class RouteSmokeCrawlTest extends TestCase
         foreach (Route::getRoutes()->getRoutes() as $route) {
             /** @var LaravelRoute $route */
             $name = $route->getName();
-            if ($name === null || ! in_array('GET', $route->methods(), true)
-                || ! str_starts_with($route->uri(), 'v4')
+            if ($name === null || !in_array('GET', $route->methods(), true)
+                || !str_starts_with($route->uri(), 'v4')
                 || array_key_exists($name, self::SKIPPED)) {
                 continue;
             }

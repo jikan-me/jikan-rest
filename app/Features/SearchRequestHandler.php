@@ -90,7 +90,7 @@ abstract class SearchRequestHandler implements RequestHandler
      */
     private function reportDegradableOrRethrow(\Throwable $e): void
     {
-        if (! SearchEngineFailure::isDegradable($e)) {
+        if (!SearchEngineFailure::isDegradable($e)) {
             throw $e;
         }
 
@@ -109,7 +109,7 @@ abstract class SearchRequestHandler implements RequestHandler
      */
     protected function prepareOrderByParam(Collection $requestData): Collection
     {
-        if ($requestData->has('order_by') && ! is_null($requestData->get('order_by'))) {
+        if ($requestData->has('order_by') && !is_null($requestData->get('order_by'))) {
             $requestData->offsetSet('order_by', $requestData->get('order_by')->label);
 
             return $requestData;

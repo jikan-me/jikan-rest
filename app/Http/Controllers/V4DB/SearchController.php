@@ -527,7 +527,7 @@ class SearchController extends Controller
         try {
             return $this->mediator->send($command);
         } catch (\Throwable $e) {
-            if (! SearchEngineFailure::isDegradable($e)) {
+            if (!SearchEngineFailure::isDegradable($e)) {
                 throw $e;
             }
 

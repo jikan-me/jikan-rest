@@ -50,7 +50,7 @@ final class AiManifestService
         $out = [];
         foreach (Arr::get($spec, 'paths', []) as $path => $item) {
             foreach ($item as $method => $op) {
-                if (! in_array($method, ['get', 'post', 'put', 'patch', 'delete'], true) || ! is_array($op)) {
+                if (!in_array($method, ['get', 'post', 'put', 'patch', 'delete'], true) || !is_array($op)) {
                     continue;
                 }
                 $out[] = [
@@ -96,7 +96,7 @@ final class AiManifestService
             $required = [];
             $op = $paths[$ep['path']][strtolower($ep['method'])] ?? [];
             foreach (is_array($op) ? Arr::get($op, 'parameters', []) : [] as $param) {
-                if (! is_array($param)) {
+                if (!is_array($param)) {
                     continue;
                 }
                 $key = (string) Arr::get($param, 'name', '');

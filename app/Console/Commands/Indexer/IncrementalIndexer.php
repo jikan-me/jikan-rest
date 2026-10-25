@@ -112,7 +112,7 @@ class IncrementalIndexer extends Command
             $this->info("Resuming from index: $index");
         }
 
-        if ($index > 0 && ! isset($ids[$index])) {
+        if ($index > 0 && !isset($ids[$index])) {
             $index = 0;
             $this->warn('Invalid index; set back to 0');
         }

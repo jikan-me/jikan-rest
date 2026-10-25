@@ -184,7 +184,7 @@ class TopController extends Controller
             new OA\Response(response: 400, description: 'Error: Bad request. When required parameters were not supplied.'),
         ],
     )]
-    
+
     #[OA\Schema(
         schema: 'reviews_collection',
         description: 'Anime & Manga Reviews Resource',

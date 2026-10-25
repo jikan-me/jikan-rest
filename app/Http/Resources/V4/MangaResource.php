@@ -73,8 +73,6 @@ use OpenApi\Attributes as OA;
 )]
 class MangaResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *

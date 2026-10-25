@@ -19,11 +19,11 @@ final class MaxResultsPerPageRule implements Rule
     {
         $this->value = $value;
 
-        if (! is_numeric($value)) {
+        if (!is_numeric($value)) {
             return false;
         }
 
-        if (! is_int($value)) {
+        if (!is_int($value)) {
             $value = intval($value);
         }
 

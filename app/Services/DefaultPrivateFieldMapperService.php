@@ -23,7 +23,7 @@ final class DefaultPrivateFieldMapperService implements PrivateFieldMapperServic
                 $fieldValue = $fieldValue->label;
             }
 
-            if (! property_exists($cls, $fieldName)) {
+            if (!property_exists($cls, $fieldName)) {
                 continue;
             }
 
