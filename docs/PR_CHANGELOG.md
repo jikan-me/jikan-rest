@@ -10,6 +10,23 @@
 
 ---
 
+## Review updates (2026-10-25)
+
+Changes made in response to the PR #614 review, one commit each:
+
+- **Dependency refresh** (`ffd7ea2`): `composer update` within the existing constraints. laravel/framework 13.35.0 → 13.38.0, Symfony 8.1.x → 8.1.9, laravel/octane 2.21.0 → 2.22.0, guzzle 8.3.0, carbon 3.15.0, zircote/swagger-php 6.18.0, phpunit 12.5.40, phpstan 2.3.2, larastan 3.13.2. `composer audit` is clean.
+- **PHP security bump** (`e6ffcf5`): the image is pinned to `php:8.4.27-cli-alpine`, and `config.platform.php` is 8.4.27. 8.4.27 fixes GHSA-w8hw-w9fx-j79w and GHSA-6wmf-4rv5-p3rp.
+- **Removed `App\Providers\EventServiceProvider`** (`8f1cfd8`): an empty leftover from the Lumen RoadRunner worker loop. Laravel's own EventServiceProvider stays registered.
+- **Brotli** (`f83c444`): `GzipResponse` became `CompressResponse`. It negotiates `br`/`gzip` from Accept-Encoding and respects q-values (`q=0` means not acceptable), and it always sets `Vary: Accept-Encoding` on compressible responses. The `gzip` alias is kept. ext-brotli is in the image and in CI.
+- **Search degradation narrowed** (`bf289bf`): `SearchRequestHandler` returns an empty 200 only for search-engine outages (`SearchEngineFailure::isDegradable()`), the same rule `SearchController` uses. Mongo errors, bugs and auth/config errors now propagate.
+- **Debug logs removed** (`71e7de7`): five `Log::info` lines in the schedules handler and controller.
+- **Pint** (`838c76c`): `pint.json` turns off `not_operator_with_successor_space`, so the code uses `!$var`. The whole codebase was reformatted in one formatting-only commit, and CI now runs `pint --test` on the full repo.
+- **RoadRunner → Swoole** (`c6f5712`, docs `74a91e7`): Octane runs on Swoole only. The RoadRunner packages, binary, `.rr*.yaml` files and env vars are removed. ext-swoole is built into the image, and `OCTANE_SERVER=swoole` and `OCTANE_TASK_WORKERS` are new. CI boots the real Swoole server in `OctaneBootSmokeTest`. Image gate: a 10-minute soak (4 workers, 19 endpoints) served 135,822 requests at p50 29 ms / p95 70 ms. Every endpoint returned one body hash, worker RSS stayed flat at 72–85 MB, and there were 0 restarts and 0 log errors. The 114-route crawl returned 113 × 200 plus the expected empty-DB 404.
+
+Verified at each step: PHPUnit 439 tests, both without Typesense (3,296 assertions, 6 skipped) and with Typesense (3,308 assertions, 3 skipped); PHPStan 0 errors; CI green on all 6 check runs.
+
+---
+
 ## Audit-fix pass (2026-10-13)
 
 An independent review of this branch found defects the green test suite could not see (it does not run under Octane, behind a proxy, from a fresh clone, or on a real CI runner). Fixed on top of the migration, one commit each:
