@@ -7,7 +7,7 @@ source of truth for how to run, verify, and change this project.
 
 A read-only public JSON API over MyAnimeList data (v4 contract, ~101 GET
 endpoints). Stack: **Laravel 13** · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb`
-v5) · Octane (RoadRunner default) · Scout/Typesense optional. The **public v4
+v5) · Octane (Swoole) · Scout/Typesense optional. The **public v4
 JSON contract is immutable** — never change a default response shape.
 
 ## Quick start
@@ -15,7 +15,7 @@ JSON contract is immutable** — never change a default response shape.
 ```bash
 ./install.sh --yes            # env + deps + runtime (idempotent)
 ./install.sh --dry-run        # preview without executing
-script/server                 # RoadRunner on :8000 (or SERVER=frankenphp|serve)
+script/server                 # Swoole on :8000 (or SERVER=frankenphp|serve)
 tools/dev/php vendor/bin/phpunit --no-coverage
 ```
 

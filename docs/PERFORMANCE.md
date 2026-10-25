@@ -1,5 +1,10 @@
 # Performance — stress-test matrix & bottlenecks (2026-10-13)
 
+> **Runtime note (4.3.0):** Octane now runs on **Swoole**; RoadRunner was removed. Every
+> number in the sections below that says "Octane/RoadRunner" or "RR" was measured on
+> RoadRunner before the switch and is kept for history. The Swoole soak is in
+> [Swoole soak (2026-10-25)](#swoole-soak-2026-10-25) at the end.
+
 Methodology: `ab -k -n 3000 -c N` (keep-alive) on a Mac (arm64) running the app
 locally. **Caveats:** the full indexer was running concurrently in the background
 (MAL scraping + Mongo writes), so absolute numbers are depressed; treat the
@@ -275,3 +280,27 @@ Warm read/static paths: excellent (thousands RPS, ms latencies, clean tails to
 c=200). Search adds a typesense round-trip (~115–300 RPS). The bottlenecks that
 remain are (a) **cold data → synchronous MAL scrape**, (b) **catalog wildcard deep
 paging**, (c) payload size (gzip helps 3–6×, enabled). All documented for the PR.
+
+## Swoole soak (2026-10-25)
+
+Image `jikan-rest:pr614-swoole` (PHP 8.4.27, Swoole 6.2.3, ext-brotli 0.21.0, ext-mongodb
+2.5.5) on Docker Desktop (amd64), throwaway `mongo:8.0`, `OCTANE_WORKERS=4`,
+`--max-requests=100000`, `CACHE_DRIVER=file`, micro-cache off, migrations applied. Same method
+as the earlier RoadRunner soak: 8 parallel clients cycling 19 URLs for 600 s (DB-backed
+resources, scraper-backed sub-resources, `?q=` search with `sfw`/`limit`/`order_by`
+interleaved, and 400/404 error paths), each URL warmed once first.
+
+| Metric | Swoole (2026-10-25) | RoadRunner (2026-10-12, same method) |
+|---|---|---|
+| Requests in 600 s | **135,822** (~226 req/s) | 120,064 in 530 s (~226 req/s) |
+| Overall p50 / p95 | **29 ms / 70 ms** | 32 ms / 60 ms |
+| Distinct body hashes per URL | **1** for all 19 (matches warm-up) | 1 for all 19 |
+| Worker RSS | 54–81 MB at start, 72–85 MB after 60 s, then flat to 600 s | ~80 MB → 94–96 MB, flat |
+| Worker restarts / PID changes | **0** (same 4 worker PIDs start to end) | 0 |
+| Errors in container / Swoole logs | **0** | 0 |
+
+Container memory after the soak: app 312 MiB, Mongo 132 MiB. Per-endpoint p50 was 19–35 ms
+except the two large scraper-cached payloads (`/v4/people/1`, `/v4/anime/1/characters`,
+~60 ms). Throughput was bound by the 8 synchronous clients, not by the server; treat the
+RoadRunner vs Swoole columns as "no regression", not as a benchmark.
+

@@ -1,6 +1,6 @@
 ---
 name: jikan-rest
-description: How the jikan-rest API (Laravel 13 on Octane/RoadRunner, MongoDB, read-only MyAnimeList v4 JSON API) is structured and how to change it safely - request flow, adding an endpoint, the v4 contract rule, Octane state rules, route and cache-TTL naming, and the gate commands. Use for any change under app/, routes/, config/jikan.php or tests/.
+description: How the jikan-rest API (Laravel 13 on Octane/Swoole, MongoDB, read-only MyAnimeList v4 JSON API) is structured and how to change it safely - request flow, adding an endpoint, the v4 contract rule, Octane state rules, route and cache-TTL naming, and the gate commands. Use for any change under app/, routes/, config/jikan.php or tests/.
 metadata:
   origin: jikan-rest
 ---
@@ -8,7 +8,7 @@ metadata:
 # jikan-rest
 
 A **read-only public JSON API** over MyAnimeList data: no auth, sessions, CSRF, Blade or Livewire. Laravel 13
-(PHP 8.4+), Octane/RoadRunner, MongoDB (`mongodb/laravel-mongodb`), the `jikan-me/jikan` parser,
+(PHP 8.4+), Octane/Swoole, MongoDB (`mongodb/laravel-mongodb`), the `jikan-me/jikan` parser,
 optional Scout/Typesense search. The generic Laravel skills in this folder apply except where they assume auth.
 
 ## Request flow

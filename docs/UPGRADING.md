@@ -3,7 +3,7 @@
 ## 4.2.x → 4.3.0 for self-hosters (platform migration)
 
 4.3.0 keeps the **same `/v4` API contract** (routes, query parameters and response keys are
-unchanged) on a **new runtime**: Lumen 9 is replaced by Laravel 13 on Octane/RoadRunner. For
+unchanged) on a **new runtime**: Lumen 9 is replaced by Laravel 13 on Octane/Swoole. For
 API consumers it is a minor release; for operators it is a platform migration, not a drop-in
 upgrade. Plan a fresh image/environment rather than an in-place `composer update`.
 
@@ -14,7 +14,7 @@ upgrade. Plan a fresh image/environment rather than an in-place `composer update
 | PHP | 8.1 | **≥ 8.4.4** (`composer.json` `php: ^8.4.4`; 8.4.0–8.4.3 are refused by the parser, php-src GH-17481) |
 | MongoDB PHP extension | 1.x | **`ext-mongodb` 2.x, ≥ 2.5** (required by `mongodb/mongodb` 2.5 / `mongodb/laravel-mongodb` ^5) |
 | Framework | Lumen 9 | Laravel 13 (`laravel/framework` ^13.0) |
-| HTTP server | `lumen-roadrunner`, RoadRunner 2.12.3 | Laravel Octane ^2 + RoadRunner (binary 2025.1.15 in the image); `ext-pcntl` is required (the image also installs `ext-sockets`) |
+| HTTP server | `lumen-roadrunner`, RoadRunner 2.12.3 | Laravel Octane ^2 on **Swoole** (`ext-swoole` 6.x, built into the image); `ext-pcntl` is required (the image also installs `ext-sockets` and `ext-brotli`). RoadRunner is no longer supported. |
 | MongoDB server | `mongo:focal` in compose | **`mongo:8.0`** (`docker-compose.yml`; the supported target). CI temporarily runs `mongo:7.0` because 8.0.34 and earlier refuse to start on GitHub runners' kernels ([SERVER-121912](https://jira.mongodb.org/browse/SERVER-121912)); it moves back to 8.0 once 8.0.35 is published |
 | Typesense (optional) | 0.24.1 | 27.0 (`docker-compose.typesense.yml`, `typesense/typesense-php` ^6); search is off by default (`SCOUT_DRIVER=null`) |
 | Parser | jikan-me/jikan 4.x | jikan-me/jikan v5.0.0 (^5.0) |
@@ -37,7 +37,8 @@ upgrade. Plan a fresh image/environment rather than an in-place `composer update
     by `/` and `/v4`, used in `llms.txt`, `/v4/ai/manifest.json` and the OpenAPI server, and the
     indexers call `APP_URL/v4/...`.
   - New: `TRUSTED_PROXIES`, `RATE_LIMIT_PER_MINUTE` (opt-in, default `0` = off),
-    `QUEUE_WORKERS`, `OCTANE_WORKERS`, `OCTANE_MAX_REQUESTS`, `OCTANE_RR_CONFIG`,
+    `QUEUE_WORKERS`, `OCTANE_SERVER` (`swoole`), `OCTANE_WORKERS`, `OCTANE_MAX_REQUESTS`,
+    `OCTANE_TASK_WORKERS`,
     `CORS_MIDDLEWARE` (still opt-in), `SCRAPE_MISS_TTL`.
   - Renamed: `CACHE_MAGAZINES_EXPIRE` → `CACHE_MAGAZINE_EXPIRE`.
   - Removed (no longer read): `CACHING`, `DB_CACHING`, `CACHE_META_EXPIRE`,
@@ -46,15 +47,28 @@ upgrade. Plan a fresh image/environment rather than an in-place `composer update
     `CACHE_BYPASS_TOKEN`, and the RoadRunner tuning vars `RR_MAX_WORKER_MEMORY`,
     `RR_MAX_REQUEST_SIZE_MB`, `JIKAN_QUEUE_WORKER_PROCESS_NUM`.
   - `MICROCACHING_EXPIRE` default in `.env.dist` is `60` (was `5`).
-- **Docker image.** Rebuilt on `php:8.4-cli-alpine` (was `php:8.1.27-bullseye` + RoadRunner
-  2.12.3) and runs as the non-root `jikanapi` user. `docker-compose.yml` builds the image locally
+- **Docker image.** Rebuilt on `php:8.4.27-cli-alpine` with `ext-swoole` (was
+  `php:8.1.27-bullseye` + RoadRunner 2.12.3) and runs as the non-root `jikanapi` user. `docker-compose.yml` builds the image locally
   (`jikan-rest:local`) instead of pulling `jikanme/jikan-rest`.
   - The entrypoint generates an `APP_KEY` when none is set (set `APP_KEY`/`APP_KEY__FILE` in
     production so it is stable), runs `config:cache` at start (routes are cached at build time),
     starts the scheduler with supercronic, starts `QUEUE_WORKERS` `queue:work` processes, then
-    `octane:start --server=roadrunner --port=8080`. Extra arguments are passed to Octane.
+    `octane:start --server=swoole --port=8080` (with `--workers`, `--task-workers` and
+    `--max-requests` from the env). Extra arguments are passed to Octane.
   - The healthcheck is now `GET /up` on port 8080 (was the RoadRunner `:2114/health` plugin).
-  - `.rr.yaml` is no longer shipped; see [Runtime and operations](#runtime-and-operations).
+  - `.rr.yaml` is no longer used; see [Runtime and operations](#runtime-and-operations).
+- **RoadRunner removed (Swoole is the only Octane server).** The image, compose file,
+  `install.sh` and `script/server` all use Swoole; the RoadRunner packages and binary are gone.
+  - Removed env vars: `OCTANE_RR_CONFIG`, `OCTANE_ROADRUNNER_COMMAND`,
+    `OCTANE_ROADRUNNER_HTTP_MIDDLEWARE` (and the older `RR_*` vars listed above).
+  - Added: `OCTANE_TASK_WORKERS` (default `1`; Octane's internal tick needs one task worker).
+  - Set `OCTANE_SERVER=swoole` (the default) or remove the variable; a leftover
+    `OCTANE_SERVER=roadrunner` fails to start.
+  - If you maintained a custom `.rr.yaml`, its settings have no effect any more. Worker count and
+    recycling map to `OCTANE_WORKERS` / `OCTANE_MAX_REQUESTS`; anything else (TLS, HTTP/2, static
+    files, request size limits) belongs in your reverse proxy, or in
+    `config/octane.php` → `swoole.options` (merged over Octane's Swoole defaults).
+  - Bare-metal installs need `ext-swoole` (`pecl install swoole`).
 
 ### Required one-time steps
 
@@ -96,7 +110,7 @@ Routes, parameters and response keys are unchanged. Differences in values:
 
 ## Reference: changes since the Lumen 9 release
 
-This release moves jikan-rest from Lumen 9 to Laravel 13 (PHP 8.4+, Octane/RoadRunner).
+This release moves jikan-rest from Lumen 9 to Laravel 13 (PHP 8.4+, Octane/Swoole).
 The public **v4 JSON contract is unchanged** for valid requests. This page lists everything
 an operator needs to know that is *not* a contract change. Each section notes what it was
 on the Lumen release ("before") and what it is now.
@@ -119,10 +133,10 @@ on the Lumen release ("before") and what it is now.
 
 ## Runtime and operations
 
-| Topic | Before (Lumen + `lumen-roadrunner`) | Now (Laravel + Octane/RoadRunner) |
+| Topic | Before (Lumen + `lumen-roadrunner`) | Now (Laravel + Octane/Swoole) |
 |---|---|---|
-| Worker pool | `.rr.yaml`, tuned through `RR_MAX_WORKER_MEMORY`, `RR_MAX_REQUEST_SIZE_MB`, `JIKAN_QUEUE_WORKER_PROCESS_NUM` | `OCTANE_WORKERS` (default `auto` = one per CPU) and `OCTANE_MAX_REQUESTS` (default `500`, workers are recycled after this many requests). `.rr.yaml` is no longer shipped. |
-| RoadRunner memory supervisor / max request size | `RR_MAX_WORKER_MEMORY` (128), `RR_MAX_REQUEST_SIZE_MB` (256) | **Not mapped.** Octane generates its own RoadRunner config. Use `OCTANE_MAX_REQUESTS` to bound worker memory growth, or supply your own RoadRunner v3 config with `OCTANE_RR_CONFIG=/path/to/.rr.yaml`. |
+| Worker pool | `.rr.yaml`, tuned through `RR_MAX_WORKER_MEMORY`, `RR_MAX_REQUEST_SIZE_MB`, `JIKAN_QUEUE_WORKER_PROCESS_NUM` | `OCTANE_WORKERS` (default `auto` = one per CPU), `OCTANE_MAX_REQUESTS` (default `500`, workers are recycled after this many requests) and `OCTANE_TASK_WORKERS` (default `1`). `.rr.yaml` is no longer used. |
+| RoadRunner memory supervisor / max request size | `RR_MAX_WORKER_MEMORY` (128), `RR_MAX_REQUEST_SIZE_MB` (256) | **Not mapped.** Use `OCTANE_MAX_REQUESTS` to bound worker memory growth; Swoole's request size limit is Octane's default `package_max_length` (10 MB), overridable in `config/octane.php` → `swoole.options`. |
 | Queue workers | `laravel_queue_worker_1` RoadRunner service | `QUEUE_WORKERS=N` (see above). |
 | `APP_KEY` | not needed by Lumen | The container entrypoint generates one on first boot when none is supplied. Set `APP_KEY` (or `APP_KEY__FILE`) explicitly in production so it is stable across restarts. |
 | Scheduler | all indexers `->daily()` at 00:00 | Staggered `dailyAt()` between 00:10 and 01:30, with `withoutOverlapping()->onOneServer()`. `onOneServer` needs a cache store shared by all instances (`CACHE_DRIVER=redis`); with a container-local store (`file`, the default, or `array`) it only de-duplicates within one container. |

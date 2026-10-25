@@ -5,7 +5,7 @@
   "project": {
     "name": "jikan-rest",
     "audience": "technical users consuming read-only MyAnimeList data via JSON; also developers/ops of the API itself",
-    "framework": "Laravel 13 (PHP 8.4, MongoDB via laravel-mongodb, Octane/RoadRunner, Scout native Typesense optional). Read-only JSON API by design: no auth, no sessions, no CSRF, no Blade.",
+    "framework": "Laravel 13 (PHP 8.4, MongoDB via laravel-mongodb, Octane/Swoole, Scout native Typesense optional). Read-only JSON API by design: no auth, no sessions, no CSRF, no Blade.",
     "singleLocale": "en-US"
   },
   "adapters": {
@@ -44,7 +44,7 @@
         "state": "approved",
         "by": "Irfan Dahir",
         "on": "2026-10-11",
-        "value": "Laravel 13 (PHP 8.4, MongoDB via laravel-mongodb, Octane/RoadRunner, Scout native Typesense optional). Read-only JSON API by design: no auth, no sessions, no CSRF, no Blade.",
+        "value": "Laravel 13 (PHP 8.4, MongoDB via laravel-mongodb, Octane/Swoole, Scout native Typesense optional). Read-only JSON API by design: no auth, no sessions, no CSRF, no Blade.",
         "evidence": "inferred by survey.py (survey of a2b71b57489f): root manifest identified the packaging stack; the design framework itself is not something a manifest states",
         "verifiedAgainst": {
           "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",

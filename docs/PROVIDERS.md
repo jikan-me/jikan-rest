@@ -19,7 +19,7 @@ Installer: `./install.sh` (interactive) or the `${FLAG}`s below. Wrappers:
 | **Redis** (cache/queue) | No — optional | redis-server (`--with-redis`) | `CACHE_DRIVER=redis`, `REDIS_HOST/PORT` | `redis-cli ping` → `PONG` |
 | **Queue** | ✅ via Mongo driver | none (config `QUEUE_CONNECTION=database`) | — | `php artisan queue:work --once` |
 | **Runtime: `php artisan serve`** | ✅ | PHP 8.4 | `--server serve` | `/up` → 200 |
-| **Runtime: Octane RoadRunner** | ✅ default | `rr` binary (auto-downloaded `octane:install`) | `--server roadrunner` / `OCTANE_SERVER=roadrunner` | `/up` under `:8000` |
+| **Runtime: Octane Swoole** | ✅ default | `ext-swoole` (`pecl install swoole`; built into the Docker image) | `--server swoole` / `OCTANE_SERVER=swoole` | `/up` under `:8000` |
 | **Runtime: Octane FrankenPHP** | ⚠️ opt-in | static binary (auto-downloaded) | `--server frankenphp` / `OCTANE_SERVER=frankenphp` | `/up`; Mongo-backed endpoints need ext-mongodb in the embedded PHP — use a container image (php + mongodb ext + FrankenPHP) for them |
 | **API docs (Scalar)** | ✅ docs page `/v4/docs`; spec `/v4/docs/openapi` (served by l5-swagger itself; legacy `/v4/api-docs` 301s here) | none (regenerate on annotation change) | `php artisan l5-swagger:generate` | `curl localhost:8000/v4/docs` |
 | **Error reporting (Sentry)** | No — needs DSN | `SENTRY_LARAVEL_DSN` | set DSN (traces default 0.1) | Sentry UI |
@@ -37,14 +37,14 @@ Installer: `./install.sh` (interactive) or the `${FLAG}`s below. Wrappers:
 ```bash
 brew install php@8.4 mongodb-community composer
 pecl install mongodb
-./install.sh --yes          # .env + APP_KEY + deps + RoadRunner runtime
-./script/server             # OCTANE_SERVER=roadrunner → :8000
+./install.sh --yes          # .env + APP_KEY + deps + Swoole check
+./script/server             # OCTANE_SERVER=swoole → :8000
 curl http://127.0.0.1:8000/up
 ```
 
 ## Production shape
 ```bash
-./install.sh --env=production --no-dev --with-redis --with-typesense --with-backend-suite --server roadrunner
+./install.sh --env=production --no-dev --with-redis --with-typesense --with-backend-suite --server swoole
 # then: docker compose up -d --build   (or run native: script/server)
 ```
 
@@ -60,7 +60,7 @@ curl http://127.0.0.1:8000/up
 >   engine; `typesenseSearchParameters()`/`typesenseCollectionSchema()` are implemented on
 >   `JikanApiSearchableModel`.
 > - **Runtime:** `php artisan serve` is the no-setup fallback; Octane is the production
->   runtime — **RoadRunner default**, **FrankenPHP opt-in** via `OCTANE_SERVER=frankenphp`
+>   runtime — **Swoole default**, **FrankenPHP opt-in** via `OCTANE_SERVER=frankenphp`
 >   (binary not shipped; `install.sh --server frankenphp` downloads it).
 > - **Cache/queue:** array (dev) / **Redis optional** (`--with-redis`); queue uses the Mongo
 >   database driver by default.

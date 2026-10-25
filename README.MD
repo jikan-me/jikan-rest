@@ -29,11 +29,11 @@ https://github.com/jikan-me/jikan-rest/tree/v3
 This repository is the self-hostable Jikan REST API: you run your own instance of the
 `/v4` API against MyAnimeList. Current release: **4.3.0**.
 
-**Stack:** Laravel 13 · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb` v5) · Octane (RoadRunner default / FrankenPHP opt-in) · PHPUnit 12 · Laravel Scout search · parser [jikan-me/jikan](https://github.com/jikan-me/jikan) v5.
+**Stack:** Laravel 13 · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb` v5) · Octane (Swoole default / FrankenPHP opt-in) · PHPUnit 12 · Laravel Scout search · parser [jikan-me/jikan](https://github.com/jikan-me/jikan) v5.
 
 **Requirements**
 
-- PHP **8.4.4 or newer** with `ext-mongodb` ≥ 2.5 and `ext-pcntl` (Composer 2)
+- PHP **8.4.4 or newer** with `ext-mongodb` ≥ 2.5, `ext-pcntl` and `ext-swoole` (Composer 2); `ext-brotli` optional
 - MongoDB server 8.0 (the Docker stack uses `mongo:8.0`; CI temporarily runs 7.0, see [TROUBLESHOOTING](docs/TROUBLESHOOTING.md))
 - Optional: Redis (shared cache across containers), Typesense 27 (search; off by default, Mongo `$text` is the fallback)
 
@@ -53,8 +53,8 @@ Set `APP_URL` to the public URL of your instance and `APP_KEY` to a stable key i
 composer install
 cp .env.dist .env && php artisan key:generate   # then set APP_URL and the DB_* values
 php artisan migrate
-php artisan octane:install --server=roadrunner  # downloads the RoadRunner binary
-php artisan octane:start --server=roadrunner --port=8000
+pecl install swoole                             # Octane server extension (once)
+php artisan octane:start --server=swoole --port=8000
 ```
 
 A fresh instance has an empty database; entries are fetched from MyAnimeList on first request.

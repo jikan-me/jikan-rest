@@ -5,7 +5,7 @@
     {
       "id": "octane-base-app-singleton",
       "title": "Resolving through $this->app in a provider leaks state across Octane requests",
-      "trigger": "Writing or editing a service-provider binding or closure that resolves services through $this->app, or that captures repository / query-builder instances in a singleton, while the API runs under Octane/RoadRunner.",
+      "trigger": "Writing or editing a service-provider binding or closure that resolves services through $this->app, or that captures repository / query-builder instances in a singleton, while the API runs under Octane/Swoole.",
       "trap": "$this->app is the long-lived base application, not the per-request sandbox, so anything resolved through it lives for the whole worker. Repositories cache mutable query builders, so where() clauses accumulate across requests and results come back wrong or empty. PHPUnit never runs under Octane, so the suite stays green.",
       "correctAction": "Resolve through the container passed to the closure (->give(fn ($app) => ...), scoped() bindings), never $this->app. Keep per-request state scoped or listed in config/octane.php 'flush'. RepositoryQueryBase hands out clones. OctaneStateIsolationTest guards the mediator path.",
       "severity": "high",

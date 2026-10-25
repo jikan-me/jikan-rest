@@ -9,12 +9,12 @@
 ## 1. System shape
 
 Read-only public v4 JSON API over MyAnimeList data. Laravel **13** (PHP 8.4),
-MongoDB via `mongodb/laravel-mongodb` **v5**, served by **Octane** (RoadRunner
+MongoDB via `mongodb/laravel-mongodb` **v5**, served by **Octane** (Swoole
 default) with optional Scout **Typesense** search. Public contract: 106 GET
 endpoints, no auth, no sessions, no Blade.
 
 ```
-HTTP → Octane worker (RoadRunner)
+HTTP → Octane worker (Swoole)
      → routes/ (v4 namespace) → Controllers (app/Http/Controllers/V4DB/**)
      → DTO commands → DefaultMediator (lazy factory map, ~101 entries)
      → request handlers (Query*Handler / Command handlers)
@@ -63,7 +63,7 @@ resolves every action).
 ## 5. Runtime & ops
 
 - **Image** (`Dockerfile`): `php:8.4-cli-alpine`, `ext-mongodb`, `pcntl/
-  sockets/opcache`, RoadRunner **2025.1.15** (arch auto-detect), `route:cache`
+  sockets/opcache`, `ext-swoole`/`ext-brotli` (PECL), `route:cache`
   baked at build, `config:cache` in the entrypoint so runtime env applies.
 - **Entrypoint** (`docker-entrypoint.sh` → `docker-entrypoint.php`): prepares
   `.env` from `.env.dist`, overlays safe defaults + Docker secrets, caches

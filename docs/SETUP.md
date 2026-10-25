@@ -1,7 +1,7 @@
 # Setup Guide — jikan-rest (Laravel 13)
 
 This checkout runs **without Docker** (native PHP/Mongo) or **with Docker** (see `docs/DOCKER.md`).
-It targets Laravel 13, PHP 8.4, MongoDB; Octane is the production runtime (RoadRunner default,
+It targets Laravel 13, PHP 8.4, MongoDB; Octane is the production runtime (Swoole default,
 FrankenPHP opt-in), search is Laravel Scout (Typesense **or** the Mongo `$text` fallback).
 
 > Machine-specific notes for the dev box used to build this fork are in
@@ -26,7 +26,7 @@ tools/dev/php vendor/bin/phpunit --no-coverage
 
 | Flag | What it does |
 |---|---|
-| `--server roadrunner\|frankenphp\|serve` | Runtime server (default `roadrunner`). `serve` = plain `php artisan serve`; `frankenphp` downloads the opt-in static binary. |
+| `--server swoole\|frankenphp\|serve` | Runtime server (default `swoole`; needs `ext-swoole`). `serve` = plain `php artisan serve`; `frankenphp` downloads the opt-in static binary. |
 | `--no-dev` | `composer install --no-dev` (production deps only). |
 | `--with-redis` | Install/flag Redis (Homebrew) + `.env` keys. |
 | `--with-typesense` | Download a native Typesense server (`/tmp/typesense`) + set `SCOUT_DRIVER=typesense`. |
@@ -85,8 +85,8 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 4. **Env** — `cp .env.dist .env && tools/dev/php artisan key:generate`, then `tools/dev/php artisan migrate` (MongoDB indexes)
    `.env.dist` is the **canonical env reference** (all ~116 keys the app reads); only `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_KEY` should differ from it.
 5. **Runtime**
-   - RoadRunner (default): `tools/dev/php artisan octane:install --server=roadrunner` then
-     `OCTANE_SERVER=roadrunner tools/dev/php artisan octane:start --server=roadrunner --port=8000`
+   - Swoole (default): `pecl install swoole` once, then
+     `OCTANE_SERVER=swoole tools/dev/php artisan octane:start --server=swoole --port=8000`
    - FrankenPHP (opt-in): download the static binary, then
      `OCTANE_SERVER=frankenphp tools/dev/php artisan octane:start --server=frankenphp --port=8000`
    - Dev on the built-in server: `tools/dev/php artisan serve --host=127.0.0.1 --port=8000`
@@ -105,7 +105,7 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 |---|---|---|
 | Search | Mongo `$text` (no server needed) | Typesense via `SCOUT_DRIVER=typesense` + native binary or `docker compose` |
 | Cache | `file` (`CACHE_DRIVER=file`; do not use `array` under Octane) | Redis to share across containers (`CACHE_DRIVER=redis`) |
-| Runtime | RoadRunner | FrankenPHP (`OCTANE_SERVER=frankenphp`), `php artisan serve`, or Docker |
+| Runtime | Swoole | FrankenPHP (`OCTANE_SERVER=frankenphp`), `php artisan serve`, or Docker |
 | Static analysis | PHPStan level 6 (baseline-pinned) + Pint | `composer phpstan` · `composer pint` |
 | API docs | Scalar reference at `v4/docs`; OpenAPI spec at `v4/docs/openapi` (l5-swagger-generated; legacy `/v4/api-docs` 301s there) | Swagger UI endpoint disabled by design |
 | Audits | `backend-quality-suite` (`.backend-suite/`) | CLI from `/tmp/bsq-venv` (or `pip install git+…@main`) |
@@ -126,10 +126,10 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 >
 > 1. Run `./install.sh --check` and confirm the prerequisites; fix any missing
 >    prerequisites (Homebrew `php@8.4` + `pecl install mongodb` + `mongodb-community`).
-> 2. Run `./install.sh` (defaults: Mongo + RoadRunner, local env). If the operator wants
+> 2. Run `./install.sh` (defaults: Mongo + Swoole, local env). If the operator wants
 >    extra services, use `--with-typesense`, `--with-backend-suite`, `--with-skills`,
 >    `--server frankenphp`.
-> 3. Start the server (RoadRunner unless another `--server` was chosen) and verify:
+> 3. Start the server (Swoole unless another `--server` was chosen) and verify:
 >    `curl http://127.0.0.1:8000/up` → `200`, `curl http://127.0.0.1:8000/v4/genres/anime` → `200`.
 > 4. Run `tools/dev/php vendor/bin/phpunit --no-coverage` → all tests green,
 >    and `tools/dev/php artisan config:cache` boots.

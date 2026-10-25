@@ -1,12 +1,12 @@
 # 🐳 Docker: build, run, configure & seed `jikan-rest`
 
-Local, PR-ready Docker stack for the Laravel 13 / Octane (RoadRunner / MongoDB)
+Local, PR-ready Docker stack for the Laravel 13 / Octane (Swoole) / MongoDB
 app. The image does **not** run `php-fpm` — Octane workers are CLI processes
-served by the RoadRunner binary on port 8080.
+served by Swoole (`ext-swoole`) on port 8080.
 
 | File | Purpose |
 |---|---|
-| `Dockerfile` | App image: PHP 8.4.27-cli-alpine + RoadRunner 2025.1.15, `composer` deps cached, `route:cache` baked, HEALTHCHECK on `/up` |
+| `Dockerfile` | App image: PHP 8.4.27-cli-alpine + ext-swoole/mongodb/brotli (PECL), `composer` deps cached, `route:cache` baked, HEALTHCHECK on `/up` |
 | `docker-compose.yml` | Full local stack: `app` (built from the Dockerfile) + `mongo` + `redis`, imports Typesense |
 | `docker-compose.typesense.yml` | Typesense service — single source of truth, imported via `include:` (also runnable standalone) |
 | `DOCKER.md` | This file |
@@ -24,18 +24,18 @@ served by the RoadRunner binary on port 8080.
   omitted).
 - Compose interpolates `${VAR:-default}` from your shell environment or a
   `.env` file placed at the repo root.
-- Apple Silicon (M1–M4) builds `linux/arm64` natively; the Dockerfile detects
-  the architecture at build time and fetches the matching RoadRunner binary, so
-  no build arg is needed (see §2).
+- Apple Silicon (M1–M4) builds `linux/arm64` natively; the PHP extensions are
+  compiled for the build platform, so no build arg is needed (see §2).
 
 ---
 
 ## 2. Build
 
-The Dockerfile downloads the RoadRunner server binary (2025.1.15) inside the
-app stage, detecting the build platform from `uname -m` — so a plain
-`docker compose build` fetches the correct `linux-amd64`/`linux-arm64` asset
-with no build arg (see the header comment in `Dockerfile`).
+The Dockerfile compiles `ext-swoole`, `ext-mongodb` and `ext-brotli` from PECL
+in the app stage (build dependencies are removed afterwards), so a plain
+`docker compose build` works on `linux/amd64` and `linux/arm64` with no build
+arg. A cold build takes about 15–20 minutes, mostly compiling Swoole and the
+MongoDB driver; later builds reuse the cached layer.
 
 ### 2.1 Compose (recommended)
 
@@ -52,12 +52,11 @@ docker buildx build --platform linux/amd64 -t jikan-rest:local .
 # ARM64 (Apple Silicon, or cross-building for arm64 runners)
 docker buildx build --platform linux/arm64 -t jikan-rest:local .
 
-# Inspect the baked-in binary
-docker run --rm --entrypoint /usr/local/bin/rr jikan-rest:local --version
+# Inspect the runtime
+docker run --rm --entrypoint php jikan-rest:local --ri swoole
 ```
 
-> Cross-builds work automatically: under emulation the build container sees the
-> target architecture, so the matching RoadRunner binary is fetched.
+> Cross-builds work under emulation, but compiling the extensions is slow there.
 
 ### 2.3 Published images
 
@@ -84,7 +83,8 @@ The `app` container's `ENTRYPOINT` (`docker-entrypoint.sh`) runs
 Laravel scheduler via supercronic, then `exec`s
 
 ```
-php artisan octane:start --server=roadrunner --host=0.0.0.0 --port=8080
+php artisan octane:start --server=swoole --host=0.0.0.0 --port=8080 \
+  --workers=$OCTANE_WORKERS --task-workers=$OCTANE_TASK_WORKERS --max-requests=$OCTANE_MAX_REQUESTS
 ```
 
 so the compose `app` service needs no `command:`. Extra Octane flags can be
@@ -114,7 +114,8 @@ them as `VAR=value docker compose ...` or in a root `.env` file.
 | `TYPESENSE_HOST` / `TYPESENSE_PORT` | `typesense` / `8108` | |
 | `TYPESENSE_API_KEY` | `abcd` | Shared by the `typesense` service **and** the app — override once: `TYPESENSE_API_KEY=my-key docker compose up -d` |
 | `CACHE_DRIVER` | `file` | `storage/framework/cache`, shared by all Octane workers in the container. Do not use `array` under Octane: it is flushed before every request, so nothing is cached between requests. To share across containers: `CACHE_DRIVER=redis docker compose up -d app` |
-| `OCTANE_SERVER` | `roadrunner` | Matches `config/octane.php`; keep as-is. |
+| `OCTANE_SERVER` | `swoole` | Matches `config/octane.php`; keep as-is (RoadRunner was removed in 4.3.0). |
+| `OCTANE_WORKERS` / `OCTANE_MAX_REQUESTS` / `OCTANE_TASK_WORKERS` | `auto` / `500` / `1` | Swoole worker count, per-worker recycling, task workers (only Octane's tick uses them; keep ≥ 1). |
 | `JIKAN_ENABLE_PERIODICAL_FULL_INDEXER` | — | Set `true` to schedule a weekly full anime/manga re-index on Mondays 01:00 (supercronic). |
 
 > ⚠️ The Dockerfile bakes `route:cache` at build time with `DISABLE_USER_LISTS`
@@ -199,12 +200,12 @@ validated without a daemon:
 **Validation checklist for a Docker host (CI or a runner) before pushing:**
 
 > Status: **the full build + stack was validated locally (2026-10-12) via Colima
-> on macOS/arm64** — image builds, `rr --version` prints 2025.1.15, and all four
-> services come up healthy. Checklist items below up to "Seed minimally" are
+> on macOS/arm64** (then on RoadRunner; the Swoole image was re-validated on
+> Docker Desktop/amd64 on 2026-10-25), and all four services come up healthy. Checklist items below up to "Seed minimally" are
 > confirmed; the last one needs data (upstream-blocked).
 
-- [x] `docker compose up -d --build` — app image builds, `rr --version` prints
-      2025.1.15 (arch auto-detected).
+- [x] `docker compose up -d --build` — app image builds, `php --ri swoole` prints
+      the Swoole version.
 - [x] `docker compose ps` shows `app`, `mongo`, `redis`, `typesense` healthy.
 - [x] `curl -fsS http://localhost:8080/up` returns `200 OK`.
 - [x] `curl -fsS http://localhost:8080/` returns `200` JSON with the heartbeat block.
