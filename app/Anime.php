@@ -236,7 +236,7 @@ class Anime extends JikanApiSearchableModel
         if (is_scout_query_builder($query)) {
             $query = $query->where('start_date', ['>=', $compareVal->getTimestamp()]);
         } else {
-            $query = $query->where('published.from', '>=', $compareVal->toAtomString());
+            $query = $query->where('aired.from', '>=', $compareVal->toAtomString());
         }
 
         return $query;
@@ -257,11 +257,10 @@ class Anime extends JikanApiSearchableModel
                 ')',
             ]);
         } else {
-            $query = $query
-                ->where('aired.to', function ($queryInner) use ($compareVal) {
-                    return $queryInner->where('aired.to', '<=', $compareVal->toAtomString())
-                        ->orWhere('aired.to', null);
-                });
+            $query = $query->where(function ($query) use ($compareVal) {
+                return $query->where('aired.to', '<=', $compareVal->toAtomString())
+                    ->orWhere('aired.to', null);
+            });
         }
 
         return $query;
@@ -319,7 +318,7 @@ class Anime extends JikanApiSearchableModel
                 ')',
             ]);
         } else {
-            $query = $query->where(function (\MongoDB\Laravel\Eloquent\Builder $query) use ($producers) {
+            $query = $query->where(function ($query) use ($producers) {
                 $firstProducer = (int) $producers->first();
                 $query = $query->where('producers.mal_id', $firstProducer)
                     ->orWhere('licensors.mal_id', $firstProducer)

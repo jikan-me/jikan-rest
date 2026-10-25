@@ -68,6 +68,7 @@ final class DefaultCachedScraperService implements CachedScraperService
             throw new NotFoundHttpException;
         }
 
+        $results = null;
         try {
             $dbResults = $this->repository->getAllByMalId($id);
             $results = $this->dbResultSetToCachedData($dbResults);
@@ -93,7 +94,7 @@ final class DefaultCachedScraperService implements CachedScraperService
             if ($e->getCode() === 404) {
                 $this->rememberMiss($id, self::MISS_UPSTREAM_404);
             }
-            if ($e->getCode() == 405 && ! $results->isEmpty() && $results->isExpired()) {
+            if ($e->getCode() == 405 && $results !== null && ! $results->isEmpty() && $results->isExpired()) {
                 return $results;
             }
             throw $e;
