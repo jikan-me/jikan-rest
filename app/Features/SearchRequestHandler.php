@@ -5,6 +5,7 @@ namespace App\Features;
 use App\Contracts\DataRequest;
 use App\Contracts\RequestHandler;
 use App\Services\QueryBuilderService;
+use App\Support\SearchEngineFailure;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -49,13 +50,11 @@ abstract class SearchRequestHandler implements RequestHandler
             );
             $paginator = $this->queryBuilderService->paginateBuilder($builder, $page, $limit);
         } catch (\Throwable $e) {
-            // A missing/unreachable search (Typesense) collection must render
-            // an EMPTY result, never 500 or 404 — search failures degrade
-            // gracefully for the whole search surface.
-            try {
-                report($e);
-            } catch (\Throwable $ignore) {
-            }
+            // Only a search-engine outage (collection missing, engine
+            // unreachable, timeout, 5xx) degrades to an empty result; Mongo
+            // errors, validation and bugs propagate (same rule as
+            // SearchController).
+            $this->reportDegradableOrRethrow($e);
             $paginator = new ConcreteLengthAwarePaginator(
                 collect(),
                 0,
@@ -68,13 +67,9 @@ abstract class SearchRequestHandler implements RequestHandler
         try {
             return $this->renderResponse($paginator);
         } catch (\Throwable $e) {
-            // Last-resort: rendering must not take a search endpoint down.
-            // Render an empty v4 envelope instead.
-            try {
-                report($e);
-            } catch (\Throwable $ignore) {
-            }
-            $perPage = (int) ($limit ?? 25);
+            // Rendering can still reach the engine (lazy hydration); only that
+            // kind of failure gets the empty v4 envelope.
+            $this->reportDegradableOrRethrow($e);
 
             return new JsonResponse([
                 'data' => [],
@@ -82,10 +77,24 @@ abstract class SearchRequestHandler implements RequestHandler
                     'last_visible_page' => 1,
                     'has_next_page' => false,
                     'current_page' => 1,
-                    'items' => ['count' => 0, 'total' => 0, 'per_page' => $perPage],
+                    'items' => ['count' => 0, 'total' => 0, 'per_page' => (int) ($limit ?? 25)],
                 ],
             ]);
         }
+    }
+
+    /**
+     * Reports a degradable search-engine failure, rethrows anything else.
+     *
+     * @throws \Throwable
+     */
+    private function reportDegradableOrRethrow(\Throwable $e): void
+    {
+        if (! SearchEngineFailure::isDegradable($e)) {
+            throw $e;
+        }
+
+        report($e);
     }
 
     /**
