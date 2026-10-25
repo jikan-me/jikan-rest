@@ -160,7 +160,6 @@ trait MediaFilters
     public function filterBySfw(Builder|\Illuminate\Database\Eloquent\Builder $query, bool $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
         // call scopeExceptItemsWithAdultRating method via $query->exceptItemsWithAdultRating()
-        /** @noinspection PhpUndefinedMethodInspection */
         return $value ? $query->exceptItemsWithAdultRating() : $query;
     }
 
@@ -170,7 +169,7 @@ trait MediaFilters
      */
     public function filterByUnapproved(Builder|\Illuminate\Database\Eloquent\Builder $query, ?bool $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return ! $value ? $query instanceof Builder ? $query->where('approved', 'true') : $query->where('approved', true) : $query;
+        return !$value ? $query instanceof Builder ? $query->where('approved', 'true') : $query->where('approved', true) : $query;
     }
 
     /**
@@ -184,7 +183,6 @@ trait MediaFilters
         }
 
         // call scopeOnlyKidsItems method via $query->onlyKidsItems()
-        /** @noinspection PhpUndefinedMethodInspection */
         return $value ? $query->onlyKidsItems() : $query->exceptKidsItems();
     }
 }

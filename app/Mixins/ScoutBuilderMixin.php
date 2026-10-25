@@ -58,6 +58,7 @@ class ScoutBuilderMixin
             // Laravel binds this macro closure to a Scout Builder at runtime.
             /**
              * @var Builder<Model> $this
+             *
              * @phpstan-ignore varTag.nativeType
              */
             if ($this->model instanceof JikanApiModel) {

@@ -33,7 +33,7 @@ if (!function_exists('ensureEnumPrimitiveValue')) {
     }
 }
 
-if (! function_exists('is_scout_query_builder')) {
+if (!function_exists('is_scout_query_builder')) {
     /**
      * @template TModel of Model|\MongoDB\Laravel\Eloquent\Model
      *
