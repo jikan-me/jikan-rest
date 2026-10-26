@@ -453,6 +453,8 @@ class Anime extends JikanApiSearchableModel
             'licensors' => $this->getMalIdsOfField($this->licensors),
             'genres' => $this->getMalIdsOfField($this->genres),
             'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres),
+            'themes' => $this->getMalIdsOfField($this->themes),
+            'demographics' => $this->getMalIdsOfField($this->demographics),
         ];
     }
 
