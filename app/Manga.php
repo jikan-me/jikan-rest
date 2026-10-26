@@ -47,7 +47,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property array<string, mixed> $related
  * @property array<string, mixed> $authors
  * @property array<string, mixed> $serializations
- * @property array<string, mixed> $magazines
  * @property array<string, mixed> $genres
  * @property array<string, mixed> $explicit_genres
  * @property array<string, mixed> $demographics
@@ -177,7 +176,7 @@ class Manga extends JikanApiSearchableModel
         $magazine = (int) $value;
 
         if (is_scout_query_builder($query)) {
-            $query = $query->where('magazines', $magazine);
+            $query = $query->where('serializations', $magazine);
         } else {
             $query = $query->where('serializations.mal_id', $magazine);
         }
@@ -200,7 +199,7 @@ class Manga extends JikanApiSearchableModel
 
         if (is_scout_query_builder($query)) {
             $magazineFilterList = '['.$magazines->implode(', ').']';
-            $query = $query->where('magazines', $magazineFilterList);
+            $query = $query->where('serializations', $magazineFilterList);
         } else {
             $query = $query->whereIn('serializations.mal_id', $magazines->toArray());
         }
@@ -315,9 +314,11 @@ class Manga extends JikanApiSearchableModel
             'favorites' => $this->favorites,
             'synopsis' => $this->synopsis,
             'approved' => $this->approved ?? false,
-            'magazines' => $this->getMalIdsOfField($this->magazines),
             'genres' => $this->getMalIdsOfField($this->genres),
             'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres),
+            'themes' => $this->getMalIdsOfField($this->themes),
+            'demographics' => $this->getMalIdsOfField($this->demographics),
+            'serializations' => $this->getMalIdsOfField($this->serializations),
         ];
     }
 
