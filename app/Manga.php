@@ -235,6 +235,7 @@ class Manga extends JikanApiSearchableModel
         return [
             'type' => MangaTypeEnum::doujin()->label,
             'genres.mal_id' => Constants::GENRE_MANGA_HENTAI,
+            'explicit_genres.mal_id' => Constants::GENRE_MANGA_HENTAI,
         ];
     }
 
@@ -244,7 +245,8 @@ class Manga extends JikanApiSearchableModel
     public function isSfw(): bool
     {
         return $this->type !== MangaTypeEnum::doujin()->label
-            && !in_array(Constants::GENRE_MANGA_HENTAI, $this->getMalIdsOfField($this->genres));
+            && !in_array(Constants::GENRE_MANGA_HENTAI, $this->getMalIdsOfField($this->genres))
+            && !in_array(Constants::GENRE_MANGA_HENTAI, $this->getMalIdsOfField($this->explicit_genres));
     }
 
     /** @noinspection PhpUnused */

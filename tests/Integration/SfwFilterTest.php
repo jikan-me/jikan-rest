@@ -56,9 +56,11 @@ class SfwFilterTest extends TestCase
         Anime::factory()->createOne(['mal_id' => 2, 'rating' => AnimeRatingEnum::rx()->label]);
         Anime::factory()->createOne(['mal_id' => 3, 'rating' => AnimeRatingEnum::r17()->label, 'genres' => self::genre(Constants::GENRE_ANIME_HENTAI)]);
         Anime::factory()->createOne(['mal_id' => 4, 'rating' => AnimeRatingEnum::r17()->label, 'explicit_genres' => self::genre(Constants::GENRE_ANIME_EROTICA)]);
+        Anime::factory()->createOne(['mal_id' => 5, 'rating' => AnimeRatingEnum::r17()->label, 'explicit_genres' => self::genre(Constants::GENRE_ANIME_HENTAI)]);
 
         $this->assertMongoFilterMatchesIsSfw(Anime::class);
         $this->assertTrue(Anime::query()->where('mal_id', 4)->firstOrFail()->isSfw(), 'Erotica is allowed as sfw for anime');
+        $this->assertFalse(Anime::query()->where('mal_id', 5)->firstOrFail()->isSfw());
     }
 
     public function testMangaSfwFilterAgreesWithIsSfw(): void
@@ -66,7 +68,9 @@ class SfwFilterTest extends TestCase
         Manga::factory()->createOne(['mal_id' => 1, 'type' => MangaTypeEnum::manga()->label]);
         Manga::factory()->createOne(['mal_id' => 2, 'type' => MangaTypeEnum::doujin()->label]);
         Manga::factory()->createOne(['mal_id' => 3, 'type' => MangaTypeEnum::manga()->label, 'genres' => self::genre(Constants::GENRE_MANGA_HENTAI)]);
+        Manga::factory()->createOne(['mal_id' => 4, 'type' => MangaTypeEnum::manga()->label, 'explicit_genres' => self::genre(Constants::GENRE_MANGA_HENTAI)]);
 
         $this->assertMongoFilterMatchesIsSfw(Manga::class);
+        $this->assertFalse(Manga::query()->where('mal_id', 4)->firstOrFail()->isSfw());
     }
 }

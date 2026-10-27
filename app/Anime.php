@@ -366,6 +366,7 @@ class Anime extends JikanApiSearchableModel
         return [
             'rating' => AnimeRatingEnum::rx()->label,
             'genres.mal_id' => Constants::GENRE_ANIME_HENTAI,
+            'explicit_genres.mal_id' => Constants::GENRE_ANIME_HENTAI,
         ];
     }
 
@@ -375,7 +376,8 @@ class Anime extends JikanApiSearchableModel
     public function isSfw(): bool
     {
         return $this->rating !== AnimeRatingEnum::rx()->label
-            && !in_array(Constants::GENRE_ANIME_HENTAI, $this->getMalIdsOfField($this->genres));
+            && !in_array(Constants::GENRE_ANIME_HENTAI, $this->getMalIdsOfField($this->genres))
+            && !in_array(Constants::GENRE_ANIME_HENTAI, $this->getMalIdsOfField($this->explicit_genres));
     }
 
     /** @noinspection PhpUnused */
