@@ -346,20 +346,36 @@ class Anime extends JikanApiSearchableModel
     public function scopeExceptItemsWithAdultRating(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (is_scout_query_builder($query)) {
-            $query = $query
-                ->where('demographics', ['!=', Constants::GENRE_ANIME_HENTAI])
-                ->where('demographics', ['!=', Constants::GENRE_ANIME_EROTICA])
-                ->where('rating', ['!=', AnimeRatingEnum::rx()->label])
-                ->where('genres', ['!=', Constants::GENRE_ANIME_HENTAI]);
-        } else {
-            $query = $query
-                ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_HENTAI)
-                ->where('demographics.mal_id', '!=', Constants::GENRE_ANIME_EROTICA)
-                ->where('rating', '!=', AnimeRatingEnum::rx()->label)
-                ->where('genres.mal_id', '!=', Constants::GENRE_ANIME_HENTAI);
+            return $query->where('sfw', true);
+        }
+
+        foreach ($this->sfwExclusions() as $field => $excludedValue) {
+            $query = $query->where($field, '!=', $excludedValue);
         }
 
         return $query;
+    }
+
+    /**
+     * Erotica is intentionally allowed: those titles are suggestive (16+ in most jurisdictions), not explicit.
+     *
+     * @return array<string, string|int>
+     */
+    public function sfwExclusions(): array
+    {
+        return [
+            'rating' => AnimeRatingEnum::rx()->label,
+            'genres.mal_id' => Constants::GENRE_ANIME_HENTAI,
+        ];
+    }
+
+    /**
+     * Must stay equivalent to sfwExclusions(); its result is indexed as "sfw" for the search engine.
+     */
+    public function isSfw(): bool
+    {
+        return $this->rating !== AnimeRatingEnum::rx()->label
+            && !in_array(Constants::GENRE_ANIME_HENTAI, $this->getMalIdsOfField($this->genres));
     }
 
     /** @noinspection PhpUnused */
@@ -455,6 +471,7 @@ class Anime extends JikanApiSearchableModel
             'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres),
             'themes' => $this->getMalIdsOfField($this->themes),
             'demographics' => $this->getMalIdsOfField($this->demographics),
+            'sfw' => $this->isSfw(),
         ];
     }
 
@@ -520,6 +537,11 @@ class Anime extends JikanApiSearchableModel
                     'optional' => true,
                     'infix' => true,
                     'sort' => false,
+                ],
+                [
+                    'name' => 'sfw',
+                    'type' => 'bool',
+                    'optional' => true,
                 ],
             ],
         ];

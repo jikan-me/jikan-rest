@@ -159,8 +159,8 @@ trait MediaFilters
      */
     public function filterBySfw(Builder|\Illuminate\Database\Eloquent\Builder $query, bool $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        // call scopeExceptItemsWithAdultRating method via $query->exceptItemsWithAdultRating()
-        return $value ? $query->exceptItemsWithAdultRating() : $query;
+        // called directly: the Scout builder doesn't forward scopes
+        return $value ? $this->scopeExceptItemsWithAdultRating($query) : $query;
     }
 
     /**
@@ -182,7 +182,7 @@ trait MediaFilters
             return $query;
         }
 
-        // call scopeOnlyKidsItems method via $query->onlyKidsItems()
-        return $value ? $query->onlyKidsItems() : $query->exceptKidsItems();
+        // called directly: the Scout builder doesn't forward scopes
+        return $value ? $this->scopeOnlyKidsItems($query) : $this->scopeExceptKidsItems($query);
     }
 }

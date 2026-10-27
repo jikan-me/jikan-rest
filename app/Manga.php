@@ -215,20 +215,36 @@ class Manga extends JikanApiSearchableModel
     public function scopeExceptItemsWithAdultRating(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
         if (is_scout_query_builder($query)) {
-            $query = $query
-                ->where('type', ['!=', MangaTypeEnum::doujin()->label])
-                ->where('demographics', ['!=', Constants::GENRE_MANGA_HENTAI])
-                ->where('demographics', ['!=', Constants::GENRE_MANGA_EROTICA])
-                ->where('genres', ['!=', Constants::GENRE_MANGA_HENTAI]);
-        } else {
-            $query = $query
-                ->where('type', '!=', MangaTypeEnum::doujin()->label)
-                ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_HENTAI)
-                ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_EROTICA)
-                ->where('genres.mal_id', '!=', Constants::GENRE_MANGA_HENTAI);
+            return $query->where('sfw', true);
+        }
+
+        foreach ($this->sfwExclusions() as $field => $excludedValue) {
+            $query = $query->where($field, '!=', $excludedValue);
         }
 
         return $query;
+    }
+
+    /**
+     * Manga has no age rating; adult works are inferred from the doujin type.
+     *
+     * @return array<string, string|int>
+     */
+    public function sfwExclusions(): array
+    {
+        return [
+            'type' => MangaTypeEnum::doujin()->label,
+            'genres.mal_id' => Constants::GENRE_MANGA_HENTAI,
+        ];
+    }
+
+    /**
+     * Must stay equivalent to sfwExclusions(); its result is indexed as "sfw" for the search engine.
+     */
+    public function isSfw(): bool
+    {
+        return $this->type !== MangaTypeEnum::doujin()->label
+            && !in_array(Constants::GENRE_MANGA_HENTAI, $this->getMalIdsOfField($this->genres));
     }
 
     /** @noinspection PhpUnused */
@@ -319,6 +335,7 @@ class Manga extends JikanApiSearchableModel
             'themes' => $this->getMalIdsOfField($this->themes),
             'demographics' => $this->getMalIdsOfField($this->demographics),
             'serializations' => $this->getMalIdsOfField($this->serializations),
+            'sfw' => $this->isSfw(),
         ];
     }
 
@@ -384,6 +401,11 @@ class Manga extends JikanApiSearchableModel
                     'optional' => true,
                     'infix' => true,
                     'sort' => false,
+                ],
+                [
+                    'name' => 'sfw',
+                    'type' => 'bool',
+                    'optional' => true,
                 ],
             ],
         ];
