@@ -20,13 +20,6 @@ trait MediaFilters
         }
 
         if (is_scout_query_builder($query)) {
-            if (array_key_exists('score', $query->wheres)) {
-                $minScoreValue = $query->wheres['score'][1];
-                $maxScoreValue = floatval($value);
-
-                return $query->where('score', ['[', $minScoreValue, '..', $maxScoreValue, ']']);
-            }
-
             return $query->where('score', ['<=', floatval($value)]);
         }
 
@@ -46,13 +39,6 @@ trait MediaFilters
         }
 
         if (is_scout_query_builder($query)) {
-            if (array_key_exists('score', $query->wheres)) {
-                $maxScoreValue = $query->wheres['score'][1];
-                $minScoreValue = floatval($value);
-
-                return $query->where('score', ['[', $minScoreValue, '..', $maxScoreValue, ']']);
-            }
-
             return $query->where('score', ['>=', floatval($value)]);
         }
 
@@ -93,14 +79,17 @@ trait MediaFilters
         $genres = explode(',', $value);
 
         if (is_scout_query_builder($query)) {
-            $genreFilterList = '['.implode(', ', $genres).']';
-            $query = $query->where('(genres', [
-                '=', $genreFilterList,
-                ' || demographics:=', $genreFilterList,
-                ' || themes:=', $genreFilterList,
-                ' || explicit_genres:=', $genreFilterList,
-                ')',
-            ]);
+            // one clause per genre: "field:=[a, b]" would match any of them, the db query requires all
+            foreach ($genres as $genreItem) {
+                $genre = (int) $genreItem;
+                $query = $query->where('(genres', [
+                    '=', $genre,
+                    ' || demographics:=', $genre,
+                    ' || themes:=', $genre,
+                    ' || explicit_genres:=', $genre,
+                    ')',
+                ]);
+            }
         } else {
             foreach ($genres as $genreItem) {
                 $genre = (int) $genreItem;
@@ -131,7 +120,7 @@ trait MediaFilters
         $genres = explode(',', $value);
 
         if (is_scout_query_builder($query)) {
-            $genreFilterList = '['.implode(', ', $genres).']';
+            $genreFilterList = '['.implode(', ', array_map('intval', $genres)).']';
             $query = $query->where('(genres', [
                 '!=', $genreFilterList,
                 ' && demographics:!=', $genreFilterList,

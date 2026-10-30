@@ -253,7 +253,7 @@ class Anime extends JikanApiSearchableModel
         if (is_scout_query_builder($query)) {
             $query = $query->where('(end_date', [
                 '<=', $compareVal->getTimestamp(),
-                ' || end_date:=', 'null',
+                ' || has_end_date:=', 'false',
                 ')',
             ]);
         } else {
@@ -310,6 +310,8 @@ class Anime extends JikanApiSearchableModel
         $producers = collect(explode(',', $value))->filter();
 
         if (is_scout_query_builder($query)) {
+            // cast: the values go verbatim into the filter_by expression
+            $producers = $producers->map(fn ($producer) => (int) $producer);
             $producerFilterList = '['.$producers->implode(', ').']';
             $query = $query->where('(producers', [
                 '=', $producerFilterList,
@@ -440,6 +442,8 @@ class Anime extends JikanApiSearchableModel
             'mal_id' => (int) $this->mal_id,
             'start_date' => $this->convertToTimestamp($this->aired['from'] ?? null),
             'end_date' => $this->convertToTimestamp($this->aired['to'] ?? null),
+            // ongoing items have no end date; Typesense can't filter on null
+            'has_end_date' => !empty($this->aired['to']),
             'title' => $this->title,
             'title_transformed' => $this->simplifyStringForSearch($this->title),
             'title_english' => $this->title_english ?? '',
@@ -545,6 +549,15 @@ class Anime extends JikanApiSearchableModel
                     'type' => 'bool',
                     'optional' => true,
                 ],
+                [
+                    'name' => 'has_end_date',
+                    'type' => 'bool',
+                    'optional' => true,
+                ],
+                // auto-typing only creates a field once a document has a value for it, so filters on these would fail until then
+                ...array_map(fn (string $name) => ['name' => $name, 'type' => 'int64[]', 'optional' => true], [
+                    'producers', 'studios', 'licensors', 'genres', 'explicit_genres', 'themes', 'demographics',
+                ]),
             ],
         ];
     }

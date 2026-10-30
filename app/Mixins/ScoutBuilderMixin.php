@@ -17,8 +17,7 @@ use Laravel\Scout\Engines\TypesenseEngine;
 class ScoutBuilderMixin
 {
     /**
-     * Specialised pagination. It retrieves all results from the search engine in chunks, loads them in memory
-     * then paginates on the database results.
+     * Specialised pagination: the search engine pages and filters, the database only hydrates the current page.
      *
      * @noinspection PhpUnused
      */
@@ -33,9 +32,9 @@ class ScoutBuilderMixin
             }
 
             $page = $page ?: Paginator::resolveCurrentPage($pageName);
-            $rawResults = $engine->paginate($this, max_results_per_page(), $page);
-            $found = (int) $engine->getTotalCount($rawResults);
             $perPage = $perPage ?: $this->model->getPerPage();
+            $rawResults = $engine->paginate($this, $perPage, $page);
+            $found = (int) $engine->getTotalCount($rawResults);
 
             $results = $this->model->newCollection($engine->map($this, $rawResults, $this->model)->values()->all());
 
@@ -64,7 +63,8 @@ class ScoutBuilderMixin
             if ($this->model instanceof JikanApiModel) {
                 $model = $this->model;
 
-                $filters = $model->getFilters($filterParameters)->map(function ($values, $filter) use ($model) {
+                // sorting is passed to the engine as sort_by by TypeSenseScoutSearchService
+                $filters = $model->getFilters($filterParameters)->except(['order_by', 'sort'])->map(function ($values, $filter) use ($model) {
                     return $model->resolve($filter, $values);
                 })->toArray();
 

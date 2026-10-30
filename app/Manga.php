@@ -150,7 +150,7 @@ class Manga extends JikanApiSearchableModel
         if (is_scout_query_builder($query)) {
             $query = $query->where('(end_date', [
                 '<=', $compareVal->getTimestamp(),
-                ' || end_date:=', 'null',
+                ' || has_end_date:=', 'false',
                 ')',
             ]);
         } else {
@@ -309,6 +309,8 @@ class Manga extends JikanApiSearchableModel
             'mal_id' => (int) $this->mal_id,
             'start_date' => $this->convertToTimestamp($this->published['from'] ?? null),
             'end_date' => $this->convertToTimestamp($this->published['to'] ?? null),
+            // ongoing items have no end date; Typesense can't filter on null
+            'has_end_date' => !empty($this->published['to']),
             'title' => $this->title,
             'title_transformed' => $this->simplifyStringForSearch($this->title),
             'title_english' => $this->title_english ?? '',
@@ -409,6 +411,15 @@ class Manga extends JikanApiSearchableModel
                     'type' => 'bool',
                     'optional' => true,
                 ],
+                [
+                    'name' => 'has_end_date',
+                    'type' => 'bool',
+                    'optional' => true,
+                ],
+                // auto-typing only creates a field once a document has a value for it, so filters on these would fail until then
+                ...array_map(fn (string $name) => ['name' => $name, 'type' => 'int64[]', 'optional' => true], [
+                    'genres', 'explicit_genres', 'themes', 'demographics', 'serializations',
+                ]),
             ],
         ];
     }
