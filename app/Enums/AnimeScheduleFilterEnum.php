@@ -2,7 +2,6 @@
 
 namespace App\Enums;
 
-
 use Spatie\Enum\Laravel\Enum;
 
 /**
@@ -27,8 +26,8 @@ final class AnimeScheduleFilterEnum extends Enum
     {
         return [
             ...collect(self::values())->map(fn ($x) => ucfirst($x))->toArray(),
-            "other" => "Not scheduled once per week",
-            "unknown" => "Unknown"
+            'other' => 'Not scheduled once per week',
+            'unknown' => 'Unknown',
         ];
     }
 }

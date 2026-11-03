@@ -16,8 +16,6 @@ use Spatie\LaravelData\Attributes\Validation\AfterOrEqual;
 use Spatie\LaravelData\Attributes\Validation\BeforeOrEqual;
 use Spatie\LaravelData\Attributes\Validation\DateFormat;
 use Spatie\LaravelData\Attributes\Validation\Min;
-use Spatie\LaravelData\Attributes\Validation\Required;
-use Spatie\LaravelData\Attributes\Validation\Sometimes;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
@@ -31,14 +29,14 @@ final class QueryMangaListOfUserCommand extends QueryListOfUserCommand
 
     #[
         WithCast(EnumCast::class, UserMangaListOrderByEnum::class),
-        MapInputName("order_by"),
+        MapInputName('order_by'),
         EnumValidation(UserMangaListOrderByEnum::class)
     ]
     public UserMangaListOrderByEnum|Optional $orderBy;
 
     #[
         WithCast(EnumCast::class, UserMangaListOrderByEnum::class),
-        MapInputName("order_by2"),
+        MapInputName('order_by2'),
         EnumValidation(UserMangaListOrderByEnum::class)
     ]
     public UserMangaListOrderByEnum|Optional $orderBy2;
@@ -47,38 +45,34 @@ final class QueryMangaListOfUserCommand extends QueryListOfUserCommand
     public int|Optional $magazine;
 
     #[
-        BeforeOrEqual("published_to"),
-        DateFormat("Y-m-d"),
-        Sometimes,
-        Required,
+        BeforeOrEqual('published_to'),
+        DateFormat('Y-m-d'),
         WithCast(DateTimeInterfaceCast::class),
         WithTransformer(DateTimeInterfaceTransformer::class),
-        MapInputName("published_from")
+        MapInputName('published_from')
     ]
     public CarbonImmutable|Optional $publishedFrom;
 
     #[
-        AfterOrEqual("published_from"),
-        DateFormat("Y-m-d"),
-        Sometimes,
-        Required,
+        AfterOrEqual('published_from'),
+        DateFormat('Y-m-d'),
         WithCast(DateTimeInterfaceCast::class),
         WithTransformer(DateTimeInterfaceTransformer::class),
-        MapInputName("published_to")
+        MapInputName('published_to')
     ]
     public CarbonImmutable|Optional $publishedTo;
 
     #[
         WithCast(EnumCast::class, UserMangaListStatusFilterEnum::class),
         EnumValidation(UserMangaListStatusFilterEnum::class),
-        MapInputName("publishing_status")
+        MapInputName('publishing_status')
     ]
     public UserMangaListStatusFilterEnum|Optional $publishingStatus;
-
 
     public function toJikanParserRequest(): UserMangaListRequest
     {
         $mapper = app(JikanUserListRequestMapperService::class);
+
         return $mapper->map($this, UserListTypeEnum::manga());
     }
 }

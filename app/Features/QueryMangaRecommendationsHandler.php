@@ -16,7 +16,7 @@ final class QueryMangaRecommendationsHandler extends QueryRecommendationsHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

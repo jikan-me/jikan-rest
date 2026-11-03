@@ -12,7 +12,7 @@ class AnimeModelFactoryDescriptor implements MediaModelFactoryDescriptor
 {
     public function activityMarkerKeyName(): string
     {
-        return "aired";
+        return 'aired';
     }
 
     public function typeParamMap(): array
@@ -32,7 +32,7 @@ class AnimeModelFactoryDescriptor implements MediaModelFactoryDescriptor
 
     public function mediaName(): string
     {
-        return "anime";
+        return 'anime';
     }
 
     public function genreQueryBuilder(): Builder
@@ -47,6 +47,6 @@ class AnimeModelFactoryDescriptor implements MediaModelFactoryDescriptor
 
     public function activityMarkerLogicalKeyName(): string
     {
-        return "airing";
+        return 'airing';
     }
 }

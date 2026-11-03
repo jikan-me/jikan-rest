@@ -1,0 +1,21 @@
+{
+    "data": [
+        "@list",
+        {
+            "aired": "@string",
+            "filler": "@bool",
+            "forum_url": "@string",
+            "mal_id": "@int",
+            "recap": "@bool",
+            "score": "@volatile",
+            "title": "@string",
+            "title_japanese": "@string",
+            "title_romanji": "@string",
+            "url": "@string"
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

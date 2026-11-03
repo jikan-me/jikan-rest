@@ -2,6 +2,4 @@
 
 namespace App\Dto;
 
-final class QueryUpcomingAnimeSeasonCommand extends QueryAnimeSeasonCommand
-{
-}
+final class QueryUpcomingAnimeSeasonCommand extends QueryAnimeSeasonCommand {}

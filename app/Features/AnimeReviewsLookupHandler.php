@@ -3,7 +3,6 @@
 namespace App\Features;
 
 use App\Dto\AnimeReviewsLookupCommand;
-use App\Enums\MediaReviewsSortEnum;
 use App\Features\Concerns\ResolvesMediaReviewParams;
 use App\Http\Resources\V4\ReviewsResource;
 use App\Support\CachedData;
@@ -21,7 +20,7 @@ final class AnimeReviewsLookupHandler extends RequestHandlerWithScraperCache
     use ResolvesMediaReviewParams;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
@@ -33,6 +32,9 @@ final class AnimeReviewsLookupHandler extends RequestHandlerWithScraperCache
         return new ReviewsResource($results);
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
         $reviewRequestParams = $this->getReviewRequestParams($requestParams);
@@ -44,7 +46,7 @@ final class AnimeReviewsLookupHandler extends RequestHandlerWithScraperCache
             fn (MalClient $jikan, ?int $page = null) => $jikan->getAnimeReviews(new AnimeReviewsRequest(
                 $id, $page, $sort, $spoilers, $preliminary
             )),
-            $requestParams->get("page", 1)
+            $requestParams->get('page', 1)
         );
     }
 }

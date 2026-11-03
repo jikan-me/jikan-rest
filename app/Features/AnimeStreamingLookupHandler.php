@@ -7,7 +7,6 @@ use App\Http\Resources\V4\StreamingLinksResource;
 use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @extends ItemLookupHandler<AnimeStreamingLookupCommand, JsonResponse>
@@ -22,7 +21,7 @@ final class AnimeStreamingLookupHandler extends ItemLookupHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

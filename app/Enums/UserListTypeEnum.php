@@ -2,13 +2,10 @@
 
 namespace App\Enums;
 
-
 use Spatie\Enum\Laravel\Enum;
 
 /**
  * @method static self anime()
  * @method static self manga()
  */
-final class UserListTypeEnum extends Enum
-{
-}
+final class UserListTypeEnum extends Enum {}

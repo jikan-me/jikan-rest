@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Update the project after a fresh pull (bootstrap + refresh caches).
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# PHP: $PHP_BIN, else the gitignored local wrapper tools/dev/php, else php on PATH.
+if [[ -n "${PHP_BIN:-}" ]]; then PHP="$PHP_BIN"; elif [[ -x "$PWD/tools/dev/php" ]]; then PHP="$PWD/tools/dev/php"; else PHP="$(command -v php)"; fi
+./script/bootstrap
+"$PHP" artisan optimize:clear >/dev/null
+echo "project updated."

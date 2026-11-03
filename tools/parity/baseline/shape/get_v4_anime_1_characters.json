@@ -1,0 +1,26 @@
+{
+    "data": [
+        "@list",
+        {
+            "character": {
+                "images": {
+                    "jpg": {
+                        "image_url": "@string"
+                    },
+                    "webp": {
+                        "image_url": "@string",
+                        "small_image_url": "@string"
+                    }
+                },
+                "mal_id": "@int",
+                "name": "@string",
+                "url": "@string"
+            },
+            "favorites": "@int",
+            "role": "@string",
+            "voice_actors": [
+                "@list"
+            ]
+        }
+    ]
+}

@@ -2,78 +2,33 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: 'anime_episode',
+    description: 'Anime Episode Resource',
+    properties: [
+        new OA\Property(property: 'mal_id', type: 'integer', description: 'MyAnimeList ID'),
+        new OA\Property(property: 'url', type: 'string', description: 'MyAnimeList URL'),
+        new OA\Property(property: 'title', type: 'string', description: 'Title'),
+        new OA\Property(property: 'title_japanese', type: 'string', description: 'Title Japanese', nullable: true),
+        new OA\Property(property: 'title_romanji', type: 'string', description: 'title_romanji', nullable: true),
+        new OA\Property(property: 'duration', type: 'integer', description: 'Episode duration in seconds', nullable: true),
+        new OA\Property(property: 'aired', type: 'string', description: 'Aired Date ISO8601', nullable: true),
+        new OA\Property(property: 'filler', type: 'boolean', description: 'Filler episode'),
+        new OA\Property(property: 'recap', type: 'boolean', description: 'Recap episode'),
+        new OA\Property(property: 'synopsis', type: 'string', description: 'Episode Synopsis', nullable: true),
+    ],
+)]
 class AnimeEpisodeResource extends JsonResource
 {
     /**
-     * @OA\Schema(
-     *     schema="anime_episode",
-     *     description="Anime Episode Resource",
-     *
-     *     @OA\Property(
-     *         property="mal_id",
-     *         type="integer",
-     *         description="MyAnimeList ID"
-     *     ),
-     *     @OA\Property(
-     *         property="url",
-     *         type="string",
-     *         description="MyAnimeList URL"
-     *     ),
-     *     @OA\Property(
-     *         property="title",
-     *         type="string",
-     *         description="Title"
-     *     ),
-     *     @OA\Property(
-     *         property="title_japanese",
-     *         type="string",
-     *         description="Title Japanese",
-     *         nullable=true
-     *     ),
-     *     @OA\Property(
-     *         property="title_romanji",
-     *         type="string",
-     *         description="title_romanji",
-     *         nullable=true
-     *     ),
-     *     @OA\Property(
-     *         property="duration",
-     *         type="integer",
-     *         description="Episode duration in seconds",
-     *         nullable=true
-     *     ),
-     *     @OA\Property(
-     *         property="aired",
-     *         type="string",
-     *         description="Aired Date ISO8601",
-     *         nullable=true
-     *     ),
-     *     @OA\Property(
-     *         property="filler",
-     *         type="boolean",
-     *         description="Filler episode"
-     *     ),
-     *     @OA\Property(
-     *         property="recap",
-     *         type="boolean",
-     *         description="Recap episode"
-     *     ),
-     *     @OA\Property(
-     *         property="synopsis",
-     *         type="string",
-     *         description="Episode Synopsis",
-     *         nullable=true
-     *     ),
-     * )
-     */
-
-    /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @param  Request  $request
+     * @return array<string, mixed>
      */
     public function toArray($request)
     {
@@ -87,7 +42,7 @@ class AnimeEpisodeResource extends JsonResource
             'aired' => $this['aired'],
             'filler' => $this['filler'],
             'recap' => $this['recap'],
-            'synopsis' => $this['synopsis']
+            'synopsis' => $this['synopsis'],
         ];
     }
 }

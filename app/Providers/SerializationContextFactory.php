@@ -15,7 +15,7 @@ class SerializationContextFactory implements SerializationContextFactoryInterfac
      */
     public function createSerializationContext(): SerializationContext
     {
-        return (new SerializationContext())
+        return (new SerializationContext)
             ->setSerializeNull(true);
     }
 }

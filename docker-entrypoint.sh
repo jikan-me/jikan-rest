@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 set -eo pipefail
 
 status=0
-if [[ $# -eq 0 ]] ; then
+if [ $# -eq 0 ] ; then
   php /app/docker-entrypoint.php
   status=$?
 else
@@ -10,6 +10,42 @@ else
   status=$?
 fi
 
-[[ $status -ne 0 ]] && exit $status
+[ $status -ne 0 ] && exit $status
 
-exec rr serve -c .rr.yaml
+# Laravel's encrypter needs APP_KEY. If none was supplied (container env or
+# APP_KEY__FILE secret, both of which end up in .env/env), generate one for this
+# container. Set APP_KEY explicitly in production so it is stable across restarts.
+if [ -z "${APP_KEY:-}" ] ; then
+  # an *empty* APP_KEY in the environment would shadow the value in .env
+  unset APP_KEY
+  if ! grep -Eq '^APP_KEY=.+' /app/.env 2>/dev/null ; then
+    php /app/artisan key:generate --force
+  fi
+fi
+
+# Cache config now that runtime env + (optionally) injected secrets are in the
+# .env file — baking it at image build time would freeze per-deployment values.
+php /app/artisan config:cache
+
+# Run the Laravel scheduler in the background (supercronic).
+if [ -f /etc/supercronic/laravel ] ; then
+  /usr/bin/supercronic /etc/supercronic/laravel &
+  SUPERVISOR_PID=$!
+  trap 'kill "$SUPERVISOR_PID" 2>/dev/null || true' TERM INT EXIT
+fi
+
+# Optional queue workers. Set QUEUE_WORKERS=N to run N `queue:work` processes.
+queue_workers="${QUEUE_WORKERS:-0}"
+i=0
+while [ "$i" -lt "$queue_workers" ]; do
+  php /app/artisan queue:work --sleep=3 --tries=3 &
+  i=$((i + 1))
+done
+
+# Octane on Swoole. Pool sizing comes from the env (see .env.dist); extra
+# arguments passed to the container are appended and win over these.
+exec php /app/artisan octane:start --server=swoole --host=0.0.0.0 --port=8080 \
+  --workers="${OCTANE_WORKERS:-auto}" \
+  --task-workers="${OCTANE_TASK_WORKERS:-1}" \
+  --max-requests="${OCTANE_MAX_REQUESTS:-500}" \
+  "$@"

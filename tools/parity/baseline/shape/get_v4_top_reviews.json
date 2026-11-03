@@ -1,0 +1,63 @@
+{
+    "data": [
+        "@list",
+        {
+            "date": "@string",
+            "entry": {
+                "images": {
+                    "jpg": {
+                        "image_url": "@string",
+                        "large_image_url": "@string",
+                        "small_image_url": "@string"
+                    },
+                    "webp": {
+                        "image_url": "@string",
+                        "large_image_url": "@string",
+                        "small_image_url": "@string"
+                    }
+                },
+                "mal_id": "@int",
+                "title": "@string",
+                "url": "@string"
+            },
+            "episodes_watched": "@null",
+            "is_preliminary": "@bool",
+            "is_spoiler": "@bool",
+            "mal_id": "@int",
+            "reactions": {
+                "confusing": "@int",
+                "creative": "@int",
+                "funny": "@int",
+                "informative": "@int",
+                "love_it": "@int",
+                "nice": "@int",
+                "overall": "@int",
+                "well_written": "@int"
+            },
+            "review": "@string",
+            "score": "@volatile",
+            "tags": [
+                "@list",
+                "@string"
+            ],
+            "type": "@string",
+            "url": "@string",
+            "user": {
+                "images": {
+                    "jpg": {
+                        "image_url": "@string"
+                    },
+                    "webp": {
+                        "image_url": "@string"
+                    }
+                },
+                "url": "@string",
+                "username": "@string"
+            }
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

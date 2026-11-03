@@ -2,27 +2,26 @@
 
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Jikan\Helper\Constants as JikanConstants;
 use Jikan\Model\Common\DateRange;
-use Jikan\Model\Resource\CommonImageResource\CommonImageResource;
-use JMS\Serializer\Serializer;
 
 class UserProfileMangaListResource extends JsonResource
 {
-
     private const VALID_PUBLISHING_STATUS = [
         JikanConstants::USER_MANGA_LIST_CURRENTLY_PUBLISHING => 'Publishing',
         JikanConstants::USER_MANGA_LIST_COMPLETED => 'Finished',
         JikanConstants::USER_MANGA_LIST_NOT_YET_PUBLISHED => 'Not yet published',
         JikanConstants::USER_MANGA_LIST_ON_HIATUS => 'On Hiatus',
-        JikanConstants::USER_MANGA_LIST_DISCONTINUED => 'Discontinued'
+        JikanConstants::USER_MANGA_LIST_DISCONTINUED => 'Discontinued',
     ];
+
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @param  Request  $request
+     * @return array<string, mixed>
      */
     public function toArray($request)
     {
@@ -31,7 +30,7 @@ class UserProfileMangaListResource extends JsonResource
         $startDate = strtotime($startDateStr);
         $endDate = strtotime($endDateStr);
 
-        $dateRangeStr = "";
+        $dateRangeStr = '';
         switch ($startDateStr) {
             case 'Not available':
                 $dateRangeStr .= 'Not available';
@@ -40,7 +39,7 @@ class UserProfileMangaListResource extends JsonResource
                 $dateRangeStr .= date('M j, Y', $startDate);
         }
 
-        $dateRangeStr .= " to ";
+        $dateRangeStr .= ' to ';
 
         switch ($endDateStr) {
             case '?':
@@ -87,13 +86,13 @@ class UserProfileMangaListResource extends JsonResource
                             'day' => $endDateStr === '?' ? null : $dateRange->getUntilProp()->getDay(),
                             'month' => $endDateStr === '?' ? null : $dateRange->getUntilProp()->getMonth(),
                             'year' => $endDateStr === '?' ? null : $dateRange->getUntilProp()->getYear(),
-                        ]
+                        ],
                     ],
-                    'string' => (string) $dateRange
+                    'string' => (string) $dateRange,
                 ],
                 'magazines' => $this['magazines'],
                 'genres' => $this['genres'],
-                'demographics' => $this['demographics']
+                'demographics' => $this['demographics'],
             ],
         ];
     }

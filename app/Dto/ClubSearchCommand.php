@@ -25,7 +25,7 @@ final class ClubSearchCommand extends SearchCommand implements DataRequest
     #[WithCast(EnumCast::class, ClubTypeEnum::class), EnumValidation(ClubTypeEnum::class)]
     public ClubTypeEnum|Optional $type;
 
-    #[MapInputName("order_by"), MapOutputName("order_by"),
+    #[MapInputName('order_by'), MapOutputName('order_by'),
         WithCast(EnumCast::class, ClubOrderByEnum::class), EnumValidation(ClubOrderByEnum::class)]
     public ClubOrderByEnum|Optional $orderBy;
 }

@@ -3,12 +3,8 @@
 namespace App\Repositories;
 
 use App\Contracts\MagazineRepository;
-use App\Contracts\Repository;
 use App\Magazine;
 
-/**
- * @implements Repository<Magazine>
- */
 final class DefaultMagazineRepository extends DatabaseRepository implements MagazineRepository
 {
     public function __construct()

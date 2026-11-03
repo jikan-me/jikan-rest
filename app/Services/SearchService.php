@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use Illuminate\Support\Collection;
+use Laravel\Scout\Builder;
 
 interface SearchService
 {
-    function search(string $searchTerms, ?string $orderByFields = null, bool $sortDirectionDescending = false): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder;
+    public function search(string $searchTerms, ?string $orderByFields = null, bool $sortDirectionDescending = false): Builder|\Illuminate\Database\Eloquent\Builder;
 
-    function setFilterParameters(Collection $requestParameters): self;
+    public function setFilterParameters(Collection $requestParameters): self;
 
-    function query(): \Laravel\Scout\Builder|\Illuminate\Database\Eloquent\Builder;
+    public function query(): Builder|\Illuminate\Database\Eloquent\Builder;
 }

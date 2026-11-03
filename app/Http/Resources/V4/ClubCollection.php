@@ -1,14 +1,15 @@
 <?php
 
-
 namespace App\Http\Resources\V4;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(schema: 'clubs_search', description: 'Clubs Search Resource', allOf: [new OA\Schema(ref: '#/components/schemas/pagination'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/club'))])])]
 class ClubCollection extends ResourceCollection
 {
-
     /**
      * The resource that this resource collects.
      *
@@ -19,36 +20,20 @@ class ClubCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  Request  $request
      * @return array
-     *
-     *  @OA\Schema(
-     *      schema="clubs_search",
-     *      description="Clubs Search Resource",
-     *
-     *      allOf={
-     *          @OA\Schema(ref="#/components/schemas/pagination"),
-     *          @OA\Schema(
-     *              @OA\Property(
-     *                   property="data",
-     *                   type="array",
-     *
-     *                   @OA\Items(
-     *                          ref="#/components/schemas/club"
-     *                   )
-     *              ),
-     *          )
-     *      }
-     *  )
      */
-
     private $pagination;
 
+    /**
+     * @param  LengthAwarePaginator<int, mixed>  $resource
+     */
     public function __construct(LengthAwarePaginator $resource)
     {
+        /** @var \Illuminate\Pagination\LengthAwarePaginator<int, mixed> $resource */
         $this->pagination = [
             'last_visible_page' => $resource->lastPage(),
-            'has_next_page' => $resource->hasMorePages()
+            'has_next_page' => $resource->hasMorePages(),
         ];
 
         $this->collection = $resource->getCollection();
@@ -59,14 +44,14 @@ class ClubCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return array
+     * @param  Request  $request
+     * @return array<string, mixed>
      */
     public function toArray($request)
     {
         return [
             'pagination' => $this->pagination,
-            'data' => $this->collection
+            'data' => $this->collection,
         ];
     }
 

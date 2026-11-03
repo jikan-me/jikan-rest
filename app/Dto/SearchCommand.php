@@ -22,7 +22,6 @@ class SearchCommand extends Data
 
     /**
      * The search keywords
-     * @var string|Optional
      */
     #[Max(255), StringType]
     public string|Optional $q;
@@ -30,6 +29,6 @@ class SearchCommand extends Data
     #[WithCast(EnumCast::class, SortDirection::class), EnumValidation(SortDirection::class)]
     public SortDirection|Optional $sort;
 
-    #[Size(1), StringType, Alpha, Prohibits("q")]
+    #[Size(1), StringType, Alpha, Prohibits('q')]
     public string|Optional $letter;
 }

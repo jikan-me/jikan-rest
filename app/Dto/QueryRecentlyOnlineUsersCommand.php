@@ -2,14 +2,15 @@
 
 namespace App\Dto;
 
-
+use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
 use Illuminate\Http\JsonResponse;
 use Spatie\LaravelData\Data;
 
 /**
- * @extends DataRequest<JsonResponse>
+ * @implements DataRequest<JsonResponse>
  */
 final class QueryRecentlyOnlineUsersCommand extends Data implements DataRequest
 {
+    use HasRequestFingerprint;
 }

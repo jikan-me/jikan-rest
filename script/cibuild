@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# CI build: tests + static analysis + style.
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# PHP: $PHP_BIN, else the gitignored local wrapper tools/dev/php, else php on PATH.
+if [[ -n "${PHP_BIN:-}" ]]; then PHP="$PHP_BIN"; elif [[ -x "$PWD/tools/dev/php" ]]; then PHP="$PWD/tools/dev/php"; else PHP="$(command -v php)"; fi
+./script/test
+"$PHP" -d error_reporting=24575 -d memory_limit=-1 vendor/bin/phpstan analyse --no-progress
+"$PHP" vendor/bin/pint --test
+echo "cibuild ok."

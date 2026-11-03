@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Profile;
 use App\Testing\JikanDataGenerator;
+use Illuminate\Support\Carbon;
 use MongoDB\BSON\UTCDateTime;
 
 final class ProfileFactory extends JikanModelFactory
@@ -16,30 +17,30 @@ final class ProfileFactory extends JikanModelFactory
     {
         $mal_id = $this->createMalId();
         $username = $this->faker->userName();
-        $url = $this->createMalUrl($username, "profile");
+        $url = $this->createMalUrl($username, 'profile');
 
         return [
-            "mal_id" => $mal_id,
-            "username" => $username,
-            "internal_username" => $username,
-            "url" => $url,
-            "request_hash" => sprintf("request:%s:%s", "users", $this->getItemTestUrl("users", $username)),
-            "images" => [
-                "jpg" => [
-                    "image_url" => $this->faker->url()
+            'mal_id' => $mal_id,
+            'username' => $username,
+            'internal_username' => $username,
+            'url' => $url,
+            'request_hash' => sprintf('request:%s:%s', 'users', $this->getItemTestUrl('users', $username)),
+            'images' => [
+                'jpg' => [
+                    'image_url' => $this->faker->url(),
                 ],
-                "webp" => [
-                    "image_url" => $this->faker->url()
-                ]
+                'webp' => [
+                    'image_url' => $this->faker->url(),
+                ],
             ],
-            "last_online" => new UTCDateTime($this->faker->dateTimeBetween('-5 years')->format('Uv')),
-            "gender" => $this->faker->randomElement(["Male", "Female", "Other"]),
-            "birthday" => new UTCDateTime($this->faker->dateTimeBetween('-60 years')->format('Uv')),
-            "location" => $this->faker->country(),
-            "joined" => new UTCDateTime($this->faker->dateTimeBetween('-5 years')->format('Uv')),
-            "createdAt" => new UTCDateTime(),
-            "modifiedAt" => new UTCDateTime(),
-            "anime_stats" => [
+            'last_online' => new UTCDateTime(Carbon::parse($this->faker->dateTimeBetween('-5 years'))->getTimestampMs()),
+            'gender' => $this->faker->randomElement(['Male', 'Female', 'Other']),
+            'birthday' => new UTCDateTime(Carbon::parse($this->faker->dateTimeBetween('-60 years'))->getTimestampMs()),
+            'location' => $this->faker->country(),
+            'joined' => new UTCDateTime(Carbon::parse($this->faker->dateTimeBetween('-5 years'))->getTimestampMs()),
+            'createdAt' => new UTCDateTime,
+            'modifiedAt' => new UTCDateTime,
+            'anime_stats' => [
                 'days_watched' => 106.8,
                 'mean_score' => 8.21,
                 'watching' => 44,
@@ -51,7 +52,7 @@ final class ProfileFactory extends JikanModelFactory
                 'rewatched' => 22,
                 'episodes_watched' => 6305,
             ],
-            "manga_stats" => [
+            'manga_stats' => [
                 'days_read' => 91,
                 'mean_score' => 8.45,
                 'reading' => 380,
@@ -64,8 +65,8 @@ final class ProfileFactory extends JikanModelFactory
                 'chapters_read' => 16263,
                 'volumes_read' => 777,
             ],
-            "favorites" => [
-                "anime" => [
+            'favorites' => [
+                'anime' => [
                     [
                         'mal_id' => 9253,
                         'url' => 'https://myanimelist.net/anime/9253/Steins_Gate',
@@ -84,9 +85,9 @@ final class ProfileFactory extends JikanModelFactory
                         'title' => 'Steins;Gate',
                         'type' => 'TV',
                         'start_year' => 2011,
-                    ]
+                    ],
                 ],
-                "manga" => [
+                'manga' => [
                     [
                         'mal_id' => 642,
                         'url' => 'https://myanimelist.net/manga/642/Vinland_Saga',
@@ -105,9 +106,9 @@ final class ProfileFactory extends JikanModelFactory
                         'title' => 'Vinland Saga',
                         'type' => 'Manga',
                         'start_year' => 2005,
-                    ]
+                    ],
                 ],
-                "characters" => [
+                'characters' => [
                     [
                         'mal_id' => 34470,
                         'url' => 'https://myanimelist.net/character/34470/Kurisu_Makise',
@@ -121,9 +122,9 @@ final class ProfileFactory extends JikanModelFactory
                             ],
                         ],
                         'name' => 'Makise, Kurisu',
-                    ]
+                    ],
                 ],
-                "people" => [
+                'people' => [
                     [
                         'mal_id' => 39950,
                         'url' => 'https://myanimelist.net/people/39950/Sayuri',
@@ -133,11 +134,11 @@ final class ProfileFactory extends JikanModelFactory
                             ],
                         ],
                         'name' => 'Sayuri',
-                    ]
-                ]
+                    ],
+                ],
             ],
-            "last_updates" => [
-                "anime" => [
+            'last_updates' => [
+                'anime' => [
                     [
                         'entry' => [
                             'mal_id' => 15227,
@@ -158,14 +159,14 @@ final class ProfileFactory extends JikanModelFactory
                         ],
                         'score' => 0,
                         'status' => 'Plan to Watch',
-                        'episodes_seen' => NULL,
-                        'episodes_total' => NULL,
+                        'episodes_seen' => null,
+                        'episodes_total' => null,
                         'date' => '2022-05-19T23:38:00+00:00',
-                    ]
+                    ],
                 ],
-                "manga" => []
+                'manga' => [],
             ],
-            "about" => "",
+            'about' => '',
         ];
     }
 }

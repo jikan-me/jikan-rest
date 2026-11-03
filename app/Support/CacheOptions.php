@@ -9,9 +9,7 @@ final class CacheOptions
 {
     private ?int $ttl = null;
 
-    public function __construct(private readonly JikanConfig $jikanConfig)
-    {
-    }
+    public function __construct(private readonly JikanConfig $jikanConfig) {}
 
     public function ttl(): int
     {

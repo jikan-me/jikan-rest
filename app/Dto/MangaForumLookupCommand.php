@@ -2,7 +2,6 @@
 
 namespace App\Dto;
 
-
 use App\Casts\EnumCast;
 use App\Enums\MangaForumFilterEnum;
 use App\Rules\Attributes\EnumValidation;

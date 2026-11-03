@@ -1,5 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php
+
+/** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
+
 use App\Anime;
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
@@ -10,23 +14,23 @@ use Tests\TestCase;
 
 class ScheduleControllerTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
     public function testSchedule()
     {
         Anime::factory(3)->state(new Sequence(
-            ["members" => 100],
-            ["members" => 50],
-            ["members" => 10]
+            ['members' => 100],
+            ['members' => 50],
+            ['members' => 10]
         ))->state([
-            "type" => AnimeTypeEnum::tv()->label,
-            "status" => AnimeStatusEnum::airing()->label,
-            "airing" => true,
+            'type' => AnimeTypeEnum::tv()->label,
+            'status' => AnimeStatusEnum::airing()->label,
+            'airing' => true,
         ])->create();
         $this->get('/v4/schedules')
-            ->seeStatusCode(200)
-            ->seeJsonStructure([
+            ->assertStatus(200)
+            ->assertJsonStructure([
                 'data' => [
                     [
                         'mal_id',
@@ -35,12 +39,12 @@ class ScheduleControllerTest extends TestCase
                             'jpg' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                             'webp' => [
                                 'image_url',
                                 'small_image_url',
-                                'large_image_url'
+                                'large_image_url',
                             ],
                         ],
                         'trailer' => [
@@ -53,7 +57,7 @@ class ScheduleControllerTest extends TestCase
                                 'medium_image_url',
                                 'large_image_url',
                                 'maximum_image_url',
-                            ]
+                            ],
                         ],
                         'title',
                         'title_english',
@@ -71,15 +75,15 @@ class ScheduleControllerTest extends TestCase
                                 'from' => [
                                     'day',
                                     'month',
-                                    'year'
+                                    'year',
                                 ],
                                 'to' => [
                                     'day',
                                     'month',
-                                    'year'
-                                ]
+                                    'year',
+                                ],
                             ],
-                            'string'
+                            'string',
                         ],
                         'duration',
                         'rating',
@@ -97,20 +101,20 @@ class ScheduleControllerTest extends TestCase
                             'day',
                             'time',
                             'timezone',
-                            'string'
+                            'string',
                         ],
                         'producers',
                         'licensors',
                         'studios',
                         'genres',
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
     public function test400()
     {
         $this->get('/v4/schedules/asdjkhas')
-            ->seeStatusCode(400);
+            ->assertStatus(400);
     }
 }

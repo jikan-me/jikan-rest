@@ -2,9 +2,11 @@
 
 namespace App\Concerns;
 
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use Illuminate\Http\Request;
 use Spatie\LaravelData\Resolvers\DataFromSomethingResolver;
+use Spatie\LaravelData\Support\Creation\CreationContext;
+use Spatie\LaravelData\Support\Creation\ValidationStrategy;
 
 /**
  * Helper trait for data transfer objects
@@ -17,9 +19,23 @@ trait HasRequestFingerprint
 
     public static function fromRequest(Request $request): ?static
     {
+        $creationContext = new CreationContext(
+            dataClass: static::class,
+            mappedProperties: [],
+            currentPath: [],
+            validationStrategy: ValidationStrategy::Always,
+            mapPropertyNames: true,
+            disableMagicalCreation: true,
+            useOptionalValues: false,
+            ignoredMagicalMethods: null,
+            casts: null,
+        );
+
         $result = app(DataFromSomethingResolver::class)
-                    ->withoutMagicalCreation()->execute(static::class, $request);
+            ->execute(static::class, $creationContext, $request);
+
         $result->fingerprint = HttpHelper::resolveRequestFingerprint($request);
+
         return $result;
     }
 

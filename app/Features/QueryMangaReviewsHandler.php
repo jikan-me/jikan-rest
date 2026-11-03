@@ -16,7 +16,7 @@ final class QueryMangaReviewsHandler extends QueryReviewsHandler
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

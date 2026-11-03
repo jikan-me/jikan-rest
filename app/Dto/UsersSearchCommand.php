@@ -8,7 +8,6 @@ use App\Contracts\DataRequest;
 use App\Enums\GenderEnum;
 use App\Http\Resources\V4\UserCollection;
 use App\Rules\Attributes\EnumValidation;
-use Spatie\Enum\Laravel\Rules\EnumRule;
 use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;

@@ -1,0 +1,12 @@
+{
+    "data": {
+        "endings": [
+            "@list",
+            "@string"
+        ],
+        "openings": [
+            "@list",
+            "@string"
+        ]
+    }
+}

@@ -41,11 +41,11 @@ class CacheRemove extends Command
         $fingerprint = $this->argument('key');
 
         if (!Cache::has($fingerprint)) {
-            $this->error("Cache does not exist");
+            $this->error('Cache does not exist');
         }
 
         if (Cache::forget($fingerprint)) {
-            Cache::forget("ttl:".$fingerprint);
+            Cache::forget('ttl:'.$fingerprint);
             $this->info('Cache removed');
         }
     }

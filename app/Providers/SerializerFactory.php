@@ -16,7 +16,7 @@ class SerializerFactory
 {
     public static function createV4(): Serializer
     {
-        return (new SerializerBuilder())
+        return (new SerializerBuilder)
             ->addMetadataDir(__DIR__.'/../../storage/app/metadata.v4')
             ->configureHandlers(
                 function (HandlerRegistry $registry) {
@@ -56,55 +56,71 @@ class SerializerFactory
                     );
                 }
             )
-            ->setSerializationContextFactory(new SerializationContextFactory())
+            ->setSerializationContextFactory(new SerializationContextFactory)
             ->build();
     }
 
+    /**
+     * @param  array<string, mixed>  $type
+     * @return array<string, mixed>
+     */
     private static function convertMalUrl($visitor, MalUrl $obj, array $type): array
     {
         return [
             'mal_id' => $obj->getMalId(),
-            'type'   => $obj->getType(),
-            'name'   => $obj->getTitle(),
-            'url'    => $obj->getUrl(),
+            'type' => $obj->getType(),
+            'name' => $obj->getTitle(),
+            'url' => $obj->getUrl(),
         ];
     }
 
+    /**
+     * @param  array<string, mixed>  $type
+     * @return array<string, mixed>
+     */
     private static function convertMalUrlv2($visitor, MalUrl $obj, array $type): array
     {
         return [
             'mal_id' => $obj->getMalId(),
-            'type'   => $obj->getType(),
-            'title'   => $obj->getTitle(),
-            'name'   => $obj->getTitle(),
-            'url'    => $obj->getUrl(),
+            'type' => $obj->getType(),
+            'title' => $obj->getTitle(),
+            'name' => $obj->getTitle(),
+            'url' => $obj->getUrl(),
         ];
     }
 
+    /**
+     * @param  array<string, mixed>  $type
+     * @return array<string, mixed>
+     */
     private static function convertDateRange($visitor, DateRange $obj, array $type): array
     {
         return [
             // todo: update the storage method of dates from string to UTCDateTime BSON object.
             // 'from'   => $obj->getFrom() ? new UTCDateTime($obj->getFrom()->getTimestamp()) : null,
             // 'to'     => $obj->getUntil() ? new UTCDateTime($obj->getUntil()->getTimestamp()) : null,
-            'from'   => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
-            'to'     => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
-            'prop'   => [
+            'from' => $obj->getFrom() ? $obj->getFrom()->format(DATE_ATOM) : null,
+            'to' => $obj->getUntil() ? $obj->getUntil()->format(DATE_ATOM) : null,
+            'prop' => [
                 'from' => [
                     'day' => $obj->getFromProp()->getDay(),
                     'month' => $obj->getFromProp()->getMonth(),
-                    'year' => $obj->getFromProp()->getYear()
+                    'year' => $obj->getFromProp()->getYear(),
                 ],
                 'to' => [
                     'day' => $obj->getUntilProp()->getDay(),
                     'month' => $obj->getUntilProp()->getMonth(),
-                    'year' => $obj->getUntilProp()->getYear()
+                    'year' => $obj->getUntilProp()->getYear(),
                 ],
             ],
-            'string' => (string)$obj,
+            'string' => (string) $obj,
         ];
     }
 
+    /**
+     * @param  array<string, mixed>  $type
+     * @return array<string, mixed>
+     */
     private static function convertCarbonDateRange($visitor, CarbonDateRange $obj, array $type): array
     {
         $from = $obj->getFrom();
@@ -116,27 +132,33 @@ class SerializerFactory
             // 'to'     => $to !== null ? new UTCDateTime($to->getTimestamp()) : null,
             'from' => $from?->toAtomString(),
             'to' => $to?->toAtomString(),
-            'prop'   => [
+            'prop' => [
                 'from' => [
                     'day' => $obj->getFromProp()->getDay(),
                     'month' => $obj->getFromProp()->getMonth(),
-                    'year' => $obj->getFromProp()->getYear()
+                    'year' => $obj->getFromProp()->getYear(),
                 ],
                 'to' => [
                     'day' => $obj->getUntilProp()->getDay(),
                     'month' => $obj->getUntilProp()->getMonth(),
-                    'year' => $obj->getUntilProp()->getYear()
+                    'year' => $obj->getUntilProp()->getYear(),
                 ],
             ],
-            'string' => (string)$obj,
+            'string' => (string) $obj,
         ];
     }
 
+    /**
+     * @param  array<string, mixed>  $type
+     */
     private static function convertDateTimeImmutable($visitor, \DateTimeImmutable $obj, array $type): ?string
     {
         return $obj ? $obj->format(DATE_ATOM) : null;
     }
 
+    /**
+     * @param  array<string, mixed>  $type
+     */
     private static function convertBsonDateTime($visitor, UTCDateTime $obj, array $type, SerializationContext $context): string
     {
         return $obj->toDateTime()->format(DATE_ATOM);

@@ -10,16 +10,16 @@ use App\Http\Resources\V4\GenreCollection;
 
 /**
  * @template TRequest of GenreListCommand
+ *
  * @implements RequestHandler<TRequest, GenreCollection>
  */
 abstract class GenreListHandler implements RequestHandler
 {
-    public function __construct(private readonly GenreRepository $repository)
-    {
-    }
+    public function __construct(private readonly GenreRepository $repository) {}
 
     /**
-     * @param GenreListCommand $request
+     * @param  GenreListCommand  $request
+     *
      * @returns GenreCollection
      */
     public function handle($request): GenreCollection
@@ -28,9 +28,9 @@ abstract class GenreListHandler implements RequestHandler
         /**
          * @var ?GenreFilterEnum $filterParam
          */
-        $filterParam = $requestParams->has("filter") ? $request->filter : null;
+        $filterParam = $requestParams->has('filter') ? $request->filter : null;
 
-        $results = match($filterParam) {
+        $results = match ($filterParam) {
             GenreFilterEnum::genres() => $this->repository->genres(),
             GenreFilterEnum::explicit_genres() => $this->repository->getExplicitItems(),
             GenreFilterEnum::themes() => $this->repository->getThemes(),
