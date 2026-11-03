@@ -19,12 +19,6 @@ parameters:
 			path: app/Anime.php
 
 		-
-			message: '#^Parameter \#1 \$field\|column of method Laravel\\Scout\\Builder\<static\(App\\Anime\)\>\:\:where\(\) expects array\<int\|string, mixed\>\|\(Closure\(\(\$operator is null \? Illuminate\\Database\\Eloquent\\Builder\<static\> \: Illuminate\\Database\\Query\\Builder\)\)\: mixed\)\|Illuminate\\Contracts\\Database\\Query\\Expression\|string, Closure\(MongoDB\\Laravel\\Eloquent\\Builder\)\: \(Illuminate\\Database\\Eloquent\\Builder\<static\>&MongoDB\\Laravel\\Eloquent\\Builder\) given\.$#'
-			identifier: argument.type
-			count: 2
-			path: app/Anime.php
-
-		-
 			message: '#^Method App\\Casts\\ContextualBooleanCast\:\:cast\(\) has parameter \$context with generic class Spatie\\LaravelData\\Support\\Creation\\CreationContext but does not specify its types\: TData$#'
 			identifier: missingType.generics
 			count: 1
@@ -55,12 +49,6 @@ parameters:
 			path: app/Club.php
 
 		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 3
-			path: app/Console/Commands/Indexer/AnimeIndexer.php
-
-		-
 			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, int given\.$#'
 			identifier: argument.type
 			count: 2
@@ -77,12 +65,6 @@ parameters:
 			identifier: catch.neverThrown
 			count: 1
 			path: app/Console/Commands/Indexer/CurrentSeasonIndexer.php
-
-		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 4
-			path: app/Console/Commands/Indexer/IncrementalIndexer.php
 
 		-
 			message: '#^If condition is always false\.$#'
@@ -109,22 +91,10 @@ parameters:
 			path: app/Console/Commands/Indexer/IncrementalIndexer.php
 
 		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 3
-			path: app/Console/Commands/Indexer/MangaIndexer.php
-
-		-
 			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, int given\.$#'
 			identifier: argument.type
 			count: 2
 			path: app/Console/Commands/Indexer/MangaIndexer.php
-
-		-
-			message: '#^Expression on left side of \?\? is not nullable\.$#'
-			identifier: nullCoalesce.expr
-			count: 3
-			path: app/Console/Commands/Indexer/ProducersIndexer.php
 
 		-
 			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, int given\.$#'
@@ -637,30 +607,6 @@ parameters:
 			path: app/Features/QueryReviewsHandler.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Anime\>\:\:filter\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Features/QueryTopAnimeItemsHandler.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Character\>\:\:filter\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Features/QueryTopCharactersHandler.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Manga\>\:\:filter\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Features/QueryTopMangaItemsHandler.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Person\>\:\:filter\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Features/QueryTopPeopleHandler.php
-
-		-
 			message: '#^Call to an undefined method TRequest of App\\Contracts\\DataRequest\:\:all\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -944,12 +890,6 @@ parameters:
 
 		-
 			message: '#^Call to protected method engine\(\) of class Laravel\\Scout\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
-			identifier: method.protected
-			count: 1
-			path: app/Mixins/ScoutBuilderMixin.php
-
-		-
-			message: '#^Call to protected method getTotalCount\(\) of class Laravel\\Scout\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
 			identifier: method.protected
 			count: 1
 			path: app/Mixins/ScoutBuilderMixin.php
@@ -1325,12 +1265,6 @@ parameters:
 			identifier: parameter.notFound
 			count: 1
 			path: app/Services/ScoutSearchService.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\:\:filter\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Services/SearchEngineSearchService.php
 
 		-
 			message: '#^Method App\\Services\\SearchEngineSearchService\:\:__construct\(\) has parameter \$repository with generic interface App\\Contracts\\Repository but does not specify its types\: T$#'

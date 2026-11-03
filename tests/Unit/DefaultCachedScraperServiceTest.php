@@ -286,6 +286,62 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $this->assertEquals($updatedMockModel->toArray(), $result->toArray());
     }
 
+    public function testIfFindServesExpiredDbItemOnUpstream405()
+    {
+        $malId = 1;
+        $staleAt = Carbon::now()->sub('3 days');
+        $mockModel = Anime::factory()->makeOne([
+            'mal_id' => $malId,
+            'modifiedAt' => new UTCDateTime($staleAt->getTimestampMs()),
+            'createdAt' => new UTCDateTime($staleAt->getTimestampMs()),
+        ]);
+
+        [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect([$mockModel]));
+        $repositoryMock->expects()->scrape($malId)->andThrow(new BadResponseException('405 on MAL', 405));
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient, $serializerMock);
+        $result = $sut->find($malId, $this->requestHash());
+
+        $this->assertEquals($mockModel->toArray(), $result->toArray());
+    }
+
+    public function testIfFindRethrowsUpstream405WithoutDbItem()
+    {
+        $malId = 987654322;
+        Cache::forget('scrape:miss:'.$malId);
+        [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect());
+        $repositoryMock->expects()->scrape($malId)->andThrow(new BadResponseException('405 on MAL', 405));
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient, $serializerMock);
+
+        $this->expectException(BadResponseException::class);
+        $this->expectExceptionCode(405);
+        $sut->find($malId, $this->requestHash());
+    }
+
+    public function testIfFindByKeyServesExpiredDbItemOnUpstream405()
+    {
+        $username = 'kompot';
+        $staleAt = Carbon::now()->sub('3 days');
+        $mockModel = Profile::factory()->makeOne([
+            'username' => $username,
+            'modifiedAt' => new UTCDateTime($staleAt->getTimestampMs()),
+            'createdAt' => new UTCDateTime($staleAt->getTimestampMs()),
+        ]);
+
+        [$queryBuilderMock, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->where('username', $username)->andReturns($queryBuilderMock);
+        $queryBuilderMock->expects()->get()->andReturns(collect([$mockModel]));
+        $repositoryMock->expects()->scrape($username)->andThrow(new BadResponseException('405 on MAL', 405));
+
+        $sut = new DefaultCachedScraperService($repositoryMock, new MalClient, $serializerMock);
+        $result = $sut->findByKey('username', $username, $this->requestHash());
+
+        $this->assertEquals($mockModel->toArray(), $result->toArray());
+    }
+
     public function testIfFindByKeyReturnsNotExpiredItems()
     {
         $username = 'kompot';

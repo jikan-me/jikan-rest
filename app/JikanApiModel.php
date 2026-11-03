@@ -2,11 +2,8 @@
 
 namespace App;
 
-use App\Enums\AnimeRatingEnum;
-use App\Enums\MangaTypeEnum;
 use App\Filters\FilterQueryString;
 use Illuminate\Support\Collection;
-use Jikan\Helper\Constants;
 use MongoDB\Laravel\Eloquent\Builder;
 use MongoDB\Laravel\Eloquent\Model;
 
@@ -29,26 +26,21 @@ class JikanApiModel extends Model
      */
     protected array $filters = [];
 
+    /**
+     * Field => value pairs an item must not have to count as sfw; models with adult content override it.
+     *
+     * @return array<string, string|int>
+     */
+    public function sfwExclusions(): array
+    {
+        return [];
+    }
+
     /** @noinspection PhpUnused */
     public function scopeRandom(Builder $query, int $numberOfRandomItems = 1, bool $sfw = false, bool $unapproved = false): Collection
     {
         return $query->raw(function (\MongoDB\Collection $collection) use ($numberOfRandomItems, $sfw, $unapproved) {
-            $sfwFilter = [
-                'demographics.mal_id' => [
-                    '$nin' => [
-                        Constants::GENRE_ANIME_HENTAI,
-                        Constants::GENRE_ANIME_EROTICA,
-                        Constants::GENRE_MANGA_HENTAI,
-                        Constants::GENRE_MANGA_EROTICA,
-                    ],
-                ],
-                'rating' => ['$ne' => AnimeRatingEnum::rx()->label],
-                'type' => ['$ne' => MangaTypeEnum::doujin()->label],
-                'genres.mal_id' => ['$nin' => [
-                    Constants::GENRE_ANIME_HENTAI,
-                    Constants::GENRE_MANGA_HENTAI,
-                ]],
-            ];
+            $sfwFilter = array_map(fn ($excludedValue) => ['$ne' => $excludedValue], $this->sfwExclusions());
 
             $pipelineParams = [
                 ['$sample' => ['size' => $numberOfRandomItems]],

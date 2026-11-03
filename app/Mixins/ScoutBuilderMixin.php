@@ -2,10 +2,13 @@
 
 namespace App\Mixins;
 
+use App\JikanApiModel;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Collection;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Contracts\PaginatesEloquentModels;
 use Laravel\Scout\Engines\TypesenseEngine;
@@ -14,8 +17,7 @@ use Laravel\Scout\Engines\TypesenseEngine;
 class ScoutBuilderMixin
 {
     /**
-     * Specialised pagination. It retrieves all results from the search engine in chunks, loads them in memory
-     * then paginates on the database results.
+     * Specialised pagination: the search engine pages and filters, the database only hydrates the current page.
      *
      * @noinspection PhpUnused
      */
@@ -30,42 +32,15 @@ class ScoutBuilderMixin
             }
 
             $page = $page ?: Paginator::resolveCurrentPage($pageName);
-
             $perPage = $perPage ?: $this->model->getPerPage();
+            $rawResults = $engine->paginate($this, $perPage, $page);
+            $found = (int) $engine->getTotalCount($rawResults);
 
-            // custom pagination, where we only paginate on the db, not in the search engine
-            // we do chunked processing of hits from the search engine if the number of hits exceed 250
-            $searchEngineResultChunkSize = 250;
-            $firstPage = $engine->paginate($this, $searchEngineResultChunkSize, 1);
-            $found = (int) $engine->getTotalCount($firstPage);
-
-            $hits = $firstPage['hits'] ?? [];
-            while (count($hits) < $found) {
-                $nextPage = $engine->paginate(
-                    $this,
-                    $searchEngineResultChunkSize,
-                    (int) (count($hits) / $searchEngineResultChunkSize) + 1
-                );
-                $nextHits = $nextPage['hits'] ?? [];
-                if ($nextHits === []) {
-                    break; // engine returned fewer than 'found' (consistency/estimation)
-                }
-                $hits = array_merge($hits, $nextHits);
-            }
-
-            // Keep 'found' scalar: array_merge_recursive() previously merged the
-            // page responses element-wise, turning 'found' (and the nested hits)
-            // into nested arrays and producing a bogus total via getTotalCount().
-            $rawResults = ['hits' => $hits, 'found' => $found];
-
-            // Notice forPage call here. We use that to only get the records for the current page from db.
-            $results = $this->model->newCollection($engine->map(
-                $this, $rawResults, $this->model
-            )->forPage($page, $perPage)->values()->all());
+            $results = $this->model->newCollection($engine->map($this, $rawResults, $this->model)->values()->all());
 
             return Container::getInstance()->makeWith(LengthAwarePaginator::class, [
                 'items' => $results,
-                'total' => $this->getTotalCount($rawResults),
+                'total' => $found,
                 'perPage' => $perPage,
                 'currentPage' => $page,
                 'options' => [
@@ -73,6 +48,33 @@ class ScoutBuilderMixin
                     'pageName' => $pageName,
                 ],
             ])->appends('query', $this->query);
+        };
+    }
+
+    public function filter(): \Closure
+    {
+        return function (Collection $filterParameters): Builder {
+            // Laravel binds this macro closure to a Scout Builder at runtime.
+            /**
+             * @var Builder<Model> $this
+             *
+             * @phpstan-ignore varTag.nativeType
+             */
+            if ($this->model instanceof JikanApiModel) {
+                $model = $this->model;
+
+                // sorting is passed to the engine as sort_by by TypeSenseScoutSearchService
+                $filters = $model->getFilters($filterParameters)->except(['order_by', 'sort'])->map(function ($values, $filter) use ($model) {
+                    return $model->resolve($filter, $values);
+                })->toArray();
+
+                return app(Pipeline::class)
+                    ->send($this)
+                    ->through($filters)
+                    ->thenReturn();
+            }
+
+            return $this;
         };
     }
 }

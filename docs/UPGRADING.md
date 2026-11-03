@@ -87,7 +87,12 @@ upgrade. Plan a fresh image/environment rather than an in-place `composer update
    - user profile last updates (keep their progress);
    - review pagination (`/users/{u}/reviews` reports `has_next_page` correctly).
 3. If you use Typesense, re-import: `php artisan scout:import "App\Anime"` (and the other models,
-   see `docs/POST_FULL_INDEX.md` §3).
+   see `docs/POST_FULL_INDEX.md` §3). Search filters now run in Typesense and need fields
+   (`sfw`, `has_end_date`, `themes`, `demographics`, `serializations`, ...) that older anime and
+   manga collections lack, and an import does not change the schema of an existing collection:
+   drop them first with `php artisan scout:delete-index anime_index` and
+   `php artisan scout:delete-index manga_index`. Until the re-import finishes, filtered anime and
+   manga searches fail.
 
 ### What API consumers will notice
 
@@ -169,6 +174,12 @@ on the Lumen release ("before") and what it is now.
   `1.4` (jikan v5 parses it as a float); the Lumen release returned integers. Whole values are
   still serialised without a fraction (`25`), so clients must accept any JSON number there. The
   OpenAPI schema already documents it as `number` (`float`).
+- **`sfw` filter.** Anime and manga with Hentai in `explicit_genres` (where MyAnimeList lists it)
+  are now excluded too; before, only `genres` was checked. Erotica stays allowed: the old checks
+  for Hentai/Erotica in `demographics` never matched, because MyAnimeList does not use those ids
+  as demographics.
+- **`end_date` filter** on `/v4/anime` and `/v4/manga` also returns ongoing entries, which have no
+  end date.
 - **Operational setup.** Dependencies are resolved against PHP 8.4 and `ext-mongodb` ≥ 2.5.
   A fresh clone needs `composer install`, which relies on the tracked
   `bootstrap/cache/.gitignore` placeholder.

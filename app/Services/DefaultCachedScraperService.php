@@ -11,6 +11,7 @@ use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Jikan\Exception\BadResponseException as JikanBadResponseException;
 use Jikan\MyAnimeList\MalClient;
 use JMS\Serializer\SerializerInterface;
@@ -68,6 +69,7 @@ final class DefaultCachedScraperService implements CachedScraperService
             throw new NotFoundHttpException;
         }
 
+        $results = null;
         try {
             $dbResults = $this->repository->getAllByMalId($id);
             $results = $this->dbResultSetToCachedData($dbResults);
@@ -93,6 +95,9 @@ final class DefaultCachedScraperService implements CachedScraperService
             if ($e->getCode() === 404) {
                 $this->rememberMiss($id, self::MISS_UPSTREAM_404);
             }
+            if ($this->canServeStale($e, $results, $cacheKey)) {
+                return $results;
+            }
             throw $e;
         }
     }
@@ -100,6 +105,20 @@ final class DefaultCachedScraperService implements CachedScraperService
     private const MISS_NOT_FOUND = 1;
 
     private const MISS_UPSTREAM_404 = 2;
+
+    /**
+     * MAL answers 405 to some scrapes of pages it still serves in a browser; an expired copy beats an error then.
+     */
+    private function canServeStale(JikanBadResponseException $e, ?CachedData $results, string $cacheKey): bool
+    {
+        if ($e->getCode() !== 405 || $results === null || $results->isEmpty() || !$results->isExpired()) {
+            return false;
+        }
+
+        Log::warning('Upstream returned 405, serving stale data', ['cache_key' => $cacheKey]);
+
+        return true;
+    }
 
     private function missKey(int $id): string
     {
@@ -117,7 +136,14 @@ final class DefaultCachedScraperService implements CachedScraperService
         $results = $this->dbResultSetToCachedData($dbResults);
 
         if ($results->isEmpty() || $results->isExpired()) {
-            $scraperResponse = $this->repository->scrape($val);
+            try {
+                $scraperResponse = $this->repository->scrape($val);
+            } catch (JikanBadResponseException $e) {
+                if ($this->canServeStale($e, $results, $cacheKey)) {
+                    return $results;
+                }
+                throw $e;
+            }
 
             $this->raiseNotFoundIfErrors($scraperResponse);
 

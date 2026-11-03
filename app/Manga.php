@@ -47,7 +47,6 @@ use MongoDB\BSON\UTCDateTime;
  * @property array<string, mixed> $related
  * @property array<string, mixed> $authors
  * @property array<string, mixed> $serializations
- * @property array<string, mixed> $magazines
  * @property array<string, mixed> $genres
  * @property array<string, mixed> $explicit_genres
  * @property array<string, mixed> $demographics
@@ -118,12 +117,15 @@ class Manga extends JikanApiSearchableModel
      */
     public function filterByStartDate(Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('published.from', '>=',
-                $value->setTime(0, 0)
-                    ->setTimezone(new \DateTimeZone('UTC'))
-                    ->toAtomString()
-            );
+        $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
+
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('start_date', ['>=', $compareVal->getTimestamp()]);
+        } else {
+            $query = $query->where('published.from', '>=', $compareVal->toAtomString());
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -143,12 +145,22 @@ class Manga extends JikanApiSearchableModel
      */
     public function filterByEndDate(Builder|\Illuminate\Database\Eloquent\Builder $query, CarbonImmutable $value): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('published.to', '<=',
-                $value->setTime(0, 0)
-                    ->setTimezone(new \DateTimeZone('UTC'))
-                    ->toAtomString()
-            );
+        $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
+
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('(end_date', [
+                '<=', $compareVal->getTimestamp(),
+                ' || has_end_date:=', 'false',
+                ')',
+            ]);
+        } else {
+            $query = $query->where(function ($query) use ($compareVal) {
+                return $query->where('published.to', '<=', $compareVal->toAtomString())
+                    ->orWhere('published.to', null);
+            });
+        }
+
+        return $query;
     }
 
     /**
@@ -163,8 +175,13 @@ class Manga extends JikanApiSearchableModel
 
         $magazine = (int) $value;
 
-        return $query
-            ->where('serializations.mal_id', $magazine);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('serializations', $magazine);
+        } else {
+            $query = $query->where('serializations.mal_id', $magazine);
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -178,10 +195,16 @@ class Manga extends JikanApiSearchableModel
             return $query;
         }
 
-        /** @var array<int, int> $magazines */
-        $magazines = collect(explode(',', $value))->filter()->map(fn ($x) => (int) $x)->toArray();
+        $magazines = collect(explode(',', $value))->filter()->map(fn ($x) => (int) $x);
 
-        return $query->whereIn('serializations.mal_id', $magazines);
+        if (is_scout_query_builder($query)) {
+            $magazineFilterList = '['.$magazines->implode(', ').']';
+            $query = $query->where('serializations', $magazineFilterList);
+        } else {
+            $query = $query->whereIn('serializations.mal_id', $magazines->toArray());
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -191,11 +214,39 @@ class Manga extends JikanApiSearchableModel
      */
     public function scopeExceptItemsWithAdultRating(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('type', '!=', MangaTypeEnum::doujin()->label)
-            ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_HENTAI)
-            ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_EROTICA)
-            ->where('genres.mal_id', '!=', Constants::GENRE_MANGA_HENTAI);
+        if (is_scout_query_builder($query)) {
+            return $query->where('sfw', true);
+        }
+
+        foreach ($this->sfwExclusions() as $field => $excludedValue) {
+            $query = $query->where($field, '!=', $excludedValue);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Manga has no age rating; adult works are inferred from the doujin type.
+     *
+     * @return array<string, string|int>
+     */
+    public function sfwExclusions(): array
+    {
+        return [
+            'type' => MangaTypeEnum::doujin()->label,
+            'genres.mal_id' => Constants::GENRE_MANGA_HENTAI,
+            'explicit_genres.mal_id' => Constants::GENRE_MANGA_HENTAI,
+        ];
+    }
+
+    /**
+     * Must stay equivalent to sfwExclusions(); its result is indexed as "sfw" for the search engine.
+     */
+    public function isSfw(): bool
+    {
+        return $this->type !== MangaTypeEnum::doujin()->label
+            && !in_array(Constants::GENRE_MANGA_HENTAI, $this->getMalIdsOfField($this->genres))
+            && !in_array(Constants::GENRE_MANGA_HENTAI, $this->getMalIdsOfField($this->explicit_genres));
     }
 
     /** @noinspection PhpUnused */
@@ -205,8 +256,13 @@ class Manga extends JikanApiSearchableModel
      */
     public function scopeExceptKidsItems(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_KIDS);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('demographics', ['!=', Constants::GENRE_MANGA_KIDS]);
+        } else {
+            $query = $query->where('demographics.mal_id', '!=', Constants::GENRE_MANGA_KIDS);
+        }
+
+        return $query;
     }
 
     /** @noinspection PhpUnused */
@@ -216,8 +272,13 @@ class Manga extends JikanApiSearchableModel
      */
     public function scopeOnlyKidsItems(Builder|\Illuminate\Database\Eloquent\Builder $query): Builder|\Illuminate\Database\Eloquent\Builder
     {
-        return $query
-            ->where('demographics.mal_id', Constants::GENRE_MANGA_KIDS);
+        if (is_scout_query_builder($query)) {
+            $query = $query->where('demographics', Constants::GENRE_MANGA_KIDS);
+        } else {
+            $query = $query->where('demographics.mal_id', Constants::GENRE_MANGA_KIDS);
+        }
+
+        return $query;
     }
 
     /**
@@ -248,6 +309,8 @@ class Manga extends JikanApiSearchableModel
             'mal_id' => (int) $this->mal_id,
             'start_date' => $this->convertToTimestamp($this->published['from'] ?? null),
             'end_date' => $this->convertToTimestamp($this->published['to'] ?? null),
+            // ongoing items have no end date; Typesense can't filter on null
+            'has_end_date' => !empty($this->published['to']),
             'title' => $this->title,
             'title_transformed' => $this->simplifyStringForSearch($this->title),
             'title_english' => $this->title_english ?? '',
@@ -271,9 +334,12 @@ class Manga extends JikanApiSearchableModel
             'favorites' => $this->favorites,
             'synopsis' => $this->synopsis,
             'approved' => $this->approved ?? false,
-            'magazines' => $this->getMalIdsOfField($this->magazines),
             'genres' => $this->getMalIdsOfField($this->genres),
             'explicit_genres' => $this->getMalIdsOfField($this->explicit_genres),
+            'themes' => $this->getMalIdsOfField($this->themes),
+            'demographics' => $this->getMalIdsOfField($this->demographics),
+            'serializations' => $this->getMalIdsOfField($this->serializations),
+            'sfw' => $this->isSfw(),
         ];
     }
 
@@ -340,6 +406,20 @@ class Manga extends JikanApiSearchableModel
                     'infix' => true,
                     'sort' => false,
                 ],
+                [
+                    'name' => 'sfw',
+                    'type' => 'bool',
+                    'optional' => true,
+                ],
+                [
+                    'name' => 'has_end_date',
+                    'type' => 'bool',
+                    'optional' => true,
+                ],
+                // auto-typing only creates a field once a document has a value for it, so filters on these would fail until then
+                ...array_map(fn (string $name) => ['name' => $name, 'type' => 'int64[]', 'optional' => true], [
+                    'genres', 'explicit_genres', 'themes', 'demographics', 'serializations',
+                ]),
             ],
         ];
     }

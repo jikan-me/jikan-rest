@@ -57,9 +57,9 @@ class AnimeIndexer extends Command
     public function handle()
     {
 
-        $failed = $this->option('failed') ?? false;
-        $resume = $this->option('resume') ?? false;
-        $reverse = $this->option('reverse') ?? false;
+        $failed = $this->option('failed');
+        $resume = $this->option('resume');
+        $reverse = $this->option('reverse');
         $delay = $this->option('delay') ?? 3;
         $index = $this->option('index') ?? 0;
 

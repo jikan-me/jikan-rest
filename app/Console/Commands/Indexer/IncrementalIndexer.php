@@ -175,8 +175,8 @@ class IncrementalIndexer extends Command
             [
                 'mediaType' => $this->argument('mediaType'),
                 'delay' => $this->option('delay'),
-                'resume' => $this->option('resume') ?? false,
-                'failed' => $this->option('failed') ?? false,
+                'resume' => $this->option('resume'),
+                'failed' => $this->option('failed'),
             ],
             [
                 // `mediaType*` is an array argument: `in` rejects an array unless `array` is also
@@ -206,8 +206,8 @@ class IncrementalIndexer extends Command
         // we want to handle signals from the OS
         $this->trap([SIGTERM, SIGQUIT, SIGINT], fn () => $this->cancelled = true);
 
-        $resume = $this->option('resume') ?? false;
-        $onlyFailed = $this->option('failed') ?? false;
+        $resume = $this->option('resume');
+        $onlyFailed = $this->option('failed');
 
         /**
          * @var $mediaTypes array

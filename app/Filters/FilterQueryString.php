@@ -65,7 +65,7 @@ trait FilterQueryString
      * @param  Collection<string, mixed>  $queryParameters
      * @return Collection<string, mixed>
      */
-    private function getFilters(Collection $queryParameters): Collection
+    public function getFilters(Collection $queryParameters): Collection
     {
         $filter = function ($key) {
 
