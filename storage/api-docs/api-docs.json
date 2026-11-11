@@ -30,6 +30,14 @@
                 "operationId": "getAnimeFullById",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -118,6 +126,14 @@
                 "operationId": "getAnimeCharacters",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -153,6 +169,14 @@
                 "operationId": "getAnimeStaff",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -187,6 +211,14 @@
                 "description": "Returns the list of episodes for an anime by **id**, paginated by **page**.",
                 "operationId": "getAnimeEpisodes",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -225,6 +257,14 @@
                 "description": "Returns a single episode of an anime by **id** and **episode**.",
                 "operationId": "getAnimeEpisodeById",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -274,6 +314,14 @@
                 "operationId": "getAnimeNews",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -311,6 +359,14 @@
                 "description": "Returns the forum topics of an anime by **id**. Use **filter** to restrict to all, episode, or other topics.",
                 "operationId": "getAnimeForum",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -361,6 +417,14 @@
                 "operationId": "getAnimeVideos",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -395,6 +459,14 @@
                 "description": "Returns the episode videos of an anime by **id**, paginated by **page**.",
                 "operationId": "getAnimeVideosEpisodes",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -434,6 +506,14 @@
                 "operationId": "getAnimePictures",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -468,6 +548,14 @@
                 "description": "Returns the statistics of an anime by **id**, such as watching, completed, and on-hold counts.",
                 "operationId": "getAnimeStatistics",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -504,6 +592,14 @@
                 "operationId": "getAnimeMoreInfo",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -539,6 +635,14 @@
                 "operationId": "getAnimeRecommendations",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -573,6 +677,14 @@
                 "description": "Returns the recent list updates of users for an anime by **id**, paginated by **page**.",
                 "operationId": "getAnimeUserUpdates",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -611,6 +723,14 @@
                 "description": "Returns the reviews of an anime by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.",
                 "operationId": "getAnimeReviews",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -656,6 +776,14 @@
                 "operationId": "getAnimeRelations",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -696,6 +824,14 @@
                 "operationId": "getAnimeThemes",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -730,6 +866,14 @@
                 "description": "Returns the external links of an anime by **id**.",
                 "operationId": "getAnimeExternal",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -766,6 +910,14 @@
                 "operationId": "getAnimeStreaming",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -800,6 +952,14 @@
                 "description": "Returns the complete character resource for a character by **id**, including anime and manga roles, voices, and more.",
                 "operationId": "getCharacterFullById",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -889,6 +1049,14 @@
                 "operationId": "getCharacterAnime",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -923,6 +1091,14 @@
                 "description": "Returns the manga roles of a character by **id**.",
                 "operationId": "getCharacterManga",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -959,6 +1135,14 @@
                 "operationId": "getCharacterVoiceActors",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -994,6 +1178,14 @@
                 "operationId": "getCharacterPictures",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1028,6 +1220,14 @@
                 "description": "Returns the details of a club by **id**.",
                 "operationId": "getClubsById",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1068,6 +1268,14 @@
                 "description": "Returns the members of a club by **id**, paginated by **page**.",
                 "operationId": "getClubMembers",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1114,6 +1322,14 @@
                 "operationId": "getClubStaff",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1148,6 +1364,14 @@
                 "description": "Returns the anime, manga, and characters related to a club by **id**.",
                 "operationId": "getClubRelations",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1184,6 +1408,14 @@
                 "operationId": "getAnimeGenres",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "filter",
                         "in": "query",
                         "schema": {
@@ -1218,6 +1450,14 @@
                 "operationId": "getMangaGenres",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "filter",
                         "in": "query",
                         "schema": {
@@ -1251,6 +1491,14 @@
                 "description": "Searches the magazines catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
                 "operationId": "getMagazines",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     },
@@ -1313,6 +1561,14 @@
                 "description": "Returns the complete manga resource, including primary data plus related sub-resources, for a manga by **id**.",
                 "operationId": "getMangaFullById",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1402,6 +1658,14 @@
                 "operationId": "getMangaCharacters",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1436,6 +1700,14 @@
                 "description": "Returns recent news articles for a manga by **id**, paginated by **page**.",
                 "operationId": "getMangaNews",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1474,6 +1746,14 @@
                 "description": "Returns the forum topics of a manga by **id**. Use **filter** to restrict to all, episode, or other topics.",
                 "operationId": "getMangaTopics",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1524,6 +1804,14 @@
                 "operationId": "getMangaPictures",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1558,6 +1846,14 @@
                 "description": "Returns the statistics of a manga by **id**, such as reading, completed, and on-hold counts.",
                 "operationId": "getMangaStatistics",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1594,6 +1890,14 @@
                 "operationId": "getMangaMoreInfo",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1629,6 +1933,14 @@
                 "operationId": "getMangaRecommendations",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1663,6 +1975,14 @@
                 "description": "Returns the recent list updates of users for a manga by **id**, paginated by **page**.",
                 "operationId": "getMangaUserUpdates",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1701,6 +2021,14 @@
                 "description": "Returns the reviews of a manga by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.",
                 "operationId": "getMangaReviews",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1746,6 +2074,14 @@
                 "operationId": "getMangaRelations",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1789,6 +2125,14 @@
                 "operationId": "getMangaExternal",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1823,6 +2167,14 @@
                 "description": "Returns the complete person resource for a person by **id**, including anime and manga roles, voices, and more.",
                 "operationId": "getPersonFullById",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1864,6 +2216,14 @@
                 "operationId": "getPersonById",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1904,6 +2264,14 @@
                 "operationId": "getPersonAnime",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -1938,6 +2306,14 @@
                 "description": "Returns the voice acting roles of a person by **id**.",
                 "operationId": "getPersonVoices",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -1974,6 +2350,14 @@
                 "operationId": "getPersonManga",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -2009,6 +2393,14 @@
                 "operationId": "getPersonPictures",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -2043,6 +2435,14 @@
                 "description": "Returns the details of a producer by **id**.",
                 "operationId": "getProducerById",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -2084,6 +2484,14 @@
                 "operationId": "getProducerFullById",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -2124,6 +2532,14 @@
                 "operationId": "getProducerExternal",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -2157,6 +2573,16 @@
                 "summary": "Random anime",
                 "description": "Returns a random anime from the indexed catalog.",
                 "operationId": "getRandomAnime",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a random anime resource",
@@ -2187,6 +2613,16 @@
                 "summary": "Random manga",
                 "description": "Returns a random manga from the indexed catalog.",
                 "operationId": "getRandomManga",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a random manga resource",
@@ -2217,6 +2653,16 @@
                 "summary": "Random characters",
                 "description": "Returns a random character from the indexed catalog.",
                 "operationId": "getRandomCharacters",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a random character resource",
@@ -2247,6 +2693,16 @@
                 "summary": "Random people",
                 "description": "Returns a random person from the indexed catalog.",
                 "operationId": "getRandomPeople",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a random person resource",
@@ -2277,6 +2733,16 @@
                 "summary": "Random users",
                 "description": "Returns a random user profile from the indexed catalog.",
                 "operationId": "getRandomUsers",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns a random user profile resource",
@@ -2309,6 +2775,14 @@
                 "operationId": "getRecentAnimeRecommendations",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     }
                 ],
@@ -2339,6 +2813,14 @@
                 "operationId": "getRecentMangaRecommendations",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     }
                 ],
@@ -2368,6 +2850,14 @@
                 "description": "Returns the most recent anime reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.",
                 "operationId": "getRecentAnimeReviews",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     },
@@ -2423,6 +2913,14 @@
                 "description": "Returns the most recent manga reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.",
                 "operationId": "getRecentMangaReviews",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     },
@@ -2494,6 +2992,14 @@
                 "description": "Returns the weekly airing schedule of anime. Use **filter** to select a weekday, with **kids** and **sfw** to include or exclude entries by their ratings, and pagination via **page**.",
                 "operationId": "getSchedules",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "filter",
                         "in": "query",
@@ -2916,6 +3422,14 @@
                 "operationId": "getPeopleSearch",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -3056,6 +3570,14 @@
                 "operationId": "getUsersSearch",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -3124,6 +3646,14 @@
                 "operationId": "getUserById",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "required": true,
@@ -3163,6 +3693,14 @@
                 "description": "Searches the clubs catalog using the **q**, **type**, **category**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.",
                 "operationId": "getClubsSearch",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     },
@@ -3240,6 +3778,14 @@
                 "operationId": "getProducers",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -3302,6 +3848,14 @@
                 "operationId": "getSeasonNow",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "filter",
                         "in": "query",
                         "description": "Entry types",
@@ -3359,6 +3913,14 @@
                 "description": "Returns the anime that aired in a specific **year** and **season**. Can be filtered by **filter** and supports pagination via **page**.",
                 "operationId": "getSeason",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "year",
                         "in": "path",
@@ -3432,6 +3994,16 @@
                 "summary": "Seasons list",
                 "description": "Lists the years and seasons with available anime archives.",
                 "operationId": "getSeasonsList",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns available list of seasons",
@@ -3458,6 +4030,14 @@
                 "description": "Returns the anime of the upcoming season. Can be filtered by **filter** and supports pagination via **page**.",
                 "operationId": "getSeasonUpcoming",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "filter",
                         "in": "query",
@@ -3516,6 +4096,14 @@
                 "description": "Returns the top-ranked anime. Can be filtered by **type**, **filter**, **rating**, and **sfw**.",
                 "operationId": "getTopAnime",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "type",
                         "in": "query",
@@ -3581,6 +4169,14 @@
                 "operationId": "getTopManga",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "type",
                         "in": "query",
                         "required": false,
@@ -3630,6 +4226,14 @@
                 "operationId": "getTopPeople",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -3663,6 +4267,14 @@
                 "operationId": "getTopCharacters",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "$ref": "#/components/parameters/page"
                     },
                     {
@@ -3695,6 +4307,14 @@
                 "description": "Returns the top-ranked reviews. Can be filtered by **type**, with **preliminary** and **spoilers** toggles.",
                 "operationId": "getTopReviews",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     },
@@ -3819,6 +4439,14 @@
                 "operationId": "getUserFullProfile",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "path",
                         "required": true,
@@ -3858,6 +4486,14 @@
                 "description": "Returns the public profile of a user by **username**.",
                 "operationId": "getUserProfile",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "username",
                         "in": "path",
@@ -3899,6 +4535,14 @@
                 "operationId": "getUserStatistics",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "path",
                         "required": true,
@@ -3933,6 +4577,14 @@
                 "description": "Returns the favorites of a user by **username**.",
                 "operationId": "getUserFavorites",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "username",
                         "in": "path",
@@ -3974,6 +4626,14 @@
                 "operationId": "getUserUpdates",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "path",
                         "required": true,
@@ -4009,6 +4669,14 @@
                 "operationId": "getUserAbout",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "path",
                         "required": true,
@@ -4043,6 +4711,14 @@
                 "description": "Returns the recent anime and manga history of a user by **username**. Use **type** to filter to anime or manga entries.",
                 "operationId": "getUserHistory",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "username",
                         "in": "path",
@@ -4091,6 +4767,14 @@
                 "operationId": "getUserFriends",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "path",
                         "required": true,
@@ -4128,6 +4812,14 @@
                 "description": "Returns the anime list of a user by **username**, optionally filtered by **status**. Note: MyAnimeList discontinued user lists on May 1st, 2022.",
                 "operationId": "getUserAnimelist",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "username",
                         "in": "path",
@@ -4170,6 +4862,14 @@
                 "operationId": "getUserMangaList",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "path",
                         "required": true,
@@ -4210,6 +4910,14 @@
                 "description": "Returns the reviews written by a user by **username**, paginated by **page**.",
                 "operationId": "getUserReviews",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "username",
                         "in": "path",
@@ -4316,6 +5024,14 @@
                 "operationId": "getUserRecommendations",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "path",
                         "required": true,
@@ -4353,6 +5069,14 @@
                 "description": "Returns the clubs joined by a user by **username**, paginated by **page**.",
                 "operationId": "getUserClubs",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "username",
                         "in": "path",
@@ -4392,6 +5116,14 @@
                 "operationId": "getUserExternal",
                 "parameters": [
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "username",
                         "in": "path",
                         "required": true,
@@ -4425,6 +5157,16 @@
                 "summary": "Recently online users",
                 "description": "Returns the users currently online or recently online.",
                 "operationId": "getRecentlyOnlineUsers",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns recently online users",
@@ -4464,6 +5206,16 @@
                 "summary": "Recently added episodes",
                 "description": "Returns recently added episodes currently trending on MyAnimeList.",
                 "operationId": "getWatchRecentEpisodes",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Recently Added Episodes",
@@ -4489,6 +5241,16 @@
                 "summary": "Popular episodes",
                 "description": "Returns popular episodes currently trending on MyAnimeList.",
                 "operationId": "getWatchPopularEpisodes",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Popular Episodes",
@@ -4515,6 +5277,14 @@
                 "description": "Returns recently added promotional videos currently trending on MyAnimeList.",
                 "operationId": "getWatchRecentPromos",
                 "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "$ref": "#/components/parameters/page"
                     }
@@ -4544,6 +5314,16 @@
                 "summary": "Popular promotional videos",
                 "description": "Returns popular promotional videos currently trending on MyAnimeList.",
                 "operationId": "getWatchPopularPromos",
+                "parameters": [
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Returns Popular Promotional Videos",
