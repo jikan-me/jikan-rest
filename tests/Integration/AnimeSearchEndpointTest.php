@@ -212,6 +212,58 @@ class AnimeSearchEndpointTest extends TestCase
     }
 
     #[Test]
+    public function testBatchLookupOmitsMissingIds()
+    {
+        Anime::factory()->createOne(['mal_id' => 91001, 'title' => 'Present']);
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '91001,999999',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $jsonResponse->assertJsonCount(1, 'data');
+        $this->assertSame([91001], array_column($jsonResponse->json('data'), 'mal_id'));
+    }
+
+    #[Test]
+    public function testBatchLookupRejectsInvalidIds()
+    {
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '1,not-an-id',
+        ]);
+
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($jsonResponse->json(), 'type'));
+    }
+
+    #[Test]
+    public function testFieldsSelectionOnSearchCollection()
+    {
+        Anime::factory(2)->create();
+
+        $jsonResponse = $this->getJsonWithParams([
+            'fields' => 'mal_id,title',
+            'limit' => 2,
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        foreach ($jsonResponse->json('data') as $item) {
+            $this->assertSame(['mal_id', 'title'], array_keys($item));
+        }
+    }
+
+    #[Test]
+    public function testFieldsSelectionRejectsUnknownFields()
+    {
+        $jsonResponse = $this->getJsonWithParams([
+            'fields' => 'mal_id,does_not_exist',
+        ]);
+
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($jsonResponse->json(), 'type'));
+    }
+
+    #[Test]
     public function testBatchLookupRejectsMoreThanFiftyIds()
     {
         $jsonResponse = $this->getJsonWithParams([

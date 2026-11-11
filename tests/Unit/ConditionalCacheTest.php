@@ -64,4 +64,20 @@ final class ConditionalCacheTest extends TestCase
 
         return $request;
     }
+
+    public function test_it_sets_cache_control_from_the_endpoint_ttl(): void
+    {
+        config()->set('jikan.per_endpoint_cache_ttl', [
+            ...config('jikan.per_endpoint_cache_ttl'),
+            'v4.anime.main' => 60,
+        ]);
+
+        $middleware = new ConditionalCache(new JikanConfig(config('jikan')));
+        $response = $middleware->handle(
+            $this->request('/v4/anime/1', 'v4.anime.main'),
+            fn (): JsonResponse => new JsonResponse(['data' => ['mal_id' => 1]])
+        );
+
+        $this->assertStringContainsString('max-age=60', (string) $response->headers->get('Cache-Control'));
+    }
 }
