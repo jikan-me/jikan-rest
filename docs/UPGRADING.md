@@ -90,9 +90,10 @@ upgrade. Plan a fresh image/environment rather than an in-place `composer update
    see `docs/POST_FULL_INDEX.md` §3). Search filters now run in Typesense and need fields
    (`sfw`, `has_end_date`, `themes`, `demographics`, `serializations`, ...) that older anime and
    manga collections lack, and an import does not change the schema of an existing collection:
-   drop them first with `php artisan scout:delete-index anime_index` and
-   `php artisan scout:delete-index manga_index`. Until the re-import finishes, filtered anime and
-   manga searches fail.
+   drop them first with `php artisan scout:delete-index "App\Anime"` and
+   `php artisan scout:delete-index "App\Manga"` (the class names resolve the collection name, a
+   bare `anime_index` would get `SCOUT_PREFIX` prepended). Until the re-import finishes, anime and
+   manga searches with `q=` return empty or partial results.
 
 ### What API consumers will notice
 
@@ -178,8 +179,6 @@ on the Lumen release ("before") and what it is now.
   are now excluded too; before, only `genres` was checked. Erotica stays allowed: the old checks
   for Hentai/Erotica in `demographics` never matched, because MyAnimeList does not use those ids
   as demographics.
-- **`end_date` filter** on `/v4/anime` and `/v4/manga` also returns ongoing entries, which have no
-  end date.
 - **Operational setup.** Dependencies are resolved against PHP 8.4 and `ext-mongodb` ≥ 2.5.
   A fresh clone needs `composer install`, which relies on the tracked
   `bootstrap/cache/.gitignore` placeholder.

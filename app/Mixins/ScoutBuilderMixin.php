@@ -32,7 +32,8 @@ class ScoutBuilderMixin
             }
 
             $page = $page ?: Paginator::resolveCurrentPage($pageName);
-            $perPage = $perPage ?: $this->model->getPerPage();
+            // typesense caps per_page at 250 (TypeSenseScoutSearchService); paging must use the same size
+            $perPage = min($perPage ?: $this->model->getPerPage(), 250);
             $rawResults = $engine->paginate($this, $perPage, $page);
             $found = (int) $engine->getTotalCount($rawResults);
 

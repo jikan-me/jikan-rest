@@ -251,16 +251,10 @@ class Anime extends JikanApiSearchableModel
     {
         $compareVal = $value->setTime(0, 0)->setTimezone(new \DateTimeZone('UTC'));
         if (is_scout_query_builder($query)) {
-            $query = $query->where('(end_date', [
-                '<=', $compareVal->getTimestamp(),
-                ' || has_end_date:=', 'false',
-                ')',
-            ]);
+            // items without an end date are indexed with end_date 0, they must not match (same as the db query)
+            $query = $query->where('end_date', ['<=', $compareVal->getTimestamp(), ' && has_end_date:=', 'true']);
         } else {
-            $query = $query->where(function ($query) use ($compareVal) {
-                return $query->where('aired.to', '<=', $compareVal->toAtomString())
-                    ->orWhere('aired.to', null);
-            });
+            $query = $query->where('aired.to', '<=', $compareVal->toAtomString());
         }
 
         return $query;
@@ -442,7 +436,7 @@ class Anime extends JikanApiSearchableModel
             'mal_id' => (int) $this->mal_id,
             'start_date' => $this->convertToTimestamp($this->aired['from'] ?? null),
             'end_date' => $this->convertToTimestamp($this->aired['to'] ?? null),
-            // ongoing items have no end date; Typesense can't filter on null
+            // Typesense can't filter on null
             'has_end_date' => !empty($this->aired['to']),
             'title' => $this->title,
             'title_transformed' => $this->simplifyStringForSearch($this->title),
