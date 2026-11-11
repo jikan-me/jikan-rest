@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "queries": [
+    {
+      "id": "anime-exact-id-1",
+      "category": "exact_id",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "1"
+      },
+      "expected": [
+        1
+      ],
+      "must_rank_first": true
+    },
+    {
+      "id": "anime-exact-title-cowboy-bebop",
+      "category": "exact_title",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "Cowboy Bebop"
+      },
+      "expected": [
+        1
+      ],
+      "must_rank_first": true
+    },
+    {
+      "id": "anime-exact-title-fmab",
+      "category": "exact_title",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "Fullmetal Alchemist: Brotherhood"
+      },
+      "expected": [
+        5114
+      ],
+      "must_rank_first": true
+    },
+    {
+      "id": "anime-alias-fma-brotherhood",
+      "category": "alias",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "FMA Brotherhood"
+      },
+      "expected": [
+        5114
+      ]
+    },
+    {
+      "id": "anime-typo-cowboy-bebp",
+      "category": "typo",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "cowboy bebp"
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "anime-cjk-attack-on-titan",
+      "category": "cjk",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "\u9032\u6483\u306e\u5de8\u4eba"
+      },
+      "expected": [
+        16498
+      ]
+    },
+    {
+      "id": "anime-filter-one-piece",
+      "category": "filter",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "one piece",
+        "type": "tv",
+        "status": "complete"
+      },
+      "expected": [
+        21
+      ]
+    },
+    {
+      "id": "anime-no-hit",
+      "category": "no_hit",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "zzzz-not-an-anime"
+      },
+      "expected": []
+    },
+    {
+      "id": "anime-typo-short",
+      "category": "typo_short",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "cow"
+      },
+      "expected": [
+        1
+      ]
+    },
+    {
+      "id": "anime-typo-long",
+      "category": "typo_long",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "fullmetal alchemist brotherhod"
+      },
+      "expected": [
+        5114
+      ]
+    },
+    {
+      "id": "anime-numeric-title-collision",
+      "category": "numeric_title",
+      "endpoint": "/v4/anime",
+      "params": {
+        "q": "86"
+      },
+      "expected": [
+        88001
+      ],
+      "must_rank_first": true
+    }
+  ]
+}

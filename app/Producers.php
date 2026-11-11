@@ -91,6 +91,7 @@ class Producers extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
+            'mal_id_text' => (string) $this->mal_id,
             'url' => !is_null($this->url) ? $this->url : '',
             'titles' => implode(', ', $titles),
             'established' => $this->convertToTimestamp($this->established),
@@ -125,6 +126,12 @@ class Producers extends JikanApiSearchableModel
                     'infix' => true,
                     'sort' => true,
                 ],
+                [
+                    'name' => 'mal_id_text',
+                    'type' => 'string',
+                    'optional' => true,
+                    'sort' => false,
+                ],
             ],
         ];
     }
@@ -134,6 +141,25 @@ class Producers extends JikanApiSearchableModel
         return [
             'url',
             'titles',
+            'mal_id_text',
+        ];
+    }
+
+    public function getSearchIndexSortBy(): ?array
+    {
+        return [
+            [
+                'field' => '_text_match(buckets:'.text_match_buckets().')',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'favorites',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'mal_id',
+                'direction' => 'asc',
+            ],
         ];
     }
 

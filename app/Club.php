@@ -124,6 +124,7 @@ class Club extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
+            'mal_id_text' => (string) $this->mal_id,
             'name' => $this->name,
             'category' => $this->category,
             'created' => $this->convertToTimestamp($this->created),
@@ -134,7 +135,25 @@ class Club extends JikanApiSearchableModel
 
     public function typesenseQueryBy(): array
     {
-        return ['name'];
+        return ['name', 'mal_id_text'];
+    }
+
+    public function getSearchIndexSortBy(): ?array
+    {
+        return [
+            [
+                'field' => '_text_match(buckets:'.text_match_buckets().')',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'members',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'mal_id',
+                'direction' => 'asc',
+            ],
+        ];
     }
 
     public function getTitleAttributeName(): string

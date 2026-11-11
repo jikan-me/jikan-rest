@@ -440,6 +440,7 @@ class Anime extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
+            'mal_id_text' => (string) $this->mal_id,
             'start_date' => $this->convertToTimestamp($this->aired['from'] ?? null),
             'end_date' => $this->convertToTimestamp($this->aired['to'] ?? null),
             // ongoing items have no end date; Typesense can't filter on null
@@ -453,6 +454,11 @@ class Anime extends JikanApiSearchableModel
             'title_synonyms' => collect($this->titles ?? [])
                 ->filter(fn ($v, $k) => !in_array($v['type'], ['Default', 'English', 'Japanese']))
                 ->pluck('title')
+                ->values()
+                ->all(),
+            'title_synonyms_transformed' => collect($this->titles ?? [])
+                ->filter(fn ($v, $k) => !in_array($v['type'], ['Default', 'English', 'Japanese']))
+                ->map(fn ($v) => $this->simplifyStringForSearch($v['title']))
                 ->values()
                 ->all(),
             'type' => $this->type,
@@ -545,6 +551,13 @@ class Anime extends JikanApiSearchableModel
                     'sort' => false,
                 ],
                 [
+                    'name' => 'title_synonyms_transformed',
+                    'type' => 'string[]',
+                    'optional' => true,
+                    'infix' => true,
+                    'sort' => false,
+                ],
+                [
                     'name' => 'sfw',
                     'type' => 'bool',
                     'optional' => true,
@@ -558,6 +571,12 @@ class Anime extends JikanApiSearchableModel
                 ...array_map(fn (string $name) => ['name' => $name, 'type' => 'int64[]', 'optional' => true], [
                     'producers', 'studios', 'licensors', 'genres', 'explicit_genres', 'themes', 'demographics',
                 ]),
+                [
+                    'name' => 'mal_id_text',
+                    'type' => 'string',
+                    'optional' => true,
+                    'sort' => false,
+                ],
             ],
         ];
     }
@@ -577,12 +596,14 @@ class Anime extends JikanApiSearchableModel
             'title_japanese',
             'title_japanese_transformed',
             'title_synonyms',
+            'title_synonyms_transformed',
+            'mal_id_text',
         ];
     }
 
     public function getTypeSenseQueryByWeights(): ?string
     {
-        return '2,2,1,1,3,3,1';
+        return '2,2,1,1,3,3,1,1,10';
     }
 
     /**
@@ -602,7 +623,7 @@ class Anime extends JikanApiSearchableModel
                 'direction' => 'asc',
             ],
             [
-                'field' => 'rank',
+                'field' => 'mal_id',
                 'direction' => 'asc',
             ],
         ];
