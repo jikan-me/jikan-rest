@@ -2,12 +2,9 @@
 
 namespace App\Dto;
 
-
 use Illuminate\Http\JsonResponse;
 
 /**
  * @extends LookupDataCommand<JsonResponse>
  */
-final class ProducerFullLookupCommand extends LookupDataCommand
-{
-}
+final class ProducerFullLookupCommand extends LookupDataCommand {}

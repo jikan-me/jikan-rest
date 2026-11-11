@@ -1,0 +1,70 @@
+{
+    "_readme": "Maps doc ROLES to actual paths in THIS project. api/api-standard intentionally unmapped (the v4 contract is the parity harness + generated swagger, no handwritten API spec file); declined rather than guessed.",
+    "roles": {
+        "decisions": "docs/MIGRATION_PLAN.md",
+        "backlog": "docs/PR_CHANGELOG.md",
+        "rfc": "docs/RFC.md",
+        "production-readiness": "docs/PRODUCTION-READINESS.md",
+        "changelog": "docs/PR_CHANGELOG.md",
+        "deployment": "docs/DOCKER.md",
+        "entry-point": "README.MD"
+    },
+    "externalRoles": {},
+    "declinedRoles": {
+        "api": {
+            "declined": "No handwritten API spec maintained; the v4 contract is the parity harness + generated swagger (config/cors-l5-swagger at build).",
+            "by": "Irfan Dahir",
+            "on": "2026-10-11"
+        },
+        "api-standard": {
+            "declined": "No separate API-standard doc; convention is enforced by the parity harness and DTO validation.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-11"
+        },
+        "brief": {
+            "declined": "No design-brief artefacts \u2014 scope lives in docs/DESIGN.md + upstream roadmap.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        },
+        "builds": {
+            "declined": "No tracked build matrix doc; CI definition lives in .github/workflows/ci.yml (runner-gated).",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        },
+        "common-mistakes": {
+            "declined": "Not maintained; PHPStan/Pint/baseline enforce the rules instead.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        },
+        "contributing": {
+            "declined": "Contribution workflow is upstream (jikan-me/jikan-rest); fork is PR-#614 only.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        },
+        "deprecations": {
+            "declined": "No formal deprecation ledger; changes are documented in docs/PR_CHANGELOG.md.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        },
+        "documentation-rules": {
+            "declined": "No formal doc-rules doc; docs stay lightweight and this manifest is the map.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        },
+        "postmortem": {
+            "declined": "No incidents recorded; postmortem file created if/when one happens.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        },
+        "public-roadmap": {
+            "declined": "No public roadmap maintained; scope is docs/DESIGN.md + docs/UPSTREAM_PR.md.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        },
+        "release": {
+            "declined": "No release process here; upstream owns releases, this fork ships via PR series.",
+            "by": "Irfan Dahir",
+            "on": "2026-10-12"
+        }
+    }
+}

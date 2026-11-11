@@ -1,5 +1,7 @@
 <?php
+
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace Tests\Integration;
 
 use App\Anime;
@@ -8,50 +10,49 @@ use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class TopAnimeEndpointTest extends TestCase
 {
-    use SyntheticMongoDbTransaction;
     use ScoutFlush;
+    use SyntheticMongoDbTransaction;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
-        $this->searchIndexModelCleanupList = ["App\\Anime"];
+        parent::setUp();
+        $this->searchIndexModelCleanupList = ['App\\Anime'];
     }
 
     protected function getBaseUri(): string
     {
-        return "/v4/top/anime";
+        return '/v4/top/anime';
     }
 
-    public function orderByFieldAndParamsData()
+    public static function orderByFieldAndParamsData()
     {
         return [
-            "empty query string" => ["score", true, []],
-            "query string: ?filter=airing" => ["score", true, ["filter" => "airing"]],
-            "query string: ?type=tv" => ["score", true, ["type" => "tv"]],
-            "query string: ?type=movie" => ["score", true, ["type" => "movie"]],
-            "query string: ?type=ova" => ["score", true, ["type" => "ova"]],
-            "query string: ?type=ona" => ["score", true, ["type" => "ona"]],
-            "query string: ?type=special" => ["score", true, ["type" => "special"]],
-            "query string: ?type=music" => ["score", true, ["type" => "music"]],
-            "query string: ?filter=upcoming" => ["members", true, ["filter" => "upcoming"]],
-            "query string: ?filter=bypopularity" => ["members", true, ["filter" => "bypopularity"]],
-            "query string: ?filter=favorite" => ["favorites", true, ["filter" => "favorite"]]
+            'empty query string' => ['score', true, []],
+            'query string: ?filter=airing' => ['score', true, ['filter' => 'airing']],
+            'query string: ?type=tv' => ['score', true, ['type' => 'tv']],
+            'query string: ?type=movie' => ['score', true, ['type' => 'movie']],
+            'query string: ?type=ova' => ['score', true, ['type' => 'ova']],
+            'query string: ?type=ona' => ['score', true, ['type' => 'ona']],
+            'query string: ?type=special' => ['score', true, ['type' => 'special']],
+            'query string: ?type=music' => ['score', true, ['type' => 'music']],
+            'query string: ?filter=upcoming' => ['members', true, ['filter' => 'upcoming']],
+            'query string: ?filter=bypopularity' => ['members', true, ['filter' => 'bypopularity']],
+            'query string: ?filter=favorite' => ['favorites', true, ['filter' => 'favorite']],
         ];
     }
 
     public function testShouldReturnMethodNotAllowedResponseIfMethodNotAllowed()
     {
-        $this->json("POST", "/v4/top/anime", ["title" => "Dum"])
-            ->seeStatusCode(405);
+        $this->json('POST', '/v4/top/anime', ['title' => 'Dum'])
+            ->assertStatus(405);
     }
 
-    /**
-     * @dataProvider orderByFieldAndParamsData
-     */
+    #[DataProvider('orderByFieldAndParamsData')]
     public function testShouldBeOrderedCorrectly(string $fieldToOrderBy, bool $descendingOrder, array $params)
     {
         /*
@@ -69,24 +70,24 @@ class TopAnimeEndpointTest extends TestCase
         // create a model factory and pin the rating attribute's value to "G - All Ages".
         $f = Anime::factory($expectedCount)
             ->state([
-                "rating" => AnimeRatingEnum::g()->label
+                'rating' => AnimeRatingEnum::g()->label,
             ]);
 
         // pin attribute values in the model factory and create data in the database
         $queryStringAttributesToOverrideBy = [];
         $queryParams = collect($params);
 
-        if ($queryParams->has("type")) {
-            $queryStringAttributesToOverrideBy["type"] = $queryParams->get("type");
+        if ($queryParams->has('type')) {
+            $queryStringAttributesToOverrideBy['type'] = $queryParams->get('type');
         }
-        if ($queryParams->has("filter") && in_array($queryParams->get("filter"), ["airing", "upcoming"], true)) {
-            $queryStringAttributesToOverrideBy["status"] = $queryParams->get("filter");
+        if ($queryParams->has('filter') && in_array($queryParams->get('filter'), ['airing', 'upcoming'], true)) {
+            $queryStringAttributesToOverrideBy['status'] = $queryParams->get('filter');
         }
         if (count($queryStringAttributesToOverrideBy) > 0) {
             $fo = $f->overrideFromQueryStringParameters($queryStringAttributesToOverrideBy, true);
-            if ($fieldToOrderBy === "rank") {
+            if ($fieldToOrderBy === 'rank') {
                 $fo = $fo->state(new Sequence(
-                    fn ($sequence) => ["rank" => $this->faker->unique()->numberBetween(120, 999)]
+                    fn ($sequence) => ['rank' => $this->faker->unique()->numberBetween(120, 999)]
                 ));
             }
             // create items with opposing attributes
@@ -102,15 +103,16 @@ class TopAnimeEndpointTest extends TestCase
         if ($descendingOrder) {
             $items = $items->reverse();
         }
-        $content = $this->getJsonResponse($params);
+        $jsonResponse = $this->getJsonWithParams($params);
+        $content = $jsonResponse->json();
 
-        $expectedItems = $items->map(fn($elem) => data_get($elem, $fieldToOrderBy))->values();
-        $actualItems = collect($content["data"])->map(fn($elem) => data_get($elem, $fieldToOrderBy))->values();
+        $expectedItems = $items->map(fn ($elem) => data_get($elem, $fieldToOrderBy))->values();
+        $actualItems = collect($content['data'])->map(fn ($elem) => data_get($elem, $fieldToOrderBy))->values();
 
-        $this->seeStatusCode(200);
-        $this->assertPaginationData($expectedCount);
-        $this->assertIsArray($content["data"]);
-        $this->assertCount($expectedCount, $content["data"]);
+        $jsonResponse->assertStatus(200);
+        $this->assertPaginationData($jsonResponse, $expectedCount);
+        $this->assertIsArray($content['data']);
+        $this->assertCount($expectedCount, $content['data']);
 
         $this->assertCollectionsStrictlyEqual($expectedItems, $actualItems);
     }

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Set up the project in an initial state (env, key, deps, optional services).
+set -euo pipefail
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+./install.sh --yes "$@"

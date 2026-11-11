@@ -9,6 +9,4 @@ use Spatie\LaravelData\Data;
 /**
  * @implements DataRequest<ProfileResource>
  */
-final class QueryRandomUserCommand extends Data implements DataRequest
-{
-}
+final class QueryRandomUserCommand extends Data implements DataRequest {}

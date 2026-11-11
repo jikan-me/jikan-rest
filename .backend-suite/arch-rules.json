@@ -1,0 +1,140 @@
+{
+  "_readme": "Project architecture rules for the jikan-rest API (read-only PHP/Laravel JSON API). Sections for audits that describe client-UI or FormRequest/route-model-binding conventions (errorHandling, contractHeaders, formRequestValidation, routeModelBinding) are deliberately absent: this API validates through spatie Data DTOs, binds ids through a mediator, and has no UI, so those audits refuse ('could not check') instead of reporting a vacuous zero. Route audits parse the class-based, named route spelling used in routes/web.v4.php.",
+  "layerBoundaries": {
+    "_comment": "Consumed by bin/audit_layer_boundaries.py. Every rule in rules[] is enforced (an earlier version read rules[0] only); baseline is the recorded oracle the ratchet compares against. On a PHP project mustNotImport may name a namespace root (App\\Http\\) or a repo-rooted path — both compare by prefix, and one rule may ban both.",
+    "rules": [
+      {
+        "label": "HTTP layer must not import Service layer",
+        "fromGlob": "app/Http/**",
+        "mustNotImport": [
+          "app/Services/**",
+          "App\\Services\\"
+        ]
+      },
+      {
+        "label": "Service layer must not import HTTP layer",
+        "fromGlob": "app/Services/**",
+        "mustNotImport": [
+          "app/Http/**",
+          "App\\Http\\"
+        ]
+      }
+    ],
+    "baseline": ".backend-suite/baselines/layer-boundaries.json"
+  },
+  "apiConsistency": {
+    "_comment": "Consumed by bin/audit_api_consistency.py. checks: each of the four (loadBearingCopy, hardBakedCopy, authoredSemantics, vocabulary) is true or {\"enabled\": false, \"why\": \"...\"} — an unconfigured check refuses rather than passes. authoredSemantics is a client-UI-provenance check (an interaction must author a named semantics node); on a server-side tree the interaction surface lives in the client app, so turn it off with a why rather than letting every route report as an unnamed interaction. vocabularyRules: this project's own naming rules, [{message, classPattern?, classNotPattern?, has, hasNot?}] — a class whose name matches, whose members all match has, and whose members match none of hasNot is a finding; vocabulary on with zero rules refuses rather than sweeping clean.",
+    "scope": [
+      "routes/**/*.php",
+      "app/Http/Controllers/**/*.php",
+      "app/Services/**/*.php"
+    ],
+    "checks": {
+      "loadBearingCopy": true,
+      "hardBakedCopy": true,
+      "authoredSemantics": {
+        "enabled": false,
+        "why": "server-side tree; interaction surfaces live in the client app"
+      },
+      "vocabulary": true
+    },
+    "vocabularyRules": [
+      {
+        "message": "uses fetch, where the codebase names this find",
+        "classPattern": "Repository",
+        "has": [
+          "function fetch\\("
+        ]
+      },
+      {
+        "message": "uses find, where the codebase names this fetch",
+        "classPattern": "Repository",
+        "has": [
+          "function find\\("
+        ]
+      }
+    ]
+  },
+  "routeCoverage": {
+    "_comment": "Consumed by bin/audit_route_coverage.php. routesGlob: glob for route files. actionPattern: regex to extract controller and method from a class-based route, [Controller::class, 'method']. controllerDirs: directories to scan for controllers.",
+    "routesGlob": "routes/*.php",
+    "actionPattern": "\\[([A-Za-z]+)::class,\\s*'([A-Za-z]+)'\\]",
+    "controllerDirs": [
+      "app/Http/Controllers/V4DB"
+    ]
+  },
+  "cacheTtlCoverage": {
+    "_comment": "Consumed by bin/audit_cache_ttl_coverage.php. routesGlob: glob for route files. actionPattern: regex to extract the route name (the TTL key) from ->name('v4.<resource>.<action>'). ttlConfigGlob: glob for TTL config file. ttlKeyPattern: regex to extract the same key from the TTL config.",
+    "routesGlob": "routes/*.php",
+    "actionPattern": "->name\\('(v4\\.[a-z]+\\.[A-Za-z]+)'\\)",
+    "ttlConfigGlob": "config/jikan.php",
+    "ttlKeyPattern": "'(v4\\.[a-z]+\\.[A-Za-z]+)'\\s*=>"
+  },
+  "endpointParity": {
+    "_comment": "verifies route/controller-action parity for class-based routes ([Controller::class, method]); no extra config needed",
+    "docMarkers": [
+      "@OA\\Get",
+      "@OA\\Post",
+      "@OA\\PathItem",
+      "#[OA\\Get",
+      "#[OA\\Post",
+      "#[OA\\Delete",
+      "#[OA\\Put",
+      "#[OA\\Patch",
+      "#[OA\\PathItem"
+    ],
+    "actionPattern": "\\[([A-Za-z]+)::class,\\s*'([A-Za-z]+)'\\]",
+    "controllerDirs": [
+      "app/Http/Controllers/V4DB"
+    ],
+    "routesGlob": "routes/*.php"
+  },
+  "rateLimit": {
+    "_comment": "public v4 API is globally throttled via the v4 group + RateLimiter::for('v4')",
+    "globalProtectionFiles": [
+      "routes/api.php",
+      "bootstrap/app.php",
+      "app/Providers/AppServiceProvider.php"
+    ],
+    "globalProtectionPattern": "throttle:v4",
+    "protectionPattern": "throttle:[A-Za-z0-9:._-]+",
+    "actionPattern": "\\[([A-Za-z]+)::class,\\s*'([A-Za-z]+)'\\]",
+    "routesGlob": "routes/*.php"
+  },
+  "versioning": {
+    "routeFilePattern": "web\\.v(\\d+)\\.php$",
+    "prefixPattern": "'prefix'\\s*=>\\s*'v([0-9]+)'",
+    "namespacePattern": "'namespace'\\s*=>\\s*'([\\w\\\\]+)'",
+    "namespaceVersionPattern": "V(\\\\d+)",
+    "bootstrapGlob": "routes/*.php"
+  },
+  "errorShape": {
+    "envelopeKeys": [
+      "status",
+      "type",
+      "message",
+      "error",
+      "report_url"
+    ],
+    "handlerGlob": "app/Exceptions/Handler.php",
+    "sourceGlob": "app/Http/Controllers/**/*.php",
+    "bypassPattern": "abort\\((\\d+)\\)"
+  },
+  "toolchainGates": {
+    "_comment": "Consumed by bin/audit_toolchain_gates.py. Declares the manifest(s) and runner(s) that define the project's toolchain, so test-suite declarations and runner directories cannot silently drift.",
+    "manifestGlob": "composer.json",
+    "runnerGlob": "phpunit.xml",
+    "requiredScripts": [
+      "test"
+    ],
+    "testsuiteFlag": "--testsuite"
+  },
+  "testNetworkCoupling": {
+    "_comment": "Consumed by bin/audit_test_network_coupling.py. Tests must never reach myanimelist.net: Tests\\TestCase::createApplication() replaces the parser's HTTP client with a mock that throws CustomTestException on any request. A host-referencing test therefore counts as safe when it extends that TestCase (or builds its own mock); a test constructing a real client is a finding.",
+    "liveHostPattern": "myanimelist\\.net",
+    "mockClientPattern": "(extends\\s+TestCase|Mockery::mock\\(|MockHttpClient)",
+    "fallbackPattern": "HttpClient::create\\(",
+    "testsGlob": "tests/**/*.php",
+    "exempt": {}
+  }
+}

@@ -1,6 +1,6 @@
 # Working with tests
 
-When developing run all the tests once with `phpunit` if you are just getting started.
+When developing run all the tests once with `composer phpunit` (`php vendor/bin/phpunit --no-coverage`) if you are just getting started.
 This will setup the test database for you in mongodb, as there is a test listener class which runs the migrations
 for a new database named `jikan-test`. (by default, feel free to override it if required)
 

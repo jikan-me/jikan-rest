@@ -1,0 +1,162 @@
+{
+    "data": {
+        "aired": {
+            "from": "@string",
+            "prop": {
+                "from": {
+                    "day": "@int",
+                    "month": "@int",
+                    "year": "@int"
+                },
+                "to": {
+                    "day": "@int",
+                    "month": "@int",
+                    "year": "@int"
+                }
+            },
+            "string": "@string",
+            "to": "@string"
+        },
+        "airing": "@bool",
+        "approved": "@bool",
+        "background": "@string",
+        "broadcast": {
+            "day": "@string",
+            "string": "@string",
+            "time": "@string",
+            "timezone": "@string"
+        },
+        "demographics": [
+            "@list"
+        ],
+        "duration": "@string",
+        "episodes": "@int",
+        "explicit_genres": [
+            "@list"
+        ],
+        "external": "@null",
+        "favorites": "@int",
+        "genres": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "images": {
+            "jpg": {
+                "image_url": "@string",
+                "large_image_url": "@string",
+                "small_image_url": "@string"
+            },
+            "webp": {
+                "image_url": "@string",
+                "large_image_url": "@string",
+                "small_image_url": "@string"
+            }
+        },
+        "licensors": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "mal_id": "@int",
+        "members": "@int",
+        "popularity": "@int",
+        "producers": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "rank": "@int",
+        "rating": "@string",
+        "relations": [
+            "@list",
+            {
+                "entry": [
+                    "@list",
+                    {
+                        "mal_id": "@int",
+                        "name": "@string",
+                        "type": "@string",
+                        "url": "@string"
+                    }
+                ],
+                "relation": "@string"
+            }
+        ],
+        "score": "@volatile",
+        "scored_by": "@int",
+        "season": "@string",
+        "source": "@string",
+        "status": "@string",
+        "streaming": "@null",
+        "studios": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "synopsis": "@string",
+        "theme": {
+            "endings": [
+                "@list",
+                "@string"
+            ],
+            "openings": [
+                "@list",
+                "@string"
+            ]
+        },
+        "themes": [
+            "@list",
+            {
+                "mal_id": "@int",
+                "name": "@string",
+                "type": "@string",
+                "url": "@string"
+            }
+        ],
+        "title": "@string",
+        "title_english": "@string",
+        "title_japanese": "@string",
+        "title_synonyms": [
+            "@list"
+        ],
+        "titles": [
+            "@list",
+            {
+                "title": "@string",
+                "type": "@string"
+            }
+        ],
+        "trailer": {
+            "embed_url": "@string",
+            "images": {
+                "image_url": "@string",
+                "large_image_url": "@string",
+                "maximum_image_url": "@string",
+                "medium_image_url": "@string",
+                "small_image_url": "@string"
+            },
+            "url": "@string",
+            "youtube_id": "@string"
+        },
+        "type": "@string",
+        "url": "@string",
+        "year": "@int"
+    }
+}

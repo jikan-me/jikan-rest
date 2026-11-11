@@ -1,0 +1,22 @@
+{
+    "data": [
+        "@list",
+        {
+            "images": {
+                "jpg": {
+                    "image_url": "@string"
+                },
+                "webp": {
+                    "image_url": "@string"
+                }
+            },
+            "last_online": "@string",
+            "url": "@string",
+            "username": "@string"
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

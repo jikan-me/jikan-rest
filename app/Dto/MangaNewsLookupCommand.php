@@ -2,7 +2,6 @@
 
 namespace App\Dto;
 
-
 use Illuminate\Http\JsonResponse;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Numeric;

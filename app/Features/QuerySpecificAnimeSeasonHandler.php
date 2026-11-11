@@ -23,7 +23,6 @@ final class QuerySpecificAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
          * @var Carbon $from
          * @var Carbon $to
          */
-
         [$from, $to] = $this->getSeasonRange($request->year, $request->season);
         $premiered = ucfirst($request->season)." {$request->year}";
         $includeContinuingItems = $request->continuing;

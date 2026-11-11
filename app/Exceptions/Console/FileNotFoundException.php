@@ -2,7 +2,4 @@
 
 namespace App\Exceptions\Console;
 
-class FileNotFoundException extends \Exception
-{
-
-}
+class FileNotFoundException extends \Exception {}

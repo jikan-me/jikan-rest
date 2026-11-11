@@ -7,7 +7,6 @@ use App\Http\Resources\V4\CharacterAnimeCollection;
 use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @extends ItemLookupHandler<CharacterAnimeLookupCommand, JsonResponse>
@@ -18,12 +17,12 @@ final class CharacterAnimeLookupHandler extends ItemLookupHandler
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return new CharacterAnimeCollection(
-            $results->get("animeography")
+            $results->get('animeography')
         );
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {

@@ -1,0 +1,21 @@
+{
+    "data": [
+        "@list",
+        {
+            "person": {
+                "images": {
+                    "jpg": {
+                        "image_url": "@string"
+                    }
+                },
+                "mal_id": "@int",
+                "name": "@string",
+                "url": "@string"
+            },
+            "positions": [
+                "@list",
+                "@string"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "data": [
+        "@list",
+        {
+            "episode": "@string",
+            "images": {
+                "jpg": {
+                    "image_url": "@null"
+                }
+            },
+            "mal_id": "@int",
+            "title": "@string",
+            "url": "@string"
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

@@ -20,14 +20,14 @@ final class MagazineFactory extends JikanModelFactory
     {
         $mal_id = $this->createMalId();
         $name = $this->createTitle();
-        $url = $this->createMalUrl($mal_id, "manga/magazine");
+        $url = $this->createMalUrl($mal_id, 'manga/magazine');
         $count = $this->faker->numberBetween(1, 999);
 
         return [
-            "mal_id" => $mal_id,
-            "name" => $name,
-            "url" => $url,
-            "count" => $count
+            'mal_id' => $mal_id,
+            'name' => $name,
+            'url' => $url,
+            'count' => $count,
         ];
     }
 }

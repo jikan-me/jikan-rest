@@ -66,20 +66,19 @@ return new class extends Migration
             $table->index('title_japanese', 'title_japanese');
             $table->index('title_synonyms', 'title_synonyms');
 
-
             $table->index(
                 [
                     'title' => 'text',
-                    'title_japanese' => 'text'
+                    'title_japanese' => 'text',
                 ],
                 'search',
                 null,
                 [
                     'weights' => [
                         'title' => 50,
-                        'title_japanese' => 5
+                        'title_japanese' => 5,
                     ],
-                    'name' => 'search'
+                    'name' => 'search',
                 ]
             );
 
@@ -117,20 +116,19 @@ return new class extends Migration
             $table->index('title_japanese', 'title_japanese');
             $table->index('title_synonyms', 'title_synonyms');
 
-
             $table->index(
                 [
                     'title' => 'text',
-                    'title_japanese' => 'text'
+                    'title_japanese' => 'text',
                 ],
                 'search',
                 null,
                 [
                     'weights' => [
                         'title' => 50,
-                        'title_japanese' => 5
+                        'title_japanese' => 5,
                     ],
-                    'name' => 'search'
+                    'name' => 'search',
                 ]
             );
 
@@ -153,7 +151,7 @@ return new class extends Migration
                 [
                     'name' => 'text',
                     'given_name' => 'text',
-                    'family_name' => 'text'
+                    'family_name' => 'text',
                 ],
                 'search',
                 null,
@@ -163,7 +161,7 @@ return new class extends Migration
                         'given_name' => 5,
                         'family_name' => 5,
                     ],
-                    'name' => 'search'
+                    'name' => 'search',
                 ]
             );
 
@@ -184,16 +182,16 @@ return new class extends Migration
             $table->index(
                 [
                     'name' => 'text',
-                    'name_kanji' => 'text'
+                    'name_kanji' => 'text',
                 ],
                 'search',
                 null,
                 [
                     'weights' => [
                         'name' => 50,
-                        'name_kanji' => 5
+                        'name_kanji' => 5,
                     ],
-                    'name' => 'search'
+                    'name' => 'search',
                 ]
             );
 
@@ -207,7 +205,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -224,7 +222,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -240,7 +238,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -253,7 +251,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -266,7 +264,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -279,7 +277,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -292,7 +290,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -305,7 +303,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -318,7 +316,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -331,7 +329,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -344,7 +342,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'name' => 'text'
+                    'name' => 'text',
                 ],
                 'search'
             );
@@ -364,7 +362,7 @@ return new class extends Migration
 
             $table->index(
                 [
-                    'internal_username' => 'text'
+                    'internal_username' => 'text',
                 ],
                 'search'
             );

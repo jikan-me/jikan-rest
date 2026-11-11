@@ -3,9 +3,9 @@
 namespace App\Features;
 
 use App\Dto\UserClubsLookupCommand;
+use App\Support\CachedData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use App\Support\CachedData;
 use Jikan\MyAnimeList\MalClient;
 use Jikan\Request\User\UserClubsRequest;
 
@@ -19,12 +19,16 @@ final class UserClubsLookupHandler extends RequestHandlerWithScraperCache
         return UserClubsLookupCommand::class;
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $username = $requestParams->get("username");
+        $username = $requestParams->get('username');
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => ["results" => $jikan->getUserClubs(new UserClubsRequest($username))]
+            fn (MalClient $jikan, ?int $page = null) => ['results' => $jikan->getUserClubs(new UserClubsRequest($username))]
         );
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Dto;
 
-
 use App\Casts\EnumCast;
 use App\Concerns\HasRequestFingerprint;
 use App\Contracts\DataRequest;
@@ -23,12 +22,12 @@ use Spatie\LaravelData\Optional;
  */
 abstract class QueryListOfUserCommand extends Data implements DataRequest
 {
-    use HasRequestFingerprint, HasPageParameter, MapsRouteParameters;
+    use HasPageParameter, HasRequestFingerprint, MapsRouteParameters;
 
     #[Min(3)]
     public string $username;
 
-    #[Max(255), MapOutputName("title")]
+    #[Max(255), MapOutputName('title')]
     public string|Optional $q;
 
     #[WithCast(EnumCast::class, SortDirection::class), EnumValidation(SortDirection::class)]

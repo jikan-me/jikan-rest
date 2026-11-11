@@ -6,7 +6,6 @@ use App\Dto\UserUpdatesLookupCommand;
 use App\Http\Resources\V4\ProfileLastUpdatesResource;
 use App\Support\CachedData;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
 
 /**
  * @extends UserLookupHandler<UserUpdatesLookupCommand>

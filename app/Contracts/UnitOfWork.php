@@ -28,8 +28,6 @@ interface UnitOfWork
 
     /**
      * Returns the repository instance for a document collection which doesn't have a model representation.
-     * @param string $tableName
-     * @return DocumentRepository
      */
     public function documents(string $tableName): DocumentRepository;
 }

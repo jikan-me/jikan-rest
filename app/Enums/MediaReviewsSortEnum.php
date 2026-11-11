@@ -15,10 +15,10 @@ final class MediaReviewsSortEnum extends Enum
     protected static function labels(): array
     {
         return [
-            "mostVoted" => Constants::REVIEWS_SORT_MOST_VOTED,
-            "newest" => Constants::REVIEWS_SORT_NEWEST,
-            "oldest" => Constants::REVIEWS_SORT_OLDEST,
-            "suggested" => "suggested",
+            'mostVoted' => Constants::REVIEWS_SORT_MOST_VOTED,
+            'newest' => Constants::REVIEWS_SORT_NEWEST,
+            'oldest' => Constants::REVIEWS_SORT_OLDEST,
+            'suggested' => 'suggested',
         ];
     }
 }

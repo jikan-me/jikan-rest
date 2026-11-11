@@ -17,7 +17,7 @@ use Spatie\LaravelData\Optional;
  */
 final class MagazineSearchCommand extends SearchCommand implements DataRequest
 {
-    #[MapInputName("order_by"), MapOutputName("order_by"),
+    #[MapInputName('order_by'), MapOutputName('order_by'),
         WithCast(EnumCast::class, MagazineOrderByEnum::class), EnumValidation(MagazineOrderByEnum::class)]
     public MagazineOrderByEnum|Optional $orderBy;
 }

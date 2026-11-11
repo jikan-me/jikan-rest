@@ -3,11 +3,11 @@
 namespace App\Repositories;
 
 use App\Contracts\GenreRepository;
+use App\DemographicAnime;
+use App\ExplicitGenresAnime;
 use App\GenreAnime;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use App\ThemeAnime;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Laravel\Scout\Builder as ScoutBuilder;
 
 final class AnimeGenresRepository extends DatabaseRepository implements GenreRepository
 {
@@ -23,17 +23,17 @@ final class AnimeGenresRepository extends DatabaseRepository implements GenreRep
 
     public function getExplicitItems(): Collection
     {
-        return DB::table('explicit_genres_anime')->get();
+        return ExplicitGenresAnime::query()->get();
     }
 
     public function getThemes(): Collection
     {
-        return DB::table('themes_anime')->get();
+        return ThemeAnime::query()->get();
     }
 
     public function getDemographics(): Collection
     {
-        return DB::table('demographics_anime')->get();
+        return DemographicAnime::query()->get();
     }
 
     public function all(): Collection

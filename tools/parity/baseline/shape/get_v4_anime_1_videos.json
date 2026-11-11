@@ -1,0 +1,28 @@
+{
+    "data": {
+        "episodes": [
+            "@list"
+        ],
+        "music_videos": [
+            "@list"
+        ],
+        "promo": [
+            "@list",
+            {
+                "title": "@string",
+                "trailer": {
+                    "embed_url": "@string",
+                    "images": {
+                        "image_url": "@string",
+                        "large_image_url": "@string",
+                        "maximum_image_url": "@string",
+                        "medium_image_url": "@string",
+                        "small_image_url": "@string"
+                    },
+                    "url": "@string",
+                    "youtube_id": "@string"
+                }
+            }
+        ]
+    }
+}

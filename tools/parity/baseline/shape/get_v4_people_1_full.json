@@ -1,0 +1,82 @@
+{
+    "data": {
+        "about": "@string",
+        "alternate_names": "@null",
+        "anime": [
+            "@list",
+            {
+                "anime": {
+                    "images": {
+                        "jpg": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        },
+                        "webp": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        }
+                    },
+                    "mal_id": "@int",
+                    "title": "@string",
+                    "url": "@string"
+                },
+                "position": "@string"
+            }
+        ],
+        "birthday": "@string",
+        "family_name": "@string",
+        "favorites": "@int",
+        "given_name": "@string",
+        "images": {
+            "jpg": {
+                "image_url": "@string"
+            }
+        },
+        "mal_id": "@int",
+        "manga": [
+            "@list"
+        ],
+        "name": "@string",
+        "url": "@string",
+        "voices": [
+            "@list",
+            {
+                "anime": {
+                    "images": {
+                        "jpg": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        },
+                        "webp": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        }
+                    },
+                    "mal_id": "@int",
+                    "title": "@string",
+                    "url": "@string"
+                },
+                "character": {
+                    "images": {
+                        "jpg": {
+                            "image_url": "@string"
+                        },
+                        "webp": {
+                            "image_url": "@string",
+                            "small_image_url": "@string"
+                        }
+                    },
+                    "mal_id": "@int",
+                    "name": "@string",
+                    "url": "@string"
+                },
+                "role": "@string"
+            }
+        ],
+        "website_url": "@null"
+    }
+}

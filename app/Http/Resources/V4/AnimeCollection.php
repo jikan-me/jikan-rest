@@ -1,37 +1,18 @@
 <?php
 
-
 namespace App\Http\Resources\V4;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(schema: 'anime_search', description: 'Anime Collection Resource', allOf: [new OA\Schema(ref: '#/components/schemas/pagination_plus'), new OA\Schema(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/anime'))])])]
 class AnimeCollection extends ResourceCollection
 {
-
     /**
      * The resource that this resource collects.
      *
      * @var string
-     *
-     *  @OA\Schema(
-     *      schema="anime_search",
-     *      description="Anime Collection Resource",
-     *
-     *      allOf={
-     *          @OA\Schema(ref="#/components/schemas/pagination_plus"),
-     *          @OA\Schema(
-     *              @OA\Property(
-     *                   property="data",
-     *                   type="array",
-     *
-     *                   @OA\Items(
-     *                          ref="#/components/schemas/anime"
-     *                   )
-     *              ),
-     *          )
-     *      }
-     *  )
      */
     public $collects = 'App\Http\Resources\V4\AnimeResource';
 
@@ -58,14 +39,14 @@ class AnimeCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return array
+     * @param  Request  $request
+     * @return array<string, mixed>
      */
     public function toArray($request)
     {
         return [
             'pagination' => $this->pagination,
-            'data' => $this->collection
+            'data' => $this->collection,
         ];
     }
 

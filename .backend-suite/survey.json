@@ -1,0 +1,107 @@
+{
+  "surveyVersion": 1,
+  "sourceStamp": {
+    "generatedBy": "backend-suite bin/survey.py v1",
+    "generatedAt": "2026-10-11T18:17:37Z",
+    "projectRoot": "/Users/irfan/Developer/jikan-rest",
+    "commit": "a2b71b57489faca437dce8dc8c4e4f7130aa39b4",
+    "branch": "laravel-12",
+    "workingTreeDirty": false,
+    "dirtyFiles": [],
+    "regenerate": "python3 ${CLAUDE_PLUGIN_ROOT}/bin/survey.py",
+    "_note": "Derived collateral. Regenerable and disposable; never written back into profile.json, docs.manifest.json, or any context document."
+  },
+  "stack": {
+    "manifestsFound": [
+      {
+        "file": "composer.json",
+        "stack": "php",
+        "why": "a root composer.json is the Composer manifest"
+      }
+    ],
+    "fileCensus": {
+      "php": 631,
+      "javascript/typescript": 1
+    },
+    "_censusNote": "CORROBORATION ONLY \u2014 never a conclusion. A committed docs build makes a census read the wrong language; measured on a real repo.",
+    "availableAdapters": [
+      "php"
+    ],
+    "stack": "php",
+    "candidateAdapter": "php"
+  },
+  "sourceRoots": [],
+  "documents": {
+    "documents": [
+      {
+        "path": "README.MD",
+        "proposedRole": "entry-point",
+        "confidence": 0.5,
+        "why": "README.md is the conventional entry point, but many projects keep their agent instructions elsewhere",
+        "provenance": "inferred"
+      },
+      {
+        "path": "tests/readme.md",
+        "proposedRole": "entry-point",
+        "confidence": 0.5,
+        "why": "README.md is the conventional entry point, but many projects keep their agent instructions elsewhere",
+        "provenance": "inferred"
+      },
+      {
+        "path": "tools/parity/README.md",
+        "proposedRole": "entry-point",
+        "confidence": 0.5,
+        "why": "README.md is the conventional entry point, but many projects keep their agent instructions elsewhere",
+        "provenance": "inferred"
+      }
+    ],
+    "unmapped": [
+      "docs/AUDIT.md",
+      "COMMANDS.MD",
+      "docs/DB_INDEXES.md",
+      "docs/DOCKER.md",
+      "docs/MIGRATION_PLAN.md",
+      "docs/PR_CHANGELOG.md",
+      "docs/TROUBLESHOOTING.md",
+      "docs/TYPESENSE_SPIKE.md",
+      "docs/UPSTREAM_ISSUES.md",
+      "docs/UPSTREAM_PR.md",
+      "docs/audit-phase2.md",
+      "docs/container_usage.md"
+    ],
+    "_note": "Every proposal here is `inferred` and nothing downstream may treat it as authoritative. Choosing between four candidate `design` documents is the judgement half (/map-project), not this script's job."
+  },
+  "filesSeen": 1159,
+  "couldNotDetermine": [
+    {
+      "field": "existingConfig",
+      "why": "no .backend-suite/ directory \u2014 this project has no context layer yet",
+      "note": "Nothing to compare against, so `survey.py --check` has no declared side."
+    },
+    {
+      "field": "sourceRoots",
+      "why": "no conventional source directory exists for the detected manifest(s)",
+      "note": "Refusing to nominate one. An empty list is an answer; a guess is not."
+    },
+    {
+      "field": "docs.roles",
+      "why": "12 document(s) map to no role in the vocabulary",
+      "note": "Not necessarily a detection failure: on a real zero-state repository 17 of 20 top-level documents had no role in the vocabulary AT ALL, and you cannot infer a mapping to a role that does not exist. A document mapped to no role is reported, never silently ignored.",
+      "documents": [
+        "docs/AUDIT.md",
+        "COMMANDS.MD",
+        "docs/DB_INDEXES.md",
+        "docs/DOCKER.md",
+        "docs/MIGRATION_PLAN.md",
+        "docs/PR_CHANGELOG.md",
+        "docs/TROUBLESHOOTING.md",
+        "docs/TYPESENSE_SPIKE.md",
+        "docs/UPSTREAM_ISSUES.md",
+        "docs/UPSTREAM_PR.md",
+        "docs/audit-phase2.md",
+        "docs/container_usage.md"
+      ]
+    }
+  ],
+  "_couldNotDetermineNote": "Load-bearing output, not a nicety. A survey that determined everything and a survey that never ran produce the same short file unless this list is here."
+}

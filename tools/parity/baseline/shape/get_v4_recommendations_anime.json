@@ -1,0 +1,38 @@
+{
+    "data": [
+        "@list",
+        {
+            "content": "@string",
+            "date": "@string",
+            "entry": [
+                "@list",
+                {
+                    "images": {
+                        "jpg": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        },
+                        "webp": {
+                            "image_url": "@string",
+                            "large_image_url": "@string",
+                            "small_image_url": "@string"
+                        }
+                    },
+                    "mal_id": "@int",
+                    "title": "@string",
+                    "url": "@string"
+                }
+            ],
+            "mal_id": "@string",
+            "user": {
+                "url": "@string",
+                "username": "@string"
+            }
+        }
+    ],
+    "pagination": {
+        "has_next_page": "@bool",
+        "last_visible_page": "@int"
+    }
+}

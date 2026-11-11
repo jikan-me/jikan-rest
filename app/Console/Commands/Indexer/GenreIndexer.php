@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Indexer;
 
-use App\Http\HttpHelper;
+use App\Support\HttpHelper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Jikan\Request\Genre\AnimeGenresRequest;
@@ -13,6 +13,7 @@ class GenreIndexer extends Command
     /**
      * The name and signature of the console command.
      *`
+     *
      * @var string
      */
     protected $signature = 'indexer:genres';
@@ -51,7 +52,7 @@ class GenreIndexer extends Command
         $results = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getAnimeGenres(new AnimeGenresRequest()),
+                    ->getAnimeGenres(new AnimeGenresRequest),
                 'json'
             ),
             true
@@ -59,22 +60,26 @@ class GenreIndexer extends Command
 
         if (HttpHelper::hasError($results)) {
             echo "FAILED: {$results->original['error']}\n";
+
             return;
         }
 
         $itemCount = count($results['genres']);
         echo "Parsed {$itemCount} anime genres\n";
         foreach ($results['genres'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('genres_anime')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -83,16 +88,19 @@ class GenreIndexer extends Command
         $itemCount = count($results['explicit_genres']);
         echo "Parsed {$itemCount} anime explicit_genres\n";
         foreach ($results['explicit_genres'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('explicit_genres_anime')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -101,16 +109,19 @@ class GenreIndexer extends Command
         $itemCount = count($results['themes']);
         echo "Parsed {$itemCount} anime themes\n";
         foreach ($results['themes'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('themes_anime')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -119,16 +130,19 @@ class GenreIndexer extends Command
         $itemCount = count($results['demographics']);
         echo "Parsed {$itemCount} anime demographics\n";
         foreach ($results['demographics'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('demographics_anime')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -141,7 +155,7 @@ class GenreIndexer extends Command
         $results = \json_decode(
             app('SerializerV4')->serialize(
                 app('JikanParser')
-                    ->getMangaGenres(new MangaGenresRequest()),
+                    ->getMangaGenres(new MangaGenresRequest),
                 'json'
             ),
             true
@@ -149,22 +163,26 @@ class GenreIndexer extends Command
 
         if (HttpHelper::hasError($results)) {
             echo "FAILED: {$results->original['error']}\n";
+
             return;
         }
 
         $itemCount = count($results['genres']);
         echo "Parsed {$itemCount} manga genres\n";
         foreach ($results['genres'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('genres_manga')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -173,16 +191,19 @@ class GenreIndexer extends Command
         $itemCount = count($results['explicit_genres']);
         echo "Parsed {$itemCount} manga explicit_genres\n";
         foreach ($results['explicit_genres'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('explicit_genres_manga')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -191,16 +212,19 @@ class GenreIndexer extends Command
         $itemCount = count($results['themes']);
         echo "Parsed {$itemCount} manga themes\n";
         foreach ($results['themes'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('themes_manga')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
@@ -209,22 +233,24 @@ class GenreIndexer extends Command
         $itemCount = count($results['demographics']);
         echo "Parsed {$itemCount} manga demographics\n";
         foreach ($results['demographics'] as $i => $item) {
+            if (($item['mal_id'] ?? null) === null) {
+                continue; // MyAnimeList list entry without an id (jikan >= v5.0.0-beta.3 returns null)
+            }
             $result = DB::table('demographics_manga')
                 ->updateOrInsert(
                     [
-                        'mal_id' => $item['mal_id']
+                        'mal_id' => $item['mal_id'],
                     ],
                     [
                         'mal_id' => $item['mal_id'],
                         'name' => $item['name'],
                         'url' => $item['url'],
-                        'count' => $item['count']
+                        'count' => $item['count'],
                     ]
                 );
             echo "Indexing {$i}/{$itemCount} \r";
         }
 
-
-        echo str_pad("Indexing complete", 10).PHP_EOL;
+        echo str_pad('Indexing complete', 10).PHP_EOL;
     }
 }

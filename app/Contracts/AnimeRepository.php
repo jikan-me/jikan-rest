@@ -4,35 +4,61 @@ namespace App\Contracts;
 
 use App\Anime;
 use App\Enums\AnimeScheduleFilterEnum;
-use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeTypeEnum;
 use Illuminate\Contracts\Database\Query\Builder as EloquentBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Builder as ScoutBuilder;
-use Laravel\Scout\Scout;
 
 /**
- * @implements Repository<Anime>
+ * @extends Repository<Anime>
  */
 interface AnimeRepository extends Repository
 {
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function getTopAiringItems(): EloquentBuilder|ScoutBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function getTopUpcomingItems(): EloquentBuilder|ScoutBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function exceptItemsWithAdultRating(): EloquentBuilder|ScoutBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function excludeKidsItems($builder): Collection|EloquentBuilder|ScoutBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function excludeNsfwItems($builder): Collection|EloquentBuilder|ScoutBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function excludeUnapprovedItems($builder): Collection|EloquentBuilder|ScoutBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function orderByPopularity(): EloquentBuilder|ScoutBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function orderByFavoriteCount(): EloquentBuilder|ScoutBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function orderByRank(): EloquentBuilder|ScoutBuilder;
 
     public function getCurrentlyAiring(
@@ -49,5 +75,8 @@ interface AnimeRepository extends Repository
 
     public function getUpcomingSeasonItems(?AnimeTypeEnum $type = null): EloquentBuilder;
 
+    /**
+     * @return EloquentBuilder|Builder<Anime>
+     */
     public function orderByScore(): EloquentBuilder|ScoutBuilder;
 }

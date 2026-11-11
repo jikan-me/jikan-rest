@@ -9,6 +9,4 @@ use Spatie\LaravelData\Data;
 /**
  * @implements DataRequest<CharacterResource>
  */
-final class QueryRandomCharacterCommand extends Data implements DataRequest
-{
-}
+final class QueryRandomCharacterCommand extends Data implements DataRequest {}

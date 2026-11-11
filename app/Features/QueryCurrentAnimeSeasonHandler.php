@@ -2,17 +2,15 @@
 
 namespace App\Features;
 
-use App\Contracts\RequestHandler;
 use App\Dto\QueryCurrentAnimeSeasonCommand;
 use App\Enums\AnimeSeasonEnum;
 use App\Enums\AnimeTypeEnum;
 use Exception;
 use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 
 /**
- * @implements RequestHandler<QueryCurrentAnimeSeasonCommand, JsonResponse>
+ * @extends QueryAnimeSeasonHandlerBase<QueryCurrentAnimeSeasonCommand>
  */
 final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
 {
@@ -22,12 +20,17 @@ final class QueryCurrentAnimeSeasonHandler extends QueryAnimeSeasonHandlerBase
     }
 
     /**
-     * @return array
      * @throws Exception
      */
-    private function getCurrentSeason() : array
+    /**
+     * @return array{0: AnimeSeasonEnum, 1: int}
+     */
+    private function getCurrentSeason(): array
     {
-        $date = new \DateTime('now', new \DateTimeZone('Asia/Tokyo'));
+        // Use Carbon::now() (which honors Carbon::setTestNow() in tests) rather than
+        // `new \DateTime('now')`, which reads the raw wall clock and made the
+        // `/seasons/now` endpoint untestable/deterministic-failing outside the faked window.
+        $date = Carbon::now(new \DateTimeZone('Asia/Tokyo'));
 
         $year = (int) $date->format('Y');
         $month = (int) $date->format('n');

@@ -15,20 +15,24 @@ use Jikan\Request\Club\UserListRequest;
 final class ClubMembersLookupHandler extends RequestHandlerWithScraperCache
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function requestClass(): string
     {
         return ClubMembersLookupCommand::class;
     }
 
+    /**
+     * @param  Collection<array-key, mixed>  $requestParams
+     */
     protected function getScraperData(string $requestFingerPrint, Collection $requestParams): CachedData
     {
-        $id = $requestParams->get("id");
+        $id = $requestParams->get('id');
+
         return $this->scraperService->findList(
             $requestFingerPrint,
-            fn(MalClient $jikan, ?int $page = null) => $jikan->getClubUsers(new UserListRequest($id, $page)),
-            $requestParams->get("page", 1)
+            fn (MalClient $jikan, ?int $page = null) => $jikan->getClubUsers(new UserListRequest($id, $page)),
+            $requestParams->get('page', 1)
         );
     }
 }

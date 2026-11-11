@@ -1,0 +1,35 @@
+{
+    "data": [
+        "@list",
+        {
+            "about": "@string",
+            "favorites": "@int",
+            "images": {
+                "jpg": {
+                    "image_url": "@string"
+                },
+                "webp": {
+                    "image_url": "@string",
+                    "small_image_url": "@string"
+                }
+            },
+            "mal_id": "@int",
+            "name": "@string",
+            "name_kanji": "@string",
+            "nicknames": [
+                "@list"
+            ],
+            "url": "@string"
+        }
+    ],
+    "pagination": {
+        "current_page": "@int",
+        "has_next_page": "@bool",
+        "items": {
+            "count": "@int",
+            "per_page": "@int",
+            "total": "@int"
+        },
+        "last_visible_page": "@int"
+    }
+}

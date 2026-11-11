@@ -11,11 +11,11 @@ return [
     | using Laravel Scout. This connection is used when syncing all models
     | to the search service. You should adjust this based on your needs.
     |
-    | Supported: "algolia", "meilisearch", "database", "collection", "typesense", "elasticsearch", "null"
+    | Supported: "algolia", "meilisearch", "database", "collection", "typesense", "null"
     |
     */
 
-    'driver' => env('SCOUT_DRIVER', 'null'),
+    'driver' => env('SCOUT_DRIVER', 'null') ?? 'null',
 
     /*
     |--------------------------------------------------------------------------
@@ -125,51 +125,34 @@ return [
     | source search engine. Below, you can state
     | the host and key information for your own TypeSense installation.
     |
-    | See: https://github.com/typesense/laravel-scout-typesense-driver
-    | https://typesense.org/docs/
+    | Native Laravel Scout Typesense engine (first-party since Laravel 13).
     |
     */
 
     'typesense' => [
-        'api_key'         => env('TYPESENSE_API_KEY','abcd'),
-        'nodes'           => [
-            [
-                'host'     => env('TYPESENSE_HOST', 'localhost'),
-                'port'     => env('TYPESENSE_PORT', '8108'),
-                'path'     => '',
+        // Laravel Scout's native Typesense engine (Laravel 13).
+        // `client-settings` is passed straight to Typesense\Client.
+        'client-settings' => [
+            'api_key' => env('TYPESENSE_API_KEY', 'abcd'),
+            'nodes' => [
+                [
+                    'host' => env('TYPESENSE_HOST', 'localhost'),
+                    'port' => env('TYPESENSE_PORT', '8108'),
+                    'path' => '',
+                    'protocol' => env('TYPESENSE_PROTOCOL', 'http'),
+                ],
+            ],
+            'nearest_node' => [
+                'host' => env('TYPESENSE_HOST', 'localhost'),
+                'port' => env('TYPESENSE_PORT', '8108'),
+                'path' => '',
                 'protocol' => env('TYPESENSE_PROTOCOL', 'http'),
             ],
+            'connection_timeout_seconds' => 2,
+            'healthcheck_interval_seconds' => 30,
+            'num_retries' => 3,
+            'retry_interval_seconds' => 1,
         ],
-        'nearest_node'    => [
-            'host'     => env('TYPESENSE_HOST', 'localhost'),
-            'port'     => env('TYPESENSE_PORT', '8108'),
-            'path'     => '',
-            'protocol' => env('TYPESENSE_PROTOCOL', 'http'),
-        ],
-        'connection_timeout_seconds'   => 2,
-        'healthcheck_interval_seconds' => 30,
-        'num_retries'                  => 3,
-        'retry_interval_seconds'       => 1,
+        'max_total_results' => 1000,
     ],
-
-    'elasticsearch' => [
-        'host' => env('ELASTICSEARCH_HOST'),
-        'indices' => [
-            'mappings' => [
-                'default' => [
-                    'properties' => [
-                        'id' => [
-                            'type' => 'keyword',
-                        ],
-                    ],
-                ],
-            ],
-            'settings' => [
-                'default' => [
-                    'number_of_shards' => 1,
-                    'number_of_replicas' => 0,
-                ],
-            ],
-        ],
-    ]
 ];

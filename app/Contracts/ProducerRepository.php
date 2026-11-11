@@ -5,9 +5,6 @@ namespace App\Contracts;
 use App\Producers;
 
 /**
- * @implements Repository<Producers>
+ * @extends Repository<Producers>
  */
-interface ProducerRepository extends Repository
-{
-
-}
+interface ProducerRepository extends Repository {}

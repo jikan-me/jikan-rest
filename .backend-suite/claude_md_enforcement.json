@@ -1,0 +1,29 @@
+{
+  "_comment": "Consumed by bin/audit_claude_md_drift.py: maps each rule stated in CLAUDE.md to the mechanism that enforces it, so a rule with no mechanism is visible rather than assumed.",
+  "rules": [
+    {
+      "id": "v4-contract-frozen",
+      "statement": "The public v4 JSON contract is never changed for default requests (additive opt-in parameters only).",
+      "check": {
+        "kind": "unenforceable",
+        "reason": "no single command proves it. Partial guards: the integration suite asserts response shapes, `composer endpoints:check` pins the endpoint catalog, and tools/parity compares against a Lumen-era baseline that cannot be regenerated without that app. Otherwise it relies on review."
+      }
+    },
+    {
+      "id": "finish-green",
+      "statement": "A change is not done until the suite, static analysis and OpenAPI generation pass.",
+      "check": {
+        "kind": "command_exits_zero",
+        "command": "grep -q phpunit .github/workflows/ci.yml && grep -q phpstan .github/workflows/ci.yml && grep -q l5-swagger:generate .github/workflows/ci.yml"
+      }
+    },
+    {
+      "id": "enum-docblocks",
+      "statement": "Every enum in app/Enums keeps its spatie `@method static self value()` docblock declarations.",
+      "check": {
+        "kind": "command_exits_zero",
+        "command": "test -z \"$(grep -L '@method static self' app/Enums/*.php)\""
+      }
+    }
+  ]
+}
