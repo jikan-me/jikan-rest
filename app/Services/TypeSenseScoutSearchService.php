@@ -48,6 +48,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             $options['typo_tokens_threshold'] = $this->jikanConfig->typoTokensThreshold();
             $options['enable_highlight_v1'] = 'false';
             $options['infix'] = 'fallback';
+            $options['prioritize_exact_match'] = 'true';
             // prevent `Could not parse the filter query: unbalanced `&&` operands.` error
             // this adds support for typesense v0.24.1
             if (array_key_exists('filter_by', $options) && ($options['filter_by'] === ' && ' || $options['filter_by'] === '&&')) {

@@ -83,6 +83,12 @@ abstract class JikanApiSearchableModel extends JikanApiModel
                     'sort' => true,
                     'optional' => false,
                 ],
+                [
+                    'name' => 'mal_id_text',
+                    'type' => 'string',
+                    'optional' => true,
+                    'sort' => false,
+                ],
             ],
         ];
     }
@@ -117,7 +123,17 @@ abstract class JikanApiSearchableModel extends JikanApiModel
      */
     public function getTypeSenseQueryByWeights(): ?string
     {
-        return null;
+        $queryBy = $this->typesenseQueryBy();
+        if ($queryBy === []) {
+            return null;
+        }
+
+        $weights = array_fill(0, count($queryBy), 1);
+        if (end($queryBy) === 'mal_id_text') {
+            $weights[count($weights) - 1] = 10;
+        }
+
+        return implode(',', $weights);
     }
 
     /**
@@ -128,7 +144,16 @@ abstract class JikanApiSearchableModel extends JikanApiModel
      */
     public function getSearchIndexSortBy(): ?array
     {
-        return null;
+        return [
+            [
+                'field' => '_text_match(buckets:'.text_match_buckets().')',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'mal_id',
+                'direction' => 'asc',
+            ],
+        ];
     }
 
     protected function simplifyStringForSearch($val): string

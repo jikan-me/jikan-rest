@@ -95,6 +95,7 @@ class Profile extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
+            'mal_id_text' => (string) $this->mal_id,
             'username' => $this->username,
         ];
     }
@@ -103,6 +104,7 @@ class Profile extends JikanApiSearchableModel
     {
         return [
             'username',
+            'mal_id_text',
         ];
     }
 

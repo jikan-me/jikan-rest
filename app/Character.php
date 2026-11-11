@@ -112,6 +112,7 @@ class Character extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
+            'mal_id_text' => (string) $this->mal_id,
             'name' => $this->name,
             'name_kanji' => $this->name_kanji,
             'member_favorites' => $this->member_favorites,
@@ -123,6 +124,7 @@ class Character extends JikanApiSearchableModel
         return [
             'name',
             'name_kanji',
+            'mal_id_text',
         ];
     }
 

@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "queries": [
+    {
+      "id": "anime-exact-id-1",
+      "category": "exact_id",
+      "endpoint": "/v4/anime",
+      "params": { "q": "1" },
+      "expected": [1],
+      "must_rank_first": true
+    },
+    {
+      "id": "anime-exact-title-cowboy-bebop",
+      "category": "exact_title",
+      "endpoint": "/v4/anime",
+      "params": { "q": "Cowboy Bebop" },
+      "expected": [1],
+      "must_rank_first": true
+    },
+    {
+      "id": "anime-exact-title-fmab",
+      "category": "exact_title",
+      "endpoint": "/v4/anime",
+      "params": { "q": "Fullmetal Alchemist: Brotherhood" },
+      "expected": [5114],
+      "must_rank_first": true
+    },
+    {
+      "id": "anime-alias-fma-brotherhood",
+      "category": "alias",
+      "endpoint": "/v4/anime",
+      "params": { "q": "FMA Brotherhood" },
+      "expected": [5114]
+    },
+    {
+      "id": "anime-typo-cowboy-bebp",
+      "category": "typo",
+      "endpoint": "/v4/anime",
+      "params": { "q": "cowboy bebp" },
+      "expected": [1]
+    },
+    {
+      "id": "anime-cjk-attack-on-titan",
+      "category": "cjk",
+      "endpoint": "/v4/anime",
+      "params": { "q": "進撃の巨人" },
+      "expected": [16498]
+    },
+    {
+      "id": "anime-filter-one-piece",
+      "category": "filter",
+      "endpoint": "/v4/anime",
+      "params": { "q": "one piece", "type": "tv", "status": "complete" },
+      "expected": [21]
+    },
+    {
+      "id": "anime-no-hit",
+      "category": "no_hit",
+      "endpoint": "/v4/anime",
+      "params": { "q": "zzzz-not-an-anime" },
+      "expected": []
+    }
+  ]
+}

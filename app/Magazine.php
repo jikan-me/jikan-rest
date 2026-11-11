@@ -78,6 +78,7 @@ class Magazine extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
+            'mal_id_text' => (string) $this->mal_id,
             'name' => $this->name,
             'count' => $this->count,
         ];
@@ -87,6 +88,7 @@ class Magazine extends JikanApiSearchableModel
     {
         return [
             'name',
+            'mal_id_text',
         ];
     }
 
