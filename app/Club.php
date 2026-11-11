@@ -138,6 +138,24 @@ class Club extends JikanApiSearchableModel
         return ['name', 'mal_id_text'];
     }
 
+    public function getSearchIndexSortBy(): ?array
+    {
+        return [
+            [
+                'field' => '_text_match(buckets:'.text_match_buckets().')',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'members',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'mal_id',
+                'direction' => 'asc',
+            ],
+        ];
+    }
+
     public function getTitleAttributeName(): string
     {
         return 'name';

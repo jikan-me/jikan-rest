@@ -123,4 +123,24 @@ final class SearchIndexFieldsTest extends TestCase
             $this->assertCount(count($model->typesenseQueryBy()), $weights, $class.' weight count mismatch');
         }
     }
+
+    public function test_non_anime_models_keep_a_popularity_tie_breaker(): void
+    {
+        $expected = [
+            Character::class => 'member_favorites',
+            Person::class => 'member_favorites',
+            Producers::class => 'favorites',
+            Club::class => 'members',
+            Magazine::class => 'count',
+        ];
+
+        foreach ($expected as $class => $field) {
+            /** @var JikanApiSearchableModel $model */
+            $model = new $class;
+            $fields = collect($model->getSearchIndexSortBy())->pluck('field')->all();
+
+            $this->assertContains($field, $fields, $class.' lost its popularity field');
+            $this->assertSame('mal_id', end($fields));
+        }
+    }
 }
