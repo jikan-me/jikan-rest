@@ -24,8 +24,16 @@ Anime and manga sort by:
 
 Other user-searchable models use:
 
-1. `_text_match`
-2. `mal_id`
+| Model | Second sort field |
+|---|---|
+| Characters | `member_favorites` descending |
+| People | `member_favorites` descending |
+| Producers | `favorites` descending |
+| Clubs | `members` descending |
+| Magazines | `count` descending |
+| Users | `mal_id` ascending |
+
+All of them end with `mal_id:asc` as the deterministic third field.
 
 ## Exact-ID behavior
 
