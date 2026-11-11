@@ -111,4 +111,30 @@ final class SearchRankingTest extends TestCase
             ->assertStatus(200)
             ->assertJsonPath('data.0.mal_id', 97001);
     }
+
+    public function test_exact_numeric_title_beats_exact_numeric_id(): void
+    {
+        Anime::factory()->createOne([
+            'mal_id' => 86,
+            'title' => 'Mobile Suit Gundam ZZ',
+            'title_english' => 'Mobile Suit Gundam ZZ',
+            'titles' => [['type' => 'Default', 'title' => 'Mobile Suit Gundam ZZ']],
+            'type' => 'TV',
+            'status' => 'Finished Airing',
+        ]);
+        Anime::factory()->createOne([
+            'mal_id' => 88001,
+            'title' => '86',
+            'title_english' => '86',
+            'titles' => [['type' => 'Default', 'title' => '86']],
+            'type' => 'TV',
+            'status' => 'Finished Airing',
+        ]);
+
+        Anime::whereIn('mal_id', [86, 88001])->get()->searchable();
+
+        $this->getJson('/v4/anime?q=86')
+            ->assertStatus(200)
+            ->assertJsonPath('data.0.mal_id', 88001);
+    }
 }

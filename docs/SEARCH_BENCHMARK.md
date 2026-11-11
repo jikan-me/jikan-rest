@@ -13,6 +13,8 @@ A committed, reproducible lexical-search benchmark for issue #615 phase 4.
 - CJK
 - structured filters
 - no-hit
+- short/long typo cases
+- numeric title vs numeric ID collision
 
 Each query records the endpoint, parameters, expected MAL IDs, and whether the
 expected result must rank first.
