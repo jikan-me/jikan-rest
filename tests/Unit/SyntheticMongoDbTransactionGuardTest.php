@@ -12,17 +12,28 @@ final class SyntheticMongoDbTransactionGuardTest extends TestCase
 {
     public function test_it_refuses_loudly_when_the_connection_is_not_the_test_database(): void
     {
-        config(['database.connections.mongodb.database' => 'jikan']);
-        DB::purge('mongodb');
+        $originalDatabase = config('database.connections.mongodb.database');
+        $disposableDatabase = 'jikan_guard_'.bin2hex(random_bytes(6));
 
-        $subject = new class
-        {
-            use SyntheticMongoDbTransaction;
-        };
+        try {
+            config(['database.connections.mongodb.database' => $disposableDatabase]);
+            DB::purge('mongodb');
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Refusing to truncate MongoDB database "jikan"');
+            $subject = new class
+            {
+                use SyntheticMongoDbTransaction;
+            };
 
-        $subject->setUpSyntheticMongoDbTransaction();
+            $this->expectException(\RuntimeException::class);
+            $this->expectExceptionMessage(sprintf(
+                'Refusing to truncate MongoDB database "%s"',
+                $disposableDatabase
+            ));
+
+            $subject->setUpSyntheticMongoDbTransaction();
+        } finally {
+            config(['database.connections.mongodb.database' => $originalDatabase]);
+            DB::purge('mongodb');
+        }
     }
 }
