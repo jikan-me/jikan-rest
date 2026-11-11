@@ -1126,3 +1126,23 @@ param. `phpstan` full-project → OK.
   is gone. `composer.lock` change is the jikan package only (`plugin-api-version` stays 2.9.0).
 - Release version set to **4.3.0** (same /v4 contract, Laravel 13 runtime); `docs/UPGRADING.md`
   has the 4.2.x -> 4.3.0 self-hoster guide.
+
+## 22. Issue #615 phase 3 — response efficiency (2026-11-11)
+
+- `?fields=` on anime/manga/character detail and search responses. Top-level
+  allowlist in `config/response_fields.php`; unknown keys return `400`. Absent
+  parameter leaves the v4 response unchanged.
+- `?ids=` on anime/manga/character search endpoints: comma-separated, max 50,
+  existing items only, request order preserved, response `{"data": [...]}` with
+  no pagination. More than 50 ids is a `400`.
+- Weak `ETag` on successful GET responses; matching `If-None-Match` returns
+  `304`. `Cache-Control: public, max-age=<endpoint TTL>` is added when the
+  endpoint has a positive TTL.
+- `tools/bench/response-size.php` records bytes and a rough token estimate.
+  Local sample (3,021 anime):
+  - `/v4/anime/1`: 5,482 bytes (~1,371 tokens)
+  - `/v4/anime/1?fields=mal_id,title`: 44 bytes (~11 tokens)
+  - `/v4/anime?limit=5`: 22,930 bytes (~5,733 tokens)
+  - `/v4/anime?limit=5&fields=mal_id,title`: 1,864 bytes (~466 tokens)
+  - `/v4/anime?ids=1,5,6`: 14,630 bytes (~3,658 tokens)
+- OpenAPI and the AI manifest regenerated; ids/fields parameters documented.
