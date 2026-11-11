@@ -32,6 +32,14 @@ class RandomController extends Controller
         summary: 'Random anime',
         description: 'Returns a random anime from the indexed catalog.',
         tags: ['random'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -56,6 +64,14 @@ class RandomController extends Controller
         summary: 'Random manga',
         description: 'Returns a random manga from the indexed catalog.',
         tags: ['random'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -80,6 +96,14 @@ class RandomController extends Controller
         summary: 'Random characters',
         description: 'Returns a random character from the indexed catalog.',
         tags: ['random'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -104,6 +128,14 @@ class RandomController extends Controller
         summary: 'Random people',
         description: 'Returns a random person from the indexed catalog.',
         tags: ['random'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -128,6 +160,14 @@ class RandomController extends Controller
         summary: 'Random users',
         description: 'Returns a random user profile from the indexed catalog.',
         tags: ['random'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,

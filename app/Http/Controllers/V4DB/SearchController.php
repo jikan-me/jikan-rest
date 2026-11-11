@@ -27,6 +27,18 @@ class SearchController extends Controller
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
+                name: 'ids',
+                in: 'query',
+                description: 'Fetch a bounded set of MAL ids (max 50, comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'q',
                 in: 'query',
                 schema: new OA\Schema(type: 'string'),
@@ -141,6 +153,18 @@ class SearchController extends Controller
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
+                name: 'ids',
+                in: 'query',
+                description: 'Fetch a bounded set of MAL ids (max 50, comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'q',
                 in: 'query',
                 schema: new OA\Schema(type: 'string'),
@@ -246,6 +270,12 @@ class SearchController extends Controller
         description: 'Searches the people catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['people'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(
@@ -294,6 +324,18 @@ class SearchController extends Controller
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
+                name: 'ids',
+                in: 'query',
+                description: 'Fetch a bounded set of MAL ids (max 50, comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'q',
                 in: 'query',
                 schema: new OA\Schema(type: 'string'),
@@ -336,6 +378,12 @@ class SearchController extends Controller
         description: 'Searches the users catalog using the **q**, **gender**, **location**, **maxAge**, and **minAge** filters. Supports pagination via **page**.',
         tags: ['users'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(
@@ -388,6 +436,12 @@ class SearchController extends Controller
         tags: ['users'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -419,6 +473,12 @@ class SearchController extends Controller
         description: 'Searches the clubs catalog using the **q**, **type**, **category**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['clubs'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(
@@ -474,6 +534,12 @@ class SearchController extends Controller
         description: 'Searches the producers catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['producers'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(

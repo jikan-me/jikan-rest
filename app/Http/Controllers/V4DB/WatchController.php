@@ -16,6 +16,14 @@ class WatchController extends Controller
         summary: 'Recently added episodes',
         description: 'Returns recently added episodes currently trending on MyAnimeList.',
         tags: ['watch'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -38,6 +46,14 @@ class WatchController extends Controller
         summary: 'Popular episodes',
         description: 'Returns popular episodes currently trending on MyAnimeList.',
         tags: ['watch'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -59,6 +75,12 @@ class WatchController extends Controller
         description: 'Returns recently added promotional videos currently trending on MyAnimeList.',
         tags: ['watch'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
         ],
         responses: [
@@ -83,6 +105,14 @@ class WatchController extends Controller
         summary: 'Popular promotional videos',
         description: 'Returns popular promotional videos currently trending on MyAnimeList.',
         tags: ['watch'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,

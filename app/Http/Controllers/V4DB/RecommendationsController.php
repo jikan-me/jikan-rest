@@ -15,6 +15,12 @@ class RecommendationsController extends Controller
         description: 'Returns the most recent anime recommendations from MyAnimeList.',
         tags: ['recommendations'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
         ],
         responses: [
@@ -38,6 +44,12 @@ class RecommendationsController extends Controller
         description: 'Returns the most recent manga recommendations from MyAnimeList.',
         tags: ['recommendations'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
         ],
         responses: [

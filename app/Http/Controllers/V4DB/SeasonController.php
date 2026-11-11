@@ -22,6 +22,12 @@ class SeasonController extends Controller
         tags: ['seasons'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'filter',
                 description: 'Entry types',
                 in: 'query',
@@ -57,6 +63,12 @@ class SeasonController extends Controller
         description: 'Returns the anime that aired in a specific **year** and **season**. Can be filtered by **filter** and supports pagination via **page**.',
         tags: ['seasons'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'year',
                 in: 'path',
@@ -101,6 +113,14 @@ class SeasonController extends Controller
         summary: 'Seasons list',
         description: 'Lists the years and seasons with available anime archives.',
         tags: ['seasons'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
@@ -148,6 +168,12 @@ class SeasonController extends Controller
         description: 'Returns the anime of the upcoming season. Can be filtered by **filter** and supports pagination via **page**.',
         tags: ['seasons'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'filter',
                 description: 'Entry types',

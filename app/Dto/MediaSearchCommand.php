@@ -16,6 +16,7 @@ use Spatie\LaravelData\Attributes\Validation\DateFormat;
 use Spatie\LaravelData\Attributes\Validation\Numeric;
 use Spatie\LaravelData\Attributes\Validation\Prohibits;
 use Spatie\LaravelData\Attributes\Validation\Sometimes;
+use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
@@ -31,6 +32,9 @@ class MediaSearchCommand extends SearchCommand
 
     #[MapInputName('max_score'), MapOutputName('max_score'), Between(1.00, 10.00), Numeric]
     public float|Optional $maxScore;
+
+    #[StringType]
+    public string|Optional $ids;
 
     #[Between(1.00, 9.99), Numeric, Prohibits(['min_score', 'max_score'])]
     public float|Optional $score;
