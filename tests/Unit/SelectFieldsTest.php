@@ -85,4 +85,14 @@ final class SelectFieldsTest extends TestCase
             ['data' => []]
         )->getData(true));
     }
+
+    public function test_it_rejects_unknown_fields_even_on_an_empty_result(): void
+    {
+        $this->expectException(ValidationException::class);
+
+        $this->handle(
+            $this->request('/v4/anime?fields=does_not_exist'),
+            ['data' => []]
+        );
+    }
 }

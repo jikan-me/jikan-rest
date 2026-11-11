@@ -34,6 +34,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -104,6 +110,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -132,6 +144,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -159,6 +177,12 @@ class AnimeController extends Controller
         description: 'Returns the list of episodes for an anime by **id**, paginated by **page**.',
         tags: ['anime'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -190,6 +214,12 @@ class AnimeController extends Controller
         description: 'Returns a single episode of an anime by **id** and **episode**.',
         tags: ['anime'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -229,6 +259,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -259,6 +295,12 @@ class AnimeController extends Controller
         description: 'Returns the forum topics of an anime by **id**. Use **filter** to restrict to all, episode, or other topics.',
         tags: ['anime'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -295,6 +337,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -322,6 +370,12 @@ class AnimeController extends Controller
         description: 'Returns the episode videos of an anime by **id**, paginated by **page**.',
         tags: ['anime'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -354,6 +408,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -381,6 +441,12 @@ class AnimeController extends Controller
         description: 'Returns the statistics of an anime by **id**, such as watching, completed, and on-hold counts.',
         tags: ['anime'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -410,6 +476,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -437,6 +509,12 @@ class AnimeController extends Controller
         description: 'Returns the recommendations for an anime by **id**.',
         tags: ['anime'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -466,6 +544,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -494,6 +578,12 @@ class AnimeController extends Controller
         description: 'Returns the reviews of an anime by **id**. Supports pagination via **page**, with **preliminary** and **spoilers** toggles for review types.',
         tags: ['anime'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -533,6 +623,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -568,6 +664,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -596,6 +698,12 @@ class AnimeController extends Controller
         tags: ['anime'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -623,6 +731,12 @@ class AnimeController extends Controller
         description: 'Returns the streaming links of an anime by **id**.',
         tags: ['anime'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',

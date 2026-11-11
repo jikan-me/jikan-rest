@@ -20,6 +20,12 @@ class PersonController extends Controller
         tags: ['people'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -51,6 +57,12 @@ class PersonController extends Controller
         description: 'Returns the details of a person by **id**.',
         tags: ['people'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -84,6 +96,12 @@ class PersonController extends Controller
         tags: ['people'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -111,6 +129,12 @@ class PersonController extends Controller
         description: 'Returns the voice acting roles of a person by **id**.',
         tags: ['people'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -140,6 +164,12 @@ class PersonController extends Controller
         tags: ['people'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -167,6 +197,12 @@ class PersonController extends Controller
         description: 'Returns the pictures of a person by **id**.',
         tags: ['people'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',

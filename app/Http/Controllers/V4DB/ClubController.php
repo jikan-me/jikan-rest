@@ -18,6 +18,12 @@ class ClubController extends Controller
         tags: ['clubs'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -49,6 +55,12 @@ class ClubController extends Controller
         description: 'Returns the members of a club by **id**, paginated by **page**.',
         tags: ['clubs'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -98,6 +110,12 @@ class ClubController extends Controller
         tags: ['clubs'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -125,6 +143,12 @@ class ClubController extends Controller
         description: 'Returns the anime, manga, and characters related to a club by **id**.',
         tags: ['clubs'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',

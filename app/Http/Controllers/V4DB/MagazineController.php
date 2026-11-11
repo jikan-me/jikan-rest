@@ -15,6 +15,12 @@ class MagazineController extends Controller
         description: 'Searches the magazines catalog using the **q**, **order_by**, **sort**, and **letter** filters. Supports pagination via **page**.',
         tags: ['magazines'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(

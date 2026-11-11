@@ -145,9 +145,6 @@ abstract class SearchRequestHandler implements RequestHandler
         }
 
         $parts = array_values(array_filter(array_map('trim', explode(',', $raw)), fn ($value) => $value !== ''));
-        if (count($parts) > 50) {
-            throw ValidationException::withMessages(['ids' => 'The ids parameter may contain at most 50 ids.']);
-        }
 
         $ids = [];
         foreach ($parts as $part) {
@@ -157,7 +154,12 @@ abstract class SearchRequestHandler implements RequestHandler
             $ids[] = (int) $part;
         }
 
-        return array_values(array_unique($ids));
+        $ids = array_values(array_unique($ids));
+        if (count($ids) > 50) {
+            throw ValidationException::withMessages(['ids' => 'The ids parameter may contain at most 50 ids.']);
+        }
+
+        return $ids;
     }
 
     /**

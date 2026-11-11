@@ -237,6 +237,36 @@ class AnimeSearchEndpointTest extends TestCase
     }
 
     #[Test]
+    public function testBatchLookupSupportsFieldSelection()
+    {
+        Anime::factory()->createOne(['mal_id' => 91002, 'title' => 'Batch Fields']);
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '91002',
+            'fields' => 'mal_id,title',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $this->assertSame(
+            [['mal_id' => 91002, 'title' => 'Batch Fields']],
+            $jsonResponse->json('data')
+        );
+    }
+
+    #[Test]
+    public function testBatchLookupDeduplicatesBeforeTheFiftyIdLimit()
+    {
+        Anime::factory()->createOne(['mal_id' => 91003]);
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => implode(',', array_fill(0, 51, 91003)),
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $jsonResponse->assertJsonCount(1, 'data');
+    }
+
+    #[Test]
     public function testFieldsSelectionOnSearchCollection()
     {
         Anime::factory(2)->create();
@@ -657,5 +687,16 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount(25, $content['data']);
         // https://github.com/jikan-me/jikan-rest/issues/298 shows that the array indexes start at 25, not from 0
         $this->assertArrayHasKey(0, $content['data']);
+    }
+
+    public function testSearchResponseSupportsConditionalGet(): void
+    {
+        $first = $this->getJson('/v4/anime?limit=1')->assertStatus(200);
+        $etag = $first->headers->get('ETag');
+        $this->assertNotNull($etag);
+
+        $this->withHeaders(['If-None-Match' => $etag])
+            ->getJson('/v4/anime?limit=1')
+            ->assertStatus(304);
     }
 }

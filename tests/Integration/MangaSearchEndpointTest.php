@@ -191,6 +191,23 @@ class MangaSearchEndpointTest extends TestCase
     }
 
     #[Test]
+    public function testBatchLookupSupportsFieldSelection()
+    {
+        Manga::factory()->createOne(['mal_id' => 92004, 'title' => 'Manga Batch Fields']);
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '92004',
+            'fields' => 'mal_id,title',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $this->assertSame(
+            [['mal_id' => 92004, 'title' => 'Manga Batch Fields']],
+            $jsonResponse->json('data')
+        );
+    }
+
+    #[Test]
     public function testFieldsSelectionOnSearchCollection()
     {
         Manga::factory(2)->create();

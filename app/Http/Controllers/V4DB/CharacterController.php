@@ -20,6 +20,12 @@ class CharacterController extends Controller
         tags: ['characters'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -90,6 +96,12 @@ class CharacterController extends Controller
         tags: ['characters'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -117,6 +129,12 @@ class CharacterController extends Controller
         description: 'Returns the manga roles of a character by **id**.',
         tags: ['characters'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -146,6 +164,12 @@ class CharacterController extends Controller
         tags: ['characters'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -173,6 +197,12 @@ class CharacterController extends Controller
         description: 'Returns the pictures of a character by **id**.',
         tags: ['characters'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',

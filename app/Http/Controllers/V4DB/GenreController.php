@@ -17,6 +17,12 @@ class GenreController extends Controller
         tags: ['genres'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'filter',
                 in: 'query',
                 schema: new OA\Schema(ref: '#/components/schemas/genre_query_filter'),
@@ -43,6 +49,12 @@ class GenreController extends Controller
         description: 'Returns the list of manga genres, explicit genres, themes, and demographics. Use **filter** to select the list type.',
         tags: ['genres'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'filter',
                 in: 'query',

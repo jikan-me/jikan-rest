@@ -38,14 +38,14 @@ final class SelectFields
         $requested = array_values(array_unique(array_filter(array_map('trim', explode(',', $raw)))));
         $available = $this->availableKeys($payload['data']);
 
-        // An empty result has no shape to validate against; return it untouched.
-        if ($available !== []) {
-            $unknown = array_values(array_diff($requested, $available));
-            if ($unknown !== []) {
-                throw ValidationException::withMessages([
-                    'fields' => 'Unknown field(s): '.implode(', ', $unknown).'.',
-                ]);
-            }
+        // On an empty result the response has no shape to inspect; fall back to
+        // the known-field registry so typos still fail instead of silently passing.
+        $known = $available !== [] ? $available : (array) config('response_fields.known', []);
+        $unknown = array_values(array_diff($requested, $known));
+        if ($known !== [] && $unknown !== []) {
+            throw ValidationException::withMessages([
+                'fields' => 'Unknown field(s): '.implode(', ', $unknown).'.',
+            ]);
         }
 
         $payload['data'] = $this->project($payload['data'], array_flip($requested));

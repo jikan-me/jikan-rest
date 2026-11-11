@@ -10,7 +10,8 @@ scraped, cached and database-backed responses.
 - Applies to successful JSON responses whose body contains `data`.
 - Works for both a single `data` object and a list of `data` objects.
 - Unknown fields are a `400` when the response has a shape to validate against.
-- Empty result sets return unchanged (there is no shape to validate).
+- Empty result sets return unchanged; unknown fields still fail against the
+  known-field registry.
 - Nested selection is not supported; only top-level keys are selectable.
 - `?ids=` remains limited to anime/manga/character search.
 
