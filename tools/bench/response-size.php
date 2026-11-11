@@ -6,7 +6,6 @@
  *
  *   php tools/bench/response-size.php http://127.0.0.1:8000
  */
-
 $base = rtrim($argv[1] ?? 'http://127.0.0.1:8000', '/');
 
 $paths = [
@@ -25,6 +24,7 @@ foreach ($paths as $path) {
 
     if ($body === false) {
         printf("%-48s %10s %10s\n", $path, 'ERROR', '-');
+
         continue;
     }
 
