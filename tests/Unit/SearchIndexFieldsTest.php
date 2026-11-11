@@ -95,4 +95,32 @@ final class SearchIndexFieldsTest extends TestCase
             $this->assertSame(['Example  The Animation'], $searchable['title_synonyms_transformed']);
         }
     }
+
+    public function test_sort_fields_respect_the_typesense_three_field_limit(): void
+    {
+        foreach ([Anime::class, Manga::class, Character::class, Person::class, Producers::class, Club::class, Magazine::class, Profile::class] as $class) {
+            /** @var JikanApiSearchableModel $model */
+            $model = new $class;
+            $sort = $model->getSearchIndexSortBy();
+
+            $this->assertNotNull($sort);
+            $this->assertLessThanOrEqual(3, count($sort), $class.' has more than three sort fields');
+            $this->assertSame('mal_id', end($sort)['field']);
+        }
+
+        $animeSort = collect((new Anime)->getSearchIndexSortBy())->pluck('field');
+        $this->assertContains('popularity', $animeSort);
+        $this->assertNotContains('rank', $animeSort);
+    }
+
+    public function test_query_by_weights_match_the_query_field_count(): void
+    {
+        foreach ([Anime::class, Manga::class, Character::class, Person::class, Producers::class, Club::class, Magazine::class, Profile::class] as $class) {
+            /** @var JikanApiSearchableModel $model */
+            $model = new $class;
+            $weights = explode(',', (string) $model->getTypeSenseQueryByWeights());
+
+            $this->assertCount(count($model->typesenseQueryBy()), $weights, $class.' weight count mismatch');
+        }
+    }
 }
