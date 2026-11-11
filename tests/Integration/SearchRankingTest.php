@@ -3,6 +3,8 @@
 namespace Tests\Integration;
 
 use App\Anime;
+use App\Character;
+use App\Person;
 use App\Testing\SyntheticMongoDbTransaction;
 use Tests\TestCase;
 
@@ -136,5 +138,32 @@ final class SearchRankingTest extends TestCase
         $this->getJson('/v4/anime?q=86')
             ->assertStatus(200)
             ->assertJsonPath('data.0.mal_id', 88001);
+    }
+
+    public function test_non_anime_popularity_breaks_text_match_ties(): void
+    {
+        foreach ([[96001, 10], [96002, 1000]] as [$id, $favorites]) {
+            Character::factory()->createOne([
+                'mal_id' => $id,
+                'name' => 'Tie Character',
+                'member_favorites' => $favorites,
+            ]);
+            Person::factory()->createOne([
+                'mal_id' => $id,
+                'name' => 'Tie Person',
+                'member_favorites' => $favorites,
+            ]);
+        }
+
+        Character::whereIn('mal_id', [96001, 96002])->get()->searchable();
+        Person::whereIn('mal_id', [96001, 96002])->get()->searchable();
+
+        $this->getJson('/v4/characters?q=Tie%20Character')
+            ->assertStatus(200)
+            ->assertJsonPath('data.0.mal_id', 96002);
+
+        $this->getJson('/v4/people?q=Tie%20Person')
+            ->assertStatus(200)
+            ->assertJsonPath('data.0.mal_id', 96002);
     }
 }

@@ -145,6 +145,24 @@ class Producers extends JikanApiSearchableModel
         ];
     }
 
+    public function getSearchIndexSortBy(): ?array
+    {
+        return [
+            [
+                'field' => '_text_match(buckets:'.text_match_buckets().')',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'favorites',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'mal_id',
+                'direction' => 'asc',
+            ],
+        ];
+    }
+
     public function getTitleAttributeName(): string
     {
         return 'titles';
