@@ -255,6 +255,8 @@ class AnimeSearchEndpointTest extends TestCase
     #[Test]
     public function testFieldsSelectionRejectsUnknownFields()
     {
+        Anime::factory()->createOne();
+
         $jsonResponse = $this->getJsonWithParams([
             'fields' => 'mal_id,does_not_exist',
         ]);

@@ -1,39 +1,25 @@
-# `?fields=` support matrix
+# `?fields=` support
 
-`?fields=` is opt-in and intentionally limited to the highest-volume response
-shapes. When the parameter is absent, the v4 response is unchanged.
+`?fields=` is opt-in: when absent, the v4 response is byte-identical. When
+present, the middleware projects **top-level keys** from the response's `data`
+payload. This applies to every v4 JSON endpoint with a `data` payload, including
+scraped, cached and database-backed responses.
 
-## Supported
+## Behaviour
 
-| Route | Resource | Allowlist |
-|---|---|---|
-| `GET /v4/anime` | anime | `config/response_fields.php` |
-| `GET /v4/anime/{id}` | anime | `config/response_fields.php` |
-| `GET /v4/manga` | manga | `config/response_fields.php` |
-| `GET /v4/manga/{id}` | manga | `config/response_fields.php` |
-| `GET /v4/characters` | character | `config/response_fields.php` |
-| `GET /v4/characters/{id}` | character | `config/response_fields.php` |
-
-`?ids=` is supported on the three search routes above, bounded to 50 ids.
-
-## Not supported
-
-Every other v4 endpoint ignores `?fields=`; it does not error and does not
-project the response. Notable candidates for a later tier:
-
-- `GET /v4/anime/{id}/full`, `/manga/{id}/full`, `/characters/{id}/full`
-- `GET /v4/people`, `/people/{id}`, `/producers`, `/producers/{id}`,
-  `/clubs`, `/clubs/{id}`
-- top, seasons, schedules, recommendations, reviews, users, watch, random
-
-Adding a route requires a resource allowlist in `config/response_fields.php`
-and a route mapping; `ResponseFieldsConfigTest` guards the configured entries.
+- Applies to successful JSON responses whose body contains `data`.
+- Works for both a single `data` object and a list of `data` objects.
+- Unknown fields are a `400` when the response has a shape to validate against.
+- Empty result sets return unchanged (there is no shape to validate).
+- Nested selection is not supported; only top-level keys are selectable.
+- `?ids=` remains limited to anime/manga/character search.
 
 ## Tests
 
-- `SelectFieldsTest` — projection, collections, unknown fields
-- `AnimeControllerTest`, `MangaControllerTest`, `CharacterControllerTest` — detail
+- `SelectFieldsTest` — projection, collections, unknown fields, arbitrary shapes
+- `AnimeControllerTest` — anime detail and full detail
+- `MangaControllerTest`, `CharacterControllerTest` — detail
 - `AnimeSearchEndpointTest`, `MangaSearchEndpointTest`,
-  `SearchControllerTest` — search
+  `SearchControllerTest` — search, batch, and cross-family fields
 - `ConditionalCacheTest` — weak ETag and 304
-- `ResponseFieldsConfigTest` — configured routes/resources and explicit scope
+- `ResponseFieldsCoverageTest` — every named v4 route carries the middleware

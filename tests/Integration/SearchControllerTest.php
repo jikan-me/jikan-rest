@@ -336,4 +336,16 @@ class SearchControllerTest extends TestCase
             $this->assertSame(['mal_id', 'name'], array_keys($item));
         }
     }
+
+    public function testPeopleSearchFields(): void
+    {
+        Person::factory(2)->create();
+
+        $response = $this->get('/v4/people?fields=mal_id,name')
+            ->assertStatus(200);
+
+        foreach ($response->json('data') as $item) {
+            $this->assertSame(['mal_id', 'name'], array_keys($item));
+        }
+    }
 }

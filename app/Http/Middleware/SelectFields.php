@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Support\HttpHelper;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,7 +9,8 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Applies the opt-in `?fields=` projection to v4 detail and search responses.
+ * Applies the opt-in `?fields=` projection to every v4 JSON response with a
+ * top-level `data` payload.
  *
  * Only top-level keys are selectable; no parameter means no change at all.
  */
@@ -23,37 +23,58 @@ final class SelectFields
             return $next($request);
         }
 
-        $routes = (array) config('response_fields.routes', []);
-        $resource = $routes[HttpHelper::getRouteName($request)] ?? null;
-        if ($resource === null) {
-            return $next($request);
-        }
-
-        $allowed = (array) config('response_fields.resources.'.$resource, []);
-        $requested = array_values(array_unique(array_filter(array_map('trim', explode(',', $raw)))));
-        $unknown = array_values(array_diff($requested, $allowed));
-
-        if ($unknown !== []) {
-            throw ValidationException::withMessages([
-                'fields' => 'Unknown field(s): '.implode(', ', $unknown).'.',
-            ]);
-        }
-
         /** @var Response $response */
         $response = $next($request);
 
-        if (!$response instanceof JsonResponse) {
+        if (!$response instanceof JsonResponse || !$response->isSuccessful()) {
             return $response;
         }
 
         $payload = $response->getData(true);
-        if (is_array($payload) && array_key_exists('data', $payload)) {
-            $keys = array_flip($requested);
-            $payload['data'] = $this->project($payload['data'], $keys);
-            $response->setData($payload);
+        if (!is_array($payload) || !array_key_exists('data', $payload)) {
+            return $response;
         }
 
+        $requested = array_values(array_unique(array_filter(array_map('trim', explode(',', $raw)))));
+        $available = $this->availableKeys($payload['data']);
+
+        // An empty result has no shape to validate against; return it untouched.
+        if ($available !== []) {
+            $unknown = array_values(array_diff($requested, $available));
+            if ($unknown !== []) {
+                throw ValidationException::withMessages([
+                    'fields' => 'Unknown field(s): '.implode(', ', $unknown).'.',
+                ]);
+            }
+        }
+
+        $payload['data'] = $this->project($payload['data'], array_flip($requested));
+        $response->setData($payload);
+
         return $response;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function availableKeys(mixed $data): array
+    {
+        if (!is_array($data)) {
+            return [];
+        }
+
+        if (!array_is_list($data)) {
+            return array_keys($data);
+        }
+
+        $keys = [];
+        foreach ($data as $item) {
+            if (is_array($item)) {
+                $keys = array_merge($keys, array_keys($item));
+            }
+        }
+
+        return array_values(array_unique($keys));
     }
 
     /**

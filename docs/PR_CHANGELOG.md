@@ -1129,9 +1129,9 @@ param. `phpstan` full-project → OK.
 
 ## 22. Issue #615 phase 3 — response efficiency (2026-11-11)
 
-- `?fields=` on anime/manga/character detail and search responses. Top-level
-  allowlist in `config/response_fields.php`; unknown keys return `400`. Absent
-  parameter leaves the v4 response unchanged.
+- `?fields=` on every v4 JSON response with a `data` payload. Top-level keys
+  only; unknown keys return `400` when the response has a shape to validate
+  against. Absent parameter leaves the v4 response unchanged.
 - `?ids=` on anime/manga/character search endpoints: comma-separated, max 50,
   existing items only, request order preserved, response `{"data": [...]}` with
   no pagination. More than 50 ids is a `400`.

@@ -944,4 +944,13 @@ class AnimeControllerTest extends TestCase
             ->getJson('/v4/anime/3')
             ->assertStatus(304);
     }
+
+    public function testFieldsSelectionWorksOnFullResource(): void
+    {
+        Anime::factory(1)->createOne(['mal_id' => 6, 'title' => 'Full Field Test']);
+
+        $this->getJson('/v4/anime/6/full?fields=mal_id,title')
+            ->assertStatus(200)
+            ->assertExactJson(['data' => ['mal_id' => 6, 'title' => 'Full Field Test']]);
+    }
 }
