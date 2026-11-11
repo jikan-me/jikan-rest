@@ -5,8 +5,10 @@
 namespace Tests\Unit;
 
 use App\Events\SourceHeartbeatEvent;
+use App\Listeners\SourceHeartbeatListener;
 use App\Providers\SourceHeartbeatProvider;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 final class SourceHeartbeatProviderTest extends TestCase
@@ -145,5 +147,13 @@ final class SourceHeartbeatProviderTest extends TestCase
 
         $this->assertFalse(SourceHeartbeatProvider::isFailoverEnabled());
         $this->assertSame(0, SourceHeartbeatProvider::getFailoverLockTimestamp());
+    }
+
+    public function test_source_heartbeat_listener_is_registered_exactly_once(): void
+    {
+        $listeners = Event::getRawListeners()[SourceHeartbeatEvent::class] ?? [];
+
+        $this->assertCount(1, $listeners, 'SourceHeartbeatListener must be registered exactly once');
+        $this->assertStringContainsString(SourceHeartbeatListener::class, $listeners[0]);
     }
 }

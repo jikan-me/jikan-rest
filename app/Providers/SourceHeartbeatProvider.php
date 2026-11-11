@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Events\SourceHeartbeatEvent;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\ServiceProvider;
 use MongoDB\Collection;
 use MongoDB\Database;
 
@@ -22,17 +22,6 @@ use MongoDB\Database;
 class SourceHeartbeatProvider extends ServiceProvider
 {
     const BAD_HEALTH_STATUSES = [403, 500, 501, 502, 503, 504, 505];
-
-    /**
-     * The event listener mappings for the application.
-     *
-     * @var array<string, array<int, string>>
-     */
-    protected $listen = [
-        'App\Events\SourceHeartbeatEvent' => [
-            'App\Listeners\SourceHeartbeatListener',
-        ],
-    ];
 
     public static function isFailoverEnabled(): bool
     {
