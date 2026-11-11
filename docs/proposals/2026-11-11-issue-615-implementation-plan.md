@@ -16,8 +16,8 @@ grilling session and the delivery stack.
   preserved, response is `{"data": [...]}` with no pagination.
 - **ETag:** weak ETag derived from the semantic response body; matching
   `If-None-Match` returns `304`.
-- **Coverage:** `fields` on anime/manga/character detail and search; `ids` on the
-  anime/manga/character search endpoints.
+- **Coverage:** `fields` on every v4 JSON response with a `data` payload;
+  `ids` on the anime/manga/character search endpoints.
 - **PHPStan:** level 7 with a committed baseline; no new findings.
 - **Identity/DQ:** alias normalization + DQ command/CI + source-vs-derived docs.
 - **Scraper resilience:** circuit breaker via the Laravel cache abstraction;
