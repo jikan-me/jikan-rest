@@ -146,7 +146,13 @@ jobs:
         run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
       - name: Start Typesense 27.0
         run: |
-          docker run -d --name jikan-typesense             -p 8108:8108             -e TYPESENSE_API_KEY=abcd             typesense/typesense:27.0             --data-dir=/tmp/typesense-data             --api-key=abcd             --port=8108
+          docker run -d --name jikan-typesense \
+            -p 8108:8108 \
+            -e TYPESENSE_API_KEY=abcd \
+            typesense/typesense:27.0 \
+            --data-dir=/tmp/typesense-data \
+            --api-key=abcd \
+            --api-port=8108
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:8108/health >/dev/null 2>&1; then exit 0; fi
             sleep 1
