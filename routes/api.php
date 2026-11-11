@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 
 $commonMiddleware = [
     'compress',
+    'conditional-cache',
+    'select-fields',
     'source-health-monitor',
     'microcaching',
     'cache-ttl',

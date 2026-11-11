@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Middleware\CompressResponse;
+use App\Http\Middleware\ConditionalCache;
 use App\Http\Middleware\DisableSwaggerUi;
 use App\Http\Middleware\EndpointCacheTtlMiddleware;
 use App\Http\Middleware\MicroCaching;
+use App\Http\Middleware\SelectFields;
 use App\Http\Middleware\SourceHeartbeatMonitor;
 use Composer\InstalledVersions;
 use Illuminate\Foundation\Application;
@@ -56,6 +58,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'microcaching' => MicroCaching::class,
             'compress' => CompressResponse::class,
+            'conditional-cache' => ConditionalCache::class,
+            'select-fields' => SelectFields::class,
             // Legacy alias (pre-4.3 name) so custom route files keep working.
             'gzip' => CompressResponse::class,
             'source-health-monitor' => SourceHeartbeatMonitor::class,
