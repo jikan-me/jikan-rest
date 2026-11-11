@@ -33,9 +33,10 @@ Other user-searchable models use:
 match, so it has no effect on normal title relevance. For numeric queries it
 lets an exact MAL ID outrank title-only matches.
 
-Risk: a numeric title such as `86` can compete with the numeric ID `86`. The
-benchmark corpus includes numeric lookups; the full-data run must confirm the
-trade-off.
+Numeric collision policy: when the query is numeric and an exact title exists,
+the ID field is removed for that request so the exact title wins. Without an
+exact title, the exact ID is boosted. This keeps human title searches and
+agent ID lookups useful without one silently overriding the other.
 
 ## Exact-title behavior
 
@@ -44,9 +45,9 @@ receive the boost before popularity is used as a tie-breaker.
 
 ## Short queries
 
-Queries of three characters or fewer still use the existing short-query
-override (`_text_match`, title). Numeric IDs are still boosted by
-`mal_id_text`, but the `mal_id` deterministic tie-break is not applied there.
+Queries of three characters or fewer use the existing short-query override
+(`_text_match`, `mal_id`) so tiny queries remain deterministic. Numeric IDs are
+still boosted by `mal_id_text` unless an exact title takes precedence.
 
 ## What is not proven yet
 
