@@ -191,6 +191,38 @@ class AnimeSearchEndpointTest extends TestCase
     }
 
     #[Test]
+    public function testBatchLookupByIdsReturnsOnlyRequestedItemsInOrder()
+    {
+        $ids = [90001, 90002, 90003];
+        foreach ($ids as $index => $id) {
+            Anime::factory()->create([
+                'mal_id' => $id,
+                'title' => 'Batch '.$index,
+            ]);
+        }
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '90003,90001',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $jsonResponse->assertJsonCount(2, 'data');
+        $jsonResponse->assertJsonMissingPath('pagination');
+        $this->assertSame([90003, 90001], array_column($jsonResponse->json('data'), 'mal_id'));
+    }
+
+    #[Test]
+    public function testBatchLookupRejectsMoreThanFiftyIds()
+    {
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => implode(',', range(1, 51)),
+        ]);
+
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($jsonResponse->json(), 'type'));
+    }
+
+    #[Test]
     public function shouldReturnMethodNotAllowedResponseIfMethodNotAllowed()
     {
         $this->json('POST', '/v4/anime', ['title' => 'Dum'])

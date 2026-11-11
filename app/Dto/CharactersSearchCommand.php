@@ -9,6 +9,7 @@ use App\Http\Resources\V4\CharacterCollection;
 use App\Rules\Attributes\EnumValidation;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
+use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Optional;
 
@@ -20,4 +21,7 @@ final class CharactersSearchCommand extends SearchCommand implements DataRequest
     #[MapInputName('order_by'), MapOutputName('order_by'),
         WithCast(EnumCast::class, CharacterOrderByEnum::class), EnumValidation(CharacterOrderByEnum::class)]
     public CharacterOrderByEnum|Optional $orderBy;
+
+    #[StringType]
+    public string|Optional $ids;
 }

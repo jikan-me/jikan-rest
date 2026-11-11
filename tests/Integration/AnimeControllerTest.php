@@ -922,4 +922,26 @@ class AnimeControllerTest extends TestCase
         $this->get('/v4/anime/2')
             ->assertStatus(404);
     }
+
+    public function testFieldsSelectionProjectsTopLevelKeys(): void
+    {
+        Anime::factory(1)->createOne(['mal_id' => 2, 'title' => 'Field Test']);
+
+        $this->getJson('/v4/anime/2?fields=mal_id,title')
+            ->assertStatus(200)
+            ->assertExactJson(['data' => ['mal_id' => 2, 'title' => 'Field Test']]);
+    }
+
+    public function testConditionalRequestReturns304ForMatchingEtag(): void
+    {
+        Anime::factory(1)->createOne(['mal_id' => 3, 'title' => 'Etag Test']);
+
+        $first = $this->getJson('/v4/anime/3')->assertStatus(200);
+        $etag = $first->headers->get('ETag');
+        $this->assertNotNull($etag);
+
+        $this->withHeaders(['If-None-Match' => $etag])
+            ->getJson('/v4/anime/3')
+            ->assertStatus(304);
+    }
 }

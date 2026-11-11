@@ -10,6 +10,14 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
+                        "ids": {
+                            "type": "string",
+                            "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -90,6 +98,10 @@
                         "id": {
                             "type": "integer",
                             "description": ""
+                        },
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
                         }
                     },
                     "required": [
@@ -481,6 +493,14 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
+                        "ids": {
+                            "type": "string",
+                            "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -513,6 +533,10 @@
                         "id": {
                             "type": "integer",
                             "description": ""
+                        },
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
                         }
                     },
                     "required": [
@@ -800,6 +824,14 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
+                        "ids": {
+                            "type": "string",
+                            "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -876,6 +908,10 @@
                         "id": {
                             "type": "integer",
                             "description": ""
+                        },
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
                         }
                     },
                     "required": [
@@ -2101,6 +2137,14 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
+                    "ids": {
+                        "type": "string",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -2178,6 +2222,10 @@
                     "id": {
                         "type": "integer",
                         "description": ""
+                    },
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
                     }
                 },
                 "required": [
@@ -2509,6 +2557,14 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
+                    "ids": {
+                        "type": "string",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -2538,6 +2594,10 @@
                     "id": {
                         "type": "integer",
                         "description": ""
+                    },
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
                     }
                 },
                 "required": [
@@ -2783,6 +2843,14 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
+                    "ids": {
+                        "type": "string",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -2856,6 +2924,10 @@
                     "id": {
                         "type": "integer",
                         "description": ""
+                    },
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
                     }
                 },
                 "required": [

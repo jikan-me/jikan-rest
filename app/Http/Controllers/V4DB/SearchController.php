@@ -27,6 +27,18 @@ class SearchController extends Controller
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
+                name: 'ids',
+                in: 'query',
+                description: 'Fetch a bounded set of MAL ids (max 50, comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'q',
                 in: 'query',
                 schema: new OA\Schema(type: 'string'),
@@ -140,6 +152,18 @@ class SearchController extends Controller
             new OA\Parameter(ref: '#/components/parameters/unapproved'),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
+                name: 'ids',
+                in: 'query',
+                description: 'Fetch a bounded set of MAL ids (max 50, comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'q',
                 in: 'query',
@@ -293,6 +317,18 @@ class SearchController extends Controller
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
+                name: 'ids',
+                in: 'query',
+                description: 'Fetch a bounded set of MAL ids (max 50, comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'q',
                 in: 'query',

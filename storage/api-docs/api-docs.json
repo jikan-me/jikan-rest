@@ -76,6 +76,14 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -839,6 +847,14 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -1343,6 +1359,14 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -2562,6 +2586,22 @@
                         "$ref": "#/components/parameters/limit"
                     },
                     {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ids",
+                        "in": "query",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "q",
                         "in": "query",
                         "schema": {
@@ -2717,6 +2757,22 @@
                     },
                     {
                         "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ids",
+                        "in": "query",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "q",
@@ -2926,6 +2982,22 @@
                     },
                     {
                         "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "name": "fields",
+                        "in": "query",
+                        "description": "Return only the listed top-level fields (comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ids",
+                        "in": "query",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated).",
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
                         "name": "q",

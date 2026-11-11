@@ -64,6 +64,12 @@ class MangaController extends Controller
                 required: true,
                 schema: new OA\Schema(type: 'integer'),
             ),
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
         ],
         responses: [
             new OA\Response(
