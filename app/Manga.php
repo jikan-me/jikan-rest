@@ -495,10 +495,6 @@ class Manga extends JikanApiSearchableModel
                 'direction' => 'asc',
             ],
             [
-                'field' => 'rank',
-                'direction' => 'asc',
-            ],
-            [
                 'field' => 'mal_id',
                 'direction' => 'asc',
             ],

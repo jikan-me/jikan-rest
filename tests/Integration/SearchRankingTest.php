@@ -90,4 +90,25 @@ final class SearchRankingTest extends TestCase
 
         Anime::whereIn('mal_id', [1, 21, 5114, 16498])->get()->searchable();
     }
+
+    public function test_popularity_breaks_text_match_ties(): void
+    {
+        foreach ([[97001, 50], [97002, 5000]] as [$id, $popularity]) {
+            Anime::factory()->createOne([
+                'mal_id' => $id,
+                'title' => 'Tie Break Show',
+                'title_english' => 'Tie Break Show',
+                'titles' => [['type' => 'Default', 'title' => 'Tie Break Show']],
+                'popularity' => $popularity,
+                'type' => 'TV',
+                'status' => 'Finished Airing',
+            ]);
+        }
+
+        Anime::whereIn('mal_id', [97001, 97002])->get()->searchable();
+
+        $this->getJson('/v4/anime?q=Tie%20Break%20Show')
+            ->assertStatus(200)
+            ->assertJsonPath('data.0.mal_id', 97001);
+    }
 }
