@@ -146,11 +146,13 @@ jobs:
         run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
       - name: Start Typesense 27.0
         run: |
+          mkdir -p /tmp/typesense-data
           docker run -d --name jikan-typesense \
             -p 8108:8108 \
+            -v /tmp/typesense-data:/data \
             -e TYPESENSE_API_KEY=abcd \
             typesense/typesense:27.0 \
-            --data-dir=/tmp/typesense-data \
+            --data-dir=/data \
             --api-key=abcd \
             --api-port=8108
           for i in $(seq 1 30); do
