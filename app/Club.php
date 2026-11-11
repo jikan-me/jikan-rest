@@ -124,6 +124,7 @@ class Club extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
+            'mal_id_text' => (string) $this->mal_id,
             'name' => $this->name,
             'category' => $this->category,
             'created' => $this->convertToTimestamp($this->created),
@@ -134,7 +135,7 @@ class Club extends JikanApiSearchableModel
 
     public function typesenseQueryBy(): array
     {
-        return ['name'];
+        return ['name', 'mal_id_text'];
     }
 
     public function getTitleAttributeName(): string
