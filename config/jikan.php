@@ -29,6 +29,12 @@ return [
     'scrape_miss_ttl' => (int) env('SCRAPE_MISS_TTL', 60),
     'source_bad_health_range' => (int) env('SOURCE_BAD_HEALTH_RANGE', 30),
     'source_bad_health_max_store' => (int) env('SOURCE_BAD_HEALTH_MAX_STORE', 50),
+    // Cache-backed MAL circuit breaker (phase 5). Works with file or Redis.
+    'source_circuit_breaker' => [
+        'failure_threshold' => (int) env('SOURCE_CIRCUIT_FAILURE_THRESHOLD', 3),
+        'cooldown_seconds' => (int) env('SOURCE_CIRCUIT_COOLDOWN_SECONDS', 60),
+        'failure_window_seconds' => (int) env('SOURCE_CIRCUIT_FAILURE_WINDOW_SECONDS', 300),
+    ],
     'typesense_options' => [
         'text_match_buckets' => env('TYPESENSE_TEXT_MATCH_BUCKETS', 1),
         'typo_tokens_threshold' => env('TYPESENSE_TYPO_TOKENS_THRESHOLD'),

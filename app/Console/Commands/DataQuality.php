@@ -11,7 +11,9 @@ class DataQuality extends Command
 {
     protected $signature = 'jikan:data-quality
                             {--json : Emit machine-readable output}
-                            {--limit=5 : Sample issue ids per check}';
+                            {--limit=5 : Sample issue ids per check}
+                            {--baseline= : JSON baseline; only counts above it fail}
+                            {--write-baseline= : Write the current counts to this path}';
 
     protected $description = 'Report duplicate ids and broken cross-collection references';
 
@@ -39,6 +41,29 @@ class DataQuality extends Command
         $this->references('manga', 'themes', 'themes_manga', $limit);
         $this->references('manga', 'demographics', 'demographics_manga', $limit);
         $this->references('manga', 'serializations', 'magazines', $limit);
+
+        if ($writeBaseline = $this->option('write-baseline')) {
+            $checks = collect($this->issues)->mapWithKeys(fn (array $issue): array => [$issue['check'] => $issue['count']])->all();
+            file_put_contents($writeBaseline, json_encode(['checks' => $checks], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n");
+            $this->info("Baseline written to {$writeBaseline}.");
+
+            return 0;
+        }
+
+        if ($baselinePath = $this->option('baseline')) {
+            if (!is_file($baselinePath)) {
+                $this->error("Baseline not found: {$baselinePath}");
+
+                return 2;
+            }
+
+            $baseline = json_decode((string) file_get_contents($baselinePath), true);
+            $known = (array) ($baseline['checks'] ?? []);
+            $this->issues = array_values(array_filter(
+                $this->issues,
+                fn (array $issue): bool => $issue['count'] > (int) ($known[$issue['check']] ?? 0)
+            ));
+        }
 
         if ($this->option('json')) {
             $this->line(json_encode($this->issues, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

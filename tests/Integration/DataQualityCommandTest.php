@@ -42,4 +42,39 @@ final class DataQualityCommandTest extends TestCase
         $this->assertContains('broken_ref:anime.genres->genres_anime', $checks);
         $this->assertContains('broken_ref:anime.producers->producers', $checks);
     }
+
+    public function test_baseline_suppresses_known_counts(): void
+    {
+        Anime::factory()->createOne(['mal_id' => 70003]);
+        Anime::factory()->createOne(['mal_id' => 70003]);
+
+        $path = tempnam(sys_get_temp_dir(), 'dq-baseline-');
+        $this->assertSame(0, Artisan::call('jikan:data-quality', ['--write-baseline' => $path]));
+
+        $this->assertSame(0, Artisan::call('jikan:data-quality', [
+            '--baseline' => $path,
+            '--json' => true,
+        ]));
+        $this->assertSame([], json_decode(Artisan::output(), true));
+
+        @unlink($path);
+    }
+
+    public function test_baseline_still_fails_when_counts_grow(): void
+    {
+        Anime::factory()->createOne(['mal_id' => 70004]);
+
+        $path = tempnam(sys_get_temp_dir(), 'dq-baseline-');
+        $this->assertSame(0, Artisan::call('jikan:data-quality', ['--write-baseline' => $path]));
+
+        Anime::factory()->createOne(['mal_id' => 70005]);
+        Anime::factory()->createOne(['mal_id' => 70005]);
+
+        $this->assertSame(1, Artisan::call('jikan:data-quality', [
+            '--baseline' => $path,
+            '--json' => true,
+        ]));
+
+        @unlink($path);
+    }
 }

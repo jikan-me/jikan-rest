@@ -8,6 +8,7 @@ use App\Anime;
 use App\Contracts\Repository;
 use App\Profile;
 use App\Services\DefaultCachedScraperService;
+use App\Support\SourceCircuitBreaker;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Jikan\Exception\BadResponseException;
@@ -436,5 +437,53 @@ final class DefaultCachedScraperServiceTest extends TestCase
         $result = $sut->findByKey('username', $username, $testRequestHash);
 
         $this->assertEquals($updatedMockModel->toArray(), $result->toArray());
+    }
+
+    public function testIfFindServesExpiredDbItemOnUpstream429()
+    {
+        config()->set('jikan.source_circuit_breaker.failure_threshold', 1);
+        Cache::flush();
+        $malId = 2;
+        $staleAt = Carbon::now()->sub('3 days');
+        $mockModel = Anime::factory()->makeOne([
+            'mal_id' => $malId,
+            'modifiedAt' => new UTCDateTime($staleAt->getTimestampMs()),
+            'createdAt' => new UTCDateTime($staleAt->getTimestampMs()),
+        ]);
+
+        [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect([$mockModel]));
+        $repositoryMock->expects()->scrape($malId)->andThrow(new BadResponseException('429 on MAL', 429));
+
+        $result = (new DefaultCachedScraperService($repositoryMock, new MalClient, $serializerMock))
+            ->find($malId, $this->requestHash());
+
+        $this->assertTrue($result->isFallback());
+        $this->assertGreaterThan(0, $result->fallbackRetryAfter());
+    }
+
+    public function testIfBreakerOpenServesStaleWithoutScraping()
+    {
+        config()->set('jikan.source_circuit_breaker.failure_threshold', 1);
+        Cache::flush();
+        app(SourceCircuitBreaker::class)->recordFailure();
+
+        $malId = 3;
+        $staleAt = Carbon::now()->sub('3 days');
+        $mockModel = Anime::factory()->makeOne([
+            'mal_id' => $malId,
+            'modifiedAt' => new UTCDateTime($staleAt->getTimestampMs()),
+            'createdAt' => new UTCDateTime($staleAt->getTimestampMs()),
+        ]);
+
+        [, $repositoryMock, $serializerMock] = $this->makeCtorArgMocks();
+        $repositoryMock->expects()->getAllByMalId($malId)->andReturns(collect([$mockModel]));
+        $repositoryMock->expects()->scrape($malId)->never();
+
+        $result = (new DefaultCachedScraperService($repositoryMock, new MalClient, $serializerMock))
+            ->find($malId, $this->requestHash());
+
+        $this->assertTrue($result->isFallback());
+        $this->assertGreaterThan(0, $result->fallbackRetryAfter());
     }
 }
