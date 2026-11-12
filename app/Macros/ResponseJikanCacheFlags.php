@@ -18,11 +18,20 @@ final class ResponseJikanCacheFlags
             /**
              * @var Response $this
              */
-            return $this
+            $this
                 ->header('X-Request-Fingerprint', $cacheKey)
                 ->setTtl(app(CacheOptions::class)->ttl())
                 ->setExpires(Carbon::createFromTimestamp($scraperResults->expiry()))
                 ->setLastModified(Carbon::createFromTimestamp($scraperResults->lastModified() ?? 0));
+
+            if ($scraperResults->isFallback()) {
+                $this->header('X-Jikan-Cached', '1');
+                if ($scraperResults->fallbackRetryAfter() > 0) {
+                    $this->header('Retry-After', (string) $scraperResults->fallbackRetryAfter());
+                }
+            }
+
+            return $this;
         };
     }
 }

@@ -7,6 +7,7 @@ use App\Contracts\Repository;
 use App\JikanApiModel;
 use App\Support\CachedData;
 use App\Support\HttpHelper;
+use App\Support\SourceCircuitBreaker;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -36,12 +37,31 @@ final class DefaultCachedScraperService implements CachedScraperService
     {
         $results = $this->get($cacheKey);
 
+        if ($this->breaker()->isOpen()) {
+            if ($results->isEmpty()) {
+                abort(503, 'MyAnimeList is temporarily unavailable.');
+            }
+
+            return $results->asFallback($this->breaker()->retryAfter());
+        }
+
         if ($results->isEmpty() || $results->isExpired()) {
             $page = $page ?? 1;
 
-            // most of the time callback uses a call to the jikan lib, which scrapes some info from MAL
-            $data = $getMalDataCallback($this->jikan, $page);
+            try {
+                // most of the time callback uses a call to the jikan lib, which scrapes some info from MAL
+                $data = $getMalDataCallback($this->jikan, $page);
+            } catch (JikanBadResponseException $e) {
+                if (in_array($e->getCode(), [429, 500, 502, 503, 504], true)) {
+                    $this->breaker()->recordFailure();
+                }
+                if ($this->canServeStale($e, $results, $cacheKey)) {
+                    return $results->asFallback($this->breaker()->retryAfter());
+                }
+                throw $e;
+            }
 
+            $this->breaker()->recordSuccess();
             $scraperResponse = $this->serializeScraperResult(Collection::unwrap($data));
             $results = $this->updateCacheByKey($cacheKey, $results, $scraperResponse);
         }
@@ -74,9 +94,18 @@ final class DefaultCachedScraperService implements CachedScraperService
             $dbResults = $this->repository->getAllByMalId($id);
             $results = $this->dbResultSetToCachedData($dbResults);
 
+            if ($this->breaker()->isOpen()) {
+                if ($results->isEmpty()) {
+                    abort(503, 'MyAnimeList is temporarily unavailable.');
+                }
+
+                return $results->asFallback($this->breaker()->retryAfter());
+            }
+
             if ($results->isEmpty() || $results->isExpired()) {
                 $response = $this->repository->scrape($id);
 
+                $this->breaker()->recordSuccess();
                 $this->raiseNotFoundIfErrors($response);
 
                 $results = $this->updateCacheById($id, $cacheKey, $results, $response);
@@ -95,8 +124,11 @@ final class DefaultCachedScraperService implements CachedScraperService
             if ($e->getCode() === 404) {
                 $this->rememberMiss($id, self::MISS_UPSTREAM_404);
             }
+            if (in_array($e->getCode(), [429, 500, 502, 503, 504], true)) {
+                $this->breaker()->recordFailure();
+            }
             if ($this->canServeStale($e, $results, $cacheKey)) {
-                return $results;
+                return $results->asFallback($this->breaker()->retryAfter());
             }
             throw $e;
         }
@@ -111,13 +143,18 @@ final class DefaultCachedScraperService implements CachedScraperService
      */
     private function canServeStale(JikanBadResponseException $e, ?CachedData $results, string $cacheKey): bool
     {
-        if ($e->getCode() !== 405 || $results === null || $results->isEmpty() || !$results->isExpired()) {
+        if (!in_array($e->getCode(), [405, 429, 500, 502, 503, 504], true) || $results === null || $results->isEmpty() || !$results->isExpired()) {
             return false;
         }
 
         Log::warning('Upstream returned 405, serving stale data', ['cache_key' => $cacheKey]);
 
         return true;
+    }
+
+    private function breaker(): SourceCircuitBreaker
+    {
+        return app(SourceCircuitBreaker::class);
     }
 
     private function missKey(int $id): string
@@ -135,16 +172,28 @@ final class DefaultCachedScraperService implements CachedScraperService
         $dbResults = $this->repository->where($key, $val)->get();
         $results = $this->dbResultSetToCachedData($dbResults);
 
+        if ($this->breaker()->isOpen()) {
+            if ($results->isEmpty()) {
+                abort(503, 'MyAnimeList is temporarily unavailable.');
+            }
+
+            return $results->asFallback($this->breaker()->retryAfter());
+        }
+
         if ($results->isEmpty() || $results->isExpired()) {
             try {
                 $scraperResponse = $this->repository->scrape($val);
             } catch (JikanBadResponseException $e) {
+                if (in_array($e->getCode(), [429, 500, 502, 503, 504], true)) {
+                    $this->breaker()->recordFailure();
+                }
                 if ($this->canServeStale($e, $results, $cacheKey)) {
-                    return $results;
+                    return $results->asFallback($this->breaker()->retryAfter());
                 }
                 throw $e;
             }
 
+            $this->breaker()->recordSuccess();
             $this->raiseNotFoundIfErrors($scraperResponse);
 
             $response = $this->prepareScraperResponse($cacheKey, $results->isEmpty(), $scraperResponse);

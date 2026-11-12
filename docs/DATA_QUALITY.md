@@ -18,6 +18,16 @@ php artisan jikan:data-quality --limit=10
 Exit code is `0` when clean and `1` when issues are found. The command is
 read-only and samples issue IDs for the report.
 
+### Baseline mode
+
+```bash
+php artisan jikan:data-quality --write-baseline=storage/quality-baseline.json
+php artisan jikan:data-quality --baseline=storage/quality-baseline.json
+```
+
+With a baseline, known counts are accepted and only **new** findings fail CI.
+Regenerate the baseline after intentionally changing the catalogue.
+
 ## Expected baseline
 
 On a partially indexed catalogue, reference collections may not be populated
