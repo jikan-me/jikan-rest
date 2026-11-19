@@ -1,0 +1,547 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Cannot access offset ''mal_id'' on array\|object\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/DataQuality.php
+
+		-
+			message: '#^Cannot access offset string on array\|object\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/DataQuality.php
+
+		-
+			message: '#^Parameter \#1 \$string of method Illuminate\\Console\\Command\:\:line\(\) expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/DataQuality.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/AnimeIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 3
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/AnimeIndexer.php
+
+		-
+			message: '#^Cannot access offset ''_id'' on stdClass\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/AnimeSweepIndexer.php
+
+		-
+			message: '#^Cannot access offset ''mal_id'' on stdClass\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/AnimeSweepIndexer.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/AnimeSweepIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/AnimeSweepIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/HarvestIndexer.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/IncrementalIndexer.php
+
+		-
+			message: '#^Parameter \#1 \$string of function sha1 expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/IncrementalIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 3
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/IncrementalIndexer.php
+
+		-
+			message: '#^Parameter \#1 \$string of method Illuminate\\Console\\Command\:\:line\(\) expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/IndexerStatus.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 3
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/ItemsIndexer.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 2
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/MangaIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 3
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/MangaIndexer.php
+
+		-
+			message: '#^Cannot access offset ''_id'' on stdClass\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/MangaSweepIndexer.php
+
+		-
+			message: '#^Cannot access offset ''mal_id'' on stdClass\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/MangaSweepIndexer.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/MangaSweepIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/MangaSweepIndexer.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/ProducersIndexer.php
+
+		-
+			message: '#^Parameter \#2 \$contents of static method Illuminate\\Contracts\\Filesystem\\Filesystem\:\:put\(\) expects Illuminate\\Http\\File\|Illuminate\\Http\\UploadedFile\|Psr\\Http\\Message\\StreamInterface\|resource\|string, string\|false given\.$#'
+			identifier: argument.type
+			count: 3
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/Indexer/ProducersIndexer.php
+
+		-
+			message: '#^Parameter \#1 \$string of method Illuminate\\Console\\Command\:\:line\(\) expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Console/Commands/SearchDoctor.php
+
+		-
+			message: '#^Method App\\Dto\\QueryAnimeListOfUserCommand\:\:toJikanParserRequest\(\) should return Jikan\\Request\\User\\UserAnimeListRequest but returns Jikan\\Request\\User\\UserAnimeListRequest\|Jikan\\Request\\User\\UserMangaListRequest\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Dto/QueryAnimeListOfUserCommand.php
+
+		-
+			message: '#^Method App\\Dto\\QueryMangaListOfUserCommand\:\:toJikanParserRequest\(\) should return Jikan\\Request\\User\\UserMangaListRequest but returns Jikan\\Request\\User\\UserAnimeListRequest\|Jikan\\Request\\User\\UserMangaListRequest\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Dto/QueryMangaListOfUserCommand.php
+
+		-
+			message: '#^Parameter \#1 \$string of function ucfirst expects string, \(Closure\)\|int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Enums/AnimeScheduleFilterEnum.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<string, int\|string\>\|iterable\<string, int\|string\>\|null, array\<string, int\|string\>\|\(Closure\(string\)\: \(int\|string\)\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Enums/AnimeScheduleFilterEnum.php
+
+		-
+			message: '#^Argument of an invalid type array\<string, int\|string\>\|\(Closure\) supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Enums/AnimeSeasonEnum.php
+
+		-
+			message: '#^Method App\\Enums\\AnimeSeasonEnum\:\:labels\(\) should return array\<string, string\> but returns array\<int\|string, string\>\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Enums/AnimeSeasonEnum.php
+
+		-
+			message: '#^Parameter \#1 \$string of function ucfirst expects string, int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Enums/AnimeSeasonEnum.php
+
+		-
+			message: '#^Parameter \#1 \$request of method App\\Features\\QueryAnimeSeasonHandlerBase\<TRequest of App\\Dto\\QueryAnimeSeasonCommand\>\:\:getSeasonItems\(\) expects TRequest of App\\Dto\\QueryAnimeSeasonCommand, App\\Dto\\QueryAnimeSeasonCommand given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryAnimeSeasonHandlerBase.php
+
+		-
+			message: '#^Parameter \#2 \$type of method App\\Features\\QueryAnimeSeasonHandlerBase\<TRequest of App\\Dto\\QueryAnimeSeasonCommand\>\:\:getSeasonItems\(\) expects App\\Enums\\AnimeTypeEnum\|null, App\\Enums\\AnimeTypeEnum\|Spatie\\LaravelData\\Optional\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryAnimeSeasonHandlerBase.php
+
+		-
+			message: '#^Parameter \#5 \$includeContinuingItems of method App\\Contracts\\AnimeRepository\:\:getItemsBySeason\(\) expects bool, bool\|Spatie\\LaravelData\\Optional given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryCurrentAnimeSeasonHandler.php
+
+		-
+			message: '#^Parameter \#2 \$sfw of method Illuminate\\Database\\Eloquent\\Builder\<App\\Anime\>\:\:random\(\) expects bool, bool\|Spatie\\LaravelData\\Optional given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryRandomAnimeHandler.php
+
+		-
+			message: '#^Parameter \#3 \$unapproved of method Illuminate\\Database\\Eloquent\\Builder\<App\\Anime\>\:\:random\(\) expects bool, bool\|Spatie\\LaravelData\\Optional given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryRandomAnimeHandler.php
+
+		-
+			message: '#^Method App\\Features\\QueryRandomItemHandler\:\:handle\(\) should return TResponse of Illuminate\\Http\\JsonResponse\|Illuminate\\Http\\Resources\\Json\\JsonResource\|Illuminate\\Http\\Response but returns Illuminate\\Http\\Resources\\Json\\JsonResource\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryRandomItemHandler.php
+
+		-
+			message: '#^Parameter \#2 \$sfw of method Illuminate\\Database\\Eloquent\\Builder\<App\\Manga\>\:\:random\(\) expects bool, bool\|Spatie\\LaravelData\\Optional given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryRandomMangaHandler.php
+
+		-
+			message: '#^Parameter \#3 \$unapproved of method Illuminate\\Database\\Eloquent\\Builder\<App\\Manga\>\:\:random\(\) expects bool, bool\|Spatie\\LaravelData\\Optional given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryRandomMangaHandler.php
+
+		-
+			message: '#^Parameter \#5 \$includeContinuingItems of method App\\Contracts\\AnimeRepository\:\:getItemsBySeason\(\) expects bool, bool\|Spatie\\LaravelData\\Optional given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QuerySpecificAnimeSeasonHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Anime\>\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryTopAnimeItemsHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Character\>\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryTopCharactersHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Manga\>\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryTopMangaItemsHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Database\\Query\\Builder\|Laravel\\Scout\\Builder\<App\\Person\>\:\:filter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/QueryTopPeopleHandler.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\<int, mixed\>\|Illuminate\\Pagination\\LengthAwarePaginator\<\(int\|string\), mixed\>\:\:getCollection\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/SearchRequestHandler.php
+
+		-
+			message: '#^Method App\\Features\\SearchRequestHandler\:\:handle\(\) should return TResponse of Illuminate\\Http\\JsonResponse\|Illuminate\\Http\\Resources\\Json\\JsonResource\|Illuminate\\Http\\Response but returns Illuminate\\Http\\JsonResponse\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Features/SearchRequestHandler.php
+
+		-
+			message: '#^Parameter \#2 \$haystack of function in_array expects array, array\<string, class\-string\>\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Helpers/Guards.php
+
+		-
+			message: '#^Part \$modelClass \(object\|string\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Helpers/Guards.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Symfony\\Component\\HttpFoundation\\Response\:\:setContent\(\) expects string\|null, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/AnimeCollection.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/AnimeCollection.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Symfony\\Component\\HttpFoundation\\Response\:\:setContent\(\) expects string\|null, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/CharacterCollection.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/CharacterCollection.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Symfony\\Component\\HttpFoundation\\Response\:\:setContent\(\) expects string\|null, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/ClubCollection.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/ClubCollection.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Symfony\\Component\\HttpFoundation\\Response\:\:setContent\(\) expects string\|null, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/MagazineCollection.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/MagazineCollection.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Symfony\\Component\\HttpFoundation\\Response\:\:setContent\(\) expects string\|null, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/MangaCollection.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/MangaCollection.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Symfony\\Component\\HttpFoundation\\Response\:\:setContent\(\) expects string\|null, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/PersonCollection.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/PersonCollection.php
+
+		-
+			message: '#^Parameter \#1 \$content of method Symfony\\Component\\HttpFoundation\\Response\:\:setContent\(\) expects string\|null, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/ProducerCollection.php
+
+		-
+			message: '#^Parameter \#1 \$json of function json_decode expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Http/Resources/V4/ProducerCollection.php
+
+		-
+			message: '#^Parameter \#1 \$value of function collect expects Illuminate\\Contracts\\Support\\Arrayable\<\(int\|string\), mixed\>\|iterable\<\(int\|string\), mixed\>\|null, array\<mixed, mixed\>\|object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/JikanApiSearchableModel.php
+
+		-
+			message: '#^Call to an undefined method object\:\:requestClass\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string\<T of object\>\|T of object, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Static property App\\Providers\\AppServiceProvider\:\:\$requestClassCache \(array\<class\-string, class\-string\>\) does not accept array\<string, mixed\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Providers/AppServiceProvider.php
+
+		-
+			message: '#^Cannot access offset ''health'' on array\|object\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Providers/SourceHeartbeatProvider.php
+
+		-
+			message: '#^Cannot access offset ''status'' on array\|object\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Providers/SourceHeartbeatProvider.php
+
+		-
+			message: '#^Cannot access offset ''timestamp'' on array\|object\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Providers/SourceHeartbeatProvider.php
+
+		-
+			message: '#^Cannot access offset ''timestamp'' on non\-empty\-array\|object\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 2
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Providers/SourceHeartbeatProvider.php
+
+		-
+			message: '#^Method App\\Providers\\SourceHeartbeatProvider\:\:getRecentEvents\(\) should return array\<int, array\{int, int, int\}\> but returns array\<int, array\<mixed\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Providers/SourceHeartbeatProvider.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$createdAt\.$#'
+			identifier: property.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$modifiedAt\.$#'
+			identifier: property.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Access to an undefined property object\:\:\$request_hash\.$#'
+			identifier: property.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Call to an undefined method object\:\:fill\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Call to an undefined method object\:\:save\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Method App\\Repositories\\DatabaseRepository\:\:getModelClass\(\) should return string but returns class\-string\|false\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Repositories/DatabaseRepository.php
+
+		-
+			message: '#^Parameter \#1 \$enum of class App\\Rules\\EnumValueRule constructor expects class\-string\<Spatie\\Enum\\Enum\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Rules/Attributes/EnumValidation.php
+
+		-
+			message: '#^Parameter \#1 \$id of class MongoDB\\BSON\\ObjectId constructor expects string\|null, int\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/SearchMetric.php
+
+		-
+			message: '#^Parameter \#1 \$class of class ReflectionProperty constructor expects class\-string\|object, class\-string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Services/DefaultPrivateFieldMapperService.php
+
+		-
+			message: '#^Parameter \#1 \$object_or_class of function property_exists expects object\|string, class\-string\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Services/DefaultPrivateFieldMapperService.php
+
+		-
+			message: '#^Method App\\Services\\EloquentBuilderPaginatorService\:\:paginate\(\) should return Illuminate\\Pagination\\LengthAwarePaginator\<int, mixed\> but returns Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Services/EloquentBuilderPaginatorService.php
+
+		-
+			message: '#^Parameter \#2 \$page of class Jikan\\Request\\User\\UserAnimeListRequest constructor expects int, int\|Spatie\\LaravelData\\Optional given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Services/JikanUserListRequestMapperService.php
+
+		-
+			message: '#^Parameter \#2 \$page of class Jikan\\Request\\User\\UserMangaListRequest constructor expects int, int\|Spatie\\LaravelData\\Optional given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Services/JikanUserListRequestMapperService.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\|Laravel\\Scout\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:jikanPaginate\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Services/ScoutBuilderPaginatorService.php
+
+		-
+			message: '#^Method App\\Services\\SearchServiceBase\:\:query\(\) should return Illuminate\\Database\\Eloquent\\Builder\|Laravel\\Scout\\Builder but returns Illuminate\\Contracts\\Database\\Query\\Builder\<App\\JikanApiModel\>\|Laravel\\Scout\\Builder\<App\\JikanApiModel\>\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Services/SearchServiceBase.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, array\<string\>\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Services/TypeSenseScoutSearchService.php
+
+		-
+			message: '#^Method App\\Support\\DefaultMediator\:\:send\(\) should return T but returns Illuminate\\Http\\JsonResponse\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Support/DefaultMediator.php
+
+		-
+			message: '#^Method App\\Support\\DefaultMediator\:\:send\(\) should return T but returns Illuminate\\Http\\JsonResponse\|Illuminate\\Http\\Resources\\Json\\JsonResource\|Illuminate\\Http\\Response\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Support/DefaultMediator.php
+
+		-
+			message: '#^Binary operation "\-" between float\|int\|string and int\<min, \-1\>\|int\<1, max\> results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Support/SourceCircuitBreaker.php
+
+		-
+			message: '#^Method App\\Support\\SourceCircuitBreaker\:\:retryAfter\(\) should return int but returns float\|int\<0, max\>\.$#'
+			identifier: return.type
+			count: 1
+			path: /home/nekomata/projects/jikan-rest-phase5/app/Support/SourceCircuitBreaker.php
