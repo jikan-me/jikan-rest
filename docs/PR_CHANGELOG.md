@@ -10,6 +10,19 @@
 
 ---
 
+## Search index drift detection (2026-11-20, #616 / PR #634)
+
+- **`App\Support\SearchHydrationGuard`**: counts engine hits the Mongo layer could not
+  hydrate and logs one `search.index_mismatch` warning per request (engine hits,
+  hydrated count, page, query, route). Wired into `App\Features\SearchRequestHandler`
+  so search endpoints report drift without changing the response body.
+- **Tests**: unit tests for the guard and the handler wiring, plus `SearchIndexMismatchTest`,
+  which runs against a live Typesense instance when one is available.
+- **CI**: new `Search hydration · Typesense` job boots Typesense 27.0 for that test.
+- **Docs**: `docs/PROVIDERS.md` documents the log signature and points at the re-index
+  procedure in `docs/POST_FULL_INDEX.md` §3.
+- Contract: unchanged. Detection is log-only; the empty-200 engine-outage rule is untouched.
+
 ## Review updates (2026-10-25)
 
 Changes made in response to the PR #614 review, one commit each:
