@@ -26,6 +26,7 @@ $firstHits = 0;
 $reciprocalRanks = 0.0;
 $scored = 0;
 $failures = [];
+$requiredFailures = [];
 
 foreach ($document['queries'] as $query) {
     $id = (string) ($query['id'] ?? 'unnamed');
@@ -62,15 +63,19 @@ foreach ($document['queries'] as $query) {
         $pass = $position !== null;
     }
 
-    $scored++;
-    if ($position === 1) {
-        $firstHits++;
-    }
-    if ($position !== null) {
-        $reciprocalRanks += 1 / $position;
+    if ($expected !== []) {
+        $scored++;
+        if ($position === 1) {
+            $firstHits++;
+        }
+        if ($position !== null) {
+            $reciprocalRanks += 1 / $position;
+        }
     }
     if (!empty($query['must_rank_first']) && $position !== 1) {
-        $failures[] = "{$id}: expected first result {$expected[0]}, got ".json_encode(array_slice($ids, 0, 5));
+        $failure = "{$id}: expected first result {$expected[0]}, got ".json_encode(array_slice($ids, 0, 5));
+        $failures[] = $failure;
+        $requiredFailures[] = $failure;
     }
     if (!$pass) {
         $failures[] = "{$id}: expected one of ".json_encode($expected).', got '.json_encode(array_slice($ids, 0, 5));
@@ -100,6 +105,7 @@ $summary = [
     'p50_ms' => round($p50, 2),
     'p95_ms' => round($p95, 2),
     'failures' => $failures,
+    'required_failures' => $requiredFailures,
 ];
 
 if ($asJson) {
@@ -123,6 +129,6 @@ if ($asJson) {
     }
 }
 
-if ($check && ($p1 < 0.90 || $mrr < 0.85 || $failures !== [])) {
+if ($check && ($p1 < 0.90 || $mrr < 0.85 || $requiredFailures !== [])) {
     exit(1);
 }

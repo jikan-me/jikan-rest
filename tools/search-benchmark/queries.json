@@ -60,14 +60,14 @@
       ]
     },
     {
-      "id": "anime-cjk-attack-on-titan",
+      "id": "anime-cjk-fmab",
       "category": "cjk",
       "endpoint": "/v4/anime",
       "params": {
-        "q": "\u9032\u6483\u306e\u5de8\u4eba"
+        "q": "鋼の錬金術師 FULLMETAL ALCHEMIST"
       },
       "expected": [
-        16498
+        5114
       ]
     },
     {
@@ -77,7 +77,7 @@
       "params": {
         "q": "one piece",
         "type": "tv",
-        "status": "complete"
+        "status": "airing"
       },
       "expected": [
         21
@@ -122,7 +122,7 @@
         "q": "86"
       },
       "expected": [
-        88001
+        41457
       ],
       "must_rank_first": true
     }

@@ -125,7 +125,7 @@ final class SearchRankingTest extends TestCase
             'status' => 'Finished Airing',
         ]);
         Anime::factory()->createOne([
-            'mal_id' => 88001,
+            'mal_id' => 41457,
             'title' => '86',
             'title_english' => '86',
             'titles' => [['type' => 'Default', 'title' => '86']],
@@ -133,11 +133,11 @@ final class SearchRankingTest extends TestCase
             'status' => 'Finished Airing',
         ]);
 
-        Anime::whereIn('mal_id', [86, 88001])->get()->searchable();
+        Anime::whereIn('mal_id', [86, 41457])->get()->searchable();
 
         $this->getJson('/v4/anime?q=86')
             ->assertStatus(200)
-            ->assertJsonPath('data.0.mal_id', 88001);
+            ->assertJsonPath('data.0.mal_id', 41457);
     }
 
     public function test_non_anime_popularity_breaks_text_match_ties(): void

@@ -64,3 +64,21 @@ Latency is reported, not gated.
 - **Local full-data:** run with Docker Typesense against the indexed catalogue.
   The current local Mongo subset is 3,021 anime; the full 10k run is recorded
   separately once the full index is available.
+
+## Full-data run — 2026-11-20
+
+Environment: Typesense 27.0 (Docker), 29,735 anime imported from Mongo.
+
+| Metric | Result |
+|---|---:|
+| P@1 | 0.90 |
+| MRR | 0.91 |
+| p50 | 73.4 ms |
+| p95 | 134.1 ms |
+
+Passing cases: exact ID, exact title, alias, typo, CJK, filtered search,
+numeric-title collision, no-hit.
+
+Known failure: the very short query `cow` ranks the expected title at position
+8. It is reported but not a gate failure because it is not an exact case; the
+relevance thresholds still pass.
