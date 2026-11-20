@@ -62,6 +62,12 @@ curl http://127.0.0.1:8000/up
 > - **Runtime:** `php artisan serve` is the no-setup fallback; Octane is the production
 >   runtime — **Swoole default**, **FrankenPHP opt-in** via `OCTANE_SERVER=frankenphp`
 >   (binary not shipped; `install.sh --server frankenphp` downloads it).
+> - **Search index consistency:** a Typesense index must be populated from the **same
+>   Mongo instance** that serves the API. Engine hits that Mongo cannot hydrate are
+>   logged as `search.index_mismatch` (engine hits, hydrated count, page, query,
+>   route); the response stays an empty 200. Re-index after switching Mongo data
+>   sources or after an empty/restored database — see
+>   `docs/POST_FULL_INDEX.md` §3.
 > - **Cache/queue:** array (dev) / **Redis optional** (`--with-redis`); queue uses the Mongo
 >   database driver by default.
 > - **Observability:** logs daily; Sentry disabled until a `SENTRY_LARAVEL_DSN` is set.

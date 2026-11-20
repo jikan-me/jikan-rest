@@ -5,7 +5,9 @@ namespace App\Features;
 use App\Contracts\DataRequest;
 use App\Contracts\RequestHandler;
 use App\Services\QueryBuilderService;
+use App\Support\HttpHelper;
 use App\Support\SearchEngineFailure;
+use App\Support\SearchHydrationGuard;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -49,6 +51,7 @@ abstract class SearchRequestHandler implements RequestHandler
                 $this->prepareOrderByParam($requestData)
             );
             $paginator = $this->queryBuilderService->paginateBuilder($builder, $page, $limit);
+            $this->guardHydration($paginator, $requestData);
         } catch (\Throwable $e) {
             // Only a search-engine outage (collection missing, engine
             // unreachable, timeout, 5xx) degrades to an empty result; Mongo
@@ -81,6 +84,28 @@ abstract class SearchRequestHandler implements RequestHandler
                 ],
             ]);
         }
+    }
+
+    /**
+     * Detect engine-hit / Mongo-hydration drift without changing the response.
+     *
+     * @param  LengthAwarePaginator<int, mixed>  $paginator
+     * @param  Collection<array-key, mixed>  $requestData
+     */
+    private function guardHydration(LengthAwarePaginator $paginator, Collection $requestData): void
+    {
+        if (in_array(config('scout.driver'), [null, 'null', ''], true)) {
+            return;
+        }
+
+        SearchHydrationGuard::check(
+            (int) $paginator->total(),
+            count($paginator->items()),
+            (int) $paginator->currentPage(),
+            (int) $paginator->perPage(),
+            $requestData->get('q'),
+            HttpHelper::getRouteName(request())
+        );
     }
 
     /**
