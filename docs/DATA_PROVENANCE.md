@@ -19,7 +19,9 @@ cached.
   or inferred data.
 - Derived data is rebuildable from canonical data; deleting an index or alias
   field must never change the canonical record.
-- Cached data must expose that it was cached when it is served as a fallback.
+- Cached data must expose that it was cached when it is served as a fallback
+  (implemented as `X-Jikan-Cached: 1` plus `Retry-After`; see
+  [`RESILIENCE.md`](RESILIENCE.md)).
 - Inferred data must never be presented as a MAL fact.
 - The v4 public contract is unchanged; provenance metadata belongs in headers
   or opt-in fields, not in default response shapes.

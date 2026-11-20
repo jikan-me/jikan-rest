@@ -144,6 +144,21 @@
         "openapi"
       ],
       "source": "CLAUDE.md (rule 3); app/Enums"
+    },
+    {
+      "id": "source-circuit-breaker-per-worker",
+      "title": "Circuit-breaker state is per worker with the default file cache",
+      "trigger": "Changing the MAL circuit breaker, its cache keys, or anything that assumes breaker state is global.",
+      "trap": "SourceCircuitBreaker stores its state in the Laravel cache. With CACHE_DRIVER=file (the default) each Octane worker has its own copy, so one worker can be open while another keeps scraping. Tests use the array store and never see the split.",
+      "correctAction": "Keep the breaker cache keys compatible and document the caveat (docs/RESILIENCE.md). For a cluster-wide breaker run CACHE_DRIVER=redis or another shared store.",
+      "severity": "medium",
+      "scope": "repo",
+      "tags": [
+        "cache",
+        "resilience",
+        "octane"
+      ],
+      "source": "app/Support/SourceCircuitBreaker.php; docs/RESILIENCE.md; tests/Unit/SourceCircuitBreakerTest.php"
     }
   ]
 }

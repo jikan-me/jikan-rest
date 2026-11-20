@@ -25,7 +25,14 @@ php artisan jikan:data-quality --write-baseline=storage/quality-baseline.json
 php artisan jikan:data-quality --baseline=storage/quality-baseline.json
 ```
 
-With a baseline, known counts are accepted and only **new** findings fail CI.
+With a baseline, known counts are accepted and only **new** findings make the
+command exit `1`:
+
+```bash
+php artisan jikan:data-quality --baseline=storage/quality-baseline.json
+```
+
+No CI job runs this command yet; the intended gate is the invocation above.
 Regenerate the baseline after intentionally changing the catalogue.
 
 ## Expected baseline
