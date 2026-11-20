@@ -10,6 +10,26 @@
 
 ---
 
+## Issue #615 phase 5 — identity & resilience (2026-11-20, PR #636)
+
+- **Data quality audit.** `php artisan jikan:data-quality` reports duplicate
+  `mal_id`s and broken genre/theme/demographic/producer/studio/licensor/
+  serialization references; `--json` and `--limit` for tooling, `--baseline` to
+  fail only on new findings. Read-only, no writes.
+- **Circuit breaker.** `App\Support\SourceCircuitBreaker` (cache-backed) opens
+  after `SOURCE_CIRCUIT_FAILURE_THRESHOLD` upstream failures within the window
+  and retries after the cooldown. Open breaker + cached copy = stale response;
+  open breaker + no copy = `503`.
+- **Stale fallback headers.** Fallbacks carry `X-Jikan-Cached: 1` and, when
+  relevant, `Retry-After`. Bodies are unchanged; see `docs/RESILIENCE.md`.
+- **Alias normalisation.** `App\Support\AliasNormalizer` centralises the
+  title/synonym normalisation used by search matching.
+- **Provenance.** `docs/DATA_PROVENANCE.md` defines canonical / derived / cached
+  classifications and the rule that cached data must say so.
+- **Static analysis.** PHPStan raised to level 7 with two committed baselines:
+  `phpstan-baseline.neon` (level-6 backlog) and `phpstan-l7-baseline.neon`
+  (level-7 delta), both with portable paths.
+
 ## Issue #615 phase 4 — retrieval quality (2026-11-20, PR #633)
 
 - **Ranking.** Search hits are ordered by `_text_match`, then popularity, then

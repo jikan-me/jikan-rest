@@ -26,6 +26,9 @@
 - [Product-readiness gates](docs/PRODUCTION-READINESS.md)
 - [Changelog / everything done](docs/PR_CHANGELOG.md) · [RFC/decisions](docs/RFC.md)
 - [Proposals](docs/proposals/2026-10-12-ai-llm-modernization.md)
+- [Data provenance (canonical vs derived vs cached)](docs/DATA_PROVENANCE.md)
+- [Data quality audit + baseline](docs/DATA_QUALITY.md)
+- [Resilience: circuit breaker, stale fallback, cache headers](docs/RESILIENCE.md)
 - [Upstream PR playbook](docs/UPSTREAM_PR.md)
 - [Upgrading 4.2.x → 4.3.0 (platform migration: env vars, behaviour changes)](docs/UPGRADING.md)
 

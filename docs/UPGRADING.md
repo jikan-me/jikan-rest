@@ -130,6 +130,7 @@ on the Lumen release ("before") and what it is now.
 | `SENTRY_LARAVEL_DSN`, `SENTRY_TRACES_SAMPLE_RATE` | placeholder DSN, `0.5` | empty DSN, `0.1` |
 | `MICROCACHING_EXPIRE` | default `60` | default `60` (an interim revision of this branch had changed it to `5`) |
 | `RATE_LIMIT_PER_MINUTE` | did not exist (no throttling) | **New, default `0` = disabled.** Per-IP requests per minute for `/v4`. Enable only with a shared cache (`CACHE_DRIVER=redis`; the default `file` store is shared only within one container, and `array` is flushed before every Octane request) and `TRUSTED_PROXIES`. |
+| `SOURCE_CIRCUIT_FAILURE_THRESHOLD`, `SOURCE_CIRCUIT_COOLDOWN_SECONDS`, `SOURCE_CIRCUIT_FAILURE_WINDOW_SECONDS` | did not exist | **New, defaults `3` / `60` / `300`.** Cache-backed MAL circuit breaker: after that many upstream failures inside the window, scrapes short-circuit for the cooldown. With a cached copy the API serves it stale (`X-Jikan-Cached: 1`) instead of erroring. Use a shared cache store (`CACHE_DRIVER=redis`) for a cluster-wide breaker; the default `file` store is per worker. See `docs/RESILIENCE.md`. |
 | `TRUSTED_PROXIES` | did not exist | **New.** Comma-separated IPs/CIDRs of your reverse proxy / load balancer, or `*`. Needed so `request()->ip()` is the real client. Empty = trust nothing. |
 | `QUEUE_WORKERS` | RoadRunner ran one `laravel_queue_worker_1` process (`JIKAN_QUEUE_WORKER_PROCESS_NUM`) | **New, default `0`.** The container entrypoint starts this many `queue:work` processes. Set it if you use `SCOUT_QUEUE=true` or dispatch jobs. |
 | `CACHE_MAGAZINES_EXPIRE` | documented in `.env.dist` | The endpoint TTL map reads **`CACHE_MAGAZINE_EXPIRE`** (singular). The plural name was only consumed by the cache-refresh jobs, which were removed. |
@@ -148,6 +149,16 @@ on the Lumen release ("before") and what it is now.
 
 ## Behaviour changes
 
+- **Response headers (additive).** Successful `GET` responses now carry a weak
+  `ETag` (`W/"<sha256>"`), an endpoint-scoped `Cache-Control: public, max-age=<ttl>`
+  when the route has a TTL, and `X-Request-Fingerprint` / `Expires` /
+  `Last-Modified` for cache-envelope responses. `If-None-Match` returns
+  `304 Not Modified` with no body. Bodies and status codes are unchanged.
+- **Stale fallback.** When MyAnimeList is unavailable (circuit breaker open) and a
+  cached copy exists, the cached payload is served with `X-Jikan-Cached: 1` and,
+  when relevant, `Retry-After: <seconds>`. With no cached copy the response is
+  `503`. Clients that previously saw an upstream error path may now see a stale
+  `200` — check `X-Jikan-Cached` when freshness matters. See `docs/RESILIENCE.md`.
 - **Errors.** With `APP_DEBUG=false` the `error` and `trace` fields of error responses are now
   empty strings, and the prefilled GitHub `report_url` no longer embeds the exception message
   or file path. Status codes and `type`/`message` are unchanged.

@@ -25,6 +25,7 @@ For an entire list of commands, you can run `php artisan list`
 - [Scout](#scout)
     - [Import](#scout-import)
     - [Flush](#scout-flush)
+- [Data quality](#data-quality-audit)
 - [Search](#search)
     - [Benchmark](#search-benchmark)
     - [Doctor](#search-doctor)
@@ -326,6 +327,19 @@ Removes every document of that model from its search collection. With the
 `scout:import "App\Model" --fresh` is the supported way to apply a schema change.
 With the Mongo engine it only clears documents. There is no collections-creation
 command, and collections must not be pre-created by hand.
+
+### Data quality audit
+Command: `jikan:data-quality [--json] [--limit=10] [--write-baseline=file] [--baseline=file]`
+
+Read-only audit of the Mongo catalogue: duplicate `mal_id`s, broken
+genre/theme/demographic references, broken producer/studio/licensor references
+and broken manga serialization references. Exit `1` when findings exist; with
+`--baseline` only *new* findings count. See `docs/DATA_QUALITY.md`.
+
+```bash
+php artisan jikan:data-quality --json
+php artisan jikan:data-quality --baseline=storage/quality-baseline.json
+```
 
 ### Search
 

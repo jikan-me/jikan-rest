@@ -83,7 +83,7 @@ resolves every action).
 ## 7. Quality guarantees
 
 `tools/parity/` (status+shape contract harness, committed baseline), PHPStan
-level 6 (baseline-pinned), Pint (scoped; CI runs `pint --test` on the full repo),
+level 7 (two committed baselines: `phpstan-baseline.neon` for the level-6 backlog, `phpstan-l7-baseline.neon` for the level-7 delta), Pint (scoped; CI runs `pint --test` on the full repo),
 PHPUnit 12 (snapshot 2026-10-12: 292 tests / 2707 assertions — run
 `vendor/bin/phpunit --list-tests` for the current count), `.backend-suite` audits
 (endpoint-parity / route-coverage / layer-boundaries clean; documented residuals
