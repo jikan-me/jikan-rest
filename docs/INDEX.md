@@ -40,4 +40,4 @@ in `docs/PR_CHANGELOG.md` or the `.backend-suite` findings.
 #632 `stack/615-03-response-efficiency` (`?fields=`, bounded `?ids=`, ETag/304) →
 #633 `stack/615-04-retrieval` → #636 `stack/615-05-identity-resilience` →
 `stack/615-06-mcp-evaluation` (plan only). `fix/616-search-index-drift` (#634) is
-independent. Current phase: `stack/615-05-identity-resilience`.
+independent. Current phase: `stack/615-06-mcp-evaluation` (MCP: plan only, no code yet).

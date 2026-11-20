@@ -10,6 +10,18 @@
 
 ---
 
+## Issue #615 phase 6 — MCP evaluation (planned, no code) — 2026-11-20
+
+- **Plan only.** `docs/proposals/2026-11-20-issue-615-phase6-mcp.md` proposes a
+  read-only Laravel MCP server over the existing v4 API: HTTP `/mcp`, static
+  bearer token from `MCP_API_KEY`, bounded read-only tools, no LLM in the
+  request path and no response-contract change.
+- **Nothing is implemented on this branch:** there is no `laravel/mcp`
+  dependency, no `/mcp` route and no `MCP_API_KEY` in `.env.dist`. Do not
+  document or consume these as shipped behaviour.
+- The branch exists to review the plan and the evaluation criteria (tool
+  inventory, task benchmark, output caps, auth) before implementation starts.
+
 ## Issue #615 phase 5 — identity & resilience (2026-11-20, PR #636)
 
 - **Data quality audit.** `php artisan jikan:data-quality` reports duplicate
