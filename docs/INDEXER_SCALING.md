@@ -74,10 +74,10 @@ default to `--source=harvest` (`--source=purarue` forces the legacy caches).
 
 1. **Sequential, slow and safe (recommended):**
    ```bash
-   nohup tools/dev/php artisan indexer:harvest --resume --delay=2 > /tmp/harvest.log 2>&1 &
+   nohup php artisan indexer:harvest --resume --delay=2 > /tmp/harvest.log 2>&1 &
    # then, once Phase A is done:
-   nohup tools/dev/php artisan indexer:items character --source=harvest --resume --delay=2 > /tmp/i-char.log 2>&1 &
-   nohup tools/dev/php artisan indexer:items people    --source=harvest --resume --delay=2 > /tmp/i-people.log 2>&1 &
+   nohup php artisan indexer:items character --source=harvest --resume --delay=2 > /tmp/i-char.log 2>&1 &
+   nohup php artisan indexer:items people    --source=harvest --resume --delay=2 > /tmp/i-people.log 2>&1 &
    ```
 2. **Faster (modest parallelism):** split each phase by `--index` ranges and run
    2–4 processes with `--delay=3` each; recover 429s via `--failed` later.
@@ -111,7 +111,7 @@ The whole run is reconstructable from three artifacts + the branch:
 # new machine
 ./install.sh --yes && mongorestore --db jikan <dump>/jikan
 tar -xzf indexer-state.tgz -C .            # -> storage/app/indexer/*
-tools/dev/php artisan indexer:harvest --resume --delay=2
+php artisan indexer:harvest --resume --delay=2
 ```
 
 ## 7. Production hardening noticed

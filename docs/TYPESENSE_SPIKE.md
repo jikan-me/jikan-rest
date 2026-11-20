@@ -16,7 +16,7 @@ reports more than 250 hits.
 
 Environment used for this spike:
 - PHP: `tools/dev/php` (Homebrew `php@8.4`)
-- Composer: `tools/dev/php /opt/homebrew/bin/composer`
+- Composer: `php /opt/homebrew/bin/composer`
 - Mongo: `localhost:27017/jikan` (read-only for the spike; `mongosh` for checks)
 - Typesense: native macOS darwin-arm64 binary v26.0 on `localhost:8108`, key `abcd`
   (no Docker available on this machine)
@@ -69,7 +69,7 @@ cd <path-to-your-jikan-rest-checkout>
 SCOUT_DRIVER=typesense \
 TYPESENSE_API_KEY=abcd \
 APP_URL=http://127.0.0.1:8002 \
-tools/dev/php artisan serve --host=127.0.0.1 --port=8002
+php artisan serve --host=127.0.0.1 --port=8002
 ```
 
 `APP_URL` keeps `searchableAs()` index names stable. Index names on this branch:
@@ -125,9 +125,9 @@ curl -sS -X POST "$K/collections" -H "$H" -H "$T" -d '{
 
 ```bash
 SCOUT_DRIVER=typesense TYPESENSE_API_KEY=abcd APP_URL=http://127.0.0.1:8002 \
-  tools/dev/php artisan scout:import "App\\Producers"
+  php artisan scout:import "App\\Producers"
 SCOUT_DRIVER=typesense TYPESENSE_API_KEY=abcd APP_URL=http://127.0.0.1:8002 \
-  tools/dev/php artisan scout:import "App\\Magazine"
+  php artisan scout:import "App\\Magazine"
 ```
 
 Verify:

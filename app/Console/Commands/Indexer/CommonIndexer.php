@@ -22,7 +22,7 @@ class CommonIndexer extends Command
      *
      * @var string
      */
-    protected $description = 'Index common endpoint metadata: Producers, Magazines';
+    protected $description = 'Index common endpoint metadata: Magazines (producers: indexer:producers)';
 
     /**
      * Create a new command instance.

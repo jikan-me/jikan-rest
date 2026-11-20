@@ -214,7 +214,7 @@ validated without a daemon:
   `config/*` (`octane.php`, `scout.php`, `database.php`, `cache.php`).
 - Ports/services cross-checked against `config/octane.php:8080`,
   `config/scout.php:8108` and `config/database.php:27017`.
-- `tools/dev/php artisan config:cache` boots the app config end-to-end.
+- `php artisan config:cache` boots the app config end-to-end.
 
 **Validation checklist for a Docker host (CI or a runner) before pushing:**
 

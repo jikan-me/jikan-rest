@@ -17,24 +17,25 @@ JSON contract is immutable** — never change a default response shape.
 ./install.sh --yes            # env + deps + runtime (idempotent)
 ./install.sh --dry-run        # preview without executing
 script/server                 # Swoole on :8000 (or SERVER=frankenphp|serve)
-tools/dev/php vendor/bin/phpunit --no-coverage
+php vendor/bin/phpunit --no-coverage
 ```
 
-`tools/dev/php` is a **gitignored** macOS wrapper (Homebrew php@8.4). On Linux or
-fresh clones use your distro php or `PHP_BIN=/path/to/php tools/dev/php …`.
+`tools/dev/php` is a **gitignored** macOS wrapper (Homebrew php@8.4). The
+commands below use plain `php`; on macOS substitute `tools/dev/php`, and on
+Linux/fresh clones use your distro php or `PHP_BIN=/path/to/php`.
 
 ## Canonical commands
 
 | Task | Command |
 |---|---|
-| Tests | `tools/dev/php vendor/bin/phpunit --no-coverage` |
-| Lint | `tools/dev/php vendor/bin/pint --test` |
-| Static analysis | `tools/dev/php -d error_reporting=24575 vendor/bin/phpstan analyse --no-progress` |
-| Regenerate OpenAPI spec | `tools/dev/php artisan l5-swagger:generate` |
+| Tests | `php vendor/bin/phpunit --no-coverage` |
+| Lint | `php vendor/bin/pint --test` |
+| Static analysis | `php -d error_reporting=24575 vendor/bin/phpstan analyse --no-progress` |
+| Regenerate OpenAPI spec | `php artisan l5-swagger:generate` |
 | Regenerate agent catalog+manifest | `composer endpoints:write` (check: `composer endpoints:check`) |
-| Parity harness | `tools/dev/php tools/parity/snapshot.php …` + `compare.php` |
+| Parity harness | `php tools/parity/snapshot.php …` + `compare.php` |
 | Audit suite | `/path/to/backend-suite audit <name>` (see `.backend-suite/`) |
-| Full data index | `tools/dev/php artisan indexer:anime` / `indexer:manga` (long) |
+| Full data index | `php artisan indexer:anime` / `indexer:manga` (long) |
 
 Formatting is defined by `pint.json`; run `vendor/bin/pint` before committing.
 

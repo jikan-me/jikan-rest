@@ -26,7 +26,7 @@ stack (Mongo + Redis + Typesense) is not used here. The app runs directly with P
 
 ## Run it
 
-> **Obsolete (2026-11-20).** The `tools/dev/php -c php.dev.ini -S …` command below
+> **Obsolete (2026-11-20).** The `php -c php.dev.ini -S …` command below
 > is how the Lumen-era checkout was started. `tools/dev/php` is a gitignored,
 > machine-local wrapper (it does not exist on a fresh clone) and `php.dev.ini` is
 > no longer in the repo. Use the Octane/Swoole path instead — `script/server`
@@ -39,7 +39,7 @@ composer install
 script/server                 # Octane/Swoole on :8000
 
 # historical (Lumen-era dev server — do not use)
-# tools/dev/php -c php.dev.ini -S 127.0.0.1:8000 -t public/
+# php -c php.dev.ini -S 127.0.0.1:8000 -t public/
 ```
 
 Then:
