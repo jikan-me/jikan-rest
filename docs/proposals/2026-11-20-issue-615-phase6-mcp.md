@@ -1,7 +1,13 @@
 # Issue #615 — phase 6 MCP + evaluation plan
 
-Status: planning only, branch `stack/615-06-mcp-evaluation` based on
+Status: **planning only**. Branch `stack/615-06-mcp-evaluation`, based on
 `stack/615-05-identity-resilience`.
+
+Nothing in this document is implemented yet on this branch: there is no
+`laravel/mcp` dependency, no `/mcp` route, and no `MCP_API_KEY` environment
+variable. Everything below is a proposal — describe it as planned, never as
+shipped behaviour, and do not add the dependency, route or env key until the
+first implementation slice starts.
 
 ## Scope
 
