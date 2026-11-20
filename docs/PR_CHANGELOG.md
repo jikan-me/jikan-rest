@@ -10,6 +10,27 @@
 
 ---
 
+## Issue #615 phase 4 — retrieval quality (2026-11-20, PR #633)
+
+- **Ranking.** Search hits are ordered by `_text_match`, then popularity, then
+  `mal_id` as the deterministic tie-breaker. `rank` was dropped from the default
+  sort because Typesense accepts at most three `sort_by` fields.
+- **Exact matches.** An exact numeric *title* outranks an exact numeric *ID*
+  ("86" → the anime titled 86); otherwise an exact `mal_id` hit wins. Aliases and
+  synonyms are matched through normalised alternate titles.
+- **Benchmark.** `php artisan search:benchmark` measures P@1/P@5/MRR and p50/p95
+  against a running API; `--check` gates relevance. The calibrated corpus lives
+  in `tools/search-benchmark/queries.json`.
+- **Full-data baseline (2026-11-20, 29,735 anime):** P@1 0.90, MRR 0.91,
+  p50 73.4 ms, p95 134.1 ms. The short query `cow` ranks 8th and is reported,
+  not gated.
+- **Index doctor.** `php artisan search:doctor` verifies each Typesense
+  collection's schema and engine/Mongo drift.
+- **CI.** The `Search benchmark · Typesense` job boots Typesense 27.0 and runs
+  `SearchRankingTest` against synthetic fixtures; the harness itself is a
+  local/opt-in tool.
+- **Contract.** Ordering only — response shapes and the v4 contract are unchanged.
+
 ## Issue #615 phase 3 — response efficiency (2026-11-11, PR #632)
 
 - `?fields=` on every v4 JSON response with a `data` payload. Top-level keys

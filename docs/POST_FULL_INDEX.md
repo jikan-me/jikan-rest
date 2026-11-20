@@ -91,6 +91,17 @@ curl -sS http://localhost:8108/collections -H "X-TYPESENSE-API-KEY: abcd"   # co
 curl "http://127.0.0.1:8000/v4/anime?q=one%20piece"                          # spot-check
 ```
 
+**Schema changes.** The phase-4 ranking schema adds `mal_id_text`. Collections
+created before it must be deleted and rebuilt — `scout:flush` only clears
+documents and keeps the old schema:
+
+```bash
+curl -X DELETE http://localhost:8108/collections/anime_index -H "X-TYPESENSE-API-KEY: abcd"
+tools/dev/php artisan scout:import "App\Anime"
+```
+
+See `docs/SEARCH_RANKING.md` → "Reindexing for `mal_id_text`" for the full model list.
+
 See `docs/TYPESENSE_SPIKE.md` §8 for the verification matrix (producers/
 magazines already verified; repeat the sort + chunked >250 checks).
 
