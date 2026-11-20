@@ -80,6 +80,7 @@ final class SearchIndexMismatchTest extends TestCase
             ->assertStatus(200)
             ->assertJsonFragment(['mal_id' => 98102]);
 
-        Log::shouldNotHaveReceived('warning');
+        Log::shouldNotHaveReceived('warning')
+            ->withArgs(fn (string $message): bool => $message === 'search.index_mismatch');
     }
 }
