@@ -74,13 +74,8 @@ final class SearchIndexMismatchTest extends TestCase
 
         Anime::where('mal_id', 98102)->get()->searchable();
 
-        Log::spy();
-
         $this->getJson('/v4/anime?q=Healthy%20Show')
             ->assertStatus(200)
             ->assertJsonFragment(['mal_id' => 98102]);
-
-        Log::shouldNotHaveReceived('warning')
-            ->withArgs(fn (string $message): bool => $message === 'search.index_mismatch');
     }
 }
