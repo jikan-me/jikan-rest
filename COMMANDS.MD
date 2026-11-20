@@ -291,10 +291,12 @@ Command: `scout:flush "App\Model"`
 
 Example: `php artisan scout:flush "App\Anime"`
 
-Removes every document of that model from its search collection (the collection
-schema stays). To rebuild after a schema change, delete the collection itself in
-Typesense (`DELETE /collections/<name>`) and import again — there is no
-collections-creation command, and collections must not be pre-created by hand.
+Removes every document of that model from its search collection. With the
+**Typesense engine this deletes the collection itself (and its schema)**; the next
+`scout:import` recreates it from `typesenseCollectionSchema()`. That is why
+`scout:import "App\Model" --fresh` is the supported way to apply a schema change.
+With the Mongo engine it only clears documents. There is no collections-creation
+command, and collections must not be pre-created by hand.
 
 ### Endpoints
 Command: `endpoints:write [--check] [--diff]`

@@ -142,17 +142,16 @@ docker compose exec app php artisan scout:import "App\Producers"
 docker compose exec app php artisan scout:import "App\Magazine"
 ```
 
-To rebuild an index after a schema change, delete the collection in Typesense and
-import again — there is no separate "ensure collections" command. `scout:flush`
-only empties the documents (the schema stays), so it is for data re-imports:
+To rebuild an index after a schema change, re-import with `--fresh`. The
+Typesense engine deletes the collection on flush, so the import recreates it
+with the current schema. There is no separate "ensure collections" command and
+collections must not be pre-created by hand:
 
 ```bash
-# schema change
-curl -X DELETE http://localhost:8108/collections/anime_index \
-  -H "X-TYPESENSE-API-KEY: abcd"
-docker compose exec app php artisan scout:import "App\Anime"
+# schema change (drops the collection, re-creates it, re-imports)
+docker compose exec app php artisan scout:import "App\Anime" --fresh
 
-# data-only re-import
+# data-only refresh
 docker compose exec app php artisan scout:flush "App\Anime"
 docker compose exec app php artisan scout:import "App\Anime"
 ```
