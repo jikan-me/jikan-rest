@@ -91,13 +91,13 @@ curl -sS http://localhost:8108/collections -H "X-TYPESENSE-API-KEY: abcd"   # co
 curl "http://127.0.0.1:8000/v4/anime?q=one%20piece"                          # spot-check
 ```
 
-**Schema changes.** The phase-4 ranking schema adds `mal_id_text`. Collections
-created before it must be deleted and rebuilt — `scout:flush` only clears
-documents and keeps the old schema:
+**Schema changes.** The phase-4 ranking schema adds `mal_id_text`. Apply it by
+re-importing with `--fresh`: the Typesense engine deletes the collection, then
+the import recreates it from the model schema:
 
 ```bash
-curl -X DELETE http://localhost:8108/collections/anime_index -H "X-TYPESENSE-API-KEY: abcd"
-tools/dev/php artisan scout:import "App\Anime"
+php artisan scout:import "App\Anime" --fresh
+php artisan scout:import "App\Manga" --fresh
 ```
 
 See `docs/SEARCH_RANKING.md` → "Reindexing for `mal_id_text`" for the full model list.
