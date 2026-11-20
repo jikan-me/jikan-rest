@@ -7,6 +7,13 @@ un-verified search path and the `jikanPaginate()` chunked-pagination path
 (`app/Mixins/ScoutBuilderMixin.php`), the latter triggers when the engine
 reports more than 250 hits.
 
+> **State banner (2026-11-20).** This document is a **spike record from
+> 2026-10-12**. The "0 documents" and per-index counts below describe that moment
+> — anime/manga/characters/people were empty then. The full indexer has since run
+> (completed runs are recorded in `docs/POST_FULL_INDEX.md`) and the phase-4
+> benchmark records 29,735 anime indexed. §3's pre-create step is **obsolete**:
+> collections auto-create on import (§8).
+
 Environment used for this spike:
 - PHP: `tools/dev/php` (Homebrew `php@8.4`)
 - Composer: `tools/dev/php /opt/homebrew/bin/composer`
@@ -71,11 +78,16 @@ suffix outside `testing` env).
 
 ---
 
-## 3. Pre-create collections (REQUIRED — see §6)
+## 3. Pre-create collections — OBSOLETE (historical, kept for the record)
 
-The native engine cannot create a collection from an empty schema
-(`scout.typesense.model-settings` is not configured in this repo). Create the
-collections first, using the schemas the models already declare
+> **Superseded (2026-10-12, §8).** Collections now auto-create on import from
+> `typesenseCollectionSchema()`; the curl pre-creation below was only needed
+> before the native-engine contract was wired. Do not run it. See §8 for the
+> verified out-of-the-box path and `docs/DOCKER.md` §5 for the reindex step.
+
+The original spike hit "Parameter `fields` is required" because the engine tried
+to create a collection from an empty schema, so it created them by hand first,
+using the schemas the models already declare
 (`app/Producers::getCollectionSchema()`, `app/JikanApiSearchableModel::getCollectionSchema()`,
 `app/SearchMetric::getCollectionSchema()`):
 
@@ -212,8 +224,9 @@ Wire the native-engine config for every searchable model:
 ],
 ```
 
-or provide `typesenseSearchParameters()` / `typesenseCollectionSchema()`
-methods on the models and keep the collections pre-created.
+or provide `typesenseSearchParameters()` / `typesenseCollectionSchema()` methods
+on the models — **the option that shipped** (see Resolution; collections then
+auto-create, no pre-creation needed).
 
 ### Resolution (implemented) — the two blockers are fixed at the source
 
@@ -258,8 +271,8 @@ pre-created collections** — the Resolution above is the only wiring.
   `Producers::typesenseCollectionSchema()` = **382 docs** (fields: `.*`,
   `titles`, `url`, `count`, `established`, `favorites`, `mal_id`).
 - `artisan scout:import "App\Magazine"` → `magazines_index` = **1498 docs**.
-- (anime/manga/characters/people = 0 docs — upstream parser blockers, see
-  `UPSTREAM_ISSUES.md`; the search pipeline itself is model-agnostic.)
+- (anime/manga/characters/people = 0 docs *at that time* — the search pipeline is
+  model-agnostic; they are populated now, see `docs/POST_FULL_INDEX.md`)
 
 **§5 matrix — all pass against the Docker server:**
 

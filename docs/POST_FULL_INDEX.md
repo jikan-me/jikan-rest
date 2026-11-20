@@ -5,6 +5,11 @@
 > on `:8000`). Turn the finished index into *verified* state without scrambling.
 > Context: jikan v5 fixes the parser blockers (`docs/UPSTREAM_ISSUES.md`);
 > the data this run produces is the first complete dataset since the migration.
+>
+> **Sizes below are historical.** The id-cache sizes and per-collection counts
+> quoted here (and in `docs/PERFORMANCE.md`) are from the 2026-10-12/13 runs; take
+> current counts from the `countDocuments()` command in §0 rather than trusting
+> these numbers.
 
 ## 0. Confirm completion
 
@@ -32,9 +37,10 @@ tools/dev/php artisan indexer:items people    --source=harvest --resume --delay=
 
 `indexer:items anime|manga` still uses the purarue caches (those are current);
 `character|people` default to `--source=harvest` (`--source=purarue` forces the
-legacy caches). All commands support `--resume`/`--failed`/`--reverse`/`--index`/
-`--limit`. Clubs have no id cache (lazy scraping via user club lists). See
-`docs/INDEXER_SCALING.md`.
+legacy caches). `indexer:items` and `indexer:harvest` support `--resume`/`--failed`/
+`--reverse`/`--index`/`--limit`; `indexer:anime`/`indexer:manga` support the first
+four but have **no `--limit`**. Clubs have no id cache (lazy scraping via user club
+lists). See `docs/INDEXER_SCALING.md`.
 
 After Mongo is populated, import to Typesense for search:
 `scout:import "App\Character"` / `"App\Person"`.
@@ -78,7 +84,7 @@ With anime/manga/character/person data now indexed, populate the search engine
 
 ```bash
 export SCOUT_DRIVER=typesense TYPESENSE_API_KEY=abcd TYPESENSE_HOST=localhost TYPESENSE_PORT=8108
-for m in Anime Manga Character Person Club GenreAnime GenreManga Profile; do
+for m in Anime Manga Character Person Club GenreAnime GenreManga Profile Producers Magazine; do
   tools/dev/php artisan scout:import "App\\$m"
 done
 curl -sS http://localhost:8108/collections -H "X-TYPESENSE-API-KEY: abcd"   # counts

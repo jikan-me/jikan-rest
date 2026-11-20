@@ -34,10 +34,10 @@ verification that a user-facing flow works, and neither is "should work".
 | 4 | Rate limiting | ⚠️ opt-in | Irfan | `throttle:v4` is attached to every public route; the limiter is **off by default** (`RATE_LIMIT_PER_MINUTE=0`). Enable only with `TRUSTED_PROXIES` set and `CACHE_DRIVER=redis`, otherwise clients behind a proxy share one bucket. Audit `rate-limit` clean |
 | 5 | Data handling & privacy | ✅ | Irfan | Read-only public MAL data, no PII collection/retention; search metrics internal (Mongo); Sentry optional (default off, 0.1 sample) |
 | 6 | Performance | ✅ | Irfan | Octane/Swoole workers; lazy handler resolution; chunked Typesense pagination verified >250 hits; soak: 12 iterations × 10 endpoints, byte-identical, zero worker restarts |
-| 7 | Test & quality suite | ✅ | Irfan | 292 tests / 2707 assertions green; parity harness zero new shape/status diffs; PHPStan level 6 baseline 0; Pint scoped; backend-suite audits clean (residuals documented) |
-| 8 | Search (Typesense) | 🟡 | Irfan | E2E verified locally against a real server (import, search, chunked pagination). Prod search blocked on anime/manga **data** (upstream parser #598–602) + a real Typesense key/collections |
+| 7 | Test & quality suite | ✅ | Irfan | Snapshot 2026-10-12: 292 tests / 2707 assertions green (current count: `vendor/bin/phpunit --list-tests | wc -l`; see `docs/PR_CHANGELOG.md` for later runs); parity harness zero new shape/status diffs; PHPStan level 6 baseline 0; Pint scoped; backend-suite audits clean (residuals documented) |
+| 8 | Search (Typesense) | 🟡 | Irfan | E2E verified locally against a real server (import, search, chunked pagination). Prod search needs **data** — an operational step, not a parser blocker (jikan v5 cleared #598–602; run the indexers + `scout:import`, see `docs/POST_FULL_INDEX.md`) — plus a real Typesense key/collections |
 | 9 | Docker / ops | 🟡 | Irfan | Image builds + full compose stack healthy (validated locally, Colima/arm64); **CI first-green needs a GitHub runner**; rollback = replace stateless image |
-| 10 | Third-party licence compliance | 🟡 | Irfan | Verify jikan-me/jikan licence terms (scraping/redistributing MAL data) + dependency stack incl. the Goutte shim before public relaunch |
+| 10 | Third-party licence compliance | 🟡 | Irfan | Verify jikan-me/jikan licence terms (scraping/redistributing MAL data) + the dependency stack before public relaunch |
 | 11 | On-call / support path | 🟡 | Irfan | Upstream OSS (no SLA); Discord channel; `/up` available for LB probes |
 | 12 | Auth and session handling | ⚪ | — | Read-only public JSON API — deliberately no auth, no sessions, no CSRF |
 | 13 | Accessibility | ⚪ | — | No UI — JSON API only |
@@ -47,7 +47,7 @@ verification that a user-facing flow works, and neither is "should work".
 | Needed | Why | Needed by | If late |
 |---|---|---|---|
 | Real GitHub runner | CI first-green (PHP 8.4 + Mongo service + Docker build) | Relaunch | CI ships unproven (logic verified locally only) |
-| Anime/manga data + parser fix (upstream jikan #598–602) | Detail endpoints return 200; search indexes populated | Relaunch | Endpoints 500 (documented upstream blocker) |
+| Anime/manga data (indexers are operational; `jikan-me/jikan ^5.0` — the old parser blockers #598–602 are cleared) | Detail endpoints return 200; search indexes populated. Operational step: run the indexers + `scout:import` (`docs/POST_FULL_INDEX.md`) | Relaunch | Endpoints 4xx/500 on unpopulated ids until the index completes |
 | Typesense API key + prod collections | Production search | When search ships | `SCOUT_DRIVER=null` fallback (search off) |
 | Container registry / built image | Container distribution | Relaunch | Build on the runner |
 
@@ -62,4 +62,4 @@ verification that a user-facing flow works, and neither is "should work".
 
 ---
 
-_Last updated: 2026-10-12_
+_Last updated: 2026-11-20_

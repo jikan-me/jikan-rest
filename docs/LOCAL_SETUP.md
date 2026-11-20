@@ -20,21 +20,26 @@ stack (Mongo + Redis + Typesense) is not used here. The app runs directly with P
   - `APP_ENV=local`, `APP_DEBUG=true`, `APP_URL=http://localhost:8000`
   - `APP_KEY` generated via `php artisan key:generate`
   - MongoDB defaults kept (`DB_CONNECTION=mongodb`, `DB_HOST=localhost`, `DB_PORT=27017`, `DB_DATABASE=jikan`)
-- `php.dev.ini` — project-local PHP config used to run the dev server.
-  It sets `display_errors=Off` so PHP 8.4 `E_DEPRECATED` notices from
-  dependencies stay out of HTTP responses (they are still logged). (Written for
-  the Lumen 9 release, where this was severe; on Laravel 13 it is optional.) Real exceptions are still rendered by
-  the framework error handler.
+- `php.dev.ini` — *(obsolete)* project-local PHP config that was used with the
+  Lumen-era `php -S` dev server to keep `E_DEPRECATED` notices out of responses.
+  Neither the file nor that launch path exists anymore; see "Run it" below.
 
 ## Run it
 
-```bash
-# 1. Make sure MongoDB is running
-brew services start mongodb/brew/mongodb-community
+> **Obsolete (2026-11-20).** The `tools/dev/php -c php.dev.ini -S …` command below
+> is how the Lumen-era checkout was started. `tools/dev/php` is a gitignored,
+> machine-local wrapper (it does not exist on a fresh clone) and `php.dev.ini` is
+> no longer in the repo. Use the Octane/Swoole path instead — `script/server`
+> (`SERVER=frankenphp|serve` to switch runtime), see `README.MD` and
+> `docs/PROVIDERS.md`.
 
-# 2. Start the API (from the repo root)
-cd ~/Developer/jikan-rest
-tools/dev/php -c php.dev.ini -S 127.0.0.1:8000 -t public/
+```bash
+# current
+composer install
+script/server                 # Octane/Swoole on :8000
+
+# historical (Lumen-era dev server — do not use)
+# tools/dev/php -c php.dev.ini -S 127.0.0.1:8000 -t public/
 ```
 
 Then:
@@ -44,8 +49,8 @@ curl http://127.0.0.1:8000/            # API info JSON
 curl http://127.0.0.1:8000/v4/anime/1  # requires MyAnimeList access (see below)
 ```
 
-> `php artisan serve` also works, but it shells out to the plain PHP binary and
-> ignores `-c php.dev.ini`, so deprecation notices leak into responses.
+> `php artisan serve` is the no-Swoole fallback (single-threaded). The
+> `php.dev.ini` note above no longer applies: the file is not in the repo.
 
 ## Known limitations in this environment
 

@@ -2,6 +2,14 @@
 
 Branch: `laravel-12` · Audited: 2026-10-11 · Read-only (`mongosh`, no writes, no test suite)
 
+> **State banner (2026-11-20).** The audit was taken against an effectively empty
+> database. Every "fresh DB / 0 documents" statement below is **historical**: the
+> full indexer has since run (completed runs are recorded in
+> `docs/POST_FULL_INDEX.md`), and the phase-4 search benchmark records **29,735
+> anime** indexed (`docs/SEARCH_BENCHMARK.md`, which lands with
+> `stack/615-04-retrieval`). Index *definitions* — this document's subject — are
+> unaffected. The §1.2 test-harness bug is **fixed** (PR #634).
+
 Migration source: single squash migration `database/migrations/2022_12_04_210448_squash.php`.
 
 Databases audited:
@@ -21,7 +29,7 @@ Truths established up front:
 - The `jikan` DB is effectively fresh — `anime`, `manga`, `characters`, `people`, `users`, `clubs` have **0 documents** (only `magazines` (1,498) and the small genre/theme/failover collections hold data). The full index set exists regardless.
 - **`jikan` DB: 0 indexes missing** vs the migration. All 134 migration-defined indexes are present.
 - **`jikan_tests` DB: 118 non-text indexes missing** vs the migration (only the 16 `search` text indexes exist). This is *expected* — tests never run migrations, they only recreate text indexes after truncate.
-- One genuine bug found: the test-harness text-index recreation for `characters` and `people` has the field sets **swapped** (see below).
+- One genuine bug was found: the test-harness text-index recreation for `characters` and `people` had the field sets **swapped** — **fixed 2026-11-20** (PR #634, issue #616), see §1.2.
 
 ---
 
@@ -37,8 +45,8 @@ Legend: ✅ present · ❌ missing · ⚠️ different
 | `jobs_failed` | (none) | ✅ n/a | ✅ n/a | migration defines no indexes |
 | `anime` | `request_hash`(U), `mal_id`(U), `aired`, `aired.from`, `aired.to`, `airing`, `demographics.mal_id`, `explicit_genres.mal_id`, `genres.mal_id`, `licensors.mal_id`, `producers.mal_id`, `studios.mal_id`, `themes.mal_id`, `episodes`, `members`, `favorites`, `popularity`, `rank`, `rating`, `score`, `scored_by`, `status`, `type`, `source`, `title`, `title_english`, `title_japanese`, `title_synonyms`, `search` (text: `title` 50 / `title_japanese` 5) | ✅ all 29 | ⚠️ only `search`; all 28 non-text missing (expected) | prod: 6 column-level indexes auto-named `members_1`, `favorites_1`, `popularity_1`, `rank_1`, `score_1`, `scored_by_1` (see §1.1) |
 | `manga` | same shape as `anime` but `published*`/`publishing`/`authors.mal_id`/`serializations.mal_id`/`chapters`/`volumes` (27 total) | ✅ all | ⚠️ only `search` (weights correct) | prod: `members_1`…`scored_by_1` auto-named like anime |
-| `people` | `request_hash`(U), `mal_id`(U), `birthday`, `member_favorites`, `name`, `given_name`, `family_name`, `alternate_names`, `search` (text: `name` 50 / `given_name` 5 / `family_name` 5) | ✅ all | ⚠️ `search` present but **wrong fields** — `{name, name_kanji}` instead of `{name, given_name, family_name}` | bug §1.2; prod: `birthday_1`, `given_name_1`, `family_name_1` auto-named |
-| `characters` | `request_hash`(U), `mal_id`(U), `birthday`, `member_favorites`, `name`, `name_kanji`, `nicknames`, `search` (text: `name` 50 / `name_kanji` 5) | ✅ all | ⚠️ `search` present but **wrong fields** — `{name, given_name, family_name}` instead of `{name, name_kanji}` | bug §1.2; prod: `birthday_1`, `name_kanji_1`, `nicknames_1` auto-named |
+| `people` | `request_hash`(U), `mal_id`(U), `birthday`, `member_favorites`, `name`, `given_name`, `family_name`, `alternate_names`, `search` (text: `name` 50 / `given_name` 5 / `family_name` 5) | ✅ all | ✅ `search` (fields were swapped until PR #634 — fixed, §1.2) | prod: `birthday_1`, `given_name_1`, `family_name_1` auto-named |
+| `characters` | `request_hash`(U), `mal_id`(U), `birthday`, `member_favorites`, `name`, `name_kanji`, `nicknames`, `search` (text: `name` 50 / `name_kanji` 5) | ✅ all | ✅ `search` (fields were swapped until PR #634 — fixed, §1.2) | prod: `birthday_1`, `name_kanji_1`, `nicknames_1` auto-named |
 | `magazines` | `mal_id`(U), `count`, `name`, `search`(name:text) | ✅ all 4 | ✅ `search` only (expected; non-text missing) | |
 | `clubs` | `request_hash`(U), `mal_id`(U), `name`, `members`, `category`, `created`, `access`, `search`(name:text) | ✅ all | ✅ `search` only (expected) | prod names match migration exactly |
 | `producers` | `mal_id`(U), `count`, `name`, `titles`, `established`, `favorites`, `search`(name:text) | ✅ all | ✅ `search` only (expected) | |
@@ -65,24 +73,26 @@ Where the migration declares an explicit index name **on a column definition** (
 
 (21 indexes total.) Key path and index type are identical — **name-only difference, harmless**. Blueprint-level `$table->index('field', 'name')` and `$table->unique(...)` names *are* honored exactly.
 
-### 1.2 Bug: `characters`/`people` text indexes swapped in the test harness
+### 1.2 RESOLVED (2026-11-20): `characters`/`people` text indexes were swapped in the test harness
 
-`SyntheticMongoDbTransaction::ensureSearchIndexes()` (`app/Testing/SyntheticMongoDbTransaction.php:116-156`, specifically `:127-128`) recreates text indexes after each truncate with the field sets crossed:
+**Status: fixed** — PR #634 (`fix/616-search-index-drift`, issue #616).
+`SyntheticMongoDbTransaction::ensureSearchIndexes()` now recreates the same field
+sets as the squash migration, and the definition is made authoritative (the old
+`search` index is dropped before the new one is created, so a stale definition
+cannot survive a truncate).
 
-```php
-'characters' => ['fields' => ['name' => 'text', 'given_name' => 'text', 'family_name' => 'text']], // ← people's fields
-'people'     => ['fields' => ['name' => 'text', 'name_kanji' => 'text']],                         // ← characters' fields
-```
+Expected values — migration reality (`..._squash.php`) and, since #634, the test
+harness:
 
-Migration reality (`..._squash.php`):
-- `characters` → `name (50), name_kanji (5)`
-- `people` → `name (50), given_name (5), family_name (5)`
+| Collection | Text fields | Weights |
+|---|---|---|
+| `characters` | `name`, `name_kanji` | 50 / 5 |
+| `people` | `name`, `given_name`, `family_name` | 50 / 5 / 5 |
 
-Observed in `jikan_tests`:
-- `characters.search` weights `{family_name:1, given_name:1, name:1}`
-- `people.search` weights `{name:1, name_kanji:1}`
-
-Effect: in tests, `$text` search on characters matches `given_name`/`family_name` (fields that don't exist on characters) and loses `name_kanji`; people search matches `name_kanji` instead of the given/family name fields. The prod `jikan` DB text indexes are correct.
+What the bug was, for the record: the two field sets were crossed, so tests ran
+`$text` search on characters over `given_name`/`family_name` (fields characters
+don't have, losing `name_kanji`) and on people over `name_kanji`. The prod `jikan`
+DB text indexes were always correct.
 
 ---
 
@@ -196,16 +206,16 @@ live `jikan.anime`.
 
 - **`jikan` DB: 0 missing indexes** — the full migration index set (134) is present. 21 indexes only differ by auto-generated names (`members_1` vs `members`, etc.) — cosmetic.
 - **`jikan_tests` DB: 118 of 118 non-text migration indexes missing** — expected (tests never run migrations; only the 16 text `search` indexes are recreated post-truncate).
-- **Bug:** `characters`/`people` `search` text indexes are swapped in `SyntheticMongoDbTransaction::ensureSearchIndexes()` (`app/Testing/SyntheticMongoDbTransaction.php:127-128`).
+- **Fixed (PR #634):** `characters`/`people` `search` text indexes were swapped in `SyntheticMongoDbTransaction::ensureSearchIndexes()` — see §1.2.
 - **Schedule query** filters `{status:"Currently Airing", type:"TV", approved:true}` (+ optional `broadcast` equality/prefix-regex), sorted by `members` — it does **not** use the boolean `airing` field.
 - **Applied compound indexes**: `P1 {status, type, approved, broadcast, members}` (schedule), `P2 {aired.from, aired.to, airing, members:-1}` (season), `P3 {airing, score:-1}` (top airing), `P4 {status, type, members:-1}` (top/upcoming, 2026-10-12). No proposals remain pending.
 ---
 
-## Resolution (2026-10-11)
+## Resolution (2026-11-20, PR #634)
 
 - **Characters/people text-index swap in the test DB** — fixed in
   `app/Testing/SyntheticMongoDbTransaction::ensureSearchIndexes()`: `characters`
-  now recreates `{name, name_kanji}` (weights 50/5) and `people` `{name, given_name,
+  recreates `{name, name_kanji}` (weights 50/5) and `people` `{name, given_name,
   family_name}` (weights 50/5/5), matching the squash migration. Verified live in
   `jikan_tests`.
 - `ensureSearchIndexes()` hardened to **drop-then-create** the `search` index per

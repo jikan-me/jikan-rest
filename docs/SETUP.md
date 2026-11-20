@@ -83,7 +83,8 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
    (default DB `jikan`, test DB `jikan_tests`).
 3. **Deps** — `tools/dev/php /opt/homebrew/bin/composer install`
 4. **Env** — `cp .env.dist .env && tools/dev/php artisan key:generate`, then `tools/dev/php artisan migrate` (MongoDB indexes)
-   `.env.dist` is the **canonical env reference** (all ~116 keys the app reads); only `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_KEY` should differ from it.
+   `.env.dist` is the **canonical env reference** (the full env surface — every key
+   the app and the container entrypoint read); only `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_KEY` should differ from it.
 5. **Runtime**
    - Swoole (default): `pecl install swoole` once, then
      `OCTANE_SERVER=swoole tools/dev/php artisan octane:start --server=swoole --port=8000`
