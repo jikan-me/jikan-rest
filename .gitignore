@@ -35,3 +35,7 @@ bootstrap/cache/*.php
 
 # Created by Storage::fake() during tests
 /storage/framework/testing/
+
+# RoadRunner artefacts (runtime removed)
+/rr
+.rr.yaml

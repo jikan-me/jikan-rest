@@ -47,7 +47,7 @@ MongoDB, served by Laravel 13.
 ## 4. User flows (canonical)
 
 1. **Look up an anime/manga/character/person** `GET /v4/anime/{id}` →
-   parsed detail JSON (data-gated: upstream parser blockers #598–602).
+   parsed detail JSON (jikan v5 parser; data populated by `indexer:*`, see `POST_FULL_INDEX.md`).
 2. **Browse catalogs** `GET /v4/top/anime`, `/v4/seasons/now`,
    `/v4/schedules?filter=` → paginated lists (verified 200 in smoke).
 3. **Search** `GET /v4/anime?q=…` (Typesense) or producer/magazine search →
