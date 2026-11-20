@@ -1,19 +1,20 @@
 # Search benchmark
 
-A committed, reproducible lexical-search benchmark for issue #615 phase 4.
+Operator guide for the lexical-search benchmark from issue #615 phase 4.
+Ranking changes affect ordering only; response shapes are unchanged.
 
 ## Corpus
 
-`tools/search-benchmark/queries.json` contains categories:
+`tools/search-benchmark/queries.json` is the calibrated corpus. It currently
+holds 11 anime queries against `/v4/anime`, covering:
 
 - exact MAL ID
 - exact title
 - alias / synonym
-- typo
+- typo (short and long)
 - CJK
 - structured filters
 - no-hit
-- short/long typo cases
 - numeric title vs numeric ID collision
 
 Each query records the endpoint, parameters, expected MAL IDs, and whether the
@@ -21,24 +22,28 @@ expected result must rank first.
 
 ## Run
 
-```bash
-# against a running instance
-php tools/search-benchmark/benchmark.php \
-  --base-url=http://127.0.0.1:8000
+The harness calls a running API instance; it does not index anything itself.
 
-# gate mode
-php tools/search-benchmark/benchmark.php \
-  --base-url=http://127.0.0.1:8000 --check
+```bash
+# full report
+php artisan search:benchmark --base-url=http://127.0.0.1:8000
+
+# relevance gate (exit code 1 on regression)
+php artisan search:benchmark --base-url=http://127.0.0.1:8000 --check
 
 # machine-readable
-php tools/search-benchmark/benchmark.php --json
+php artisan search:benchmark --json
 ```
 
-Or through the application:
+`php tools/search-benchmark/benchmark.php` accepts the same `--base-url`,
+`--queries`, `--check`, and `--json` flags and can be run directly without
+Artisan.
+
+`--when-ready` skips the run until the anime collection reaches `--threshold`
+rows (default `10000`):
 
 ```bash
-php artisan search:benchmark --base-url=http://127.0.0.1:8000
-php artisan search:benchmark --check
+php artisan search:benchmark --when-ready --threshold=10000
 ```
 
 ## Metrics
@@ -58,16 +63,23 @@ php artisan search:benchmark --check
 
 Latency is reported, not gated.
 
-## Data
+## CI
 
-- **CI:** synthetic fixture documents only; Typesense 27.0.
-- **Local full-data:** run with Docker Typesense against the indexed catalogue.
-  The current local Mongo subset is 3,021 anime; the full 10k run is recorded
-  separately once the full index is available.
+The `search-benchmark` job in `.github/workflows/ci.yml` does not run this
+harness. It starts Typesense 27.0 and runs the ranking fixture test against it:
+
+```bash
+vendor/bin/phpunit --no-coverage --testsuite=integration --filter='SearchRankingTest'
+```
+
+The test indexes synthetic fixture documents itself, so no production data is
+required. The benchmark harness above is a local/opt-in tool for measuring
+relevance and latency against a populated index.
 
 ## Full-data run — 2026-11-20
 
-Environment: Typesense 27.0 (Docker), 29,735 anime imported from Mongo.
+Environment: Typesense 27.0 (Docker), 29,735 anime imported from Mongo. Re-run
+against the same index with `php artisan search:benchmark --check`.
 
 | Metric | Result |
 |---|---:|

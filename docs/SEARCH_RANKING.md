@@ -1,5 +1,8 @@
 # Search ranking audit — phase 4
 
+Ranking changes in this phase affect relevance only. Response shapes,
+pagination envelopes, and error contracts are unchanged.
+
 ## Before phase 4
 
 Anime and manga sorted by three fields:
@@ -31,9 +34,12 @@ Other user-searchable models use:
 | Producers | `favorites` descending |
 | Clubs | `members` descending |
 | Magazines | `count` descending |
-| Users | `mal_id` ascending |
+| Users (`Profile`) | none — inherits the base two-field sort |
 
-All of them end with `mal_id:asc` as the deterministic third field.
+Anime, manga, characters, people, producers, clubs, and magazines all end with
+`mal_id:asc` as the deterministic third field. Users (`Profile`) do not override
+`getSearchIndexSortBy()`, so they use the base sort:
+`_text_match(buckets:N):desc, mal_id:asc`.
 
 ## Exact-ID behavior
 
@@ -57,10 +63,56 @@ Queries of three characters or fewer use the existing short-query override
 (`_text_match`, `mal_id`) so tiny queries remain deterministic. Numeric IDs are
 still boosted by `mal_id_text` unless an exact title takes precedence.
 
+## Reindexing for `mal_id_text`
+
+`mal_id_text` is part of the collection schema for all eight searchable models:
+Anime, Manga, Character, Person, Producers, Club, Magazine, and Profile. A
+collection created before phase 4 does not have the field, and Scout does not
+alter an existing collection schema. Recreate and re-import each collection:
+
+```bash
+php artisan scout:import "App\Anime" --fresh
+php artisan scout:import "App\Manga" --fresh
+php artisan scout:import "App\Character" --fresh
+php artisan scout:import "App\Person" --fresh
+php artisan scout:import "App\Producers" --fresh
+php artisan scout:import "App\Club" --fresh
+php artisan scout:import "App\Magazine" --fresh
+php artisan scout:import "App\Profile" --fresh
+```
+
+`--fresh` deletes the collection first, so the new schema (including
+`mal_id_text`) is created on import. Expect numeric-ID queries to rank
+unboosted on any collection that has not been re-imported yet.
+
+## Operating the search index
+
+`php artisan search:doctor [--json]` checks every searchable collection for the
+phase-4 schema and for drift. For each model it reports the collection name,
+whether `mal_id_text` is present, stored (Mongo) vs indexed (Typesense) document
+counts, and an issue. It exits non-zero when a collection is unavailable, is
+missing `mal_id_text`, or its indexed count differs from Mongo.
+
+`php artisan search:benchmark [options]` measures P@1/P@5/MRR and p50/p95
+latency against a running API instance:
+
+| Option | Meaning |
+|---|---|
+| `--base-url` | API base URL (default `http://127.0.0.1:8000`) |
+| `--queries` | Corpus path (default `tools/search-benchmark/queries.json`) |
+| `--check` | Exit non-zero on relevance regression |
+| `--json` | Machine-readable output |
+| `--when-ready` | Skip until the anime count reaches `--threshold` |
+| `--threshold` | Minimum anime count for `--when-ready` (default `10000`) |
+
+The gate fails when `P@1 < 0.90`, `MRR < 0.85`, or an exact-ID/exact-title
+fixture is not at rank 1. Latency is reported, not gated. See
+[SEARCH_BENCHMARK.md](SEARCH_BENCHMARK.md) for the corpus and the recorded
+full-data run.
+
 ## What is not proven yet
 
-- Full-data ranking numbers on the 3,021-anime index.
-- Manga/character/person/producer/club/user ranking fixtures.
-- Numeric-title vs numeric-ID collisions.
-- Typo-tolerance tuning beyond the existing short-query behavior.
-- Existing Typesense indexes need a reindex to gain `mal_id_text`.
+- Ranking fixtures for manga, producers, clubs, magazines, and users.
+  Characters and people have a popularity tie-break test; anime has the full
+  benchmark corpus.
+- Typo tolerance beyond the existing short-query behavior.
