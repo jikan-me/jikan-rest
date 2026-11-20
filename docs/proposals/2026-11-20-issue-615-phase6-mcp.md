@@ -1,13 +1,16 @@
 # Issue #615 — phase 6 MCP + evaluation plan
 
-Status: **planning only**. Branch `stack/615-06-mcp-evaluation`, based on
-`stack/615-05-identity-resilience`.
+Status: **slice 1 implemented; the rest is planned**. Branch
+`stack/615-06-mcp-evaluation`, based on `stack/615-05-identity-resilience`.
 
-Nothing in this document is implemented yet on this branch: there is no
-`laravel/mcp` dependency, no `/mcp` route, and no `MCP_API_KEY` environment
-variable. Everything below is a proposal — describe it as planned, never as
-shipped behaviour, and do not add the dependency, route or env key until the
-first implementation slice starts.
+Implemented in slice 1: `laravel/mcp` production dependency, `POST /mcp` via
+`App\Mcp\Servers\JikanServer`, `MCP_API_KEY` bearer auth
+(`App\Http\Middleware\AuthenticateMcp`, fail closed), and two read-only tools
+(`search_anime`, `get_anime`) exposed as adapters over the v4 API. See
+`docs/MCP.md` for the operator guide.
+
+Everything else below (remaining tools, observability, benchmark) is still a
+proposal — describe it as planned, never as shipped behaviour.
 
 ## Scope
 
@@ -36,20 +39,30 @@ an agent-task benchmark. No LLM in the request path; no response-contract change
 | `get_seasonal_anime` | year + season + limit | seasonal cards |
 | `compare_anime` | ids + fields | compact comparison |
 
+`search_anime` and `get_anime` are implemented on this branch; the remaining
+rows are planned.
+
 All tools are read-only and return validation errors for bad input.
 
 ## Implementation slices
 
-1. **MCP foundation**
-   - Add `laravel/mcp` as a production dependency.
-   - Register `/mcp` HTTP endpoint.
-   - Add `MCP_API_KEY` middleware; missing/wrong token → 401.
-   - Add a health/introspection test.
+1. **MCP foundation — implemented (slice 1)**
+   - Add `laravel/mcp` as a production dependency (`^1.2`).
+   - Register `/mcp` HTTP endpoint (`routes/ai.php`, `App\Mcp\Servers\JikanServer`).
+   - Add `MCP_API_KEY` middleware; missing/empty key or wrong token → 401
+     (`App\Http\Middleware\AuthenticateMcp`, constant-time compare, fail closed).
+   - Add a health/introspection test (401 paths, initialize + `tools/list`,
+     invalid input, missing ids).
 
-2. **Tools**
-   - Implement tool classes with strict input schemas and output caps.
-   - Reuse controllers/services/DTOs; do not duplicate API logic.
-   - Add per-tool tests for success, empty result, invalid input, upstream failure.
+2. **Tools — in progress (2 of 7 implemented)**
+   - Shipped: `search_anime` (bounded cards: query, limit, type, status,
+     min_score) and `get_anime` (full v4 detail by `mal_id`). Both dispatch an
+     internal `/v4` request through the HTTP kernel instead of duplicating
+     controller logic.
+   - Planned: `get_anime_relations`, `search_manga`, `search_characters`,
+     `get_seasonal_anime`, `compare_anime`.
+   - Remaining work: per-tool tests for every success/empty/invalid/upstream
+     case; keep output caps and strict schemas.
 
 3. **Observability**
    - JSON log format in containers (already planned in phase 6 scope).

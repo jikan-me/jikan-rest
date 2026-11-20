@@ -13,10 +13,14 @@
   `If-None-Match`, `Cache-Control`). See [response fields](docs/RESPONSE_FIELDS.md).
 - No auth. Per-IP rate limiting is opt-in per deployment. Errors use `{status, type, message}`.
 - Data is scraped from MyAnimeList and cached (per-endpoint TTL).
+- Optional read-only MCP adapter at `POST /mcp` (bearer `MCP_API_KEY`, opt-in,
+  fail closed) wraps two v4 tools. It does not change the v4 contract; see
+  [MCP](docs/MCP.md).
 
 ## Docs
 - [Repo agent guide](AGENTS.md)
 - [Doc index (question → file)](docs/INDEX.md)
+- [MCP server: read-only `/mcp`, auth, tools](docs/MCP.md)
 - [Setup / native install](docs/SETUP.md)
 - [Services & providers matrix](docs/PROVIDERS.md)
 - [Response fields / ids / ETag](docs/RESPONSE_FIELDS.md)
@@ -36,8 +40,9 @@
 - Release line `laravel-12`. Issue #615 phase stack, merged in order: #632
   (`stack/615-03-response-efficiency`: `fields=`, bounded `ids=`, ETag/304) →
   #633 (`stack/615-04-retrieval`) → #636
-  (`stack/615-05-identity-resilience`) → `stack/615-06-mcp-evaluation` (plan
-  only). `fix/616-search-index-drift` (#634) is independent of the stack.
+  (`stack/615-05-identity-resilience`) → `stack/615-06-mcp-evaluation`
+  (read-only MCP foundation + 2 tools). `fix/616-search-index-drift` (#634) is
+  independent of the stack.
 
 ## Contract (machine-readable)
 - OpenAPI spec: `GET /v4/docs/openapi` (JSON; regenerate with `artisan l5-swagger:generate`)

@@ -18,6 +18,7 @@
         "jikan-me/jikan": "^5.0",
         "jms/serializer": "^3.0",
         "laravel/framework": "^13.0",
+        "laravel/mcp": "^1.2",
         "laravel/octane": "^2.0",
         "laravel/scout": "^11.0",
         "league/flysystem": "^3.0",
