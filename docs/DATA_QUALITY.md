@@ -32,8 +32,23 @@ command exit `1`:
 php artisan jikan:data-quality --baseline=storage/quality-baseline.json
 ```
 
-No CI job runs this command yet; the intended gate is the invocation above.
 Regenerate the baseline after intentionally changing the catalogue.
+
+### CI
+
+The `Data quality · baseline gate` job runs `DataQualityCommandTest` (empty
+catalogue, duplicates, broken references, baseline suppression and baseline
+growth) plus a smoke run of the command.
+
+CI has no production catalogue, so the catalogue-wide gate stays a post-index
+step: after a bulk index or a data migration, run
+
+```bash
+php artisan jikan:data-quality --baseline=storage/quality-baseline.json
+```
+
+and ship the baseline with the data snapshot. A non-zero exit means the new data
+introduced findings that the previous snapshot did not have.
 
 ## Expected baseline
 

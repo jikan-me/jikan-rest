@@ -101,6 +101,58 @@ jobs:
         run: |
           ls -1 storage/logs/*.log 2>/dev/null || true
           tail -50 storage/logs/laravel.log 2>/dev/null || true
+  data-quality:
+    name: Data quality · baseline gate
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      APP_ENV: testing
+      APP_DEBUG: "true"
+      APP_KEY: base64:Y2kY4Q0VwrVnlA+iihSWX9ZUlpHew19c9XMzCVMUn4A=
+      APP_URL: http://localhost:8080
+      LOG_CHANNEL: stack
+      LOG_LEVEL: warning
+      DB_HOST: 127.0.0.1
+      DB_PORT: 27017
+      DB_DATABASE: jikan_tests
+      DB_USERNAME: ""
+      DB_PASSWORD: ""
+      CACHE_DRIVER: array
+      QUEUE_CONNECTION: sync
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl,intl,mbstring,mongodb-stable,opcache,sockets,pcntl,brotli
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
+
+      - name: Data quality command smoke run
+        # Empty catalogue must be clean (exit 0). This catches boot/config
+        # regressions in the command itself.
+        run: php artisan jikan:data-quality --json
+
+      - name: Data quality regression tests
+        # Duplicates, broken references, baseline suppression and baseline growth.
+        # A catalogue-wide baseline gate is a post-index step:
+        #   php artisan jikan:data-quality --baseline=storage/quality-baseline.json
+        run: vendor/bin/phpunit --no-coverage --filter=DataQualityCommandTest
+
   search-benchmark:
     name: Search benchmark · Typesense
     runs-on: ubuntu-latest
