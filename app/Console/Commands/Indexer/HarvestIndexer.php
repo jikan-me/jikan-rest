@@ -110,10 +110,13 @@ class HarvestIndexer extends Command
         }
 
         $this->flushHarvest();
-        $this->newLine();
-        $this->info('Harvest totals: '.count($this->harvestSet['character']).' characters, '
-            .count($this->harvestSet['people']).' people.');
-        $this->line('Next: indexer:items character --source=harvest   (and)   indexer:items people --source=harvest');
+
+        if (array_intersect($kinds, ['anime', 'manga']) !== []) {
+            $this->newLine();
+            $this->info('Harvest totals: '.count($this->harvestSet['character']).' characters, '
+                .count($this->harvestSet['people']).' people.');
+            $this->line('Next: indexer:items character --source=harvest   (and)   indexer:items people --source=harvest');
+        }
 
         return self::SUCCESS;
     }
