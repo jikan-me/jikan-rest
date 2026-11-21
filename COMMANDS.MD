@@ -25,6 +25,9 @@ For an entire list of commands, you can run `php artisan list`
 - [Scout](#scout)
     - [Import](#scout-import)
     - [Flush](#scout-flush)
+- [Search](#search)
+    - [Benchmark](#search-benchmark)
+    - [Doctor](#search-doctor)
 - [Endpoints](#endpoints)
 
 ## Commands
@@ -323,6 +326,28 @@ Removes every document of that model from its search collection. With the
 `scout:import "App\Model" --fresh` is the supported way to apply a schema change.
 With the Mongo engine it only clears documents. There is no collections-creation
 command, and collections must not be pre-created by hand.
+
+### Search
+
+#### Search: Benchmark
+Command: `search:benchmark [--base-url=…] [--queries=file] [--check] [--json] [--when-ready] [--threshold=10000]`
+
+Runs the lexical relevance/latency benchmark against a **running API** (it does
+not index anything). `--check` exits non-zero on a relevance regression, so it
+is the CI-friendly form. `--when-ready` no-ops until the anime collection
+reaches `--threshold`.
+
+```bash
+php artisan search:benchmark --base-url=http://127.0.0.1:8000
+php artisan search:benchmark --check
+```
+
+#### Search: Doctor
+Command: `search:doctor [--json]`
+
+Checks each Typesense collection for the phase-4 schema (`mal_id_text`, sort
+fields) and for engine/Mongo drift. Exits non-zero when a collection is missing
+or out of date; run it after an import and before a benchmark.
 
 ### Endpoints
 Command: `endpoints:write [--check] [--diff]`

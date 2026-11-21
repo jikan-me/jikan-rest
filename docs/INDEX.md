@@ -9,6 +9,8 @@
 | What is in scope / not in scope? | `docs/DESIGN.md` |
 | Which services exist, what's required vs optional? | `docs/PROVIDERS.md` (services matrix) |
 | Trim the response (`?fields=`), batch by id, or use ETag/304? | `docs/RESPONSE_FIELDS.md` |
+| How does search ranking work / why is this result first? | `docs/SEARCH_RANKING.md` |
+| How relevant/fast is search? How do I re-run the benchmark? | `docs/SEARCH_BENCHMARK.md` |
 | Register/search the API contract | `GET /v4/docs/openapi` (spec), `GET /v4/docs` (Scalar UI), `GET /v4/ai/manifest.json` (tool schema) |
 | How to add an endpoint | `docs/RECIPE_ADD_ENDPOINT.md` |
 | Is it production-ready? | `docs/PRODUCTION-READINESS.md` |
@@ -35,4 +37,4 @@ in `docs/PR_CHANGELOG.md` or the `.backend-suite` findings.
 #632 `stack/615-03-response-efficiency` (`?fields=`, bounded `?ids=`, ETag/304) →
 #633 `stack/615-04-retrieval` → #636 `stack/615-05-identity-resilience` →
 `stack/615-06-mcp-evaluation` (plan only). `fix/616-search-index-drift` (#634) is
-independent. Current phase: `stack/615-03-response-efficiency`.
+independent. Current phase: `stack/615-04-retrieval`.

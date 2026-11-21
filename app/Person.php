@@ -118,6 +118,7 @@ class Person extends JikanApiSearchableModel
         return [
             'id' => (string) $this->mal_id,
             'mal_id' => (int) $this->mal_id,
+            'mal_id_text' => (string) $this->mal_id,
             'name' => $this->name,
             'given_name' => $this->given_name,
             'family_name' => $this->family_name,
@@ -134,6 +135,25 @@ class Person extends JikanApiSearchableModel
             'given_name',
             'family_name',
             'alternate_names',
+            'mal_id_text',
+        ];
+    }
+
+    public function getSearchIndexSortBy(): ?array
+    {
+        return [
+            [
+                'field' => '_text_match(buckets:'.text_match_buckets().')',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'member_favorites',
+                'direction' => 'desc',
+            ],
+            [
+                'field' => 'mal_id',
+                'direction' => 'asc',
+            ],
         ];
     }
 

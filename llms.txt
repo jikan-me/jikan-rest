@@ -20,6 +20,8 @@
 - [Setup / native install](docs/SETUP.md)
 - [Services & providers matrix](docs/PROVIDERS.md)
 - [Response fields / ids / ETag](docs/RESPONSE_FIELDS.md)
+- [Search ranking (ordering only; frozen contract)](docs/SEARCH_RANKING.md)
+- [Search benchmark + full-data baseline](docs/SEARCH_BENCHMARK.md)
 - [Architecture](docs/ARCHITECTURE.md) · [Design/scope](docs/DESIGN.md)
 - [Product-readiness gates](docs/PRODUCTION-READINESS.md)
 - [Changelog / everything done](docs/PR_CHANGELOG.md) · [RFC/decisions](docs/RFC.md)

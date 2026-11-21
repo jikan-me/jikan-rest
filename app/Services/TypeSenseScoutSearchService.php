@@ -35,12 +35,34 @@ class TypeSenseScoutSearchService implements ScoutSearchService
     public function search(string $q, ?string $orderByField = null,
         bool $sortDirectionDescending = false): Builder
     {
-        return $this->repository->search($q, $this->middleware($orderByField, $sortDirectionDescending));
+        $model = $this->repository->createEntity();
+        $suppressExactId = $model instanceof JikanApiSearchableModel
+            && is_numeric($q)
+            && $this->hasExactTitle($model, $q);
+
+        return $this->repository->search($q, $this->middleware($orderByField, $sortDirectionDescending, $suppressExactId));
     }
 
-    private function middleware(?string $orderByField = null, bool $sortDirectionDescending = false): \Closure
+    private function hasExactTitle(JikanApiSearchableModel $model, string $q): bool
     {
-        return function (Documents $documents, string $query, array $options) use ($orderByField, $sortDirectionDescending) {
+        $titleAttribute = $model->getTitleAttributeName();
+
+        // Producers store titles as a string/array column; numeric title matches
+        // are not meaningful there.
+        if ($titleAttribute === 'titles') {
+            return false;
+        }
+
+        try {
+            return $model->newQuery()->where($titleAttribute, $q)->exists();
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    private function middleware(?string $orderByField = null, bool $sortDirectionDescending = false, bool $suppressExactId = false): \Closure
+    {
+        return function (Documents $documents, string $query, array $options) use ($orderByField, $sortDirectionDescending, $suppressExactId) {
             $options['exhaustive_search'] = $this->jikanConfig->exhaustiveSearch();
             $options['search_cutoff_ms'] = $this->jikanConfig->searchCutOffMs();
             // this will be ignored together with exhaustive_search set to "true"
@@ -48,6 +70,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
             $options['typo_tokens_threshold'] = $this->jikanConfig->typoTokensThreshold();
             $options['enable_highlight_v1'] = 'false';
             $options['infix'] = 'fallback';
+            $options['prioritize_exact_match'] = 'true';
             // prevent `Could not parse the filter query: unbalanced `&&` operands.` error
             // this adds support for typesense v0.24.1
             if (array_key_exists('filter_by', $options) && ($options['filter_by'] === ' && ' || $options['filter_by'] === '&&')) {
@@ -68,6 +91,10 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                 $modelTitleAttributeName = $modelInstance->getTitleAttributeName();
             }
             $options = $this->adaptToShortQueries($query, $modelTitleAttributeName, $options);
+
+            if ($suppressExactId) {
+                $options = $this->withoutExactIdField($options);
+            }
 
             try {
                 $results = $documents->search($options);
@@ -95,6 +122,37 @@ class TypeSenseScoutSearchService implements ScoutSearchService
     }
 
     /**
+     * Exact-title queries should win over exact numeric IDs. Remove the ID
+     * search field for those queries so title relevance and popularity decide.
+     *
+     * @param  array<string, mixed>  $options
+     * @return array<string, mixed>
+     */
+    private function withoutExactIdField(array $options): array
+    {
+        if (empty($options['query_by'])) {
+            return $options;
+        }
+
+        $fields = explode(',', (string) $options['query_by']);
+        $index = array_search('mal_id_text', $fields, true);
+        if ($index === false) {
+            return $options;
+        }
+
+        array_splice($fields, $index, 1);
+        $options['query_by'] = implode(',', $fields);
+
+        if (!empty($options['query_by_weights'])) {
+            $weights = explode(',', (string) $options['query_by_weights']);
+            array_splice($weights, $index, 1);
+            $options['query_by_weights'] = implode(',', $weights);
+        }
+
+        return $options;
+    }
+
+    /**
      * @param  array<string, mixed>  $options
      * @return array<string, mixed>
      */
@@ -110,7 +168,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
 
             if (array_key_exists('sort_by', $options)) {
                 if (Str::startsWith($options['sort_by'], '_text_match')) {
-                    $options['sort_by'] = '_text_match:desc,'.$modelTitleAttributeName.':asc';
+                    $options['sort_by'] = '_text_match:desc,mal_id:asc';
                 } else {
                     // move text_match to the beginning if there is an orderby parameter set.
                     $options['sort_by'] = Str::replace('(buckets:'.$this->jikanConfig->textMatchBuckets().')', '', $options['sort_by']);
@@ -120,7 +178,7 @@ class TypeSenseScoutSearchService implements ScoutSearchService
                     $options['sort_by'] = $parts->implode(',');
                 }
             } else {
-                $options['sort_by'] = '_text_match:desc,'.$modelTitleAttributeName.':asc';
+                $options['sort_by'] = '_text_match:desc,mal_id:asc';
             }
         }
 

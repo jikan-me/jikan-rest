@@ -101,6 +101,70 @@ jobs:
         run: |
           ls -1 storage/logs/*.log 2>/dev/null || true
           tail -50 storage/logs/laravel.log 2>/dev/null || true
+  search-benchmark:
+    name: Search benchmark · Typesense
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      APP_ENV: testing
+      APP_DEBUG: "true"
+      APP_KEY: base64:Y2kY4Q0VwrVnlA+iihSWX9ZUlpHew19c9XMzCVMUn4A=
+      APP_URL: http://localhost:8000
+      LOG_CHANNEL: stack
+      LOG_LEVEL: warning
+      DB_HOST: 127.0.0.1
+      DB_PORT: 27017
+      DB_DATABASE: jikan_tests
+      DB_USERNAME: ""
+      DB_PASSWORD: ""
+      CACHE_DRIVER: array
+      QUEUE_CONNECTION: sync
+      CACHE_DEFAULT_EXPIRE: 86400
+      CACHE_SEARCH_EXPIRE: 432000
+      MAX_RESULTS_PER_PAGE: 25
+      SCOUT_DRIVER: typesense
+      TYPESENSE_HOST: 127.0.0.1
+      TYPESENSE_PORT: 8108
+      TYPESENSE_PROTOCOL: http
+      TYPESENSE_API_KEY: abcd
+      GITHUB_REPORTING: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: curl,intl,mbstring,mongodb-stable,opcache,pcntl,redis,brotli
+          coverage: none
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --no-scripts --prefer-dist --ignore-platform-req=php
+      - name: Start Typesense 27.0
+        run: |
+          mkdir -p /tmp/typesense-data
+          docker run -d --name jikan-typesense \
+            -p 8108:8108 \
+            -v /tmp/typesense-data:/data \
+            -e TYPESENSE_API_KEY=abcd \
+            typesense/typesense:27.0 \
+            --data-dir=/data \
+            --api-key=abcd \
+            --api-port=8108
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8108/health >/dev/null 2>&1; then exit 0; fi
+            sleep 1
+          done
+          echo "Typesense did not become healthy" >&2
+          docker logs jikan-typesense
+          exit 1
+      - name: Ranking gate
+        run: vendor/bin/phpunit --no-coverage --testsuite=integration --filter='SearchRankingTest'
+
   artifact-freshness:
     name: Agent artifacts — spec, manifest, catalog
     runs-on: ubuntu-latest
