@@ -5,6 +5,7 @@
 | What is this? How do I run it? | `README.MD` (root), `docs/SETUP.md` |
 | Agent quickstart / conventions / commands | `AGENTS.md` (root; `CLAUDE.md` for Claude Code) |
 | LLM/API index + contract pointers | `llms.txt` (root; also `GET /llms.txt`) |
+| MCP server (read-only `/mcp`, bearer auth, tools) | `docs/MCP.md` |
 | How is the app structured? | `docs/ARCHITECTURE.md` |
 | What is in scope / not in scope? | `docs/DESIGN.md` |
 | Which services exist, what's required vs optional? | `docs/PROVIDERS.md` (services matrix) |
@@ -39,5 +40,7 @@ in `docs/PR_CHANGELOG.md` or the `.backend-suite` findings.
 **Delivery stack.** `laravel-12` is the release line. Issue #615 merges in order:
 #632 `stack/615-03-response-efficiency` (`?fields=`, bounded `?ids=`, ETag/304) →
 #633 `stack/615-04-retrieval` → #636 `stack/615-05-identity-resilience` →
-`stack/615-06-mcp-evaluation` (plan only). `fix/616-search-index-drift` (#634) is
-independent. Current phase: `stack/615-05-identity-resilience`.
+`stack/615-06-mcp-evaluation` (read-only MCP server, all seven tools).
+`fix/616-search-index-drift` (#634) is independent. Current phase:
+`stack/615-06-mcp-evaluation` (slices 1-2 shipped: `/mcp`, bearer auth, seven
+read-only tools; observability/benchmark planned — see `docs/MCP.md`).
