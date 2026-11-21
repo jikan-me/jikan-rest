@@ -28,17 +28,31 @@ to this adapter.
 
 | Tool | Input | Output |
 |---|---|---|
-| `search_anime` | `query` (string, 1-100 chars, required), `limit` (1-25, default 10), optional `type`, `status`, `min_score` | `{count, has_next_page, items[]}` — compact anime cards |
-| `get_anime` | `mal_id` (integer ≥ 1, required) | the same `data` object as `GET /v4/anime/{mal_id}` |
+| `search_anime` | `query` (1-100 chars), `limit` (1-25, default 10), optional `type`, `status`, `min_score` | `{count, has_next_page, items[]}` — compact anime cards |
+| `get_anime` | `mal_id` (integer ≥ 1) | the same `data` object as `GET /v4/anime/{mal_id}` |
+| `search_manga` | `query` (1-100 chars), `limit` (1-25, default 10), optional `type`, `status`, `min_score` | `{count, has_next_page, items[]}` — compact manga cards |
+| `search_characters` | `query` (1-100 chars), `limit` (1-25, default 10) | `{count, has_next_page, items[]}` — compact character cards |
+| `get_anime_relations` | `mal_id` (integer ≥ 1) | `{data[], truncated}` — one item per relation; each `entry` list is capped at 50, with `entry_total` and `truncated` per relation |
+| `get_seasonal_anime` | `year` (1000-2999), `season` (`winter`/`spring`/`summer`/`fall`), `limit` (1-25, default 10) | `{count, has_next_page, items[]}` — compact anime cards |
+| `compare_anime` | `ids` (2-5 distinct integers ≥ 1), optional `fields` (1-20 compact-card field names) | `{count, items[]}` — one card per id, in the requested order |
 
-- Cards keep a bounded field set (`mal_id`, `url`, `images`, titles, `type`,
-  `episodes`, `status`, `score`, `rank`, `members`, …); heavy fields such as
-  `synopsis` and `background` are left out. At most 25 cards per call.
-- Both tools return MCP structured content (`result.structuredContent`).
+- Cards keep a bounded field set per media type:
+  - anime: `mal_id`, `url`, `images`, titles, `type`, `episodes`, `status`,
+    `score`, `rank`, `members`, season/year, …
+  - manga: `mal_id`, `url`, `images`, titles, `type`, `chapters`, `volumes`,
+    `status`, `score`, `rank`, `members`, …
+  - character: `mal_id`, `name`, `name_kanji`, `nicknames`, `favorites`, `url`.
+  Heavy fields such as `synopsis`, `background` and `about` are left out. At
+  most 25 cards per call (except `compare_anime`, which is capped at 5).
+- `compare_anime` only accepts compact-card field names for `fields`; unknown
+  names are ignored rather than rejected, and `mal_id` is always kept so cards
+  stay identifiable.
+- Every tool returns MCP structured content (`result.structuredContent`).
 - Invalid input is a typed tool error (`result.isError: true` with a message),
   not a PHP exception or a 5xx.
-- An unknown `mal_id` is a tool error, mirroring the v4 `404`.
-- Both are annotated `readOnlyHint` / `idempotentHint` in `tools/list`.
+- An unknown `mal_id` (or an unknown id in `compare_anime`) is a tool error,
+  mirroring the v4 `404`/missing entry.
+- All tools are annotated `readOnlyHint` / `idempotentHint` in `tools/list`.
 
 ## How it is implemented
 
@@ -53,7 +67,10 @@ Files:
 - `routes/ai.php` — registers `Mcp::web('/mcp', JikanServer::class)` behind the
   bearer guard.
 - `app/Mcp/Servers/JikanServer.php` — server metadata and tool registry.
-- `app/Mcp/Tools/SearchAnimeTool.php`, `app/Mcp/Tools/GetAnimeTool.php`.
+- `app/Mcp/Tools/` — `SearchAnimeTool`, `GetAnimeTool`, `SearchMangaTool`,
+  `SearchCharactersTool`, `GetAnimeRelationsTool`, `GetSeasonalAnimeTool`,
+  `CompareAnimeTool`.
+- `app/Mcp/Support/CompactCard.php` — shared bounded card shaping.
 - `app/Mcp/Support/V4ApiClient.php` — internal v4 adapter.
 - `app/Http/Middleware/AuthenticateMcp.php` — bearer auth.
 - `config/mcp.php` — `api_key` (package defaults are merged in by
@@ -88,6 +105,13 @@ curl -s http://127.0.0.1:8000/mcp \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_anime","arguments":{"mal_id":1}}}'
+
+# 6. Compare two anime with a reduced card shape
+curl -s http://127.0.0.1:8000/mcp \
+  -H 'Authorization: Bearer <token>' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -d '{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"compare_anime","arguments":{"ids":[1,5114],"fields":["title","score","episodes"]}}}'
 ```
 
 Tests:
@@ -97,8 +121,10 @@ vendor/bin/phpunit --no-coverage --filter='Mcp'
 ```
 
 The integration tests cover `401` without a token / with a wrong token / with no
-configured key, a full `initialize` + `tools/list` handshake, `get_anime`
-success and missing ids, and bounded `search_anime` output.
+configured key, a full `initialize` + `tools/list` handshake (all seven tools),
+a happy path for every tool, bound violations (bad `limit`, too few
+`compare_anime` ids, relations entry cap) and unknown ids returning tool
+errors.
 
 ## Scope notes
 
@@ -109,6 +135,6 @@ success and missing ids, and bounded `search_anime` output.
   exposed publicly, terminate TLS and apply rate limits at the proxy (or add a
   `throttle:mcp` route middleware later).
 - The endpoint is not part of the v4 OpenAPI contract; it is an operator
-  opt-in adapter. Planned (not in this slice): the remaining tools, metrics,
-  and the agent-task benchmark — see
+  opt-in adapter. Still planned: observability (tool-call metrics) and the
+  agent-task benchmark — see
   `docs/proposals/2026-11-20-issue-615-phase6-mcp.md`.

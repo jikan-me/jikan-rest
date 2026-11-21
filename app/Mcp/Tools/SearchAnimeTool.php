@@ -4,6 +4,7 @@ namespace App\Mcp\Tools;
 
 use App\Enums\AnimeStatusEnum;
 use App\Enums\AnimeTypeEnum;
+use App\Mcp\Support\CompactCard;
 use App\Mcp\Support\V4ApiClient;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Validation\Rule;
@@ -22,35 +23,6 @@ use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 #[IsIdempotent]
 final class SearchAnimeTool extends Tool
 {
-    /**
-     * Fields kept from each /v4/anime entry to keep the tool output bounded.
-     *
-     * @var array<int, string>
-     */
-    private const CARD_FIELDS = [
-        'mal_id',
-        'url',
-        'images',
-        'title',
-        'title_english',
-        'title_japanese',
-        'type',
-        'source',
-        'episodes',
-        'status',
-        'airing',
-        'duration',
-        'rating',
-        'score',
-        'scored_by',
-        'rank',
-        'popularity',
-        'members',
-        'favorites',
-        'season',
-        'year',
-    ];
-
     private const DEFAULT_LIMIT = 10;
 
     private const MAX_LIMIT = 25;
@@ -102,7 +74,7 @@ final class SearchAnimeTool extends Tool
         }
 
         $items = array_map(
-            fn (array $anime): array => $this->card($anime),
+            fn (array $anime): array => CompactCard::anime($anime),
             array_values(array_filter($data, 'is_array')),
         );
 
@@ -141,22 +113,5 @@ final class SearchAnimeTool extends Tool
                 ->min(0)
                 ->max(10),
         ];
-    }
-
-    /**
-     * @param  array<string, mixed>  $anime
-     * @return array<string, mixed>
-     */
-    private function card(array $anime): array
-    {
-        $card = [];
-
-        foreach (self::CARD_FIELDS as $field) {
-            if (array_key_exists($field, $anime)) {
-                $card[$field] = $anime[$field];
-            }
-        }
-
-        return $card;
     }
 }

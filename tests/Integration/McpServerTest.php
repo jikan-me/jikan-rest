@@ -5,6 +5,8 @@
 namespace Tests\Integration;
 
 use App\Anime;
+use App\Character;
+use App\Manga;
 use App\Testing\ScoutFlush;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Testing\TestResponse;
@@ -20,7 +22,7 @@ class McpServerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->searchIndexModelCleanupList = ['App\\Anime'];
+        $this->searchIndexModelCleanupList = ['App\\Anime', 'App\\Manga', 'App\\Character'];
         config(['mcp.api_key' => self::TOKEN]);
     }
 
@@ -109,12 +111,19 @@ class McpServerTest extends TestCase
 
         $names = array_column($response->json('result.tools'), 'name');
 
-        $this->assertContains('search_anime', $names);
-        $this->assertContains('get_anime', $names);
+        $this->assertEqualsCanonicalizing([
+            'search_anime',
+            'get_anime',
+            'search_manga',
+            'search_characters',
+            'get_anime_relations',
+            'get_seasonal_anime',
+            'compare_anime',
+        ], $names);
 
-        $annotations = collect($response->json('result.tools'))
-            ->firstWhere('name', 'get_anime')['annotations'];
-        $this->assertTrue($annotations['readOnlyHint']);
+        foreach ($response->json('result.tools') as $tool) {
+            $this->assertTrue($tool['annotations']['readOnlyHint'], $tool['name'].' is not read-only');
+        }
     }
 
     public function testGetAnimeReturnsTheSeededEntry()
@@ -199,5 +208,180 @@ class McpServerTest extends TestCase
         $this->rpc($this->toolCallPayload('search_anime', []))
             ->assertStatus(200)
             ->assertJsonPath('result.isError', true);
+    }
+
+    public function testSearchMangaReturnsBoundedCards()
+    {
+        $title = 'awesome manga';
+
+        Manga::factory(2)->create([
+            'titles' => [['type' => 'Default', 'title' => $title]],
+            'title' => $title,
+            'title_english' => $title,
+            'title_japanese' => $title,
+            'title_synonyms' => [$title],
+        ]);
+
+        $response = $this->rpc($this->toolCallPayload('search_manga', [
+            'query' => 'awesome',
+            'limit' => 1,
+        ]))->assertStatus(200)
+            ->assertJsonPath('result.isError', false)
+            ->assertJsonPath('result.structuredContent.count', 1)
+            ->assertJsonPath('result.structuredContent.has_next_page', true);
+
+        $items = $response->json('result.structuredContent.items');
+
+        $this->assertCount(1, $items);
+        $this->assertArrayHasKey('mal_id', $items[0]);
+        $this->assertArrayHasKey('title', $items[0]);
+        $this->assertArrayHasKey('chapters', $items[0]);
+        $this->assertArrayNotHasKey('synopsis', $items[0]);
+        $this->assertArrayNotHasKey('background', $items[0]);
+    }
+
+    public function testSearchCharactersReturnsCompactCards()
+    {
+        Character::factory()->createOne([
+            'mal_id' => 98001,
+            'name' => 'Okabe Rintarou',
+            'name_kanji' => '岡部 倫太郎',
+            'nicknames' => ['Okarin'],
+            'member_favorites' => 42,
+        ]);
+
+        $response = $this->rpc($this->toolCallPayload('search_characters', [
+            'query' => 'Okabe',
+            'limit' => 5,
+        ]))->assertStatus(200)
+            ->assertJsonPath('result.isError', false)
+            ->assertJsonPath('result.structuredContent.count', 1);
+
+        $items = $response->json('result.structuredContent.items');
+
+        $this->assertSame(98001, $items[0]['mal_id']);
+        $this->assertSame('Okabe Rintarou', $items[0]['name']);
+        $this->assertSame(['Okarin'], $items[0]['nicknames']);
+        $this->assertSame(42, $items[0]['favorites']);
+        $this->assertArrayNotHasKey('about', $items[0]);
+    }
+
+    public function testGetAnimeRelationsCapsEachRelationList()
+    {
+        $entries = [];
+
+        for ($i = 0; $i < 55; $i++) {
+            $entries[] = [
+                'mal_id' => 1000 + $i,
+                'type' => 'anime',
+                'name' => 'Related '.$i,
+                'url' => 'https://myanimelist.net/anime/'.(1000 + $i),
+            ];
+        }
+
+        Anime::factory()->createOne([
+            'mal_id' => 1,
+            'related' => [
+                ['relation' => 'Sequel', 'entry' => $entries],
+            ],
+        ]);
+
+        $response = $this->rpc($this->toolCallPayload('get_anime_relations', ['mal_id' => 1]))
+            ->assertStatus(200)
+            ->assertJsonPath('result.isError', false)
+            ->assertJsonPath('result.structuredContent.truncated', true)
+            ->assertJsonPath('result.structuredContent.data.0.relation', 'Sequel')
+            ->assertJsonPath('result.structuredContent.data.0.entry_total', 55)
+            ->assertJsonPath('result.structuredContent.data.0.truncated', true);
+
+        $entries = $response->json('result.structuredContent.data.0.entry');
+        $this->assertCount(50, $entries);
+        $this->assertSame(1000, $entries[0]['mal_id']);
+    }
+
+    public function testGetAnimeRelationsReturnsToolErrorForUnknownId()
+    {
+        $this->mockJikanParserWith404RespondingUpstream();
+
+        $response = $this->rpc($this->toolCallPayload('get_anime_relations', ['mal_id' => 999999]))
+            ->assertStatus(200)
+            ->assertJsonPath('result.isError', true);
+
+        $this->assertStringContainsString('999999', (string) $response->json('result.content.0.text'));
+    }
+
+    public function testGetSeasonalAnimeReturnsCompactCards()
+    {
+        Anime::factory()->createOne([
+            'mal_id' => 777,
+            'title' => 'Winter Show',
+            'premiered' => 'Winter 2024',
+        ]);
+
+        $response = $this->rpc($this->toolCallPayload('get_seasonal_anime', [
+            'year' => 2024,
+            'season' => 'winter',
+            'limit' => 10,
+        ]))->assertStatus(200)
+            ->assertJsonPath('result.isError', false)
+            ->assertJsonPath('result.structuredContent.count', 1);
+
+        $items = $response->json('result.structuredContent.items');
+        $this->assertSame(777, $items[0]['mal_id']);
+        $this->assertSame('Winter Show', $items[0]['title']);
+        $this->assertArrayNotHasKey('synopsis', $items[0]);
+    }
+
+    public function testCompareAnimeReturnsRequestedCardsInOrderAndFields()
+    {
+        Anime::factory()->createOne(['mal_id' => 1, 'title' => 'First Entry', 'score' => 8.5]);
+        Anime::factory()->createOne(['mal_id' => 2, 'title' => 'Second Entry', 'score' => 7.5]);
+
+        $response = $this->rpc($this->toolCallPayload('compare_anime', [
+            'ids' => [2, 1],
+            'fields' => ['title', 'score', 'not_a_field'],
+        ]))->assertStatus(200)
+            ->assertJsonPath('result.isError', false)
+            ->assertJsonPath('result.structuredContent.count', 2);
+
+        $items = $response->json('result.structuredContent.items');
+
+        $this->assertSame([2, 1], array_column($items, 'mal_id'));
+        $this->assertSame('Second Entry', $items[0]['title']);
+        $this->assertSame(['mal_id', 'title', 'score'], array_keys($items[0]));
+        $this->assertArrayNotHasKey('not_a_field', $items[0]);
+        $this->assertArrayNotHasKey('images', $items[0]);
+    }
+
+    public function testCompareAnimeReturnsToolErrorWhenAnIdIsMissing()
+    {
+        Anime::factory()->createOne(['mal_id' => 1, 'title' => 'Present Entry']);
+
+        $response = $this->rpc($this->toolCallPayload('compare_anime', [
+            'ids' => [1, 999999],
+        ]))->assertStatus(200)
+            ->assertJsonPath('result.isError', true);
+
+        $this->assertStringContainsString('999999', (string) $response->json('result.content.0.text'));
+    }
+
+    public function testCompareAnimeRejectsFewerThanTwoIds()
+    {
+        $response = $this->rpc($this->toolCallPayload('compare_anime', ['ids' => [1]]))
+            ->assertStatus(200)
+            ->assertJsonPath('result.isError', true);
+
+        $this->assertStringContainsString('ids', (string) $response->json('result.content.0.text'));
+    }
+
+    public function testSearchMangaRejectsOutOfRangeLimit()
+    {
+        $response = $this->rpc($this->toolCallPayload('search_manga', [
+            'query' => 'awesome',
+            'limit' => 99,
+        ]))->assertStatus(200)
+            ->assertJsonPath('result.isError', true);
+
+        $this->assertStringContainsString('limit', (string) $response->json('result.content.0.text'));
     }
 }

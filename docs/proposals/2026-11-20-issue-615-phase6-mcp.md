@@ -1,16 +1,22 @@
 # Issue #615 — phase 6 MCP + evaluation plan
 
-Status: **slice 1 implemented; the rest is planned**. Branch
-`stack/615-06-mcp-evaluation`, based on `stack/615-05-identity-resilience`.
+Status: **slices 1 and 2 implemented; observability and the benchmark are
+planned**. Branch `stack/615-06-mcp-evaluation`, based on
+`stack/615-05-identity-resilience`.
 
 Implemented in slice 1: `laravel/mcp` production dependency, `POST /mcp` via
 `App\Mcp\Servers\JikanServer`, `MCP_API_KEY` bearer auth
-(`App\Http\Middleware\AuthenticateMcp`, fail closed), and two read-only tools
-(`search_anime`, `get_anime`) exposed as adapters over the v4 API. See
-`docs/MCP.md` for the operator guide.
+(`App\Http\Middleware\AuthenticateMcp`, fail closed), and the first read-only
+tools.
 
-Everything else below (remaining tools, observability, benchmark) is still a
-proposal — describe it as planned, never as shipped behaviour.
+Implemented in slice 2: all seven read-only tools (`search_anime`, `get_anime`,
+`get_anime_relations`, `search_manga`, `search_characters`,
+`get_seasonal_anime`, `compare_anime`), sharing bounded card shaping
+(`App\Mcp\Support\CompactCard`) and the v4 kernel adapter. See `docs/MCP.md`
+for the operator guide.
+
+Everything below about observability and the benchmark is still a proposal —
+describe it as planned, never as shipped behaviour.
 
 ## Scope
 
@@ -39,10 +45,9 @@ an agent-task benchmark. No LLM in the request path; no response-contract change
 | `get_seasonal_anime` | year + season + limit | seasonal cards |
 | `compare_anime` | ids + fields | compact comparison |
 
-`search_anime` and `get_anime` are implemented on this branch; the remaining
-rows are planned.
-
-All tools are read-only and return validation errors for bad input.
+All seven tools are implemented on this branch. All are read-only, return
+validation errors for bad input, and bound their output (cards, per-relation
+entry caps, 2-5 ids for comparisons).
 
 ## Implementation slices
 
@@ -54,15 +59,17 @@ All tools are read-only and return validation errors for bad input.
    - Add a health/introspection test (401 paths, initialize + `tools/list`,
      invalid input, missing ids).
 
-2. **Tools — in progress (2 of 7 implemented)**
-   - Shipped: `search_anime` (bounded cards: query, limit, type, status,
-     min_score) and `get_anime` (full v4 detail by `mal_id`). Both dispatch an
-     internal `/v4` request through the HTTP kernel instead of duplicating
-     controller logic.
-   - Planned: `get_anime_relations`, `search_manga`, `search_characters`,
-     `get_seasonal_anime`, `compare_anime`.
-   - Remaining work: per-tool tests for every success/empty/invalid/upstream
-     case; keep output caps and strict schemas.
+2. **Tools — implemented (slice 2)**
+   - Shipped: `search_anime`, `get_anime`, `get_anime_relations`,
+     `search_manga`, `search_characters`, `get_seasonal_anime` and
+     `compare_anime`. All dispatch an internal `/v4` request through the HTTP
+     kernel instead of duplicating controller logic.
+   - Output is bounded: at most 25 cards per search/season, 5 entries per
+     comparison, and 50 related entries per relation group (with a truncation
+     flag). `compare_anime` only exposes compact-card top-level fields and
+     ignores unknown field names.
+   - Tests cover success and error paths for every tool, bound violations and
+     unknown ids.
 
 3. **Observability**
    - JSON log format in containers (already planned in phase 6 scope).

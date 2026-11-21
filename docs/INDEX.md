@@ -40,8 +40,7 @@ in `docs/PR_CHANGELOG.md` or the `.backend-suite` findings.
 **Delivery stack.** `laravel-12` is the release line. Issue #615 merges in order:
 #632 `stack/615-03-response-efficiency` (`?fields=`, bounded `?ids=`, ETag/304) →
 #633 `stack/615-04-retrieval` → #636 `stack/615-05-identity-resilience` →
-#633 `stack/615-04-retrieval` → #636 `stack/615-05-identity-resilience` →
-`stack/615-06-mcp-evaluation` (read-only MCP foundation + 2 tools).
+`stack/615-06-mcp-evaluation` (read-only MCP server, all seven tools).
 `fix/616-search-index-drift` (#634) is independent. Current phase:
-`stack/615-06-mcp-evaluation` (slice 1 shipped: `/mcp`, bearer auth,
-`search_anime` + `get_anime`; remaining tools planned — see `docs/MCP.md`).
+`stack/615-06-mcp-evaluation` (slices 1-2 shipped: `/mcp`, bearer auth, seven
+read-only tools; observability/benchmark planned — see `docs/MCP.md`).
