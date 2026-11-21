@@ -107,7 +107,7 @@ PHP_BIN=/usr/bin/php8.4 php artisan …  # force a specific PHP (any OS)
 | Search | Mongo `$text` (no server needed) | Typesense via `SCOUT_DRIVER=typesense` + native binary or `docker compose` |
 | Cache | `file` (`CACHE_DRIVER=file`; do not use `array` under Octane) | Redis to share across containers (`CACHE_DRIVER=redis`) |
 | Runtime | Swoole | FrankenPHP (`OCTANE_SERVER=frankenphp`), `php artisan serve`, or Docker |
-| Static analysis | PHPStan level 6 (baseline-pinned) + Pint | `composer phpstan` · `composer pint` |
+| Static analysis | PHPStan level 7 (two committed baselines) + Pint | `composer phpstan` · `composer pint` |
 | API docs | Scalar reference at `v4/docs`; OpenAPI spec at `v4/docs/openapi` (l5-swagger-generated; legacy `/v4/api-docs` 301s there) | Swagger UI endpoint disabled by design |
 | Audits | `backend-quality-suite` (`.backend-suite/`) | CLI from `/tmp/bsq-venv` (or `pip install git+…@main`) |
 | Agent skills | `laravel/boost` + `.ai/skills/*` | dev-only |

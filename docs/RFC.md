@@ -42,7 +42,7 @@ guarded by a committed parity harness and the integration suite.
   third-party driver; chunked pagination (`jikanPaginate()`) fixed and
   verified >250 hits.
 - Runtime: Octane (RoadRunner default, FrankenPHP opt-in via `OCTANE_SERVER`).
-- Docs/tests/tooling: PHPUnit 12, l5-swagger, PHPStan level 6 (baseline),
+- Docs/tests/tooling: PHPUnit 12, l5-swagger, PHPStan level 7 (two baselines),
   Pint, `laravel/boost` + skills, backend-quality-suite context layer.
 - Safety net: `tools/parity/` status+shape harness committed before any
   behavior change; `.backend-suite/` audits green/rationed.

@@ -1,17 +1,17 @@
 includes:
     - vendor/larastan/larastan/extension.neon
     - phpstan-baseline.neon
+    - phpstan-l7-baseline.neon
 
 parameters:
     paths:
         - app
 
-    # Analysis level. Level 6 is now the standing level; the Lumen-era missing
-    # type hints/generics surfaced by level 6 (1000+ findings) are pinned in
-    # phpstan-baseline.neon so `vendor/bin/phpstan analyse` exits 0. Burn the
-    # baseline down as code is type-lined (regenerate with
-    # `--generate-baseline`), then target level 7+.
-    level: 6
+    # Level 7 is the standing level. Level-6 findings live in
+    # phpstan-baseline.neon; the L7 delta lives in phpstan-l7-baseline.neon so
+    # `vendor/bin/phpstan analyse` exits 0. Burn both baselines down as code is
+    # type-lined.
+    level: 7
 
     tmpDir: storage/framework/cache/phpstan
 

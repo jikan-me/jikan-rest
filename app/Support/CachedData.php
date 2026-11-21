@@ -30,6 +30,10 @@ class CachedData implements ArrayAccess
 
     private int $cacheTimeToLive;
 
+    private bool $fallback = false;
+
+    private int $fallbackRetryAfter = 0;
+
     /**
      * @param  Collection<array-key, mixed>  $scraperResult
      */
@@ -87,6 +91,24 @@ class CachedData implements ArrayAccess
     public function toArray(): array
     {
         return $this->scraperResult->toArray();
+    }
+
+    public function asFallback(int $retryAfter = 0): self
+    {
+        $this->fallback = true;
+        $this->fallbackRetryAfter = max(0, $retryAfter);
+
+        return $this;
+    }
+
+    public function isFallback(): bool
+    {
+        return $this->fallback;
+    }
+
+    public function fallbackRetryAfter(): int
+    {
+        return $this->fallbackRetryAfter;
     }
 
     public function expiry(): int

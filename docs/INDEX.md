@@ -24,6 +24,9 @@
 | Typesense search spike/runbook | `docs/TYPESENSE_SPIKE.md` |
 | What to do after a full data index | `docs/POST_FULL_INDEX.md` |
 | How do I populate characters/people (bulk, multi-day)? | `docs/INDEXER_SCALING.md` |
+| Is the data trustworthy? What is canonical vs cached? | `docs/DATA_PROVENANCE.md` |
+| How do I audit data quality / set a baseline? | `docs/DATA_QUALITY.md` |
+| What happens when MyAnimeList is down? Which cache headers exist? | `docs/RESILIENCE.md` |
 | Upgrading 4.2.x → 4.3.0 / what changed for operators vs the Lumen release? | `docs/UPGRADING.md` |
 | What went wrong before / traps to avoid | `.backend-suite/known-traps.json` |
 | Project conventions as an agent skill | `.ai/skills/jikan-rest/SKILL.md` |
@@ -37,4 +40,4 @@ in `docs/PR_CHANGELOG.md` or the `.backend-suite` findings.
 #632 `stack/615-03-response-efficiency` (`?fields=`, bounded `?ids=`, ETag/304) →
 #633 `stack/615-04-retrieval` → #636 `stack/615-05-identity-resilience` →
 `stack/615-06-mcp-evaluation` (plan only). `fix/616-search-index-drift` (#634) is
-independent. Current phase: `stack/615-04-retrieval`.
+independent. Current phase: `stack/615-05-identity-resilience`.

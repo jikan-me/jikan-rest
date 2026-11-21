@@ -101,7 +101,7 @@ unmodified.
 ## Gates that must stay green
 
 1. `vendor/bin/phpunit --no-coverage` (or `composer phpunit`) → 0 failures.
-2. `composer phpstan` → 0 errors (level 6, baseline-pinned).
+2. `composer phpstan` → 0 errors (level 7; `phpstan-baseline.neon` + `phpstan-l7-baseline.neon`).
 3. `composer pint:test` → clean (`composer pint` to fix).
 4. `l5-swagger:generate` → exit 0; `composer endpoints:check` → exit 0.
 5. Audits: `endpoint-parity`, `route-coverage`, `toolchain-gates`,
