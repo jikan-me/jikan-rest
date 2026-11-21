@@ -349,7 +349,7 @@ class HarvestIndexer extends Command
 
         $list = array_keys($ids);
         sort($list, SORT_NUMERIC);
-        Storage::put('indexer/harvest_producers.json', json_encode($list));
+        Storage::put('indexer/harvest_producers.json', json_encode($list, JSON_THROW_ON_ERROR));
         $this->info('Wrote '.count($list).' producer ids to storage/app/indexer/harvest_producers.json');
         $this->line('Next: indexer:producers --source=harvest');
     }
@@ -382,7 +382,7 @@ class HarvestIndexer extends Command
             }
             $merged = array_keys($ids);
             sort($merged, SORT_NUMERIC);
-            Storage::put("indexer/harvest_{$family}.json", json_encode($merged));
+            Storage::put("indexer/harvest_{$family}.json", json_encode($merged, JSON_THROW_ON_ERROR));
             $this->info("Merged {$family}: ".count($merged).' ids');
         }
     }
