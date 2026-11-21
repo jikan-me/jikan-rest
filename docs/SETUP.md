@@ -19,7 +19,7 @@ FrankenPHP opt-in), search is Laravel Scout (Typesense **or** the Mongo `$text` 
 #   script/bootstrap · script/setup · script/update · script/server · script/test
 # then:
 curl http://127.0.0.1:8000/up       # 200 OK
-tools/dev/php vendor/bin/phpunit --no-coverage
+php vendor/bin/phpunit --no-coverage
 ```
 
 ### Options (also selectable interactively)
@@ -68,7 +68,7 @@ Composer falls back from `COMPOSER_BIN` → `composer` on PATH.
 Examples:
 ```bash
 ./install.sh --dry-run --yes                     # preview every step, execute nothing
-PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any OS)
+PHP_BIN=/usr/bin/php8.4 php artisan …  # force a specific PHP (any OS)
 ```
 
 ---
@@ -81,20 +81,21 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
    it unsets `PHP_INI_SCAN_DIR` which Homebrew requires.)
 2. **MongoDB** — `brew install mongodb-community && brew services start mongodb-community`
    (default DB `jikan`, test DB `jikan_tests`).
-3. **Deps** — `tools/dev/php /opt/homebrew/bin/composer install`
-4. **Env** — `cp .env.dist .env && tools/dev/php artisan key:generate`, then `tools/dev/php artisan migrate` (MongoDB indexes)
-   `.env.dist` is the **canonical env reference** (all ~116 keys the app reads); only `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_KEY` should differ from it.
+3. **Deps** — `php /opt/homebrew/bin/composer install`
+4. **Env** — `cp .env.dist .env && php artisan key:generate`, then `php artisan migrate` (MongoDB indexes)
+   `.env.dist` is the **canonical env reference** (the full env surface — every key
+   the app and the container entrypoint read); only `APP_ENV`, `APP_DEBUG`, `APP_URL`, `APP_KEY` should differ from it.
 5. **Runtime**
    - Swoole (default): `pecl install swoole` once, then
-     `OCTANE_SERVER=swoole tools/dev/php artisan octane:start --server=swoole --port=8000`
+     `OCTANE_SERVER=swoole php artisan octane:start --server=swoole --port=8000`
    - FrankenPHP (opt-in): download the static binary, then
-     `OCTANE_SERVER=frankenphp tools/dev/php artisan octane:start --server=frankenphp --port=8000`
-   - Dev on the built-in server: `tools/dev/php artisan serve --host=127.0.0.1 --port=8000`
+     `OCTANE_SERVER=frankenphp php artisan octane:start --server=frankenphp --port=8000`
+   - Dev on the built-in server: `php artisan serve --host=127.0.0.1 --port=8000`
 6. **Verify**
    ```bash
    curl http://127.0.0.1:8000/up                       # 200 OK
-   tools/dev/php vendor/bin/phpunit --no-coverage       # all green
-   tools/dev/php artisan config:cache                   # config-cache safe
+   php vendor/bin/phpunit --no-coverage       # all green
+   php artisan config:cache                   # config-cache safe
    ```
 
 ---
@@ -131,8 +132,8 @@ PHP_BIN=/usr/bin/php8.4 tools/dev/php artisan …  # force a specific PHP (any O
 >    `--server frankenphp`.
 > 3. Start the server (Swoole unless another `--server` was chosen) and verify:
 >    `curl http://127.0.0.1:8000/up` → `200`, `curl http://127.0.0.1:8000/v4/genres/anime` → `200`.
-> 4. Run `tools/dev/php vendor/bin/phpunit --no-coverage` → all tests green,
->    and `tools/dev/php artisan config:cache` boots.
+> 4. Run `php vendor/bin/phpunit --no-coverage` → all tests green,
+>    and `php artisan config:cache` boots.
 > 5. If `--with-backend-suite` was requested, run the key audits
 >    (`rate-limit`, `cache-ttl-coverage`, `error-shape`) and report results.
 > 6. Report exactly what was installed, which server is running, and the health-check output.

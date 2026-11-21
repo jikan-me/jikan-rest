@@ -36,6 +36,18 @@ class JikanApiModel extends Model
         return [];
     }
 
+    /**
+     * Batch lookup support for the search endpoints: `?ids=1,2,3`.
+     *
+     * @param  mixed  $query
+     */
+    public function filterByIds($query, mixed $value): mixed
+    {
+        $ids = array_values(array_filter(array_map('intval', explode(',', (string) $value))));
+
+        return $query->whereIn('mal_id', $ids);
+    }
+
     /** @noinspection PhpUnused */
     public function scopeRandom(Builder $query, int $numberOfRandomItems = 1, bool $sfw = false, bool $unapproved = false): Collection
     {

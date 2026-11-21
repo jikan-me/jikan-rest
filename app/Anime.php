@@ -79,7 +79,7 @@ class Anime extends JikanApiSearchableModel
 
     protected array $filters = [
         'order_by', 'status', 'type', 'sort', 'max_score', 'min_score', 'score', 'rating', 'start_date', 'end_date',
-        'producer', 'producers', 'letter', 'genres', 'genres_exclude', 'sfw', 'unapproved', 'kids',
+        'producer', 'producers', 'letter', 'genres', 'genres_exclude', 'sfw', 'unapproved', 'kids', 'ids',
     ];
 
     /**

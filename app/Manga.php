@@ -62,7 +62,7 @@ class Manga extends JikanApiSearchableModel
 
     protected array $filters = [
         'order_by', 'status', 'type', 'sort', 'max_score', 'min_score', 'score', 'start_date', 'end_date', 'magazine',
-        'magazines', 'letter', 'genres', 'genres_exclude', 'sfw', 'unapproved', 'kids',
+        'magazines', 'letter', 'genres', 'genres_exclude', 'sfw', 'unapproved', 'kids', 'ids',
     ];
 
     /**

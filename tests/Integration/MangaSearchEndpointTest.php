@@ -170,6 +170,60 @@ class MangaSearchEndpointTest extends TestCase
     }
 
     #[Test]
+    public function testBatchLookupByIdsReturnsOnlyRequestedItemsInOrder()
+    {
+        $ids = [92001, 92002, 92003];
+        foreach ($ids as $index => $id) {
+            Manga::factory()->createOne([
+                'mal_id' => $id,
+                'title' => 'Manga Batch '.$index,
+            ]);
+        }
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '92003,92001',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $jsonResponse->assertJsonCount(2, 'data');
+        $jsonResponse->assertJsonMissingPath('pagination');
+        $this->assertSame([92003, 92001], array_column($jsonResponse->json('data'), 'mal_id'));
+    }
+
+    #[Test]
+    public function testBatchLookupSupportsFieldSelection()
+    {
+        Manga::factory()->createOne(['mal_id' => 92004, 'title' => 'Manga Batch Fields']);
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '92004',
+            'fields' => 'mal_id,title',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $this->assertSame(
+            [['mal_id' => 92004, 'title' => 'Manga Batch Fields']],
+            $jsonResponse->json('data')
+        );
+    }
+
+    #[Test]
+    public function testFieldsSelectionOnSearchCollection()
+    {
+        Manga::factory(2)->create();
+
+        $jsonResponse = $this->getJsonWithParams([
+            'fields' => 'mal_id,title',
+            'limit' => 2,
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        foreach ($jsonResponse->json('data') as $item) {
+            $this->assertSame(['mal_id', 'title'], array_keys($item));
+        }
+    }
+
+    #[Test]
     public function shouldReturnMethodNotAllowedResponseIfMethodNotAllowed()
     {
         $this->json('POST', '/v4/anime', ['title' => 'Dum'])

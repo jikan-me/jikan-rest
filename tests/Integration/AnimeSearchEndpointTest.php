@@ -191,6 +191,122 @@ class AnimeSearchEndpointTest extends TestCase
     }
 
     #[Test]
+    public function testBatchLookupByIdsReturnsOnlyRequestedItemsInOrder()
+    {
+        $ids = [90001, 90002, 90003];
+        foreach ($ids as $index => $id) {
+            Anime::factory()->create([
+                'mal_id' => $id,
+                'title' => 'Batch '.$index,
+            ]);
+        }
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '90003,90001',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $jsonResponse->assertJsonCount(2, 'data');
+        $jsonResponse->assertJsonMissingPath('pagination');
+        $this->assertSame([90003, 90001], array_column($jsonResponse->json('data'), 'mal_id'));
+    }
+
+    #[Test]
+    public function testBatchLookupOmitsMissingIds()
+    {
+        Anime::factory()->createOne(['mal_id' => 91001, 'title' => 'Present']);
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '91001,999999',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $jsonResponse->assertJsonCount(1, 'data');
+        $this->assertSame([91001], array_column($jsonResponse->json('data'), 'mal_id'));
+    }
+
+    #[Test]
+    public function testBatchLookupRejectsInvalidIds()
+    {
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '1,not-an-id',
+        ]);
+
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($jsonResponse->json(), 'type'));
+    }
+
+    #[Test]
+    public function testBatchLookupSupportsFieldSelection()
+    {
+        Anime::factory()->createOne(['mal_id' => 91002, 'title' => 'Batch Fields']);
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => '91002',
+            'fields' => 'mal_id,title',
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $this->assertSame(
+            [['mal_id' => 91002, 'title' => 'Batch Fields']],
+            $jsonResponse->json('data')
+        );
+    }
+
+    #[Test]
+    public function testBatchLookupDeduplicatesBeforeTheFiftyIdLimit()
+    {
+        Anime::factory()->createOne(['mal_id' => 91003]);
+
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => implode(',', array_fill(0, 51, 91003)),
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        $jsonResponse->assertJsonCount(1, 'data');
+    }
+
+    #[Test]
+    public function testFieldsSelectionOnSearchCollection()
+    {
+        Anime::factory(2)->create();
+
+        $jsonResponse = $this->getJsonWithParams([
+            'fields' => 'mal_id,title',
+            'limit' => 2,
+        ]);
+
+        $jsonResponse->assertStatus(200);
+        foreach ($jsonResponse->json('data') as $item) {
+            $this->assertSame(['mal_id', 'title'], array_keys($item));
+        }
+    }
+
+    #[Test]
+    public function testFieldsSelectionRejectsUnknownFields()
+    {
+        Anime::factory()->createOne();
+
+        $jsonResponse = $this->getJsonWithParams([
+            'fields' => 'mal_id,does_not_exist',
+        ]);
+
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($jsonResponse->json(), 'type'));
+    }
+
+    #[Test]
+    public function testBatchLookupRejectsMoreThanFiftyIds()
+    {
+        $jsonResponse = $this->getJsonWithParams([
+            'ids' => implode(',', range(1, 51)),
+        ]);
+
+        $jsonResponse->assertStatus(400);
+        $this->assertEquals('ValidationException', data_get($jsonResponse->json(), 'type'));
+    }
+
+    #[Test]
     public function shouldReturnMethodNotAllowedResponseIfMethodNotAllowed()
     {
         $this->json('POST', '/v4/anime', ['title' => 'Dum'])
@@ -571,5 +687,16 @@ class AnimeSearchEndpointTest extends TestCase
         $this->assertCount(25, $content['data']);
         // https://github.com/jikan-me/jikan-rest/issues/298 shows that the array indexes start at 25, not from 0
         $this->assertArrayHasKey(0, $content['data']);
+    }
+
+    public function testSearchResponseSupportsConditionalGet(): void
+    {
+        $first = $this->getJson('/v4/anime?limit=1')->assertStatus(200);
+        $etag = $first->headers->get('ETag');
+        $this->assertNotNull($etag);
+
+        $this->withHeaders(['If-None-Match' => $etag])
+            ->getJson('/v4/anime?limit=1')
+            ->assertStatus(304);
     }
 }

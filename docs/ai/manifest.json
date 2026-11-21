@@ -10,6 +10,14 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
+                        "ids": {
+                            "type": "string",
+                            "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -90,6 +98,10 @@
                         "id": {
                             "type": "integer",
                             "description": ""
+                        },
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
                         }
                     },
                     "required": [
@@ -106,6 +118,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -125,6 +141,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -144,6 +164,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -168,6 +192,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -187,6 +215,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -215,6 +247,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -234,6 +270,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -253,6 +293,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -272,6 +316,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -291,6 +339,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -310,6 +362,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -329,6 +385,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -348,6 +408,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -367,6 +431,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -386,6 +454,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -405,6 +477,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -424,6 +500,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -443,6 +523,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -462,6 +546,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -481,6 +569,14 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
+                        "ids": {
+                            "type": "string",
+                            "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -513,6 +609,10 @@
                         "id": {
                             "type": "integer",
                             "description": ""
+                        },
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
                         }
                     },
                     "required": [
@@ -529,6 +629,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -548,6 +652,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -567,6 +675,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -586,6 +698,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -605,6 +721,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -624,6 +744,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -661,6 +785,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -680,6 +808,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -699,6 +831,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -718,6 +854,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -737,6 +877,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "filter": {
                             "type": "string",
                             "description": ""
@@ -754,6 +898,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "filter": {
                             "type": "string",
                             "description": ""
@@ -771,6 +919,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -800,6 +952,14 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
+                        "ids": {
+                            "type": "string",
+                            "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -876,6 +1036,10 @@
                         "id": {
                             "type": "integer",
                             "description": ""
+                        },
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
                         }
                     },
                     "required": [
@@ -892,6 +1056,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -911,6 +1079,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -930,6 +1102,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -958,6 +1134,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -977,6 +1157,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -996,6 +1180,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1015,6 +1203,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1034,6 +1226,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1053,6 +1249,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1072,6 +1272,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1091,6 +1295,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1110,6 +1318,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1129,6 +1341,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -1158,6 +1374,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1177,6 +1397,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1196,6 +1420,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1215,6 +1443,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1234,6 +1466,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1253,6 +1489,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1272,6 +1512,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -1301,6 +1545,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1320,6 +1568,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1339,6 +1591,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1357,7 +1613,12 @@
                 "description": "Random anime\n\nReturns a random anime from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1369,7 +1630,12 @@
                 "description": "Random characters\n\nReturns a random character from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1381,7 +1647,12 @@
                 "description": "Random manga\n\nReturns a random manga from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1393,7 +1664,12 @@
                 "description": "Random people\n\nReturns a random person from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1405,7 +1681,12 @@
                 "description": "Random users\n\nReturns a random user profile from the indexed catalog.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1417,7 +1698,12 @@
                 "description": "Recent anime recommendations\n\nReturns the most recent anime recommendations from MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1429,7 +1715,12 @@
                 "description": "Recent manga recommendations\n\nReturns the most recent manga recommendations from MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1441,7 +1732,12 @@
                 "description": "Recent anime reviews\n\nReturns the most recent anime reviews. Supports pagination via page, with preliminary and spoilers toggles.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1453,7 +1749,12 @@
                 "description": "Recent manga reviews\n\nReturns the most recent manga reviews. Supports pagination via page, with preliminary and spoilers toggles.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1466,6 +1767,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "filter": {
                             "type": "string",
                             "description": "Filter by day",
@@ -1509,7 +1814,12 @@
                 "description": "Seasons list\n\nLists the years and seasons with available anime archives.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1522,6 +1832,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "filter": {
                             "type": "string",
                             "description": "Entry types",
@@ -1547,6 +1861,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "filter": {
                             "type": "string",
                             "description": "Entry types",
@@ -1572,6 +1890,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "year": {
                             "type": "integer",
                             "description": ""
@@ -1608,6 +1930,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "type": {
                             "type": "string",
                             "description": ""
@@ -1636,7 +1962,12 @@
                 "description": "Top characters\n\nReturns the top-ranked characters.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1649,6 +1980,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "type": {
                             "type": "string",
                             "description": ""
@@ -1669,7 +2004,12 @@
                 "description": "Top people\n\nReturns the top-ranked people.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1682,6 +2022,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "type": {
                             "type": "string",
                             "description": ""
@@ -1707,6 +2051,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "q": {
                             "type": "string",
                             "description": ""
@@ -1739,7 +2087,12 @@
                 "description": "Recently online users\n\nReturns the users currently online or recently online.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -1752,6 +2105,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "id": {
                             "type": "integer",
                             "description": ""
@@ -1771,6 +2128,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1790,6 +2151,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1809,6 +2174,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1832,6 +2201,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1851,6 +2224,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1870,6 +2247,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1889,6 +2270,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1908,6 +2293,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1927,6 +2316,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1954,6 +2347,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1977,6 +2374,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -1996,6 +2397,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -2015,6 +2420,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -2034,6 +2443,10 @@
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        },
                         "username": {
                             "type": "string",
                             "description": ""
@@ -2052,7 +2465,12 @@
                 "description": "Recently added episodes\n\nReturns recently added episodes currently trending on MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -2064,7 +2482,12 @@
                 "description": "Popular episodes\n\nReturns popular episodes currently trending on MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -2076,7 +2499,12 @@
                 "description": "Recently added promotional videos\n\nReturns recently added promotional videos currently trending on MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -2088,7 +2516,12 @@
                 "description": "Popular promotional videos\n\nReturns popular promotional videos currently trending on MyAnimeList.",
                 "parameters": {
                     "type": "object",
-                    "properties": {},
+                    "properties": {
+                        "fields": {
+                            "type": "string",
+                            "description": "Return only the listed top-level fields (comma-separated)."
+                        }
+                    },
                     "required": []
                 }
             }
@@ -2101,6 +2534,14 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
+                    "ids": {
+                        "type": "string",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -2178,6 +2619,10 @@
                     "id": {
                         "type": "integer",
                         "description": ""
+                    },
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
                     }
                 },
                 "required": [
@@ -2191,6 +2636,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2207,6 +2656,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2223,6 +2676,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2244,6 +2701,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2260,6 +2721,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2285,6 +2750,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2301,6 +2770,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2317,6 +2790,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2333,6 +2810,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2349,6 +2830,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2365,6 +2850,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2381,6 +2870,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2397,6 +2890,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2413,6 +2910,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2429,6 +2930,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2445,6 +2950,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2461,6 +2970,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2477,6 +2990,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2493,6 +3010,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2509,6 +3030,14 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
+                    "ids": {
+                        "type": "string",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -2538,6 +3067,10 @@
                     "id": {
                         "type": "integer",
                         "description": ""
+                    },
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
                     }
                 },
                 "required": [
@@ -2551,6 +3084,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2567,6 +3104,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2583,6 +3124,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2599,6 +3144,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2615,6 +3164,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2631,6 +3184,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -2665,6 +3222,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2681,6 +3242,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2697,6 +3262,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2713,6 +3282,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2729,6 +3302,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "filter": {
                         "type": "string",
                         "description": ""
@@ -2743,6 +3320,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "filter": {
                         "type": "string",
                         "description": ""
@@ -2757,6 +3338,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -2783,6 +3368,14 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
+                    "ids": {
+                        "type": "string",
+                        "description": "Fetch a bounded set of MAL ids (max 50, comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -2856,6 +3449,10 @@
                     "id": {
                         "type": "integer",
                         "description": ""
+                    },
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
                     }
                 },
                 "required": [
@@ -2869,6 +3466,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2885,6 +3486,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2901,6 +3506,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2926,6 +3535,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2942,6 +3555,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2958,6 +3575,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2974,6 +3595,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -2990,6 +3615,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3006,6 +3635,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3022,6 +3655,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3038,6 +3675,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3054,6 +3695,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3070,6 +3715,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -3096,6 +3745,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3112,6 +3765,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3128,6 +3785,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3144,6 +3805,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3160,6 +3825,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3176,6 +3845,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3192,6 +3865,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -3218,6 +3895,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3234,6 +3915,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3250,6 +3935,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3265,7 +3954,12 @@
             "description": "Random anime\n\nReturns a random anime from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3274,7 +3968,12 @@
             "description": "Random characters\n\nReturns a random character from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3283,7 +3982,12 @@
             "description": "Random manga\n\nReturns a random manga from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3292,7 +3996,12 @@
             "description": "Random people\n\nReturns a random person from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3301,7 +4010,12 @@
             "description": "Random users\n\nReturns a random user profile from the indexed catalog.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3310,7 +4024,12 @@
             "description": "Recent anime recommendations\n\nReturns the most recent anime recommendations from MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3319,7 +4038,12 @@
             "description": "Recent manga recommendations\n\nReturns the most recent manga recommendations from MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3328,7 +4052,12 @@
             "description": "Recent anime reviews\n\nReturns the most recent anime reviews. Supports pagination via page, with preliminary and spoilers toggles.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3337,7 +4066,12 @@
             "description": "Recent manga reviews\n\nReturns the most recent manga reviews. Supports pagination via page, with preliminary and spoilers toggles.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3347,6 +4081,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "filter": {
                         "type": "string",
                         "description": "Filter by day",
@@ -3387,7 +4125,12 @@
             "description": "Seasons list\n\nLists the years and seasons with available anime archives.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3397,6 +4140,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "filter": {
                         "type": "string",
                         "description": "Entry types",
@@ -3419,6 +4166,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "filter": {
                         "type": "string",
                         "description": "Entry types",
@@ -3441,6 +4192,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "year": {
                         "type": "integer",
                         "description": ""
@@ -3474,6 +4229,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "type": {
                         "type": "string",
                         "description": ""
@@ -3499,7 +4258,12 @@
             "description": "Top characters\n\nReturns the top-ranked characters.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3509,6 +4273,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "type": {
                         "type": "string",
                         "description": ""
@@ -3526,7 +4294,12 @@
             "description": "Top people\n\nReturns the top-ranked people.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3536,6 +4309,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "type": {
                         "type": "string",
                         "description": ""
@@ -3558,6 +4335,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "q": {
                         "type": "string",
                         "description": ""
@@ -3587,7 +4368,12 @@
             "description": "Recently online users\n\nReturns the users currently online or recently online.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3597,6 +4383,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "id": {
                         "type": "integer",
                         "description": ""
@@ -3613,6 +4403,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3629,6 +4423,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3645,6 +4443,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3665,6 +4467,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3681,6 +4487,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3697,6 +4507,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3713,6 +4527,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3729,6 +4547,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3745,6 +4567,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3769,6 +4595,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3789,6 +4619,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3805,6 +4639,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3821,6 +4659,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3837,6 +4679,10 @@
             "parameters": {
                 "type": "object",
                 "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    },
                     "username": {
                         "type": "string",
                         "description": ""
@@ -3852,7 +4698,12 @@
             "description": "Recently added episodes\n\nReturns recently added episodes currently trending on MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3861,7 +4712,12 @@
             "description": "Popular episodes\n\nReturns popular episodes currently trending on MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3870,7 +4726,12 @@
             "description": "Recently added promotional videos\n\nReturns recently added promotional videos currently trending on MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         },
@@ -3879,7 +4740,12 @@
             "description": "Popular promotional videos\n\nReturns popular promotional videos currently trending on MyAnimeList.",
             "parameters": {
                 "type": "object",
-                "properties": {},
+                "properties": {
+                    "fields": {
+                        "type": "string",
+                        "description": "Return only the listed top-level fields (comma-separated)."
+                    }
+                },
                 "required": []
             }
         }

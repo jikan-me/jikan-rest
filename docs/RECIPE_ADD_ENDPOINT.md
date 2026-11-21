@@ -22,7 +22,7 @@ For an `{id}` sub-resource, add it inside the resource's existing group (the gro
 `'where' => ['id' => '[0-9]+']` already constrains it). Never chain `->where()` after
 `Route::group(...)`: that is a silent no-op.
 
-Gate: `tools/dev/php artisan route:list` shows it; `backend-suite audit route-coverage` green.
+Gate: `php artisan route:list` shows it; `backend-suite audit route-coverage` green.
 
 ## 2. DTO (request)
 `app/Dto/MyLookupCommand.php` — extends the Data base; add query params as
@@ -74,9 +74,9 @@ Gate: full suite green.
 
 ## 8. Regenerate + verify generated artifacts
 ```bash
-tools/dev/php artisan l5-swagger:generate
-tools/dev/php artisan endpoints:write          # regen docs/ai/*
-tools/dev/php artisan endpoints:write --check  # gate: exit 0
+php artisan l5-swagger:generate
+php artisan endpoints:write          # regen docs/ai/*
+php artisan endpoints:write --check  # gate: exit 0
 ```
 
 Gate: `git diff --exit-code` shows only your new/edited files, never stale

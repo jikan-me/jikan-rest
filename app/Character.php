@@ -33,7 +33,7 @@ class Character extends JikanApiSearchableModel
 {
     use FilteredByLetter, HasFactory;
 
-    protected array $filters = ['order_by', 'sort', 'letter'];
+    protected array $filters = ['order_by', 'sort', 'letter', 'ids'];
 
     /**
      * The attributes that are mass assignable.

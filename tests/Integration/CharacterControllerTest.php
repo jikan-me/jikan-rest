@@ -201,4 +201,13 @@ class CharacterControllerTest extends TestCase
         $this->get('/v4/characters/1000000')
             ->assertStatus(404);
     }
+
+    public function testFieldsSelectionProjectsTopLevelKeys(): void
+    {
+        Character::factory()->createOne(['mal_id' => 94001, 'name' => 'Character Field Test']);
+
+        $this->getJson('/v4/characters/94001?fields=mal_id,name')
+            ->assertStatus(200)
+            ->assertExactJson(['data' => ['mal_id' => 94001, 'name' => 'Character Field Test']]);
+    }
 }

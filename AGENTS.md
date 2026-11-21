@@ -5,8 +5,9 @@ source of truth for how to run, verify, and change this project.
 
 ## What this is
 
-A read-only public JSON API over MyAnimeList data (v4 contract, ~101 GET
-endpoints). Stack: **Laravel 13** · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb`
+A read-only public JSON API over MyAnimeList data (v4 contract: **101 documented
+v4 operations** — 102 named v4 routes, the extra being `v4.root`, 110 routes
+registered in total including the meta/docs routes). Stack: **Laravel 13** · PHP 8.4 · MongoDB (`mongodb/laravel-mongodb`
 v5) · Octane (Swoole) · Scout/Typesense optional. The **public v4
 JSON contract is immutable** — never change a default response shape.
 
@@ -16,24 +17,25 @@ JSON contract is immutable** — never change a default response shape.
 ./install.sh --yes            # env + deps + runtime (idempotent)
 ./install.sh --dry-run        # preview without executing
 script/server                 # Swoole on :8000 (or SERVER=frankenphp|serve)
-tools/dev/php vendor/bin/phpunit --no-coverage
+php vendor/bin/phpunit --no-coverage
 ```
 
-`tools/dev/php` is a **gitignored** macOS wrapper (Homebrew php@8.4). On Linux or
-fresh clones use your distro php or `PHP_BIN=/path/to/php tools/dev/php …`.
+`tools/dev/php` is a **gitignored** macOS wrapper (Homebrew php@8.4). The
+commands below use plain `php`; on macOS substitute `tools/dev/php`, and on
+Linux/fresh clones use your distro php or `PHP_BIN=/path/to/php`.
 
 ## Canonical commands
 
 | Task | Command |
 |---|---|
-| Tests | `tools/dev/php vendor/bin/phpunit --no-coverage` |
-| Lint | `tools/dev/php vendor/bin/pint --test` |
-| Static analysis | `tools/dev/php -d error_reporting=24575 vendor/bin/phpstan analyse --no-progress` |
-| Regenerate OpenAPI spec | `tools/dev/php artisan l5-swagger:generate` |
-| Regenerate agent catalog+manifest | `tools/dev/php composer endpoints:write` |
-| Parity harness | `tools/dev/php tools/parity/snapshot.php …` + `compare.php` |
+| Tests | `php vendor/bin/phpunit --no-coverage` |
+| Lint | `php vendor/bin/pint --test` |
+| Static analysis | `php -d error_reporting=24575 vendor/bin/phpstan analyse --no-progress` |
+| Regenerate OpenAPI spec | `php artisan l5-swagger:generate` |
+| Regenerate agent catalog+manifest | `composer endpoints:write` (check: `composer endpoints:check`) |
+| Parity harness | `php tools/parity/snapshot.php …` + `compare.php` |
 | Audit suite | `/path/to/backend-suite audit <name>` (see `.backend-suite/`) |
-| Full data index | `tools/dev/php artisan indexer:anime` / `indexer:manga` (long) |
+| Full data index | `php artisan indexer:anime` / `indexer:manga` (long) |
 
 Formatting is defined by `pint.json`; run `vendor/bin/pint` before committing.
 
@@ -48,7 +50,9 @@ committed canonical: **do not hand-edit** — regenerate, and `endpoints:check` 
 - `llms.txt` — LLM index of docs + contract (also served at `GET /llms.txt`)
 - `docs/ARCHITECTURE.md`, `docs/DESIGN.md` — how / scope
 - `docs/SETUP.md`, `docs/PROVIDERS.md` — native setup + services matrix
-- `docs/RFC.md`, `docs/UPSTREAM_PR.md` — decisions + upstream playbook
+- `docs/RFC.md`, `docs/UPSTREAM_PR.md` — decisions + upstream delivery stack
+- `docs/RESPONSE_FIELDS.md` — `?fields=` / `?ids=` / ETag behaviour
+- `docs/proposals/` — phase proposals (open/decided)
 - `.backend-suite/` — machine-readable quality context (audits, doc roles)
 - Contract: OpenAPI at `GET /v4/docs/openapi`; function-calling manifest at
   `GET /v4/ai/manifest.json`
@@ -79,7 +83,15 @@ unmodified.
   route-coverage / endpoint-parity / rate-limit / cache-ttl-coverage audits parse
   this spelling (patterns: `.backend-suite/arch-rules.json`). Constrain `{id}` in
   the group attributes (`'where' => [...]`); `group(...)->where()` is a no-op.
-- **Branch rule**: everything ships on `laravel-12` (no splits).
+- **Branch rule**: `laravel-12` is the release line. Issue #615 work lands as an
+  ordered stack — #632 (`stack/615-03-response-efficiency`) → #633
+  (`stack/615-04-retrieval`) → #636 (`stack/615-05-identity-resilience`) →
+  `stack/615-06-mcp-evaluation` (plan only). `fix/616-search-index-drift` (#634)
+  branches from `laravel-12`, not from a stack branch. Details:
+  `docs/UPSTREAM_PR.md` §5.
+- **Leftovers**: never `git add -A` / `git add .` — stage explicit paths. Local
+  runtime artefacts (`rr`, `.rr.yaml`, databases, logs, `.env`) must not be
+  committed; `.gitignore` is the backstop, not the plan.
 - **Getting the tarpit right**: don't mutate `env()` outside config; keep the
   app `config:cache`-safe.
 - **Known traps**: `.backend-suite/known-traps.json` (Octane state, proxies and
@@ -89,10 +101,12 @@ unmodified.
 ## Gates that must stay green
 
 1. `vendor/bin/phpunit --no-coverage` (or `composer phpunit`) → 0 failures.
-2. `l5-swagger:generate` → exit 0; `composer endpoints:check` → exit 0.
-3. Audits: `endpoint-parity`, `route-coverage`, `toolchain-gates`,
+2. `composer phpstan` → 0 errors (level 6, baseline-pinned).
+3. `composer pint:test` → clean (`composer pint` to fix).
+4. `l5-swagger:generate` → exit 0; `composer endpoints:check` → exit 0.
+5. Audits: `endpoint-parity`, `route-coverage`, `toolchain-gates`,
    `proposal-status` → exit 0.
-4. `git diff --exit-code` on generated artifacts after regeneration.
+6. `git diff --exit-code` on generated artifacts after regeneration.
 
 <!-- BEGIN backend-suite (generated by `backend-suite harness`; edits inside are overwritten) -->
 ## Design suite
@@ -121,7 +135,7 @@ python3 "$BACKEND_SUITE_HOME/bin/audit_tokens.py"   # without the CLI
 ```
 
 `BACKEND_SUITE_HOME` is the suite root; `backend-suite where` prints it. Skills in
-`.agents/skills/` refer to scripts through it.
+`.ai/skills/` refer to scripts through it.
 
 **Invocation tiers.** Skills marked *explicit-tier* generate content or set
 project conventions. Run them **only on a direct user request** — never on your

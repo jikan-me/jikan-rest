@@ -10,8 +10,10 @@
 
 Read-only public v4 JSON API over MyAnimeList data. Laravel **13** (PHP 8.4),
 MongoDB via `mongodb/laravel-mongodb` **v5**, served by **Octane** (Swoole
-default) with optional Scout **Typesense** search. Public contract: 106 GET
-endpoints, no auth, no sessions, no Blade.
+default) with optional Scout **Typesense** search. Public contract: **101
+documented v4 operations** (102 named v4 routes — the extra is `v4.root` — 110
+routes registered in total including the meta/docs routes in `routes/api.php`),
+no auth, no sessions, no Blade.
 
 ```
 HTTP → Octane worker (Swoole)
@@ -81,10 +83,12 @@ resolves every action).
 ## 7. Quality guarantees
 
 `tools/parity/` (status+shape contract harness, committed baseline), PHPStan
-level 6 (baseline-pinned), Pint (scoped), PHPUnit 12 (292 tests / 2707
-assertions), `.backend-suite` audits (endpoint-parity / route-coverage /
-layer-boundaries clean; documented residuals only).
+level 6 (baseline-pinned), Pint (scoped; CI runs `pint --test` on the full repo),
+PHPUnit 12 (snapshot 2026-10-12: 292 tests / 2707 assertions — run
+`vendor/bin/phpunit --list-tests` for the current count), `.backend-suite` audits
+(endpoint-parity / route-coverage / layer-boundaries clean; documented residuals
+only).
 
 ---
 
-_Last updated: 2026-10-12_
+_Last updated: 2026-11-20_

@@ -19,6 +19,7 @@ class ProducersIndexer extends Command
      * @var string
      */
     protected $signature = 'indexer:producers
+                            {--source=auto : auto|harvest — read referenced producer/studio/licensor ids from the harvest file}
                             {--failed : Run only entries that failed to index last time}
                             {--resume : Resume from the last position}
                             {--reverse : Start from the end of the array}
@@ -73,7 +74,10 @@ class ProducersIndexer extends Command
         }
 
         if (!$failed) {
-            $this->ids = $this->fetchMalIds();
+            $this->ids = match ((string) $this->option('source')) {
+                'harvest' => $this->loadHarvestMalIds(),
+                default => $this->fetchMalIds(),
+            };
         }
 
         // start from the end
@@ -163,6 +167,22 @@ class ProducersIndexer extends Command
         Storage::put('indexer/producers_mal_id.json', json_encode($this->ids));
 
         return json_decode(Storage::get('indexer/producers_mal_id.json'));
+    }
+
+    /**
+     * Ids harvested from stored anime relations by `indexer:harvest --kind=producers`.
+     *
+     * @return array<int, int>
+     */
+    private function loadHarvestMalIds(): array
+    {
+        if (!Storage::exists('indexer/harvest_producers.json')) {
+            throw new FileNotFoundException(
+                'indexer/harvest_producers.json does not exist — run indexer:harvest --kind=producers first'
+            );
+        }
+
+        return array_map('intval', (array) json_decode((string) Storage::get('indexer/harvest_producers.json'), true));
     }
 
     /**

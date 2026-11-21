@@ -314,4 +314,38 @@ class SearchControllerTest extends TestCase
                 ],
             ]);
     }
+
+    public function testCharacterSearchBatchAndFields(): void
+    {
+        $ids = [95001, 95002, 95003];
+        foreach ($ids as $index => $id) {
+            Character::factory()->createOne([
+                'mal_id' => $id,
+                'name' => 'Character '.$index,
+            ]);
+        }
+
+        $response = $this->get('/v4/characters?ids=95003,95001&fields=mal_id,name')
+            ->assertStatus(200)
+            ->assertJsonCount(2, 'data')
+            ->assertJsonMissingPath('pagination');
+
+        $data = $response->json('data');
+        $this->assertSame([95003, 95001], array_column($data, 'mal_id'));
+        foreach ($data as $item) {
+            $this->assertSame(['mal_id', 'name'], array_keys($item));
+        }
+    }
+
+    public function testPeopleSearchFields(): void
+    {
+        Person::factory(2)->create();
+
+        $response = $this->get('/v4/people?fields=mal_id,name')
+            ->assertStatus(200);
+
+        foreach ($response->json('data') as $item) {
+            $this->assertSame(['mal_id', 'name'], array_keys($item));
+        }
+    }
 }

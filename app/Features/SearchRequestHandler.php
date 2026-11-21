@@ -44,6 +44,28 @@ abstract class SearchRequestHandler implements RequestHandler
         $page = $requestData->get('page');
         $limit = $requestData->get('limit', (int) config('jikan.max_results_per_page', 25));
 
+        $batchIds = $this->parseBatchIds($requestData);
+        if ($batchIds !== null) {
+            $requestData->offsetSet('ids', implode(',', $batchIds));
+
+            try {
+                $builder = $this->queryBuilderService->query(
+                    $this->prepareOrderByParam($requestData)
+                );
+                $paginator = $this->queryBuilderService->paginateBuilder($builder, 1, count($batchIds));
+            } catch (\Throwable $e) {
+                $this->reportDegradableOrRethrow($e);
+                $paginator = new ConcreteLengthAwarePaginator(collect(), 0, count($batchIds), 1);
+            }
+
+            $order = array_flip($batchIds);
+            $items = $paginator->getCollection()
+                ->sortBy(fn ($item) => $order[(int) ($item->mal_id ?? 0)] ?? PHP_INT_MAX)
+                ->values();
+
+            return $this->renderBatchResponse($items);
+        }
+
         try {
             $builder = $this->queryBuilderService->query(
                 $this->prepareOrderByParam($requestData)
@@ -98,10 +120,47 @@ abstract class SearchRequestHandler implements RequestHandler
     }
 
     /**
+     * @param  Collection<array-key, mixed>  $items
+     */
+    protected function renderBatchResponse(Collection $items): mixed
+    {
+        return new JsonResponse(['data' => $items->values()->all()]);
+    }
+
+    /**
      * @param  LengthAwarePaginator<int, mixed>  $paginator
      * @return TResponse
      */
     abstract protected function renderResponse(LengthAwarePaginator $paginator);
+
+    /**
+     * @param  Collection<array-key, mixed>  $requestData
+     * @return array<int, int>|null
+     */
+    private function parseBatchIds(Collection $requestData): ?array
+    {
+        $raw = $requestData->get('ids');
+        if (!is_string($raw) || trim($raw) === '') {
+            return null;
+        }
+
+        $parts = array_values(array_filter(array_map('trim', explode(',', $raw)), fn ($value) => $value !== ''));
+
+        $ids = [];
+        foreach ($parts as $part) {
+            if (!ctype_digit($part) || (int) $part < 1) {
+                throw ValidationException::withMessages(['ids' => 'The ids parameter must be a comma-separated list of positive integers.']);
+            }
+            $ids[] = (int) $part;
+        }
+
+        $ids = array_values(array_unique($ids));
+        if (count($ids) > 50) {
+            throw ValidationException::withMessages(['ids' => 'The ids parameter may contain at most 50 ids.']);
+        }
+
+        return $ids;
+    }
 
     /**
      * @param  Collection<array-key, mixed>  $requestData

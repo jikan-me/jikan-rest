@@ -64,8 +64,11 @@ absolutes. Tests were run on spare ports alongside the indexer's `:8000` server
   configurable envs), reload-on-deploy. Add **Redis** for a shared hot-id LRU +
   cross-container cache/rate-limit when scale demands (the default `file` store
   is shared only by the workers of one container).
-- **Contract-level efficiency (proposal WS-G):** `fields`, bounded batch reads,
-  ETag/conditional — directly cut bytes/tokens and 304s for repeat consumers.
+- **Contract-level efficiency (issue #615 phase 3, shipped):** `fields=`
+  projection, bounded `ids=`, and weak ETag/`304` conditional GETs — cut
+  bytes/tokens and let repeat consumers skip the body. See
+  `docs/RESPONSE_FIELDS.md`. Compression (`br`/`gzip`) is already applied by
+  `CompressResponse`.
 - **FrankenPHP:** pursue via a **container image with ext-mongodb** (documented in
   `PROVIDERS.md`); the static binary is fastest for edge/static but can't serve data.
 
@@ -105,7 +108,8 @@ middleware chain (e.g. per-request source-heartbeat) + JMS serialization + respo
   response escaping — target the biggest slice (likely middleware + serialization).
 - **gzip/br + HTTP/2** in front (proxy) for the heavy list payloads (~105 KB seasons/now).
 - Octane worker/max-requests tuning; **Redis** shared cache/rate-limit at scale.
-- **fields/batch/ETag (proposal WS-G)** for the real consumer token/transfer wins.
+- **fields/batch/ETag (issue #615 phase 3, #632)** shipped — the consumer
+  token/transfer lever is now opt-in on the request side (`docs/RESPONSE_FIELDS.md`).
 - Re-measure post-index (clean absolutes) + provide these numbers to PR #614.
 
 ## End-to-end performance lever report (2026-10-13) — for PR #614
@@ -133,7 +137,7 @@ floor for anime/21 ≈ **23 ms**.
 | Redis shared cache/rate-limit | local redis reachable (docker), host port closed | Recommend at scale; CACHE_DRIVER=redis |
 | FrankenPHP | fastest server (5.4k rps light) but **no ext-mongodb** → Mongo routes 500 | Use container image w/ driver, or edge/static |
 | Mongo read | indexed `mal_id` confirmed; ~4 ms in-flight w/ persistent workers | Consider projection for huge docs later |
-| ETag/fields/batch (proposal WS-G) | not implemented | Recommend for consumer token/transfer wins |
+| ETag/fields/batch (`?fields=`, bounded `?ids=`, weak ETag → 304) | **implemented in issue #615 phase 3 (PR #632)** — opt-in, default responses unchanged | See `docs/RESPONSE_FIELDS.md`; re-measure on a clean runner |
 
 ### After (applied optimizations) — Octane RR 4 workers
 `/v4/anime/21` plain **~998 rps** (was 259) · `/v4/seasons/now` **~203 rps** (was 104) ·
@@ -143,7 +147,8 @@ gzip: payload/transfer ~6× smaller when the client accepts it.
 ### Net takeaways for the PR
 - Remove/reduce per-request side-effecting I/O (heartbeat) — biggest win.
 - Serve with Octane + adequate workers; gzip responses; keep micro-cache off by default;
-  cache config for boot; profile serialization next; add WS-G efficiency later.
+  cache config for boot; profile serialization next; consumer efficiency is now
+  opt-in (`?fields=`, `?ids=`, ETag/304 — phase 3).
 
 ## End-to-end coverage + robustness benchmark (2026-10-13) — for PR #614
 
@@ -303,4 +308,35 @@ Container memory after the soak: app 312 MiB, Mongo 132 MiB. Per-endpoint p50 wa
 except the two large scraper-cached payloads (`/v4/people/1`, `/v4/anime/1/characters`,
 ~60 ms). Throughput was bound by the 8 synchronous clients, not by the server; treat the
 RoadRunner vs Swoole columns as "no regression", not as a benchmark.
+
+## Response efficiency (2026-11-11, issue #615 phase 3 — PR #632)
+
+Additive/opt-in only: absent parameters leave the v4 body byte-identical, and
+ETag/`Cache-Control` are headers. Behaviour is documented in
+`docs/RESPONSE_FIELDS.md`.
+
+- `?fields=` — top-level key projection on every v4 JSON response with a `data`
+  payload (single object or list). Unknown keys are a `400` when the response has
+  a shape to validate against.
+- `?ids=` — bounded batch read on the anime/manga/character search endpoints:
+  comma-separated, max 50, request order preserved, no pagination. More than 50
+  is a `400`.
+- Weak `ETag` on successful GETs; a matching `If-None-Match` returns `304`.
+  `Cache-Control: public, max-age=<endpoint TTL>` is added when the endpoint has
+  a positive TTL.
+
+Byte/token sample recorded by `tools/bench/response-size.php` (local, 3,021
+anime) — re-run it for current numbers rather than treating these as absolutes:
+
+| Request | Bytes | ~tokens |
+|---|---|---|
+| `/v4/anime/1` | 5,482 | ~1,371 |
+| `/v4/anime/1?fields=mal_id,title` | 44 | ~11 |
+| `/v4/anime?limit=5` | 22,930 | ~5,733 |
+| `/v4/anime?limit=5&fields=mal_id,title` | 1,864 | ~466 |
+| `/v4/anime?ids=1,5,6` | 14,630 | ~3,658 |
+
+Not measured yet: `304` rates for real consumer traffic, and the effect of
+`fields=` on server CPU (projection happens after the response is built, so the
+saving is bytes on the wire, not handler work).
 

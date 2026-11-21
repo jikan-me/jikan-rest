@@ -19,6 +19,12 @@ class TopController extends Controller
         tags: ['top'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'type',
                 in: 'query',
                 required: false,
@@ -66,6 +72,12 @@ class TopController extends Controller
         tags: ['top'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'type',
                 in: 'query',
                 required: false,
@@ -101,6 +113,12 @@ class TopController extends Controller
         description: 'Returns the top-ranked people.',
         tags: ['top'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
         ],
@@ -125,6 +143,12 @@ class TopController extends Controller
         description: 'Returns the top-ranked characters.',
         tags: ['top'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/limit'),
         ],
@@ -149,6 +173,12 @@ class TopController extends Controller
         description: 'Returns the top-ranked reviews. Can be filtered by **type**, with **preliminary** and **spoilers** toggles.',
         tags: ['top'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(
                 name: 'type',

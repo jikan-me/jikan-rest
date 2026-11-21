@@ -15,6 +15,12 @@ class ScheduleController extends Controller
         tags: ['schedules'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'filter',
                 in: 'query',
                 required: false,

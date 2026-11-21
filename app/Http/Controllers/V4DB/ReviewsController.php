@@ -75,6 +75,12 @@ class ReviewsController extends Controller
         description: 'Returns the most recent anime reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.',
         tags: ['reviews'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/preliminary'),
             new OA\Parameter(ref: '#/components/parameters/spoilers'),
@@ -113,6 +119,12 @@ class ReviewsController extends Controller
         description: 'Returns the most recent manga reviews. Supports pagination via **page**, with **preliminary** and **spoilers** toggles.',
         tags: ['reviews'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(ref: '#/components/parameters/page'),
             new OA\Parameter(ref: '#/components/parameters/preliminary'),
             new OA\Parameter(ref: '#/components/parameters/spoilers'),

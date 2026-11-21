@@ -30,7 +30,7 @@ guarded by a committed parity harness and the integration suite.
 - Lumen 9 is **archived**; Laravel 9 reached **security end-of-life**.
 - The Lumen + Jena/Herd Mongo-driver pairing cannot be maintained on current
   PHP and blocks everything (upstream PR #569 stalled).
-- The public contract (106 GET endpoints) must not change — the migration is
+- The public contract (101 documented v4 operations) must not change — the migration is
   the only safe way forward, and must be provably non-breaking.
 
 ## 3. Proposal
@@ -46,8 +46,8 @@ guarded by a committed parity harness and the integration suite.
   Pint, `laravel/boost` + skills, backend-quality-suite context layer.
 - Safety net: `tools/parity/` status+shape harness committed before any
   behavior change; `.backend-suite/` audits green/rationed.
-- Delivery: squash branch `laravel-12` → 14-PR series to upstream (§5 of
-  `docs/UPSTREAM_PR.md`).
+- Delivery: branch `laravel-12` is the release line; follow-up work ships as a
+  short PR stack on top of it (see §9 and `docs/UPSTREAM_PR.md` §5).
 
 ## 4. Alternatives considered
 
@@ -89,14 +89,31 @@ Resolved during review (2026-10-11/12):
 
 ## 8. Decision
 
-**Accepted.** Proceed with the PR series to `jikan-me/jikan-rest` (draft PR
-#614 on the fork; 14-PR split in `docs/UPSTREAM_PR.md` §5). RFC-first filing
-skipped by decision on 2026-10-12 — the PR series is the vehicle. Decision
-log: `docs/MIGRATION_PLAN.md`, `docs/PR_CHANGELOG.md`.
+**Accepted.** Proceed to `jikan-me/jikan-rest` on the `laravel-12` release line
+(draft PR #614 on the fork). RFC-first filing skipped by decision on 2026-10-12 —
+the PRs are the vehicle. Delivery is a short stack of follow-up branches, not a
+14-PR series (see §9). Decision log: `docs/MIGRATION_PLAN.md`,
+`docs/PR_CHANGELOG.md`.
+
+## 9. Delivery stack (updated 2026-11-20)
+
+The earlier framings — a "14-PR series" and later "single PR, no split" — are both
+superseded. `laravel-12` is the release line; issue #615 work lands as an ordered
+stack on top of it:
+
+| Order | Branch | PR | Contents |
+|---|---|---|---|
+| 1 | `stack/615-03-response-efficiency` | #632 | `?fields=`, bounded `?ids=`, ETag/`304` (`docs/RESPONSE_FIELDS.md`) |
+| 2 | `stack/615-04-retrieval` | #633 | ranking, aliases, search benchmark |
+| 3 | `stack/615-05-identity-resilience` | #636 | data-quality checks, circuit breaker, stale fallback |
+| 4 | `stack/615-06-mcp-evaluation` | — | MCP evaluation — plan only, no code yet |
+
+Merge in that order. One branch is **not** stacked: `fix/616-search-index-drift`
+(PR #634) branches from `laravel-12` and merges independently.
 
 > Future RFCs (e.g. pagination strategy, rate limiting, versioning) append as
 > RFC-0002+ in this file.
 
 ---
 
-_Last updated: 2026-10-12_
+_Last updated: 2026-11-20_

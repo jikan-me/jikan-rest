@@ -17,10 +17,10 @@
 | Piece | State |
 |---|---|
 | RFC issue for `jikan-me/jikan-rest` | **Decided against (2026-10-12): no RFC — the PR series is the vehicle.** The §4 draft is kept for reference only; its open questions should be raised in PR discussion |
-| PR series | **Single PR — no split (decision 2026-10-12): everything ships from `laravel-12`**; draft **PR #614** open against `master` (84 commits). §5 is now an internal theme map, not a split plan. |
+| PR series | **Delivery stack (updated 2026-11-20).** `laravel-12` is the release line; draft **PR #614** is open against `master`. Issue #615 work merges as an ordered stack: #632 → #633 → #636 → `stack/615-06-mcp-evaluation` (plan only). `fix/616-search-index-drift` (#634) branches from `laravel-12` and merges independently. See §5. Both earlier framings ("14-PR series", then "single PR, no split") are superseded. |
 | Infra agent (T1–T4) | T1 heartbeat ✅ · T2 TTL guard ✅ · T3 Dockerfile ✅ · T4 PHPStan/Pint/CI ✅ |
 | Local work committed at reconciliation | insights + CORS **removals** (`c858c3d`), **observability** (`41dd860`), `UPSTREAM_PR.md` (`8f94dfa`) |
-| Verification | **292 tests / 2707 assertions — fully green** · PHPStan level 6 baseline-pinned exit 0 · **Parity: 59 endpoints match, 0 diffs** (baseline ratcheted 2026-10-12 after **jikan v5 adoption** cleared the parser blockers — anime/manga/characters/people/recentlyonline now serve live data) · Docker build + stack validated locally (Colima) · Typesense E2E verified (Docker server) |
+| Verification | **Snapshot 2026-10-12: 292 tests / 2707 assertions — fully green** (re-run `vendor/bin/phpunit --list-tests` / the suite for the current count; later runs in `docs/PR_CHANGELOG.md`) · PHPStan level 6 baseline-pinned exit 0 · **Parity: 59 endpoints match, 0 diffs** (baseline ratcheted 2026-10-12 after **jikan v5 adoption** cleared the parser blockers — anime/manga/characters/people/recentlyonline now serve live data) · Docker build + stack validated locally (Colima) · Typesense E2E verified (Docker server) |
 | Docker / CI | Image builds clean on a real runtime; `app`/`mongo`/`redis`/`typesense` healthy, `/up` 200, `rr --version` 2025.1.15 (arm64). CI matrix first-green still parked for a GitHub runner |
 | `jikan-me/jikan` parser fixes | **Resolved by adopting jikan v5.0.0-beta** (2026-10-12): UP-01…06 all cleared, verified live; Goutte shim removed |
 | Decisions made | Laravel **13** (final), **Typesense-only** search (native Scout engine), Octane RoadRunner default, PHPUnit 12, security/config-cache hardening in scope |
@@ -47,11 +47,12 @@ guarded by a committed parity harness and the integration suite. Developer tooli
 
 ## 3. Evidence pack (for the PR body)
 
-- **Parity harness** (`tools/parity/`): 60-endpoint status + response-shape comparison
+- **Parity harness** (`tools/parity/`): 59-endpoint status + response-shape comparison
   against a committed baseline; migration went **69 problems → 3** (2 intentional
   `/docs` redirect + 1 pre-existing `users.php` parser failure). Post-fixes re-verified:
   every change introduced **zero new shape/status diffs** — the remaining ~39 endpoint
-  diffs are the documented upstream parser blockers (see `UPSTREAM_ISSUES.md`).
+  diffs at that point were the upstream parser blockers, cleared by the jikan v5
+  adoption (`UPSTREAM_ISSUES.md`, §1).
 - **Test suite**: 289 tests / 2696 assertions; only 1–2 failures, both the same
   time-dependent `SeasonControllerTest` season tests that failed on the Lumen baseline.
   (280 at migration green; +9 from the heartbeat + TTL-guard tests.)
@@ -99,13 +100,27 @@ Octane-served endpoints. Links to the staged PR series below.
 
 ---
 
-## 5. PR themes (internal map — **single PR, no split**)
+## 5. Delivery stack (supersedes the "14-PR series" and "single PR" framings)
 
-> **Decision 2026-10-12: we are NOT splitting.** Everything ships on `laravel-12`
-> as one branch (draft PR #614). Use this table only as a reviewer-visible index of
-> the work themes inside that single PR — it is not a push order.
+> **Current model (2026-11-20):** `laravel-12` is the release line; each phase of
+> issue #615 is its own branch and PR, merged in order on top of it. Only phase 3
+> is implemented on the branch this doc was last updated from.
 
-| # | PR title | Contents (local commits) | Notes |
+| Order | Branch | PR | Contents | State |
+|---|---|---|---|---|
+| — | `laravel-12` | #614 (draft) | Laravel 13 migration | open |
+| 1 | `stack/615-03-response-efficiency` | #632 | `?fields=` on every v4 data response, bounded `?ids=`, weak ETag/`304`, `Cache-Control` | implemented — `docs/RESPONSE_FIELDS.md` |
+| 2 | `stack/615-04-retrieval` | #633 | ranking, aliases, search benchmark | later in stack |
+| 3 | `stack/615-05-identity-resilience` | #636 | data-quality checks, circuit breaker, stale fallback | later in stack |
+| 4 | `stack/615-06-mcp-evaluation` | — | MCP evaluation | planned — plan only, no code |
+| independent | `fix/616-search-index-drift` | #634 | test-harness `characters`/`people` text-index swap (issue #616) | branches from `laravel-12`, not stacked |
+
+Merge #632 → #633 → #636 → phase 6. #634 can land on its own at any point.
+
+The migration itself is still one body of work (draft PR #614). The table below is
+the internal theme index of that work — historical, not a push order:
+
+| # | Theme | Contents (local commits) | Notes |
 |---|---|---|---|
 | 1 | `test: add parity harness, PHPStan/Larastan + Pint + CI` | `tools/parity/*`, `phpstan.neon` + baseline, `pint.json`, `.github/workflows/ci.yml`, `UPSTREAM_ISSUES.md` | No behavior change; establishes the safety net first (T4 infra) |
 | 1b | `feat: developer tooling — laravel/boost + skills + backend-quality-suite` | `composer.json` (+`laravel/boost` ^2 dev), `.ai/skills/*`, `.backend-suite/*` (profile/arch-rules/docs.manifest, ratified), `install.sh` + `docs/SETUP.md` | Optional/subjective; dev-only tooling — maintainers may want it split or dropped |
@@ -123,9 +138,9 @@ Octane-served endpoints. Links to the staged PR series below.
 | 13 | `build: Dockerfile for PHP 8.4 + modern RoadRunner` | rewritten `Dockerfile`, `.dockerignore` | T3 commit |
 | 14 | `docs: PR_CHANGELOG + audits + UPSTREAM_PR` | changelog + audit docs + this playbook | Reviewer orientation |
 
-> Adjust the number of PRs to maintainer preference. `laravel-12` branch history is
-> atomic and can be cherry-picked/re-ordered if upstream wants a 12-first staging.
-> The `insights`/CORS removals are folded into the PR where they were decided (§8).
+> This theme table is retained as the record of the base migration's contents; it is
+> not a split plan and not a push order. The #615 phases in the stack above supersede
+> any numbering here.
 
 ---
 

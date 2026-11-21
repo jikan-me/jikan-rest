@@ -74,16 +74,37 @@ default to `--source=harvest` (`--source=purarue` forces the legacy caches).
 
 1. **Sequential, slow and safe (recommended):**
    ```bash
-   nohup tools/dev/php artisan indexer:harvest --resume --delay=2 > /tmp/harvest.log 2>&1 &
+   nohup php artisan indexer:harvest --resume --delay=2 > /tmp/harvest.log 2>&1 &
    # then, once Phase A is done:
-   nohup tools/dev/php artisan indexer:items character --source=harvest --resume --delay=2 > /tmp/i-char.log 2>&1 &
-   nohup tools/dev/php artisan indexer:items people    --source=harvest --resume --delay=2 > /tmp/i-people.log 2>&1 &
+   nohup php artisan indexer:items character --source=harvest --resume --delay=2 > /tmp/i-char.log 2>&1 &
+   nohup php artisan indexer:items people    --source=harvest --resume --delay=2 > /tmp/i-people.log 2>&1 &
    ```
-2. **Faster (modest parallelism):** split each phase by `--index` ranges and run
-   2–4 processes with `--delay=3` each; recover 429s via `--failed` later.
+2. **Sharded (recommended for the full catalogue):** run N processes over
+   disjoint slices. Each shard writes `harvest_*.shardN.json` and its own save
+   file, so they never clobber each other; merge at the end:
+   ```bash
+   for s in 0 1 2 3; do
+     nohup php artisan indexer:harvest --kind=anime --shards=4 --shard=$s --delay=1 \
+       > /tmp/h-anime-$s.log 2>&1 &
+   done
+   php artisan indexer:harvest --merge      # after all four finish
+   ```
+   Concurrency only helps if the API can serve requests in parallel: a plain
+   `artisan serve` is single-worker. Start it with
+   `PHP_CLI_SERVER_WORKERS=4 php artisan serve …`, or use Octane.
 3. **Tune down delay** (`--delay=1`) — faster, more 429s, recoverable.
 4. Long-term (future, issue #615): queue-backed workers calling the parser
    directly instead of HTTP self-scrape.
+
+### Producer coverage
+
+`indexer:producers` historically read a ~900-id list, but stored anime reference
+1,800+ producers, 1,400+ studios and licensors. To cover them:
+
+```bash
+php artisan indexer:harvest --kind=producers        # writes harvest_producers.json, no scraping
+php artisan indexer:producers --source=harvest --delay=3
+```
 
 ## 5. What gets populated (vs lazy)
 
@@ -111,7 +132,7 @@ The whole run is reconstructable from three artifacts + the branch:
 # new machine
 ./install.sh --yes && mongorestore --db jikan <dump>/jikan
 tar -xzf indexer-state.tgz -C .            # -> storage/app/indexer/*
-tools/dev/php artisan indexer:harvest --resume --delay=2
+php artisan indexer:harvest --resume --delay=2
 ```
 
 ## 7. Production hardening noticed

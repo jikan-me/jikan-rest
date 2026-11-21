@@ -17,6 +17,12 @@ class ProducerController extends Controller
         tags: ['producers'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -49,6 +55,12 @@ class ProducerController extends Controller
         tags: ['producers'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'id',
                 in: 'path',
                 required: true,
@@ -80,6 +92,12 @@ class ProducerController extends Controller
         description: 'Returns the external links of a producer by **id**.',
         tags: ['producers'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',

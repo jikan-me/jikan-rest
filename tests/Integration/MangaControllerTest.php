@@ -573,4 +573,13 @@ class MangaControllerTest extends TestCase
         $this->get('/v4/manga/1000000')
             ->assertStatus(404);
     }
+
+    public function testFieldsSelectionProjectsTopLevelKeys(): void
+    {
+        Manga::factory()->createOne(['mal_id' => 93001, 'title' => 'Manga Field Test']);
+
+        $this->getJson('/v4/manga/93001?fields=mal_id,title')
+            ->assertStatus(200)
+            ->assertExactJson(['data' => ['mal_id' => 93001, 'title' => 'Manga Field Test']]);
+    }
 }

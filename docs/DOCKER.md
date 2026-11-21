@@ -135,13 +135,25 @@ TYPESENSE_API_KEY=abcd SCOUT_DRIVER=typesense docker compose up -d app
 # 2. verify Typesense is healthy
 curl -fsS http://localhost:8108/health           # -> {"ok":true}
 
-# 3. pre-create collections — REQUIRED, the native Scout TypesenseEngine cannot
-#    auto-create one from an empty schema. Follow docs/TYPESENSE_SPIKE.md
-#    "Pre-create collections" (curl calls) or a typesense:ensure-collections
-#    command if available, then import:
+# 3. import — collections auto-create from the model's typesenseCollectionSchema()
+#    on first import (see docs/TYPESENSE_SPIKE.md §8). No pre-creation step.
 docker compose exec app php artisan scout:import "App\Anime"
 docker compose exec app php artisan scout:import "App\Producers"
 docker compose exec app php artisan scout:import "App\Magazine"
+```
+
+To rebuild an index after a schema change, re-import with `--fresh`. The
+Typesense engine deletes the collection on flush, so the import recreates it
+with the current schema. There is no separate "ensure collections" command and
+collections must not be pre-created by hand:
+
+```bash
+# schema change (drops the collection, re-creates it, re-imports)
+docker compose exec app php artisan scout:import "App\Anime" --fresh
+
+# data-only refresh
+docker compose exec app php artisan scout:flush "App\Anime"
+docker compose exec app php artisan scout:import "App\Anime"
 ```
 
 ---
@@ -152,14 +164,20 @@ A fresh stack has an **empty database**. Fill it with the MyAnimeList scraper
 from inside the container:
 
 ```bash
-docker compose exec app php artisan indexer:anime --fail
+docker compose exec app php artisan indexer:anime            # full run
 docker compose exec app php artisan indexer:anime --resume   # after an interrupt
-docker compose exec app php artisan indexer:manga --fail
-docker compose exec app php artisan indexer:manga --resume
+docker compose exec app php artisan indexer:anime --failed   # only ids that failed last time
+docker compose exec app php artisan indexer:manga            # same flags
 ```
 
 - This scrapes MAL and can take **days** for a full run. `--resume` continues an
-  interrupted run from where it left off.
+  interrupted run from where it left off; `--failed` retries recorded failures.
+  `indexer:anime` / `indexer:manga` have no `--limit` — to try a bounded run use
+  `indexer:items anime --limit=N` (self-scrapes the app's own endpoint).
+- Fill the rest of the surface with `indexer:genres`, `indexer:common`
+  (magazines), `indexer:producers`, then
+  `indexer:harvest` → `indexer:items character|people --source=harvest`
+  (multi-day; see `docs/POST_FULL_INDEX.md` and `docs/INDEXER_SCALING.md`).
 - Enable a weekly automated full re-index with
   `JIKAN_ENABLE_PERIODICAL_FULL_INDEXER=true`.
 - Discover available indexer commands: `docker compose exec app php artisan list | grep indexer`.
@@ -195,14 +213,14 @@ validated without a daemon:
   `config/*` (`octane.php`, `scout.php`, `database.php`, `cache.php`).
 - Ports/services cross-checked against `config/octane.php:8080`,
   `config/scout.php:8108` and `config/database.php:27017`.
-- `tools/dev/php artisan config:cache` boots the app config end-to-end.
+- `php artisan config:cache` boots the app config end-to-end.
 
 **Validation checklist for a Docker host (CI or a runner) before pushing:**
 
 > Status: **the full build + stack was validated locally (2026-10-12) via Colima
 > on macOS/arm64** (then on RoadRunner; the Swoole image was re-validated on
 > Docker Desktop/amd64 on 2026-10-25), and all four services come up healthy. Checklist items below up to "Seed minimally" are
-> confirmed; the last one needs data (upstream-blocked).
+> confirmed; the last one needs data (operational: run the indexers, see §6).
 
 - [x] `docker compose up -d --build` — app image builds, `php --ri swoole` prints
       the Swoole version.
@@ -211,5 +229,6 @@ validated without a daemon:
 - [x] `curl -fsS http://localhost:8080/` returns `200` JSON with the heartbeat block.
 - [x] `docker compose exec app php artisan about` boots Octane container fine.
 - [ ] Seed minimally + smoke `GET /v4/anime/:id` (200) — blocked: empty DB
-      returns a `ParserException` 500 until anime data exists (upstream parser
-      blockers, see `UPSTREAM_ISSUES.md`).
+      returns a `ParserException` 500 until anime data exists (data-population
+      step, not a parser defect: `jikan-me/jikan ^5.0` is in place — see
+      `docs/POST_FULL_INDEX.md`).

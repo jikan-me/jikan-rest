@@ -32,6 +32,12 @@ class UserController extends Controller
         tags: ['users'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'username',
                 in: 'path',
                 required: true,
@@ -63,6 +69,12 @@ class UserController extends Controller
         description: 'Returns the public profile of a user by **username**.',
         tags: ['users'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'username',
                 in: 'path',
@@ -96,6 +108,12 @@ class UserController extends Controller
         tags: ['users'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'username',
                 in: 'path',
                 required: true,
@@ -123,6 +141,12 @@ class UserController extends Controller
         description: 'Returns the favorites of a user by **username**.',
         tags: ['users'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'username',
                 in: 'path',
@@ -156,6 +180,12 @@ class UserController extends Controller
         tags: ['users'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'username',
                 in: 'path',
                 required: true,
@@ -184,6 +214,12 @@ class UserController extends Controller
         tags: ['users'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'username',
                 in: 'path',
                 required: true,
@@ -211,6 +247,12 @@ class UserController extends Controller
         description: 'Returns the recent anime and manga history of a user by **username**. Use **type** to filter to anime or manga entries.',
         tags: ['users'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'username',
                 in: 'path',
@@ -246,6 +288,12 @@ class UserController extends Controller
         tags: ['users'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'username',
                 in: 'path',
                 required: true,
@@ -277,6 +325,12 @@ class UserController extends Controller
         tags: ['users'],
         deprecated: true,
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'username',
                 in: 'path',
@@ -312,6 +366,12 @@ class UserController extends Controller
         deprecated: true,
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'username',
                 in: 'path',
                 required: true,
@@ -344,6 +404,12 @@ class UserController extends Controller
         description: 'Returns the reviews written by a user by **username**, paginated by **page**.',
         tags: ['users'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'username',
                 in: 'path',
@@ -378,6 +444,12 @@ class UserController extends Controller
         tags: ['users'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'username',
                 in: 'path',
                 required: true,
@@ -406,6 +478,12 @@ class UserController extends Controller
         description: 'Returns the clubs joined by a user by **username**, paginated by **page**.',
         tags: ['users'],
         parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
             new OA\Parameter(
                 name: 'username',
                 in: 'path',
@@ -438,6 +516,12 @@ class UserController extends Controller
         tags: ['users'],
         parameters: [
             new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+            new OA\Parameter(
                 name: 'username',
                 in: 'path',
                 required: true,
@@ -464,6 +548,14 @@ class UserController extends Controller
         summary: 'Recently online users',
         description: 'Returns the users currently online or recently online.',
         tags: ['users'],
+        parameters: [
+            new OA\Parameter(
+                name: 'fields',
+                in: 'query',
+                description: 'Return only the listed top-level fields (comma-separated).',
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: 200,
