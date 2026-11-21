@@ -166,6 +166,8 @@ indexer:items {family}
     {--delay=3 : Seconds between requests}
     {--timeout=30 : Seconds before a single HTTP request is abandoned}
     {--limit=0 : Stop after N entries (0 = all)}
+    {--shard=0 : Shard number (0-based) for parallel runs}
+    {--shards=1 : Total number of shards}
 ```
 
 - `family`: `anime`, `manga`, `character`, `people`. Clubs have no id cache and are
@@ -175,6 +177,14 @@ indexer:items {family}
 - `--source=harvest` / `--source=purarue` force one source.
 
 Example: `indexer:items character --source=harvest --resume --delay=2`
+
+Sharded run (each shard keeps its own save file):
+
+```bash
+for s in 0 1 2; do
+  php artisan indexer:items character --source=harvest --shards=3 --shard=$s --delay=1 &
+done
+```
 
 #### Indexer: Harvest
 Phase A of the relational character/people indexer: walks the **already stored**

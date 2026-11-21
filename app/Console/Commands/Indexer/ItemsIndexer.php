@@ -33,7 +33,9 @@ class ItemsIndexer extends Command
                             {--index=0 : Start from a specific index}
                             {--delay=3 : Seconds between requests}
                             {--timeout=30 : Seconds before a single HTTP request is abandoned}
-                            {--limit=0 : Stop after N entries (0 = all)}';
+                            {--limit=0 : Stop after N entries (0 = all)}
+                            {--shard=0 : Shard number (0-based) for parallel runs}
+                            {--shards=1 : Total number of shards}';
 
     protected $description = 'Index a family of MAL entries (anime|manga|character|people) by MAL id';
 
@@ -65,6 +67,13 @@ class ItemsIndexer extends Command
         $index = (int) $this->option('index');
         $limit = (int) $this->option('limit');
         $source = strtolower((string) $this->option('source'));
+        $shard = max(0, (int) $this->option('shard'));
+        $shards = max(1, (int) $this->option('shards'));
+        if ($shard >= $shards) {
+            $this->error("--shard must be lower than --shards ({$shard} >= {$shards}).");
+
+            return self::FAILURE;
+        }
         $fromHarvest = $source === 'harvest'
             || ($source === 'auto' && in_array($family, ['character', 'people'], true));
 
@@ -86,8 +95,18 @@ class ItemsIndexer extends Command
             $this->ids = array_reverse($this->ids);
         }
 
-        if ($resume && Storage::exists("indexer/indexer_{$key}.save")) {
-            $index = max((int) Storage::get("indexer/indexer_{$key}.save"), $index);
+        if ($shards > 1) {
+            $per = (int) ceil(count($this->ids) / $shards);
+            $this->ids = array_slice($this->ids, $shard * $per, $per);
+            $this->info("Shard {$shard}/{$shards}: ".count($this->ids).' entries');
+        }
+
+        $savePath = $shards > 1
+            ? "indexer/indexer_{$key}.shard{$shard}.save"
+            : "indexer/indexer_{$key}.save";
+
+        if ($resume && Storage::exists($savePath)) {
+            $index = max((int) Storage::get($savePath), $index);
             $this->info("Resuming from index: {$index}");
         }
 
@@ -97,7 +116,7 @@ class ItemsIndexer extends Command
         }
 
         $this->ids = array_values($this->ids);
-        Storage::put("indexer/indexer_{$key}.save", '0');
+        Storage::put($savePath, '0');
 
         $count = count($this->ids);
         $this->info("{$count} entries available for {$family}");
@@ -129,11 +148,11 @@ class ItemsIndexer extends Command
                 Storage::put("indexer/indexer_{$key}.failed", json_encode($failedIds));
             }
 
-            Storage::put("indexer/indexer_{$key}.save", (string) $i);
+            Storage::put($savePath, (string) $i);
             sleep($delay);
         }
 
-        Storage::delete("indexer/indexer_{$key}.save");
+        Storage::delete($savePath);
         echo "---------\nDone. {$success} indexed; ".count($failedIds)." failed (re-run with --failed).\n";
 
         return self::SUCCESS;
