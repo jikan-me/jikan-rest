@@ -189,7 +189,7 @@ reads. See `docs/INDEXER_SCALING.md` for measured costs.
 Command:
 ```
 indexer:harvest
-    {--kind=all : all|anime|manga}
+    {--kind=all : all|anime|manga|producers}
     {--no-staff : Skip the anime /staff pass (characters + voice actors only)}
     {--failed : Run only entries that failed last time}
     {--resume : Resume from the last position}
@@ -198,9 +198,22 @@ indexer:harvest
     {--delay=2 : Seconds between requests}
     {--timeout=30 : Seconds before a single HTTP request is abandoned}
     {--limit=0 : Stop after N entries (0 = all)}
+    {--shard=0 : Shard number (0-based) for parallel runs}
+    {--shards=1 : Total number of shards}
+    {--merge : Union the shard files into the main harvest files and exit}
 ```
 
-Example: `indexer:harvest --kind=anime --no-staff --resume`
+Examples:
+
+```bash
+php artisan indexer:harvest --kind=anime --resume
+php artisan indexer:harvest --kind=anime --shards=4 --shard=2 --delay=1   # parallel slice
+php artisan indexer:harvest --merge                                        # after all shards finish
+```
+
+`--kind=producers` does not scrape: it collects every producer/studio/licensor id
+referenced by a stored anime into `harvest_producers.json`, for
+`indexer:producers --source=harvest`.
 
 #### Indexer: Genres
 Indexes anime and manga genres, themes, demographics and explicit genres (the
@@ -221,12 +234,15 @@ indexer:common
 ```
 
 #### Indexer: Producers
-Fetches the producer MAL ids from the purarue cache and scrapes each producer
-through `/v4/producers/{id}` (same self-scrape pattern as `indexer:anime`).
+Scrapes each producer through `/v4/producers/{id}` (same self-scrape pattern as
+`indexer:anime`). By default the id list comes from the purarue producer cache
+(~900 ids); `--source=harvest` uses every producer/studio/licensor id referenced
+by stored anime instead (see `indexer:harvest --kind=producers`).
 
 Command:
 ```
 indexer:producers
+    {--source=auto : auto|harvest}
     {--failed : Run only entries that failed to index last time}
     {--resume : Resume from the last position}
     {--reverse : Start from the end of the array}
