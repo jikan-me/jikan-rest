@@ -43,6 +43,17 @@ final class DataQualityCommandTest extends TestCase
         $this->assertContains('broken_ref:anime.producers->producers', $checks);
     }
 
+    public function test_explicit_genres_satisfy_genre_references(): void
+    {
+        \Illuminate\Support\Facades\DB::table('explicit_genres_anime')->insert(['mal_id' => 12]);
+        Anime::factory()->createOne(['mal_id' => 70006, 'genres' => [12]]);
+
+        Artisan::call('jikan:data-quality', ['--json' => true]);
+        $checks = collect(json_decode(Artisan::output(), true))->pluck('check');
+
+        $this->assertNotContains('broken_ref:anime.genres->genres_anime', $checks);
+    }
+
     public function test_baseline_suppresses_known_counts(): void
     {
         Anime::factory()->createOne(['mal_id' => 70003]);

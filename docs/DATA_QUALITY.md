@@ -7,6 +7,10 @@
 - broken producer/studio/licensor references;
 - broken manga serialization references.
 
+Genre references are validated against `genres_*` **plus** `explicit_genres_*`:
+MAL keeps the adult genres (Ecchi, Hentai, Erotica) out of the main genre list,
+so an anime whose `genres` contains one of those ids is not a broken reference.
+
 Options:
 
 ```bash

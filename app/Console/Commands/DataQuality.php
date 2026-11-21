@@ -28,7 +28,7 @@ class DataQuality extends Command
             $this->duplicates($collection, $limit);
         }
 
-        $this->references('anime', 'genres', 'genres_anime', $limit);
+        $this->references('anime', 'genres', 'genres_anime', $limit, ['explicit_genres_anime']);
         $this->references('anime', 'explicit_genres', 'explicit_genres_anime', $limit);
         $this->references('anime', 'themes', 'themes_anime', $limit);
         $this->references('anime', 'demographics', 'demographics_anime', $limit);
@@ -36,7 +36,7 @@ class DataQuality extends Command
         $this->references('anime', 'studios', 'producers', $limit);
         $this->references('anime', 'licensors', 'producers', $limit);
 
-        $this->references('manga', 'genres', 'genres_manga', $limit);
+        $this->references('manga', 'genres', 'genres_manga', $limit, ['explicit_genres_manga']);
         $this->references('manga', 'explicit_genres', 'explicit_genres_manga', $limit);
         $this->references('manga', 'themes', 'themes_manga', $limit);
         $this->references('manga', 'demographics', 'demographics_manga', $limit);
@@ -98,9 +98,15 @@ class DataQuality extends Command
         }
     }
 
-    private function references(string $sourceCollection, string $field, string $referenceCollection, int $limit): void
+    /**
+     * @param  string[]  $alsoAccept  extra collections whose mal_id also satisfies the reference
+     */
+    private function references(string $sourceCollection, string $field, string $referenceCollection, int $limit, array $alsoAccept = []): void
     {
         $referenceIds = array_flip(array_map('intval', $this->collection($referenceCollection)->distinct('mal_id')));
+        foreach ($alsoAccept as $extraCollection) {
+            $referenceIds += array_flip(array_map('intval', $this->collection($extraCollection)->distinct('mal_id')));
+        }
         $broken = [];
         $count = 0;
 
