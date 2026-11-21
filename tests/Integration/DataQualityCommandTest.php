@@ -5,6 +5,7 @@ namespace Tests\Integration;
 use App\Anime;
 use App\Testing\SyntheticMongoDbTransaction;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 final class DataQualityCommandTest extends TestCase
@@ -45,7 +46,7 @@ final class DataQualityCommandTest extends TestCase
 
     public function test_explicit_genres_satisfy_genre_references(): void
     {
-        \Illuminate\Support\Facades\DB::table('explicit_genres_anime')->insert(['mal_id' => 12]);
+        DB::table('explicit_genres_anime')->insert(['mal_id' => 12]);
         Anime::factory()->createOne(['mal_id' => 70006, 'genres' => [12]]);
 
         Artisan::call('jikan:data-quality', ['--json' => true]);
